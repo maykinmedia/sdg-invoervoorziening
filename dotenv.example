@@ -1,0 +1,10 @@
+SECRET_KEY="n0zyvjjcogd$hmoy5xruh%k!0c5d-t+(#w6^o-#al5diww&j2@"
+DB_NAME="sdg"
+DB_USER="sdg"
+#
+# For peer authentication via unix domain socket
+# these should be kept empty.
+#
+DB_PASSWORD=""
+DB_HOST=""
+DB_PORT=""
