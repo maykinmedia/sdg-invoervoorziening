@@ -119,6 +119,8 @@ INSTALLED_APPS = [
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
+    # SDG applications
+    "sdg.core",
 ]
 
 MIDDLEWARE = [
