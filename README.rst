@@ -1,5 +1,5 @@
 ==================
-sdg
+SDG Invoervoorziening
 ==================
 
 :Version: 0.1.0
@@ -9,7 +9,7 @@ sdg
 
 |build-status| |requirements|
 
-``<oneliner describing the project>``
+SDG invoervoorziening voor het onderhouden van gemeentelijke specifieke productbeschrijvingen.
 
 Developed by `Maykin Media B.V.`_ for ``<client>``
 
@@ -17,7 +17,23 @@ Developed by `Maykin Media B.V.`_ for ``<client>``
 Introduction
 ============
 
-``<describe the project in a few paragraphs and briefly mention the features>``
+De Single Digital Gateway-verordening, kortweg SDG, is in oktober 2018 aangenomen door het
+Europees Parlement. Daarmee heeft Nederland de wettelijke verplichting gekregen om de
+verordening uit te voeren.
+
+
+Doel van de SDG: digitale drempels wegnemen
+___________________________________________
+
+Niet iedereen in de EU heeft op dit moment op eenzelfde manier toegang tot digitale
+overheidsdienstverlening. Dat verbetert de Europese Commissie door met de SDG-verordening één
+online toegangsportaal te creëren voor makkelijke en integrale toegang tot online informatie,
+administratieve procedures en daarbij horende diensten voor ondersteuning en probleemoplossing
+in de verschillende Europese lidstaten: YourEurope.
+
+The information is made accessible via a European central digital gateway, also known as gateway
+called, YourEurope. This gateway then redirects users to the correct web page in the Member
+State where they want to make an arrangement.
 
 
 Documentation

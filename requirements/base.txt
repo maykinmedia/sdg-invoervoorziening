@@ -32,6 +32,8 @@ django-axes==5.20.0
     # via -r requirements/base.in
 django-choices==1.7.2
     # via -r requirements/base.in
+django-ckeditor==6.1.0
+    # via -r requirements/base.in
 django-compat==1.0.15
     # via django-hijack-admin
 django-formtools==2.3
@@ -44,6 +46,8 @@ django-hijack-admin==2.1.10
     # via -r requirements/base.in
 django-ipware==3.0.7
     # via django-axes
+django-js-asset==1.2.2
+    # via django-ckeditor
 django-ordered-model==3.4.3
     # via django-admin-index
 django-otp==1.0.6

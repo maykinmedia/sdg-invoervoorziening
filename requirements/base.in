@@ -28,3 +28,6 @@ phonenumbers
 uwsgi
 sentry-sdk  # error monitoring
 elastic-apm  # Elastic APM integration
+
+# Rich-text editor
+django-ckeditor

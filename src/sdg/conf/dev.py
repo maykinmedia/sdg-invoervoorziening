@@ -107,3 +107,5 @@ try:
     from .local import *  # noqa
 except ImportError:
     pass
+
+INSTALLED_APPS += ["django_extensions"]

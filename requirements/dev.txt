@@ -83,6 +83,10 @@ django-choices==1.7.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+django-ckeditor==6.1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 django-compat==1.0.15
     # via
     #   -c requirements/ci.txt
@@ -115,6 +119,11 @@ django-jenkins==0.110.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+django-js-asset==1.2.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-ckeditor
 django-ordered-model==3.4.3
     # via
     #   -c requirements/ci.txt

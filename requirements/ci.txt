@@ -55,6 +55,10 @@ django-choices==1.7.2
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+django-ckeditor==6.1.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 django-compat==1.0.15
     # via
     #   -c requirements/base.txt
@@ -81,6 +85,11 @@ django-ipware==3.0.7
     #   django-axes
 django-jenkins==0.110.0
     # via -r requirements/test-tools.in
+django-js-asset==1.2.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-ckeditor
 django-ordered-model==3.4.3
     # via
     #   -c requirements/base.txt
