@@ -48,4 +48,4 @@ jobs:
           pip install -r requirements/ci.txt
       - name: Run flake8
         run: |
-          flake8 src
+          flake8 src --ignore=E501,F405,W503,F401

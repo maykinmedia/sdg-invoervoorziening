@@ -4,10 +4,6 @@
 #
 #    ./bin/compile_dependencies.sh
 #
--e git+git://github.com/maykinmedia/django-two-factor-auth@729249e647674c7022b894fcb0ccc4c231ed23d8#egg=django-two-factor-auth
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
 appdirs==1.4.4
     # via black
 astroid==2.6.5
@@ -40,15 +36,11 @@ django==2.2.24
     #   -r requirements/base.txt
     #   django-axes
     #   django-choices
-    #   django-formtools
     #   django-hijack
     #   django-jenkins
-    #   django-otp
-    #   django-phonenumber-field
     #   django-redis
     #   django-rosetta
     #   django-sniplates
-    #   django-two-factor-auth
 django-admin-index==1.4.0
     # via
     #   -c requirements/base.txt
@@ -66,11 +58,6 @@ django-compat==1.0.15
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-hijack-admin
-django-formtools==2.3
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   django-two-factor-auth
 django-hijack==2.3.0
     # via
     #   -c requirements/base.txt
@@ -92,16 +79,6 @@ django-ordered-model==3.4.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-admin-index
-django-otp==1.0.6
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   django-two-factor-auth
-django-phonenumber-field==5.2.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   django-two-factor-auth
 django-redis==5.0.0
     # via
     #   -c requirements/base.txt
@@ -193,11 +170,6 @@ pytz==2021.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django
-qrcode==6.1
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   django-two-factor-auth
 redis==3.5.3
     # via
     #   -c requirements/base.txt
@@ -225,7 +197,6 @@ six==1.16.0
     #   django-compat
     #   django-rosetta
     #   python-dateutil
-    #   qrcode
     #   requests-mock
     #   webtest
 soupsieve==2.2.1
