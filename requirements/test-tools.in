@@ -16,3 +16,8 @@ tblib
 black
 isort
 flake8
+
+# Debug
+django-debug-toolbar
+ddt-api-calls
+django-extensions
