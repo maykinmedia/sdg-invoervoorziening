@@ -4,8 +4,6 @@
 #
 #    ./bin/compile_dependencies.sh
 #
--e git+git://github.com/maykinmedia/django-two-factor-auth@729249e647674c7022b894fcb0ccc4c231ed23d8#egg=django-two-factor-auth
-    # via -r requirements/base.in
 certifi==2021.5.30
     # via
     #   elastic-apm
@@ -25,7 +23,7 @@ django==2.2.24
     #   django-redis
     #   django-rosetta
     #   django-sniplates
-    #   django-two-factor-auth
+    #   maykin-django-two-factor-auth
 django-admin-index==1.4.0
     # via -r requirements/base.in
 django-axes==5.20.0
@@ -35,7 +33,7 @@ django-choices==1.7.2
 django-compat==1.0.15
     # via django-hijack-admin
 django-formtools==2.3
-    # via django-two-factor-auth
+    # via maykin-django-two-factor-auth
 django-hijack==2.3.0
     # via
     #   -r requirements/base.in
@@ -49,9 +47,9 @@ django-ordered-model==3.4.3
 django-otp==1.0.6
     # via
     #   -r requirements/base.in
-    #   django-two-factor-auth
+    #   maykin-django-two-factor-auth
 django-phonenumber-field==5.2.0
-    # via django-two-factor-auth
+    # via maykin-django-two-factor-auth
 django-redis==5.0.0
     # via -r requirements/base.in
 django-rosetta==0.9.6
@@ -62,6 +60,8 @@ elastic-apm==6.3.3
     # via -r requirements/base.in
 idna==3.2
     # via requests
+maykin-django-two-factor-auth==2.0.2
+    # via -r requirements/base.in
 phonenumbers==8.12.28
     # via -r requirements/base.in
 pillow==8.3.1
@@ -79,7 +79,7 @@ pytz==2021.1
     #   -r requirements/base.in
     #   django
 qrcode==6.1
-    # via django-two-factor-auth
+    # via maykin-django-two-factor-auth
 redis==3.5.3
     # via django-redis
 requests==2.26.0
