@@ -10,19 +10,22 @@ class ContactgegevensMixin(models.Model):
     )
     contact_website = models.URLField(
         _("contact website"),
-        blank=True, null=True,
+        blank=True,
+        null=True,
         help_text=_("De website van de verantwoordelijke contactpersoon."),
     )
     contact_telefoonnummer = models.CharField(
         _("contact telefoonnummer"),
         max_length=20,
-        blank=True, null=True,
+        blank=True,
+        null=True,
         help_text=_("Het telefoonnummer van de verantwoordelijke contactpersoon."),
     )
     contact_emailadres = models.EmailField(
         _("contact emailadres"),
         max_length=254,
-        blank=True, null=True,
+        blank=True,
+        null=True,
         help_text=_("Het e-mailadres van de verantwoordelijke contactpersoon."),
     )
 

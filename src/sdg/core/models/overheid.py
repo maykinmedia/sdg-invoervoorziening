@@ -6,7 +6,9 @@ from sdg.core.models.mixins import ContactgegevensMixin
 
 class Organisatie(ContactgegevensMixin, models.Model):
     naam = models.CharField(
-        _("naam"), max_length=40, help_text=_("De naam van de organisatie."),
+        _("naam"),
+        max_length=40,
+        help_text=_("De naam van de organisatie."),
     )
 
     class Meta:
@@ -27,7 +29,7 @@ class LokaleOverheid(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("verantwoordelijke organisatie"),
         help_text=_("Organisatie verantwoordelijk voor de decentrale informatie."),
-        related_name = "verantwoordelijke",
+        related_name="verantwoordelijke",
     )
     bevoegde_organisatie = models.ForeignKey(
         "Organisatie",

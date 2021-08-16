@@ -22,15 +22,13 @@ class ProductenCatalogus(models.Model):
     kvk_nummer = models.CharField(
         max_length=8,
         verbose_name=_("kvk nummer"),
-        help_text="Landelijk uniek identificerend administratienummer."
+        help_text="Landelijk uniek identificerend administratienummer.",
     )
     domein = models.CharField(
         _("domein"),
         max_length=5,
         validators=[validate_uppercase],
-        help_text=_(
-            "Een afkorting die wordt gebruikt om het domein aan te duiden."
-        ),
+        help_text=_("Een afkorting die wordt gebruikt om het domein aan te duiden."),
     )
     versie = models.PositiveIntegerField(
         default=1,
@@ -38,7 +36,9 @@ class ProductenCatalogus(models.Model):
         help_text=_("Het versienummer van het producten catalogus."),
     )
     naam = models.CharField(
-        _("naam"), max_length=40, help_text=_("De naam van de producten catalogus."),
+        _("naam"),
+        max_length=40,
+        help_text=_("De naam van de producten catalogus."),
     )
     toelichting = models.TextField(
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."

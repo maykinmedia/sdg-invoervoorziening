@@ -34,7 +34,7 @@ urlpatterns = [
     ),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
-    path('admin/', include(tf_urls)),
+    path("admin/", include(tf_urls)),
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(),
@@ -58,4 +58,6 @@ urlpatterns += staticfiles_urlpatterns() + static(
 if settings.DEBUG and apps.is_installed("debug_toolbar"):
     import debug_toolbar
 
-    urlpatterns = [path("__debug__/", include(debug_toolbar.urls)),] + urlpatterns
+    urlpatterns = [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ] + urlpatterns

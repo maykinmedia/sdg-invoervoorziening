@@ -1,7 +1,9 @@
-from ckeditor.fields import RichTextField
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from ckeditor.fields import RichTextField
+
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 
 
@@ -21,14 +23,14 @@ class ProductGeneriekInformatie(models.Model):
         max_length=3,
         help_text=_(
             "De taal waarin de betreffende tekst is geschreven."
-        "ISO 639 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"
+            "ISO 639 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"
         ),
     )
     upn_uri = models.URLField(
         _("UPN URI"),
         help_text=_(
             "Uniforme Productnaam URI van landelijk product",
-    ),
+        ),
     )
     upn_label = models.CharField(
         _("UPN label"),
@@ -151,9 +153,7 @@ class ProductSpecifiekInformatie(ProductGeneriekInformatie, models.Model):
     )
     beschikbaar = models.BooleanField(
         _("beschikbaar"),
-        help_text=_(
-            "Geeft aan of het product al dan niet beschikbaar is."
-        ),
+        help_text=_("Geeft aan of het product al dan niet beschikbaar is."),
     )
     versie = models.PositiveIntegerField(
         default=1,
@@ -162,9 +162,7 @@ class ProductSpecifiekInformatie(ProductGeneriekInformatie, models.Model):
     )
     publicatie_datum = models.DateTimeField(
         _("publicatie datum"),
-        help_text=_(
-            "De datum van publicatie van de productspecifieke informatie."
-        ),
+        help_text=_("De datum van publicatie van de productspecifieke informatie."),
     )
 
     class Meta:
@@ -192,19 +190,46 @@ class ProductSpecifiekAanvraag(models.Model):
         ),
     )
     procedure_beschrijving = RichTextField(
-        _("procedure beschrijving"), help_text=_("Procedurebeschrijving.",),
+        _("procedure beschrijving"),
+        help_text=_(
+            "Procedurebeschrijving.",
+        ),
     )
-    vereisten = RichTextField(_("vereisten"), help_text=_("Vereisten auth/id/sign.",),)
-    bewijs = RichTextField(_("bewijs"), help_text=_("Bewijs (type/format).",),)
+    vereisten = RichTextField(
+        _("vereisten"),
+        help_text=_(
+            "Vereisten auth/id/sign.",
+        ),
+    )
+    bewijs = RichTextField(
+        _("bewijs"),
+        help_text=_(
+            "Bewijs (type/format).",
+        ),
+    )
     bezwaar_en_beroep = RichTextField(
-        _("bezwaar en beroep"), help_text=_("Bezwaar en beroep.",),
+        _("bezwaar en beroep"),
+        help_text=_(
+            "Bezwaar en beroep.",
+        ),
     )
     kosten_en_betaalmethoden = RichTextField(
-        _("kosten en betaalmethoden"), help_text=_("Kosten en betaalmethoden.",),
+        _("kosten en betaalmethoden"),
+        help_text=_(
+            "Kosten en betaalmethoden.",
+        ),
     )
-    uiterste_termijn = RichTextField(_("uiterste termijn"), help_text=_("Deadlines.",),)
+    uiterste_termijn = RichTextField(
+        _("uiterste termijn"),
+        help_text=_(
+            "Deadlines.",
+        ),
+    )
     wtd_bij_geen_reactie = RichTextField(
-        _("wtd bij geen reactie"), help_text=_("Wat te doen bij geen reactie.",),
+        _("wtd bij geen reactie"),
+        help_text=_(
+            "Wat te doen bij geen reactie.",
+        ),
     )
     decentrale_procedure_link = models.URLField(
         _("decentrale procedure link"),
@@ -239,7 +264,8 @@ class Productuitvoering(models.Model):
         help_text=_("Decentrale producttitel."),
     )
     specifieke_tekst = RichTextField(
-        _("specifieke tekst"), help_text=_("Decentrale omschrijving."),
+        _("specifieke tekst"),
+        help_text=_("Decentrale omschrijving."),
     )
     verwijzing_links = ArrayField(
         models.URLField(_("url van verwijzing"), max_length=1000),
@@ -249,7 +275,8 @@ class Productuitvoering(models.Model):
     )
 
     specifieke_link = models.URLField(
-        _("specifieke link"), help_text=_("URL decentrale productpagina."),
+        _("specifieke link"),
+        help_text=_("URL decentrale productpagina."),
     )
 
     decentrale_link = models.URLField(

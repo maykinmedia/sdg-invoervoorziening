@@ -26,7 +26,9 @@ class GitVersionTestCase(VersionTestCase):
     def setUp(self):
         super().setUp()
 
-        self.mocked_which.return_value = True # assume git is installed for this testcase
+        self.mocked_which.return_value = (
+            True  # assume git is installed for this testcase
+        )
 
     def tearDown(self):
         patch.stopall()
@@ -91,9 +93,7 @@ class FileVersionTestCase(VersionTestCase):
 
     @patch("builtins.open", new_callable=mock_open, read_data="commit-hash")
     def test_simple(self, mock_file):
-        self.mocked_listdir.return_value = (
-            "master", "main", "foo"
-        )
+        self.mocked_listdir.return_value = ("master", "main", "foo")
 
         self.assertEqual(get_current_version(), "commit-hash")
 

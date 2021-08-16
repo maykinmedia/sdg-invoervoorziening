@@ -1,4 +1,4 @@
-from django.core.validators import _lazy_re_compile, RegexValidator
+from django.core.validators import RegexValidator, _lazy_re_compile
 from django.utils.translation import ugettext_lazy as _
 
 uppercase_validator = RegexValidator(
