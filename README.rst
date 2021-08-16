@@ -56,10 +56,9 @@ Links
 * `Issues <https://taiga.maykinmedia.nl/project/vng-sdg-invoervoorziening>`_
 * `Code <https://github.com/maykinmedia/sdg-invoervoorziening>`_
 
-
-.. |build-status| image:: https://github.com/maykinmedia/sdg-invoervoorziening/workflows/ci/badge.svg?branch=main
+.. |build-status| image:: https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml/badge.svg
     :alt: Build status
-    :target: https://github.com/maykinmedia/sdg-invoervoorziening/actions?query=workflow%3Aci
+    :target: https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :alt: Code style
