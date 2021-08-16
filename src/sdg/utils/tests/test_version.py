@@ -1,8 +1,6 @@
 from subprocess import CalledProcessError
-from unittest import skip
 from unittest.mock import mock_open, patch
 
-from django.conf import settings
 from django.test import TestCase
 
 from sdg.conf.utils import get_current_version
