@@ -1,3 +1,3 @@
-from .catalogus import *
-from .overheid import *
-from .product import *
+from .catalogus import *  # noqa
+from .overheid import *  # noqa
+from .product import *  # noqa
