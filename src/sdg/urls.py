@@ -7,19 +7,12 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views.generic.base import TemplateView
 
-from two_factor.admin import AdminSiteOTPRequired
-from two_factor.urls import urlpatterns as tf_urls
-
 from sdg.accounts.views.password_reset import PasswordResetView
 
 handler500 = "sdg.utils.views.server_error"
 admin.site.site_header = "sdg admin"
 admin.site.site_title = "sdg admin"
 admin.site.index_title = "Welcome to the sdg admin"
-
-# This will cause users not to be able to login any longer without the OTP setup. There are some
-# issues in this package that need to be resolved.
-admin.site.__class__ = AdminSiteOTPRequired
 
 urlpatterns = [
     path(
@@ -34,7 +27,6 @@ urlpatterns = [
     ),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
-    path('admin/', include(tf_urls)),
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(),
@@ -58,4 +50,6 @@ urlpatterns += staticfiles_urlpatterns() + static(
 if settings.DEBUG and apps.is_installed("debug_toolbar"):
     import debug_toolbar
 
-    urlpatterns = [path("__debug__/", include(debug_toolbar.urls)),] + urlpatterns
+    urlpatterns = [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ] + urlpatterns

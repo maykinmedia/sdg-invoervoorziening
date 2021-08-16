@@ -3,7 +3,9 @@ import warnings
 
 os.environ.setdefault("DEBUG", "yes")
 os.environ.setdefault("ALLOWED_HOSTS", "*")
-os.environ.setdefault("SECRET_KEY", "n0zyvjjcogd$hmoy5xruh%k!0c5d-t+(#w6^o-#al5diww&j2@")
+os.environ.setdefault(
+    "SECRET_KEY", "n0zyvjjcogd$hmoy5xruh%k!0c5d-t+(#w6^o-#al5diww&j2@"
+)
 os.environ.setdefault("IS_HTTPS", "no")
 os.environ.setdefault("VERSION_TAG", "dev")
 
@@ -101,6 +103,10 @@ warnings.filterwarnings(
     RuntimeWarning,
     r"django\.db\.models\.fields",
 )
+
+# Two factor authentication
+# Disable two factor authentication locally then uncomment the line below.
+# TWO_FACTOR_FORCE_OTP_ADMIN = False
 
 # Override settings with local settings.
 try:
