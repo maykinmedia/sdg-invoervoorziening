@@ -11,6 +11,9 @@ class Organisatie(ContactgegevensMixin, models.Model):
         help_text=_("De naam van de organisatie."),
     )
 
+    def __str__(self):
+        return self.naam
+
     class Meta:
         verbose_name = _("organisatie")
         verbose_name_plural = _("organisaties")

@@ -165,6 +165,9 @@ class ProductSpecifiekInformatie(ProductGeneriekInformatie, models.Model):
         help_text=_("De datum van publicatie van de productspecifieke informatie."),
     )
 
+    def __str__(self):
+        return f"{self.product_titel} - {self.product_titel_decentraal}"
+
     class Meta:
         verbose_name = _("product specifiek informatie")
         verbose_name_plural = _("product specifiek informatie")

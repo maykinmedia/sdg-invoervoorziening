@@ -44,6 +44,9 @@ class ProductenCatalogus(models.Model):
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."
     )
 
+    def __str__(self):
+        return f"{self.naam} - {self.versie}"
+
     class Meta:
         verbose_name = _("producten catalogus")
         verbose_name_plural = _("productcatalogi")
