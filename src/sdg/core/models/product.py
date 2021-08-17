@@ -5,13 +5,21 @@ from django.utils.translation import ugettext_lazy as _
 from ckeditor.fields import RichTextField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
+from sdg.core.models.mixins import ProductSpecifiekDetailsMixin
 
 
 class ProductGeneriekInformatie(models.Model):
     """De generiek informatie over een product."""
 
+    upn = models.ForeignKey(
+        "UniformeProductnaam",
+        on_delete=models.PROTECT,
+        related_name="generiek_product",
+        verbose_name=_("uniforme productnaam"),
+        help_text=_("De uniforme productnaam met betrekking tot dit product."),
+    )
     verantwoordelijke_organisatie = models.ForeignKey(
-        "Organisatie",
+        "Overheidsorganisatie",
         on_delete=models.PROTECT,
         related_name="generiek_informatie",
         verbose_name=_("product generiek informatie"),
@@ -24,20 +32,6 @@ class ProductGeneriekInformatie(models.Model):
         help_text=_(
             "De taal waarin de betreffende tekst is geschreven."
             "ISO 639 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"
-        ),
-    )
-    upn_uri = models.URLField(
-        _("UPN URI"),
-        help_text=_(
-            "Uniforme Productnaam URI van landelijk product",
-        ),
-    )
-    upn_label = models.CharField(
-        _("UPN label"),
-        max_length=255,
-        help_text=_(
-            "Het bijbehorende label. Zie https://standaarden.overheid.nl/owms/oquery/UPL-actueel.plain voor de "
-            "volledige UPL. "
         ),
     )
     product_titel = models.CharField(
@@ -109,21 +103,25 @@ class ProductGeneriekInformatie(models.Model):
         ),
     )
 
+    def __str__(self):
+        return f"{self.product_titel}"
+
     class Meta:
-        abstract = True
         verbose_name = _("product generiek informatie")
         verbose_name_plural = _("product generiek informatie")
 
 
-class ProductSpecifiekInformatie(ProductGeneriekInformatie, models.Model):
+class ProductSpecifiekInformatie(ProductSpecifiekDetailsMixin, models.Model):
     """De specifieke informatie over een product."""
 
-    catalogus = models.ForeignKey(
-        "ProductenCatalogus",
+    generiek_product = models.OneToOneField(
+        "ProductGeneriekInformatie",
         on_delete=models.CASCADE,
-        related_name="producten",
-        verbose_name=_("product specifiek informatie"),
-        help_text=_("Referentie naar de catalogus waartoe dit product behoort."),
+        related_name="specifiek_product",
+        null=True,
+        blank=True,
+        verbose_name=_("generiek product"),
+        help_text=_("Een verwijzing naar de generieke versie van dit product"),
     )
     product = models.OneToOneField(
         "self",
@@ -131,9 +129,26 @@ class ProductSpecifiekInformatie(ProductGeneriekInformatie, models.Model):
         related_name="gerefereerd",
         null=True,
         blank=True,
-        verbose_name="refereert aan",
-        help_text=_("Object record which corrects the current record"),
+        verbose_name=_("refereert aan"),
+        help_text=_("Een verwijzing naar een ander product."),
     )
+    catalogus = models.ForeignKey(
+        "ProductenCatalogus",
+        on_delete=models.CASCADE,
+        related_name="producten",
+        verbose_name=_("product specifiek informatie"),
+        help_text=_("Referentie naar de catalogus waartoe dit product behoort."),
+    )
+    gerelateerd_product = models.ForeignKey(
+        "self",
+        on_delete=models.CASCADE,
+        related_name="gerelateerd",
+        null=True,
+        blank=True,
+        verbose_name=_("gerelateerd aan"),
+        help_text=_("Een verwijzing naar een gerelateerd product."),
+    )
+
     doelgroep = ArrayField(
         models.CharField(max_length=32, choices=DoelgroepChoices.choices),
         help_text=_(
@@ -143,13 +158,6 @@ class ProductSpecifiekInformatie(ProductGeneriekInformatie, models.Model):
         ),
         default=list,
         blank=True,
-    )
-    product_titel_decentraal = models.CharField(
-        _("product titel decentraal"),
-        max_length=50,
-        help_text=_(
-            "De titel van het decentrale product, die immers kan afwijken van de landelijke titel."
-        ),
     )
     beschikbaar = models.BooleanField(
         _("beschikbaar"),
@@ -166,7 +174,7 @@ class ProductSpecifiekInformatie(ProductGeneriekInformatie, models.Model):
     )
 
     def __str__(self):
-        return f"{self.product_titel} - {self.product_titel_decentraal}"
+        return f"{self.product_titel_decentraal} - {self.versie}"
 
     class Meta:
         verbose_name = _("product specifiek informatie")
@@ -193,46 +201,19 @@ class ProductSpecifiekAanvraag(models.Model):
         ),
     )
     procedure_beschrijving = RichTextField(
-        _("procedure beschrijving"),
-        help_text=_(
-            "Procedurebeschrijving.",
-        ),
+        _("procedure beschrijving"), help_text=_("Procedurebeschrijving.",),
     )
-    vereisten = RichTextField(
-        _("vereisten"),
-        help_text=_(
-            "Vereisten auth/id/sign.",
-        ),
-    )
-    bewijs = RichTextField(
-        _("bewijs"),
-        help_text=_(
-            "Bewijs (type/format).",
-        ),
-    )
+    vereisten = RichTextField(_("vereisten"), help_text=_("Vereisten auth/id/sign.",),)
+    bewijs = RichTextField(_("bewijs"), help_text=_("Bewijs (type/format).",),)
     bezwaar_en_beroep = RichTextField(
-        _("bezwaar en beroep"),
-        help_text=_(
-            "Bezwaar en beroep.",
-        ),
+        _("bezwaar en beroep"), help_text=_("Bezwaar en beroep.",),
     )
     kosten_en_betaalmethoden = RichTextField(
-        _("kosten en betaalmethoden"),
-        help_text=_(
-            "Kosten en betaalmethoden.",
-        ),
+        _("kosten en betaalmethoden"), help_text=_("Kosten en betaalmethoden.",),
     )
-    uiterste_termijn = RichTextField(
-        _("uiterste termijn"),
-        help_text=_(
-            "Deadlines.",
-        ),
-    )
+    uiterste_termijn = RichTextField(_("uiterste termijn"), help_text=_("Deadlines.",),)
     wtd_bij_geen_reactie = RichTextField(
-        _("wtd bij geen reactie"),
-        help_text=_(
-            "Wat te doen bij geen reactie.",
-        ),
+        _("wtd bij geen reactie"), help_text=_("Wat te doen bij geen reactie.",),
     )
     decentrale_procedure_link = models.URLField(
         _("decentrale procedure link"),
@@ -244,7 +225,7 @@ class ProductSpecifiekAanvraag(models.Model):
         verbose_name_plural = _("product specifiek aanvragen")
 
 
-class Productuitvoering(models.Model):
+class Productuitvoering(ProductSpecifiekDetailsMixin, models.Model):
     """De specifieke uitvoering van een product.
     Gemeente kan van een product meerdere varianten beschrijven."""
 
@@ -260,38 +241,11 @@ class Productuitvoering(models.Model):
         verbose_name=_("product specifiek aanvraag"),
         help_text=_("Referentie naar het product specifiek aanvraag."),
     )
-
-    product_titel_decentraal = models.CharField(
-        _("product titel decentraal"),
+    product_titel_uitvoering = models.CharField(
+        _("product titel_uitovering"),
         max_length=50,
-        help_text=_("Decentrale producttitel."),
-    )
-    specifieke_tekst = RichTextField(
-        _("specifieke tekst"),
-        help_text=_("Decentrale omschrijving."),
-    )
-    verwijzing_links = ArrayField(
-        models.URLField(_("url van verwijzing"), max_length=1000),
-        help_text=_("Decentrale verwijzingen."),
-        blank=True,
-        default=list,
-    )
-
-    specifieke_link = models.URLField(
-        _("specifieke link"),
-        help_text=_("URL decentrale productpagina."),
-    )
-
-    decentrale_link = models.URLField(
-        _("decentrale link"),
         help_text=_(
-            "Link naar decentrale productpagina voor burgers en / of bedrijven."
-        ),
-    )
-    datum_wijziging = models.DateTimeField(
-        _("datum wijziging"),
-        help_text=_(
-            "Decentrale overheden geven een wijzigingsdatum mee voor hun informatie. Deze datum wordt op het portaal getoond."
+            "De titel van het  product, die immers kan afwijken van de landelijke titel."
         ),
     )
 
