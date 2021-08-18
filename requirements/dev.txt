@@ -70,6 +70,7 @@ django==2.2.24
     #   django-formtools
     #   django-hijack
     #   django-jenkins
+    #   django-markdownx
     #   django-otp
     #   django-phonenumber-field
     #   django-redis
@@ -85,10 +86,6 @@ django-axes==5.20.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
 django-choices==1.7.2
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-django-ckeditor==6.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -128,11 +125,10 @@ django-jenkins==0.110.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-django-js-asset==1.2.2
+django-markdownx==3.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   django-ckeditor
 django-ordered-model==3.4.3
     # via
     #   -c requirements/ci.txt
@@ -213,6 +209,11 @@ lxml==4.6.3
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   pyquery
+markdown==3.3.4
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-markdownx
 markupsafe==2.0.1
     # via jinja2
 maykin-django-two-factor-auth==2.0.2
@@ -251,6 +252,7 @@ pillow==8.3.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-markdownx
 pip-tools==6.2.0
     # via -r requirements/dev.in
 polib==1.1.1

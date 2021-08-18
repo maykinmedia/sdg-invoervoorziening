@@ -2,7 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ckeditor.fields import RichTextField
+from markdownx.models import MarkdownxField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models.mixins import ProductGegevensMixin
@@ -41,7 +41,7 @@ class ProductGeneriekInformatie(models.Model):
             "De titel van het decentrale product, die immers kan afwijken van de landelijke titel."
         ),
     )
-    generieke_tekst = RichTextField(
+    generieke_tekst = MarkdownxField(
         _("generieke tekst"),
         help_text=_(
             "De Nationale Portalen schrijven een inleidende, algemene tekst over het product. Het idee is dat deze "
@@ -200,43 +200,43 @@ class ProductSpecifiekAanvraag(models.Model):
         verbose_name=_("specifiek product"),
         related_name="specifiek_aanvraag",
     )
-    procedure_beschrijving = RichTextField(
+    procedure_beschrijving = MarkdownxField(
         _("procedure beschrijving"),
         help_text=_(
             "Procedurebeschrijving.",
         ),
     )
-    vereisten = RichTextField(
+    vereisten = MarkdownxField(
         _("vereisten"),
         help_text=_(
             "Vereisten auth/id/sign.",
         ),
     )
-    bewijs = RichTextField(
+    bewijs = MarkdownxField(
         _("bewijs"),
         help_text=_(
             "Bewijs (type/format).",
         ),
     )
-    bezwaar_en_beroep = RichTextField(
+    bezwaar_en_beroep = MarkdownxField(
         _("bezwaar en beroep"),
         help_text=_(
             "Bezwaar en beroep.",
         ),
     )
-    kosten_en_betaalmethoden = RichTextField(
+    kosten_en_betaalmethoden = MarkdownxField(
         _("kosten en betaalmethoden"),
         help_text=_(
             "Kosten en betaalmethoden.",
         ),
     )
-    uiterste_termijn = RichTextField(
+    uiterste_termijn = MarkdownxField(
         _("uiterste termijn"),
         help_text=_(
             "Deadlines.",
         ),
     )
-    wtd_bij_geen_reactie = RichTextField(
+    wtd_bij_geen_reactie = MarkdownxField(
         _("wtd bij geen reactie"),
         help_text=_(
             "Wat te doen bij geen reactie.",

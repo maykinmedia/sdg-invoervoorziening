@@ -2,7 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from ckeditor.fields import RichTextField
+from markdownx.models import MarkdownxField
 
 
 class ProductGegevensMixin(models.Model):
@@ -13,7 +13,7 @@ class ProductGegevensMixin(models.Model):
             "De titel van het decentrale product, die immers kan afwijken van de landelijke titel."
         ),
     )
-    specifieke_tekst = RichTextField(
+    specifieke_tekst = MarkdownxField(
         _("specifieke tekst"),
         help_text=_("Decentrale omschrijving."),
     )

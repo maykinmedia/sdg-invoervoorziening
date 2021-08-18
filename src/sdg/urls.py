@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -34,6 +35,7 @@ urlpatterns = [
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
     path("admin/", include(tf_urls)),
+    url(r"^markdownx/", include("markdownx.urls")),
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(),

@@ -114,7 +114,7 @@ INSTALLED_APPS = [
     "compat",  # Part of hijack
     "hijack",
     "hijack_admin",
-    "ckeditor",
+    "markdownx",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",

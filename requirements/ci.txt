@@ -44,6 +44,7 @@ django==2.2.24
     #   django-formtools
     #   django-hijack
     #   django-jenkins
+    #   django-markdownx
     #   django-otp
     #   django-phonenumber-field
     #   django-redis
@@ -59,10 +60,6 @@ django-axes==5.20.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
 django-choices==1.7.2
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-django-ckeditor==6.1.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -96,11 +93,10 @@ django-ipware==3.0.7
     #   django-axes
 django-jenkins==0.110.0
     # via -r requirements/test-tools.in
-django-js-asset==1.2.2
+django-markdownx==3.0.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   django-ckeditor
 django-ordered-model==3.4.3
     # via
     #   -c requirements/base.txt
@@ -155,6 +151,11 @@ lazy-object-proxy==1.6.0
     # via astroid
 lxml==4.6.3
     # via pyquery
+markdown==3.3.4
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-markdownx
 maykin-django-two-factor-auth==2.0.2
     # via
     #   -c requirements/base.txt
@@ -177,6 +178,7 @@ pillow==8.3.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+    #   django-markdownx
 polib==1.1.1
     # via
     #   -c requirements/base.txt
