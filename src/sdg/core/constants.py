@@ -7,6 +7,10 @@ class TaalChoices(DjangoChoices):
     nl = ChoiceItem("NL", _("Nederlands"))
     en = ChoiceItem("EN", _("Engels"))
 
+    @classmethod
+    def get_available_languages(cls):
+        return dict(cls).keys()
+
 
 class DoelgroepChoices(DjangoChoices):
     burgers = ChoiceItem("burgers", _("Burgers"))

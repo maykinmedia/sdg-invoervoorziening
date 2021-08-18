@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from ckeditor.fields import RichTextField
 
 
-class ProductSpecifiekDetailsMixin(models.Model):
+class ProductGegevensMixin(models.Model):
     product_titel_decentraal = models.CharField(
         _("product titel decentraal"),
         max_length=50,
@@ -14,7 +14,8 @@ class ProductSpecifiekDetailsMixin(models.Model):
         ),
     )
     specifieke_tekst = RichTextField(
-        _("specifieke tekst"), help_text=_("Decentrale omschrijving."),
+        _("specifieke tekst"),
+        help_text=_("Decentrale omschrijving."),
     )
     verwijzing_links = ArrayField(
         models.URLField(_("url van verwijzing"), max_length=1000),
@@ -22,9 +23,9 @@ class ProductSpecifiekDetailsMixin(models.Model):
         blank=True,
         default=list,
     )
-
     specifieke_link = models.URLField(
-        _("specifieke link"), help_text=_("URL decentrale productpagina."),
+        _("specifieke link"),
+        help_text=_("URL decentrale productpagina."),
     )
 
     decentrale_link = models.URLField(
@@ -36,7 +37,8 @@ class ProductSpecifiekDetailsMixin(models.Model):
     datum_wijziging = models.DateTimeField(
         _("datum wijziging"),
         help_text=_(
-            "Decentrale overheden geven een wijzigingsdatum mee voor hun informatie. Deze datum wordt op het portaal getoond."
+            "Decentrale overheden geven een wijzigingsdatum mee voor hun informatie. Deze datum wordt op het portaal "
+            "getoond. "
         ),
     )
 

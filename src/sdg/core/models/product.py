@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from ckeditor.fields import RichTextField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
-from sdg.core.models.mixins import ProductSpecifiekDetailsMixin
+from sdg.core.models.mixins import ProductGegevensMixin
 
 
 class ProductGeneriekInformatie(models.Model):
@@ -22,7 +22,7 @@ class ProductGeneriekInformatie(models.Model):
         "Overheidsorganisatie",
         on_delete=models.PROTECT,
         related_name="generiek_informatie",
-        verbose_name=_("product generiek informatie"),
+        verbose_name=_("verantwoordelijke organisatie"),
         help_text=_("Organisatie verantwoordelijk voor de landelijke informatie"),
     )
     taal = models.CharField(
@@ -103,6 +103,10 @@ class ProductGeneriekInformatie(models.Model):
         ),
     )
 
+    @property
+    def upn_uri(self):
+        return self.upn.upn_uri
+
     def __str__(self):
         return f"{self.product_titel}"
 
@@ -111,15 +115,13 @@ class ProductGeneriekInformatie(models.Model):
         verbose_name_plural = _("product generiek informatie")
 
 
-class ProductSpecifiekInformatie(ProductSpecifiekDetailsMixin, models.Model):
+class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     """De specifieke informatie over een product."""
 
     generiek_product = models.OneToOneField(
         "ProductGeneriekInformatie",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="specifiek_product",
-        null=True,
-        blank=True,
         verbose_name=_("generiek product"),
         help_text=_("Een verwijzing naar de generieke versie van dit product"),
     )
@@ -173,6 +175,14 @@ class ProductSpecifiekInformatie(ProductSpecifiekDetailsMixin, models.Model):
         help_text=_("De datum van publicatie van de productspecifieke informatie."),
     )
 
+    @property
+    def upn_uri(self):
+        return self.generiek_product.upn_uri
+
+    @property
+    def taal(self):
+        return self.generiek_product.taal
+
     def __str__(self):
         return f"{self.product_titel_decentraal} - {self.versie}"
 
@@ -184,48 +194,78 @@ class ProductSpecifiekInformatie(ProductSpecifiekDetailsMixin, models.Model):
 class ProductSpecifiekAanvraag(models.Model):
     """De specifieke aanvraag van een product."""
 
-    product = models.ForeignKey(
+    specifiek_product = models.ForeignKey(
         "ProductSpecifiekInformatie",
         on_delete=models.CASCADE,
-        verbose_name=_("lokale overheid"),
+        verbose_name=_("specifiek product"),
         related_name="specifiek_aanvraag",
     )
-    beschikbare_talen = models.CharField(
-        _("beschikbare talen"),
-        max_length=255,
+    procedure_beschrijving = RichTextField(
+        _("procedure beschrijving"),
         help_text=_(
-            "Naast de taal van de informatie, dient ook aangegeven te worden in welke aanvullende taal/talen de "
-            "procedure kan worden uitgevoerd. elke productbeschrijving is in één taal (nl of en). De 'additional "
-            "languages' betreft dus altijd de andere taal (en of nl). Aanname: de portalen richten zich uitsluitend "
-            "op Nederlands en Engels, geen andere talen."
+            "Procedurebeschrijving.",
         ),
     )
-    procedure_beschrijving = RichTextField(
-        _("procedure beschrijving"), help_text=_("Procedurebeschrijving.",),
+    vereisten = RichTextField(
+        _("vereisten"),
+        help_text=_(
+            "Vereisten auth/id/sign.",
+        ),
     )
-    vereisten = RichTextField(_("vereisten"), help_text=_("Vereisten auth/id/sign.",),)
-    bewijs = RichTextField(_("bewijs"), help_text=_("Bewijs (type/format).",),)
+    bewijs = RichTextField(
+        _("bewijs"),
+        help_text=_(
+            "Bewijs (type/format).",
+        ),
+    )
     bezwaar_en_beroep = RichTextField(
-        _("bezwaar en beroep"), help_text=_("Bezwaar en beroep.",),
+        _("bezwaar en beroep"),
+        help_text=_(
+            "Bezwaar en beroep.",
+        ),
     )
     kosten_en_betaalmethoden = RichTextField(
-        _("kosten en betaalmethoden"), help_text=_("Kosten en betaalmethoden.",),
+        _("kosten en betaalmethoden"),
+        help_text=_(
+            "Kosten en betaalmethoden.",
+        ),
     )
-    uiterste_termijn = RichTextField(_("uiterste termijn"), help_text=_("Deadlines.",),)
+    uiterste_termijn = RichTextField(
+        _("uiterste termijn"),
+        help_text=_(
+            "Deadlines.",
+        ),
+    )
     wtd_bij_geen_reactie = RichTextField(
-        _("wtd bij geen reactie"), help_text=_("Wat te doen bij geen reactie.",),
+        _("wtd bij geen reactie"),
+        help_text=_(
+            "Wat te doen bij geen reactie.",
+        ),
     )
     decentrale_procedure_link = models.URLField(
         _("decentrale procedure link"),
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
     )
 
+    @property
+    def beschikbare_talen(self):
+        """Naast de taal van de informatie, dient ook aangegeven te worden in welke aanvullende taal/talen de
+        procedure kan worden uitgevoerd. elke productbeschrijving is in één taal (nl of en). De 'additional
+        languages' betreft dus altijd de andere taal (en of nl). Aanname: de portalen richten zich uitsluitend op
+        Nederlands en Engels, geen andere talen"""
+
+        return [
+            i
+            for i in TaalChoices.get_available_languages()
+            if i != self.specifiek_product.taal
+        ]
+
     class Meta:
         verbose_name = _("product specifiek aanvraag")
         verbose_name_plural = _("product specifiek aanvragen")
 
 
-class Productuitvoering(ProductSpecifiekDetailsMixin, models.Model):
+class Productuitvoering(ProductGegevensMixin, models.Model):
     """De specifieke uitvoering van een product.
     Gemeente kan van een product meerdere varianten beschrijven."""
 

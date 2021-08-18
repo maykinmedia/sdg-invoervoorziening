@@ -13,12 +13,16 @@ class ProductenCatalogus(models.Model):
         blank=True,
         on_delete=models.SET_NULL,
     )
-    verantwoordelijke_organisatie = models.ForeignKey(
+    lokale_overheid = models.ForeignKey(
         "LokaleOverheid",
-        on_delete=models.PROTECT,
-        verbose_name=_("verantwoordelijke organisatie"),
-        help_text=_("Organisatie verantwoordelijk voor de decentrale informatie."),
+        verbose_name=_("lokale overheid"),
+        help_text=_("De lokale overheid die bij deze catalogus hoort."),
+        related_name="catalogi",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
     )
+
     kvk_nummer = models.CharField(
         max_length=8,
         verbose_name=_("kvk nummer"),
@@ -43,6 +47,12 @@ class ProductenCatalogus(models.Model):
     toelichting = models.TextField(
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."
     )
+
+    @property
+    def verantwoordelijke_organisatie(self):
+        """Het departement dat verantwoordelijk is (medebewind producten), bv BZK voor paspoort; "gemeenten" voor
+        autonome producten (bv terrasvergunning)"""
+        return self.lokale_overheid.verantwoordelijke_organisatie
 
     def __str__(self):
         return f"{self.naam} - {self.versie}"

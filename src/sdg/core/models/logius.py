@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.core.models import ContactgegevensMixin
+from .mixins import ContactgegevensMixin
 
 
 class Overheidsorganisatie(ContactgegevensMixin, models.Model):
@@ -17,7 +17,9 @@ class Overheidsorganisatie(ContactgegevensMixin, models.Model):
         help_text=_("De wettelijk erkende naam van de organisatie."),
     )
     naam = models.CharField(
-        _("naam"), max_length=40, help_text=_("De naam van de overheidsorganisatie."),
+        _("naam"),
+        max_length=40,
+        help_text=_("De naam van de overheidsorganisatie."),
     )
 
     def __str__(self):
@@ -36,7 +38,7 @@ class Informatiegebied(models.Model):
     )
     informatiegebied = models.CharField(
         _("informatiegebied"),
-        max_length=3,
+        max_length=40,
         help_text=_("Het bij de gegevens behorende informatiegebied."),
     )
 
@@ -57,11 +59,13 @@ class Thema(models.Model):
         help_text=_("Het informatiegebied met betrekking tot dit thema."),
     )
     code = models.CharField(
-        _("code"), max_length=3, help_text=_("De code van het desbetreffende thema."),
+        _("code"),
+        max_length=3,
+        help_text=_("De code van het desbetreffende thema."),
     )
     thema = models.CharField(
         _("thema"),
-        max_length=3,
+        max_length=40,
         help_text=_("Het thema dat verband houdt met de gegevens."),
     )
 
@@ -78,11 +82,14 @@ class UniformeProductnaam(models.Model):
         "Thema",
         on_delete=models.PROTECT,
         related_name="upn",
-        verbose_name=_("informatiegebied"),
+        verbose_name=_("thema"),
         help_text=_("Het informatiegebied met betrekking tot dit thema."),
     )
     upn_uri = models.URLField(
-        _("UPN URI"), help_text=_("Uniforme Productnaam URI van landelijk product",),
+        _("UPN URI"),
+        help_text=_(
+            "Uniforme Productnaam URI van landelijk product",
+        ),
     )
     upn_label = models.CharField(
         _("UPN label"),
