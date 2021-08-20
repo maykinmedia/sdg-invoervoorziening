@@ -1,18 +1,25 @@
 from django.apps import apps
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateView
+
+from two_factor.admin import AdminSiteOTPRequired
+from two_factor.urls import urlpatterns as tf_urls
 
 from sdg.accounts.views.password_reset import PasswordResetView
 
 handler500 = "sdg.utils.views.server_error"
-admin.site.site_header = "sdg admin"
-admin.site.site_title = "sdg admin"
-admin.site.index_title = "Welcome to the sdg admin"
+admin.site.site_header = _("SDG Invoervoorziening")
+admin.site.site_title = _("SDG Invoervoorziening")
+admin.site.index_title = _("Welcome to the SDG admin")
+
+admin.site.__class__ = AdminSiteOTPRequired
 
 urlpatterns = [
     path(
@@ -27,6 +34,8 @@ urlpatterns = [
     ),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
+    path("admin/", include(tf_urls)),
+    url(r"^markdownx/", include("markdownx.urls")),
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(),

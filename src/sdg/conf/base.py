@@ -114,6 +114,7 @@ INSTALLED_APPS = [
     "compat",  # Part of hijack
     "hijack",
     "hijack_admin",
+    "markdownx",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
@@ -320,7 +321,6 @@ SESSION_COOKIE_SECURE = IS_HTTPS
 SESSION_COOKIE_HTTPONLY = True
 
 CSRF_COOKIE_SECURE = IS_HTTPS
-CSRF_FAILURE_VIEW = "vips.accounts.views.csrf_failure"
 
 X_FRAME_OPTIONS = "DENY"
 

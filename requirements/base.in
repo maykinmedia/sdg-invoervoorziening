@@ -29,3 +29,6 @@ django-otp
 uwsgi
 sentry-sdk  # error monitoring
 elastic-apm  # Elastic APM integration
+
+# Markdown editor
+django-markdownx
