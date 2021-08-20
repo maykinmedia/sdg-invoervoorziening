@@ -8,6 +8,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import TemplateView
+from two_factor.urls import urlpatterns as tf_urls
 
 from two_factor.admin import AdminSiteOTPRequired
 from two_factor.urls import urlpatterns as tf_urls
@@ -46,6 +47,8 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    path("", include(tf_urls)),
+    path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html")),
 ]
