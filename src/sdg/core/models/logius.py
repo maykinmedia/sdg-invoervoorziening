@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from .mixins import ContactgegevensMixin
-
 
 class Overheidsorganisatie(models.Model):
     owms_identifier = models.URLField(

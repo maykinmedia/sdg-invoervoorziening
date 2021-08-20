@@ -46,6 +46,58 @@ class ProductGegevensMixin(models.Model):
         abstract = True
 
 
+class ProductAanvraagGegevensMixin(models.Model):
+    procedure_beschrijving = MarkdownxField(
+        _("procedure beschrijving"),
+        help_text=_(
+            "Procedurebeschrijving.",
+        ),
+    )
+    vereisten = MarkdownxField(
+        _("vereisten"),
+        help_text=_(
+            "Vereisten auth/id/sign.",
+        ),
+    )
+    bewijs = MarkdownxField(
+        _("bewijs"),
+        help_text=_(
+            "Bewijs (type/format).",
+        ),
+    )
+    bezwaar_en_beroep = MarkdownxField(
+        _("bezwaar en beroep"),
+        help_text=_(
+            "Bezwaar en beroep.",
+        ),
+    )
+    kosten_en_betaalmethoden = MarkdownxField(
+        _("kosten en betaalmethoden"),
+        help_text=_(
+            "Kosten en betaalmethoden.",
+        ),
+    )
+    uiterste_termijn = MarkdownxField(
+        _("uiterste termijn"),
+        help_text=_(
+            "Deadlines.",
+        ),
+    )
+    wtd_bij_geen_reactie = MarkdownxField(
+        _("wtd bij geen reactie"),
+        help_text=_(
+            "Wat te doen bij geen reactie.",
+        ),
+    )
+    decentrale_procedure_link = models.URLField(
+        _("decentrale procedure link"),
+        help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
+    )
+
+    class Meta:
+        abstract = True
+
+
 class ContactgegevensMixin(models.Model):
     contact_naam = models.CharField(
         _("contact naam"),

@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
-from sdg.core.models.mixins import ProductGegevensMixin
+from sdg.core.models.mixins import ProductAanvraagGegevensMixin, ProductGegevensMixin
 
 
 class ProductGeneriekInformatie(models.Model):
@@ -118,6 +118,13 @@ class ProductGeneriekInformatie(models.Model):
 class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     """De specifieke informatie over een product."""
 
+    standaard = models.ForeignKey(
+        "StandaardProductSpecifiekInformatie",
+        related_name="aanpassingen",
+        on_delete=models.PROTECT,
+        verbose_name=_("standaard"),
+        help_text=_("De standaardinformatie voor de product specifiek informatie."),
+    )
     generiek_product = models.OneToOneField(
         "ProductGeneriekInformatie",
         on_delete=models.PROTECT,
@@ -191,9 +198,16 @@ class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
         verbose_name_plural = _("product specifiek informatie")
 
 
-class ProductSpecifiekAanvraag(models.Model):
+class ProductSpecifiekAanvraag(ProductAanvraagGegevensMixin, models.Model):
     """De specifieke aanvraag van een product."""
 
+    standaard = models.ForeignKey(
+        "StandaardProductSpecifiekAanvraag",
+        related_name="aanpassingen",
+        on_delete=models.PROTECT,
+        verbose_name=_("standaard"),
+        help_text=_("De standaardinformatie voor de product specifiek aanvraag."),
+    )
     specifiek_product = models.ForeignKey(
         "ProductSpecifiekInformatie",
         on_delete=models.CASCADE,
@@ -207,53 +221,6 @@ class ProductSpecifiekAanvraag(models.Model):
         help_text=_(
             "De locaties die zijn toegewezen aan de productaanvraag.",
         ),
-    )
-
-    procedure_beschrijving = MarkdownxField(
-        _("procedure beschrijving"),
-        help_text=_(
-            "Procedurebeschrijving.",
-        ),
-    )
-    vereisten = MarkdownxField(
-        _("vereisten"),
-        help_text=_(
-            "Vereisten auth/id/sign.",
-        ),
-    )
-    bewijs = MarkdownxField(
-        _("bewijs"),
-        help_text=_(
-            "Bewijs (type/format).",
-        ),
-    )
-    bezwaar_en_beroep = MarkdownxField(
-        _("bezwaar en beroep"),
-        help_text=_(
-            "Bezwaar en beroep.",
-        ),
-    )
-    kosten_en_betaalmethoden = MarkdownxField(
-        _("kosten en betaalmethoden"),
-        help_text=_(
-            "Kosten en betaalmethoden.",
-        ),
-    )
-    uiterste_termijn = MarkdownxField(
-        _("uiterste termijn"),
-        help_text=_(
-            "Deadlines.",
-        ),
-    )
-    wtd_bij_geen_reactie = MarkdownxField(
-        _("wtd bij geen reactie"),
-        help_text=_(
-            "Wat te doen bij geen reactie.",
-        ),
-    )
-    decentrale_procedure_link = models.URLField(
-        _("decentrale procedure link"),
-        help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
     )
 
     @property
@@ -278,6 +245,13 @@ class Productuitvoering(ProductGegevensMixin, models.Model):
     """De specifieke uitvoering van een product.
     Gemeente kan van een product meerdere varianten beschrijven."""
 
+    standaard = models.ForeignKey(
+        "StandaardProductuitvoering",
+        related_name="aanpassingen",
+        on_delete=models.PROTECT,
+        verbose_name=_("standaard"),
+        help_text=_("De standaardinformatie voor de productuitvoering."),
+    )
     product_specifiek_informatie = models.ForeignKey(
         "ProductSpecifiekInformatie",
         on_delete=models.CASCADE,
