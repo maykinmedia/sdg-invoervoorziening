@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from .mixins import ContactgegevensMixin
 
 
-class Overheidsorganisatie(ContactgegevensMixin, models.Model):
+class Overheidsorganisatie(models.Model):
     owms_identifier = models.URLField(
         _("owms identifier"),
         help_text=_(

@@ -200,6 +200,15 @@ class ProductSpecifiekAanvraag(models.Model):
         verbose_name=_("specifiek product"),
         related_name="specifiek_aanvraag",
     )
+    lokaties = models.ManyToManyField(
+        "Lokatie",
+        verbose_name=_("lokaties"),
+        related_name="productaanvragen",
+        help_text=_(
+            "De locaties die zijn toegewezen aan de productaanvraag.",
+        ),
+    )
+
     procedure_beschrijving = MarkdownxField(
         _("procedure beschrijving"),
         help_text=_(

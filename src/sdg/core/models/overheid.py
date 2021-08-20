@@ -26,6 +26,13 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         help_text=_("Bevoegd gezag verantwoordelijk voor de procedure."),
         related_name="bevoegde",
     )
+    organisatie = models.ForeignKey(
+        "Overheidsorganisatie",
+        on_delete=models.CASCADE,
+        verbose_name=_("organisatie"),
+        help_text=_("De organisatie van de lokale overheid."),
+        related_name="organisatie",
+    )
 
     class Meta:
         verbose_name = _("lokale overheid")
@@ -37,11 +44,6 @@ class Lokatie(models.Model):
         "LokaleOverheid",
         on_delete=models.CASCADE,
         verbose_name=_("lokale overheid"),
-    )
-    product = models.ForeignKey(
-        "ProductSpecifiekAanvraag",
-        on_delete=models.PROTECT,
-        verbose_name=_("product"),
     )
 
     lokatie_adres = models.TextField(

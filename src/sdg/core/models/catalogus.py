@@ -23,11 +23,6 @@ class ProductenCatalogus(models.Model):
         on_delete=models.SET_NULL,
     )
 
-    kvk_nummer = models.CharField(
-        max_length=8,
-        verbose_name=_("kvk nummer"),
-        help_text="Landelijk uniek identificerend administratienummer.",
-    )
     domein = models.CharField(
         _("domein"),
         max_length=5,
