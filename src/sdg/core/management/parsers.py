@@ -1,9 +1,10 @@
 import csv
-from lxml import etree
 import os
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 from django.core.management import BaseCommand, CommandError
+
+from lxml import etree
 
 
 class ParserException(Exception):
@@ -37,7 +38,9 @@ class OwmsParser:
         for value in values:
             output.append(
                 {
-                    column: value.find(column).text if value.find(column) is not None else None
+                    column: value.find(column).text
+                    if value.find(column) is not None
+                    else None
                     for column in self.xml_column_names
                 }
             )
@@ -63,17 +66,21 @@ class ParserCommand(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "filename", help="The name of the file to be imported.",
+            "filename",
+            help="The name of the file to be imported.",
         )
 
     def handle(self, handler_function, **options):
-        filename = options.pop('filename')
+        filename = options.pop("filename")
 
         data = self.parse(filename)
         created_count = handler_function(data)
 
         self.stdout.write(
-            self.style.SUCCESS(f"Succesfully {self.plural_object_name} imported from {filename} ({created_count} objects)."))
+            self.style.SUCCESS(
+                f"Succesfully {self.plural_object_name} imported from {filename} ({created_count} objects)."
+            )
+        )
 
     def parse(self, filename) -> List[Dict[str, Any]]:
         try:

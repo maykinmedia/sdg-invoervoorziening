@@ -1,11 +1,11 @@
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Any, Dict, List
 
 from sdg.core.models import (
-    Overheidsorganisatie,
-    UniformeProductnaam,
     Informatiegebied,
+    Overheidsorganisatie,
     Thema,
+    UniformeProductnaam,
 )
 from sdg.core.utils import string_to_date
 
@@ -81,22 +81,23 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
             rijk=bool(obj.get("Rijk")),
             provincie=bool(obj.get("Provincie")),
             waterschap=bool(obj.get("Waterschap")),
-            gemeente= bool(obj.get("Gemeente")),
+            gemeente=bool(obj.get("Gemeente")),
             burger=bool(obj.get("Burger")),
             bedrijf=bool(obj.get("Bedrijf")),
-            dienstenwet= bool(obj.get("Dienstenwet")),
-            sdg= bool(obj.get("SDG")),
-            autonomie= bool(obj.get("Autonomie")),
-            medebewind= bool(obj.get("Medebewind")),
-            aanvraag= bool(obj.get("Aanvraag")),
-            subsidie= bool(obj.get("Subsidie")),
-            melding= bool(obj.get("Melding")),
-            verplichting= bool(obj.get("Verplichting")),
+            dienstenwet=bool(obj.get("Dienstenwet")),
+            sdg=bool(obj.get("SDG")),
+            autonomie=bool(obj.get("Autonomie")),
+            medebewind=bool(obj.get("Medebewind")),
+            aanvraag=bool(obj.get("Aanvraag")),
+            subsidie=bool(obj.get("Subsidie")),
+            melding=bool(obj.get("Melding")),
+            verplichting=bool(obj.get("Verplichting")),
             digi_d_macht=bool(obj.get("DigiDMacht")),
             grondslag=obj.get("Grondslag"),
             grondslaglabel=obj.get("Grondslaglabel"),
             grondslaglink=obj.get("Grondslaglink"),
-        ) for obj in data
+        )
+        for obj in data
     ]
     created_objects = UniformeProductnaam.objects.bulk_create(upn_list)
     return len(created_objects)

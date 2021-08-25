@@ -4,8 +4,5 @@ from django.utils.timezone import now
 
 
 class OrganisatieManager(models.Manager):
-
     def active(self):
-        return self.filter(
-            Q(owms_end_date__lte=now())
-        )
+        return self.filter(Q(owms_end_date__lte=now()))

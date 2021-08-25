@@ -48,7 +48,9 @@ class Informatiegebied(models.Model):
     )
     informatiegebied_uri = models.URLField(
         _("informatiegebied uri"),
-        help_text=_("Informatiegebied URI van landelijk product",),
+        help_text=_(
+            "Informatiegebied URI van landelijk product",
+        ),
     )
 
     def __str__(self):
@@ -73,7 +75,10 @@ class Thema(models.Model):
         help_text=_("Het thema dat verband houdt met de gegevens."),
     )
     thema_uri = models.URLField(
-        _("thema uri"), help_text=_("Thema URI van landelijk product",),
+        _("thema uri"),
+        help_text=_(
+            "Thema URI van landelijk product",
+        ),
     )
 
     @property
@@ -99,7 +104,10 @@ class UniformeProductnaam(models.Model):
         null=True,
     )
     upn_uri = models.URLField(
-        _("UPN URI"), help_text=_("Uniforme Productnaam URI van landelijk product",),
+        _("UPN URI"),
+        help_text=_(
+            "Uniforme Productnaam URI van landelijk product",
+        ),
     )
     upn_label = models.CharField(
         _("UPN label"),
@@ -172,15 +180,21 @@ class UniformeProductnaam(models.Model):
     )
 
     grondslag = models.CharField(
-        _("grondslag"), blank=True, null=True,
+        _("grondslag"),
+        blank=True,
+        null=True,
         max_length=80,
     )
     grondslaglabel = models.CharField(
-        _("grondslaglabel"), blank=True, null=True,
+        _("grondslaglabel"),
+        blank=True,
+        null=True,
         max_length=512,
     )
     grondslaglink = models.URLField(
-        _("grondslaglink"), blank=True, null=True,
+        _("grondslaglink"),
+        blank=True,
+        null=True,
     )
 
     def __str__(self):
@@ -189,4 +203,3 @@ class UniformeProductnaam(models.Model):
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
-
