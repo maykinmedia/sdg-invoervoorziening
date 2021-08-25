@@ -78,7 +78,7 @@ class ParserCommand(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Succesfully {self.plural_object_name} imported from {filename} ({created_count} objects)."
+                f"Succesfully imported {self.plural_object_name} from {filename} ({created_count} objects)."
             )
         )
 
