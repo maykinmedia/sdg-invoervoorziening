@@ -34,6 +34,11 @@ certifi==2021.5.30
     #   elastic-apm
     #   requests
     #   sentry-sdk
+cffi==1.14.6
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   cryptography
 charset-normalizer==2.0.4
     # via
     #   -c requirements/ci.txt
@@ -49,6 +54,11 @@ coverage==4.5.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+cryptography==3.4.8
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   pyjwt
 cssselect==1.1.0
     # via
     #   -c requirements/ci.txt
@@ -58,11 +68,17 @@ ddt-api-calls==0.3.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+defusedxml==0.7.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   python3-openid
 django==2.2.24
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   ddt-api-calls
+    #   django-allauth
     #   django-axes
     #   django-choices
     #   django-debug-toolbar
@@ -78,6 +94,10 @@ django==2.2.24
     #   django-sniplates
     #   maykin-django-two-factor-auth
 django-admin-index==1.4.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+django-allauth==0.45.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -231,6 +251,11 @@ mypy-extensions==0.4.3
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   black
+oauthlib==3.1.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   requests-oauthlib
 packaging==21.0
     # via sphinx
 pathspec==0.9.0
@@ -244,7 +269,7 @@ pep8==1.7.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-phonenumbers==8.12.28
+phonenumbers==8.12.31
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -260,7 +285,7 @@ polib==1.1.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-rosetta
-psycopg2==2.9.1
+psycopg2==2.8.6
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -269,6 +294,11 @@ pycodestyle==2.7.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   flake8
+pycparser==2.20
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   cffi
 pyflakes==2.3.1
     # via
     #   -c requirements/ci.txt
@@ -276,6 +306,11 @@ pyflakes==2.3.1
     #   flake8
 pygments==2.9.0
     # via sphinx
+pyjwt[crypto]==2.1.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-allauth
 pylint==2.9.6
     # via
     #   -c requirements/ci.txt
@@ -300,6 +335,11 @@ python-dotenv==0.19.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+python3-openid==3.2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-allauth
 pytz==2021.1
     # via
     #   -c requirements/ci.txt
@@ -326,14 +366,21 @@ requests==2.26.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   ddt-api-calls
+    #   django-allauth
     #   django-rosetta
     #   requests-mock
+    #   requests-oauthlib
     #   sphinx
 requests-mock==1.9.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   ddt-api-calls
+requests-oauthlib==1.3.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-allauth
 sentry-sdk==1.3.1
     # via
     #   -c requirements/ci.txt

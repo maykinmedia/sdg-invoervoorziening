@@ -1,6 +1,6 @@
 # Core python libraries
 Pillow  # handle images
-psycopg2  # database driver
+psycopg2 < 2.9 # database driver
 pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
@@ -17,7 +17,7 @@ django-rosetta
 django-sniplates
 maykin-django-two-factor-auth
 phonenumbers
-django-otp
+django-allauth
 
 # API libraries
 # djangorestframework

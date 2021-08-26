@@ -9,11 +9,18 @@ certifi==2021.5.30
     #   elastic-apm
     #   requests
     #   sentry-sdk
+cffi==1.14.6
+    # via cryptography
 charset-normalizer==2.0.4
     # via requests
+cryptography==3.4.8
+    # via pyjwt
+defusedxml==0.7.1
+    # via python3-openid
 django==2.2.24
     # via
     #   -r requirements/base.in
+    #   django-allauth
     #   django-axes
     #   django-choices
     #   django-formtools
@@ -26,6 +33,8 @@ django==2.2.24
     #   django-sniplates
     #   maykin-django-two-factor-auth
 django-admin-index==1.4.0
+    # via -r requirements/base.in
+django-allauth==0.45.0
     # via -r requirements/base.in
 django-axes==5.20.0
     # via -r requirements/base.in
@@ -48,9 +57,7 @@ django-markdownx==3.0.1
 django-ordered-model==3.4.3
     # via django-admin-index
 django-otp==1.0.6
-    # via
-    #   -r requirements/base.in
-    #   maykin-django-two-factor-auth
+    # via maykin-django-two-factor-auth
 django-phonenumber-field==5.2.0
     # via maykin-django-two-factor-auth
 django-redis==5.0.0
@@ -67,7 +74,9 @@ markdown==3.3.4
     # via django-markdownx
 maykin-django-two-factor-auth==2.0.2
     # via -r requirements/base.in
-phonenumbers==8.12.28
+oauthlib==3.1.1
+    # via requests-oauthlib
+phonenumbers==8.12.31
     # via -r requirements/base.in
 pillow==8.3.1
     # via
@@ -75,12 +84,18 @@ pillow==8.3.1
     #   django-markdownx
 polib==1.1.1
     # via django-rosetta
-psycopg2==2.9.1
+psycopg2==2.8.6
     # via -r requirements/base.in
+pycparser==2.20
+    # via cffi
+pyjwt[crypto]==2.1.0
+    # via django-allauth
 python-decouple==3.4
     # via -r requirements/base.in
 python-dotenv==0.19.0
     # via -r requirements/base.in
+python3-openid==3.2.0
+    # via django-allauth
 pytz==2021.1
     # via
     #   -r requirements/base.in
@@ -90,7 +105,12 @@ qrcode==6.1
 redis==3.5.3
     # via django-redis
 requests==2.26.0
-    # via django-rosetta
+    # via
+    #   django-allauth
+    #   django-rosetta
+    #   requests-oauthlib
+requests-oauthlib==1.3.0
+    # via django-allauth
 sentry-sdk==1.3.1
     # via -r requirements/base.in
 six==1.16.0

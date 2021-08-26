@@ -20,7 +20,7 @@ BASE_DIR = os.path.abspath(
 #
 # Core Django settings
 #
-# SITE_ID = config("SITE_ID", default=1)
+SITE_ID = config("SITE_ID", default=1)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
@@ -93,7 +93,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     # NOTE: If enabled, at least one Site object is required and
     # uncomment SITE_ID above.
-    # 'django.contrib.sites',
+    "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Admin auth
@@ -115,6 +115,8 @@ INSTALLED_APPS = [
     "hijack",
     "hijack_admin",
     "markdownx",
+    "allauth",
+    "allauth.account",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
@@ -306,6 +308,7 @@ AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesBackend",
     "sdg.accounts.backends.UserModelEmailBackend",
     "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 SESSION_COOKIE_NAME = "sdg_sessionid"
@@ -403,8 +406,8 @@ SENTRY_DSN = config("SENTRY_DSN", None)
 RELEASE = get_current_version()
 
 # Two factor auth
-LOGIN_URL = "two_factor:login"
-LOGIN_REDIRECT_URL = "admin:index"
+LOGIN_URL = "accounts:login"
+LOGIN_REDIRECT_URL = "core:home"
 
 if SENTRY_DSN:
     SENTRY_CONFIG = {
@@ -427,3 +430,9 @@ ELASTIC_APM = {
 if not ELASTIC_APM_SERVER_URL:
     ELASTIC_APM["ENABLED"] = False
     ELASTIC_APM["SERVER_URL"] = "http://localhost:8200"
+
+# django-allauth
+ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"

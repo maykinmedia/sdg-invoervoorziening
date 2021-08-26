@@ -46,8 +46,10 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
-    # Simply show the master template.
-    path("", TemplateView.as_view(template_name="master.html")),
+    path("", include(tf_urls)),
+    path("accounts/", include("allauth.urls")),
+    path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
+    path("", include("sdg.core.urls", namespace="core")),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
