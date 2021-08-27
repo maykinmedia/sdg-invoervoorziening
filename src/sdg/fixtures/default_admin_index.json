@@ -2,21 +2,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 2,
-        "name": "Catalogus",
-        "slug": "catalogus",
-        "models": [
-            [
-                "core",
-                "productencatalogus"
-            ]
-        ]
-    }
-},
-{
-    "model": "admin_index.appgroup",
-    "fields": {
-        "order": 0,
+        "order": 1,
         "name": "Logius",
         "slug": "logius",
         "models": [
@@ -42,9 +28,9 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 1,
-        "name": "Overheid",
-        "slug": "overheid",
+        "order": 2,
+        "name": "Organisaties",
+        "slug": "organisaties",
         "models": [
             [
                 "core",
@@ -61,9 +47,13 @@
     "model": "admin_index.appgroup",
     "fields": {
         "order": 3,
-        "name": "Product",
-        "slug": "product",
+        "name": "Producten",
+        "slug": "producten",
         "models": [
+            [
+                "core",
+                "productencatalogus"
+            ],
             [
                 "core",
                 "productgeneriekinformatie"
@@ -87,8 +77,8 @@
     "model": "admin_index.appgroup",
     "fields": {
         "order": 4,
-        "name": "Standaard",
-        "slug": "standaard",
+        "name": "Referentie producten",
+        "slug": "referentie-producten",
         "models": [
             [
                 "core",
@@ -101,6 +91,64 @@
             [
                 "core",
                 "standaardproductuitvoering"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 0,
+        "name": "Accounts",
+        "slug": "accounts",
+        "models": [
+            [
+                "accounts",
+                "user"
+            ],
+            [
+                "auth",
+                "group"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 6,
+        "name": "Logs",
+        "slug": "logs",
+        "models": [
+            [
+                "admin",
+                "logentry"
+            ],
+            [
+                "axes",
+                "accessattempt"
+            ],
+            [
+                "axes",
+                "accesslog"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 5,
+        "name": "Configuratie",
+        "slug": "configuratie",
+        "models": [
+            [
+                "admin_index",
+                "appgroup"
+            ],
+            [
+                "admin_index",
+                "applink"
             ]
         ]
     }
