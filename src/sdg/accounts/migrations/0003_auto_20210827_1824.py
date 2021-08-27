@@ -8,37 +8,57 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0002_role'),
+        ("accounts", "0002_role"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='role',
-            options={'verbose_name': 'role', 'verbose_name_plural': 'roles'},
+            name="role",
+            options={"verbose_name": "role", "verbose_name_plural": "roles"},
         ),
         migrations.AddField(
-            model_name='user',
-            name='is_redacteur',
-            field=models.BooleanField(default=False, help_text='Designates whether this user can edit the reference texts. ', verbose_name='redacteur'),
+            model_name="user",
+            name="is_redacteur",
+            field=models.BooleanField(
+                default=False,
+                help_text="Designates whether this user can edit the reference texts. ",
+                verbose_name="redacteur",
+            ),
         ),
         migrations.AlterField(
-            model_name='role',
-            name='is_beheerder',
-            field=models.BooleanField(default=False, help_text='Designates whether this user is a manager of a specific overheidsorganisatie. ', verbose_name='beheerder'),
+            model_name="role",
+            name="is_beheerder",
+            field=models.BooleanField(
+                default=False,
+                help_text="Designates whether this user is a manager of a specific overheidsorganisatie. ",
+                verbose_name="beheerder",
+            ),
         ),
         migrations.AlterField(
-            model_name='role',
-            name='is_redacteur',
-            field=models.BooleanField(default=False, help_text='Designates whether this is a redacteur of a specific overheidsorganisatie. ', verbose_name='redacteur'),
+            model_name="role",
+            name="is_redacteur",
+            field=models.BooleanField(
+                default=False,
+                help_text="Designates whether this is a redacteur of a specific overheidsorganisatie. ",
+                verbose_name="redacteur",
+            ),
         ),
         migrations.AlterField(
-            model_name='role',
-            name='lokale_overheid',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='lokale_overheden', to='core.LokaleOverheid'),
+            model_name="role",
+            name="lokale_overheid",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="lokale_overheden",
+                to="core.LokaleOverheid",
+            ),
         ),
         migrations.AlterField(
-            model_name='role',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='roles', to=settings.AUTH_USER_MODEL),
+            model_name="role",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="roles",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

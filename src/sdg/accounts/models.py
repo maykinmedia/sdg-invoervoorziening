@@ -22,7 +22,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
         ),
         validators=[username_validator],
-        error_messages={"unique": _("A user with that username already exists."),},
+        error_messages={
+            "unique": _("A user with that username already exists."),
+        },
     )
     first_name = models.CharField(_("first name"), max_length=255, blank=True)
     last_name = models.CharField(_("last name"), max_length=255, blank=True)
@@ -69,7 +71,11 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Role(models.Model):
-    user = models.ForeignKey("User", on_delete=models.PROTECT, related_name="roles",)
+    user = models.ForeignKey(
+        "User",
+        on_delete=models.PROTECT,
+        related_name="roles",
+    )
     lokale_overheid = models.ForeignKey(
         "core.LokaleOverheid",
         on_delete=models.PROTECT,
@@ -79,12 +85,16 @@ class Role(models.Model):
     is_beheerder = models.BooleanField(
         _("beheerder"),
         default=False,
-        help_text=_("Designates whether this user is a manager of a specific overheidsorganisatie. "),
+        help_text=_(
+            "Designates whether this user is a manager of a specific overheidsorganisatie. "
+        ),
     )
     is_redacteur = models.BooleanField(
         _("redacteur"),
         default=False,
-        help_text=_("Designates whether this is a redacteur of a specific overheidsorganisatie. "),
+        help_text=_(
+            "Designates whether this is a redacteur of a specific overheidsorganisatie. "
+        ),
     )
 
     def get_allowed_roles(self):

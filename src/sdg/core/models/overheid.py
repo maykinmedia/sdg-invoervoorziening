@@ -48,7 +48,9 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
 
 class Lokatie(models.Model):
     lokale_overheid = models.ForeignKey(
-        "LokaleOverheid", on_delete=models.CASCADE, verbose_name=_("lokale overheid"),
+        "LokaleOverheid",
+        on_delete=models.CASCADE,
+        verbose_name=_("lokale overheid"),
     )
 
     lokatie_adres = models.TextField(

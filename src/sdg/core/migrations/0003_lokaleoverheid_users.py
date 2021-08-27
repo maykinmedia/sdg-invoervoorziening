@@ -7,15 +7,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('accounts', '0002_role'),
+        ("accounts", "0002_role"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('core', '0002_auto_20210827_1612'),
+        ("core", "0002_auto_20210827_1612"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='lokaleoverheid',
-            name='users',
-            field=models.ManyToManyField(through='accounts.Role', to=settings.AUTH_USER_MODEL),
+            model_name="lokaleoverheid",
+            name="users",
+            field=models.ManyToManyField(
+                through="accounts.Role", to=settings.AUTH_USER_MODEL
+            ),
         ),
     ]

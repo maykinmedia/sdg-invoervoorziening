@@ -6,18 +6,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_lokaleoverheid_users'),
+        ("core", "0003_lokaleoverheid_users"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='overheidsorganisatie',
-            name='owms_identifier',
-            field=models.URLField(help_text='De metadatastandaard voor informatie van de nederlandse overheid op internet.', unique=True, verbose_name='OWMS identifier'),
+            model_name="overheidsorganisatie",
+            name="owms_identifier",
+            field=models.URLField(
+                help_text="De metadatastandaard voor informatie van de nederlandse overheid op internet.",
+                unique=True,
+                verbose_name="OWMS identifier",
+            ),
         ),
         migrations.AlterField(
-            model_name='overheidsorganisatie',
-            name='owms_pref_label',
-            field=models.CharField(help_text='De wettelijk erkende naam van de organisatie.', max_length=80, verbose_name='OWMS pref label'),
+            model_name="overheidsorganisatie",
+            name="owms_pref_label",
+            field=models.CharField(
+                help_text="De wettelijk erkende naam van de organisatie.",
+                max_length=80,
+                verbose_name="OWMS pref label",
+            ),
         ),
     ]

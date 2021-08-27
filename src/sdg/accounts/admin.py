@@ -4,15 +4,16 @@ from django.utils.translation import ugettext_lazy as _
 
 from hijack_admin.admin import HijackUserAdminMixin
 
-from .models import User, Role
+from .models import Role, User
 
 
 @admin.register(User)
 class _UserAdmin(UserAdmin, HijackUserAdminMixin):
-    fieldsets = UserAdmin.fieldsets + (
-        (_("Roles"), {"fields": ("is_redacteur",)}),
+    fieldsets = UserAdmin.fieldsets + ((_("Roles"), {"fields": ("is_redacteur",)}),)
+    list_display = UserAdmin.list_display + (
+        "is_redacteur",
+        "hijack_field",
     )
-    list_display = UserAdmin.list_display + ("is_redacteur", "hijack_field",)
 
 
 @admin.register(Role)
