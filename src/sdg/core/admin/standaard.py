@@ -9,21 +9,16 @@ from sdg.core.models import (
 )
 
 
-class StandaardAdmin(MarkdownxModelAdmin):
-    def has_module_permission(self, request):
-        return False
-
-
 @admin.register(StandaardProductSpecifiekInformatie)
-class StandaardProductSpecifiekInformatieAdmin(StandaardAdmin):
+class StandaardProductSpecifiekInformatieAdmin(MarkdownxModelAdmin):
     model = StandaardProductSpecifiekInformatie
 
 
 @admin.register(StandaardProductSpecifiekAanvraag)
-class StandardProductAanvraagAdmin(StandaardAdmin):
+class StandardProductAanvraagAdmin(MarkdownxModelAdmin):
     model = StandaardProductSpecifiekAanvraag
 
 
 @admin.register(StandaardProductuitvoering)
-class StandaardProductuitvoeringAdmin(StandaardAdmin):
+class StandaardProductuitvoeringAdmin(MarkdownxModelAdmin):
     model = StandaardProductuitvoering
