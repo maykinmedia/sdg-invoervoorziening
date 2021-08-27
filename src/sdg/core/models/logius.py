@@ -6,14 +6,14 @@ from sdg.core.managers import OrganisatieManager
 
 class Overheidsorganisatie(models.Model):
     owms_identifier = models.URLField(
-        _("owms identifier"),
+        _("OWMS identifier"),
         help_text=_(
             "De metadatastandaard voor informatie van de nederlandse overheid op internet."
         ),
         unique=True,
     )
     owms_pref_label = models.CharField(
-        _("owms pref label"),
+        _("OWMS pref label"),
         max_length=80,
         help_text=_("De wettelijk erkende naam van de organisatie."),
     )
@@ -27,7 +27,7 @@ class Overheidsorganisatie(models.Model):
     objects = OrganisatieManager()
 
     def __str__(self):
-        return f"{self.owms_identifier} - {self.owms_pref_label}"
+        return self.owms_pref_label
 
     class Meta:
         verbose_name = _("overheidsorganisatie")
