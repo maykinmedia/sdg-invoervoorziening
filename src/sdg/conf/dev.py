@@ -104,10 +104,6 @@ warnings.filterwarnings(
     r"django\.db\.models\.fields",
 )
 
-# Two factor authentication
-# Disable two factor authentication locally then uncomment the line below.
-# TWO_FACTOR_FORCE_OTP_ADMIN = False
-
 # Override settings with local settings.
 try:
     from .local import *  # noqa
