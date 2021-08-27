@@ -184,7 +184,7 @@ polib==1.1.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-rosetta
-psycopg2==2.9.1
+psycopg2==2.8.6
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt

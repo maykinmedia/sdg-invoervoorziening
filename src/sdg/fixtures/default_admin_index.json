@@ -1,0 +1,108 @@
+[
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 2,
+        "name": "Catalogus",
+        "slug": "catalogus",
+        "models": [
+            [
+                "core",
+                "productencatalogus"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 0,
+        "name": "Logius",
+        "slug": "logius",
+        "models": [
+            [
+                "core",
+                "informatiegebied"
+            ],
+            [
+                "core",
+                "overheidsorganisatie"
+            ],
+            [
+                "core",
+                "thema"
+            ],
+            [
+                "core",
+                "uniformeproductnaam"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 1,
+        "name": "Overheid",
+        "slug": "overheid",
+        "models": [
+            [
+                "core",
+                "lokaleoverheid"
+            ],
+            [
+                "core",
+                "lokatie"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 3,
+        "name": "Product",
+        "slug": "product",
+        "models": [
+            [
+                "core",
+                "productgeneriekinformatie"
+            ],
+            [
+                "core",
+                "productspecifiekaanvraag"
+            ],
+            [
+                "core",
+                "productspecifiekinformatie"
+            ],
+            [
+                "core",
+                "productuitvoering"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 4,
+        "name": "Standaard",
+        "slug": "standaard",
+        "models": [
+            [
+                "core",
+                "standaardproductspecifiekaanvraag"
+            ],
+            [
+                "core",
+                "standaardproductspecifiekinformatie"
+            ],
+            [
+                "core",
+                "standaardproductuitvoering"
+            ]
+        ]
+    }
+}
+]

@@ -260,7 +260,7 @@ polib==1.1.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-rosetta
-psycopg2==2.9.1
+psycopg2==2.8.6
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt

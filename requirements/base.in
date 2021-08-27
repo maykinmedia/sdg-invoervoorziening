@@ -1,6 +1,6 @@
 # Core python libraries
 Pillow  # handle images
-psycopg2  # database driver
+psycopg2 <= 2.8.6  # database driver
 pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
