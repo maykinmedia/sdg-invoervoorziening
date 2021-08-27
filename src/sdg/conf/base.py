@@ -314,7 +314,7 @@ AUTHENTICATION_BACKENDS = [
 SESSION_COOKIE_NAME = "sdg_sessionid"
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
-LOGIN_URL = reverse_lazy("accounts:login")
+LOGIN_URL = reverse_lazy("account_login")
 LOGIN_REDIRECT_URL = reverse_lazy("core:home")
 LOGOUT_REDIRECT_URL = reverse_lazy("core:home")
 
