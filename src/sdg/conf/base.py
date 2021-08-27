@@ -314,8 +314,9 @@ AUTHENTICATION_BACKENDS = [
 SESSION_COOKIE_NAME = "sdg_sessionid"
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
-LOGIN_URL = reverse_lazy("admin:login")
-LOGIN_REDIRECT_URL = reverse_lazy("admin:index")
+LOGIN_URL = reverse_lazy("accounts:login")
+LOGIN_REDIRECT_URL = reverse_lazy("core:home")
+LOGOUT_REDIRECT_URL = reverse_lazy("core:home")
 
 #
 # SECURITY settings
@@ -352,6 +353,9 @@ SHOW_ALERT = True
 ADMIN_INDEX_SHOW_REMAINING_APPS = False
 ADMIN_INDEX_AUTO_CREATE_APP_GROUP = False
 ADMIN_INDEX_SHOW_REMAINING_APPS_TO_SUPERUSERS = True
+# ADMIN_INDEX_DISPLAY_DROP_DOWN_MENU_CONDITION_FUNCTION = (
+#     "openforms.utils.django_two_factor_auth.should_display_dropdown_menu"
+# )
 
 #
 # DJANGO-AXES (4.0+)
@@ -405,9 +409,11 @@ HIJACK_ALLOW_GET_REQUESTS = True
 SENTRY_DSN = config("SENTRY_DSN", None)
 RELEASE = get_current_version()
 
-# Two factor auth
-LOGIN_URL = "accounts:login"
-LOGIN_REDIRECT_URL = "core:home"
+#
+# Maykin fork of DJANGO-TWO-FACTOR-AUTH
+#
+TWO_FACTOR_FORCE_OTP_ADMIN = config("TWO_FACTOR_FORCE_OTP_ADMIN", default=not DEBUG)
+TWO_FACTOR_PATCH_ADMIN = config("TWO_FACTOR_PATCH_ADMIN", default=True)
 
 if SENTRY_DSN:
     SENTRY_CONFIG = {
