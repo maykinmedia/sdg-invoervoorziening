@@ -17,6 +17,7 @@
     padding: 8px 16px;
     display: block;
     text-decoration: none;
+    color: #54748b;
 
     &.selection__tab--selected {
       border-top: 1px solid #ddd;
@@ -59,9 +60,28 @@
     flex-direction: column;
     padding: 34px 16px;
     justify-content: space-evenly;
+    position: relative;
   }
 
   .selection__general-link {
-    // add icon before
+    color: #000;
+    display: flex;
+    align-items: center;
+
+    .svg-inline--fa {
+      background-color: #dfdfe9;
+      width: 40px;
+      height: 40px;
+      padding: 10px;
+      border-radius: 50%;
+      margin-right: 16px;
+    }
+  }
+
+  .selection__edit {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    color: #5c7f92;
   }
 }
