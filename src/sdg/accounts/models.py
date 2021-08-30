@@ -111,3 +111,9 @@ class Role(models.Model):
     class Meta:
         verbose_name = _("role")
         verbose_name_plural = _("roles")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "lokale_overheid"],
+                name="unique_user_per_lokaleoverheid",
+            )
+        ]
