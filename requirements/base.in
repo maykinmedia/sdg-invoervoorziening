@@ -16,6 +16,7 @@ django-redis
 django-rosetta
 django-sniplates
 django-allauth
+django-crispy-forms
 
 # WIP: maykin-django-two-factor-auth[phonenumbers]
 # This commit is a commit on the master branch which is still undergoing some tweaks

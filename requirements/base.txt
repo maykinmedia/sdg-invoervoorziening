@@ -42,6 +42,8 @@ django-choices==1.7.2
     # via -r requirements/base.in
 django-compat==1.0.15
     # via django-hijack-admin
+django-crispy-forms==1.12.0
+    # via -r requirements/base.in
 django-formtools==2.3
     # via maykin-django-two-factor-auth
 django-hijack==2.3.0
