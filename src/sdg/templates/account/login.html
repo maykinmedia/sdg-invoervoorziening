@@ -6,16 +6,12 @@
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
-{% block inner %}
-    <div class="login__right">
-        <div class="login__container">
-            <h3 class="login__container-title">{% trans "Sign In" %}</h3>
-            <p class="login__container-info">
-                {% blocktrans %}If you have not created an account yet, then please
-                    <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
-            </p>
-            {% crispy form %}
-        </div>
-    </div>
+{% block login_right %}
+    <h3 class="login__container-title">{% trans "Sign In" %}</h3>
+    <p class="login__container-info">
+        {% blocktrans %}If you have not created an account yet, then please
+            <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
+    </p>
+    {% crispy form %}
 {% endblock %}
 

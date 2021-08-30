@@ -5,10 +5,16 @@
 {% block content %}
     <div class="login">
         <div class="login__left">
-            <h1 class="login__title">SDG</h1>
-            <h2 class="login__subtitle">voor gemeenten</h2>
+            {% block login_left %}
+                <h1 class="login__title">SDG</h1>
+                <h2 class="login__subtitle">voor gemeenten</h2>
+            {% endblock %}
         </div>
-        {% block inner %}
-        {% endblock %}
+        <div class="login__right">
+            <div class="login__container">
+                {% block login_right %}
+                {% endblock %}
+            </div>
+        </div>
     </div>
 {% endblock %}
