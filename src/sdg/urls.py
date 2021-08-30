@@ -39,7 +39,6 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
-    path("", include(tf_urls)),
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
     path("", include("sdg.core.urls", namespace="core")),

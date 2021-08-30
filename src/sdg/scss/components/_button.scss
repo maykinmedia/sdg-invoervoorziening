@@ -1,0 +1,22 @@
+.button {
+  background-color: #febe29;
+  color: #000;
+  padding: 20px;
+  box-shadow: 0 4px 0 #b69341;
+  display: inline-block;
+  margin-top: 10px;
+  text-decoration: none;
+  transition: transform 150ms, box-shadow 150ms;
+  border: 0;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 0 #b69341;
+    // background-color: darken(#febe29, 20);
+  }
+
+  &:active {
+    transform: translateY(4px);
+    box-shadow: none;
+  }
+}

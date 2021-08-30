@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+
+        <link rel="stylesheet" href="{% static 'bundles/sdg-css.css' %}">
+        <script defer src="{% static 'bundles/sdg-js.js' %}"></script>
+        <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
+    </head>
+    <body>
+        <header class="header {% block header_classes %}{% endblock header_classes %}">
+            <div class="container header__top">
+                <img class="header__logo" src="{% static 'ico/favicon.png' %}" />
+                <div class="header__user">
+                    <i class="fas fa-user"></i>
+                    John Doe
+                </div>
+            </div>
+            <div class="container">
+                <p class="header__subtitle">{% block subtitle %}{% endblock subtitle %}</p>
+                <p class="header__title">{% block title %}{% endblock title %}</p>
+            </div>
+        </header>
+
+        <main class="container">
+            {% block content %}{% endblock content %}
+        </main>
+    </body>
+</html>
