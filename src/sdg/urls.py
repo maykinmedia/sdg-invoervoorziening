@@ -29,7 +29,7 @@ urlpatterns = [
     ),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
-    url(r"^markdownx/", include("markdownx.urls")),
+    path("markdownx/", include("markdownx.urls")),
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(),

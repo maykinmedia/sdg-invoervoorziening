@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
+from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models.mixins import ProductAanvraagGegevensMixin, ProductGegevensMixin
 
 
@@ -158,8 +159,8 @@ class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
         help_text=_("Een verwijzing naar een gerelateerd product."),
     )
 
-    doelgroep = ArrayField(
-        models.CharField(max_length=32, choices=DoelgroepChoices.choices),
+    doelgroep = ChoiceArrayField(
+        base_field=models.CharField(max_length=32, choices=DoelgroepChoices.choices),
         help_text=_(
             "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
             "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "

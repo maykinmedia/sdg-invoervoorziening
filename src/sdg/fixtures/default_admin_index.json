@@ -1,0 +1,156 @@
+[
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 1,
+        "name": "Logius",
+        "slug": "logius",
+        "models": [
+            [
+                "core",
+                "informatiegebied"
+            ],
+            [
+                "core",
+                "overheidsorganisatie"
+            ],
+            [
+                "core",
+                "thema"
+            ],
+            [
+                "core",
+                "uniformeproductnaam"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 2,
+        "name": "Organisaties",
+        "slug": "organisaties",
+        "models": [
+            [
+                "core",
+                "lokaleoverheid"
+            ],
+            [
+                "core",
+                "lokatie"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 3,
+        "name": "Producten",
+        "slug": "producten",
+        "models": [
+            [
+                "core",
+                "productencatalogus"
+            ],
+            [
+                "core",
+                "productgeneriekinformatie"
+            ],
+            [
+                "core",
+                "productspecifiekaanvraag"
+            ],
+            [
+                "core",
+                "productspecifiekinformatie"
+            ],
+            [
+                "core",
+                "productuitvoering"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 4,
+        "name": "Referentie producten",
+        "slug": "referentie-producten",
+        "models": [
+            [
+                "core",
+                "standaardproductspecifiekaanvraag"
+            ],
+            [
+                "core",
+                "standaardproductspecifiekinformatie"
+            ],
+            [
+                "core",
+                "standaardproductuitvoering"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 0,
+        "name": "Accounts",
+        "slug": "accounts",
+        "models": [
+            [
+                "accounts",
+                "user"
+            ],
+            [
+                "auth",
+                "group"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 6,
+        "name": "Logs",
+        "slug": "logs",
+        "models": [
+            [
+                "admin",
+                "logentry"
+            ],
+            [
+                "axes",
+                "accessattempt"
+            ],
+            [
+                "axes",
+                "accesslog"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 5,
+        "name": "Configuratie",
+        "slug": "configuratie",
+        "models": [
+            [
+                "admin_index",
+                "appgroup"
+            ],
+            [
+                "admin_index",
+                "applink"
+            ]
+        ]
+    }
+}
+]
