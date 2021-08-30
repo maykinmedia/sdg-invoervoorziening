@@ -1,13 +1,18 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
 
-class ProductListView(TemplateView):
-    template_name = "pages/products.html"
+class ProductListView(LoginRequiredMixin, TemplateView):
+    template_name = "products/products.html"
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context)
 
 
-class ProductDetailView(TemplateView):
-    template_name = "pages/product.html"
+class ProductDetailView(LoginRequiredMixin, TemplateView):
+    template_name = "products/product.html"
 
 
-class ContactEditView(TemplateView):
-    template_name = "pages/edit-contact.html"
+class ContactEditView(LoginRequiredMixin, TemplateView):
+    template_name = "products/edit-contact.html"

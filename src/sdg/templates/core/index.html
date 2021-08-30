@@ -5,7 +5,11 @@
 
 {% block head_title %}{% trans "Home" %}{% endblock %}
 
-{% block inner %}
-    ...
-{% endblock %}
+{% block container_title %}Home (sample){% endblock container_title %}
 
+{% block inner %}
+    <p>
+        <a href="{% url 'products:list' %}">Products</a>
+    </p>
+    <p><a href="{% url 'account_logout' %}">Log out</a></p>
+{% endblock inner %}
