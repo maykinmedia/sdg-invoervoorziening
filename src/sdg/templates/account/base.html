@@ -3,6 +3,12 @@
 {% block title %}{% block head_title %}{% endblock head_title %} | SDG {% trans "Accounts" %}{% endblock title %}
 
 {% block content %}
-    {% block inner %}
-    {% endblock %}
+    <div class="login">
+        <div class="login__left">
+            <h1 class="login__title">SDG</h1>
+            <h2 class="login__subtitle">voor gemeenten</h2>
+        </div>
+        {% block inner %}
+        {% endblock %}
+    </div>
 {% endblock %}

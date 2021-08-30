@@ -117,6 +117,7 @@ INSTALLED_APPS = [
     "markdownx",
     "allauth",
     "allauth.account",
+    "crispy_forms",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
@@ -314,7 +315,7 @@ AUTHENTICATION_BACKENDS = [
 SESSION_COOKIE_NAME = "sdg_sessionid"
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
-LOGIN_URL = reverse_lazy("account_login")
+LOGIN_URL = reverse_lazy("accounts:login_dashboard")
 LOGIN_REDIRECT_URL = reverse_lazy("core:home")
 LOGOUT_REDIRECT_URL = reverse_lazy("core:home")
 
@@ -442,3 +443,8 @@ ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_FORMS = {
+    "login": "sdg.accounts.forms.SdgLoginForm",
+    "signup": "sdg.accounts.forms.SdgSignupForm",
+    "reset_password": "sdg.accounts.forms.SdgResetPasswordForm",
+}
