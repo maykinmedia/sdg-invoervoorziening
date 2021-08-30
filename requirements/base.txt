@@ -72,12 +72,12 @@ idna==3.2
     # via requests
 markdown==3.3.4
     # via django-markdownx
-maykin-django-two-factor-auth==2.0.2
+git+https://github.com/maykinmedia/django-two-factor-auth.git@549bef1586eaa9088058352889e0747889090bba#egg=maykin-django-two-factor-auth[phonenumbers]
     # via -r requirements/base.in
 oauthlib==3.1.1
     # via requests-oauthlib
 phonenumbers==8.12.31
-    # via -r requirements/base.in
+    # via maykin-django-two-factor-auth
 pillow==8.3.1
     # via
     #   -r requirements/base.in

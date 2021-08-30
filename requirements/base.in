@@ -15,9 +15,11 @@ django-hijack-admin
 django-redis
 django-rosetta
 django-sniplates
-maykin-django-two-factor-auth
-phonenumbers
 django-allauth
+
+# WIP: maykin-django-two-factor-auth[phonenumbers]
+# This commit is a commit on the master branch which is still undergoing some tweaks
+git+https://github.com/maykinmedia/django-two-factor-auth.git@549bef1586eaa9088058352889e0747889090bba#egg=maykin-django-two-factor-auth[phonenumbers]
 
 # API libraries
 # djangorestframework
