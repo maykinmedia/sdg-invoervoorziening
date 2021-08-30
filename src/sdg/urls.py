@@ -40,6 +40,8 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
+    path("products/", include("sdg.products.urls", namespace="products")),
     # Simply show the master template.
     path("", TemplateView.as_view(template_name="master.html")),
 ]
