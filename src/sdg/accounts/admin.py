@@ -9,9 +9,11 @@ from .models import Role, User
 
 @admin.register(User)
 class _UserAdmin(UserAdmin, HijackUserAdminMixin):
-    fieldsets = UserAdmin.fieldsets + ((_("Roles"), {"fields": ("is_redacteur",)}),)
+    fieldsets = UserAdmin.fieldsets + (
+        (_("Roles"), {"fields": ("is_hoofdredacteur",)}),
+    )
     list_display = UserAdmin.list_display + (
-        "is_redacteur",
+        "is_hoofdredacteur",
         "hijack_field",
     )
 

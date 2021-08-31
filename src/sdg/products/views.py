@@ -5,9 +5,9 @@ from django.views.generic import TemplateView
 class ProductListView(LoginRequiredMixin, TemplateView):
     template_name = "products/products.html"
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
-        return self.render_to_response(context)
+    @staticmethod
+    def get_required_roles():
+        return ["is_beheerder", "is_redacteur"]
 
 
 class ProductDetailView(LoginRequiredMixin, TemplateView):

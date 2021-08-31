@@ -6,7 +6,10 @@ from markdownx.models import MarkdownxField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.db.fields import ChoiceArrayField
-from sdg.products.models.mixins import ProductGegevensMixin, ProductAanvraagGegevensMixin
+from sdg.products.models.mixins import (
+    ProductAanvraagGegevensMixin,
+    ProductGegevensMixin,
+)
 
 
 class ProductGeneriekInformatie(models.Model):

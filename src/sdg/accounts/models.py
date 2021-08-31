@@ -42,10 +42,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
-    is_redacteur = models.BooleanField(
-        _("redacteur"),
+    is_hoofdredacteur = models.BooleanField(
+        _("hoofdredacteur"),
         default=False,
-        help_text=_("Designates whether this user can edit the reference texts. "),
+        help_text=_(
+            "Designates whether this user is a root editor (i.e. can edit the reference texts)."
+        ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
@@ -93,7 +95,7 @@ class Role(models.Model):
         _("redacteur"),
         default=False,
         help_text=_(
-            "Designates whether this is a redacteur of a specific overheidsorganisatie. "
+            "Designates whether this is an editor of a specific overheidsorganisatie. "
         ),
     )
 

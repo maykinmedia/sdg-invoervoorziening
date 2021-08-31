@@ -1,28 +1,33 @@
-from abc import ABC, abstractproperty, abstractmethod
+from abc import ABC, abstractmethod, abstractproperty
 
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 class OverheidRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin, ABC):
-    @property
-    @abstractmethod
-    def allowed_roles(self):
-        """
-        :returns: A list of roles (for a lokale overheid) the use must have to access the view.
+    """Ensures an authenticated user has a given list of role permissions."""
 
-        For example:
+    lokale_overheid = None
+
+    @abstractmethod
+    def get_required_roles(self):
+        """
+        :returns: A list of required roles (for a lokale overheid) for the user to access the view.
+
+        Example:
         >>> ["is_beheerder", "is_redacteur"]
         """
         return []
 
     def test_func(self):
-        role = self.request.user.roles
-        role
+        role = self.request.user.roles.get(lokale_overheid=self.lokale_overheid)
+        if not role:
+            return False
+
+        return all([getattr(role, r) for r in self.get_required_roles()])
 
 
-class RedacteurRequiredMixin(LoginRequiredMixin, UserPassesTestMixin, ABC):
-    """Ensure the authenticated use has global redacteur permissions."""
+class RedacteurRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    """Ensures an authenticated user has "hoofdredacteur" permissions."""
 
     def test_func(self):
-        role = self.request.user.roles
-        return getattr(role, "global_redacteur")
+        return getattr(self.request.user, "is_hoofdredacteur")
