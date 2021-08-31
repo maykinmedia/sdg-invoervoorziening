@@ -1,8 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
+from sdg.accounts.mixins import OverheidRoleRequiredMixin
 
-class ProductListView(LoginRequiredMixin, TemplateView):
+
+class ProductListView(OverheidRoleRequiredMixin, TemplateView):
     template_name = "products/products.html"
 
     @staticmethod
@@ -10,9 +11,9 @@ class ProductListView(LoginRequiredMixin, TemplateView):
         return ["is_beheerder", "is_redacteur"]
 
 
-class ProductDetailView(LoginRequiredMixin, TemplateView):
+class ProductDetailView(OverheidRoleRequiredMixin, TemplateView):
     template_name = "products/product.html"
 
 
-class ContactEditView(LoginRequiredMixin, TemplateView):
+class ContactEditView(OverheidRoleRequiredMixin, TemplateView):
     template_name = "products/edit-contact.html"

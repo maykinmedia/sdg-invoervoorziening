@@ -99,11 +99,12 @@ class Role(models.Model):
         ),
     )
 
-    def get_allowed_roles(self):
+    @classmethod
+    def get_allowed_roles(cls):
         return [
             f
-            for f in self._meta.fields
-            if f.name.startswith("is_") and getattr(self, f.name)
+            for f in cls._meta.fields
+            if f.name.startswith("is_") and getattr(cls, f.name)
         ]
 
     def __str__(self):
