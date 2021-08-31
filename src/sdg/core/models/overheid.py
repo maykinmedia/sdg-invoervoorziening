@@ -39,6 +39,8 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
     )
     lau_code = models.CharField(
         _("LAU-code"),
+        blank=True,
+        null=True,
         max_length=5,
         validators=[validate_lau],
         help_text=_("Een geldige LAU-code van de organisatie."),

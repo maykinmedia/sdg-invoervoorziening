@@ -10,7 +10,8 @@ from .models import Role
 User = get_user_model()
 
 
-class _UserAdmin(_UserAdmin, HijackUserAdminMixin):
+@admin.register(User)
+class UserAdmin(_UserAdmin, HijackUserAdminMixin):
     fieldsets = _UserAdmin.fieldsets + (
         (_("Roles"), {"fields": ("is_hoofdredacteur",)}),
     )
