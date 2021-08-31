@@ -1,2 +1,2 @@
-from .product import *
-from .standaard import *
+from .product import *  # noqa
+from .standaard import *  # noqa
