@@ -13,9 +13,9 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
     model = LokaleOverheid
 
     list_display = ("organisatie", "contact_website", "contact_naam")
-    ordering = ("organisatie__naam",)
+    ordering = ("organisatie__owms_pref_label",)
     search_fields = (
-        "organisatie__naam",
+        "organisatie__owms_pref_label",
         "contact_naam",
         "contact_emailadres",
         "contact_website",
