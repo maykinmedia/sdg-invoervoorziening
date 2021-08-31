@@ -1,16 +1,21 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import ugettext_lazy as _
 
 from hijack_admin.admin import HijackUserAdminMixin
 
-from .models import Role, User
+from .models import Role
+
+User = get_user_model()
 
 
 @admin.register(User)
-class _UserAdmin(UserAdmin, HijackUserAdminMixin):
-    fieldsets = UserAdmin.fieldsets + ((_("Roles"), {"fields": ("is_redacteur",)}),)
-    list_display = UserAdmin.list_display + (
+class UserAdmin(_UserAdmin, HijackUserAdminMixin):
+    list_display = _UserAdmin.list_display + ("hijack_field",)
+    search_fields = ["first_name"]
+    fieldsets = _UserAdmin.fieldsets + ((_("Roles"), {"fields": ("is_redacteur",)}),)
+    list_display = _UserAdmin.list_display + (
         "is_redacteur",
         "hijack_field",
     )

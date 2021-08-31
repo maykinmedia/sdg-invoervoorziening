@@ -7,7 +7,6 @@ from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.base import TemplateView
 
 from sdg.accounts.views.password_reset import PasswordResetView
 
@@ -40,10 +39,9 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    path("accounts/", include("allauth.urls")),
     path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
-    path("products/", include("sdg.products.urls", namespace="products")),
-    # Simply show the master template.
-    path("", TemplateView.as_view(template_name="master.html")),
+    path("", include("sdg.core.urls", namespace="core")),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static

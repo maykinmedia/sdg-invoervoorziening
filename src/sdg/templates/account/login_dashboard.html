@@ -1,0 +1,21 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block login_right %}
+    <h3 class="login__container-title">SDG voor gemeenten</h3>
+    <p class="login__container-info">Welkom bij de Single Digital Gateway (SDG) Invoervoorziening van VNG
+        Realisatie.</p>
+    <p class="login__container-info">Hier beheert u gemeente specifieke teksten voor gemeentelijke producten. Deze
+        informatie wordt gepresenteerd op <a href="#">Rijksoverheid.nl</a> en <a
+            href="#">Digitaalondernemersplein.nl</a>.</p>
+    <p class="login__container-info">Log in om verder te gaan.</p>
+    <a class="login__button button" href="{% url 'account_login' %}?next=/">
+        Inloggen met Login Service X
+        <i>icon</i>
+    </a>
+{% endblock %}
+
