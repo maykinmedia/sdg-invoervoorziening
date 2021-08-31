@@ -104,6 +104,10 @@
         "models": [
             [
                 "accounts",
+                "role"
+            ],
+            [
+                "accounts",
                 "user"
             ],
             [
