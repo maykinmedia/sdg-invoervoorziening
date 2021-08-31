@@ -12,4 +12,4 @@ repos:
     rev: 3.9.2
     hooks:
       - id: flake8
-        args: [ '--config=setup.cfg', '--ignore=E501,F405,W503,F401' ]
+        args: [ '--ignore=E501,F405,W503,F401' ]
