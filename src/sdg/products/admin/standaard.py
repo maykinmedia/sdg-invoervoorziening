@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from markdownx.admin import MarkdownxModelAdmin
 
-from sdg.core.models import (
+from sdg.products.models import (
     StandaardProductSpecifiekAanvraag,
     StandaardProductSpecifiekInformatie,
     StandaardProductuitvoering,

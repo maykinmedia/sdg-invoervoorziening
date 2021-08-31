@@ -55,20 +55,16 @@
                 "productencatalogus"
             ],
             [
-                "core",
+                "products",
                 "productgeneriekinformatie"
             ],
             [
-                "core",
+                "products",
                 "productspecifiekaanvraag"
             ],
             [
-                "core",
+                "products",
                 "productspecifiekinformatie"
-            ],
-            [
-                "core",
-                "productuitvoering"
             ]
         ]
     }
@@ -81,15 +77,15 @@
         "slug": "referentie-producten",
         "models": [
             [
-                "core",
+                "products",
                 "standaardproductspecifiekaanvraag"
             ],
             [
-                "core",
+                "products",
                 "standaardproductspecifiekinformatie"
             ],
             [
-                "core",
+                "products",
                 "standaardproductuitvoering"
             ]
         ]
