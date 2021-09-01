@@ -149,7 +149,7 @@ class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
         "core.ProductenCatalogus",
         on_delete=models.CASCADE,
         related_name="producten",
-        verbose_name=_("product specifiek informatie"),
+        verbose_name=_("catalogus"),
         help_text=_("Referentie naar de catalogus waartoe dit product behoort."),
     )
     gerelateerd_product = models.ForeignKey(

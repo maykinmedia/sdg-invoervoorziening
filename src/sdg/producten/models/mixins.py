@@ -42,6 +42,9 @@ class ProductGegevensMixin(models.Model):
         ),
     )
 
+    def __str__(self):
+        return f"{self.product_titel_decentraal}"
+
     class Meta:
         abstract = True
 

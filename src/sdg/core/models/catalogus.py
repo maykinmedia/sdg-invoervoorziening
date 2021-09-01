@@ -18,9 +18,7 @@ class ProductenCatalogus(models.Model):
         verbose_name=_("lokale overheid"),
         help_text=_("De lokale overheid die bij deze catalogus hoort."),
         related_name="catalogi",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
     )
 
     domein = models.CharField(
