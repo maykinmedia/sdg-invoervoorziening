@@ -4,7 +4,11 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.models.mixins import ContactgegevensMixin
-from sdg.core.models.validators import validate_lau
+from sdg.core.models.validators import (
+    validate_lau,
+    validate_openingstijden,
+    validate_postcode,
+)
 
 User = get_user_model()
 
@@ -72,11 +76,79 @@ class Lokatie(models.Model):
         max_length=40,
         help_text=_("De naam van de lokatie."),
     )
-    lokatie_adres = models.TextField(  # TODO: Rename field to 'adres' if approved
-        _("lokatie adres"),
-        max_length=1000,
-        help_text=_("De gegevens over het adres van de lokatie."),
+    straat = models.CharField(
+        _("straat"),
+        max_length=256,
     )
+    nummer = models.PositiveIntegerField(
+        _("nummer"),
+    )
+    postcode = models.CharField(
+        _("postcode"),
+        validators=[validate_postcode],
+        max_length=6,
+    )
+    plaats = models.CharField(
+        _("plaats"),
+        max_length=256,
+    )
+    land = models.CharField(
+        _("land"),
+        max_length=128,
+    )
+
+    maandag = models.CharField(
+        _("maandag"),
+        blank=True,
+        null=True,
+        max_length=16,
+        validators=[validate_openingstijden],
+    )
+    dinsdag = models.CharField(
+        _("dinsdag"),
+        blank=True,
+        null=True,
+        max_length=16,
+        validators=[validate_openingstijden],
+    )
+    woensdag = models.CharField(
+        _("woensdag"),
+        blank=True,
+        null=True,
+        max_length=16,
+        validators=[validate_openingstijden],
+    )
+    donderdag = models.CharField(
+        _("donderdag"),
+        blank=True,
+        null=True,
+        max_length=16,
+        validators=[validate_openingstijden],
+    )
+    vrijdag = models.CharField(
+        _("vrijdag"),
+        blank=True,
+        null=True,
+        max_length=16,
+        validators=[validate_openingstijden],
+    )
+    zaterdag = models.CharField(
+        _("zaterdag"),
+        blank=True,
+        null=True,
+        max_length=16,
+        validators=[validate_openingstijden],
+    )
+    zondag = models.CharField(
+        _("zondag"),
+        blank=True,
+        null=True,
+        max_length=16,
+        validators=[validate_openingstijden],
+    )
+
+    def get_formatted_address(self):
+        return f"{self.naam}\n{self.straat} {self.nummer}\n{self.postcode} {self.plaats}\n{self.land}"
 
     def __str__(self):
         return self.naam
