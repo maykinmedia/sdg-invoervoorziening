@@ -1,4 +1,5 @@
 const productAccordeons = document.querySelectorAll(".products__accordeon");
+debugger;
 
 class Accordeon {
     constructor(node) {
@@ -6,7 +7,7 @@ class Accordeon {
         this.items = node.querySelectorAll(".products__accordeon-item");
 
         [...this.items].forEach(item => {
-            item.addEventListener("click", (event) => {
+            item.addEventListener("mouseup", (event) => {
                 const wasOpen = event.currentTarget.classList.contains("products__accordeon-item--open");
                 [...this.items].forEach(accordeonItem => accordeonItem.classList.remove("products__accordeon-item--open"));
                 if (!wasOpen) {
