@@ -8,8 +8,18 @@
 {% block container_title %}Home (sample){% endblock container_title %}
 
 {% block inner %}
-    <p>
-        <a href="{% url 'producten:list' %}">Products</a>
-    </p>
-    <p><a href="{% url 'account_logout' %}">Log out</a></p>
+{#    TODO modifiy/update (sample template)#}
+    <div class="products">
+        <h2 class="products__title">Lokale Overheden</h2>
+        {% for lokaleoverheid in lokale_overheden %}
+            <div class="products__accordeon-item">
+                <a href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">{{ lokaleoverheid }}</a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="products">
+        <h2 class="products__title">Menu (sample)</h2>
+        <p><a href="{% url 'account_logout' %}">Log out</a></p>
+    </div>
 {% endblock inner %}

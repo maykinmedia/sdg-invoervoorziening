@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
-{% block container_title %}Contact gegevens voor de gemeente Buren{% endblock container_title %}
+{% block container_title %}SDG voor de <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
 
 {% block inner %}
     {% crispy form %}

@@ -111,3 +111,4 @@ except ImportError:
     pass
 
 INSTALLED_APPS += ["django_extensions"]
+GRAPH_MODELS = {"app_labels": ["core", "organisaties", "producten"]}
