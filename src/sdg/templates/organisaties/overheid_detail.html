@@ -19,26 +19,26 @@
                     <div>
                         <div class="selection__title">Bezoek adres</div>
                         <div class="selection__information">
-                            {{ lokatie.lokatie_adres }}
+                            {{ lokatie.get_formatted_address|linebreaks }}
                         </div>
                     </div>
                     <div>
                         <div class="selection__title">Openingstijden</div>
                         <div class="selection__tabled">
                             <div>Maandag</div>
-                            <div>09.00 - 17.00</div>
+                            <div>{{ lokatie.maandag|default:_("Closed") }}</div>
                             <div>Dinsdag</div>
-                            <div>09.00 - 17.00</div>
+                            <div>{{ lokatie.dinsdag|default:_("Closed") }}</div>
                             <div>Woensdag</div>
-                            <div>09.00 - 17.00</div>
+                            <div>{{ lokatie.woensdag|default:_("Closed") }}</div>
                             <div>Donderdag</div>
-                            <div>09.00 - 17.00</div>
+                            <div>{{ lokatie.donderdag|default:_("Closed") }}</div>
                             <div>Vrijdag</div>
-                            <div>09.00 - 17.00</div>
+                            <div>{{ lokatie.vrijdag|default:_("Closed") }}</div>
                             <div>Zaterdag</div>
-                            <div>Gesloten</div>
+                            <div>{{ lokatie.zaterdag|default:_("Closed") }}</div>
                             <div>Zondag</div>
-                            <div>Gesloten</div>
+                            <div>{{ lokatie.zondag|default:_("Closed") }}</div>
                         </div>
                     </div>
                 </div>
