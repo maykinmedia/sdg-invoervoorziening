@@ -33,11 +33,11 @@
         "slug": "organisaties",
         "models": [
             [
-                "core",
+                "organisaties",
                 "lokaleoverheid"
             ],
             [
-                "core",
+                "organisaties",
                 "lokatie"
             ]
         ]
@@ -55,15 +55,15 @@
                 "productencatalogus"
             ],
             [
-                "products",
+                "producten",
                 "productgeneriekinformatie"
             ],
             [
-                "products",
+                "producten",
                 "productspecifiekaanvraag"
             ],
             [
-                "products",
+                "producten",
                 "productspecifiekinformatie"
             ]
         ]
@@ -77,15 +77,15 @@
         "slug": "referentie-producten",
         "models": [
             [
-                "products",
+                "producten",
                 "standaardproductspecifiekaanvraag"
             ],
             [
-                "products",
+                "producten",
                 "standaardproductspecifiekinformatie"
             ],
             [
-                "products",
+                "producten",
                 "standaardproductuitvoering"
             ]
         ]

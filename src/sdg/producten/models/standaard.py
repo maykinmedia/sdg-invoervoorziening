@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.products.models.mixins import (
+from sdg.producten.models.mixins import (
     ProductAanvraagGegevensMixin,
     ProductGegevensMixin,
 )

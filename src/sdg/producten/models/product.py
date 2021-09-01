@@ -6,7 +6,7 @@ from markdownx.models import MarkdownxField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.db.fields import ChoiceArrayField
-from sdg.products.models.mixins import (
+from sdg.producten.models.mixins import (
     ProductAanvraagGegevensMixin,
     ProductGegevensMixin,
 )
@@ -123,7 +123,7 @@ class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     """De specifieke informatie over een product."""
 
     standaard = models.ForeignKey(
-        "StandaardProductSpecifiekInformatie",
+        "producten.StandaardProductSpecifiekInformatie",
         related_name="aanpassingen",
         on_delete=models.PROTECT,
         verbose_name=_("standaard"),
@@ -206,7 +206,7 @@ class ProductSpecifiekAanvraag(ProductAanvraagGegevensMixin, models.Model):
     """De specifieke aanvraag van een product."""
 
     standaard = models.ForeignKey(
-        "StandaardProductSpecifiekAanvraag",
+        "producten.StandaardProductSpecifiekAanvraag",
         related_name="aanpassingen",
         on_delete=models.PROTECT,
         verbose_name=_("standaard"),
@@ -219,7 +219,7 @@ class ProductSpecifiekAanvraag(ProductAanvraagGegevensMixin, models.Model):
         related_name="specifiek_aanvraag",
     )
     lokaties = models.ManyToManyField(
-        "core.Lokatie",
+        "organisaties.Lokatie",
         verbose_name=_("lokaties"),
         related_name="productaanvragen",
         help_text=_(
@@ -250,7 +250,7 @@ class Productuitvoering(ProductGegevensMixin, models.Model):
     Gemeente kan van een product meerdere varianten beschrijven."""
 
     standaard = models.ForeignKey(
-        "StandaardProductuitvoering",
+        "producten.StandaardProductuitvoering",
         related_name="aanpassingen",
         on_delete=models.PROTECT,
         verbose_name=_("standaard"),

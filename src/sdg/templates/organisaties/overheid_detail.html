@@ -1,102 +1,66 @@
-{% extends 'products/base.html' %}
+{% extends 'organisaties/base.html' %}
+
+{% load i18n %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor de <b>gemeente buren</b>{% endblock container_title %}
+{% block container_title %}SDG voor de <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
 
 {% block inner %}
     <div class="selection">
         <div class="selection__tabs">
-            <a href="#gemeentehuis" data-id="gemeentehuis" class="selection__tab selection__tab--selected">Gemeentehuis</a>
-            <a href="#loketzuid" data-id="loketzuid" class="selection__tab">Loket Zuid</a>
-            <a href="#loketnoord" data-id="loketnoord" class="selection__tab">Loket Noord</a>
+            {% for lokatie in lokaleoverheid.lokaties.all %}
+                <a href="#{{ lokatie.pk }}" data-id="{{ lokatie.pk }}"
+                   class="selection__tab selection__tab{% if forloop.first %}--selected{% endif %}">{{ lokatie.naam }}</a>
+            {% endfor %}
         </div>
         <div class="selection__tab-contents">
-            <div class="selection__tab-content selection__tab-content--active" id="gemeentehuis">
-                <div>
-                    <div class="selection__title">Bezoek adres</div>
-                    <div class="selection__information">
-                        Gemeentehuis<br>
-                        De Wetering 1<br>
-                        4021 VZ Maurik<br>
-                        Nederland<br>
+            {% for lokatie in lokaleoverheid.lokaties.all %}
+                <div class="selection__tab-content selection__tab-content{% if forloop.first %}--active{% endif %}" id="{{ lokatie.pk }}">
+                    <div>
+                        <div class="selection__title">Bezoek adres</div>
+                        <div class="selection__information">
+                            {{ lokatie.lokatie_adres }}
+                        </div>
+                    </div>
+                    <div>
+                        <div class="selection__title">Openingstijden</div>
+                        <div class="selection__tabled">
+                            <div>Maandag</div>
+                            <div>09.00 - 17.00</div>
+                            <div>Dinsdag</div>
+                            <div>09.00 - 17.00</div>
+                            <div>Woensdag</div>
+                            <div>09.00 - 17.00</div>
+                            <div>Donderdag</div>
+                            <div>09.00 - 17.00</div>
+                            <div>Vrijdag</div>
+                            <div>09.00 - 17.00</div>
+                            <div>Zaterdag</div>
+                            <div>Gesloten</div>
+                            <div>Zondag</div>
+                            <div>Gesloten</div>
+                        </div>
                     </div>
                 </div>
-                <div>
-                    <div class="selection__title">Openingstijden</div>
-                    <div class="selection__tabled">
-                        <div>Maandag</div><div>09.00 - 17.00</div>
-                        <div>Dinsdag</div><div>09.00 - 17.00</div>
-                        <div>Woensdag</div><div>09.00 - 17.00</div>
-                        <div>Donderdag</div><div>09.00 - 17.00</div>
-                        <div>Vrijdag</div><div>09.00 - 17.00</div>
-                        <div>Zaterdag</div><div>Gesloten</div>
-                        <div>Zondag</div><div>Gesloten</div>
-                    </div>
-                </div>
-            </div>
-            <div class="selection__tab-content" id="loketzuid">
-                <div>
-                    <div class="selection__title">Bezoek adres</div>
-                    <div class="selection__information">
-                        Loket Zuid<br>
-                        De Wetering 1<br>
-                        4021 VZ Maurik<br>
-                        Nederland<br>
-                    </div>
-                </div>
-                <div>
-                    <div class="selection__title">Openingstijden</div>
-                    <div class="selection__tabled">
-                        <div>Maandag</div><div>09.00 - 17.00</div>
-                        <div>Dinsdag</div><div>09.00 - 17.00</div>
-                        <div>Woensdag</div><div>Gesloten</div>
-                        <div>Donderdag</div><div>09.00 - 17.00</div>
-                        <div>Vrijdag</div><div>09.00 - 17.00</div>
-                        <div>Zaterdag</div><div>Gesloten</div>
-                        <div>Zondag</div><div>Gesloten</div>
-                    </div>
-                </div>
-            </div>
-            <div class="selection__tab-content" id="loketnoord">
-                <div>
-                    <div class="selection__title">Bezoek adres</div>
-                    <div class="selection__information">
-                        Loket Noord<br>
-                        De Wetering 1<br>
-                        4021 VZ Maurik<br>
-                        Nederland<br>
-                    </div>
-                </div>
-                <div>
-                    <div class="selection__title">Openingstijden</div>
-                    <div class="selection__tabled">
-                        <div>Maandag</div><div>09.00 - 12.00</div>
-                        <div>Dinsdag</div><div>09.00 - 12.00</div>
-                        <div>Woensdag</div><div>09.00 - 12.00</div>
-                        <div>Donderdag</div><div>09.00 - 12.00</div>
-                        <div>Vrijdag</div><div>09.00 - 12.00</div>
-                        <div>Zaterdag</div><div>Gesloten</div>
-                        <div>Zondag</div><div>Gesloten</div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
         <div class="selection__general">
             <a class="selection__general-link" href="#">
                 <i class="fas fa-mouse-pointer"></i>
-                www.buren.nl
+                {{ lokaleoverheid.contact_website|default:_("No website") }}
             </a>
             <a class="selection__general-link" href="#">
                 <i class="fas fa-phone"></i>
-                0123-456790
+                {{ lokaleoverheid.contact_telefoonnummer|default:_("No phone number") }}
+            </a>
             </a>
             <a class="selection__general-link" href="#">
                 <i class="fas fa-envelope"></i>
-                info.burgerzaken@buren.nl
+                {{ lokaleoverheid.contact_emailadres|default:_("No email-address") }}
             </a>
-            <a class="selection__edit" href="{% url 'producten:edit-contact' %}">
+            <a class="selection__edit" href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">
                 <i class="fas fa-pencil-alt"></i>
-                Wijzigen
+                {% trans "Change" %}
             </a>
         </div>
     </div>

@@ -9,7 +9,9 @@ body {
 
   }
 
-  .form__group {
+  .form__group,
+  .control-group,
+  {
     display: flex;
     flex-direction: column;
     border: 0;
@@ -76,7 +78,9 @@ body {
     align-items: center;
   }
 
-  .form__action-help {
+  .form__action-help,
+  .help-block
+  {
     font-size: 14px;
     color: #666;
   }
