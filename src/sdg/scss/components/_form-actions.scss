@@ -1,0 +1,10 @@
+.form-actions {
+  display: grid;
+  grid-template-columns: 18% 1fr;
+  margin-bottom: 32px;
+
+  .form-actions__title {
+    color: #333;
+    margin-bottom: 24px;
+  }
+}

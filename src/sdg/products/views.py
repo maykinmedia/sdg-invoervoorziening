@@ -1,4 +1,6 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, FormView
+
+from .forms import ProductEditForm
 
 
 class ProductListView(TemplateView):
@@ -7,6 +9,11 @@ class ProductListView(TemplateView):
 
 class ProductDetailView(TemplateView):
     template_name = "pages/product.html"
+
+
+class ProductEditView(FormView):
+    template_name = "pages/product-edit.html"
+    form_class = ProductEditForm
 
 
 class ContactEditView(TemplateView):
