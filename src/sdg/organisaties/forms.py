@@ -1,7 +1,5 @@
 from django import forms
 from django.forms import inlineformset_factory
-from django.urls import reverse
-from django.utils.translation import gettext as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import HTML, Div, Field, Layout
