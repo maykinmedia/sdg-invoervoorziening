@@ -2,7 +2,7 @@ from django import forms
 from django.forms import inlineformset_factory
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import HTML, Div, Field, Layout
+from crispy_forms.layout import HTML, Div, Field, Hidden, Layout
 
 from sdg.core.forms.mixins import SdgFormMixin
 from sdg.organisaties.models import LokaleOverheid, Lokatie
@@ -32,6 +32,8 @@ class LokatieFormHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.form_tag = None
+        self.disable_csrf = True
+        self.template = "forms/whole_uni_formset.html"
         self.layout = Layout(
             Div(
                 Div(
