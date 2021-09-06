@@ -1,9 +1,8 @@
 from django import forms
 
-from ckeditor.widgets import CKEditorWidget
 
-
+# TODO: Implement markdown editor
 class ProductEditForm(forms.Form):
-    description = forms.CharField(widget=CKEditorWidget())
-    procedure = forms.CharField(widget=CKEditorWidget())
-    exceptions = forms.CharField(widget=CKEditorWidget())
+    description = forms.CharField()
+    procedure = forms.CharField()
+    exceptions = forms.CharField()

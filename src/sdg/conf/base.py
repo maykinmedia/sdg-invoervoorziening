@@ -102,7 +102,6 @@ INSTALLED_APPS = [
     "django_otp.plugins.otp_totp",
     "two_factor",
     # Optional applications.
-    "ckeditor",
     "ordered_model",
     "django_admin_index",
     "django.contrib.admin",
@@ -448,14 +447,4 @@ ACCOUNT_FORMS = {
     "login": "sdg.accounts.forms.SdgLoginForm",
     "signup": "sdg.accounts.forms.SdgSignupForm",
     "reset_password": "sdg.accounts.forms.SdgResetPasswordForm",
-}
-
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar_Basic': [
-            ['Bold', 'Italic', 'NumberedList', 'BulletedList', 'Link', "Table"]
-        ],
-        'toolbar': 'Basic',
-        'toolbarLocation': "bottom",
-    }
 }
