@@ -34,6 +34,26 @@
     }
   }
 
+  .tabs__tab-header {
+    padding: 32px 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tabs__status {
+    display: flex;
+  }
+
+  .tabs__status-label {
+    margin-right: 16px;
+  }
+
+  .tabs__status-display {
+    color: #889a82;
+  }
+
   .tabs__table {
     width: 100%;
     border-spacing: 0;
@@ -95,5 +115,36 @@
 
   .tabs__form-button {
     margin-top: 32px;
+  }
+
+  .tabs__footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 16px;
+    margin-top: 64px;
+  }
+
+  .tabs__footer-title {
+    font-size: 24px;
+  }
+
+  .tabs__footer-list {
+    list-style: none;
+  }
+
+  .tabs__footer-list-item {
+    padding-bottom: 8px;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  .tabs__table-help {
+    display: block;
+    text-align: right;
+    color: #396a88;
+    font-weight: bold;
+    text-decoration: none;
   }
 }

@@ -1,0 +1,22 @@
+.revision-list {
+  .revision-list__item {
+    display: flex;
+    align-items: center;
+    padding-bottom: 16px;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+
+    .svg-inline--fa {
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
+      background-color: #e2ebf2;
+      color: #9d9b9e;
+      padding-top: 4px;
+      overflow: hidden;
+      margin-right: 8px;
+    }
+  }
+}
