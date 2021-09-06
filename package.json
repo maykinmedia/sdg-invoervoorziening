@@ -21,6 +21,7 @@
   "homepage": "https://maykinmedia.nl",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "formset.js": "^0.0.1",
     "microscope-sass": "latest",
     "reseter.css": "^2.0.0"
   },

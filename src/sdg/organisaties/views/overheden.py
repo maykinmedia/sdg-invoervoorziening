@@ -1,11 +1,9 @@
-from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.organisaties.forms import (
     LokaleOverheidForm,
-    LokatieForm,
     LokatieFormHelper,
     LokatieInlineFormSet,
 )
@@ -37,25 +35,24 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["formset"] = LokatieInlineFormSet(instance=self.object)
+        context["lokatie_formset"] = kwargs.get("formset") or LokatieInlineFormSet(
+            instance=self.object, prefix="form"
+        )
         context["lokatie_helper"] = LokatieFormHelper()
 
         return context
 
     def post(self, request, *args, **kwargs):
-        super().post(request, *args, **kwargs)
+        self.object = self.get_object()
 
         form = self.form_class(request.POST, instance=self.object)
-        formset = LokatieInlineFormSet(request.POST, instance=self.object)
+        formset = LokatieInlineFormSet(
+            request.POST, instance=self.object, prefix="form"
+        )
 
         if form.is_valid() and formset.is_valid():
             return self.form_valid(form, formset=formset)
         else:
-            form_errors = [] if not form.errors else form.errors
-            formset_errors = [] if not formset.errors else formset.errors
-            for obj in [*form_errors, *formset_errors]:
-                for field, error in obj.items():
-                    messages.error(request, f"{field}: {error.as_text()}")
             return self.form_invalid(form, formset=formset)
 
     def form_valid(self, form, formset=None):
