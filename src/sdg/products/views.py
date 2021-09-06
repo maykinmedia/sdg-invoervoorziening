@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, FormView
+from django.views.generic import FormView, TemplateView
 
 from .forms import ProductEditForm
 
