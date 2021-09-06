@@ -1,18 +1,26 @@
 .button {
-  background-color: #febe29;
+  --main-color: #febe29;
+  --shadow-color: #b69341;
+  --shadow-size: 4px;
+  background-color: var(--main-color);
   color: #000;
   padding: 20px;
-  box-shadow: 0 4px 0 #b69341;
+  box-shadow: 0 var(--shadow-size) 0 var(--shadow-color);
   display: inline-block;
   margin-top: 10px;
   text-decoration: none;
-  transition: transform 150ms, box-shadow 150ms;
+  transition: transform 150ms, box-shadow 100ms;
   border: 0;
+  cursor: pointer;
+
+  &.button--light {
+    --main-color: #e0e3ea;
+    --shadow-color: #b5b6bb;
+  }
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 5px 0 #b69341;
-    // background-color: darken(#febe29, 20);
+    --shadow-size: 5px;
   }
 
   &:active {
