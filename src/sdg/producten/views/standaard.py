@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, TemplateView
+from django.views.generic import DetailView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.producten.models import StandaardProductSpecifiekInformatie
@@ -11,8 +11,3 @@ class StandaardProductDetailView(OverheidRoleRequiredMixin, DetailView):
     @staticmethod
     def get_required_roles():
         return ["is_beheerder", "is_redacteur"]
-
-
-# TODO [US-02] (Lokatie)
-class ContactEditView(OverheidRoleRequiredMixin, TemplateView):
-    template_name = "organisaties/overheid_update.html"
