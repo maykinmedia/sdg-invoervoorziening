@@ -39,6 +39,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements/ci.txt codecov
 
+      - name: Run npm build
+        run: |
+          npm ci
+          npm run build
+
       - name: Run tests
         run: |
           python src/manage.py collectstatic --noinput --link
