@@ -30,7 +30,7 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Nederlands deactiveren</a>
-                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
                     </div>
                 </div>
 
@@ -51,14 +51,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for label, value, help_text, is_markdown in object.get_fields %}
+                    {% for field in object.get_fields %}
                         <tr>
-                            <td class="tabs__table-cell">{{ label|title }}<i class="fas fa-info-circle" title="{{ help_text }}"></i></td>
+                            <td class="tabs__table-cell">{{ field.name|title }}<i class="fas fa-info-circle" title="{{ field.help_text }}"></i></td>
                             <td class="tabs__table-cell">
-                                {% if is_markdown %}
-                                    {{ value|markdownify }}
+                                {% if field.is_markdown %}
+                                    {{ field.value|markdownify }}
                                 {% else %}
-                                    {{ value }}
+                                    {{ field.value }}
                                 {% endif %}
                             </td>
                             <td class="tabs__table-cell">{{ object.datum_wijziging|date:"d-m-Y" }}</td>
@@ -139,7 +139,7 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Engels deactiveren</a>
-                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
                     </div>
                 </div>
 
@@ -236,7 +236,7 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Duits deactiveren</a>
-                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
                     </div>
                 </div>
 

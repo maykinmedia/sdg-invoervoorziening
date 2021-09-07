@@ -17,7 +17,9 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context["producten"] = StandaardProductSpecifiekInformatie.objects.all()
+        context[
+            "standaardproducten"
+        ] = StandaardProductSpecifiekInformatie.objects.all()
         return context
 
     def get_queryset(self):

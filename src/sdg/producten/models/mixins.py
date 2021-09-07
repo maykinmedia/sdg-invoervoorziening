@@ -1,11 +1,48 @@
+from abc import ABC
+from typing import Any, List, Tuple
+
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from markdownx.models import MarkdownxField
 
+from sdg.producten.utils import ProductField
 
-class ProductGegevensMixin(models.Model):
+
+class BaseGegevensMixin(models.Model):
+    def _get_field_value(self, field) -> Tuple[Any, bool]:
+        """Get the value of a field. If empty, retrieve from standard.
+
+        :return: The field value, whether it is standard or not.
+        """
+        value = field.value_from_object(self)
+
+        if not value and getattr(self, "standaard", None):
+            return getattr(self.standaard, field.name), True
+
+        return value, False
+
+    def _get_field(self, field) -> ProductField:
+        """Gets field specific information."""
+        value, is_standard = self._get_field_value(field)
+        return ProductField(
+            name=field.verbose_name,
+            value=value,
+            help_text=field.help_text,
+            is_standard=is_standard,
+            is_markdown=type(field) == MarkdownxField,
+        )
+
+    def get_fields(self) -> List[ProductField]:
+        """Returns data for each field as a list of Field objects."""
+        return [self._get_field(field) for field in self.__class__._meta.fields]
+
+    class Meta:
+        abstract = True
+
+
+class ProductGegevensMixin(BaseGegevensMixin):
     product_titel_decentraal = models.CharField(
         _("product titel decentraal"),
         max_length=50,
@@ -42,17 +79,6 @@ class ProductGegevensMixin(models.Model):
         ),
     )
 
-    def get_fields(self):
-        return [
-            (
-                f.verbose_name,
-                f.value_from_object(self),
-                f.help_text,
-                type(f) == MarkdownxField,
-            )
-            for f in self.__class__._meta.fields
-        ]
-
     def __str__(self):
         return f"{self.product_titel_decentraal}"
 
@@ -60,7 +86,7 @@ class ProductGegevensMixin(models.Model):
         abstract = True
 
 
-class ProductAanvraagGegevensMixin(models.Model):
+class ProductAanvraagGegevensMixin(BaseGegevensMixin):
     procedure_beschrijving = MarkdownxField(
         _("procedure beschrijving"),
         help_text=_(

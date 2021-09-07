@@ -12,7 +12,7 @@ class StandaardProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     """Standaardinformatie voor ProductSpecifiekInformatie."""
 
     def get_absolute_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.pk})
+        return reverse("producten:std_detail", kwargs={"pk": self.pk})
 
     class Meta:
         verbose_name = _("standaard product specifiek informatie")

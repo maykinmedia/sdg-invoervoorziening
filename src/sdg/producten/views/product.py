@@ -1,11 +1,16 @@
-from django.views.generic import TemplateView
+from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.producten.forms import ProductSpecifiekInformatieForm
+from sdg.producten.models import ProductSpecifiekInformatie
 
 
-class ProductDetailView(OverheidRoleRequiredMixin, TemplateView):
+class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "producten/product_detail.html"
+    model = ProductSpecifiekInformatie
 
 
-class ProductListView(OverheidRoleRequiredMixin, TemplateView):
-    template_name = "producten/products.html"
+class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
+    template_name = "producten/product_edit.html"
+    model = ProductSpecifiekInformatie
+    form_class = ProductSpecifiekInformatieForm

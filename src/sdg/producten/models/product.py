@@ -207,16 +207,16 @@ class ProductSpecifiekAanvraag(ProductAanvraagGegevensMixin, models.Model):
 
     standaard = models.ForeignKey(
         "producten.StandaardProductSpecifiekAanvraag",
-        related_name="aanpassingen",
         on_delete=models.PROTECT,
         verbose_name=_("standaard"),
         help_text=_("De standaardinformatie voor de product specifiek aanvraag."),
+        related_name="productaanvragen",
     )
     specifiek_product = models.ForeignKey(
         "ProductSpecifiekInformatie",
         on_delete=models.CASCADE,
         verbose_name=_("specifiek product"),
-        related_name="specifiek_aanvraag",
+        related_name="productaanvragen",
     )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
@@ -279,3 +279,19 @@ class Productuitvoering(ProductGegevensMixin, models.Model):
     class Meta:
         verbose_name = _("productuitvoering")
         verbose_name_plural = _("productuitvoeringen")
+
+
+# Make non-standard fields nullable
+for field in [
+    *ProductSpecifiekInformatie._meta.fields,
+    *Productuitvoering._meta.fields,
+]:
+    if field in ProductGegevensMixin._meta.fields:
+        field.blank = True
+        field.null = True
+
+
+for field in ProductSpecifiekAanvraag._meta.fields:
+    if field in ProductAanvraagGegevensMixin._meta.fields:
+        field.blank = True
+        field.null = True

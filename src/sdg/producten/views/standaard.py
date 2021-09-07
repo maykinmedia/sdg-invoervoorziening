@@ -10,10 +10,6 @@ class StandaardProductDetailView(RootEditorRequiredMixin, DetailView):
 
     model = StandaardProductSpecifiekInformatie
 
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]
-
 
 class StandaardProductUpdateView(RootEditorRequiredMixin, UpdateView):
     template_name = "producten/product_edit.html"
