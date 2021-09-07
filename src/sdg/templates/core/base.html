@@ -7,7 +7,7 @@
     <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
 {% endblock %}
 
-{% block content %}
+{% block outer_content %}
     <header class="header {% block header_classes %}{% endblock header_classes %}">
         <div class="container header__top">
             <img class="header__logo" src="{% static 'ico/favicon.png' %}"/>
@@ -25,6 +25,8 @@
             <p class="header__title">{% block container_title %}{% endblock container_title %}</p>
         </div>
     </header>
+{% endblock %}
+{% block content %}
     <main class="container">
         {% if messages %}
             {% for message in messages %}

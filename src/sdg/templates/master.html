@@ -13,7 +13,10 @@
     <body class="view__body">
         {% hijack_notification %}
 
-        <main>
+        {% block outer_content %}
+        {% endblock %}
+
+        <main class="container">
             {% block content %}
                 Override <code>{% verbatim %}{% block content %}{% endverbatim %}</code>
                 to get some actual content.

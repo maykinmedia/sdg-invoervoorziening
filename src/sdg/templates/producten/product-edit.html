@@ -1,9 +1,9 @@
-{% extends 'pages/_base.html' %}
+{% extends 'core/base.html' %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block title %}SDG voor de <b>gemeente buren</b>{% endblock title %}
+{% block container_title %}SDG voor de <b>gemeente buren</b>{% endblock container_title %}
 
-{% block content %}
+{% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
             <a href="#nl" data-id="nl" class="tabs__tab tabs__tab--selected">
@@ -62,7 +62,7 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Engels deactiveren</a>
-                        <a class="button" href="{% url 'products:edit' %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:edit' %}">Wijzigen</a>
                     </div>
                 </div>
 
@@ -126,7 +126,7 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Duits deactiveren</a>
-                        <a class="button" href="{% url 'products:edit' %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:edit' %}">Wijzigen</a>
                     </div>
                 </div>
 
@@ -209,4 +209,4 @@
             </div>
         </form>
     </div>
-{% endblock content %}
+{% endblock inner %}
