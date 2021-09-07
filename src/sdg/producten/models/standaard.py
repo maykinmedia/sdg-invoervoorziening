@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.producten.models.mixins import (
@@ -9,6 +10,9 @@ from sdg.producten.models.mixins import (
 
 class StandaardProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     """Standaardinformatie voor ProductSpecifiekInformatie."""
+
+    def get_absolute_url(self):
+        return reverse("producten:detail", kwargs={"pk": self.pk})
 
     class Meta:
         verbose_name = _("standaard product specifiek informatie")

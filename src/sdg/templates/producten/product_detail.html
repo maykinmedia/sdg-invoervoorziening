@@ -1,5 +1,7 @@
 {% extends 'producten/base.html' %}
 
+{% load markdownify %}
+
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de <b>gemeente buren</b>{% endblock container_title %}
 
@@ -28,7 +30,7 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Nederlands deactiveren</a>
-                        <a class="button" href="{% url 'products:edit' %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
                     </div>
                 </div>
 
@@ -42,93 +44,85 @@
 
                 <table class="tabs__table">
                     <thead>
-                        <tr>
-                            <th class="tabs__table-header" width="25%">Gegeven</th>
-                            <th class="tabs__table-header">Huidige informatie</th>
-                            <th class="tabs__table-header">Gewijzigd</th>
-                        </tr>
+                    <tr>
+                        <th class="tabs__table-header" width="25%">Gegeven</th>
+                        <th class="tabs__table-header">Huidige informatie</th>
+                        <th class="tabs__table-header">Gewijzigd</th>
+                    </tr>
                     </thead>
                     <tbody>
+                    {% for label, value, help_text, is_markdown in object.get_fields %}
                         <tr>
-                            <td class="tabs__table-cell">Beschrijving<i class="fas fa-info-circle"></i></td>
+                            <td class="tabs__table-cell">{{ label|title }}<i class="fas fa-info-circle" title="{{ help_text }}"></i></td>
                             <td class="tabs__table-cell">
-                                Bent u immigrant en wilt u in Nederland blijven wonen of langer blijven dan drie maanden? Dan:
-                                <ul>
-                                    <li>in het bezit zijn van een geldig document voor grensoverschrijding en een geldige machtiging voorlopig verblijf (MVV). De MVV mang niet ouder zijn dan zes maanden.</li>
-                                    <li>en dus voor <a href="#">vertrek naar Nederland</a> een basisexamen inburgering met goed resultaat hebben afgelegd (geldt vanaf 16 jaar tot de AOW-gerechtigde leeftijd).</li>
-                                    <li>in Nederland verplicht inburgeren.</li>
-                                </ul>
-                                U moet zich binnen vijf dagen na aankomst in Nederland melden.
+                                {% if is_markdown %}
+                                    {{ value|markdownify }}
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
                             </td>
-                            <td class="tabs__table-cell">18-11-2019</td>
+                            <td class="tabs__table-cell">{{ object.datum_wijziging|date:"d-m-Y" }}</td>
                         </tr>
-                        <tr>
-                            <td class="tabs__table-cell">Procedure stappen<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                De er genomen betreft gesteld. Ader thee stam deel heen wij rug. In al vereenigd wellesley chineesch om kapitalen vroegeren. Te gelaten nu ze rechten twisten in. Moeite enkele grayah bamboe op gouden al er verder. Prestige dikwijls ik er stelling deeltjes kolonist elkander. Hij haalden zal enclave evenals talrijk pagoden zoo had.
-                            </td>
-                            <td class="tabs__table-cell">18-11-2019</td>
-                        </tr>
-                        <tr>
-                            <td class="tabs__table-cell">Uitzonderingen<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                De er genomen betreft gesteld. Ader thee stam deel heen wij rug. In al vereenigd wellesley chineesch om kapitalen vroegeren. Te gelaten nu ze rechten twisten in. Moeite enkele grayah bamboe op gouden al er verder. Prestige dikwijls ik er stelling deeltjes kolonist elkander. Hij haalden zal enclave evenals talrijk pagoden zoo had. <br>
-                                <br>
-                                Het belangrijk nauwelijks kan europeanen hun opgebracht archimedes instorting. Inkrimpt was kan hij troepjes bedreven bij britsche dichtbij. Vlakten zekeren vliegen dit verdere drijven die nam zou. Afstand brokken kemming op citadel af cultuur de of werkman. En nu puin geen bouw de ad daar. Cultures voorzorg systemen de ze ze. Ik australie stroomend ze al behoeften overwaard vertoonen. Maar te mier werk of ze er veld dekt. Dit nam bijgeloof vermijden ook vreedzame. Is op steeds aantal deelen.
-                            </td>
-                            <td class="tabs__table-cell">18-11-2019</td>
-                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
 
                 <div class="tabs__footer">
-                    <div class="tabs__footer-left">
-                        <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                        <ul class="tabs__footer-list">
-                            <li class="tabs__footer-list-item">
-                                <input type="checkbox" name="" checked disabled>
-                                Gemeentehuis
-                            </li>
-                            <li class="tabs__footer-list-item">
-                                <input type="checkbox" name="" disabled>
-                                Loket Zuid
-                            </li>
-                        </ul>
-                    </div>
+                    {% if object.lokaties %}
+                        <div class="tabs__footer-left">
+                            <h3 class="tabs__footer-title">Locaties met dit product</h3>
+                            <ul class="tabs__footer-list">
+                        {% for lokatie in object.lokaties.all %}
+                                <li class="tabs__footer-list-item">
+                                    <input type="checkbox" name="" checked disabled>
+                                    {{ lokatie.naam }}
+                                </li>
+                        {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                     <div class="tabs__fotter-right">
                         <h3 class="tabs__footer-title">Revisies</h3>
                         <ul class="revision-list">
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                         </ul>
                     </div>
@@ -145,7 +139,7 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Engels deactiveren</a>
-                        <a class="button" href="{% url 'products:edit' %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
                     </div>
                 </div>
 
@@ -159,93 +153,73 @@
 
                 <table class="tabs__table">
                     <thead>
-                        <tr>
-                            <th class="tabs__table-header" width="25%">Gegeven</th>
-                            <th class="tabs__table-header">Huidige informatie</th>
-                            <th class="tabs__table-header">Gewijzigd</th>
-                        </tr>
+                    <tr>
+                        <th class="tabs__table-header" width="25%">Gegeven</th>
+                        <th class="tabs__table-header">Huidige informatie</th>
+                        <th class="tabs__table-header">Gewijzigd</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="tabs__table-cell">Beschrijving<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                Bent u immigrant en wilt u in Nederland blijven wonen of langer blijven dan drie maanden? Dan:
-                                <ul>
-                                    <li>in het bezit zijn van een geldig document voor grensoverschrijding en een geldige machtiging voorlopig verblijf (MVV). De MVV mang niet ouder zijn dan zes maanden.</li>
-                                    <li>en dus voor <a href="#">vertrek naar Nederland</a> een basisexamen inburgering met goed resultaat hebben afgelegd (geldt vanaf 16 jaar tot de AOW-gerechtigde leeftijd).</li>
-                                    <li>in Nederland verplicht inburgeren.</li>
-                                </ul>
-                                U moet zich binnen vijf dagen na aankomst in Nederland melden.
-                            </td>
-                            <td class="tabs__table-cell">Nee</td>
-                        </tr>
-                        <tr>
-                            <td class="tabs__table-cell">Procedure stappen<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                De er genomen betreft gesteld. Ader thee stam deel heen wij rug. In al vereenigd wellesley chineesch om kapitalen vroegeren. Te gelaten nu ze rechten twisten in. Moeite enkele grayah bamboe op gouden al er verder. Prestige dikwijls ik er stelling deeltjes kolonist elkander. Hij haalden zal enclave evenals talrijk pagoden zoo had.
-                            </td>
-                            <td class="tabs__table-cell">Nee</td>
-                        </tr>
-                        <tr>
-                            <td class="tabs__table-cell">Uitzonderingen<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                De er genomen betreft gesteld. Ader thee stam deel heen wij rug. In al vereenigd wellesley chineesch om kapitalen vroegeren. Te gelaten nu ze rechten twisten in. Moeite enkele grayah bamboe op gouden al er verder. Prestige dikwijls ik er stelling deeltjes kolonist elkander. Hij haalden zal enclave evenals talrijk pagoden zoo had. <br>
-                                <br>
-                                Het belangrijk nauwelijks kan europeanen hun opgebracht archimedes instorting. Inkrimpt was kan hij troepjes bedreven bij britsche dichtbij. Vlakten zekeren vliegen dit verdere drijven die nam zou. Afstand brokken kemming op citadel af cultuur de of werkman. En nu puin geen bouw de ad daar. Cultures voorzorg systemen de ze ze. Ik australie stroomend ze al behoeften overwaard vertoonen. Maar te mier werk of ze er veld dekt. Dit nam bijgeloof vermijden ook vreedzame. Is op steeds aantal deelen.
-                            </td>
-                            <td class="tabs__table-cell">Nee</td>
-                        </tr>
+                    {# TODO: Include language-specific version #}
                     </tbody>
                 </table>
 
                 <div class="tabs__footer">
-                    <div class="tabs__footer-left">
-                        <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                        <ul class="tabs__footer-list">
-                            <li class="tabs__footer-list-item">
-                                <input type="checkbox" name="" checked disabled>
-                                Gemeentehuis
-                            </li>
-                            <li class="tabs__footer-list-item">
-                                <input type="checkbox" name="" disabled>
-                                Loket Zuid
-                            </li>
-                        </ul>
-                    </div>
+                    {% if object.lokaties %}
+                        <div class="tabs__footer-left">
+                            <h3 class="tabs__footer-title">Locaties met dit product</h3>
+                            <ul class="tabs__footer-list">
+                                {% for lokatie in object.lokaties.all %}
+                                    <li class="tabs__footer-list-item">
+                                        <input type="checkbox" name="" checked disabled>
+                                        {{ lokatie.naam }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                     <div class="tabs__fotter-right">
                         <h3 class="tabs__footer-title">Revisies</h3>
                         <ul class="revision-list">
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                         </ul>
                     </div>
@@ -262,118 +236,79 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Duits deactiveren</a>
-                        <a class="button" href="{% url 'products:edit' %}">Wijzigen</a>
+                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
                     </div>
                 </div>
 
                 <table class="tabs__table">
                     <thead>
-                        <tr>
-                            <th class="tabs__table-header" width="25%">Gegeven</th>
-                            <th class="tabs__table-header">Huidige informatie</th>
-                            <th class="tabs__table-header">Gewijzigd</th>
-                        </tr>
+                    <tr>
+                        <th class="tabs__table-header" width="25%">Gegeven</th>
+                        <th class="tabs__table-header">Huidige informatie</th>
+                        <th class="tabs__table-header">Gewijzigd</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="tabs__table-cell">Beschrijving<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                Bent u immigrant en wilt u in Nederland blijven wonen of langer blijven dan drie maanden? Dan:
-                                <ul>
-                                    <li>in het bezit zijn van een geldig document voor grensoverschrijding en een geldige machtiging voorlopig verblijf (MVV). De MVV mang niet ouder zijn dan zes maanden.</li>
-                                    <li>en dus voor <a href="#">vertrek naar Nederland</a> een basisexamen inburgering met goed resultaat hebben afgelegd (geldt vanaf 16 jaar tot de AOW-gerechtigde leeftijd).</li>
-                                    <li>in Nederland verplicht inburgeren.</li>
-                                </ul>
-                                U moet zich binnen vijf dagen na aankomst in Nederland melden.
-                            </td>
-                            <td class="tabs__table-cell">Nee</td>
-                        </tr>
-                        <tr>
-                            <td class="tabs__table-cell">Procedure stappen<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                De er genomen betreft gesteld. Ader thee stam deel heen wij rug. In al vereenigd wellesley chineesch om kapitalen vroegeren. Te gelaten nu ze rechten twisten in. Moeite enkele grayah bamboe op gouden al er verder. Prestige dikwijls ik er stelling deeltjes kolonist elkander. Hij haalden zal enclave evenals talrijk pagoden zoo had.
-                            </td>
-                            <td class="tabs__table-cell">Nee</td>
-                        </tr>
-                        <tr>
-                            <td class="tabs__table-cell">Uitzonderingen<i class="fas fa-info-circle"></i></td>
-                            <td class="tabs__table-cell">
-                                De er genomen betreft gesteld. Ader thee stam deel heen wij rug. In al vereenigd wellesley chineesch om kapitalen vroegeren. Te gelaten nu ze rechten twisten in. Moeite enkele grayah bamboe op gouden al er verder. Prestige dikwijls ik er stelling deeltjes kolonist elkander. Hij haalden zal enclave evenals talrijk pagoden zoo had. <br>
-                                <br>
-                                Het belangrijk nauwelijks kan europeanen hun opgebracht archimedes instorting. Inkrimpt was kan hij troepjes bedreven bij britsche dichtbij. Vlakten zekeren vliegen dit verdere drijven die nam zou. Afstand brokken kemming op citadel af cultuur de of werkman. En nu puin geen bouw de ad daar. Cultures voorzorg systemen de ze ze. Ik australie stroomend ze al behoeften overwaard vertoonen. Maar te mier werk of ze er veld dekt. Dit nam bijgeloof vermijden ook vreedzame. Is op steeds aantal deelen.
-                            </td>
-                            <td class="tabs__table-cell">18-11-2019</td>
-                        </tr>
-                        <tr>
-                            <td class="tabs__table-cell"></td>
-                            <td class="tabs__table-cell">
-                                <form class="tabs__form" action="">
-                                    Wijzigingen plubliceren
-                                    <div>
-                                        <label for="now">
-                                            <input type="radio" name="publish" id="now">
-                                            <label for="now">Publiceer direct</label>
-                                        </label>
-                                        <label for="later">
-                                            <input type="radio" name="publish" id="later">
-                                            <label for="later">Kies datum</label>
-                                        </label>
-                                    </div>
-                                    <input class="button tabs__form-button" type="submit" value="Opslaan">
-                                </form>
-                            </td>
-                        </tr>
+                    {# TODO: Include language-specific version#}
                     </tbody>
                 </table>
 
                 <div class="tabs__footer">
-                    <div class="tabs__footer-left">
-                        <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                        <ul class="tabs__footer-list">
-                            <li class="tabs__footer-list-item">
-                                <input type="checkbox" name="" checked disabled>
-                                Gemeentehuis
-                            </li>
-                            <li class="tabs__footer-list-item">
-                                <input type="checkbox" name="" disabled>
-                                Loket Zuid
-                            </li>
-                        </ul>
-                    </div>
+                    {% if object.lokaties %}
+                        <div class="tabs__footer-left">
+                            <h3 class="tabs__footer-title">Locaties met dit product</h3>
+                            <ul class="tabs__footer-list">
+                                {% for lokatie in object.lokaties.all %}
+                                    <li class="tabs__footer-list-item">
+                                        <input type="checkbox" name="" checked disabled>
+                                        {{ lokatie.naam }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                     <div class="tabs__fotter-right">
                         <h3 class="tabs__footer-title">Revisies</h3>
                         <ul class="revision-list">
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                             <li class="revision-list__item">
                                 <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a  class="revision-list-link" href="#">01-03-2021 00:00</a>)
+                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                00:00</a>)
                             </li>
                         </ul>
                     </div>

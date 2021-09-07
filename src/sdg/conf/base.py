@@ -115,6 +115,7 @@ INSTALLED_APPS = [
     "hijack",
     "hijack_admin",
     "markdownx",
+    "markdownify",
     "allauth",
     "allauth.account",
     "crispy_forms",

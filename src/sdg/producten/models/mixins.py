@@ -42,6 +42,17 @@ class ProductGegevensMixin(models.Model):
         ),
     )
 
+    def get_fields(self):
+        return [
+            (
+                f.verbose_name,
+                f.value_from_object(self),
+                f.help_text,
+                type(f) == MarkdownxField,
+            )
+            for f in self.__class__._meta.fields
+        ]
+
     def __str__(self):
         return f"{self.product_titel_decentraal}"
 

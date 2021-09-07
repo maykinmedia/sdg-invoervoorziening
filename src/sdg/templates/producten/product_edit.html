@@ -1,0 +1,62 @@
+{% extends 'core/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block header_classes %}header--inset{% endblock header_classes %}
+{% block container_title %}SDG voor de <b>gemeente buren</b>{% endblock container_title %}
+
+{% block inner %}
+    <div class="tabs">
+        <div class="tabs__tabs">
+            <a href="#nl" data-id="nl" class="tabs__tab tabs__tab--selected">
+                Nederlands
+            </a>
+            <a href="#en" data-id="en" class="tabs__tab">
+                Engels
+            </a>
+            <a href="#de" data-id="de" class="tabs__tab">
+                Duits
+            </a>
+        </div>
+        <form action="." method="POST" class="tabs__tab-contents">
+            {{ form.media }}
+            <div class="tabs__tab-content tabs__tab-content--active" id="nl">
+                <table class="tabs__table">
+                    <thead>
+                        <tr>
+                            <th class="tabs__table-header" width="25%">Gegeven</th>
+                            <th class="tabs__table-header">Huidige informatie</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% crispy form %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="tabs__tab-content" id="en">
+
+            </div>
+            <div class="tabs__tab-content" id="de">
+
+            </div>
+
+            <div class="form-actions">
+                <div></div>
+                <div>
+                    <div class="form-actions__title">Wijzigingen plubliceren</div>
+                    <div>
+                        <label for="now">
+                            <input type="radio" name="publish" id="now">
+                            <label for="now">Publiceer direct</label>
+                        </label>
+                        <label for="later">
+                            <input type="radio" name="publish" id="later">
+                            <label for="later">Kies datum</label>
+                        </label>
+                    </div>
+                    <input class="button tabs__form-button" type="submit" value="Opslaan">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock inner %}
