@@ -5,13 +5,18 @@ from sdg.producten.forms import ProductSpecifiekInformatieForm
 from sdg.producten.models import StandaardProductSpecifiekInformatie
 
 
-class StandaardProductDetailView(RootEditorRequiredMixin, DetailView):
-    template_name = "producten/product_detail.html"
+class StandaardMixin:
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["standaard"] = True
+        return context
 
+
+class StandaardProductDetailView(RootEditorRequiredMixin, StandaardMixin, DetailView):
     model = StandaardProductSpecifiekInformatie
 
 
-class StandaardProductUpdateView(RootEditorRequiredMixin, UpdateView):
+class StandaardProductUpdateView(RootEditorRequiredMixin, StandaardMixin, UpdateView):
     template_name = "producten/product_edit.html"
 
     model = StandaardProductSpecifiekInformatie

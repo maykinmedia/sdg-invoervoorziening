@@ -19,12 +19,16 @@ class BaseGegevensMixin(models.Model):
         value = field.value_from_object(self)
 
         if not value and getattr(self, "standaard", None):
-            return getattr(self.standaard, field.name), True
+            # TODO: Revise getattr
+            return getattr(self.standaard, field.name, None), True
 
         return value, False
 
     def _get_field(self, field) -> ProductField:
         """Gets field specific information."""
+        if isinstance(field, str):
+            field = self.__class__._meta.get_field(field)
+
         value, is_standard = self._get_field_value(field)
         return ProductField(
             name=field.verbose_name,
@@ -37,6 +41,10 @@ class BaseGegevensMixin(models.Model):
     def get_fields(self) -> List[ProductField]:
         """Returns data for each field as a list of Field objects."""
         return [self._get_field(field) for field in self.__class__._meta.fields]
+
+    def get_field(self, field) -> ProductField:
+        """Returns data for a single field."""
+        return self._get_field(field)
 
     class Meta:
         abstract = True

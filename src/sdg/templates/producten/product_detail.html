@@ -30,7 +30,11 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Nederlands deactiveren</a>
-                        <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
+                        {% if standaard %}
+                            <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
+                        {% else %}
+                            <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -59,6 +63,10 @@
                                     {{ field.value|markdownify }}
                                 {% else %}
                                     {{ field.value }}
+                                {% endif %}
+                                {% if field.is_standard %}
+                                    {# TODO: add badge/icon#}
+                                    (REFERENCE)
                                 {% endif %}
                             </td>
                             <td class="tabs__table-cell">{{ object.datum_wijziging|date:"d-m-Y" }}</td>
@@ -139,7 +147,11 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Engels deactiveren</a>
-                        <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
+                        {% if standaard %}
+                            <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
+                        {% else %}
+                            <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -236,7 +248,11 @@
                     </div>
                     <div>
                         <a href="#" class="button button--light">Duits deactiveren</a>
-                        <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
+                        {% if standaard %}
+                            <a class="button" href="{% url 'producten:std_edit' pk=object.pk %}">Wijzigen</a>
+                        {% else %}
+                            <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
+                        {% endif %}
                     </div>
                 </div>
 
