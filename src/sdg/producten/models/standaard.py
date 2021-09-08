@@ -14,6 +14,9 @@ class StandaardProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     def get_absolute_url(self):
         return reverse("producten:std_detail", kwargs={"pk": self.pk})
 
+    def __str__(self):
+        return self.product_titel_decentraal
+
     class Meta:
         verbose_name = _("standaard product specifiek informatie")
         verbose_name_plural = _("standaard product specifiek informatie")
@@ -22,6 +25,9 @@ class StandaardProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
 class StandaardProductSpecifiekAanvraag(ProductAanvraagGegevensMixin, models.Model):
     """Standaardinformatie voor ProductSpecifiekAanvraag."""
 
+    def __str__(self):
+        return self.procedure_beschrijving
+
     class Meta:
         verbose_name = _("standaard product specifiek aanvraag")
         verbose_name_plural = _("standaard product specifiek aanvragen")
@@ -29,6 +35,9 @@ class StandaardProductSpecifiekAanvraag(ProductAanvraagGegevensMixin, models.Mod
 
 class StandaardProductuitvoering(ProductGegevensMixin, models.Model):
     """Standaardinformatie voor Productuitvoering."""
+
+    def __str__(self):
+        return self.product_titel_decentraal
 
     class Meta:
         verbose_name = _("standaard productuitvoering")

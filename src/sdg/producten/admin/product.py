@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from markdownx.admin import MarkdownxModelAdmin
 
@@ -66,3 +67,5 @@ class ProductSpecifiekAnvraagAdmin(MarkdownxModelAdmin):
 
     def get_product_title(self, obj):
         return obj.specifiek_product.product_titel_decentraal
+
+    get_product_title.short_description = _("Product title")
