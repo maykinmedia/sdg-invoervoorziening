@@ -3,16 +3,11 @@ from django.views.generic import DetailView, UpdateView
 from sdg.accounts.mixins import RootEditorRequiredMixin
 from sdg.producten.forms import ProductSpecifiekInformatieForm
 from sdg.producten.models import StandaardProductSpecifiekInformatie
-
-
-class StandaardMixin:
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["standaard"] = True
-        return context
+from sdg.producten.views.mixins import StandaardMixin
 
 
 class StandaardProductDetailView(RootEditorRequiredMixin, StandaardMixin, DetailView):
+    template_name = "producten/product_detail.html"
     model = StandaardProductSpecifiekInformatie
 
 

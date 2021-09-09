@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from markdownx.models import MarkdownxField
@@ -193,6 +194,9 @@ class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     @property
     def taal(self):
         return self.generiek_product.taal
+
+    def get_absolute_url(self):
+        return reverse("producten:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return f"{self.product_titel_decentraal} - {self.versie}"
