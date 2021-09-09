@@ -1,3 +1,9 @@
+$color-primary: #396a88;
+
 .markdownx-preview {
   float: right;
+}
+
+.primary {
+  color: $color-primary;
 }

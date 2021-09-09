@@ -1,5 +1,6 @@
 {% extends 'producten/base.html' %}
 
+{% load i18n %}
 {% load markdownify %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
@@ -57,7 +58,7 @@
                     <tbody>
                     {% for field in object.get_fields %}
                         <tr>
-                            <td class="tabs__table-cell">{{ field.name|title }}<i class="fas fa-info-circle" title="{{ field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">{{ field.name|title }}<i class="fas fa-info-circle fa-xs" title="{{ field.help_text }}"></i></td>
                             <td class="tabs__table-cell">
                                 {% if field.is_markdown %}
                                     {{ field.value|markdownify }}
@@ -65,8 +66,7 @@
                                     {{ field.value }}
                                 {% endif %}
                                 {% if field.is_standard %}
-                                    {# TODO: add badge/icon#}
-                                    (REFERENCE)
+                                    <i class="fa fa-asterisk fa-xs primary" title="{% trans 'This field is using reference text.' %}"></i>
                                 {% endif %}
                             </td>
                             <td class="tabs__table-cell">{{ object.datum_wijziging|date:"d-m-Y" }}</td>
