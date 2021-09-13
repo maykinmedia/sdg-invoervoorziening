@@ -6,21 +6,24 @@ from markdownx.models import MarkdownxField
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.db.fields import ChoiceArrayField
-from sdg.core.models.mixins import ProductAanvraagGegevensMixin, ProductGegevensMixin
+from sdg.products.models.mixins import (
+    ProductAanvraagGegevensMixin,
+    ProductGegevensMixin,
+)
 
 
 class ProductGeneriekInformatie(models.Model):
     """De generiek informatie over een product."""
 
     upn = models.ForeignKey(
-        "UniformeProductnaam",
+        "core.UniformeProductnaam",
         on_delete=models.PROTECT,
         related_name="generiek_product",
         verbose_name=_("uniforme productnaam"),
         help_text=_("De uniforme productnaam met betrekking tot dit product."),
     )
     verantwoordelijke_organisatie = models.ForeignKey(
-        "Overheidsorganisatie",
+        "core.Overheidsorganisatie",
         on_delete=models.PROTECT,
         related_name="generiek_informatie",
         verbose_name=_("verantwoordelijke organisatie"),
@@ -143,7 +146,7 @@ class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
         help_text=_("Een verwijzing naar een ander product."),
     )
     catalogus = models.ForeignKey(
-        "ProductenCatalogus",
+        "core.ProductenCatalogus",
         on_delete=models.CASCADE,
         related_name="producten",
         verbose_name=_("product specifiek informatie"),
@@ -216,7 +219,7 @@ class ProductSpecifiekAanvraag(ProductAanvraagGegevensMixin, models.Model):
         related_name="specifiek_aanvraag",
     )
     lokaties = models.ManyToManyField(
-        "Lokatie",
+        "core.Lokatie",
         verbose_name=_("lokaties"),
         related_name="productaanvragen",
         help_text=_(

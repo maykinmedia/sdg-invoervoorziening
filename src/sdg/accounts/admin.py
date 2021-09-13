@@ -12,11 +12,12 @@ User = get_user_model()
 
 @admin.register(User)
 class UserAdmin(_UserAdmin, HijackUserAdminMixin):
-    list_display = _UserAdmin.list_display + ("hijack_field",)
+    fieldsets = _UserAdmin.fieldsets + (
+        (_("Roles"), {"fields": ("is_hoofdredacteur",)}),
+    )
     search_fields = ["first_name"]
-    fieldsets = _UserAdmin.fieldsets + ((_("Roles"), {"fields": ("is_redacteur",)}),)
     list_display = _UserAdmin.list_display + (
-        "is_redacteur",
+        "is_hoofdredacteur",
         "hijack_field",
     )
 

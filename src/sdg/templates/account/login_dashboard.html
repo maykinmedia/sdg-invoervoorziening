@@ -13,7 +13,7 @@
         informatie wordt gepresenteerd op <a href="#">Rijksoverheid.nl</a> en <a
             href="#">Digitaalondernemersplein.nl</a>.</p>
     <p class="login__container-info">Log in om verder te gaan.</p>
-    <a class="login__button button" href="{% url 'account_login' %}?next=/">
+    <a class="login__button button" href="{% url 'account_login' %}?next={{ next }}">
         Inloggen met Login Service X
         <i>icon</i>
     </a>

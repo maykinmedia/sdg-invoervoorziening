@@ -41,6 +41,7 @@ urlpatterns = [
     ),
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
+    path("products/", include("sdg.products.urls", namespace="products")),
     path("", include("sdg.core.urls", namespace="core")),
 ]
 

@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.models.mixins import ContactgegevensMixin
+from sdg.core.models.validators import validate_lau
 
 User = get_user_model()
 
@@ -35,6 +36,14 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         verbose_name=_("organisatie"),
         help_text=_("De organisatie van de lokale overheid."),
         related_name="organisatie",
+    )
+    lau_code = models.CharField(
+        _("LAU-code"),
+        blank=True,
+        null=True,
+        max_length=5,
+        validators=[validate_lau],
+        help_text=_("Een geldige LAU-code van de organisatie."),
     )
     users = models.ManyToManyField(User, through="accounts.Role")
 

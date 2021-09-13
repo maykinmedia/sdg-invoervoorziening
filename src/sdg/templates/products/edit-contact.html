@@ -1,9 +1,9 @@
-{% extends 'pages/_base.html' %}
+{% extends 'products/base.html' %}
 
-{% block subtitle %}Wijzig contactgegevens{% endblock subtitle %}
-{% block title %}Contact gegevens voor de gemeente Buren{% endblock title %}
+{% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
+{% block container_title %}Contact gegevens voor de gemeente Buren{% endblock container_title %}
 
-{% block content %}
+{% block inner %}
     <form class="form">
         <div class="form__block">
             <fieldset class="form__group">
@@ -91,4 +91,4 @@
             <p class="form__action-help">Wijzigingen worden direct gepubliceerd</p>
         </div>
     </form>
-{% endblock content %}
+{% endblock inner %}

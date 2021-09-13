@@ -1,20 +1,26 @@
 from django.views.generic import FormView, TemplateView
 
+from sdg.accounts.mixins import OverheidRoleRequiredMixin
+
 from .forms import ProductEditForm
 
 
-class ProductListView(TemplateView):
-    template_name = "pages/products.html"
+class ProductListView(OverheidRoleRequiredMixin, TemplateView):
+    template_name = "products/products.html"
+
+    @staticmethod
+    def get_required_roles():
+        return ["is_beheerder", "is_redacteur"]
 
 
-class ProductDetailView(TemplateView):
-    template_name = "pages/product.html"
+class ProductDetailView(OverheidRoleRequiredMixin, TemplateView):
+    template_name = "products/product.html"
 
 
-class ProductEditView(FormView):
+class ProductEditView(OverheidRoleRequiredMixin, FormView):
     template_name = "pages/product-edit.html"
     form_class = ProductEditForm
 
 
-class ContactEditView(TemplateView):
+class ContactEditView(OverheidRoleRequiredMixin, TemplateView):
     template_name = "pages/edit-contact.html"

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from markdownx.admin import MarkdownxModelAdmin
 
-from sdg.core.models import (
+from sdg.products.models import (
     ProductGeneriekInformatie,
     ProductSpecifiekAanvraag,
     ProductSpecifiekInformatie,
@@ -65,4 +65,4 @@ class ProductSpecifiekAnvraagAdmin(MarkdownxModelAdmin):
     )
 
     def get_product_title(self, obj):
-        return obj.specifiek_product.product_title_decentraal
+        return obj.specifiek_product.product_titel_decentraal

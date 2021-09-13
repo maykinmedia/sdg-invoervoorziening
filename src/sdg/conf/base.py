@@ -123,6 +123,7 @@ INSTALLED_APPS = [
     "sdg.utils",
     # SDG applications
     "sdg.core",
+    "sdg.products",
 ]
 
 MIDDLEWARE = [
