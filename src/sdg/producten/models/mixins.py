@@ -4,8 +4,19 @@ from django.utils.translation import ugettext_lazy as _
 
 from markdownx.models import MarkdownxField
 
+from sdg.core.constants import TaalChoices
+
 
 class ProductGegevensMixin(models.Model):
+    taal = models.CharField(
+        _("taal"),
+        choices=TaalChoices.choices,
+        max_length=3,
+        help_text=_(
+            "De taal waarin de betreffende tekst is geschreven."
+            "ISO 639 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"
+        ),
+    )
     product_titel_decentraal = models.CharField(
         _("product titel decentraal"),
         max_length=50,
@@ -27,7 +38,6 @@ class ProductGegevensMixin(models.Model):
         _("specifieke link"),
         help_text=_("URL decentrale productpagina."),
     )
-
     decentrale_link = models.URLField(
         _("decentrale link"),
         help_text=_(
@@ -40,6 +50,68 @@ class ProductGegevensMixin(models.Model):
             "Decentrale overheden geven een wijzigingsdatum mee voor hun informatie. Deze datum wordt op het portaal "
             "getoond. "
         ),
+    )
+    procedure_beschrijving = MarkdownxField(
+        _("procedure beschrijving"),
+        help_text=_(
+            "Procedurebeschrijving.",
+        ),
+        blank=True,
+        null=True,
+    )
+    vereisten = MarkdownxField(
+        _("vereisten"),
+        help_text=_(
+            "Vereisten auth/id/sign.",
+        ),
+        blank=True,
+        null=True,
+    )
+    bewijs = MarkdownxField(
+        _("bewijs"),
+        help_text=_(
+            "Bewijs (type/format).",
+        ),
+        blank=True,
+        null=True,
+    )
+    bezwaar_en_beroep = MarkdownxField(
+        _("bezwaar en beroep"),
+        help_text=_(
+            "Bezwaar en beroep.",
+        ),
+        blank=True,
+        null=True,
+    )
+    kosten_en_betaalmethoden = MarkdownxField(
+        _("kosten en betaalmethoden"),
+        help_text=_(
+            "Kosten en betaalmethoden.",
+        ),
+        blank=True,
+        null=True,
+    )
+    uiterste_termijn = MarkdownxField(
+        _("uiterste termijn"),
+        help_text=_(
+            "Deadlines.",
+        ),
+        blank=True,
+        null=True,
+    )
+    wtd_bij_geen_reactie = MarkdownxField(
+        _("wtd bij geen reactie"),
+        help_text=_(
+            "Wat te doen bij geen reactie.",
+        ),
+        blank=True,
+        null=True,
+    )
+    decentrale_procedure_link = models.URLField(
+        _("decentrale procedure link"),
+        help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
+        blank=True,
+        null=True,
     )
 
     def get_fields(self):
@@ -55,58 +127,6 @@ class ProductGegevensMixin(models.Model):
 
     def __str__(self):
         return f"{self.product_titel_decentraal}"
-
-    class Meta:
-        abstract = True
-
-
-class ProductAanvraagGegevensMixin(models.Model):
-    procedure_beschrijving = MarkdownxField(
-        _("procedure beschrijving"),
-        help_text=_(
-            "Procedurebeschrijving.",
-        ),
-    )
-    vereisten = MarkdownxField(
-        _("vereisten"),
-        help_text=_(
-            "Vereisten auth/id/sign.",
-        ),
-    )
-    bewijs = MarkdownxField(
-        _("bewijs"),
-        help_text=_(
-            "Bewijs (type/format).",
-        ),
-    )
-    bezwaar_en_beroep = MarkdownxField(
-        _("bezwaar en beroep"),
-        help_text=_(
-            "Bezwaar en beroep.",
-        ),
-    )
-    kosten_en_betaalmethoden = MarkdownxField(
-        _("kosten en betaalmethoden"),
-        help_text=_(
-            "Kosten en betaalmethoden.",
-        ),
-    )
-    uiterste_termijn = MarkdownxField(
-        _("uiterste termijn"),
-        help_text=_(
-            "Deadlines.",
-        ),
-    )
-    wtd_bij_geen_reactie = MarkdownxField(
-        _("wtd bij geen reactie"),
-        help_text=_(
-            "Wat te doen bij geen reactie.",
-        ),
-    )
-    decentrale_procedure_link = models.URLField(
-        _("decentrale procedure link"),
-        help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
-    )
 
     class Meta:
         abstract = True

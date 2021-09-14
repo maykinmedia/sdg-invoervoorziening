@@ -1,16 +1,16 @@
 from django.conf.urls import url
 
-from sdg.producten.views.standaard import (
-    StandaardProductDetailView,
-    StandaardProductUpdateView,
+from sdg.producten.views.referentie import (
+    ReferentieProductDetailView,
+    ReferentieProductUpdateView,
 )
 
 app_name = "producten"
 urlpatterns = [
     url(
         r"^(?P<pk>[\d]+)/$",
-        StandaardProductDetailView.as_view(),
+        ReferentieProductDetailView.as_view(),
         name="detail",
     ),
-    url(r"^(?P<pk>[\d]+)/edit/$", StandaardProductUpdateView.as_view(), name="edit"),
+    url(r"^(?P<pk>[\d]+)/edit/$", ReferentieProductUpdateView.as_view(), name="edit"),
 ]

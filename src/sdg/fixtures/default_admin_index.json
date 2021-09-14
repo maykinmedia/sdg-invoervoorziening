@@ -60,10 +60,6 @@
             ],
             [
                 "producten",
-                "productspecifiekaanvraag"
-            ],
-            [
-                "producten",
                 "productspecifiekinformatie"
             ]
         ]
@@ -78,15 +74,11 @@
         "models": [
             [
                 "producten",
-                "standaardproductspecifiekaanvraag"
+                "referentieproductinformatie"
             ],
             [
                 "producten",
-                "standaardproductspecifiekinformatie"
-            ],
-            [
-                "producten",
-                "standaardproductuitvoering"
+                "referentieproductuitvoering"
             ]
         ]
     }

@@ -3,7 +3,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field, Layout, Submit
 
-from sdg.producten.models import StandaardProductSpecifiekInformatie
+from sdg.producten.models import ProductReferentieInformatie
 
 
 class ProductSpecifiekInformatieForm(forms.ModelForm):
@@ -24,7 +24,7 @@ class ProductSpecifiekInformatieForm(forms.ModelForm):
         )
 
     class Meta:
-        model = StandaardProductSpecifiekInformatie
+        model = ProductReferentieInformatie
         fields = (
             "product_titel_decentraal",
             "specifieke_tekst",
