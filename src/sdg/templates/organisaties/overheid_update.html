@@ -1,69 +1,41 @@
 {% extends 'organisaties/base.html' %}
+
+{% load static %}
+{% load i18n %}
 {% load crispy_forms_tags %}
 
 {% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
-{% block container_title %}SDG voor de <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
+{% block container_title %}SDG voor de
+    <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
 
 {% block inner %}
-    {% crispy form %}
-{#    TODO: Add via JS#}
-{#    <div class="form__subforms">#}
-{#        <div class="form__subform">#}
-{#            <h3 class="form__subtitle">#}
-{#                Locatie 1#}
-{#                <a class="form__delete" href="#">#}
-{#                    <i class="far fa-trash-alt"></i>#}
-{#                    Locatie verwijderen#}
-{#                </a>#}
-{#            </h3>#}
-{##}
-{#            <div class="form__block-group">#}
-{#                <div>#}
-{#                    <fieldset class="form__group">#}
-{#                        <label class="form__label" for="">Locatienaam</label>#}
-{#                        <input class="form__input" type="text" value="Gemeente Buren">#}
-{#                    </fieldset>#}
-{#                    <fieldset class="form__group">#}
-{#                        <label class="form__label" for="">Adres + huisnummer</label>#}
-{#                        <input class="form__input" type="text" value="Gemeente Buren">#}
-{#                    </fieldset>#}
-{#                    <div class="form__table form__special-group">#}
-{#                        <fieldset class="form__group">#}
-{#                            <label class="form__label" for="">Postcode</label>#}
-{#                            <input class="form__input" type="text" value="Gemeente Buren">#}
-{#                        </fieldset>#}
-{#                        <fieldset class="form__group">#}
-{#                            <label class="form__label" for="">Plaats</label>#}
-{#                            <input class="form__input" type="text" value="Gemeente Buren">#}
-{#                        </fieldset>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="form__table">#}
-{#                    <div class="form__table-header">Dag</div>#}
-{#                    <div class="form__table-header">Openingstijden</div>#}
-{#                    <label for="">Maandag</label>#}
-{#                    <input class="form__input" type="text">#}
-{#                    <label for="">Dinsdag</label>#}
-{#                    <input class="form__input" type="text">#}
-{#                    <label for="">Woensdag</label>#}
-{#                    <input class="form__input" type="text">#}
-{#                    <label for="">Donderdag</label>#}
-{#                    <input class="form__input" type="text">#}
-{#                    <label for="">Vrijdag</label>#}
-{#                    <input class="form__input" type="text">#}
-{#                    <label for="">Zaterdag</label>#}
-{#                    <input class="form__input" type="text">#}
-{#                    <label for="">Zondag</label>#}
-{#                    <input class="form__input" type="text">#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
 
-    {#    </div>#}
+    <form action="{% url "organisaties:overheid_edit" pk=lokaleoverheid.pk %}" method="post" class="form">
+        <fieldset class="form__group">
+            {% crispy form %}
+        </fieldset>
 
+        {% crispy lokatie_formset lokatie_helper %}
+
+        <div class="formset__add form__add-subform" data-formset-prefix="{{ lokatie_formset.prefix }}">
+            <i class="fas fa-plus"></i>
+            {% trans "Add another location" %}
+        </div>
+        <input type="submit" value="Opslaan" class="primaryAction login_button button">
+    </form>
+
+    <template class="formset__template">
+        {% include "organisaties/_prefix/lokatie_formset.html" %}
+    </template>
 
     <div class="form__actions">
         <p class="form__action-help">Wijzigingen worden direct gepubliceerd</p>
     </div>
 {% endblock inner %}
+
+{% block extra_js %}
+    <script src="{% static 'formset.js' %}"></script>
+    <script>
+        new Formset();
+    </script>
+{% endblock %}

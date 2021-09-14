@@ -12,6 +12,7 @@
 
     <body class="view__body">
         {% hijack_notification %}
+
         <main>
             {% block content %}
                 Override <code>{% verbatim %}{% block content %}{% endverbatim %}</code>
@@ -20,5 +21,7 @@
         </main>
 
         <script src="{% static 'bundles/sdg-js.js' %}"></script>
+        {% block extra_js %}
+        {% endblock %}
     </body>
 </html>

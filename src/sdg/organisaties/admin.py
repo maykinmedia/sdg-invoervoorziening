@@ -5,7 +5,7 @@ from sdg.organisaties.models import LokaleOverheid, Lokatie
 
 class LokatieInline(admin.StackedInline):
     model = Lokatie
-    extra = 1
+    extra = 0
 
 
 @admin.register(LokaleOverheid)

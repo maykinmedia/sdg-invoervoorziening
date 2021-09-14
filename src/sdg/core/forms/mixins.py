@@ -5,6 +5,11 @@ from crispy_forms.layout import HTML, Div, Field, Layout, Submit
 
 
 class SdgFormMixin(forms.Form):
+    """
+    Base SDG form, reusable for most basic forms.
+    It will render all fields by default in the most basic way.
+    """
+
     form_action = None
 
     def __init__(self, *args, **kwargs):
