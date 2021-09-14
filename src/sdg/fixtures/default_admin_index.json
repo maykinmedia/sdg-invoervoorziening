@@ -46,21 +46,21 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 3,
+        "order": 4,
         "name": "Producten",
         "slug": "producten",
         "models": [
             [
-                "core",
-                "productencatalogus"
+                "producten",
+                "generiekproduct"
             ],
             [
                 "producten",
-                "productgeneriekinformatie"
+                "referentieproduct"
             ],
             [
                 "producten",
-                "productspecifiekinformatie"
+                "specifiekproduct"
             ]
         ]
     }
@@ -68,17 +68,21 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 4,
-        "name": "Referentie producten",
-        "slug": "referentie-producten",
+        "order": 5,
+        "name": "Informatie",
+        "slug": "informatie",
         "models": [
             [
                 "producten",
-                "referentieproductinformatie"
+                "productgeneriekinformatie"
             ],
             [
                 "producten",
-                "referentieproductuitvoering"
+                "productreferentieinformatie"
+            ],
+            [
+                "producten",
+                "productspecifiekinformatie"
             ]
         ]
     }
@@ -108,7 +112,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 6,
+        "order": 7,
         "name": "Logs",
         "slug": "logs",
         "models": [
@@ -130,7 +134,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 5,
+        "order": 6,
         "name": "Configuratie",
         "slug": "configuratie",
         "models": [
@@ -141,6 +145,20 @@
             [
                 "admin_index",
                 "applink"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 3,
+        "name": "Catalogus",
+        "slug": "catalogus",
+        "models": [
+            [
+                "core",
+                "productencatalogus"
             ]
         ]
     }

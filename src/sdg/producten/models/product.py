@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices, TaalChoices
@@ -45,8 +46,21 @@ class ReferentieProduct(models.Model):
     def upn_uri(self):
         return self.generiek.upn.upn_uri
 
+    @property
+    def upn_label(self):
+        return self.generiek.upn.upn_label
+
+    @cached_property
+    def beschikbare_talen(self):
+        """Naast de taal van de informatie, dient ook aangegeven te worden in welke aanvullende taal/talen de
+        procedure kan worden uitgevoerd. elke productbeschrijving is in één taal (nl of en). De 'additional
+        languages' betreft dus altijd de andere taal (en of nl). Aanname: de portalen richten zich uitsluitend op
+        Nederlands en Engels, geen andere talen"""
+
+        return [i.taal for i in self.informatie.all()]
+
     def __str__(self):
-        return f"{self.generiek} (referentie)"
+        return f"{self.upn_label} (referentie)"
 
     class Meta:
         verbose_name = _("referentie product")
@@ -123,22 +137,17 @@ class SpecifiekProduct(models.Model):
         ),
     )
 
-    @property
+    @cached_property
     def beschikbare_talen(self):
         """Naast de taal van de informatie, dient ook aangegeven te worden in welke aanvullende taal/talen de
         procedure kan worden uitgevoerd. elke productbeschrijving is in één taal (nl of en). De 'additional
         languages' betreft dus altijd de andere taal (en of nl). Aanname: de portalen richten zich uitsluitend op
         Nederlands en Engels, geen andere talen"""
 
-        # TODO: Use manager
-        return [i for i in TaalChoices.get_available_languages() if i != self.taal]
-
-    @property
-    def upn_uri(self):
-        return self.referentie.upn_uri
+        return [i.taal for i in self.informatie.all()]
 
     def __str__(self):
-        return f"{self.referentie} (specifiek)"
+        return f"{self.referentie.upn_label} (specifiek)"
 
     class Meta:
         verbose_name = _("specifiek product")

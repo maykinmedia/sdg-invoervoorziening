@@ -3,45 +3,43 @@ from django.contrib import admin
 from markdownx.admin import MarkdownxModelAdmin
 
 from sdg.producten.models import (
+    GeneriekProduct,
     ProductGeneriekInformatie,
     ProductReferentieInformatie,
     ProductSpecifiekInformatie,
+    ReferentieProduct,
+    SpecifiekProduct,
 )
 
 
-@admin.register(ProductGeneriekInformatie)
-class ProductGeneriekInformatieAdmin(MarkdownxModelAdmin):
+class ProductGeneriekInformatieInline(admin.StackedInline):
     model = ProductGeneriekInformatie
-
-    list_display = (
-        "get_upn_uri",
-        "product_titel",
-    )
-    list_filter = ("datum_check",)
-    ordering = ("datum_check", "product_titel")
-    search_fields = (
-        "product_titel",
-        "upn__uri",
-        "upn__label",
-    )
-
-    def get_upn_uri(self, obj):
-        return obj.upn.upn_uri
+    extra = 1
 
 
-@admin.register(ProductReferentieInformatie)
-class ProductReferentieInformatieAdmin(MarkdownxModelAdmin):
+class ProductReferentieInformatieInline(admin.StackedInline):
     model = ProductReferentieInformatie
+    extra = 1
 
 
-@admin.register(ProductSpecifiekInformatie)
-class ProductSpecifiekInformatieAdmin(MarkdownxModelAdmin):
+class ProductSpecifiekInformatieInline(admin.StackedInline):
     model = ProductSpecifiekInformatie
+    extra = 1
 
-    list_display = ("upn_uri", "product_titel_decentraal", "versie")
-    list_filter = ("publicatie_datum",)
-    ordering = ("publicatie_datum", "product_titel_decentraal")
-    search_fields = (
-        "product_titel",
-        "upn_uri",
-    )
+
+@admin.register(GeneriekProduct)
+class GeneriekProductAdmin(MarkdownxModelAdmin):
+    model = GeneriekProduct
+    inlines = (ProductGeneriekInformatieInline,)
+
+
+@admin.register(ReferentieProduct)
+class ReferentieProductAdmin(MarkdownxModelAdmin):
+    model = ReferentieProduct
+    inlines = (ProductReferentieInformatieInline,)
+
+
+@admin.register(SpecifiekProduct)
+class SpecifiekProductAdmin(MarkdownxModelAdmin):
+    model = SpecifiekProduct
+    inlines = (ProductSpecifiekInformatieInline,)

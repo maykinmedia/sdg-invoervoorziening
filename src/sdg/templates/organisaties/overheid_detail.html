@@ -79,8 +79,8 @@
                 {% for product in producten %}
                     <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
                         <div>
-                            <div class="products__item-title">{{ product.product_titel_decentraal }}</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
+                            <div class="products__item-title">{{ product.upn_label }}</div>
+                            <div class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
                         </div>
                         <div class="products__item-icon">
                             <i class="fas fa-angle-right"></i>

@@ -8,312 +8,125 @@
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
-            <a href="#nl" data-id="nl" class="tabs__tab tabs__tab--selected">
-                Nederlands
-            </a>
-            <a href="#en" data-id="en" class="tabs__tab">
-                Engels
-            </a>
-            <a href="#de" data-id="de" class="tabs__tab">
-                Duits
-            </a>
+            {% for info in object.informatie.all %}
+                <a href="#{{ info.taal }}" data-id="{{ info.taal }}" class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
+                    {{ info.taal }}
+                </a>
+            {% endfor %}
         </div>
         <div class="tabs__tab-contents">
-            <div class="tabs__tab-content tabs__tab-content--active" id="nl">
-                <div class="tabs__tab-header">
-                    <div class="tabs__status">
-                        <span class="tabs__status-label">Status:</span>
-                        <div class="tabs__status-display">
-                            <i class="fas fa-check"></i>
-                            Gepubliceerd
+            {% for info in object.informatie.all %}
+                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}" id="{{ info.taal }}">
+                    <div class="tabs__tab-header">
+                        <div class="tabs__status">
+                            <span class="tabs__status-label">Status:</span>
+                            <div class="tabs__status-display">
+                                <i class="fas fa-check"></i>
+                                Gepubliceerd
+                            </div>
+                        </div>
+                        <div>
+                            <a href="#" class="button button--light">Nederlands deactiveren</a>
+                            <a class="button" href="{% url 'producten:edit' pk=info.pk %}">Wijzigen</a>
                         </div>
                     </div>
-                    <div>
-                        <a href="#" class="button button--light">Nederlands deactiveren</a>
-                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
-                    </div>
-                </div>
 
-                <div class="notifications">
-                    <div class="notifications__notification">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Ingeplande wijzigingen op 01-01-2021</span>
-                        <a href="#">Bekijk wijzigingen</a>
+                    <div class="notifications">
+                        <div class="notifications__notification">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Ingeplande wijzigingen op 01-01-2021</span>
+                            <a href="#">Bekijk wijzigingen</a>
+                        </div>
                     </div>
-                </div>
 
-                <table class="tabs__table">
-                    <thead>
-                    <tr>
-                        <th class="tabs__table-header" width="25%">Gegeven</th>
-                        <th class="tabs__table-header">Huidige informatie</th>
-                        <th class="tabs__table-header">Gewijzigd</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for label, value, help_text, is_markdown in object.get_fields %}
+                    <table class="tabs__table">
+                        <thead>
                         <tr>
-                            <td class="tabs__table-cell">{{ label|title }}<i class="fas fa-info-circle" title="{{ help_text }}"></i></td>
-                            <td class="tabs__table-cell">
-                                {% if is_markdown %}
-                                    {{ value|markdownify }}
-                                {% else %}
-                                    {{ value }}
-                                {% endif %}
-                            </td>
-                            <td class="tabs__table-cell">{{ object.datum_wijziging|date:"d-m-Y" }}</td>
+                            <th class="tabs__table-header" width="25%">Gegeven</th>
+                            <th class="tabs__table-header">Huidige informatie</th>
+                            <th class="tabs__table-header">Gewijzigd</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-
-                <div class="tabs__footer">
-                    {% if object.lokaties %}
-                        <div class="tabs__footer-left">
-                            <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                            <ul class="tabs__footer-list">
-                        {% for lokatie in object.lokaties.all %}
-                                <li class="tabs__footer-list-item">
-                                    <input type="checkbox" name="" checked disabled>
-                                    {{ lokatie.naam }}
-                                </li>
+                        </thead>
+                        <tbody>
+                        {% for label, value, help_text, is_markdown in info.get_fields %}
+                            <tr>
+                                <td class="tabs__table-cell">{{ label|title }}<i class="fas fa-info-circle"
+                                                                                 title="{{ help_text }}"></i></td>
+                                <td class="tabs__table-cell">
+                                    {% if is_markdown %}
+                                        {{ value|markdownify }}
+                                    {% else %}
+                                        {{ value }}
+                                    {% endif %}
+                                </td>
+                                <td class="tabs__table-cell">{{ info.datum_wijziging|date:"d-m-Y" }}</td>
+                            </tr>
                         {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="tabs__footer">
+                        {% if info.lokaties %}
+                            <div class="tabs__footer-left">
+                                <h3 class="tabs__footer-title">Locaties met dit product</h3>
+                                <ul class="tabs__footer-list">
+                                    {% for lokatie in info.lokaties.all %}
+                                        <li class="tabs__footer-list-item">
+                                            <input type="checkbox" name="" checked disabled>
+                                            {{ lokatie.naam }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        <div class="tabs__fotter-right">
+                            <h3 class="tabs__footer-title">Revisies</h3>
+                            <ul class="revision-list">
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
+                                    00:00</a>)
+                                </li>
                             </ul>
                         </div>
-                    {% endif %}
-                    <div class="tabs__fotter-right">
-                        <h3 class="tabs__footer-title">Revisies</h3>
-                        <ul class="revision-list">
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class="tabs__tab-content" id="en">
-                <div class="tabs__tab-header">
-                    <div class="tabs__status">
-                        <span class="tabs__status-label">Status:</span>
-                        <div class="tabs__status-display">
-                            <i class="fas fa-check"></i>
-                            Gepubliceerd
-                        </div>
-                    </div>
-                    <div>
-                        <a href="#" class="button button--light">Engels deactiveren</a>
-                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
-                    </div>
-                </div>
-
-                <div class="notifications">
-                    <div class="notifications__notification">
-                        <i class="fas fa-info-circle"></i>
-                        <span>Ingeplande wijzigingen op 01-01-2021</span>
-                        <a href="#">Bekijk wijzigingen</a>
-                    </div>
-                </div>
-
-                <table class="tabs__table">
-                    <thead>
-                    <tr>
-                        <th class="tabs__table-header" width="25%">Gegeven</th>
-                        <th class="tabs__table-header">Huidige informatie</th>
-                        <th class="tabs__table-header">Gewijzigd</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {# TODO: Include language-specific version #}
-                    </tbody>
-                </table>
-
-                <div class="tabs__footer">
-                    {% if object.lokaties %}
-                        <div class="tabs__footer-left">
-                            <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                            <ul class="tabs__footer-list">
-                                {% for lokatie in object.lokaties.all %}
-                                    <li class="tabs__footer-list-item">
-                                        <input type="checkbox" name="" checked disabled>
-                                        {{ lokatie.naam }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                    <div class="tabs__fotter-right">
-                        <h3 class="tabs__footer-title">Revisies</h3>
-                        <ul class="revision-list">
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="tabs__tab-content" id="de">
-                <div class="tabs__tab-header">
-                    <div class="tabs__status">
-                        <span class="tabs__status-label">Status:</span>
-                        <div class="tabs__status-display">
-                            <i class="fas fa-check"></i>
-                            Gepubliceerd
-                        </div>
-                    </div>
-                    <div>
-                        <a href="#" class="button button--light">Duits deactiveren</a>
-                        <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
-                    </div>
-                </div>
-
-                <table class="tabs__table">
-                    <thead>
-                    <tr>
-                        <th class="tabs__table-header" width="25%">Gegeven</th>
-                        <th class="tabs__table-header">Huidige informatie</th>
-                        <th class="tabs__table-header">Gewijzigd</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {# TODO: Include language-specific version#}
-                    </tbody>
-                </table>
-
-                <div class="tabs__footer">
-                    {% if object.lokaties %}
-                        <div class="tabs__footer-left">
-                            <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                            <ul class="tabs__footer-list">
-                                {% for lokatie in object.lokaties.all %}
-                                    <li class="tabs__footer-list-item">
-                                        <input type="checkbox" name="" checked disabled>
-                                        {{ lokatie.naam }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    {% endif %}
-                    <div class="tabs__fotter-right">
-                        <h3 class="tabs__footer-title">Revisies</h3>
-                        <ul class="revision-list">
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                            <li class="revision-list__item">
-                                <i class="fas fa-user"></i>
-                                John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                00:00</a>)
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock inner %}
