@@ -2,7 +2,7 @@
 
 {% load i18n %}
 {% load account %}
-{% load crispy_forms_tags %}
+{% load utils %}
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
@@ -12,6 +12,40 @@
         {% blocktrans %}If you have not created an account yet, then please
             <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
     </p>
-    {% crispy form %}
+
+    <form action="/accounts/login/" class="form" method="post">
+        {% csrf_token %}
+        <div class="form__block">
+            <fieldset class="form__group">
+                <label for="{{ form.login.id_for_label }}" class="control-label requiredField">
+                    {{ form.login.label }}
+                    {% if form.login.field.required %}
+                        <span class="asteriskField">*</span>
+                    {% endif %}
+                </label>
+                {{ form.login|addclass:"form__input" }}
+            </fieldset>
+            <fieldset class="form__group">
+                <label for="{{ form.password.id_for_label }}" class="control-label requiredField">
+                    {{ form.password.label }}
+                    {% if form.password.field.required %}
+                        <span class="asteriskField">*</span>
+                    {% endif %}
+                </label>
+                {{ form.password|addclass:"form__input" }}
+            </fieldset>
+            <fieldset class="form__group">
+                <label for="{{ form.remember.id_for_label }}" class="checkbox ">
+                    {{ form.remember|addclass:"form__checkbox" }}
+                    {{ form.remember.label }}
+                </label>
+            </fieldset>
+            <input type="hidden" name="next" value="/">
+            <div class="form-buttons">
+                <input type="submit" name="sign_in" value="Aanmelden" class="btn btn-primary primaryAction login_button button" id="submit-id-sign_in">
+                <a class="secondaryAction" href="/accounts/password/reset/">Wachtwoord vergeten?</a>
+            </div>
+        </div>
+    </form>
 {% endblock %}
 

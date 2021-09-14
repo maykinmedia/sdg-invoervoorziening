@@ -68,3 +68,13 @@ def placekitten_src(width=800, height=600):
 @register.simple_tag
 def version():
     return settings.RELEASE
+
+
+@register.filter(name='addclass')
+def addclass(field, class_attr):
+    return field.as_widget(attrs={'class': class_attr})
+
+
+@register.simple_tag
+def template_dir(value):
+    return dir(value)

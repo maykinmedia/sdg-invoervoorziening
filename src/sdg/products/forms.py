@@ -1,8 +1,10 @@
 from django import forms
 
+from markdownx.fields import MarkdownxFormField
+
 
 # TODO: Implement markdown editor
 class ProductEditForm(forms.Form):
-    description = forms.CharField()
-    procedure = forms.CharField()
-    exceptions = forms.CharField()
+    description = MarkdownxFormField()
+    procedure = MarkdownxFormField()
+    exceptions = MarkdownxFormField()
