@@ -79,7 +79,7 @@ class Role(models.Model):
         related_name="roles",
     )
     lokale_overheid = models.ForeignKey(
-        "core.LokaleOverheid",
+        "organisaties.LokaleOverheid",
         on_delete=models.PROTECT,
         related_name="lokale_overheden",
     )
