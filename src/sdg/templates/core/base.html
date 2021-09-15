@@ -10,7 +10,9 @@
 {% block outer_content %}
     <header class="header {% block header_classes %}{% endblock header_classes %}">
         <div class="container header__top">
-            <img class="header__logo" src="{% static 'ico/favicon.png' %}"/>
+            <a href="{% url 'core:home' %}">
+                <img class="header__logo" src="{% static 'ico/favicon.png' %}"/>
+            </a>
             <div class="header__user">
                 <i class="fas fa-user"></i>
                 {% if request.user.first_name %}

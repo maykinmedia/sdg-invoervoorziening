@@ -8,9 +8,9 @@
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
-            {% for info in object.informatie.all %}
-                <a href="#{{ info.taal }}" data-id="{{ info.taal }}" class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ info.taal }}
+            {% for taal in object.beschikbare_talen %}
+                <a href="#{{ taal }}" data-id="{{ taal }}" class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
+                    {{ taal }}
                 </a>
             {% endfor %}
         </div>
@@ -27,7 +27,7 @@
                         </div>
                         <div>
                             <a href="#" class="button button--light">Nederlands deactiveren</a>
-                            <a class="button" href="{% url 'producten:edit' pk=info.pk %}">Wijzigen</a>
+                            <a class="button" href="{% url 'producten:edit' pk=object.pk %}">Wijzigen</a>
                         </div>
                     </div>
 

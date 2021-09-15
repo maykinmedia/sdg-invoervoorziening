@@ -148,3 +148,22 @@ class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
     class Meta:
         verbose_name = _("product specifiek informatie")
         verbose_name_plural = _("product specifiek informatie")
+
+
+class ProductuitvoeringInformatie(ProductGegevensMixin, models.Model):
+    """De specifieke informatie over een productuitvoering."""
+
+    productuitvoering = models.ForeignKey(
+        "producten.Productuitvoering",
+        on_delete=models.PROTECT,
+        related_name="informatie",
+        verbose_name=_("productuitvoering"),
+        help_text=_("Het moeder-productuitvoering van deze informatie."),
+    )
+
+    def __str__(self):
+        return f"{self.productuitvoering} [informatie]"
+
+    class Meta:
+        verbose_name = _("product specifiek informatie")
+        verbose_name_plural = _("product specifiek informatie")

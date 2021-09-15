@@ -1,8 +1,9 @@
 from django.db import models
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.core.constants import DoelgroepChoices, TaalChoices
+from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 
 
@@ -58,6 +59,9 @@ class ReferentieProduct(models.Model):
         Nederlands en Engels, geen andere talen"""
 
         return [i.taal for i in self.informatie.all()]
+
+    def get_absolute_url(self):
+        return reverse("producten:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         return f"{self.upn_label} (referentie)"
@@ -137,6 +141,14 @@ class SpecifiekProduct(models.Model):
         ),
     )
 
+    @property
+    def upn_uri(self):
+        return self.referentie.upn_uri
+
+    @property
+    def upn_label(self):
+        return self.referentie.upn_label
+
     @cached_property
     def beschikbare_talen(self):
         """Naast de taal van de informatie, dient ook aangegeven te worden in welke aanvullende taal/talen de
@@ -148,6 +160,26 @@ class SpecifiekProduct(models.Model):
 
     def __str__(self):
         return f"{self.referentie.upn_label} (specifiek)"
+
+    class Meta:
+        verbose_name = _("specifiek product")
+        verbose_name_plural = _("specifiek product")
+
+
+class Productuitvoering(models.Model):
+    """Een productuitvoering (variantvorm van een specifiek product).
+    Kan meerdere lokaal-specifieke varianten van productinformatie bevatten."""
+
+    specifiek_product = models.ForeignKey(
+        "producten.SpecifiekProduct",
+        related_name="uitvoeringen",
+        on_delete=models.PROTECT,
+        verbose_name=_("referentie"),
+        help_text=_("Het referentieproduct voor het specifieke product."),
+    )
+
+    def __str__(self):
+        return f"{self.specifiek_product.upn_label} (uitvoering)"
 
     class Meta:
         verbose_name = _("specifiek product")

@@ -8,42 +8,37 @@
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
-            <a href="#nl" data-id="nl" class="tabs__tab tabs__tab--selected">
-                Nederlands
+            {% for taal in product.beschikbare_talen %}
+            <a href="#{{ taal }}" data-id="{{ taal }}" class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
+                {{ taal }}
             </a>
-            <a href="#en" data-id="en" class="tabs__tab">
-                Engels
-            </a>
-            <a href="#de" data-id="de" class="tabs__tab">
-                Duits
-            </a>
+            {% endfor %}
         </div>
         <form action="." method="POST" class="tabs__tab-contents">
+            {% csrf_token %}
             {{ form.media }}
-            <div class="tabs__tab-content tabs__tab-content--active" id="nl">
-                <table class="tabs__table">
-                    <thead>
+            {{ form.management_form|crispy }}
+
+            {% for f in form %}
+                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}" id="{{ f.taal.value }}">
+                    <table class="tabs__table">
+                        <thead>
                         <tr>
                             <th class="tabs__table-header" width="25%">Gegeven</th>
                             <th class="tabs__table-header">Huidige informatie</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% crispy form %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="tabs__tab-content" id="en">
-
-            </div>
-            <div class="tabs__tab-content" id="de">
-
-            </div>
+                        </thead>
+                        <tbody>
+                        {% crispy f form_helper %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
 
             <div class="form-actions">
                 <div></div>
                 <div>
-                    <div class="form-actions__title">Wijzigingen plubliceren</div>
+                    <div class="form-actions__title">Wijzigingen publiceren</div>
                     <div>
                         <label for="now">
                             <input type="radio" name="publish" id="now">
