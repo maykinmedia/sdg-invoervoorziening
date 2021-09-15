@@ -3,7 +3,7 @@ name: Continuous Integration (CI)
 on:
   push:
     branches:
-      - main
+      - master
     tags:
       - '*'
   pull_request:
@@ -62,6 +62,9 @@ jobs:
 
   docker_build:
     name: Build Docker image
+    # Temporary until we use docker_push job
+    needs:
+      - tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -90,13 +93,23 @@ jobs:
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
 
-      - run: docker image save -o image.tar $IMAGE_NAME:${{ steps.vars.outputs.tag }}
-      - name: Store image artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: docker-image
-          path: image.tar
-          retention-days: 1
+      # - run: docker image save -o image.tar $IMAGE_NAME:${{ steps.vars.outputs.tag }}
+      # - name: Store image artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: docker-image
+      #     path: image.tar
+      #     retention-days: 1
+
+      - name: Log into registry
+        if: github.event_name == 'push'  # Exclude PRs
+        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push the Docker image
+        if: github.event_name == 'push'  # Exclude PRs
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+        run: docker push $IMAGE_NAME:$RELEASE_VERSION
 
   # oas-lint:
   #   needs: tests
@@ -166,48 +179,48 @@ jobs:
   #       run: openapi-generator-cli generate -i ./openapi.yaml --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
   #         -o ./sdks/python -g python --additional-properties=optionalProjectFile=false,optionalAssemblyInfo=false+
 
-  docker_push:
-    needs:
-      - tests
-      - docker_build
-      # - oas-lint
-      # - oas-postman
-      # - oas-generate-sdks
+  # docker_push:
+  #   needs:
+  #     - tests
+  #     - docker_build
+  #     # - oas-lint
+  #     # - oas-postman
+  #     # - oas-generate-sdks
 
-    name: Push Docker image
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'  # Exclude PRs
+  #   name: Push Docker image
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'push'  # Exclude PRs
 
-    steps:
-      - uses: actions/checkout@v2
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Download built image
-        uses: actions/download-artifact@v2
-        with:
-          name: docker-image
+  #     - name: Download built image
+  #       uses: actions/download-artifact@v2
+  #       with:
+  #         name: docker-image
 
-      - name: Set tag
-        id: vars
-        run: |
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+  #     - name: Set tag
+  #       id: vars
+  #       run: |
+  #         # Strip git ref prefix from version
+  #         VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
-          # Strip "v" prefix from tag name (if present at all)
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+  #         # Strip "v" prefix from tag name (if present at all)
+  #         [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+  #         # Use Docker `latest` tag convention
+  #         [ "$VERSION" == "master" ] && VERSION=latest
 
-          echo ::set-output name=tag::${VERSION}
+  #         echo ::set-output name=tag::${VERSION}
 
-      - name: Load image
-        run: |
-          docker image load -i image.tar
+  #     - name: Load image
+  #       run: |
+  #         docker image load -i image.tar
 
-      - name: Log into registry
-        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+  #     - name: Log into registry
+  #       run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Push the Docker image
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: docker push $IMAGE_NAME:$RELEASE_VERSION
+  #     - name: Push the Docker image
+  #       env:
+  #         RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+  #       run: docker push $IMAGE_NAME:$RELEASE_VERSION
