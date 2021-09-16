@@ -37,7 +37,8 @@ class ProductFieldsMixin:
             field = self.__class__._meta.get_field(field)
         value, is_reference = self._get_field_value(field)
         return ProductField(
-            name=field.verbose_name,
+            name=field.name,
+            verbose_name=field.verbose_name,
             value=value,
             help_text=field.help_text,
             is_reference=is_reference,

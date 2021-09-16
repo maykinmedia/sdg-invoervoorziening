@@ -21,6 +21,32 @@
             {% for generic_info, info in informatie %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ info.taal }}">
+                    <div class="tabs__tab-header">
+                        <div class="tabs__status">
+                            <span class="tabs__status-label">Status:</span>
+                            <div class="tabs__status-display">
+                                <i class="fas fa-check"></i>
+                                gepubliceerd
+                            </div>
+                        </div>
+                        <div>
+                            <a href="#" class="button button--light">{{ info.taal }} Deactiveren</a>
+                            {% if product.generiek %}
+                                <a class="button" href="{% url 'producten:ref_edit' pk=product.pk %}">Wijzigen</a>
+                            {% else %}
+                                <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="notifications">
+                        <div class="notifications__notification">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Ingeplande wijzigingen op 01-01-2021</span>
+                            <a href="#">Bekijk wijzigingen</a>
+                        </div>
+                    </div>
+
                     {% if generic_info %}
                         <table class="tabs__table">
                             <thead>
@@ -31,9 +57,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for field in generic_info.get_fields|exclude:"id,taal" %}
+                            {% for field in generic_info.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
                                 <tr>
-                                    <td class="tabs__table-cell">{{ field.name|title }}<i
+                                    <td class="tabs__table-cell">{{ field.verbose_name|title }}<i
                                         class="fas fa-info-circle fa-xs"
                                         title="{{ field.help_text }}"></i>
                                     </td>
@@ -53,33 +79,9 @@
                             {% endfor %}
                             </tbody>
                         </table>
+
+                        <hr class="divider">
                     {% endif %}
-
-                    <div class="tabs__tab-header">
-                        <div class="tabs__status">
-                            <span class="tabs__status-label">status:</span>
-                            <div class="tabs__status-display">
-                                <i class="fas fa-check"></i>
-                                gepubliceerd
-                            </div>
-                        </div>
-                        <div>
-                            <a href="#" class="button button--light">nederlands deactiveren</a>
-                            {% if product.generiek %}
-                                <a class="button" href="{% url 'producten:ref_edit' pk=product.pk %}">wijzigen</a>
-                            {% else %}
-                                <a class="button" href="{% url 'producten:edit' pk=product.pk %}">wijzigen</a>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="notifications">
-                        <div class="notifications__notification">
-                            <i class="fas fa-info-circle"></i>
-                            <span>ingeplande wijzigingen op 01-01-2021</span>
-                            <a href="#">bekijk wijzigingen</a>
-                        </div>
-                    </div>
 
                     <table class="tabs__table">
                         <thead>
@@ -92,7 +94,7 @@
                         <tbody>
                         {% for field in info.get_fields|exclude:"id,taal" %}
                             <tr>
-                                <td class="tabs__table-cell">{{ field.name|title }}<i class="fas fa-info-circle fa-xs"
+                                <td class="tabs__table-cell">{{ field.verbose_name|title }}<i class="fas fa-info-circle fa-xs"
                                                                                       title="{{ field.help_text }}"></i>
                                 </td>
                                 <td class="tabs__table-cell">
@@ -115,7 +117,7 @@
                     <div class="tabs__footer">
                         {% if product.lokaties %}
                             <div class="tabs__footer-left">
-                                <h3 class="tabs__footer-title">locaties met dit product</h3>
+                                <h3 class="tabs__footer-title">Locaties met dit product</h3>
                                 <ul class="tabs__footer-list">
                                     {% for lokatie in product.lokaties.all %}
                                         <li class="tabs__footer-list-item">
@@ -127,7 +129,7 @@
                             </div>
                         {% endif %}
                         <div class="tabs__fotter-right">
-                            <h3 class="tabs__footer-title">revisies</h3>
+                            <h3 class="tabs__footer-title">Revisies</h3>
                             <ul class="revision-list">
                                 <li class="revision-list__item">
                                     <i class="fas fa-user"></i>

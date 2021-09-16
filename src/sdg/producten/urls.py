@@ -14,7 +14,7 @@ urlpatterns = [
         name="detail",
     ),
     url(r"^(?P<pk>\d+)/edit/$", ProductUpdateView.as_view(), name="edit"),
-    # Standaard
+    # Referentie
     url(
         r"^r/(?P<pk>\d+)/$",
         ReferentieProductDetailView.as_view(),

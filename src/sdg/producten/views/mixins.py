@@ -33,6 +33,7 @@ class ProductFormSetMixin:
             self.parent_model,
             self.child_model,
             form=ProductGegevensForm,
+            extra=0,
         )
         super().__init__(*args, **kwargs)
 

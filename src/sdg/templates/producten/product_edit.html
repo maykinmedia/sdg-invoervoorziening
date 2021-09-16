@@ -1,6 +1,9 @@
-{% extends 'core/base.html' %}
+{% extends 'producten/base.html' %}
 
 {% load crispy_forms_tags %}
+{% load i18n %}
+{% load markdownify %}
+{% load producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de <b>gemeente buren</b>{% endblock container_title %}
@@ -9,9 +12,10 @@
     <div class="tabs">
         <div class="tabs__tabs">
             {% for taal in product.beschikbare_talen %}
-            <a href="#{{ taal }}" data-id="{{ taal }}" class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                {{ taal }}
-            </a>
+                <a href="#{{ taal }}" data-id="{{ taal }}"
+                   class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
+                    {{ taal }}
+                </a>
             {% endfor %}
         </div>
         <form action="." method="POST" class="tabs__tab-contents">
@@ -19,8 +23,45 @@
             {{ form.media }}
             {{ form.management_form|crispy }}
 
-            {% for f in form %}
-                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}" id="{{ f.taal.value }}">
+            {% for generic_information, form in informatie_form %}
+                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
+                     id="{{ form.taal.value }}">
+                    {% if generic_information %}
+                        <table class="tabs__table">
+                            <thead>
+                            <tr>
+                                <th class="tabs__table-header" width="25%">generieke gegevens</th>
+                                <th class="tabs__table-header">huidige informatie</th>
+                                <th class="tabs__table-header">gewijzigd</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
+                                <tr>
+                                    <td class="tabs__table-cell">{{ field.verbose_name|title }}<i
+                                        class="fas fa-info-circle fa-xs"
+                                        title="{{ field.help_text }}"></i>
+                                    </td>
+                                    <td class="tabs__table-cell">
+                                        {% if field.is_markdown %}
+                                            {{ field.value|markdownify }}
+                                        {% else %}
+                                            {{ field.value }}
+                                        {% endif %}
+                                        {% if field.is_reference %}
+                                            <i class="fa fa-asterisk fa-xs primary"
+                                               title="{% trans 'this field is using reference text.' %}"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="tabs__table-cell">{{ info.datum_wijziging|date:"d-m-y" }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <hr class="divider">
+                    {% endif %}
+
                     <table class="tabs__table">
                         <thead>
                         <tr>
@@ -29,7 +70,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% crispy f form_helper %}
+                        {% crispy form form_helper %}
                         </tbody>
                     </table>
                 </div>

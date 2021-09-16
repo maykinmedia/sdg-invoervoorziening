@@ -35,3 +35,14 @@ class ProductUpdateView(
     template_name = "producten/product_edit.html"
     parent_model = SpecifiekProduct
     child_model = ProductSpecifiekInformatie
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        generic_information = context["product"].referentie.generiek.informatie.all()
+
+        context["informatie_form"] = zip_longest(
+            generic_information, context["form"].forms
+        )
+
+        return context

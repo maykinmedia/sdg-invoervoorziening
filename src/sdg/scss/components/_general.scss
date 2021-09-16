@@ -1,9 +1,18 @@
-$color-primary: #396a88;
+$color_primary: #396a88;
+$color_lightgrey: #e0e0e0;
+$color_darkgrey: #b5b6bb;
 
 .markdownx-preview {
   float: right;
 }
 
 .primary {
-  color: $color-primary;
+  color: $color_primary;
+}
+
+.divider {
+  border: none;
+  background-color: $color_lightgrey;
+  height: 8px;
+  margin: 32px 0;
 }
