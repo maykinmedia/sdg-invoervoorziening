@@ -8,7 +8,7 @@ from sdg.organisaties.forms import (
     LokatieInlineFormSet,
 )
 from sdg.organisaties.models import LokaleOverheid
-from sdg.producten.models import StandaardProductSpecifiekInformatie
+from sdg.producten.models import ReferentieProduct, SpecifiekProduct
 
 
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
@@ -17,9 +17,12 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context[
-            "standaardproducten"
-        ] = StandaardProductSpecifiekInformatie.objects.all()
+        context["referentieproducten"] = ReferentieProduct.objects.prefetch_related(
+            "informatie"
+        ).all()
+        context["producten"] = SpecifiekProduct.objects.prefetch_related(
+            "informatie"
+        ).all()
         return context
 
     def get_queryset(self):

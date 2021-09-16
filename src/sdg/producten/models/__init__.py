@@ -1,2 +1,2 @@
+from .informatie import *  # noqa
 from .product import *  # noqa
-from .standaard import *  # noqa

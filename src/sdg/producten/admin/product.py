@@ -4,68 +4,43 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.admin import MarkdownxModelAdmin
 
 from sdg.producten.models import (
+    GeneriekProduct,
     ProductGeneriekInformatie,
-    ProductSpecifiekAanvraag,
+    ProductReferentieInformatie,
     ProductSpecifiekInformatie,
+    ReferentieProduct,
+    SpecifiekProduct,
 )
 
 
-@admin.register(ProductGeneriekInformatie)
-class ProductGeneriekInformatieAdmin(MarkdownxModelAdmin):
+class ProductGeneriekInformatieInline(admin.StackedInline):
     model = ProductGeneriekInformatie
-
-    list_display = (
-        "get_upn_uri",
-        "product_titel",
-    )
-    list_filter = ("datum_check",)
-    ordering = ("datum_check", "product_titel")
-    search_fields = (
-        "product_titel",
-        "upn__uri",
-        "upn__label",
-    )
-
-    def get_upn_uri(self, obj):
-        return obj.upn.upn_uri
-
-
-class SpecifiekAanvraagInline(admin.StackedInline):
-    model = ProductSpecifiekAanvraag
-    can_delete = False
     extra = 1
-    max_num = 1
 
 
-@admin.register(ProductSpecifiekInformatie)
-class ProductSpecifiekInformatieAdmin(MarkdownxModelAdmin):
+class ProductReferentieInformatieInline(admin.StackedInline):
+    model = ProductReferentieInformatie
+    extra = 1
+
+
+class ProductSpecifiekInformatieInline(admin.StackedInline):
     model = ProductSpecifiekInformatie
-
-    list_display = ("upn_uri", "product_titel_decentraal", "versie")
-    list_filter = ("publicatie_datum",)
-    ordering = ("publicatie_datum", "product_titel_decentraal")
-    search_fields = (
-        "product_titel",
-        "upn_uri",
-    )
-    inlines = (SpecifiekAanvraagInline,)
+    extra = 1
 
 
-@admin.register(ProductSpecifiekAanvraag)
-class ProductSpecifiekAnvraagAdmin(MarkdownxModelAdmin):
-    model = ProductSpecifiekAanvraag
+@admin.register(GeneriekProduct)
+class GeneriekProductAdmin(MarkdownxModelAdmin):
+    model = GeneriekProduct
+    inlines = (ProductGeneriekInformatieInline,)
 
-    list_display = (
-        "get_product_title",
-        "decentrale_procedure_link",
-        "beschikbare_talen",
-    )
-    search_fields = (
-        "upn_label",
-        "upn_uri",
-    )
 
-    def get_product_title(self, obj):
-        return obj.specifiek_product.product_titel_decentraal
+@admin.register(ReferentieProduct)
+class ReferentieProductAdmin(MarkdownxModelAdmin):
+    model = ReferentieProduct
+    inlines = (ProductReferentieInformatieInline,)
 
-    get_product_title.short_description = _("Product title")
+
+@admin.register(SpecifiekProduct)
+class SpecifiekProductAdmin(MarkdownxModelAdmin):
+    model = SpecifiekProduct
+    inlines = (ProductSpecifiekInformatieInline,)

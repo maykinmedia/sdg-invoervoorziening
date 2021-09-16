@@ -7,5 +7,5 @@ class ProductField:
     name: str
     value: Any
     help_text: str
-    is_standard: bool
+    is_reference: bool
     is_markdown: bool
