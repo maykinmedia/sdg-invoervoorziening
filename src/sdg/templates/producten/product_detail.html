@@ -113,11 +113,11 @@
                     </table>
 
                     <div class="tabs__footer">
-                        {% if info.lokaties %}
+                        {% if product.lokaties %}
                             <div class="tabs__footer-left">
                                 <h3 class="tabs__footer-title">locaties met dit product</h3>
                                 <ul class="tabs__footer-list">
-                                    {% for lokatie in info.lokaties.all %}
+                                    {% for lokatie in product.lokaties.all %}
                                         <li class="tabs__footer-list-item">
                                             <input type="checkbox" name="" checked disabled>
                                             {{ lokatie.naam }}

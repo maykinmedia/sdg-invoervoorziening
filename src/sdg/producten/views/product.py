@@ -14,6 +14,7 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     queryset = SpecifiekProduct.objects.all().prefetch_related(
         "referentie__generiek__informatie",
         "informatie",
+        "lokaties",
     )
     model = SpecifiekProduct
 
