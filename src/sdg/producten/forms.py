@@ -72,15 +72,3 @@ class ProductGegevensForm(forms.ModelForm):
             "wtd_bij_geen_reactie",
             "decentrale_procedure_link",
         )
-
-
-ProductReferentieInformatieFormset = inlineformset_factory(
-    ReferentieProduct,
-    ProductReferentieInformatie,
-    form=ProductGegevensForm,
-)
-ProductSpecifiekInformatieFormset = inlineformset_factory(
-    SpecifiekProduct,
-    ProductSpecifiekInformatie,
-    form=ProductGegevensForm,
-)

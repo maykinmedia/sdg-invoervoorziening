@@ -17,12 +17,15 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        context["referentieproducten"] = ReferentieProduct.objects.prefetch_related(
+
+        # TODO: remove this (temporary for display)
+        context[
+            "referentieproducten"
+        ] = ReferentieProduct.objects.all().prefetch_related("informatie")
+        context["producten"] = SpecifiekProduct.objects.all().prefetch_related(
             "informatie"
-        ).all()
-        context["producten"] = SpecifiekProduct.objects.prefetch_related(
-            "informatie"
-        ).all()
+        )
+
         return context
 
     def get_queryset(self):
