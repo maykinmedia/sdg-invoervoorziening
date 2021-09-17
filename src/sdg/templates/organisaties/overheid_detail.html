@@ -72,26 +72,6 @@
     <div class="products__accordeon">
         <div class="products__accordeon-item">
             <div class="products__accordeon-title">
-                Referentieproducten (test)
-                <i class="fas fa-angle-down"></i>
-                <i class="fas fa-angle-up"></i>
-            </div>
-            <div class="products__list">
-                {% for product in referentieproducten %}
-                    <a class="products__item" href="{% url 'producten:ref_detail' pk=product.pk %}">
-                        <div>
-                            <div class="products__item-title">{{ product.upn_label }}</div>
-                            <div class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-        <div class="products__accordeon-item">
-            <div class="products__accordeon-title">
                 Producten (test)
                 <i class="fas fa-angle-down"></i>
                 <i class="fas fa-angle-up"></i>

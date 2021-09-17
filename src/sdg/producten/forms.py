@@ -1,16 +1,9 @@
 from django import forms
-from django.forms import inlineformset_factory
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, Layout
 
-from sdg.producten.models import (
-    ProductGegevensMixin,
-    ProductReferentieInformatie,
-    ProductSpecifiekInformatie,
-    ReferentieProduct,
-    SpecifiekProduct,
-)
+from sdg.producten.models import ProductGegevensMixin
 
 
 class GegevensFormHelper(FormHelper):

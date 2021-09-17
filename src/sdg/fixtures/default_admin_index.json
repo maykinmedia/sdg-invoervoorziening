@@ -56,10 +56,6 @@
             ],
             [
                 "producten",
-                "referentieproduct"
-            ],
-            [
-                "producten",
                 "specifiekproduct"
             ]
         ]
@@ -75,10 +71,6 @@
             [
                 "producten",
                 "productgeneriekinformatie"
-            ],
-            [
-                "producten",
-                "productreferentieinformatie"
             ],
             [
                 "producten",

@@ -2,11 +2,7 @@ from django.contrib import admin
 
 from markdownx.admin import MarkdownxModelAdmin
 
-from sdg.producten.models import (
-    ProductGeneriekInformatie,
-    ProductReferentieInformatie,
-    ProductSpecifiekInformatie,
-)
+from sdg.producten.models import ProductGeneriekInformatie, ProductSpecifiekInformatie
 
 
 @admin.register(ProductGeneriekInformatie)
@@ -27,11 +23,6 @@ class ProductGeneriekInformatieAdmin(MarkdownxModelAdmin):
 
     def get_upn_uri(self, obj):
         return obj.upn.upn_uri
-
-
-@admin.register(ProductReferentieInformatie)
-class ProductReferentieInformatieAdmin(MarkdownxModelAdmin):
-    model = ProductReferentieInformatie
 
 
 @admin.register(ProductSpecifiekInformatie)
