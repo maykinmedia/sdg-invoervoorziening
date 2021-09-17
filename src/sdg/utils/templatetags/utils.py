@@ -78,3 +78,10 @@ def addclass(field, class_attr):
 @register.simple_tag
 def template_dir(value):
     return dir(value)
+
+
+@register.inclusion_tag("forms/field.html")
+def form_field(field):
+    return {
+        'field': field
+    }

@@ -1,5 +1,16 @@
 @import 'reseter.css/css/reseter.css';
 
+// General styling:
+body {
+  color: #212121;
+  background-color: #F2F2F2;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+a {
+  color: #0B71A1;
+}
+
 @import 'settings';
 @import 'components';
 @import 'views';

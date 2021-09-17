@@ -1,5 +1,5 @@
 .tabs {
-  margin-top: -42px;
+  margin-top: -66px;
 
   .tabs__tabs {
     display: grid;
@@ -9,7 +9,7 @@
 
   .tabs__tab {
     color: #fff;
-    padding: 12px;
+    padding: 16px;
     border-radius: 10px 10px 0 0;
     font-weight: bold;
     transition: background-color 300ms;
@@ -62,17 +62,21 @@
   .tabs__table-header {
     font-weight: bold;
     text-align: left;
-    border-bottom: 2px solid #e0e0e0;
-    padding: 8px;
+    border-bottom: 1px solid #BDBDBD;
+    padding: 12px;
     text-transform: uppercase;
   }
 
   .tabs__table-cell {
-    padding: 8px;
-    border-bottom: 2px solid #e0e0e0;
+    padding: 12px;
+    border-bottom: 1px solid #BDBDBD;
     vertical-align: top;
     line-height: 1.5;
-    color: #808080;
+    color: #212121;
+
+    &.tabs__table-cell--edit {
+      padding-top: 24px;
+    }
 
     &.required {
       color: #333333;
@@ -80,10 +84,6 @@
 
     .svg-inline--fa {
       margin-left: 4px;
-    }
-
-    a {
-      color: #396a88;
     }
 
     ul {
@@ -99,6 +99,11 @@
         content: "-";
         margin-right: 27px;
       }
+    }
+
+    .form__input {
+      width: 100%;
+      padding: 12px;
     }
   }
 
@@ -145,6 +150,7 @@
   }
 
   .tabs__table-help {
+    margin-top: 8px;
     display: block;
     text-align: right;
     color: #396a88;

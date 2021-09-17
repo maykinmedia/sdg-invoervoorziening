@@ -7,4 +7,14 @@
     color: #333;
     margin-bottom: 24px;
   }
+
+  .form-actions__options {
+    label {
+      margin-right: 20px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
 }
