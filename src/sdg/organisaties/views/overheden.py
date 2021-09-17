@@ -8,6 +8,7 @@ from sdg.organisaties.forms import (
     LokatieInlineFormSet,
 )
 from sdg.organisaties.models import LokaleOverheid
+from sdg.organisaties.utils import create_specific_catalogs
 from sdg.producten.models import SpecifiekProduct
 
 
@@ -21,6 +22,7 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
         context["producten"] = SpecifiekProduct.objects.all().prefetch_related(
             "informatie"
         )
+        create_specific_catalogs(context["lokaleoverheid"])
 
         return context
 

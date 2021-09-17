@@ -53,7 +53,10 @@ class SpecifiekProduct(models.Model):
         related_name="original",
         on_delete=models.PROTECT,
         verbose_name=_("referentie product"),
-        help_text=_("Het referentie product voor het specifieke product."),
+        help_text=_(
+            "Een referentie naar een product. "
+            "Het toewijzen van een referentieproduct veronderstelt automatisch dat dit product specifiek is."
+        ),
         blank=True,
         null=True,
     )

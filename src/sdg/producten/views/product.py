@@ -1,6 +1,7 @@
 from itertools import zip_longest
 
-from django.views.generic import DetailView
+from django.urls import reverse
+from django.views.generic import DetailView, RedirectView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.producten.models import ProductSpecifiekInformatie, SpecifiekProduct
@@ -40,9 +41,18 @@ class ProductUpdateView(
         context = super().get_context_data(**kwargs)
 
         generic_information = context["product"].referentie.generiek.informatie.all()
-
         context["informatie_form"] = zip_longest(
             generic_information, context["form"].forms
         )
 
         return context
+
+
+class CreateProductRedirectView(RedirectView):
+    def get(self, request, *args, **kwargs):
+        # TODO: Create product from C to C1
+        self.created_pk = ...
+        super().get(request, *args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("producten:edit", kwargs={"pk": kwargs.get(self.created_pk)})
