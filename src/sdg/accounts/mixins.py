@@ -1,9 +1,29 @@
+from abc import ABC
+
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from sdg.accounts.models import Role
 
 
-class OverheidRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+class RoleTestMixin(LoginRequiredMixin, UserPassesTestMixin, ABC):
+    """Base class for role related permissions checks."""
+
+    def is_root_editor(self):
+        """Check if the user has root editor permission."""
+        return getattr(self.request.user, "is_hoofdredacteur")
+
+
+class RootEditorRequiredMixin(RoleTestMixin):
+    """Ensures an authenticated user has a root editor permissions."""
+
+    def test_func(self):
+        if self.is_root_editor():
+            return True
+        else:
+            return False
+
+
+class OverheidRoleRequiredMixin(RoleTestMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
     lokale_overheid = None
@@ -16,10 +36,6 @@ class OverheidRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         Returns all roles by default.
         """
         return Role.get_allowed_roles()
-
-    def is_root_editor(self):
-        """Check if the user has root editor privileges."""
-        return getattr(self.request.user, "is_hoofdredacteur")
 
     def test_func(self):
         if self.is_root_editor():

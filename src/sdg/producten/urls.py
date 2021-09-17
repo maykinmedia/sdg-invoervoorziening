@@ -1,24 +1,28 @@
 from django.conf.urls import url
-from django.urls import path
 
-from sdg.producten.views.product import (
-    ContactEditView,
-    ProductDetailView,
-    ProductEditView,
-    ProductListView,
+from sdg.producten.views.product import ProductDetailView, ProductUpdateView
+from sdg.producten.views.referentie import (
+    ReferentieProductDetailView,
+    ReferentieProductUpdateView,
 )
-from sdg.producten.views.standaard import StandaardProductDetailView
 
 app_name = "producten"
 urlpatterns = [
-    # Standaard
     url(
-        r"^standaard/(?P<pk>[\d]+)/$",
-        StandaardProductDetailView.as_view(),
-        name="standaard_detail",
+        r"^(?P<pk>\d+)/$",
+        ProductDetailView.as_view(),
+        name="detail",
     ),
-    path("", ProductListView.as_view(), name="list"),
-    path("detail/1/", ProductDetailView.as_view(), name="detail"),
-    path("edit/1/", ProductEditView.as_view(), name="edit"),
-    path("edit/contact/", ContactEditView.as_view(), name="edit-contact"),
+    url(r"^(?P<pk>\d+)/edit/$", ProductUpdateView.as_view(), name="edit"),
+    # Referentie
+    url(
+        r"^r/(?P<pk>\d+)/$",
+        ReferentieProductDetailView.as_view(),
+        name="ref_detail",
+    ),
+    url(
+        r"^r/(?P<pk>\d+)/edit/$",
+        ReferentieProductUpdateView.as_view(),
+        name="ref_edit",
+    ),
 ]

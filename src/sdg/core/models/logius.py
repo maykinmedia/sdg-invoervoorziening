@@ -37,7 +37,7 @@ class Overheidsorganisatie(models.Model):
 class Informatiegebied(models.Model):
     code = models.CharField(
         _("code"),
-        max_length=3,
+        max_length=32,
         help_text=_("De code van het desbetreffende informatiegebied."),
         unique=True,
     )

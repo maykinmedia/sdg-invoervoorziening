@@ -1,0 +1,32 @@
+{% load crispy_forms_field %}
+
+{% if field.is_hidden %}
+    {{ field }}
+{% else %}
+    <tr>
+        {% if field.label and not field|is_checkbox and form_show_labels %}
+            <td class="tabs__table-cell {% if field.field.required %}required{% endif %}">
+                {{ field.label|safe }}
+                {% if field.help_text %}
+                    <i class="fas fa-info-circle fa-sm" title="{{ field.help_text }}"></i>
+                {% endif %}
+            </td>
+        {% endif %}
+
+        {% if not field|is_checkboxselectmultiple and not field|is_radioselect %}
+            {% if field|is_checkbox and form_show_labels %}
+                <label for="{{ field.id_for_label }}"
+                       class="checkbox {% if field.field.required %}requiredField{% endif %}">
+                    {% crispy_field field %}
+                    {{ field.label|safe }}{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                </label>
+            {% else %}
+                <td class="tabs__table-cell">
+                    {% crispy_field field %}
+                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
+                </td>
+            {% endif %}
+        {% endif %}
+    </tr>
+{% endif %}
+

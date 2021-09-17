@@ -1,10 +1,10 @@
-{% extends 'master.html' %}
+{% extends 'account/base.html' %}
 
-{% block menu %}{% endblock %}
+{% load i18n %}
 
-{% block content %}
-
-  <h1>Sorry, the requested page could not be found (404)</h1>
-
-
-{% endblock content %}
+{% block login_right %}
+    <h3 class="login__container-title">404</h3>
+    <p class="login__container-info">
+        {% trans 'Sorry, the request page could not be found.' %}
+    </p>
+{% endblock login_right %}

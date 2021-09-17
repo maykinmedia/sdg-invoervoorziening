@@ -1,9 +1,11 @@
 {% extends 'organisaties/base.html' %}
 
 {% load i18n %}
+{% load producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor de <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
+{% block container_title %}SDG voor de
+    <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
 
 {% block inner %}
     <div class="selection">
@@ -15,7 +17,8 @@
         </div>
         <div class="selection__tab-contents">
             {% for lokatie in lokaleoverheid.lokaties.all %}
-                <div class="selection__tab-content selection__tab-content{% if forloop.first %}--active{% endif %}" id="{{ lokatie.pk }}">
+                <div class="selection__tab-content selection__tab-content{% if forloop.first %}--active{% endif %}"
+                     id="{{ lokatie.pk }}">
                     <div>
                         <div class="selection__title">Bezoek adres</div>
                         <div class="selection__information">
@@ -53,7 +56,6 @@
                 <i class="fas fa-phone"></i>
                 {{ lokaleoverheid.contact_telefoonnummer|default:_("No phone number") }}
             </a>
-            </a>
             <a class="selection__general-link" href="#">
                 <i class="fas fa-envelope"></i>
                 {{ lokaleoverheid.contact_emailadres|default:_("No email-address") }}
@@ -66,92 +68,133 @@
     </div>
 
     <div class="products">
-        <h2 class="products__title">Producten</h2>
-        <div class="products__accordeon">
-            <div class="products__accordeon-item">
-                <div class="products__accordeon-title">
-                    Burger en Familierecht
-                    <i class="fas fa-angle-down"></i>
-                    <i class="fas fa-angle-up"></i>
-                </div>
-                <div class="products__list">
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                    <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
-                        <div>
-                            <div class="products__item-title">Burger en Famiierecht</div>
-                            <div class="products__item-help">Nederlands, Engels</div>
-                        </div>
-                        <div class="products__item-icon">
-                            <i class="fas fa-angle-right"></i>
-                        </div>
-                    </a>
-                </div>
+    <h2 class="products__title">Producten</h2>
+    <div class="products__accordeon">
+        <div class="products__accordeon-item">
+            <div class="products__accordeon-title">
+                Referentieproducten (test)
+                <i class="fas fa-angle-down"></i>
+                <i class="fas fa-angle-up"></i>
             </div>
+            <div class="products__list">
+                {% for product in referentieproducten %}
+                    <a class="products__item" href="{% url 'producten:ref_detail' pk=product.pk %}">
+                        <div>
+                            <div class="products__item-title">{{ product.upn_label }}</div>
+                            <div class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
+                        </div>
+                        <div class="products__item-icon">
+                            <i class="fas fa-angle-right"></i>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="products__accordeon-item">
+            <div class="products__accordeon-title">
+                Producten (test)
+                <i class="fas fa-angle-down"></i>
+                <i class="fas fa-angle-up"></i>
+            </div>
+            <div class="products__list">
+                {% for product in producten %}
+                    <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
+                        <div>
+                            <div
+                                class="products__item-title">{{ product.upn_label }}</div>
+                            <div class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
+                        </div>
+                        <div class="products__item-icon">
+                            <i class="fas fa-angle-right"></i>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="products__accordeon-item">
+            <div class="products__accordeon-title">
+                Burger en Familierecht
+                <i class="fas fa-angle-down"></i>
+                <i class="fas fa-angle-up"></i>
+            </div>
+            <div class="products__list">
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+                <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
+                    <div>
+                        <div class="products__item-title">Burger en Famiierecht</div>
+                        <div class="products__item-help">Nederlands, Engels</div>
+                    </div>
+                    <div class="products__item-icon">
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
         <h3 class="products__subtitle">Niet in gebruik bij gemeente buren:</h3>
         <div class="products__list products__list--add">
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>
@@ -160,7 +203,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
             </a>
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>
@@ -169,7 +212,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
             </a>
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>
@@ -178,7 +221,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
             </a>
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>
@@ -187,7 +230,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
             </a>
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>
@@ -196,7 +239,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
             </a>
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>
@@ -205,7 +248,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
             </a>
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>
@@ -214,7 +257,7 @@
                     <i class="fas fa-plus"></i>
                 </div>
             </a>
-            <a class="products__item" href="{% url 'producten:standaard_detail' pk=1 %}">
+            <a class="products__item" href="{% url 'producten:ref_detail' pk=1 %}">
                 <div>
                     <div class="products__item-title">Burger en Famiierecht</div>
                     <div class="products__item-help">Nederlands, Engels</div>

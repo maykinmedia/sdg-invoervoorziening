@@ -1,28 +1,48 @@
-from django.views.generic import DetailView, FormView, TemplateView
+from itertools import zip_longest
+
+from django.views.generic import DetailView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.producten.forms import ProductEditForm
-from sdg.producten.models import ProductSpecifiekInformatie
+from sdg.producten.models import ProductSpecifiekInformatie, SpecifiekProduct
+from sdg.producten.views import BaseProductUpdateView
+from sdg.producten.views.mixins import OptionalFormMixin
 
 
 class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
-    template_name = "organisaties/overheid_detail.html"
-    model = ProductSpecifiekInformatie
+    template_name = "producten/product_detail.html"
+    context_object_name = "product"
+    queryset = SpecifiekProduct.objects.all().prefetch_related(
+        "referentie__generiek__informatie",
+        "informatie",
+        "lokaties",
+    )
+    model = SpecifiekProduct
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        product_information = context["product"].informatie.all()
+        generic_information = context["product"].referentie.generiek.informatie.all()
+
+        context["informatie"] = zip_longest(generic_information, product_information)
+
+        return context
 
 
-# TODO [US-02] (Lokatie)
-class ContactEditView(OverheidRoleRequiredMixin, TemplateView):
-    template_name = "organisaties/overheid_update.html"
+class ProductUpdateView(
+    OptionalFormMixin, OverheidRoleRequiredMixin, BaseProductUpdateView
+):
+    template_name = "producten/product_edit.html"
+    parent_model = SpecifiekProduct
+    child_model = ProductSpecifiekInformatie
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-class ProductListView(OverheidRoleRequiredMixin, TemplateView):
-    template_name = "producten/products.html"
+        generic_information = context["product"].referentie.generiek.informatie.all()
 
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]
+        context["informatie_form"] = zip_longest(
+            generic_information, context["form"].forms
+        )
 
-
-class ProductEditView(OverheidRoleRequiredMixin, FormView):
-    template_name = "producten/product-edit.html"
-    form_class = ProductEditForm
+        return context

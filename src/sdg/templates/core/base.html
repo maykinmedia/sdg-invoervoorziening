@@ -7,10 +7,12 @@
     <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
 {% endblock %}
 
-{% block content %}
+{% block outer_content %}
     <header class="header {% block header_classes %}{% endblock header_classes %}">
         <div class="container header__top">
-            <img class="header__logo" src="{% static 'ico/favicon.png' %}"/>
+            <a href="{% url 'core:home' %}">
+                <img class="header__logo" src="{% static 'ico/favicon.png' %}"/>
+            </a>
             <div class="header__user">
                 <i class="fas fa-user"></i>
                 {% if request.user.first_name %}
@@ -25,16 +27,24 @@
             <p class="header__title">{% block container_title %}{% endblock container_title %}</p>
         </div>
     </header>
+{% endblock %}
+{% block content %}
     <main class="container">
+
         {% if messages %}
             {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <div class="notifications">
+                    <div class="notifications__notification">
+                        <i class="fas fa-info-circle"></i>
+                        <span>{{ message }}</span>
+                        <a href="#">{% trans "Close" %}</a>
+                    </div>
                 </div>
             {% endfor %}
         {% endif %}
+
         {% block inner %}
         {% endblock %}
+
     </main>
 {% endblock %}

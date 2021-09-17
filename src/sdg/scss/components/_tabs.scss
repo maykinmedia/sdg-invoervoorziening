@@ -74,6 +74,10 @@
     line-height: 1.5;
     color: #808080;
 
+    &.required {
+      color: #333333;
+    }
+
     .svg-inline--fa {
       margin-left: 4px;
     }
