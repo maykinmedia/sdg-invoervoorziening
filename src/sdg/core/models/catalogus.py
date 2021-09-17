@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -21,6 +22,12 @@ class ProductenCatalogus(models.Model):
         on_delete=models.CASCADE,
     )
 
+    is_referentie_catalogus = models.BooleanField(
+        _("is referentie catalogus"),
+        default=True,
+        help_text=_("Geeft aan of dit een referentiecatalogus is."),
+    )
+
     domein = models.CharField(
         _("domein"),
         max_length=5,
@@ -41,6 +48,10 @@ class ProductenCatalogus(models.Model):
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."
     )
 
+    def has_referentie_catalogus(self) -> bool:
+        """Geeft als resultaat of het een referentiecatalogus heeft of niet."""
+        return bool(self.referentie_catalogus)
+
     @property
     def verantwoordelijke_organisatie(self):
         """Het departement dat verantwoordelijk is (medebewind producten), bv BZK voor paspoort; "gemeenten" voor
@@ -53,3 +64,29 @@ class ProductenCatalogus(models.Model):
     class Meta:
         verbose_name = _("producten catalogus")
         verbose_name_plural = _("productcatalogi")
+
+    def clean(self):
+        super().clean()
+
+        if self.is_referentie_catalogus:
+            # Reference catalog
+            if not self.has_referentie_catalogus():
+                raise ValidationError(
+                    _(
+                        """Een referentiecatalogus kan geen "referentie_catalogus" hebben."""
+                    )
+                )
+
+            if not self.referentie_catalogus.is_referentie_catalogus:
+                raise ValidationError(
+                    _(
+                        """Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is
+                        ingeschakeld. """
+                    )
+                )
+        else:
+            # Specific catalog
+            if self.has_referentie_catalogus():
+                raise ValidationError(
+                    _("""Een catalogus moet een referentiecatalogus hebben.""")
+                )
