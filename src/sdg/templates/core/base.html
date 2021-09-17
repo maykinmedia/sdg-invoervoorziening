@@ -1,8 +1,50 @@
-{% extends "master.html" %}
+{% extends 'master.html' %}
+{% load static %}
 {% load i18n %}
 {% block title %}{% block head_title %}{% endblock head_title %} | SDG{% endblock title %}
 
+{% block extra_css %}
+    <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
+{% endblock %}
+
+{% block outer_content %}
+    <header class="header {% block header_classes %}{% endblock header_classes %}">
+        <div class="container header__top">
+            <a href="{% url 'core:home' %}">
+                <img class="header__logo" src="{% static 'ico/favicon.png' %}"/>
+            </a>
+            <div class="header__user">
+                <i class="fas fa-user"></i>
+                {% if request.user.first_name %}
+                    {{ request.user.get_full_name }}
+                {% else %}
+                    {{ request.user.username }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="container">
+            <p class="header__subtitle">{% block container_subtitle %}{% endblock container_subtitle %}</p>
+            <p class="header__title">{% block container_title %}{% endblock container_title %}</p>
+        </div>
+    </header>
+{% endblock %}
 {% block content %}
-    {% block inner %}
-    {% endblock %}
+    <main class="container">
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="notifications">
+                    <div class="notifications__notification">
+                        <i class="fas fa-info-circle"></i>
+                        <span>{{ message }}</span>
+                        <a href="#">{% trans "Close" %}</a>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block inner %}
+        {% endblock %}
+
+    </main>
 {% endblock %}

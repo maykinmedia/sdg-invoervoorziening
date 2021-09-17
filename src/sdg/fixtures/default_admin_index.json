@@ -33,11 +33,11 @@
         "slug": "organisaties",
         "models": [
             [
-                "core",
+                "organisaties",
                 "lokaleoverheid"
             ],
             [
-                "core",
+                "organisaties",
                 "lokatie"
             ]
         ]
@@ -46,29 +46,21 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 3,
+        "order": 4,
         "name": "Producten",
         "slug": "producten",
         "models": [
             [
-                "core",
-                "productencatalogus"
+                "producten",
+                "generiekproduct"
             ],
             [
-                "core",
-                "productgeneriekinformatie"
+                "producten",
+                "referentieproduct"
             ],
             [
-                "core",
-                "productspecifiekaanvraag"
-            ],
-            [
-                "core",
-                "productspecifiekinformatie"
-            ],
-            [
-                "core",
-                "productuitvoering"
+                "producten",
+                "specifiekproduct"
             ]
         ]
     }
@@ -76,21 +68,21 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 4,
-        "name": "Referentie producten",
-        "slug": "referentie-producten",
+        "order": 5,
+        "name": "Informatie",
+        "slug": "informatie",
         "models": [
             [
-                "core",
-                "standaardproductspecifiekaanvraag"
+                "producten",
+                "productgeneriekinformatie"
             ],
             [
-                "core",
-                "standaardproductspecifiekinformatie"
+                "producten",
+                "productreferentieinformatie"
             ],
             [
-                "core",
-                "standaardproductuitvoering"
+                "producten",
+                "productspecifiekinformatie"
             ]
         ]
     }
@@ -120,7 +112,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 6,
+        "order": 7,
         "name": "Logs",
         "slug": "logs",
         "models": [
@@ -142,7 +134,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 5,
+        "order": 6,
         "name": "Configuratie",
         "slug": "configuratie",
         "models": [
@@ -153,6 +145,20 @@
             [
                 "admin_index",
                 "applink"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 3,
+        "name": "Catalogus",
+        "slug": "catalogus",
+        "models": [
+            [
+                "core",
+                "productencatalogus"
             ]
         ]
     }

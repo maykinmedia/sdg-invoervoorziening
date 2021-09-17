@@ -42,10 +42,12 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
-    is_redacteur = models.BooleanField(
-        _("redacteur"),
+    is_hoofdredacteur = models.BooleanField(
+        _("hoofdredacteur"),
         default=False,
-        help_text=_("Designates whether this user can edit the reference texts. "),
+        help_text=_(
+            "Designates whether this user is a root editor (i.e. can edit the reference texts)."
+        ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
@@ -77,7 +79,7 @@ class Role(models.Model):
         related_name="roles",
     )
     lokale_overheid = models.ForeignKey(
-        "core.LokaleOverheid",
+        "organisaties.LokaleOverheid",
         on_delete=models.PROTECT,
         related_name="lokale_overheden",
     )
@@ -93,15 +95,16 @@ class Role(models.Model):
         _("redacteur"),
         default=False,
         help_text=_(
-            "Designates whether this is a redacteur of a specific overheidsorganisatie. "
+            "Designates whether this is an editor of a specific overheidsorganisatie. "
         ),
     )
 
-    def get_allowed_roles(self):
+    @classmethod
+    def get_allowed_roles(cls):
         return [
             f
-            for f in self._meta.fields
-            if f.name.startswith("is_") and getattr(self, f.name)
+            for f in cls._meta.fields
+            if f.name.startswith("is_") and getattr(cls, f.name)
         ]
 
     def __str__(self):

@@ -9,6 +9,11 @@ class LoginDashboardView(RedirectAuthenticatedUserMixin, TemplateView):
     success_url = None
     redirect_field_name = "next"
 
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        context["next"] = self.request.GET.get("next", "/")
+        return self.render_to_response(context)
+
     def get_success_url(self):
         # Explicitly passed ?next= URL takes precedence
         ret = (
