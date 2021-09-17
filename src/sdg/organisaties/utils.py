@@ -1,10 +1,12 @@
+from typing import List
+
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid
 
 
 def create_specific_catalogs(
     lokale_overheid: LokaleOverheid,
-) -> list[ProductenCatalogus]:
+) -> List[ProductenCatalogus]:
     """Create catalogus for all reference catalogus (if it doesn't exist)"""
 
     catalogus_list = []

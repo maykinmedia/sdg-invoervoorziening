@@ -55,7 +55,7 @@ class ProductenCatalogus(models.Model):
         autonome producten (bv terrasvergunning)"""
         return self.lokale_overheid.verantwoordelijke_organisatie
 
-    def has_referentie_catalogus(self) -> bool:
+    def has_reference_catalog(self) -> bool:
         """Geeft als resultaat of het een referentiecatalogus heeft of niet."""
         return bool(self.referentie_catalogus)
 
@@ -71,7 +71,7 @@ class ProductenCatalogus(models.Model):
 
         if self.is_referentie_catalogus:
             # Reference catalog
-            if self.has_referentie_catalogus():
+            if self.has_reference_catalog():
                 raise ValidationError(
                     _(
                         """Een referentiecatalogus kan geen "referentie_catalogus" hebben."""
@@ -79,7 +79,7 @@ class ProductenCatalogus(models.Model):
                 )
         else:
             # Specific catalog
-            if not self.has_referentie_catalogus():
+            if not self.has_reference_catalog():
                 raise ValidationError(
                     _("""Een catalogus moet een referentiecatalogus hebben.""")
                 )
