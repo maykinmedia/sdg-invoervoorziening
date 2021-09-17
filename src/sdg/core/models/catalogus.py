@@ -70,23 +70,22 @@ class ProductenCatalogus(models.Model):
 
         if self.is_referentie_catalogus:
             # Reference catalog
-            if not self.has_referentie_catalogus():
+            if self.has_referentie_catalogus():
                 raise ValidationError(
                     _(
                         """Een referentiecatalogus kan geen "referentie_catalogus" hebben."""
                     )
                 )
-
+        else:
+            # Specific catalog
+            if not self.has_referentie_catalogus():
+                raise ValidationError(
+                    _("""Een catalogus moet een referentiecatalogus hebben.""")
+                )
             if not self.referentie_catalogus.is_referentie_catalogus:
                 raise ValidationError(
                     _(
                         """Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is
                         ingeschakeld. """
                     )
-                )
-        else:
-            # Specific catalog
-            if self.has_referentie_catalogus():
-                raise ValidationError(
-                    _("""Een catalogus moet een referentiecatalogus hebben.""")
                 )
