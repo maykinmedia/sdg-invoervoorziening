@@ -48,15 +48,15 @@ class ProductenCatalogus(models.Model):
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."
     )
 
-    def has_referentie_catalogus(self) -> bool:
-        """Geeft als resultaat of het een referentiecatalogus heeft of niet."""
-        return bool(self.referentie_catalogus)
-
     @property
     def verantwoordelijke_organisatie(self):
         """Het departement dat verantwoordelijk is (medebewind producten), bv BZK voor paspoort; "gemeenten" voor
         autonome producten (bv terrasvergunning)"""
         return self.lokale_overheid.verantwoordelijke_organisatie
+
+    def has_referentie_catalogus(self) -> bool:
+        """Geeft als resultaat of het een referentiecatalogus heeft of niet."""
+        return bool(self.referentie_catalogus)
 
     def __str__(self):
         return f"{self.naam} - {self.versie}"

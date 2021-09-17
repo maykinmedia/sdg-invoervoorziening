@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -23,6 +22,10 @@ class GeneriekProduct(models.Model):
     @property
     def upn_uri(self):
         return self.upn.upn_uri
+
+    @property
+    def upn_label(self):
+        return self.upn.upn_label
 
     def __str__(self):
         return f"{self.upn.upn_label}"
@@ -116,7 +119,11 @@ class SpecifiekProduct(models.Model):
 
     @property
     def upn_uri(self):
-        return self.generiek_product.upn_uri
+        return self.generiek_product.upn.upn_uri
+
+    @property
+    def upn_label(self):
+        return self.generiek_product.upn.upn_label
 
     @cached_property
     def beschikbare_talen(self):
@@ -127,33 +134,35 @@ class SpecifiekProduct(models.Model):
 
         return [i.taal for i in self.informatie.all()]
 
+    def is_reference_product(self) -> bool:
+        """Dit product is een referentieproduct, omdat het geen referentieproduct heeft."""
+        return bool(not self.referentie_product)
+
     def get_absolute_url(self):
         return reverse("producten:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
-        return f"{self.generiek_product} (specifiek)"
+        if self.is_reference_product():
+            return f"{self.generiek_product.upn_label} [reference]"
+        else:
+            return f"{self.referentie_product.upn_label} [specifiek]"
 
     class Meta:
         verbose_name = _("specifiek product")
         verbose_name_plural = _("specifiek product")
 
     def clean(self):
+        from sdg.producten.models.validators import (
+            validate_reference_product,
+            validate_specific_product,
+        )
+
         super().clean()
 
-        if not self.referentie_product.catalogus.is_referentie_catalogus:
-            raise ValidationError(
-                _(
-                    """"Het referentieproduct van dit product moet in een referentiecatalogus staan."""
-                )
-            )
-
-        if self.generiek_product and not self.catalogus.is_referentie_catalogus:
-            raise ValidationError(
-                _(
-                    """Het veld "generiek_product" kan alleen worden toegevoegd als dit product een referentieproduct
-                    is. """
-                )
-            )
+        if self.is_reference_product():
+            validate_reference_product(self)
+        else:
+            validate_specific_product(self)
 
 
 class Productuitvoering(models.Model):
