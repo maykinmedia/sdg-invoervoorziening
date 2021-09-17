@@ -29,10 +29,7 @@ class ProductGeneriekInformatie(ProductFieldsMixin, models.Model):
         _("taal"),
         choices=TaalChoices.choices,
         max_length=32,
-        help_text=_(
-            "De taal waarin de betreffende tekst is geschreven."
-            "ISO 639 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"
-        ),
+        help_text=_("De taal waarin de betreffende tekst is geschreven."),
     )
     product_titel = models.CharField(
         _("product titel"),

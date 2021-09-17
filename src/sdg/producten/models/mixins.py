@@ -105,7 +105,6 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Procedurebeschrijving.",
         ),
         blank=True,
-        null=True,
     )
     vereisten = MarkdownxField(
         _("vereisten"),
@@ -113,7 +112,6 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Vereisten auth/id/sign.",
         ),
         blank=True,
-        null=True,
     )
     bewijs = MarkdownxField(
         _("bewijs"),
@@ -121,7 +119,6 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Bewijs (type/format).",
         ),
         blank=True,
-        null=True,
     )
     bezwaar_en_beroep = MarkdownxField(
         _("bezwaar en beroep"),
@@ -129,7 +126,6 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Bezwaar en beroep.",
         ),
         blank=True,
-        null=True,
     )
     kosten_en_betaalmethoden = MarkdownxField(
         _("kosten en betaalmethoden"),
@@ -137,7 +133,6 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Kosten en betaalmethoden.",
         ),
         blank=True,
-        null=True,
     )
     uiterste_termijn = MarkdownxField(
         _("uiterste termijn"),
@@ -145,7 +140,6 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Deadlines.",
         ),
         blank=True,
-        null=True,
     )
     wtd_bij_geen_reactie = MarkdownxField(
         _("wtd bij geen reactie"),
@@ -153,13 +147,11 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Wat te doen bij geen reactie.",
         ),
         blank=True,
-        null=True,
     )
     decentrale_procedure_link = models.URLField(
         _("decentrale procedure link"),
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
         blank=True,
-        null=True,
     )
 
     def __str__(self):
@@ -219,7 +211,6 @@ class ProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Procedurebeschrijving.",
         ),
         blank=True,
-        null=True,
     )
     vereisten = MarkdownxField(
         _("vereisten"),
@@ -227,7 +218,6 @@ class ProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Vereisten auth/id/sign.",
         ),
         blank=True,
-        null=True,
     )
     bewijs = MarkdownxField(
         _("bewijs"),
@@ -235,7 +225,6 @@ class ProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Bewijs (type/format).",
         ),
         blank=True,
-        null=True,
     )
     bezwaar_en_beroep = MarkdownxField(
         _("bezwaar en beroep"),
@@ -243,7 +232,6 @@ class ProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Bezwaar en beroep.",
         ),
         blank=True,
-        null=True,
     )
     kosten_en_betaalmethoden = MarkdownxField(
         _("kosten en betaalmethoden"),
@@ -251,7 +239,6 @@ class ProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Kosten en betaalmethoden.",
         ),
         blank=True,
-        null=True,
     )
     uiterste_termijn = MarkdownxField(
         _("uiterste termijn"),
@@ -259,7 +246,6 @@ class ProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Deadlines.",
         ),
         blank=True,
-        null=True,
     )
     wtd_bij_geen_reactie = MarkdownxField(
         _("wtd bij geen reactie"),
@@ -267,13 +253,11 @@ class ProductGegevensMixin(ProductFieldsMixin, models.Model):
             "Wat te doen bij geen reactie.",
         ),
         blank=True,
-        null=True,
     )
     decentrale_procedure_link = models.URLField(
         _("decentrale procedure link"),
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
         blank=True,
-        null=True,
     )
 
     def __str__(self):
