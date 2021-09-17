@@ -11,7 +11,7 @@ from sdg.core.constants import TaalChoices
 from sdg.producten.utils import ProductField
 
 
-class ProductFieldsMixin:
+class ProductFieldMixin:
     def _get_field_value(self, field) -> Tuple[Any, bool]:
         """Get the value of a field. If empty, retrieve from standard.
 
@@ -55,7 +55,7 @@ class ProductFieldsMixin:
         return self._get_field(field)
 
 
-class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
+class GeneriekProductGegevensMixin(ProductFieldMixin, models.Model):
     taal = models.CharField(
         _("taal"),
         choices=TaalChoices.choices,
@@ -161,7 +161,7 @@ class GeneriekProductGegevensMixin(ProductFieldsMixin, models.Model):
         abstract = True
 
 
-class ProductGegevensMixin(ProductFieldsMixin, models.Model):
+class ProductGegevensMixin(ProductFieldMixin, models.Model):
     taal = models.CharField(
         _("taal"),
         choices=TaalChoices.choices,

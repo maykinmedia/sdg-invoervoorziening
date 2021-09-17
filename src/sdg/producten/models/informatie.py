@@ -5,15 +5,15 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.constants import TaalChoices
-from sdg.producten.models.mixins import ProductFieldsMixin, ProductGegevensMixin
+from sdg.producten.models.mixins import ProductFieldMixin, ProductGegevensMixin
 
 
-class ProductGeneriekInformatie(ProductFieldsMixin, models.Model):
+class ProductGeneriekInformatie(ProductFieldMixin, models.Model):
     """De generiek informatie over een product."""
 
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="informatie",
         verbose_name=_("generiek product"),
         help_text=_("Het generieke moederproduct van deze informatie."),
