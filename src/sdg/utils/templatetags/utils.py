@@ -70,9 +70,9 @@ def version():
     return settings.RELEASE
 
 
-@register.filter(name='addclass')
+@register.filter(name="addclass")
 def addclass(field, class_attr):
-    return field.as_widget(attrs={'class': class_attr})
+    return field.as_widget(attrs={"class": class_attr})
 
 
 @register.simple_tag
@@ -82,6 +82,4 @@ def template_dir(value):
 
 @register.inclusion_tag("forms/field.html")
 def form_field(field):
-    return {
-        'field': field
-    }
+    return {"field": field}
