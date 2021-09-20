@@ -1,0 +1,17 @@
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 16px;
+
+  .cards__card {
+    padding: 32px;
+    background-color: #e0e3ec;
+    border-radius: 10px;
+    color: #212121;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
