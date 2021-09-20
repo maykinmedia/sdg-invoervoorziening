@@ -28,6 +28,12 @@ class OverheidRoleRequiredMixin(RoleTestMixin):
 
     lokale_overheid = None
 
+    def get_lokale_overheid(self):
+        """
+        :returns: The lokale overheid for which we are matching permissions for.
+        """
+        return self.lokale_overheid
+
     @staticmethod
     def get_required_roles():
         """

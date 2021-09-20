@@ -9,6 +9,7 @@ class ProductenCatalogus(models.Model):
     referentie_catalogus = models.ForeignKey(
         "self",
         verbose_name=_("referentie catalogus"),
+        related_name="specifiek_catalog",
         help_text=_("De catalogus van referentie."),
         null=True,
         blank=True,
@@ -60,11 +61,14 @@ class ProductenCatalogus(models.Model):
         return bool(self.referentie_catalogus)
 
     def __str__(self):
-        return f"{self.naam} - {self.versie}"
+        if self.is_referentie_catalogus:
+            return f"{self.naam} [referentie]"
+        else:
+            return f"{self.naam}"
 
     class Meta:
         verbose_name = _("producten catalogus")
-        verbose_name_plural = _("productcatalogi")
+        verbose_name_plural = _("productencatalogi")
 
     def clean(self):
         super().clean()
