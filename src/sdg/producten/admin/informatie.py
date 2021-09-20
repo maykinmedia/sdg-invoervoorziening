@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from markdownx.admin import MarkdownxModelAdmin
 
-from sdg.producten.models import ProductGeneriekInformatie, ProductSpecifiekInformatie
+from sdg.producten.models import ProductGeneriekInformatie, ProductInformatie
 
 
 @admin.register(ProductGeneriekInformatie)
@@ -25,9 +25,9 @@ class ProductGeneriekInformatieAdmin(MarkdownxModelAdmin):
         return obj.upn.upn_uri
 
 
-@admin.register(ProductSpecifiekInformatie)
-class ProductSpecifiekInformatieAdmin(MarkdownxModelAdmin):
-    model = ProductSpecifiekInformatie
+@admin.register(ProductInformatie)
+class ProductInformatieAdmin(MarkdownxModelAdmin):
+    model = ProductInformatie
 
     list_display = ("product_titel_decentraal",)
     list_filter = ("datum_wijziging",)

@@ -5,9 +5,9 @@ from markdownx.admin import MarkdownxModelAdmin
 
 from sdg.producten.models import (
     GeneriekProduct,
+    Product,
     ProductGeneriekInformatie,
-    ProductSpecifiekInformatie,
-    SpecifiekProduct,
+    ProductInformatie,
 )
 
 
@@ -16,8 +16,8 @@ class ProductGeneriekInformatieInline(admin.StackedInline):
     extra = 1
 
 
-class ProductSpecifiekInformatieInline(admin.StackedInline):
-    model = ProductSpecifiekInformatie
+class ProductInformatieInline(admin.StackedInline):
+    model = ProductInformatie
     extra = 1
 
 
@@ -27,7 +27,7 @@ class GeneriekProductAdmin(MarkdownxModelAdmin):
     inlines = (ProductGeneriekInformatieInline,)
 
 
-@admin.register(SpecifiekProduct)
-class SpecifiekProductAdmin(MarkdownxModelAdmin):
-    model = SpecifiekProduct
-    inlines = (ProductSpecifiekInformatieInline,)
+@admin.register(Product)
+class ProductAdmin(MarkdownxModelAdmin):
+    model = Product
+    inlines = (ProductInformatieInline,)

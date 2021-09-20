@@ -19,15 +19,8 @@ class ProductFieldMixin:
         """
         value = field.value_from_object(self)
 
-        if not value and getattr(self, "specifiek_product", None):
-            # TODO: optimize and refactor after major changes [issue #80]
-            try:
-                referentie_info = self.specifiek_product.referentie.informatie.get(
-                    taal=self.taal,
-                )
-            except ObjectDoesNotExist:
-                return None, True
-            return getattr(referentie_info, field.name, None), True
+        if getattr(self, "referentie_informatie", None):
+            return getattr(self.referentie_informatie, field.name, None), True
 
         return value, False
 
@@ -177,10 +170,12 @@ class ProductGegevensMixin(ProductFieldMixin, models.Model):
         help_text=_(
             "De titel van het decentrale product, die immers kan afwijken van de landelijke titel."
         ),
+        blank=True,
     )
     specifieke_tekst = MarkdownxField(
         _("specifieke tekst"),
         help_text=_("Decentrale omschrijving."),
+        blank=True,
     )
     verwijzing_links = ArrayField(
         models.URLField(_("url van verwijzing"), max_length=1000),
@@ -191,12 +186,14 @@ class ProductGegevensMixin(ProductFieldMixin, models.Model):
     specifieke_link = models.URLField(
         _("specifieke link"),
         help_text=_("URL decentrale productpagina."),
+        blank=True,
     )
     decentrale_link = models.URLField(
         _("decentrale link"),
         help_text=_(
             "Link naar decentrale productpagina voor burgers en / of bedrijven."
         ),
+        blank=True,
     )
     datum_wijziging = models.DateTimeField(
         _("datum wijziging"),
@@ -204,6 +201,7 @@ class ProductGegevensMixin(ProductFieldMixin, models.Model):
             "Decentrale overheden geven een wijzigingsdatum mee voor hun informatie. Deze datum wordt op het portaal "
             "getoond. "
         ),
+        auto_now=True,
     )
     procedure_beschrijving = MarkdownxField(
         _("procedure beschrijving"),

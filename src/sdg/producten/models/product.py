@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
+from sdg.core.models import ProductenCatalogus
+from sdg.producten.models import ProductInformatie
 
 
 class GeneriekProduct(models.Model):
@@ -35,16 +40,16 @@ class GeneriekProduct(models.Model):
         verbose_name_plural = _("generiek product")
 
 
-class SpecifiekProduct(models.Model):
-    """Een specifiek product.
+class Product(models.Model):
+    """Een product.
     Kan meerdere lokaal-specifieke varianten van productinformatie bevatten."""
 
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
-        related_name="specifiek",
+        related_name="producten",
         on_delete=models.PROTECT,
         verbose_name=_("generiek product"),
-        help_text=_("Het generiek product voor het specifieke product."),
+        help_text=_("Het generiek product voor het referentieproduct."),
         blank=True,
         null=True,
     )
@@ -96,20 +101,21 @@ class SpecifiekProduct(models.Model):
             "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
         ),
         default=list,
-        blank=True,
     )
     beschikbaar = models.BooleanField(
         _("beschikbaar"),
         help_text=_("Geeft aan of het product al dan niet beschikbaar is."),
+        default=False,
     )
     versie = models.PositiveIntegerField(
-        default=1,
         verbose_name=_("versie"),
         help_text=_("Het versienummer van het item."),
+        default=1,
     )
     publicatie_datum = models.DateTimeField(
         _("publicatie datum"),
-        help_text=_("De datum van publicatie van de productspecifieke informatie."),
+        help_text=_("De datum van publicatie van de product."),
+        auto_now_add=True,
     )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
@@ -122,11 +128,11 @@ class SpecifiekProduct(models.Model):
 
     @property
     def upn_uri(self):
-        return self.generiek_product.upn.upn_uri
+        return self.get_generic_product().upn.upn_uri
 
     @property
     def upn_label(self):
-        return self.generiek_product.upn.upn_label
+        return self.get_generic_product().upn.upn_label
 
     @cached_property
     def beschikbare_talen(self):
@@ -134,25 +140,64 @@ class SpecifiekProduct(models.Model):
         procedure kan worden uitgevoerd. elke productbeschrijving is in één taal (nl of en). De 'additional
         languages' betreft dus altijd de andere taal (en of nl). Aanname: de portalen richten zich uitsluitend op
         Nederlands en Engels, geen andere talen"""
-
         return [i.taal for i in self.informatie.all()]
 
     def is_reference_product(self) -> bool:
         """Dit product is een referentieproduct, omdat het geen referentieproduct heeft."""
         return bool(not self.referentie_product)
 
+    def get_generic_product(self):
+        """
+        :returns: Generiek product voor het product.
+        """
+        return (
+            self.generiek_product
+            if self.is_reference_product()
+            else self.referentie_product.generiek_product
+        )
+
+    def generate_informatie(self, taal, **kwargs) -> ProductInformatie:
+        """Generate localized information for this product."""
+        return ProductInformatie(
+            product=self,
+            taal=taal,
+            **kwargs,
+        )
+
+    def get_or_create_specific_product(self) -> Product:
+        """Maak een specifiek product voor een referentieproduct, inclusief gelokaliseerde informatie."""
+
+        if self.is_reference_product():
+            specific_product, created = Product.objects.get_or_create(
+                referentie_product=self,
+                defaults={
+                    "catalogus": self.catalogus.specifiek_catalog.get(),
+                    "doelgroep": self.doelgroep,
+                },
+            )
+            if created:
+                ProductInformatie.objects.bulk_create(
+                    [
+                        specific_product.generate_informatie(taal=taal)
+                        for taal in self.beschikbare_talen
+                    ]
+                )
+            return specific_product
+        else:
+            return self
+
     def get_absolute_url(self):
         return reverse("producten:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
         if self.is_reference_product():
-            return f"{self.generiek_product.upn_label} [reference]"
+            return f"{self.generiek_product.upn_label} [referentie]"
         else:
-            return f"{self.referentie_product.upn_label} [specifiek]"
+            return f"{self.referentie_product.upn_label}"
 
     class Meta:
-        verbose_name = _("specifiek product")
-        verbose_name_plural = _("specifiek product")
+        verbose_name = _("product")
+        verbose_name_plural = _("product")
 
     def clean(self):
         from sdg.producten.models.validators import (
@@ -172,16 +217,16 @@ class Productuitvoering(models.Model):
     """Een productuitvoering (variantvorm van een specifiek product).
     Kan meerdere lokaal-specifieke varianten van productinformatie bevatten."""
 
-    specifiek_product = models.ForeignKey(
-        "producten.SpecifiekProduct",
+    product = models.ForeignKey(
+        "producten.Product",
         related_name="uitvoeringen",
         on_delete=models.PROTECT,
         verbose_name=_("referentie"),
-        help_text=_("Het referentieproduct voor het specifieke product."),
+        help_text=_("Het referentieproduct voor het product."),
     )
 
     def __str__(self):
-        return f"{self.specifiek_product} (uitvoering)"
+        return f"{self.product} (uitvoering)"
 
     class Meta:
         verbose_name = _("productuitvoering")

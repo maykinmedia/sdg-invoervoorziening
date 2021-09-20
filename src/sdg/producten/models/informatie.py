@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from markdownx.models import MarkdownxField
@@ -108,27 +109,38 @@ class ProductGeneriekInformatie(ProductFieldMixin, models.Model):
         verbose_name_plural = _("product generiek informatie")
 
 
-class ProductSpecifiekInformatie(ProductGegevensMixin, models.Model):
-    """De specifieke informatie over een product."""
+class ProductInformatie(ProductGegevensMixin, models.Model):
+    """De informatie over een product."""
 
-    specifiek_product = models.ForeignKey(
-        "producten.SpecifiekProduct",
+    product = models.ForeignKey(
+        "producten.Product",
         on_delete=models.PROTECT,
         related_name="informatie",
         verbose_name=_("specifiek product"),
         help_text=_("Het specifiek moederproduct van deze informatie."),
     )
 
+    @cached_property
+    def referentie_informatie(self):
+        if self.product.referentie_product:
+            return self.product.referentie_product.informatie.get(taal=self.taal)
+        else:
+            return None
+
+    @cached_property
+    def generiek_informatie(self):
+        return self.product.get_generic_product().informatie.get(taal=self.taal)
+
     def __str__(self):
-        return f"{self.specifiek_product} [informatie]"
+        return f"{self.product} [informatie]"
 
     class Meta:
-        verbose_name = _("product specifiek informatie")
-        verbose_name_plural = _("product specifiek informatie")
+        verbose_name = _("product informatie")
+        verbose_name_plural = _("product informatie")
 
 
 class ProductuitvoeringInformatie(ProductGegevensMixin, models.Model):
-    """De specifieke informatie over een productuitvoering."""
+    """De informatie over een productuitvoering."""
 
     productuitvoering = models.ForeignKey(
         "producten.Productuitvoering",
@@ -142,15 +154,5 @@ class ProductuitvoeringInformatie(ProductGegevensMixin, models.Model):
         return f"{self.productuitvoering} [informatie]"
 
     class Meta:
-        verbose_name = _("product specifiek informatie")
-        verbose_name_plural = _("product specifiek informatie")
-
-
-# Make non-standard fields nullable
-for field in [
-    *ProductSpecifiekInformatie._meta.fields,
-    *ProductuitvoeringInformatie._meta.fields,
-]:
-    if field in ProductGegevensMixin._meta.fields:
-        field.blank = True
-        field.null = True
+        verbose_name = _("productuitvoering informatie")
+        verbose_name_plural = _("productuitvoering informatie")
