@@ -56,7 +56,7 @@ class Product(models.Model):
     referentie_product = models.ForeignKey(
         "self",
         related_name="original",
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         verbose_name=_("referentie product"),
         help_text=_(
             "Een referentie naar een product. "
@@ -121,7 +121,9 @@ class Product(models.Model):
         "organisaties.Lokatie",
         verbose_name=_("lokaties"),
         related_name="producten",
-        help_text=_("De locaties die zijn toegewezen aan de product.",),
+        help_text=_(
+            "De locaties die zijn toegewezen aan de product.",
+        ),
     )
 
     @property
@@ -156,7 +158,11 @@ class Product(models.Model):
 
     def generate_informatie(self, taal, **kwargs) -> ProductInformatie:
         """Generate localized information for this product."""
-        return ProductInformatie(product=self, taal=taal, **kwargs,)
+        return ProductInformatie(
+            product=self,
+            taal=taal,
+            **kwargs,
+        )
 
     def get_or_create_specific_product(self) -> Product:
         """Maak een specifiek product voor een referentieproduct, inclusief gelokaliseerde informatie."""

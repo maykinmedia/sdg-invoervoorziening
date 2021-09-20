@@ -26,7 +26,7 @@ class ProductenCatalogus(models.Model):
 
     is_referentie_catalogus = models.BooleanField(
         _("is referentie catalogus"),
-        default=True,
+        default=False,
         help_text=_("Geeft aan of dit een referentiecatalogus is."),
     )
 
