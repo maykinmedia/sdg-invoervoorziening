@@ -13,8 +13,8 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "producten/product_detail.html"
     context_object_name = "product"
     queryset = Product.objects.all().prefetch_related(
-        "referentie__generiek__informatie",
-        "informatie",
+        "referentie_product__generiek_product__vertalingen",
+        "vertalingen",
         "lokaties",
     )
     model = Product
@@ -22,8 +22,10 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        product_information = context["product"].informatie.all()
-        generic_information = context["product"].referentie.generiek.informatie.all()
+        product_information = context["product"].vertalingen.all()
+        generic_information = context[
+            "product"
+        ].referentie_product.generiek_product.vertalingen.all()
 
         context["informatie"] = zip_longest(generic_information, product_information)
 
@@ -40,7 +42,9 @@ class ProductUpdateView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        generic_information = context["product"].referentie.generiek.informatie.all()
+        generic_information = context[
+            "product"
+        ].referentie_product.generiek_product.vertalingen.all()
         context["informatie_form"] = zip_longest(
             generic_information, context["form"].forms
         )

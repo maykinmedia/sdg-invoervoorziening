@@ -19,7 +19,7 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        context["producten"] = Product.objects.all().prefetch_related("informatie")
+        context["producten"] = Product.objects.all().prefetch_related("vertalingen")
         create_specific_catalogs(context["lokaleoverheid"])
 
         return context
