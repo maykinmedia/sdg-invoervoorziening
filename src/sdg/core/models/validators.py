@@ -12,19 +12,21 @@ uppercase_validator = RegexValidator(
 
 lau_validator = RegexValidator(
     _lazy_re_compile(r"^NL\d{1,3}$"),
-    message=_("Voer een geldige LAU code in."),
+    message=_("Voer een geldige LAU code in. Bijvoorbeeld: NL123"),
     code="invalid",
 )
 
 postcode_validator = RegexValidator(
     _lazy_re_compile(r"^[1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2}$", re.IGNORECASE),
-    message=_("Voer een geldige LAU code in."),
+    message=_("Voer een geldige postcode code in. Bijvoorbeeld: 1234AA"),
     code="invalid",
 )
 
 openingstijden_validator = RegexValidator(
     _lazy_re_compile(r"^[0-9]{1,2}(:|\.)[0-9]{2}(\s?-\s?[0-9]{1,2}(:|\.)[0-9]{2})?$"),
-    message=_("Voer een geldige openingstijd in."),
+    message=_(
+        "Voer een geldige openingstijd in of laat leeg indien gesloten. Bijvoorbeeld: 09:00 - 17:00"
+    ),
     code="invalid",
 )
 

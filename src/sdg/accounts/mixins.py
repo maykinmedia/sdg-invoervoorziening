@@ -10,7 +10,8 @@ class RoleTestMixin(LoginRequiredMixin, UserPassesTestMixin, ABC):
 
     def is_root_editor(self):
         """Check if the user has root editor permission."""
-        return getattr(self.request.user, "is_hoofdredacteur")
+        # TODO: Remove this since this is now a regular catalog feature.
+        return True  # getattr(self.request.user, "is_hoofdredacteur")
 
 
 class RootEditorRequiredMixin(RoleTestMixin):

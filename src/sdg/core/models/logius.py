@@ -198,7 +198,7 @@ class UniformeProductnaam(models.Model):
     )
 
     def __str__(self):
-        return f"{self.upn_uri} - {self.upn_label}"
+        return self.upn_label
 
     class Meta:
         verbose_name = _("uniforme productnaam")

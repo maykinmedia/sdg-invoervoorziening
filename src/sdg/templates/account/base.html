@@ -1,12 +1,13 @@
 {% extends "master.html" %}
-{% load i18n %}
+{% load i18n static %}
 {% block title %}{% block head_title %}{% endblock head_title %} | SDG {% trans "Accounts" %}{% endblock title %}
 
 {% block outer_content %}
     <div class="login">
         <div class="login__left">
+            <img class="login__background-image" src="{% static 'images/gemeentes.png' %}" alt="">
             {% block login_left %}
-                <h1 class="login__title">SDG</h1>
+                <h1 class="login__title">SD<span class="login__colored">G</span></h1>
                 <h2 class="login__subtitle">voor gemeenten</h2>
             {% endblock %}
         </div>

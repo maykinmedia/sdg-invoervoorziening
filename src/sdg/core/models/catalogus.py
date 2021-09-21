@@ -17,7 +17,6 @@ class ProductenCatalogus(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        unique=True,
     )
     lokale_overheid = models.ForeignKey(
         "organisaties.LokaleOverheid",
@@ -26,13 +25,11 @@ class ProductenCatalogus(models.Model):
         related_name="catalogi",
         on_delete=models.CASCADE,
     )
-
     is_referentie_catalogus = models.BooleanField(
         _("is referentie catalogus"),
         default=False,
         help_text=_("Geeft aan of dit een referentiecatalogus is."),
     )
-
     domein = models.CharField(
         _("domein"),
         max_length=5,
@@ -65,13 +62,13 @@ class ProductenCatalogus(models.Model):
 
     def __str__(self):
         if self.is_referentie_catalogus:
-            return f"{self.naam} [referentie]"
+            return f"{self.naam} (referentie)"
         else:
             return f"{self.naam}"
 
     class Meta:
         verbose_name = _("producten catalogus")
-        verbose_name_plural = _("productencatalogi")
+        verbose_name_plural = _("producten catalogi")
 
     def clean(self):
         super().clean()

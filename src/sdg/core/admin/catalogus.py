@@ -3,31 +3,19 @@ from django.contrib import admin
 from sdg.core.models import ProductenCatalogus
 
 
-class IsReferenceCatalogFilter(admin.SimpleListFilter):
-    title = "Is Referentie"
-    parameter_name = "is_referentie_catalogus"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("Ja", "Ja"),
-            ("Nee", "Nee"),
-        )
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if value == "Ja":
-            return queryset.filter(is_referentie_catalogus=True)
-        elif value == "Nee":
-            return queryset.filter(is_referentie_catalogus=False)
-        return queryset
-
-
 @admin.register(ProductenCatalogus)
 class CatalogusAdmin(admin.ModelAdmin):
     model = ProductenCatalogus
 
-    list_display = ("naam", "domein", "versie")
-    list_filter = ("domein", "naam", IsReferenceCatalogFilter)
+    list_display = (
+        "naam",
+        "domein",
+        "lokale_overheid",
+        "referentie_catalogus",
+        "is_referentie_catalogus",
+        "versie",
+    )
+    list_filter = ("is_referentie_catalogus", "domein", "naam")
     ordering = ("domein", "naam")
     search_fields = (
         "naam",

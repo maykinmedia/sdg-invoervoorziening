@@ -19,8 +19,8 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
 
     gemeente_list = [
         Overheidsorganisatie(
-            owms_identifier=obj.get("prefLabel"),
-            owms_pref_label=obj.get("resourceIdentifier"),
+            owms_identifier=obj.get("resourceIdentifier"),
+            owms_pref_label=obj.get("prefLabel"),
             owms_end_date=string_to_date(obj.get("endDate"), "%Y-%m-%d")
             if obj.get("endDate")
             else None,

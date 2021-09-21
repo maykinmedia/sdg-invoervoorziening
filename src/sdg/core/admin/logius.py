@@ -10,19 +10,19 @@ from sdg.core.models import (
 
 @admin.register(Overheidsorganisatie)
 class OverheidsorganisatieAdmin(admin.ModelAdmin):
-    model = Overheidsorganisatie
+    search_fields = ("owms_pref_label",)
 
 
 @admin.register(Informatiegebied)
 class InformatiegebiedAdmin(admin.ModelAdmin):
-    model = Informatiegebied
+    search_fields = ("code", "informatiegebied")
 
 
 @admin.register(Thema)
 class ThemaAdmin(admin.ModelAdmin):
-    model = Thema
+    search_fields = ("thema",)
 
 
 @admin.register(UniformeProductnaam)
 class UniformeProductnaamAdmin(admin.ModelAdmin):
-    model = UniformeProductnaam
+    search_fields = ("upn_label",)

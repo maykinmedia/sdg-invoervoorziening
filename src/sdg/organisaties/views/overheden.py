@@ -24,7 +24,7 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
 
         reference_catalog = (
             ProductenCatalogus.objects.prefetch_related(
-                "producten__informatie",
+                "producten__vertalingen",
                 "producten__generiek_product__upn",
             )
             .filter(

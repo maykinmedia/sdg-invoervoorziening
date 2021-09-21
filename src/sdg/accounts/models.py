@@ -42,13 +42,6 @@ class User(AbstractBaseUser, PermissionsMixin):
             "Unselect this instead of deleting accounts."
         ),
     )
-    is_hoofdredacteur = models.BooleanField(
-        _("hoofdredacteur"),
-        default=False,
-        help_text=_(
-            "Designates whether this user is a root editor (i.e. can edit the reference texts)."
-        ),
-    )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
 
     objects = UserManager()

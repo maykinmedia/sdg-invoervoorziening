@@ -7,19 +7,35 @@ from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
-from sdg.producten.models import ProductInformatie
+from sdg.producten.models import LocalizedProduct
 
 
 class GeneriekProduct(models.Model):
-    """Een generiek product.
-    Kan meerdere lokaal-specifieke varianten van productinformatie bevatten."""
+    """
+    Generic product
+
+    Container for localized generic products holding only the properties that
+    are the same for every localized generic product.
+    """
 
     upn = models.ForeignKey(
         "core.UniformeProductnaam",
         on_delete=models.PROTECT,
         related_name="generiek_product",
-        verbose_name=_("uniforme productnaam"),
         help_text=_("De uniforme productnaam met betrekking tot dit product."),
+    )
+    verantwoordelijke_organisatie = models.ForeignKey(
+        "core.Overheidsorganisatie",
+        on_delete=models.PROTECT,
+        related_name="generiek_informatie",
+        verbose_name=_("verantwoordelijke organisatie"),
+        help_text=_("Organisatie verantwoordelijk voor de landelijke informatie"),
+    )
+    verplicht_product = models.BooleanField(
+        _("verplicht product"),
+        help_text=_(
+            "Geeft aan of decentrale overheden verplicht zijn informatie over dit product te leveren."
+        ),
     )
 
     @property
@@ -35,12 +51,16 @@ class GeneriekProduct(models.Model):
 
     class Meta:
         verbose_name = _("generiek product")
-        verbose_name_plural = _("generiek product")
+        verbose_name_plural = _("generieke producten")
 
 
 class Product(models.Model):
-    """Een product.
-    Kan meerdere lokaal-specifieke varianten van productinformatie bevatten."""
+    """
+    Product
+
+    Container for localized products holding only the properties that are the
+    same for every localized product.
+    """
 
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
@@ -54,7 +74,7 @@ class Product(models.Model):
     referentie_product = models.ForeignKey(
         "self",
         related_name="specifieke_producten",
-        on_delete=models.PROTECT,
+        on_delete=models.SET_NULL,
         verbose_name=_("referentie product"),
         help_text=_(
             "Een referentie naar een product. "
@@ -63,7 +83,6 @@ class Product(models.Model):
         blank=True,
         null=True,
     )
-
     catalogus = models.ForeignKey(
         "core.ProductenCatalogus",
         on_delete=models.CASCADE,
@@ -71,26 +90,13 @@ class Product(models.Model):
         verbose_name=_("catalogus"),
         help_text=_("Referentie naar de catalogus waartoe dit product behoort."),
     )
-
-    product = models.OneToOneField(
+    gerelateerde_producten = models.ManyToManyField(
         "self",
-        on_delete=models.CASCADE,
-        related_name="gerefereerd",
-        null=True,
-        blank=True,
-        verbose_name=_("refereert aan"),
-        help_text=_("Een verwijzing naar een ander product."),
-    )
-    gerelateerd_product = models.ForeignKey(
-        "self",
-        on_delete=models.CASCADE,
-        related_name="gerelateerd",
-        null=True,
+        related_name="gerelateerde_producten",
         blank=True,
         verbose_name=_("gerelateerd aan"),
         help_text=_("Een verwijzing naar een gerelateerd product."),
     )
-
     doelgroep = ChoiceArrayField(
         base_field=models.CharField(max_length=32, choices=DoelgroepChoices.choices),
         help_text=_(
@@ -111,9 +117,7 @@ class Product(models.Model):
         default=1,
     )
     publicatie_datum = models.DateTimeField(
-        _("publicatie datum"),
-        help_text=_("De datum van publicatie van de product."),
-        auto_now_add=True,
+        _("publicatie datum"), help_text=_("De datum van publicatie van de product.")
     )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
@@ -122,6 +126,7 @@ class Product(models.Model):
         help_text=_(
             "De locaties die zijn toegewezen aan de product.",
         ),
+        blank=True,
     )
 
     @property
@@ -134,14 +139,9 @@ class Product(models.Model):
 
     @cached_property
     def beschikbare_talen(self):
-        """Naast de taal van de informatie, dient ook aangegeven te worden in welke aanvullende taal/talen de
-        procedure kan worden uitgevoerd. elke productbeschrijving is in één taal (nl of en). De 'additional
-        languages' betreft dus altijd de andere taal (en of nl). Aanname: de portalen richten zich uitsluitend op
-        Nederlands en Engels, geen andere talen"""
-        return [i.taal for i in self.informatie.all()]
+        return [i.taal for i in self.vertalingen.all()]
 
     def is_reference_product(self) -> bool:
-        """Dit product is een referentieproduct, omdat het geen referentieproduct heeft."""
         return bool(not self.referentie_product)
 
     def get_generic_product(self):
@@ -154,9 +154,9 @@ class Product(models.Model):
             else self.referentie_product.generiek_product
         )
 
-    def generate_informatie(self, taal, **kwargs) -> ProductInformatie:
+    def generate_informatie(self, taal, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""
-        return ProductInformatie(
+        return LocalizedProduct(
             product=self,
             taal=taal,
             **kwargs,
@@ -174,7 +174,7 @@ class Product(models.Model):
                 },
             )
             if created:
-                ProductInformatie.objects.bulk_create(
+                LocalizedProduct.objects.bulk_create(
                     [
                         specific_product.generate_informatie(taal=taal)
                         for taal in self.beschikbare_talen
@@ -189,13 +189,13 @@ class Product(models.Model):
 
     def __str__(self):
         if self.is_reference_product():
-            return f"{self.generiek_product.upn_label} [referentie]"
+            return f"{self.generiek_product.upn_label} (referentie)"
         else:
             return f"{self.referentie_product.upn_label}"
 
     class Meta:
         verbose_name = _("product")
-        verbose_name_plural = _("product")
+        verbose_name_plural = _("producten")
 
     def clean(self):
         from sdg.producten.models.validators import (
@@ -212,8 +212,12 @@ class Product(models.Model):
 
 
 class Productuitvoering(models.Model):
-    """Een productuitvoering (variantvorm van een specifiek product).
-    Kan meerdere lokaal-specifieke varianten van productinformatie bevatten."""
+    """
+    Product variant
+
+    Container for localized product variants holding only the properties that
+    are the same for every localized product variant.
+    """
 
     product = models.ForeignKey(
         "producten.Product",
@@ -228,4 +232,4 @@ class Productuitvoering(models.Model):
 
     class Meta:
         verbose_name = _("productuitvoering")
-        verbose_name_plural = _("productuitvoering")
+        verbose_name_plural = _("productuitvoeringen")

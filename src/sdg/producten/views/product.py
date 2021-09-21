@@ -7,7 +7,7 @@ from django.views.generic import DetailView, RedirectView
 from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.producten.models import GeneriekProduct, Product, ProductInformatie
+from sdg.producten.models import GeneriekProduct, LocalizedProduct, Product
 from sdg.producten.views import BaseProductUpdateView
 from sdg.producten.views.mixins import OptionalFormMixin
 
@@ -38,11 +38,11 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     context_object_name = "product"
     queryset = Product.objects.prefetch_related(
         "lokaties",
-        "informatie",
-        "referentie_product__informatie",
+        "vertalingen",
+        "referentie_product__vertalingen",
         Prefetch(
             "referentie_product__generiek_product",
-            queryset=GeneriekProduct.objects.prefetch_related("informatie"),
+            queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
         ),
     )
     model = Product
@@ -63,13 +63,13 @@ class ProductUpdateView(
 ):
     template_name = "producten/product_edit.html"
     parent_model = Product
-    child_model = ProductInformatie
+    child_model = LocalizedProduct
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
         product = context["product"]
-        generic_information = product.get_generic_product().informatie.all()
+        generic_information = product.get_generic_product().vertalingen.all()
         context["informatie_form"] = zip_longest(
             generic_information, context["form"].forms
         )

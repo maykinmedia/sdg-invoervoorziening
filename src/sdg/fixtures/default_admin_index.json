@@ -64,24 +64,6 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 5,
-        "name": "Informatie",
-        "slug": "informatie",
-        "models": [
-            [
-                "producten",
-                "productgeneriekinformatie"
-            ],
-            [
-                "producten",
-                "productinformatie"
-            ]
-        ]
-    }
-},
-{
-    "model": "admin_index.appgroup",
-    "fields": {
         "order": 0,
         "name": "Accounts",
         "slug": "accounts",
