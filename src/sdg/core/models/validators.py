@@ -1,5 +1,6 @@
 import re
 
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, _lazy_re_compile
 from django.utils.translation import ugettext_lazy as _
 
@@ -42,3 +43,24 @@ def validate_postcode(value):
 
 def validate_openingstijden(value):
     return openingstijden_validator(value)
+
+
+def validate_reference_catalog(catalog):
+    if catalog.has_reference_catalog():
+        raise ValidationError(
+            _("""Een referentiecatalogus kan geen "referentie_catalogus" hebben.""")
+        )
+
+
+def validate_specific_catalog(catalog):
+    if not catalog.has_reference_catalog():
+        raise ValidationError(
+            _("""Een catalogus moet een referentiecatalogus hebben.""")
+        )
+    if not catalog.referentie_catalogus.is_referentie_catalogus:
+        raise ValidationError(
+            _(
+                """Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is
+                ingeschakeld. """
+            )
+        )

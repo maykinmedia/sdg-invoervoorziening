@@ -1,8 +1,11 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.core.models.validators import validate_uppercase
+from sdg.core.models.validators import (
+    validate_reference_catalog,
+    validate_specific_catalog,
+    validate_uppercase,
+)
 
 
 class ProductenCatalogus(models.Model):
@@ -74,23 +77,6 @@ class ProductenCatalogus(models.Model):
         super().clean()
 
         if self.is_referentie_catalogus:
-            # Reference catalog
-            if self.has_reference_catalog():
-                raise ValidationError(
-                    _(
-                        """Een referentiecatalogus kan geen "referentie_catalogus" hebben."""
-                    )
-                )
+            validate_reference_catalog(self)
         else:
-            # Specific catalog
-            if not self.has_reference_catalog():
-                raise ValidationError(
-                    _("""Een catalogus moet een referentiecatalogus hebben.""")
-                )
-            if not self.referentie_catalogus.is_referentie_catalogus:
-                raise ValidationError(
-                    _(
-                        """Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is
-                        ingeschakeld. """
-                    )
-                )
+            validate_specific_catalog(self)

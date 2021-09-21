@@ -3,12 +3,10 @@ from __future__ import annotations
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
-from sdg.core.models import ProductenCatalogus
 from sdg.producten.models import ProductInformatie
 
 
@@ -55,7 +53,7 @@ class Product(models.Model):
     )
     referentie_product = models.ForeignKey(
         "self",
-        related_name="original",
+        related_name="specifieke_producten",
         on_delete=models.PROTECT,
         verbose_name=_("referentie product"),
         help_text=_(

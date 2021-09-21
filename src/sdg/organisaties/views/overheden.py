@@ -2,13 +2,13 @@ from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.forms import (
     LokaleOverheidForm,
     LokatieFormHelper,
     LokatieInlineFormSet,
 )
 from sdg.organisaties.models import LokaleOverheid
-from sdg.producten.models import Product
 
 
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
@@ -19,19 +19,27 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        context["producten"] = Product.objects.all().prefetch_related("informatie")
-        context["lokaleoverheid"].create_specific_catalogs()
+        lokale_overheid = context["lokaleoverheid"]
+        lokale_overheid.create_specific_catalogs()
+
+        reference_catalog = (
+            ProductenCatalogus.objects.prefetch_related(
+                "producten__informatie",
+                "producten__generiek_product__upn",
+            )
+            .filter(
+                lokale_overheid=lokale_overheid,
+                is_referentie_catalogus=True,
+            )
+            .first()
+        )
+        context["producten"] = reference_catalog.producten.all()
 
         return context
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.prefetch_related(
-            "lokaties",
-            "organisatie",
-            "catalogi",
-            "catalogi__producten",
-        )
+        return queryset.prefetch_related("lokaties", "organisatie", "catalogi")
 
 
 class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
