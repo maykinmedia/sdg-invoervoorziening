@@ -31,3 +31,14 @@ class GeneriekProductAdmin(MarkdownxModelAdmin):
 class SpecifiekProductAdmin(MarkdownxModelAdmin):
     model = SpecifiekProduct
     inlines = (ProductSpecifiekInformatieInline,)
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Ervoor zorgen dat alleen referentieproducten kunnen worden geselecteerd.
+        """
+
+        if db_field.name == "referentie_product":
+            kwargs["queryset"] = SpecifiekProduct.objects.filter(
+                referentie_product=None
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
