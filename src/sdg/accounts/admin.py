@@ -10,34 +10,9 @@ from .models import Role
 User = get_user_model()
 
 
-@admin.register(User)
-class UserAdmin(_UserAdmin, HijackUserAdminMixin):
-    fieldsets = _UserAdmin.fieldsets + (
-        (_("Roles"), {"fields": ("is_hoofdredacteur",)}),
-    )
-    search_fields = ["first_name"]
-    list_display = _UserAdmin.list_display + (
-        "is_hoofdredacteur",
-        "hijack_field",
-    )
-
-
-@admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
+class RoleInline(admin.TabularInline):
     model = Role
-
-    list_display = (
-        "get_role_user",
-        "get_role_organization",
-        "is_beheerder",
-        "is_redacteur",
-    )
-    list_filter = (
-        "user__username",
-        "lokale_overheid__organisatie__owms_pref_label",
-        "is_beheerder",
-        "is_redacteur",
-    )
+    extra = 1
 
     def get_role_user(self, obj):
         return obj.user.username
@@ -48,3 +23,10 @@ class RoleAdmin(admin.ModelAdmin):
         return obj.lokale_overheid.organisatie.owms_pref_label
 
     get_role_organization.short_description = _("Organization")
+
+
+@admin.register(User)
+class UserAdmin(_UserAdmin, HijackUserAdminMixin):
+    search_fields = ["first_name"]
+    list_display = _UserAdmin.list_display + ("hijack_field",)
+    inlines = (RoleInline,)
