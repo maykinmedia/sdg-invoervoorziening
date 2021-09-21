@@ -4,8 +4,8 @@ from djchoices import ChoiceItem, DjangoChoices
 
 
 class TaalChoices(DjangoChoices):
-    nl = ChoiceItem("Nederlands", _("Nederlands"))
-    en = ChoiceItem("Engels", _("Engels"))
+    nl = ChoiceItem("nl", _("Nederlands"))
+    en = ChoiceItem("en", _("Engels"))
 
     @classmethod
     def get_available_languages(cls):
