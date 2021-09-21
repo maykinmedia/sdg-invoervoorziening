@@ -1,6 +1,11 @@
 #
 # Any machine specific settings when using development settings.
 #
+import os
+
+os.environ.setdefault("TWO_FACTOR_PATCH_ADMIN", "no"),
+os.environ.setdefault("TWO_FACTOR_FORCE_OTP_ADMIN", "no"),
+
 
 DATABASES = {
     "default": {
