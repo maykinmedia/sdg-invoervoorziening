@@ -7,16 +7,10 @@ from sdg.organisaties.models import LokaleOverheid, Lokatie
 class LokatieDetailView(OverheidRoleRequiredMixin, CreateView):
     template_name = "organisaties/overheid_update.html"
     model = Lokatie
-
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]
+    get_required_roles = ["is_beheerder", "is_redacteur"]
 
 
 class LokatieUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "organisaties/overheid_update.html"
     model = Lokatie
-
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]
+    get_required_roles = ["is_beheerder", "is_redacteur"]

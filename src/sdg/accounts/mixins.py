@@ -27,6 +27,7 @@ class OverheidRoleRequiredMixin(RoleTestMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
     lokale_overheid = None
+    required_roles = Role.get_allowed_roles()
 
     def get_lokale_overheid(self):
         """
@@ -34,14 +35,13 @@ class OverheidRoleRequiredMixin(RoleTestMixin):
         """
         return self.lokale_overheid
 
-    @staticmethod
-    def get_required_roles():
+    def get_required_roles(self):
         """
         :returns: A list of required roles (for a lokale overheid) for the user to access the view.
 
         Returns all roles by default.
         """
-        return Role.get_allowed_roles()
+        return self.required_roles
 
     def test_func(self):
         if self.is_root_editor():

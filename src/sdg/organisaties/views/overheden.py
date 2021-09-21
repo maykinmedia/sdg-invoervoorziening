@@ -14,6 +14,7 @@ from sdg.producten.models import Product
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -32,15 +33,12 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
             "catalogi__producten",
         )
 
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]
-
 
 class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "organisaties/overheid_update.html"
     form_class = LokaleOverheidForm
     model = LokaleOverheid
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -75,7 +73,3 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
-
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]
