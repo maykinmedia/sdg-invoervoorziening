@@ -50,8 +50,8 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
         if self.object.is_reference_product():
-            return reverse(
-                redirect("producten:redirect", kwargs={"pk": self.object.pk})
+            return redirect(
+                reverse("producten:redirect", kwargs={"pk": self.object.pk})
             )
 
         return response
