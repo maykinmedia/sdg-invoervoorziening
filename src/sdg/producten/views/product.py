@@ -1,9 +1,10 @@
 from itertools import zip_longest
 
-from django.views.generic import DetailView
+from django.urls import reverse
+from django.views.generic import DetailView, RedirectView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.producten.models import ProductSpecifiekInformatie, SpecifiekProduct
+from sdg.producten.models import LocalizedProduct, Product
 from sdg.producten.views import BaseProductUpdateView
 from sdg.producten.views.mixins import OptionalFormMixin
 
@@ -11,18 +12,20 @@ from sdg.producten.views.mixins import OptionalFormMixin
 class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "producten/product_detail.html"
     context_object_name = "product"
-    queryset = SpecifiekProduct.objects.all().prefetch_related(
-        "referentie__generiek__informatie",
-        "informatie",
+    queryset = Product.objects.all().prefetch_related(
+        "referentie_product__generiek_product__vertalingen",
+        "vertalingen",
         "lokaties",
     )
-    model = SpecifiekProduct
+    model = Product
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        product_information = context["product"].informatie.all()
-        generic_information = context["product"].referentie.generiek.informatie.all()
+        product_information = context["product"].vertalingen.all()
+        generic_information = context[
+            "product"
+        ].referentie_product.generiek_product.vertalingen.all()
 
         context["informatie"] = zip_longest(generic_information, product_information)
 
@@ -33,16 +36,27 @@ class ProductUpdateView(
     OptionalFormMixin, OverheidRoleRequiredMixin, BaseProductUpdateView
 ):
     template_name = "producten/product_edit.html"
-    parent_model = SpecifiekProduct
-    child_model = ProductSpecifiekInformatie
+    parent_model = Product
+    child_model = LocalizedProduct
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        generic_information = context["product"].referentie.generiek.informatie.all()
-
+        generic_information = context[
+            "product"
+        ].referentie_product.generiek_product.vertalingen.all()
         context["informatie_form"] = zip_longest(
             generic_information, context["form"].forms
         )
 
         return context
+
+
+class CreateProductRedirectView(RedirectView):
+    def get(self, request, *args, **kwargs):
+        # TODO: Create product from C to C1
+        self.created_pk = ...
+        super().get(request, *args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("producten:edit", kwargs={"pk": kwargs.get(self.created_pk)})

@@ -2,16 +2,12 @@ from django.contrib import admin
 
 from markdownx.admin import MarkdownxModelAdmin
 
-from sdg.producten.models import (
-    ProductGeneriekInformatie,
-    ProductReferentieInformatie,
-    ProductSpecifiekInformatie,
-)
+from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
 
 
-@admin.register(ProductGeneriekInformatie)
-class ProductGeneriekInformatieAdmin(MarkdownxModelAdmin):
-    model = ProductGeneriekInformatie
+@admin.register(LocalizedGeneriekProduct)
+class LocalizedGeneriekProductAdmin(MarkdownxModelAdmin):
+    model = LocalizedGeneriekProduct
 
     list_display = (
         "get_upn_uri",
@@ -29,14 +25,9 @@ class ProductGeneriekInformatieAdmin(MarkdownxModelAdmin):
         return obj.upn.upn_uri
 
 
-@admin.register(ProductReferentieInformatie)
-class ProductReferentieInformatieAdmin(MarkdownxModelAdmin):
-    model = ProductReferentieInformatie
-
-
-@admin.register(ProductSpecifiekInformatie)
-class ProductSpecifiekInformatieAdmin(MarkdownxModelAdmin):
-    model = ProductSpecifiekInformatie
+@admin.register(LocalizedProduct)
+class LocalizedProductAdmin(MarkdownxModelAdmin):
+    model = LocalizedProduct
 
     list_display = ("product_titel_decentraal",)
     list_filter = ("datum_wijziging",)

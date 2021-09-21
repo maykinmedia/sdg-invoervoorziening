@@ -1,16 +1,9 @@
 from django import forms
-from django.forms import inlineformset_factory
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Field, Layout
 
-from sdg.producten.models import (
-    ProductGegevensMixin,
-    ProductReferentieInformatie,
-    ProductSpecifiekInformatie,
-    ReferentieProduct,
-    SpecifiekProduct,
-)
+from .models import LocalizedProduct
 
 
 class GegevensFormHelper(FormHelper):
@@ -54,7 +47,7 @@ class ProductGegevensForm(forms.ModelForm):
         self.helper.label_class = "form__label"
 
     class Meta:
-        model = ProductGegevensMixin
+        model = LocalizedProduct
         fields = (
             "taal",
             "product_titel_decentraal",
@@ -62,7 +55,7 @@ class ProductGegevensForm(forms.ModelForm):
             "verwijzing_links",
             "specifieke_link",
             "decentrale_link",
-            "datum_wijziging",
+            # "datum_wijziging",
             "procedure_beschrijving",
             "vereisten",
             "bewijs",

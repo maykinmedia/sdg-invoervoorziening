@@ -31,11 +31,7 @@
                         </div>
                         <div>
                             <a href="#" class="button button--light">{{ info.taal }} Deactiveren</a>
-                            {% if product.generiek %}
-                                <a class="button" href="{% url 'producten:ref_edit' pk=product.pk %}">Wijzigen</a>
-                            {% else %}
-                                <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
-                            {% endif %}
+                            <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
                         </div>
                     </div>
 

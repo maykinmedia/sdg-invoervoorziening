@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
-# TODO: Delete/modify (sample view)
 from sdg.organisaties.models import LokaleOverheid
 
 
+# TODO: Delete/modify (sample view)
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "core/index.html"
 

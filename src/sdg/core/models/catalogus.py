@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -8,6 +9,7 @@ class ProductenCatalogus(models.Model):
     referentie_catalogus = models.ForeignKey(
         "self",
         verbose_name=_("referentie catalogus"),
+        related_name="specifiek_catalog",
         help_text=_("De catalogus van referentie."),
         null=True,
         blank=True,
@@ -20,7 +22,11 @@ class ProductenCatalogus(models.Model):
         related_name="catalogi",
         on_delete=models.CASCADE,
     )
-
+    is_referentie_catalogus = models.BooleanField(
+        _("is referentie catalogus"),
+        default=False,
+        help_text=_("Geeft aan of dit een referentiecatalogus is."),
+    )
     domein = models.CharField(
         _("domein"),
         max_length=5,
@@ -47,9 +53,38 @@ class ProductenCatalogus(models.Model):
         autonome producten (bv terrasvergunning)"""
         return self.lokale_overheid.verantwoordelijke_organisatie
 
+    def has_reference_catalog(self) -> bool:
+        """Geeft als resultaat of het een referentiecatalogus heeft of niet."""
+        return bool(self.referentie_catalogus)
+
     def __str__(self):
-        return f"{self.naam} - {self.versie}"
+        if self.is_referentie_catalogus:
+            return f"{self.naam} (referentie)"
+        else:
+            return f"{self.naam}"
 
     class Meta:
         verbose_name = _("producten catalogus")
-        verbose_name_plural = _("productcatalogi")
+        verbose_name_plural = _("producten catalogi")
+
+    def clean(self):
+        super().clean()
+
+        if self.is_referentie_catalogus:
+            # Reference catalog
+            if self.has_reference_catalog():
+                raise ValidationError(
+                    _('Een referentiecatalogus kan geen "referentie_catalogus" hebben.')
+                )
+        else:
+            # Specific catalog
+            if not self.has_reference_catalog():
+                raise ValidationError(
+                    _("Een catalogus moet een referentiecatalogus hebben.")
+                )
+            if not self.referentie_catalogus.is_referentie_catalogus:
+                raise ValidationError(
+                    _(
+                        'Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is ingeschakeld.'
+                    )
+                )

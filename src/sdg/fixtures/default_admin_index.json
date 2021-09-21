@@ -56,33 +56,7 @@
             ],
             [
                 "producten",
-                "referentieproduct"
-            ],
-            [
-                "producten",
-                "specifiekproduct"
-            ]
-        ]
-    }
-},
-{
-    "model": "admin_index.appgroup",
-    "fields": {
-        "order": 5,
-        "name": "Informatie",
-        "slug": "informatie",
-        "models": [
-            [
-                "producten",
-                "productgeneriekinformatie"
-            ],
-            [
-                "producten",
-                "productreferentieinformatie"
-            ],
-            [
-                "producten",
-                "productspecifiekinformatie"
+                "product"
             ]
         ]
     }

@@ -10,7 +10,8 @@ class RoleTestMixin(LoginRequiredMixin, UserPassesTestMixin, ABC):
 
     def is_root_editor(self):
         """Check if the user has root editor permission."""
-        return getattr(self.request.user, "is_hoofdredacteur")
+        # TODO: Remove this since this is now a regular catalog feature.
+        return True  # getattr(self.request.user, "is_hoofdredacteur")
 
 
 class RootEditorRequiredMixin(RoleTestMixin):
@@ -27,6 +28,12 @@ class OverheidRoleRequiredMixin(RoleTestMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
     lokale_overheid = None
+
+    def get_lokale_overheid(self):
+        """
+        :returns: The lokale overheid for which we are matching permissions for.
+        """
+        return self.lokale_overheid
 
     @staticmethod
     def get_required_roles():
