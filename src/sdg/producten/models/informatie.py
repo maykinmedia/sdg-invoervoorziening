@@ -114,7 +114,7 @@ class ProductInformatie(ProductGegevensMixin, models.Model):
 
     product = models.ForeignKey(
         "producten.Product",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="informatie",
         verbose_name=_("specifiek product"),
         help_text=_("Het specifiek moederproduct van deze informatie."),
@@ -144,7 +144,7 @@ class ProductuitvoeringInformatie(ProductGegevensMixin, models.Model):
 
     productuitvoering = models.ForeignKey(
         "producten.Productuitvoering",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="informatie",
         verbose_name=_("productuitvoering"),
         help_text=_("Het moeder-productuitvoering van deze informatie."),
