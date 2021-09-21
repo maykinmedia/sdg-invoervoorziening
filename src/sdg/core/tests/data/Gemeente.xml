@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cv xmlns:overheid="http://standaarden.overheid.nl/owms/terms/" name="overheid:Gemeente">
+    <value>
+        <prefLabel>'s-Graveland</prefLabel>
+        <resourceIdentifier>http://standaarden.overheid.nl/owms/terms/'s-Graveland_(gemeente)</resourceIdentifier>
+        <endDate>2001-12-31</endDate>
+    </value>
+    <value>
+        <prefLabel>'s-Gravendeel</prefLabel>
+        <resourceIdentifier>http://standaarden.overheid.nl/owms/terms/'s-Gravendeel_(gemeente)</resourceIdentifier>
+        <endDate>2006-12-31</endDate>
+    </value>
+    <value>
+        <prefLabel>'s-Gravenhage</prefLabel>
+        <resourceIdentifier>http://standaarden.overheid.nl/owms/terms/'s-Gravenhage</resourceIdentifier>
+    </value>
+    <value>
+        <prefLabel>'s-Gravenzande</prefLabel>
+        <resourceIdentifier>http://standaarden.overheid.nl/owms/terms/'s-Gravenzande_(gemeente)</resourceIdentifier>
+        <endDate>2003-12-31</endDate>
+    </value>
+    <value>
+        <prefLabel>'s-Hertogenbosch</prefLabel>
+        <resourceIdentifier>http://standaarden.overheid.nl/owms/terms/'s-Hertogenbosch</resourceIdentifier>
+    </value>
+</cv>
