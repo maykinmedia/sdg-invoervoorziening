@@ -1,20 +1,24 @@
 .notifications {
   display: grid;
   grid-template-columns: 1fr;
-  width: 60%;
   grid-gap: 16px;
-  margin-bottom: 32px;
+  width: 100%;
+
+  &.notifications--inline {
+    width: 60%;
+    margin-bottom: 32px;
+  }
 
   .notifications__notification {
-    border-left: 5px solid #1d637c;
-    background-color: #d7e7e7;
+    border-left: 5px solid #0B71A1;
+    background-color: #D5E2EA;
     padding: 16px;
     display: flex;
     justify-content: space-between;
 
     .fa-info-circle,
     a {
-      color: #1d6888;
+      color: #0B71A1;
       font-weight: bold;
       text-decoration: none;
     }

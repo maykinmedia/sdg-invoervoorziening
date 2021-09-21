@@ -5,21 +5,16 @@
 
 {% block head_title %}{% trans "Home" %}{% endblock %}
 
-{% block container_title %}Home (sample){% endblock container_title %}
+{% block container_title %}Home{% endblock container_title %}
 
 {% block inner %}
 {#    TODO modifiy/update (sample template)#}
     <div class="products">
         <h2 class="products__title">Lokale Overheden</h2>
         {% for lokaleoverheid in lokale_overheden %}
-            <div class="products__accordeon-item">
-                <a href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">{{ lokaleoverheid }}</a>
+            <div class="cards">
+                <a class="cards__card" href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">{{ lokaleoverheid }}</a>
             </div>
         {% endfor %}
-    </div>
-
-    <div class="products">
-        <h2 class="products__title">Menu (sample)</h2>
-        <p><a href="{% url 'account_logout' %}">Log out</a></p>
     </div>
 {% endblock inner %}
