@@ -1,2 +1,2 @@
-from .informatie import *  # noqa
+from .localized import *  # noqa
 from .product import *  # noqa

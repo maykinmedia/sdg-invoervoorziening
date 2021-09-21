@@ -14,7 +14,6 @@ class ProductenCatalogus(models.Model):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        unique=True,
     )
     lokale_overheid = models.ForeignKey(
         "organisaties.LokaleOverheid",
@@ -23,13 +22,11 @@ class ProductenCatalogus(models.Model):
         related_name="catalogi",
         on_delete=models.CASCADE,
     )
-
     is_referentie_catalogus = models.BooleanField(
         _("is referentie catalogus"),
         default=False,
         help_text=_("Geeft aan of dit een referentiecatalogus is."),
     )
-
     domein = models.CharField(
         _("domein"),
         max_length=5,
@@ -62,13 +59,13 @@ class ProductenCatalogus(models.Model):
 
     def __str__(self):
         if self.is_referentie_catalogus:
-            return f"{self.naam} [referentie]"
+            return f"{self.naam} (referentie)"
         else:
             return f"{self.naam}"
 
     class Meta:
         verbose_name = _("producten catalogus")
-        verbose_name_plural = _("productencatalogi")
+        verbose_name_plural = _("producten catalogi")
 
     def clean(self):
         super().clean()
@@ -77,20 +74,17 @@ class ProductenCatalogus(models.Model):
             # Reference catalog
             if self.has_reference_catalog():
                 raise ValidationError(
-                    _(
-                        """Een referentiecatalogus kan geen "referentie_catalogus" hebben."""
-                    )
+                    _('Een referentiecatalogus kan geen "referentie_catalogus" hebben.')
                 )
         else:
             # Specific catalog
             if not self.has_reference_catalog():
                 raise ValidationError(
-                    _("""Een catalogus moet een referentiecatalogus hebben.""")
+                    _("Een catalogus moet een referentiecatalogus hebben.")
                 )
             if not self.referentie_catalogus.is_referentie_catalogus:
                 raise ValidationError(
                     _(
-                        """Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is
-                        ingeschakeld. """
+                        'Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is ingeschakeld.'
                     )
                 )

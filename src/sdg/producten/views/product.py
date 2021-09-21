@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views.generic import DetailView, RedirectView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.producten.models import ProductSpecifiekInformatie, SpecifiekProduct
+from sdg.producten.models import LocalizedProduct, Product
 from sdg.producten.views import BaseProductUpdateView
 from sdg.producten.views.mixins import OptionalFormMixin
 
@@ -12,12 +12,12 @@ from sdg.producten.views.mixins import OptionalFormMixin
 class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "producten/product_detail.html"
     context_object_name = "product"
-    queryset = SpecifiekProduct.objects.all().prefetch_related(
+    queryset = Product.objects.all().prefetch_related(
         "referentie__generiek__informatie",
         "informatie",
         "lokaties",
     )
-    model = SpecifiekProduct
+    model = Product
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -34,8 +34,8 @@ class ProductUpdateView(
     OptionalFormMixin, OverheidRoleRequiredMixin, BaseProductUpdateView
 ):
     template_name = "producten/product_edit.html"
-    parent_model = SpecifiekProduct
-    child_model = ProductSpecifiekInformatie
+    parent_model = Product
+    child_model = LocalizedProduct
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

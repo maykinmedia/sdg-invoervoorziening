@@ -7,8 +7,15 @@ from sdg.core.models import ProductenCatalogus
 class CatalogusAdmin(admin.ModelAdmin):
     model = ProductenCatalogus
 
-    list_display = ("naam", "domein", "versie")
-    list_filter = ("domein", "naam")
+    list_display = (
+        "naam",
+        "domein",
+        "lokale_overheid",
+        "referentie_catalogus",
+        "is_referentie_catalogus",
+        "versie",
+    )
+    list_filter = ("is_referentie_catalogus", "domein", "naam")
     ordering = ("domein", "naam")
     search_fields = (
         "naam",
