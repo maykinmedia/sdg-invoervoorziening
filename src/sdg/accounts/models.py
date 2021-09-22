@@ -93,7 +93,7 @@ class Role(models.Model):
     )
 
     @classmethod
-    def get_allowed_roles(cls):
+    def get_roles(cls):
         return [
             f
             for f in cls._meta.fields
@@ -101,7 +101,7 @@ class Role(models.Model):
         ]
 
     def __str__(self):
-        allowed_roles = [str(r.verbose_name) for r in self.get_allowed_roles()]
+        allowed_roles = [str(r.verbose_name) for r in self.get_roles()]
         return f"{self.user} @ {self.lokale_overheid.organisatie.owms_pref_label}: {', '.join(allowed_roles)}"
 
     class Meta:

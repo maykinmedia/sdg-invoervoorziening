@@ -86,7 +86,7 @@ class Thema(models.Model):
         return self.informatiegebied.code
 
     def __str__(self):
-        return f"{self.thema} [{self.code}]"
+        return f"{self.thema}"
 
     class Meta:
         verbose_name = _("thema")

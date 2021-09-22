@@ -47,14 +47,19 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     )
     model = Product
 
+    def get_lokale_overheid(self):
+        self.object = self.get_object()
+        return self.object.catalogus.lokale_overheid
+
     def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
+        context = self.get_context_data(object=self.object)
+
         if self.object.is_reference_product():
             return redirect(
                 reverse("producten:redirect", kwargs={"pk": self.object.pk})
             )
-
-        return response
+        else:
+            return self.render_to_response(context)
 
 
 # TODO: Refactor mixins

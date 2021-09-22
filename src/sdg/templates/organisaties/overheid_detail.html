@@ -5,7 +5,7 @@
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de
-    <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
+    <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
 
 {% block inner %}
     <div class="selection">
@@ -70,31 +70,31 @@
     <div class="products">
         <h2 class="products__title">Producten</h2>
         <div class="products__accordeon">
-            {# TODO: for-loop over informatiegebieden #}
-            <div class="products__accordeon-item">
-                <div class="products__accordeon-title">
-                    TODO: Informatiegebied-label
-                    <div>
-                        <span class="products__accordeon-title-info">{{ producten|length }} Producten</span>
-                        <i class="fas fa-angle-down"></i>
-                        <i class="fas fa-angle-up"></i>
+            {% for informatiegebied, producten in informatiegebied_een_producten.items %}
+                <div class="products__accordeon-item">
+                    <div class="products__accordeon-title">
+                        {{ informatiegebied|truncatechars:100 }}
+                        <div>
+                            <span class="products__accordeon-title-info">{{ producten|length }} Producten</span>
+                            <i class="fas fa-angle-down"></i>
+                            <i class="fas fa-angle-up"></i>
+                        </div>
+                    </div>
+                    <div class="products__list">
+                        {% for product in producten %}
+                            <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
+                                <div>
+                                    <div class="products__item-title">{{ product.upn_label }}</div>
+                                    <div class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
+                                </div>
+                                <div class="products__item-icon">
+                                    <i class="fas fa-angle-right"></i>
+                                </div>
+                            </a>
+                        {% endfor %}
                     </div>
                 </div>
-                <div class="products__list">
-                    {% for product in producten %}
-                        <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
-                            <div>
-                                <div class="products__item-title">{{ product.upn_label }}</div>
-                                <div class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
-                            </div>
-                            <div class="products__item-icon">
-                                <i class="fas fa-angle-right"></i>
-                            </div>
-                        </a>
-                    {% endfor %}
-                </div>
-            </div>
-            {# END-TODO #}
+            {% endfor %}
         </div>
     </div>
 {% endblock inner %}

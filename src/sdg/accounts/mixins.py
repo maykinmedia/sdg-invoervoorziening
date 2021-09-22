@@ -8,14 +8,17 @@ from sdg.accounts.models import Role
 class OverheidRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
-    lokale_overheid = None
-    required_roles = Role.get_allowed_roles()
+    required_roles = {i.name for i in Role.get_roles()}
 
     def get_lokale_overheid(self):
         """
         :returns: The lokale overheid for which we are matching permissions for.
         """
-        return self.lokale_overheid
+        raise NotImplementedError(
+            "{0} is missing the implementation of the get_lokale_overheid() method.".format(
+                self.__class__.__name__
+            )
+        )
 
     def get_required_roles(self):
         """
@@ -27,7 +30,9 @@ class OverheidRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
     def test_func(self):
         try:
-            role = self.request.user.roles.get(lokale_overheid=self.lokale_overheid)
+            role = self.request.user.roles.get(
+                lokale_overheid=self.get_lokale_overheid()
+            )
         except Role.DoesNotExist:
             return False
 

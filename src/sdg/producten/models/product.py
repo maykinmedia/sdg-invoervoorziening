@@ -88,7 +88,7 @@ class Product(models.Model):
         on_delete=models.CASCADE,
         related_name="producten",
         verbose_name=_("catalogus"),
-        help_text=_("Referentie naar de catalogus waartoe dit product behoort."),
+        help_text=_("De catalogus waartoe dit product behoort."),
     )
     gerelateerde_producten = models.ManyToManyField(
         "self",
@@ -171,6 +171,7 @@ class Product(models.Model):
                 defaults={
                     "catalogus": self.catalogus.specifiek_catalog.get(),
                     "doelgroep": self.doelgroep,
+                    "publicatie_datum": self.publicatie_datum,
                 },
             )
             if created:
