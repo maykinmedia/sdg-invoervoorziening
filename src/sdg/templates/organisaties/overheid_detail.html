@@ -81,6 +81,7 @@
                         </div>
                     </div>
                     <div class="products__list">
+                        <div class="products__list-container">
                         {% for product in producten %}
                             <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
                                 <div>
@@ -92,6 +93,7 @@
                                 </div>
                             </a>
                         {% endfor %}
+                        </div>
                     </div>
                 </div>
             {% endfor %}
