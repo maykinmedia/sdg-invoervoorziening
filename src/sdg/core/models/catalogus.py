@@ -69,6 +69,12 @@ class ProductenCatalogus(models.Model):
     class Meta:
         verbose_name = _("producten catalogus")
         verbose_name_plural = _("producten catalogi")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["referentie_catalogus", "lokale_overheid"],
+                name="unique_referentie_catalogus_and_lokale_overheid",
+            )
+        ]
 
     def clean(self):
         super().clean()

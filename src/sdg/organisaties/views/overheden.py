@@ -19,16 +19,14 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        lokale_overheid = context["lokaleoverheid"]
-        lokale_overheid.create_specific_catalogs()
-
+        self.object.create_specific_catalogs()
         reference_catalog = (
             ProductenCatalogus.objects.prefetch_related(
                 "producten__vertalingen",
                 "producten__generiek_product__upn",
             )
             .filter(
-                lokale_overheid=lokale_overheid,
+                lokale_overheid=self.object,
                 is_referentie_catalogus=True,
             )
             .first()

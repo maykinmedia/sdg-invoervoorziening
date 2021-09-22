@@ -68,8 +68,7 @@ class ProductUpdateView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        product = context["product"]
-        generic_information = product.get_generic_product().vertalingen.all()
+        generic_information = self.object.get_generic_product().vertalingen.all()
         context["informatie_form"] = zip_longest(
             generic_information, context["form"].forms
         )
