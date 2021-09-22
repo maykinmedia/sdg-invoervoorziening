@@ -53,8 +53,8 @@ class GeneriekProductAdmin(MarkdownxModelAdmin):
 @admin.register(Product)
 class ProductAdmin(MarkdownxModelAdmin):
     list_display = (
-        "is_referentie",
         "upn_label",
+        "is_referentie",
         "lokale_overheid",
         "catalogus",
         "referentie_product",
