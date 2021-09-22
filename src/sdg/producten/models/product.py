@@ -139,7 +139,7 @@ class Product(models.Model):
 
     @cached_property
     def beschikbare_talen(self):
-        return [i.taal for i in self.vertalingen.all()]
+        return [i.get_taal_display() for i in self.vertalingen.all()]
 
     def is_reference_product(self) -> bool:
         return bool(not self.referentie_product)
