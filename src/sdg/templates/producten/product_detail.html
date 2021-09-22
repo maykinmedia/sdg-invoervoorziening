@@ -18,7 +18,7 @@
             {% endfor %}
         </div>
         <div class="tabs__tab-contents">
-            {% for info in product.informatie.all %}
+            {% for info in product.vertalingen.all %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ info.taal }}">
                     <div class="tabs__tab-header">
