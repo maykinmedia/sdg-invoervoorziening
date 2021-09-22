@@ -35,17 +35,9 @@
 
 
 {% block content %}
-    {% if messages %}
-        <div class="notifications">
-            {% for message in messages %}
-                <div class="notifications__notification">
-                    <i class="fas fa-info-circle"></i>
-                    <span>{{ message }}</span>
-                    <a class="notifications__close" href="#">{% trans "Close" %}</a>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    {% block notifications %}
+        {% include "core/_notifications.html" %}
+    {% endblock %}
 
     {% block inner %}
     {% endblock %}

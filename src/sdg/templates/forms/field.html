@@ -1,15 +1,23 @@
 {% load utils %}
 
-<fieldset class="form__group">
-    <label for="{{ field.id_for_label }}" class="form__label {% if field.field.required %}requiredField{% endif %}">
-        {{ field.label }}
-        {% if field.field.required %}
-            <span class="asteriskField">*</span>
-        {% endif %}
-    </label>
-    {{ field|addclass:"form__input" }}
-    {% if field.help_text %}
-        <p class="form__help-text">{{ field.help_text }}</p>
+{% if not no_fieldset %}
+    <fieldset class="form__group">
+{% endif %}
+
+<label for="{{ field.id_for_label }}" class="form__label {% if field.field.required %}requiredField{% endif %}">
+    {{ field.label }}
+    {% if field.field.required %}
+        <span class="asteriskField">*</span>
     {% endif %}
-    {{ field.errors }}
-</fieldset>
+</label>
+{{ field|addclass:"form__input" }}
+{% if field.help_text %}
+    <p class="form__help-text">{{ field.help_text }}</p>
+{% endif %}
+{% if field.errors %}
+<span></span>{{ field.errors }}
+{% endif %}
+
+{% if not no_fieldset %}
+    </fieldset>
+{% endif %}
