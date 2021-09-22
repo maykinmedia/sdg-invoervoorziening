@@ -1,7 +1,7 @@
 {% extends 'producten/base.html' %}
 
 {% load i18n %}
-{% load markdownify %}
+{% load utils %}
 {% load producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
@@ -17,6 +17,7 @@
                 </a>
             {% endfor %}
         </div>
+        {% include "core/_notifications.html" %}
         <div class="tabs__tab-contents">
             {% for info in product.vertalingen.all %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
@@ -36,7 +37,7 @@
                     </div>
 
                     <div class="notifications notifications--inline">
-                        <div class="notifications__notification">
+                        <div class="notifications__notification info">
                             <i class="fas fa-info-circle"></i>
                             <span>Ingeplande wijzigingen op 01-01-2021</span>
                             <a href="#">Bekijk wijzigingen</a>
@@ -54,20 +55,7 @@
                             </thead>
                             <tbody>
                             {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
-                                <tr>
-                                    <td class="tabs__table-cell">{{ field.verbose_name|title }}<i
-                                        class="fas fa-info-circle fa-xs"
-                                        title="{{ field.help_text }}"></i>
-                                    </td>
-                                    <td class="tabs__table-cell">
-                                        {% if field.is_markdown %}
-                                            {{ field.value|markdownify }}
-                                        {% else %}
-                                            {{ field.value }}
-                                        {% endif %}
-                                    </td>
-                                    <td class="tabs__table-cell">{{ info.datum_wijziging|date:"d-m-y" }}</td>
-                                </tr>
+                                {% table_row field %}
                             {% endfor %}
                             </tbody>
                         </table>
@@ -85,23 +73,7 @@
                         </thead>
                         <tbody>
                         {% for field in info.get_fields|exclude:"id,taal,product" %}
-                            <tr>
-                                <td class="tabs__table-cell">{{ field.verbose_name|title }}<i class="fas fa-info-circle fa-xs"
-                                                                                      title="{{ field.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {% if field.is_markdown %}
-                                        {{ field.value|markdownify }}
-                                    {% else %}
-                                        {{ field.value }}
-                                    {% endif %}
-                                    {% if field.is_reference %}
-                                        <i class="fa fa-asterisk fa-xs primary"
-                                           title="{% trans 'this field is using reference text.' %}"></i>
-                                    {% endif %}
-                                </td>
-                                <td class="tabs__table-cell">{{ info.datum_wijziging|date:"d-m-y" }}</td>
-                            </tr>
+                            {% table_row field %}
                         {% endfor %}
                         </tbody>
                     </table>

@@ -9,7 +9,7 @@ from django.views.generic import DetailView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.producten.forms import GegevensFormHelper, ProductGegevensForm
+from sdg.producten.forms import LocalizedProductForm
 from sdg.producten.models import GeneriekProduct, LocalizedProduct, Product
 
 
@@ -71,7 +71,7 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     form_class = inlineformset_factory(
         Product,
         LocalizedProduct,
-        form=ProductGegevensForm,
+        form=LocalizedProductForm,
         extra=0,
     )
 

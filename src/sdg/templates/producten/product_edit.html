@@ -2,7 +2,6 @@
 
 {% load utils %}
 {% load i18n %}
-{% load markdownify %}
 {% load producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
@@ -18,6 +17,7 @@
                 </a>
             {% endfor %}
         </div>
+        {% include "core/_notifications.html" %}
         <form action="." method="POST" class="form tabs__tab-contents">
             {% csrf_token %}
             {{ form.media }}
@@ -37,34 +37,10 @@
                             </thead>
                             <tbody>
                             {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
-                                <tr>
-                                    <td class="tabs__table-cell">{{ field.verbose_name|title }}<i
-                                        class="fas fa-info-circle fa-xs"
-                                        title="{{ field.help_text }}"></i>
-                                    </td>
-                                    <td class="tabs__table-cell">
-                                        {% if field.is_markdown %}
-                                            {{ field.value|markdownify }}
-                                        {% else %}
-                                            {{ field.value }}
-                                        {% endif %}
-                                        {% if field.is_reference %}
-                                            <i class="fa fa-asterisk fa-xs primary"
-                                               title="{% trans 'this field is using reference text.' %}"></i>
-                                        {% endif %}
-                                    </td>
-                                    <td class="tabs__table-cell">
-                                        {% if info.datum_wijziging %}
-                                            {{ info.datum_wijziging|date:"d-m-y" }}
-                                        {% else %}
-                                            -
-                                        {% endif %}
-                                    </td>
-                                </tr>
+                                {%  table_row field %}
                             {% endfor %}
                             </tbody>
                         </table>
-
                         <hr class="divider">
                     {% endif %}
 
@@ -84,149 +60,19 @@
                                     {{ form.taal.as_hidden }}
                                 </td>
                             </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.product_titel_decentraal.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.product_titel_decentraal.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.product_titel_decentraal|addclass:"form__input" }}
-                                    {{ form.product_titel_decentraal.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.specifieke_tekst.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.specifieke_tekst.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.specifieke_tekst|addclass:"form__input" }}
-                                    {{ form.specifieke_tekst.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.verwijzing_links.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.verwijzing_links.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.verwijzing_links|addclass:"form__input" }}
-                                    {{ form.verwijzing_links.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.specifieke_link.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.specifieke_link.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.specifieke_link|addclass:"form__input" }}
-                                    {{ form.specifieke_link.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.decentrale_link.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.decentrale_link.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.decentrale_link|addclass:"form__input" }}
-                                    {{ form.decentrale_link.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.procedure_beschrijving.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.procedure_beschrijving.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.procedure_beschrijving|addclass:"form__input" }}
-                                    {{ form.procedure_beschrijving.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.vereisten.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.vereisten.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.vereisten|addclass:"form__input" }}
-                                    {{ form.vereisten.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.bewijs.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.bewijs.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.bewijs|addclass:"form__input" }}
-                                    {{ form.bewijs.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.bezwaar_en_beroep.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.bezwaar_en_beroep.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.bezwaar_en_beroep|addclass:"form__input" }}
-                                    {{ form.bezwaar_en_beroep.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.kosten_en_betaalmethoden.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.kosten_en_betaalmethoden.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.kosten_en_betaalmethoden|addclass:"form__input" }}
-                                    {{ form.kosten_en_betaalmethoden.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.uiterste_termijn.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.uiterste_termijn.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.uiterste_termijn|addclass:"form__input" }}
-                                    {{ form.uiterste_termijn.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.wtd_bij_geen_reactie.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.wtd_bij_geen_reactie.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.wtd_bij_geen_reactie|addclass:"form__input" }}
-                                    {{ form.wtd_bij_geen_reactie.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.decentrale_procedure_link.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.decentrale_procedure_link.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.decentrale_procedure_link|addclass:"form__input" }}
-                                    {{ form.decentrale_procedure_link.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
+                            {%  table_field form.product_titel_decentraal reference=True %}
+                            {%  table_field form.specifieke_tekst reference=True %}
+                            {%  table_field form.verwijzing_links reference=True %}
+                            {%  table_field form.specifieke_link reference=True %}
+                            {%  table_field form.decentrale_link reference=True %}
+                            {%  table_field form.procedure_beschrijving reference=True %}
+                            {%  table_field form.vereisten reference=True %}
+                            {%  table_field form.bewijs reference=True %}
+                            {%  table_field form.bezwaar_en_beroep reference=True %}
+                            {%  table_field form.kosten_en_betaalmethoden reference=True %}
+                            {%  table_field form.uiterste_termijn reference=True %}
+                            {%  table_field form.wtd_bij_geen_reactie reference=True %}
+                            {%  table_field form.decentrale_procedure_link reference=True %}
                         </tbody>
                     </table>
                 </div>

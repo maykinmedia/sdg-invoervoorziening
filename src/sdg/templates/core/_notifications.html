@@ -1,0 +1,13 @@
+{% load i18n %}
+
+{% if messages %}
+    <div class="notifications">
+        {% for message in messages %}
+            <div class="notifications__notification grey">
+                <i class="fas fa-user"></i>
+                <span>{{ message }}</span>
+                <a class="notifications__close" href="#">{% trans "Close" %}</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
