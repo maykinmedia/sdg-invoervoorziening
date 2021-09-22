@@ -30,7 +30,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="#" class="button button--light">{{ info.taal }} Deactiveren</a>
+                            <a href="#" class="button button--light">{{ info.get_taal_display }} Deactiveren</a>
                             <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
                         </div>
                     </div>
@@ -64,10 +64,6 @@
                                             {{ field.value|markdownify }}
                                         {% else %}
                                             {{ field.value }}
-                                        {% endif %}
-                                        {% if field.is_reference %}
-                                            <i class="fa fa-asterisk fa-xs primary"
-                                               title="{% trans 'this field is using reference text.' %}"></i>
                                         {% endif %}
                                     </td>
                                     <td class="tabs__table-cell">{{ info.datum_wijziging|date:"d-m-y" }}</td>

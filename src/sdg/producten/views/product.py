@@ -1,15 +1,16 @@
 from itertools import zip_longest
 
 from django.db.models import Prefetch
+from django.forms import inlineformset_factory
+from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.views.generic import DetailView, RedirectView
+from django.views.generic import DetailView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.producten.forms import GegevensFormHelper, ProductGegevensForm
 from sdg.producten.models import GeneriekProduct, LocalizedProduct, Product
-from sdg.producten.views import BaseProductUpdateView
-from sdg.producten.views.mixins import OptionalFormMixin
 
 
 class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
@@ -62,20 +63,43 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
             return self.render_to_response(context)
 
 
-# TODO: Refactor mixins
-class ProductUpdateView(
-    OptionalFormMixin, OverheidRoleRequiredMixin, BaseProductUpdateView
-):
+class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "producten/product_edit.html"
-    parent_model = Product
+    context_object_name = "product"
+    model = Product
     child_model = LocalizedProduct
+    form_class = inlineformset_factory(
+        Product,
+        LocalizedProduct,
+        form=ProductGegevensForm,
+        extra=0,
+    )
+
+    def get_lokale_overheid(self):
+        self.object = self.get_object()
+        return self.object.catalogus.lokale_overheid
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         generic_information = self.object.get_generic_product().vertalingen.all()
         context["informatie_form"] = zip_longest(
             generic_information, context["form"].forms
         )
-
         return context
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(self.get_context_data())
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST, instance=self.object)
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse("producten:detail", kwargs={"pk": self.object.pk})
