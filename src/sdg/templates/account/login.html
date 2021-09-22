@@ -13,42 +13,19 @@
             <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
     </p>
 
-    <form action="/accounts/login/" class="form" method="post">
+    <form action="{% url "account_login" %}" class="form" method="post">
         {% csrf_token %}
 
         {{ form.non_field_errors }}
 
         <div class="form__block">
-            <fieldset class="form__group">
-                <label for="{{ form.login.id_for_label }}" class="form__label requiredField">
-                    {{ form.login.label }}
-                    {% if form.login.field.required %}
-                        <span class="asteriskField">*</span>
-                    {% endif %}
-                </label>
-                {{ form.login|addclass:"form__input" }}
-                {{ form.login.errors }}
-            </fieldset>
-            <fieldset class="form__group">
-                <label for="{{ form.password.id_for_label }}" class="form__label requiredField">
-                    {{ form.password.label }}
-                    {% if form.password.field.required %}
-                        <span class="asteriskField">*</span>
-                    {% endif %}
-                </label>
-                {{ form.password|addclass:"form__input" }}
-                {{ form.password.errors }}
-            </fieldset>
-            <fieldset class="form__group">
-                <label for="{{ form.remember.id_for_label }}" class="checkbox ">
-                    {{ form.remember|addclass:"form__checkbox" }}
-                    {{ form.remember.label }}
-                </label>
-            </fieldset>
-            <input type="hidden" name="next" value="/">
+            {% form_field form.login %}
+            {% form_field form.password %}
+            {% form_checkbox form.remember %}
+            <input type="hidden" name="next" value="{{ redirect_field_value }}">
             <div class="form__buttons">
                 <input type="submit" name="sign_in" value="Aanmelden" class="btn btn-primary primaryAction login_button button" id="submit-id-sign_in">
-                <a class="form__buttons-link" href="/accounts/password/reset/">Wachtwoord vergeten?</a>
+                <a class="form__buttons-link" href="{% url "account_reset_password" %}">Wachtwoord vergeten?</a>
             </div>
         </div>
     </form>

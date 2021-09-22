@@ -81,5 +81,10 @@ def template_dir(value):
 
 
 @register.inclusion_tag("forms/field.html")
-def form_field(field):
-    return {"field": field}
+def form_field(field, **kwargs):
+    return {**kwargs, "field": field}
+
+
+@register.inclusion_tag("forms/checkbox.html")
+def form_checkbox(field, **kwargs):
+    return {**kwargs, "field": field}
