@@ -21,6 +21,7 @@
         {% form_field form.contact_telefoonnummer %}
         {% form_field form.contact_emailadres %}
 
+        {# TODO: refactor formset #}
         {% crispy lokatie_formset lokatie_helper %}
 
         <div class="formset__add form__add-subform" data-formset-prefix="{{ lokatie_formset.prefix }}">
