@@ -11,10 +11,10 @@
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
-            {% for taal in product.beschikbare_talen %}
-                <a href="#{{ taal }}" data-id="{{ taal }}"
+            {% for key, value in product.beschikbare_talen.items %}
+                <a href="#{{ value }}" data-id="{{ value }}"
                    class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ taal }}
+                    {{ key }}
                 </a>
             {% endfor %}
         </div>
