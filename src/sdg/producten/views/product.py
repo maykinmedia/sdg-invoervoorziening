@@ -62,7 +62,6 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
         else:
             return self.render_to_response(context)
 
-
 class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "producten/product_edit.html"
     context_object_name = "product"
