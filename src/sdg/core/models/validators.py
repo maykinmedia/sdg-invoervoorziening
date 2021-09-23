@@ -50,19 +50,16 @@ def validate_openingstijden(value):
 def validate_reference_catalog(catalog):
     if catalog.has_reference_catalog():
         raise ValidationError(
-            _("""Een referentiecatalogus kan geen "referentie_catalogus" hebben.""")
+            _('Een referentiecatalogus kan geen "referentie_catalogus" hebben.')
         )
 
 
 def validate_specific_catalog(catalog):
     if not catalog.has_reference_catalog():
-        raise ValidationError(
-            _("""Een catalogus moet een referentiecatalogus hebben.""")
-        )
+        raise ValidationError(_("Een catalogus moet een referentiecatalogus hebben."))
     if not catalog.referentie_catalogus.is_referentie_catalogus:
         raise ValidationError(
             _(
-                """Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is
-                ingeschakeld. """
+                'Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is ingeschakeld.'
             )
         )
