@@ -1,3 +1,5 @@
+@import 'general';
+
 .notifications {
   display: grid;
   grid-template-columns: 1fr;
@@ -10,17 +12,44 @@
   }
 
   .notifications__notification {
-    border-left: 5px solid #0B71A1;
-    background-color: #D5E2EA;
     padding: 16px;
     display: flex;
     justify-content: space-between;
 
-    .fa-info-circle,
-    a {
-      color: #0B71A1;
+    .fas, a {
       font-weight: bold;
       text-decoration: none;
     }
+
+    &.info {
+      border-left: 5px solid #0B71A1;
+      background-color: $color_primary_light;
+
+      .svg-inline--fa,
+      a {
+        color: #0B71A1;
+      }
+    }
+
+    &.grey {
+      border-left: 5px solid $color_grey_dark;
+      background-color: $color_grey_light;
+
+      .svg-inline--fa,
+      a {
+        color: $color_grey_darkest;
+      }
+    }
+
+    //.accent {
+    //  border-left: 5px solid $color_accent;
+    //  background-color: $color_light;
+    //
+    //  .fas,
+    //  a {
+    //    color: $color_accent;
+    //  }
+    //}
+
   }
 }

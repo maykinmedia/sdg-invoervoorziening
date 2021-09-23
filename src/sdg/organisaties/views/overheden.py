@@ -1,15 +1,9 @@
-from collections import defaultdict
-
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.core.models import ProductenCatalogus, Thema
-from sdg.organisaties.forms import (
-    LokaleOverheidForm,
-    LokatieFormHelper,
-    LokatieInlineFormSet,
-)
+from sdg.organisaties.forms import LokaleOverheidForm, LokatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
 
@@ -78,19 +72,19 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
     model = LokaleOverheid
     required_roles = ["is_beheerder", "is_redacteur"]
 
+    def get_lokale_overheid(self):
+        self.object = self.get_object()
+        return self.object
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["lokatie_formset"] = kwargs.get("formset") or LokatieInlineFormSet(
+        context["formset"] = kwargs.get("formset") or LokatieInlineFormSet(
             instance=self.object, prefix="form"
         )
-        context["lokatie_helper"] = LokatieFormHelper()
-
         return context
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-
         form = self.form_class(request.POST, instance=self.object)
         formset = LokatieInlineFormSet(
             request.POST, instance=self.object, prefix="form"

@@ -16,13 +16,14 @@
         {% csrf_token %}
 
         <div class="form__block">
-            {% form_field form.email %}
-            {% form_field form.username %}
-            {% form_field form.password1 %}
-            {% form_field form.password2 %}
+            {% field form.email %}
+            {% field form.username %}
+            {% field form.password1 %}
+            {% field form.password2 %}
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
             <div class="form__buttons">
-                <input type="submit" name="sign_up" value="Registreren" class="primaryAction login_button button" id="submit-id-sign_up">
+                <input type="submit" name="sign_up" value="Registreren" class="primaryAction login_button button"
+                       id="submit-id-sign_up">
             </div>
         </div>
     </form>

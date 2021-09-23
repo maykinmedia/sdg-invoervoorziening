@@ -166,4 +166,9 @@
   .markdownx-preview {
     display: none;
   }
+
+  & > .notifications {
+    margin-top: 24px;
+  }
+
 }
