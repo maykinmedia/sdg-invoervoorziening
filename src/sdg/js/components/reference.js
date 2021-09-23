@@ -17,4 +17,4 @@ class FormWithReference {
     }
 }
 
-[...forms].forEach(referenceButton => new FormWithReference(referenceButton));
+[...forms].forEach(form => new FormWithReference(form));
