@@ -1,4 +1,7 @@
 $color_primary: #396a88;
+
+$color_accent: #ffbc2c;
+
 $color_lightgrey: #e0e0e0;
 $color_darkgrey: #b5b6bb;
 
@@ -7,7 +10,15 @@ $color_darkgrey: #b5b6bb;
 }
 
 .primary {
-  color: $color_primary;
+  color: $color_primary !important;
+}
+
+.accent {
+  color: $color_accent !important;
+}
+
+.dark {
+  color: $color_darkgrey !important;
 }
 
 .divider {
