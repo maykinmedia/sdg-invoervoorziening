@@ -27,11 +27,11 @@
                 {{ formset.management_form }}
             </div>
             <div class="formset__body">
-                {% for subform in formset %}
-                    {% for hidden in subform.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-                    <div class="form__subforms">
+                <div class="form__subforms">
+                    {% for subform in formset %}
+                        {% for hidden in subform.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
                         <div class="form__block-group">
                             <div>
                                 <div class="form__group">
@@ -57,8 +57,8 @@
                                 {% field subform.zondag no_fieldset=True %}
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
 
