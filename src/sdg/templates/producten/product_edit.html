@@ -23,7 +23,7 @@
             {{ form.media }}
             {{ form.management_form }}
 
-            {% for generic_information, form in informatie_form %}
+            {% for generic_information, reference_form, form in informatie_form %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">
                     {% if generic_information %}
@@ -44,7 +44,7 @@
                         <hr class="divider">
                     {% endif %}
 
-                    <table class="tabs__table">
+                    <table class="tabs__table form__has-reference">
                         <thead>
                         <tr>
                             <th class="tabs__table-header" width="25%">Gegeven</th>
@@ -60,6 +60,9 @@
                                 {{ form.taal.as_hidden }}
                             </td>
                         </tr>
+                        <template class="form__reference">
+                            {{ reference_form.as_p }}
+                        </template>
                         {% table_field form.product_titel_decentraal reference=True %}
                         {% table_field form.specifieke_tekst reference=True %}
                         {% table_field form.verwijzing_links reference=True %}

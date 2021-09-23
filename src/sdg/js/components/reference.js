@@ -1,16 +1,20 @@
-const referenceButtons = document.querySelectorAll(".tabs__table");
+const forms = document.querySelectorAll(".form__has-reference");
 
-class ReferenceButton {
+class FormWithReference {
     constructor(node) {
         this.node = node;
-        this.items = node.querySelectorAll(".tabs__table-help");
+        this.referenceForm = this.node.querySelector(".form__reference");
+        this.formCell = this.node.querySelectorAll(".form__cell");
 
-        [...this.items].forEach(item => {
-            item.addEventListener("click", (event) => {
-                // ...
-            });
+        [...this.formCell].forEach(cell => {
+            const formInput = cell.querySelector(".form__input");
+            const formReferenceBtn = cell.querySelector(".form__reference-btn");
+            formReferenceBtn.addEventListener("click", (event) => {
+                event.preventDefault();
+                formInput.value = this.referenceForm.content.getElementById(formInput.id).value;
+            })
         });
     }
 }
 
-[...referenceButtons].forEach(referenceButton => new ReferenceButton(referenceButton));
+[...forms].forEach(referenceButton => new FormWithReference(referenceButton));

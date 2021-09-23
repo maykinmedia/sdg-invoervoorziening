@@ -82,8 +82,13 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         generic_information = self.object.get_generic_product().vertalingen.all()
+        reference_formset = inlineformset_factory(
+            Product, LocalizedProduct, form=LocalizedProductForm, extra=0
+        )(
+            instance=self.object.referentie_product,
+        )
         context["informatie_form"] = zip_longest(
-            generic_information, context["form"].forms
+            generic_information, reference_formset.forms, context["form"].forms
         )
         return context
 
