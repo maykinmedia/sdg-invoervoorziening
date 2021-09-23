@@ -92,6 +92,9 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
 
         return context
 
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(self.get_context_data())
+
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, instance=self.object)
         formset = LokatieInlineFormSet(
