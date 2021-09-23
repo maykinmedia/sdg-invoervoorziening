@@ -6,6 +6,7 @@
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de
     <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
+{% block notifications %}{% endblock %}
 
 {% block inner %}
     <div class="selection">
@@ -66,6 +67,8 @@
             </a>
         </div>
     </div>
+
+    {% include "core/_notifications.html" %}
 
     <div class="products">
         <h2 class="products__title">Producten</h2>
