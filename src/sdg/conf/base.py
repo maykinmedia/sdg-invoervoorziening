@@ -118,7 +118,6 @@ INSTALLED_APPS = [
     "markdownify",
     "allauth",
     "allauth.account",
-    "crispy_forms",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
