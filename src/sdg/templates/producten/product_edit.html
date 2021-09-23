@@ -11,10 +11,10 @@
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
-            {% for taal in product.beschikbare_talen %}
-                <a href="#{{ taal }}" data-id="{{ taal }}"
+            {% for key, value in product.beschikbare_talen.items %}
+                <a href="#{{ value }}" data-id="{{ value }}"
                    class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ taal }}
+                    {{ key }}
                 </a>
             {% endfor %}
         </div>
@@ -81,6 +81,7 @@
                                 <td>
                                     {{ form.non_field_errors }}
                                     {{ form.id }}
+                                    {{ form.taal.as_hidden }}
                                 </td>
                             </tr>
                             <tr>
@@ -135,17 +136,6 @@
                                 <td class="tabs__table-cell">
                                     {{ form.decentrale_link|addclass:"form__input" }}
                                     {{ form.decentrale_link.errors }}
-                                    <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="tabs__table-cell tabs__table-cell--edit">
-                                    {{ form.datum_wijziging.label|title }}
-                                    <i class="fas fa-info-circle fa-xs" title="{{ form.datum_wijziging.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ form.datum_wijziging|addclass:"form__input" }}
-                                    {{ form.datum_wijziging.errors }}
                                     <a href="#" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik generieke tekst</a>
                                 </td>
                             </tr>

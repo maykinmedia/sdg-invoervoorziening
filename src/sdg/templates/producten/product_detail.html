@@ -10,15 +10,15 @@
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
-            {% for taal in product.beschikbare_talen %}
-                <a href="#{{ taal }}" data-id="{{ taal }}"
+            {% for key, value in product.beschikbare_talen.items %}
+                <a href="#{{value }}" data-id="{{value }}"
                    class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ taal }}
+                    {{ key }}
                 </a>
             {% endfor %}
         </div>
         <div class="tabs__tab-contents">
-            {% for info in product.informatie.all %}
+            {% for info in product.vertalingen.all %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ info.taal }}">
                     <div class="tabs__tab-header">
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                         <div>
-                            <a href="#" class="button button--light">{{ info.taal }} Deactiveren</a>
+                            <a href="#" class="button button--light">{{ info.get_taal_display }} Deactiveren</a>
                             <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
                         </div>
                     </div>
@@ -65,10 +65,6 @@
                                         {% else %}
                                             {{ field.value }}
                                         {% endif %}
-                                        {% if field.is_reference %}
-                                            <i class="fa fa-asterisk fa-xs primary"
-                                               title="{% trans 'this field is using reference text.' %}"></i>
-                                        {% endif %}
                                     </td>
                                     <td class="tabs__table-cell">{{ info.datum_wijziging|date:"d-m-y" }}</td>
                                 </tr>
@@ -88,7 +84,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for field in info.get_fields|exclude:"id,taal" %}
+                        {% for field in info.get_fields|exclude:"id,taal,product" %}
                             <tr>
                                 <td class="tabs__table-cell">{{ field.verbose_name|title }}<i class="fas fa-info-circle fa-xs"
                                                                                       title="{{ field.help_text }}"></i>

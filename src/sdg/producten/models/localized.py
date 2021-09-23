@@ -193,13 +193,13 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     @cached_property
     def referentie_informatie(self):
         if self.product.referentie_product:
-            return self.product.referentie_product.informatie.get(taal=self.taal)
+            return self.product.referentie_product.vertalingen.get(taal=self.taal)
         else:
             return None
 
     @cached_property
     def generiek_informatie(self):
-        return self.product.get_generic_product().informatie.get(taal=self.taal)
+        return self.product.get_generic_product().vertalingen.get(taal=self.taal)
 
     def __str__(self):
         return self.product_titel_decentraal

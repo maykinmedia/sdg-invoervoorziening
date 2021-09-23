@@ -1,20 +1,31 @@
+from collections import defaultdict
+
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.core.models import ProductenCatalogus
+from sdg.core.models import ProductenCatalogus, Thema
 from sdg.organisaties.forms import (
     LokaleOverheidForm,
     LokatieFormHelper,
     LokatieInlineFormSet,
 )
 from sdg.organisaties.models import LokaleOverheid
+from sdg.producten.models import Product
 
 
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
     required_roles = ["is_beheerder", "is_redacteur"]
+
+    def get_lokale_overheid(self):
+        self.object = self.get_object()
+        return self.object
+
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data(object=self.object)
+        return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -31,7 +42,28 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
             )
             .first()
         )
-        context["producten"] = reference_catalog.producten.all()
+
+        # TODO: Refactor [43-59]
+        theme_list = (
+            Thema.objects.all()
+            .select_related("informatiegebied")
+            .prefetch_related("upn")
+        )
+        area_and_products = {
+            theme.informatiegebied.informatiegebied: [] for theme in theme_list
+        }
+        for theme in theme_list:
+            upn_list = theme.upn.all()
+            if upn_list:
+                for product in Product.objects.filter(
+                    generiek_product__upn__in=upn_list,
+                    catalogus=reference_catalog,
+                ):
+                    area_and_products[theme.informatiegebied.informatiegebied].append(
+                        product
+                    )
+
+        context["informatiegebied_een_producten"] = area_and_products
 
         return context
 

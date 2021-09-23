@@ -115,7 +115,7 @@ class Migration(migrations.Migration):
                 (
                     "catalogus",
                     models.ForeignKey(
-                        help_text="Referentie naar de catalogus waartoe dit product behoort.",
+                        help_text="De catalogus waartoe dit product behoort.",
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="producten",
                         to="core.ProductenCatalogus",

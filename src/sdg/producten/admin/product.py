@@ -54,6 +54,7 @@ class GeneriekProductAdmin(MarkdownxModelAdmin):
 class ProductAdmin(MarkdownxModelAdmin):
     list_display = (
         "upn_label",
+        "is_referentie",
         "lokale_overheid",
         "catalogus",
         "referentie_product",
@@ -65,6 +66,11 @@ class ProductAdmin(MarkdownxModelAdmin):
         IsReferenceProductFilter,
     )
     inlines = (LocalizedProductInline,)
+
+    def is_referentie(self, obj):
+        return obj.is_reference_product()
+
+    is_referentie.boolean = True
 
     def lokale_overheid(self, obj):
         return obj.catalogus.lokale_overheid
