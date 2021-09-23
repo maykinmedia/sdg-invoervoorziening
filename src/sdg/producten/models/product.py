@@ -73,7 +73,7 @@ class Product(models.Model):
     )
     referentie_product = models.ForeignKey(
         "self",
-        related_name="producten",
+        related_name="specifieke_producten",
         on_delete=models.SET_NULL,
         verbose_name=_("referentie product"),
         help_text=_(

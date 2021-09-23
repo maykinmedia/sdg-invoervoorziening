@@ -1,8 +1,11 @@
+from typing import List
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from sdg.core.models import ProductenCatalogus
 from sdg.core.models.mixins import ContactgegevensMixin
 from sdg.core.models.validators import (
     validate_lau,
@@ -51,6 +54,25 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         help_text=_("Een geldige LAU-code van de organisatie."),
     )
     users = models.ManyToManyField(User, through="accounts.Role")
+
+    def create_specific_catalogs(self) -> List[ProductenCatalogus]:
+        """Create a specific catalog (if it doesn't exist) for each reference catalog."""
+
+        catalogus_list = []
+        for catalog in ProductenCatalogus.objects.filter(is_referentie_catalogus=True):
+            catalogus_list.append(
+                ProductenCatalogus(
+                    referentie_catalogus=catalog,
+                    lokale_overheid=self,
+                    is_referentie_catalogus=False,
+                    domein=catalog.domein,
+                    versie=catalog.versie,
+                    naam=catalog.naam,
+                )
+            )
+        return ProductenCatalogus.objects.bulk_create(
+            catalogus_list, ignore_conflicts=True
+        )
 
     def get_absolute_url(self):
         return reverse("organisaties:overheid_detail", kwargs={"pk": self.pk})

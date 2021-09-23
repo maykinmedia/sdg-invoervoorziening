@@ -1,37 +1,63 @@
 from itertools import zip_longest
 
+from django.db.models import Prefetch
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.views.generic import DetailView, RedirectView
+from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.producten.models import LocalizedProduct, Product
+from sdg.producten.models import GeneriekProduct, LocalizedProduct, Product
 from sdg.producten.views import BaseProductUpdateView
 from sdg.producten.views.mixins import OptionalFormMixin
+
+
+class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
+    """
+    Get or create (children) specific product if this is a reference product.
+    Redirect to product detail view.
+    """
+
+    context_object_name = "product"
+    model = Product
+
+    def get(self, request, *args, **kwargs):
+        obj = super().get_object()
+        if obj.is_reference_product():
+            obj = obj.get_or_create_specific_product()
+
+        kwargs["obj"] = obj
+        return super().get(request, *args, **kwargs)
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse("producten:detail", kwargs={"pk": kwargs.get("obj").pk})
 
 
 class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "producten/product_detail.html"
     context_object_name = "product"
-    queryset = Product.objects.all().prefetch_related(
-        "referentie_product__generiek_product__vertalingen",
-        "vertalingen",
+    queryset = Product.objects.prefetch_related(
         "lokaties",
+        "vertalingen",
+        "referentie_product__vertalingen",
+        Prefetch(
+            "referentie_product__generiek_product",
+            queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
+        ),
     )
     model = Product
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        if self.object.is_reference_product():
+            return redirect(
+                reverse("producten:redirect", kwargs={"pk": self.object.pk})
+            )
 
-        product_information = context["product"].vertalingen.all()
-        generic_information = context[
-            "product"
-        ].referentie_product.generiek_product.vertalingen.all()
-
-        context["informatie"] = zip_longest(generic_information, product_information)
-
-        return context
+        return response
 
 
+# TODO: Refactor mixins
 class ProductUpdateView(
     OptionalFormMixin, OverheidRoleRequiredMixin, BaseProductUpdateView
 ):
@@ -42,21 +68,9 @@ class ProductUpdateView(
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        generic_information = context[
-            "product"
-        ].referentie_product.generiek_product.vertalingen.all()
+        generic_information = self.object.get_generic_product().vertalingen.all()
         context["informatie_form"] = zip_longest(
             generic_information, context["form"].forms
         )
 
         return context
-
-
-class CreateProductRedirectView(RedirectView):
-    def get(self, request, *args, **kwargs):
-        # TODO: Create product from C to C1
-        self.created_pk = ...
-        super().get(request, *args, **kwargs)
-
-    def get_redirect_url(self, *args, **kwargs):
-        return reverse("producten:edit", kwargs={"pk": kwargs.get(self.created_pk)})

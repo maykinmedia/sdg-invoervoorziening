@@ -2,46 +2,49 @@ from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.forms import (
     LokaleOverheidForm,
     LokatieFormHelper,
     LokatieInlineFormSet,
 )
 from sdg.organisaties.models import LokaleOverheid
-from sdg.organisaties.utils import create_specific_catalogs
-from sdg.producten.models import Product
 
 
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
 
-        context["producten"] = Product.objects.all().prefetch_related("vertalingen")
-        create_specific_catalogs(context["lokaleoverheid"])
+        self.object.create_specific_catalogs()
+        reference_catalog = (
+            ProductenCatalogus.objects.prefetch_related(
+                "producten__vertalingen",
+                "producten__generiek_product__upn",
+            )
+            .filter(
+                lokale_overheid=self.object,
+                is_referentie_catalogus=True,
+            )
+            .first()
+        )
+        context["producten"] = reference_catalog.producten.all()
 
         return context
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.prefetch_related(
-            "lokaties",
-            "organisatie",
-            "catalogi",
-            "catalogi__producten",
-        )
-
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]
+        return queryset.prefetch_related("lokaties", "organisatie", "catalogi")
 
 
 class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "organisaties/overheid_update.html"
     form_class = LokaleOverheidForm
     model = LokaleOverheid
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,7 +79,3 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
-
-    @staticmethod
-    def get_required_roles():
-        return ["is_beheerder", "is_redacteur"]

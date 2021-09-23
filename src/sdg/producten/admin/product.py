@@ -11,6 +11,25 @@ from sdg.producten.models import (
 )
 
 
+class IsReferenceProductFilter(admin.SimpleListFilter):
+    title = "Is Referentie"
+    parameter_name = "referentie_product"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("Ja", "Ja"),
+            ("Nee", "Nee"),
+        )
+
+    def queryset(self, request, queryset):
+        value = self.value()
+        if value == "Ja":
+            return queryset.filter(referentie_product__isnull=True)
+        elif value == "Nee":
+            return queryset.filter(referentie_product__isnull=False)
+        return queryset
+
+
 class LocalizedGeneriekProductInline(admin.StackedInline):
     model = LocalizedGeneriekProduct
     extra = 1
@@ -43,6 +62,7 @@ class ProductAdmin(MarkdownxModelAdmin):
     list_filter = (
         "catalogus__lokale_overheid",
         "generiek_product",
+        IsReferenceProductFilter,
     )
     inlines = (LocalizedProductInline,)
 

@@ -18,7 +18,7 @@
             {% endfor %}
         </div>
         <div class="tabs__tab-contents">
-            {% for generic_info, info in informatie %}
+            {% for info in product.informatie.all %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ info.taal }}">
                     <div class="tabs__tab-header">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    {% if generic_info %}
+                    {% if info.generiek_informatie %}
                         <table class="tabs__table">
                             <thead>
                             <tr>
@@ -53,7 +53,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for field in generic_info.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
+                            {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
                                 <tr>
                                     <td class="tabs__table-cell">{{ field.verbose_name|title }}<i
                                         class="fas fa-info-circle fa-xs"
