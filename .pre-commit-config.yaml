@@ -13,3 +13,8 @@ repos:
     hooks:
       - id: flake8
         args: [ '--ignore=E501,F405,W503,F401' ]
+  - repo: https://github.com/milin/giticket
+    rev: v1.1
+    hooks:
+      - id: giticket
+        args: [ '--regex=\w+/[0-9]+', '--format={commit_msg} -- #{ticket}' ]
