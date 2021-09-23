@@ -13,6 +13,7 @@ from sdg.producten.models import Product
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
+
     required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
