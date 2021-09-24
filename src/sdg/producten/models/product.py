@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from django.db import models
+from django.db.models import Model
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
+from sdg.core.models import ProductenCatalogus
 from sdg.producten.models import LocalizedProduct
 
 
@@ -162,14 +165,16 @@ class Product(models.Model):
             **kwargs,
         )
 
-    def get_or_create_specific_product(self) -> Product:
+    def get_or_create_specific_product(self, catalog) -> Product:
         """Maak een specifiek product voor een referentieproduct, inclusief gelokaliseerde informatie."""
 
         if self.is_reference_product():
+            if not isinstance(catalog, Model):
+                catalog = get_object_or_404(ProductenCatalogus, pk=catalog)
             specific_product, created = Product.objects.get_or_create(
                 referentie_product=self,
+                catalogus=catalog,
                 defaults={
-                    "catalogus": self.catalogus.specifiek_catalog.get(),
                     "doelgroep": self.doelgroep,
                     "publicatie_datum": self.publicatie_datum,
                 },

@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
@@ -11,7 +13,7 @@ from sdg.producten.models import Product
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
-    required_roles = ["is_beheerder", "is_redacteur"]
+    required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
@@ -26,7 +28,7 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
 
         self.object.create_specific_catalogs()
 
-        # TODO: Optimize / refactor [.->L63]
+        # TODO: Optimize / refactor [.->L82]
         theme_list = (
             Thema.objects.all()
             .select_related("informatiegebied")
@@ -39,10 +41,16 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
         for role in self.request.user.roles.filter(
             is_redacteur=True, lokale_overheid=self.object
         ):
-            for catalog in role.get_catalogs():
-                catalog_area_and_products = area_and_products.copy()
+            for catalog in role.get_catalogs(reference=False):
+                reference_catalog = catalog.referentie_catalogus
+
+                reference_catalog_area_and_products = deepcopy(area_and_products)
+                catalog_area_and_products = deepcopy(area_and_products)
+
                 for theme in theme_list:
+                    area = theme.informatiegebied.informatiegebied
                     theme_upns = theme.upn.all()
+
                     if theme_upns:
                         specific_products = Product.objects.filter(
                             referentie_product__generiek_product__upn__in=theme_upns,
@@ -51,15 +59,28 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
                         specific_upns = specific_products.values(
                             "referentie_product__generiek_product__upn"
                         )
+
                         reference_products = Product.objects.filter(
                             generiek_product__upn__in=theme_upns,
-                            catalogus=catalog.referentie_catalogus,
-                        ).exclude(generiek_product__upn__in=specific_upns)
-                        catalog_area_and_products[
-                            theme.informatiegebied.informatiegebied
-                        ].extend(specific_products | reference_products)
+                            catalogus=reference_catalog,
+                        )
+                        reference_catalog_area_and_products[area].extend(
+                            reference_products
+                        )
+                        catalog_area_and_products[area].extend(
+                            specific_products
+                            | reference_products.exclude(
+                                generiek_product__upn__in=specific_upns
+                            )
+                        )
+                setattr(
+                    reference_catalog,
+                    "area_and_products",
+                    reference_catalog_area_and_products,
+                )
                 setattr(catalog, "area_and_products", catalog_area_and_products)
-                catalogs.append(catalog)
+                catalogs.extend([reference_catalog, catalog])
+
         context["catalogs"] = catalogs
 
         return context
@@ -73,7 +94,7 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "organisaties/overheid_update.html"
     form_class = LokaleOverheidForm
     model = LokaleOverheid
-    required_roles = ["is_beheerder", "is_redacteur"]
+    required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()

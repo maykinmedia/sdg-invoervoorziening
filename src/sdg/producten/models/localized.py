@@ -85,7 +85,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     product = models.ForeignKey(
         "producten.Product",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="vertalingen",
         verbose_name=_("specifieke product"),
         help_text=_("Het specifieke product van deze vertaling."),
@@ -213,7 +213,7 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
 
     productuitvoering = models.ForeignKey(
         "producten.Productuitvoering",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="vertalingen",
         verbose_name=_("productuitvoering"),
         help_text=_("De productuitvoering van deze vertaling."),

@@ -92,7 +92,11 @@ class Role(models.Model):
         ),
     )
 
-    def get_catalogs(self):
+    def get_catalogs(self, reference=None):
+        if reference is not None:
+            return self.lokale_overheid.catalogi.filter(
+                is_referentie_catalogus=reference
+            ).all()
         return self.lokale_overheid.catalogi.all()
 
     @classmethod

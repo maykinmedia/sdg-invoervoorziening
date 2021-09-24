@@ -1,14 +1,16 @@
 from itertools import zip_longest
 
+from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import DetailView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.core.models import ProductenCatalogus
 from sdg.producten.forms import LocalizedProductForm
 from sdg.producten.models import GeneriekProduct, LocalizedProduct, Product
 
@@ -24,7 +26,13 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
 
     def get(self, request, *args, **kwargs):
         obj = super().get_object()
-        obj = obj.get_or_create_specific_product()
+
+        if kwargs.get("catalog_pk"):
+            catalog = get_object_or_404(ProductenCatalogus, pk=kwargs["catalog_pk"])
+            if catalog.user_is_redacteur(self.request.user):
+                obj = obj.get_or_create_specific_product(catalog=catalog)
+            else:
+                raise PermissionDenied()
 
         kwargs["obj"] = obj
         return super().get(request, *args, **kwargs)
@@ -46,6 +54,7 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
         ),
     )
     model = Product
+    required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
@@ -54,13 +63,7 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(object=self.object)
-
-        if self.object.is_reference_product():
-            return redirect(
-                reverse("producten:redirect", kwargs={"pk": self.object.pk})
-            )
-        else:
-            return self.render_to_response(context)
+        return self.render_to_response(context)
 
 
 class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
@@ -74,6 +77,7 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
         form=LocalizedProductForm,
         extra=0,
     )
+    required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
