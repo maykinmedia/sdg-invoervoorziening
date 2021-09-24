@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -144,49 +144,72 @@ class Product(models.Model):
     def beschikbare_talen(self):
         return {i.get_taal_display(): i.taal for i in self.vertalingen.all()}
 
-    def is_reference_product(self) -> bool:
+    @cached_property
+    def is_referentie_product(self) -> bool:
+        """:returns: Whether this is a reference product or not."""
         return bool(not self.referentie_product)
 
     def get_generic_product(self):
-        """
-        :returns: Generiek product voor het product.
-        """
+        """:returns: The generic product of this product."""
+
         return (
             self.generiek_product
-            if self.is_reference_product()
+            if self.is_referentie_product
             else self.referentie_product.generiek_product
         )
 
-    def generate_informatie(self, taal, **kwargs) -> LocalizedProduct:
+    def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""
+
         return LocalizedProduct(
             product=self,
             taal=taal,
             **kwargs,
         )
 
-    def get_or_create_specific_product(self, catalog) -> Product:
-        """Maak een specifiek product voor een referentieproduct, inclusief gelokaliseerde informatie."""
+    def create_localized_products(self):
+        """Create localized product information for this reference product."""
 
-        if self.is_reference_product():
-            if not isinstance(catalog, Model):
-                catalog = get_object_or_404(ProductenCatalogus, pk=catalog)
-            specific_product, created = Product.objects.get_or_create(
-                referentie_product=self,
-                catalogus=catalog,
-                defaults={
-                    "doelgroep": self.doelgroep,
-                    "publicatie_datum": self.publicatie_datum,
-                },
-            )
-            if created:
-                LocalizedProduct.objects.bulk_create(
+        localized_products = []
+
+        if self.is_referentie_product:
+            reference_languages = self.beschikbare_talen.values()
+            for specific_product in self.specifieke_producten.all():
+                localized_products.extend(
                     [
-                        specific_product.generate_informatie(taal=taal)
-                        for taal in self.beschikbare_talen.values()
+                        specific_product.generate_localized_information(taal=taal)
+                        for taal in reference_languages
                     ]
                 )
-            return specific_product
+        else:
+            localized_products.extend(
+                [
+                    self.generate_localized_information(taal=taal)
+                    for taal in self.referentie_product.beschikbare_talen.values()
+                ]
+            )
+
+        LocalizedProduct.objects.bulk_create(localized_products, ignore_conflicts=True)
+
+    def get_or_create_specific_product(self, specific_catalog) -> Product:
+        """Create a specific product for a reference product, including localized information."""
+
+        if self.is_referentie_product:
+            with transaction.atomic():
+                if not isinstance(specific_catalog, Model):
+                    specific_catalog = get_object_or_404(
+                        ProductenCatalogus, pk=specific_catalog
+                    )
+                specific_product, created = Product.objects.get_or_create(
+                    referentie_product=self,
+                    catalogus=specific_catalog,
+                    defaults={
+                        "doelgroep": self.doelgroep,
+                        "publicatie_datum": self.publicatie_datum,
+                    },
+                )
+                specific_product.create_localized_products()
+                return specific_product
         else:
             return self
 
@@ -194,7 +217,7 @@ class Product(models.Model):
         return reverse("producten:detail", kwargs={"pk": self.pk})
 
     def __str__(self):
-        if self.is_reference_product():
+        if self.is_referentie_product:
             return f"{self.generiek_product.upn_label} (referentie)"
         else:
             return f"{self.referentie_product.upn_label}"
@@ -211,10 +234,14 @@ class Product(models.Model):
 
         super().clean()
 
-        if self.is_reference_product():
+        if self.is_referentie_product:
             validate_reference_product(self)
         else:
             validate_specific_product(self)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.create_localized_products()
 
 
 class Productuitvoering(models.Model):

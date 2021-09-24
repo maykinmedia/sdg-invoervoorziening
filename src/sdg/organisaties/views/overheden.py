@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
-from sdg.core.models import ProductenCatalogus, Thema
+from sdg.core.models import Thema
 from sdg.organisaties.forms import LokaleOverheidForm, LokatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
