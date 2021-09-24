@@ -25,19 +25,8 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
         context = super().get_context_data()
 
         self.object.create_specific_catalogs()
-        reference_catalog = (
-            ProductenCatalogus.objects.prefetch_related(
-                "producten__vertalingen",
-                "producten__generiek_product__upn",
-            )
-            .filter(
-                lokale_overheid=self.object,
-                is_referentie_catalogus=True,
-            )
-            .first()
-        )
 
-        # TODO: Refactor [43-59]
+        # TODO: Optimize / refactor [.->L63]
         theme_list = (
             Thema.objects.all()
             .select_related("informatiegebied")
@@ -46,18 +35,32 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
         area_and_products = {
             theme.informatiegebied.informatiegebied: [] for theme in theme_list
         }
-        for theme in theme_list:
-            upn_list = theme.upn.all()
-            if upn_list:
-                for product in Product.objects.filter(
-                    generiek_product__upn__in=upn_list,
-                    catalogus=reference_catalog,
-                ):
-                    area_and_products[theme.informatiegebied.informatiegebied].append(
-                        product
-                    )
-
-        context["informatiegebied_een_producten"] = area_and_products
+        catalogs = []
+        for role in self.request.user.roles.filter(
+            is_redacteur=True, lokale_overheid=self.object
+        ):
+            for catalog in role.get_catalogs():
+                catalog_area_and_products = area_and_products.copy()
+                for theme in theme_list:
+                    theme_upns = theme.upn.all()
+                    if theme_upns:
+                        specific_products = Product.objects.filter(
+                            referentie_product__generiek_product__upn__in=theme_upns,
+                            catalogus=catalog,
+                        )
+                        specific_upns = specific_products.values(
+                            "referentie_product__generiek_product__upn"
+                        )
+                        reference_products = Product.objects.filter(
+                            generiek_product__upn__in=theme_upns,
+                            catalogus=catalog.referentie_catalogus,
+                        ).exclude(generiek_product__upn__in=specific_upns)
+                        catalog_area_and_products[
+                            theme.informatiegebied.informatiegebied
+                        ].extend(specific_products | reference_products)
+                setattr(catalog, "area_and_products", catalog_area_and_products)
+                catalogs.append(catalog)
+        context["catalogs"] = catalogs
 
         return context
 

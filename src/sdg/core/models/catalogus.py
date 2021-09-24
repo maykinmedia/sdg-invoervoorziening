@@ -12,7 +12,7 @@ class ProductenCatalogus(models.Model):
     referentie_catalogus = models.ForeignKey(
         "self",
         verbose_name=_("referentie catalogus"),
-        related_name="specifiek_catalog",
+        related_name="specifieke_catalogi",
         help_text=_("De catalogus van referentie."),
         null=True,
         blank=True,

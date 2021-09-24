@@ -92,6 +92,9 @@ class Role(models.Model):
         ),
     )
 
+    def get_catalogs(self):
+        return self.lokale_overheid.catalogi.all()
+
     @classmethod
     def get_roles(cls):
         return [

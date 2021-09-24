@@ -24,8 +24,7 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
 
     def get(self, request, *args, **kwargs):
         obj = super().get_object()
-        if obj.is_reference_product():
-            obj = obj.get_or_create_specific_product()
+        obj = obj.get_or_create_specific_product()
 
         kwargs["obj"] = obj
         return super().get(request, *args, **kwargs)
@@ -50,7 +49,8 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
-        return self.object.catalogus.lokale_overheid
+        self.lokale_overheid = self.object.catalogus.lokale_overheid
+        return self.lokale_overheid
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(object=self.object)
