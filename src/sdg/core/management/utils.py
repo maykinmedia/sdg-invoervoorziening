@@ -16,19 +16,22 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
 
     :return: The total count of the created objects.
     """
+    count = 0
 
-    gemeente_list = [
-        Overheidsorganisatie(
+    for obj in data:
+        _oo, created = Overheidsorganisatie.objects.update_or_create(
             owms_identifier=obj.get("resourceIdentifier"),
-            owms_pref_label=obj.get("prefLabel"),
-            owms_end_date=string_to_date(obj.get("endDate"), "%Y-%m-%d")
-            if obj.get("endDate")
-            else None,
+            defaults={
+                "owms_pref_label": obj.get("prefLabel"),
+                "owms_end_date": string_to_date(obj.get("endDate"), "%Y-%m-%d")
+                if obj.get("endDate")
+                else None,
+            },
         )
-        for obj in data
-    ]
-    created_objects = Overheidsorganisatie.objects.bulk_create(gemeente_list)
-    return len(created_objects)
+        if created:
+            count += 1
+
+    return count
 
 
 def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:

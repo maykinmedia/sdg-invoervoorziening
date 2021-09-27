@@ -18,7 +18,7 @@ class Overheidsorganisatie(models.Model):
     )
     owms_pref_label = models.CharField(
         _("OWMS pref label"),
-        max_length=80,
+        max_length=200,
         help_text=_("De wettelijk erkende naam van de organisatie."),
     )
     owms_end_date = models.DateTimeField(

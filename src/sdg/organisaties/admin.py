@@ -21,6 +21,12 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
         "contact_website",
     )
     inlines = (LokatieInline,)
+    raw_id_fields = (
+        "organisatie",
+        "ondersteunings_organisatie",
+        "verantwoordelijke_organisatie",
+        "bevoegde_organisatie",
+    )
 
 
 @admin.register(Lokatie)

@@ -47,6 +47,7 @@ class GeneriekProductAdmin(MarkdownxModelAdmin):
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
+    raw_id_fields = ("verantwoordelijke_organisatie", "upn")
 
 
 @admin.register(Product)
