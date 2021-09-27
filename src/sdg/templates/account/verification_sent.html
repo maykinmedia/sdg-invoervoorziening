@@ -2,10 +2,12 @@
 
 {% load i18n %}
 
-{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+{% block head_title %}{% trans "Verifieer uw e-mailadres" %}{% endblock %}
 
 {% block login_right %}
-    <h1>{% trans "Verify Your E-mail Address" %}</h1>
+    <h1>{% trans "Verifieer uw e-mailadres" %}</h1>
 
-    <p>{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. Please contact us if you do not receive it within a few minutes.{% endblocktrans %}</p>
+    <p>
+        {% blocktrans %}We hebben een e-mail ter verificatie naar u gestuurd. Volg de link om het aanmeldingsproces af te ronden. Neem contact met ons op als u deze niet binnen een paar minuten ontvangt.{% endblocktrans %}
+    </p>
 {% endblock %}

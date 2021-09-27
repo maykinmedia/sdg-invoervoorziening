@@ -1,7 +1,10 @@
 {% extends 'account/base.html' %}
 
+{% load i18n %}
+
 {% block menu %}{% endblock %}
 
 {% block login_right %}
-    <h1>Sorry, you don't have access to this page (403)</h1>
+    <h1>Error 403</h1>
+    <p>{% trans "Sorry, je hebt geen toegang tot deze pagina" %}</p>
 {% endblock login_right %}

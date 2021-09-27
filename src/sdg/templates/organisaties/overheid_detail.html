@@ -30,19 +30,19 @@
                         <div class="selection__title">Openingstijden</div>
                         <div class="selection__tabled">
                             <div>Maandag</div>
-                            <div>{{ lokatie.maandag|default:_("Closed") }}</div>
+                            <div>{{ lokatie.maandag|default:_("Gesloten") }}</div>
                             <div>Dinsdag</div>
-                            <div>{{ lokatie.dinsdag|default:_("Closed") }}</div>
+                            <div>{{ lokatie.dinsdag|default:_("Gesloten") }}</div>
                             <div>Woensdag</div>
-                            <div>{{ lokatie.woensdag|default:_("Closed") }}</div>
+                            <div>{{ lokatie.woensdag|default:_("Gesloten") }}</div>
                             <div>Donderdag</div>
-                            <div>{{ lokatie.donderdag|default:_("Closed") }}</div>
+                            <div>{{ lokatie.donderdag|default:_("Gesloten") }}</div>
                             <div>Vrijdag</div>
-                            <div>{{ lokatie.vrijdag|default:_("Closed") }}</div>
+                            <div>{{ lokatie.vrijdag|default:_("Gesloten") }}</div>
                             <div>Zaterdag</div>
-                            <div>{{ lokatie.zaterdag|default:_("Closed") }}</div>
+                            <div>{{ lokatie.zaterdag|default:_("Gesloten") }}</div>
                             <div>Zondag</div>
-                            <div>{{ lokatie.zondag|default:_("Closed") }}</div>
+                            <div>{{ lokatie.zondag|default:_("Gesloten") }}</div>
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
             </a>
             <a class="selection__edit" href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">
                 <i class="fas fa-pencil-alt"></i>
-                {% trans "Change" %}
+                {% trans "Wijzigen" %}
             </a>
         </div>
     </div>

@@ -2,18 +2,18 @@
 
 {% load i18n %}
 
-{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+{% block head_title %}{% trans "Uitloggen" %}{% endblock %}
 
 {% block login_right %}
-    <h3 class="login__container-title">{% trans "Sign Out" %}</h3>
+    <h3 class="login__container-title">{% trans "Uitloggen" %}</h3>
     <p class="login__container-info">
-        {% trans 'Are you sure you want to sign out?' %}
+        {% trans 'Weet u zeker dat u wilt uitloggen?' %}
     </p>
     <form method="post" action="{% url 'account_logout' %}">
         {% csrf_token %}
         {% if redirect_field_value %}
             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
         {% endif %}
-        <button type="submit" class="login_button button">{% trans 'Sign Out' %}</button>
+        <button type="submit" class="login_button button">{% trans 'Uitloggen' %}</button>
     </form>
 {% endblock %}
