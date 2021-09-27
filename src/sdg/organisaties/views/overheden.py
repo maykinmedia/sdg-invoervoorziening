@@ -28,7 +28,7 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
 
         self.object.create_specific_catalogs()
 
-        # TODO: Optimize / refactor [.->L82]
+        # TODO: Optimize / refactor [.->L86]
         theme_list = (
             Thema.objects.all()
             .select_related("informatiegebied")
@@ -73,13 +73,17 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
                                 generiek_product__upn__in=specific_upns
                             )
                         )
-                setattr(
-                    reference_catalog,
-                    "area_and_products",
-                    reference_catalog_area_and_products,
-                )
+
+                if reference_catalog.user_is_redacteur(self.request.user):
+                    setattr(
+                        reference_catalog,
+                        "area_and_products",
+                        reference_catalog_area_and_products,
+                    )
+                    catalogs.append(reference_catalog)
+
                 setattr(catalog, "area_and_products", catalog_area_and_products)
-                catalogs.extend([reference_catalog, catalog])
+                catalogs.append(catalog)
 
         context["catalogs"] = catalogs
 
@@ -107,6 +111,9 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
             instance=self.object, prefix="form"
         )
         return context
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, instance=self.object)

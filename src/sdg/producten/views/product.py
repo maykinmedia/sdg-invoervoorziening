@@ -72,8 +72,8 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     model = Product
     child_model = LocalizedProduct
     form_class = inlineformset_factory(
-        Product,
-        LocalizedProduct,
+        model,
+        child_model,
         form=LocalizedProductForm,
         extra=0,
     )
