@@ -1,3 +1,5 @@
+@import "colors";
+
 .tabs {
   margin-top: -66px;
 
@@ -50,8 +52,16 @@
     margin-right: 16px;
   }
 
-  .tabs__status-display {
-    color: #889a82;
+  .tabs__status-label--result {
+    margin-left: 4px;
+  }
+
+  .tabs__status-published {
+    color: $color_primary;
+  }
+
+  .tabs__status-unpublished {
+    color: $color_secondary_darkest;
   }
 
   .tabs__table {
@@ -167,7 +177,7 @@
     display: none;
   }
 
-  &>.notifications {
+  & > .notifications {
     margin-top: 24px;
   }
 

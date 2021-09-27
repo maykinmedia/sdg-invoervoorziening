@@ -11,7 +11,7 @@
     <div class="tabs">
         <div class="tabs__tabs">
             {% for key, value in product.beschikbare_talen.items %}
-                <a href="#{{value }}" data-id="{{value }}"
+                <a href="#{{ value }}" data-id="{{ value }}"
                    class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
                     {{ key }}
                 </a>
@@ -25,10 +25,21 @@
                     <div class="tabs__tab-header">
                         <div class="tabs__status">
                             <span class="tabs__status-label">Status:</span>
-                            <div class="tabs__status-display">
-                                <i class="fas fa-check"></i>
-                                gepubliceerd
-                            </div>
+                            {% if product.beschikbaar %}
+                                <div class="tabs__status-published">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span class="tabs__status-label--result">
+                                    gepubliceerd
+                                    </span>
+                                </div>
+                            {% else %}
+                                <div class="tabs__status-unpublished">
+                                    <i class="fas fa-calendar-times"></i>
+                                    <span class="tabs__status-label--result">
+                                    ongepubliceerd
+                                    </span>
+                                </div>
+                            {% endif %}
                         </div>
                         <div>
                             <a href="#" class="button button--light">{{ info.get_taal_display }} Deactiveren</a>
