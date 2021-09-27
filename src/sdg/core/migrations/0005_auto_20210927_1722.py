@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0004_auto_20210924_1819'),
+        ("core", "0004_auto_20210924_1819"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='overheidsorganisatie',
-            name='owms_pref_label',
-            field=models.CharField(help_text='De wettelijk erkende naam van de organisatie.', max_length=200, verbose_name='OWMS pref label'),
+            model_name="overheidsorganisatie",
+            name="owms_pref_label",
+            field=models.CharField(
+                help_text="De wettelijk erkende naam van de organisatie.",
+                max_length=200,
+                verbose_name="OWMS pref label",
+            ),
         ),
     ]
