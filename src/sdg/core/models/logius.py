@@ -5,6 +5,10 @@ from sdg.core.managers import OrganisatieManager
 
 
 class Overheidsorganisatie(models.Model):
+    """
+    Government organization
+    """
+
     owms_identifier = models.URLField(
         _("OWMS identifier"),
         help_text=_(
@@ -35,6 +39,10 @@ class Overheidsorganisatie(models.Model):
 
 
 class Informatiegebied(models.Model):
+    """
+    Information area
+    """
+
     code = models.CharField(
         _("code"),
         max_length=32,
@@ -62,6 +70,10 @@ class Informatiegebied(models.Model):
 
 
 class Thema(models.Model):
+    """
+    Theme
+    """
+
     informatiegebied = models.OneToOneField(
         "Informatiegebied",
         on_delete=models.PROTECT,
@@ -94,6 +106,12 @@ class Thema(models.Model):
 
 
 class UniformeProductnaam(models.Model):
+    """
+    UPN
+
+    The base for every product.
+    """
+
     thema = models.ForeignKey(
         "Thema",
         on_delete=models.PROTECT,

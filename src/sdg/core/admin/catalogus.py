@@ -24,7 +24,7 @@ class CatalogusAdmin(admin.ModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """
-        Zorg ervoor dat alleen referentiecatalogi kunnen worden geselecteerd.
+        Ensure that only reference catalogs can be selected.
         """
 
         if db_field.name == "referentie_catalogus":

@@ -9,6 +9,9 @@ from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
 
 class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
+    """
+    Localized information for a generic product.
+    """
 
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
@@ -88,6 +91,9 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
 
 
 class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
+    """
+    Localized information for a product.
+    """
 
     product = models.ForeignKey(
         "producten.Product",
@@ -241,6 +247,9 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
 
 class LocalizedProductuitvoering(TaalMixin, models.Model):
+    """
+    Localized information for a product variant.
+    """
 
     productuitvoering = models.ForeignKey(
         "producten.Productuitvoering",

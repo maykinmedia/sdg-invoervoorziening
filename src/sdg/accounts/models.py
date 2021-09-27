@@ -15,7 +15,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
 
     username = models.CharField(
-        _("username"),
+        _("gebruikersnaam"),
         max_length=150,
         unique=True,
         help_text=_(
@@ -23,23 +23,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         ),
         validators=[username_validator],
         error_messages={
-            "unique": _("A user with that username already exists."),
+            "unique": _("Een gebruiker met die gebruikersnaam bestaat al."),
         },
     )
-    first_name = models.CharField(_("first name"), max_length=255, blank=True)
-    last_name = models.CharField(_("last name"), max_length=255, blank=True)
-    email = models.EmailField(_("email address"), blank=True)
+    first_name = models.CharField(_("voornaam"), max_length=255, blank=True)
+    last_name = models.CharField(_("achternaam"), max_length=255, blank=True)
+    email = models.EmailField(_("e-mailadres"), blank=True)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
-        help_text=_("Designates whether the user can log into this admin site."),
+        help_text=_("Geeft aan of de gebruiker kan inloggen op deze beheerdersite."),
     )
     is_active = models.BooleanField(
         _("active"),
         default=True,
         help_text=_(
-            "Designates whether this user should be treated as active. "
-            "Unselect this instead of deleting accounts."
+            "Geeft aan of deze gebruiker als actief moet worden behandeld. Deselecteer dit in plaats van accounts te "
+            "verwijderen."
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
@@ -50,8 +50,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["email"]
 
     class Meta:
-        verbose_name = _("user")
-        verbose_name_plural = _("users")
+        verbose_name = _("gebruiker")
+        verbose_name_plural = _("gebruikers")
 
     def get_full_name(self):
         """
@@ -66,6 +66,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Role(models.Model):
+    """
+    A role that governs the relationship between a municipality and user.
+    """
+
     user = models.ForeignKey(
         "User",
         on_delete=models.PROTECT,

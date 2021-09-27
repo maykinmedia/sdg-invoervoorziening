@@ -51,15 +51,15 @@
         <div class="selection__general">
             <a class="selection__general-link" href="#">
                 <i class="fas fa-mouse-pointer"></i>
-                {{ lokaleoverheid.contact_website|default:_("No website") }}
+                {{ lokaleoverheid.contact_website|default:_("Geen website") }}
             </a>
             <a class="selection__general-link" href="#">
                 <i class="fas fa-phone"></i>
-                {{ lokaleoverheid.contact_telefoonnummer|default:_("No phone number") }}
+                {{ lokaleoverheid.contact_telefoonnummer|default:_("Geen telefoonnummer") }}
             </a>
             <a class="selection__general-link" href="#">
                 <i class="fas fa-envelope"></i>
-                {{ lokaleoverheid.contact_emailadres|default:_("No email-address") }}
+                {{ lokaleoverheid.contact_emailadres|default:_("Geen e-mailadres") }}
             </a>
             <a class="selection__edit" href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">
                 <i class="fas fa-pencil-alt"></i>
