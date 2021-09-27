@@ -15,7 +15,7 @@ urlpatterns = [
     ),
     url(r"^(?P<pk>\d+)/edit/$", ProductUpdateView.as_view(), name="edit"),
     url(
-        r"^r/(?P<pk>\d+)/$",
+        r"^r/(?P<pk>\d+)/(?:(?P<catalog_pk>\d+)/)?$",
         ProductCreateRedirectView.as_view(),
         name="redirect",
     ),

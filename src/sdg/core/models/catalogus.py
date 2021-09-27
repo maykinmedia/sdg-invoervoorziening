@@ -1,18 +1,23 @@
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
+from sdg.accounts.models import Role
 from sdg.core.models.validators import (
     validate_reference_catalog,
     validate_specific_catalog,
     validate_uppercase,
 )
 
+User = get_user_model()
+
 
 class ProductenCatalogus(models.Model):
     referentie_catalogus = models.ForeignKey(
         "self",
         verbose_name=_("referentie catalogus"),
-        related_name="specifiek_catalog",
+        related_name="specifieke_catalogi",
         help_text=_("De catalogus van referentie."),
         null=True,
         blank=True,
@@ -55,6 +60,13 @@ class ProductenCatalogus(models.Model):
         """Het departement dat verantwoordelijk is (medebewind producten), bv BZK voor paspoort; "gemeenten" voor
         autonome producten (bv terrasvergunning)"""
         return self.lokale_overheid.verantwoordelijke_organisatie
+
+    def user_is_redacteur(self, user: User) -> bool:
+        role = get_object_or_404(Role, user=user, lokale_overheid=self.lokale_overheid)
+        if role.is_redacteur:
+            return True
+        else:
+            return False
 
     def has_reference_catalog(self) -> bool:
         """Geeft als resultaat of het een referentiecatalogus heeft of niet."""

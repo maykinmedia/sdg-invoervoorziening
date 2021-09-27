@@ -79,13 +79,19 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
     class Meta:
         verbose_name = _("Vertaald generiek product")
         verbose_name_plural = _("Vertaalde generieke producten")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["generiek_product", "taal"],
+                name="unique_language_per_generiekproduct",
+            )
+        ]
 
 
 class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     product = models.ForeignKey(
         "producten.Product",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="vertalingen",
         verbose_name=_("specifieke product"),
         help_text=_("Het specifieke product van deze vertaling."),
@@ -207,13 +213,38 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     class Meta:
         verbose_name = _("vertaald product")
         verbose_name_plural = _("vertaalde producten")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["product", "taal"],
+                name="unique_language_per_product",
+            )
+        ]
+
+    def localize_specific_products(self):
+        """
+        Localize all specific products related to this localized reference product.
+        """
+
+        product = self.product
+        if product.is_referentie_product:
+            LocalizedProduct.objects.bulk_create(
+                [
+                    specific_product.generate_localized_information(taal=self.taal)
+                    for specific_product in product.specifieke_producten.all()
+                ],
+                ignore_conflicts=True,
+            )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.localize_specific_products()
 
 
 class LocalizedProductuitvoering(TaalMixin, models.Model):
 
     productuitvoering = models.ForeignKey(
         "producten.Productuitvoering",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="vertalingen",
         verbose_name=_("productuitvoering"),
         help_text=_("De productuitvoering van deze vertaling."),
@@ -234,3 +265,9 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
     class Meta:
         verbose_name = _("vertaalde productuitvoering")
         verbose_name_plural = _("vertaalde productuitvoeringen")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["productuitvoering", "taal"],
+                name="unique_language_per_productuitvoering",
+            )
+        ]

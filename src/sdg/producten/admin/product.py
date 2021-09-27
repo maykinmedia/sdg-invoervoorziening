@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 
 from markdownx.admin import MarkdownxModelAdmin
 
@@ -68,7 +67,7 @@ class ProductAdmin(MarkdownxModelAdmin):
     inlines = (LocalizedProductInline,)
 
     def is_referentie(self, obj):
-        return obj.is_reference_product()
+        return obj.is_referentie_product
 
     is_referentie.boolean = True
 
