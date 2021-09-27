@@ -17,6 +17,10 @@ User = get_user_model()
 
 
 class LokaleOverheid(ContactgegevensMixin, models.Model):
+    """
+    Municipality
+    """
+
     ondersteunings_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
         on_delete=models.CASCADE,
@@ -86,6 +90,10 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
 
 
 class Lokatie(models.Model):
+    """
+    Location
+    """
+
     lokale_overheid = models.ForeignKey(
         "LokaleOverheid",
         on_delete=models.CASCADE,

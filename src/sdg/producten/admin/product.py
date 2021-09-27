@@ -77,9 +77,7 @@ class ProductAdmin(MarkdownxModelAdmin):
     lokale_overheid.admin_order_field = "catalogus__lokale_overheid"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        """
-        Ensure that only reference products can be selected.
-        """
+        """Ensure that only reference products can be selected."""
 
         if db_field.name == "referentie_product":
             kwargs["queryset"] = Product.objects.filter(referentie_product=None)

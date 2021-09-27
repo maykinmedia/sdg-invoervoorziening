@@ -66,6 +66,10 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Role(models.Model):
+    """
+    A role that governs the relationship between a municipality and user.
+    """
+
     user = models.ForeignKey(
         "User",
         on_delete=models.PROTECT,

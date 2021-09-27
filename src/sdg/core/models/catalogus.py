@@ -57,12 +57,16 @@ class ProductenCatalogus(models.Model):
 
     @property
     def verantwoordelijke_organisatie(self):
-        """The department that is responsible (co-management products), e.g. BZK for passport; "municipalities" for
-        autonomous products (e.g. terrace permit)"""
+        """
+        The department that is responsible (co-management products), e.g. BZK for passport; "municipalities" for
+        autonomous products (e.g. terrace permit)
+        """
 
         return self.lokale_overheid.verantwoordelijke_organisatie
 
     def user_is_redacteur(self, user: User) -> bool:
+        """Determine whether the user is an editor of this catalog."""
+
         role = get_object_or_404(Role, user=user, lokale_overheid=self.lokale_overheid)
         if role.is_redacteur:
             return True
