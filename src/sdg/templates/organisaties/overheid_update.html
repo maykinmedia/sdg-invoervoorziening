@@ -48,13 +48,13 @@
                             <div class="form__table">
                                 <div class="form__table-header">Dag</div>
                                 <div class="form__table-header">Openingstijden</div>
-                                {% field subform.maandag no_fieldset=True %}
-                                {% field subform.dinsdag no_fieldset=True %}
-                                {% field subform.woensdag no_fieldset=True %}
-                                {% field subform.donderdag no_fieldset=True %}
-                                {% field subform.vrijdag no_fieldset=True %}
-                                {% field subform.zaterdag no_fieldset=True %}
-                                {% field subform.zondag no_fieldset=True %}
+                                {% table_grid_field subform.maandag  %}
+                                {% table_grid_field subform.dinsdag  %}
+                                {% table_grid_field subform.woensdag  %}
+                                {% table_grid_field subform.donderdag  %}
+                                {% table_grid_field subform.vrijdag  %}
+                                {% table_grid_field subform.zaterdag  %}
+                                {% table_grid_field subform.zondag  %}
                             </div>
                         </div>
                     {% endfor %}

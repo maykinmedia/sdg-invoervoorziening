@@ -1,4 +1,4 @@
-@import 'general';
+@import 'colors';
 
 .notifications {
   display: grid;
@@ -21,7 +21,7 @@
       text-decoration: none;
     }
 
-    &.info {
+    &.notification__info {
       border-left: 5px solid #0B71A1;
       background-color: $color_primary_light;
 
@@ -31,7 +31,7 @@
       }
     }
 
-    &.grey {
+    &.notification__grey {
       border-left: 5px solid $color_grey_dark;
       background-color: $color_grey_light;
 
@@ -41,7 +41,7 @@
       }
     }
 
-    &.accent {
+    &.notification__accent {
       border-left: 5px solid $color_accent;
       background-color: $color_grey_light;
 

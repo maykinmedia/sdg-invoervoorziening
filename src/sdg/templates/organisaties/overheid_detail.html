@@ -88,7 +88,7 @@
                         {% for product in producten %}
                             <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
                                 <div class="products__item-icon">
-                                    <i class="fas fa-dot-circle {% if product.beschikbaar %}primary{% else %}darkgrey{% endif %}"></i>
+                                    <i class="fas fa-dot-circle {% if product.beschikbaar %}primary{% else %}dark{% endif %}"></i>
                                 </div>
                                 <div>
                                     <div class="products__item-title">{{ product.upn_label }}</div>
