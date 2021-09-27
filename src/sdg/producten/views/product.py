@@ -47,6 +47,7 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
         ),
     )
     model = Product
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
@@ -69,11 +70,12 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     model = Product
     child_model = LocalizedProduct
     form_class = inlineformset_factory(
-        Product,
-        LocalizedProduct,
+        model,
+        child_model,
         form=LocalizedProductForm,
         extra=0,
     )
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
