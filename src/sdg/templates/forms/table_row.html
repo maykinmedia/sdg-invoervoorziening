@@ -3,7 +3,7 @@
 {% load markdownify %}
 
 <tr>
-    <td class="tabs__table-cell">{{ field.verbose_name|title }}<i
+    <td class="tabs__table-cell">{{ field.verbose_name|capfirst }}<i
         class="fas fa-info-circle fa-xs"
         title="{{ field.help_text }}"></i>
     </td>
