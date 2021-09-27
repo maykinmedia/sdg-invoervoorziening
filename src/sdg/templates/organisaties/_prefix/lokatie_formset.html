@@ -3,27 +3,26 @@
 <div class="form__subforms">
     <div class="form__block-group">
         <div>
-            <div class="form__group">
-                {% field formset.empty_form.naam %}
-                {% field formset.empty_form.straat %}
-                {% field formset.empty_form.nummer %}
-                {% field formset.empty_form.plaats %}
-                <div class="form__table form__special-group">
-                    {% field formset.empty_form.postcode %}
-                    {% field formset.empty_form.land %}
-                </div>
+            <div class="form__table-header-left">Lokatie</div>
+            {% field formset.empty_form.naam %}
+            {% field formset.empty_form.straat %}
+            {% field formset.empty_form.nummer %}
+            {% field formset.empty_form.plaats %}
+            <div class="form__table form__special-group">
+                {% field formset.empty_form.postcode %}
+                {% field formset.empty_form.land %}
             </div>
         </div>
         <div class="form__table">
             <div class="form__table-header">Dag</div>
             <div class="form__table-header">Openingstijden</div>
-            {% table_grid_field formset.empty_form.maandag  %}
-            {% table_grid_field formset.empty_form.dinsdag  %}
-            {% table_grid_field formset.empty_form.woensdag  %}
-            {% table_grid_field formset.empty_form.donderdag  %}
-            {% table_grid_field formset.empty_form.vrijdag  %}
-            {% table_grid_field formset.empty_form.zaterdag  %}
-            {% table_grid_field formset.empty_form.zondag  %}
+            {% table_grid_field formset.empty_form.maandag %}
+            {% table_grid_field formset.empty_form.dinsdag %}
+            {% table_grid_field formset.empty_form.woensdag %}
+            {% table_grid_field formset.empty_form.donderdag %}
+            {% table_grid_field formset.empty_form.vrijdag %}
+            {% table_grid_field formset.empty_form.zaterdag %}
+            {% table_grid_field formset.empty_form.zondag %}
         </div>
     </div>
 </div>

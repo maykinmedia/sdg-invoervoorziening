@@ -2,7 +2,7 @@
 
 <tr>
     <td class="tabs__table-cell tabs__table-cell--edit">
-        {{ field.label|title }}
+        {{ field.label|capfirst }}
         <i class="fas fa-info-circle fa-xs" title="{{ field.help_text }}"></i>
     </td>
     <td class="tabs__table-cell {% if reference %}form__cell{% endif %}">

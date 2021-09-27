@@ -1,33 +1,36 @@
 {% load static hijack_tags %}<!DOCTYPE html>
-<html lang="en" class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
-    <head>
-        <meta charset="utf-8">
-        <title>{% block title %}SDG{% endblock %}</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
-        <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
-        <link href="{% static 'bundles/sdg-css.css' %}" media="all" rel="stylesheet" />
-        <link href="{% static 'hijack/hijack-styles.css' %}" rel="stylesheet" type="text/css" />
-        {% block extra_css %}{% endblock %}
-    </head>
+<html lang="en"
+      class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}SDG{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
+    <link href="{% static 'bundles/sdg-css.css' %}" media="all" rel="stylesheet"/>
+    <link href="{% static 'hijack/hijack-styles.css' %}" rel="stylesheet" type="text/css"/>
+    {% block extra_css %}{% endblock %}
+</head>
 
-    <body class="view__body">
-        {% hijack_notification %}
+<body class="view__body">
+{% hijack_notification %}
 
-        {% block outer_content %}
+{% block outer_content %}
+{% endblock %}
+
+{% block main_container %}
+    <main class="container container--main">
+        {% block content %}
         {% endblock %}
+    </main>
+{% endblock %}
 
-        <main class="container container--main">
-            {% block content %}
-            {% endblock %}
-        </main>
+{% block footer %}{% endblock footer %}
 
-        {% block footer %}{% endblock footer %}
-
-        <script src="{% static 'bundles/sdg-js.js' %}"></script>
-        {% block extra_js %}
-        {% endblock %}
-    </body>
+<script src="{% static 'bundles/sdg-js.js' %}"></script>
+{% block extra_js %}
+{% endblock %}
+</body>
 </html>

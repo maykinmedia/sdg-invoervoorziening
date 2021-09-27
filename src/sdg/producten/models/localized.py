@@ -207,19 +207,6 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     def generiek_informatie(self):
         return self.product.get_generic_product().vertalingen.get(taal=self.taal)
 
-    def __str__(self):
-        return self.product_titel_decentraal
-
-    class Meta:
-        verbose_name = _("vertaald product")
-        verbose_name_plural = _("vertaalde producten")
-        constraints = [
-            models.UniqueConstraint(
-                fields=["product", "taal"],
-                name="unique_language_per_product",
-            )
-        ]
-
     def localize_specific_products(self):
         """
         Localize all specific products related to this localized reference product.
@@ -234,6 +221,19 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
                 ],
                 ignore_conflicts=True,
             )
+
+    def __str__(self):
+        return self.product_titel_decentraal
+
+    class Meta:
+        verbose_name = _("vertaald product")
+        verbose_name_plural = _("vertaalde producten")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["product", "taal"],
+                name="unique_language_per_product",
+            )
+        ]
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
