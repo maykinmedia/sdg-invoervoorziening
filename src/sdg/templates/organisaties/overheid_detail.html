@@ -72,7 +72,7 @@
 
     <div class="products">
         {% for catalog in catalogs %}
-            <h2 class="products__title primary">{{ catalog.naam }}</h2>
+            <h2 class="products__title">{{ catalog.naam }}</h2>
             <div class="products__accordeon">
                 {% for informatiegebied, producten in catalog.area_and_products.items %}
                     <div class="products__accordeon-item">
@@ -92,20 +92,21 @@
                                     {% if catalog.is_referentie_catalogus %}
                                         <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
                                     {% else %}
-                                        <a class="products__item" href="{% url 'producten:redirect' pk=product.pk catalog_pk=catalog.pk %}">
+                                        <a class="products__item"
+                                           href="{% url 'producten:redirect' pk=product.pk catalog_pk=catalog.pk %}">
                                     {% endif %}
-                                        <div class="products__item-icon">
-                                            <i class="fas fa-dot-circle {% if product.is_referentie_product %}grey{% elif product.beschikbaar %}primary{% else %}accent{% endif %}"></i>
-                                        </div>
-                                        <div>
-                                            <div class="products__item-title">{{ product.upn_label }}</div>
-                                            <div
-                                                class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
-                                        </div>
-                                        <div class="products__item-icon">
-                                            <i class="fas fa-angle-right"></i>
-                                        </div>
-                                    </a>
+                                <div class="products__item-icon">
+                                    <i class="fas fa-dot-circle {% if product.is_referentie_product %}grey{% elif product.beschikbaar %}primary{% else %}accent{% endif %}"></i>
+                                </div>
+                                <div>
+                                    <div class="products__item-title">{{ product.upn_label }}</div>
+                                    <div
+                                        class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
+                                </div>
+                                <div class="products__item-icon">
+                                    <i class="fas fa-angle-right"></i>
+                                </div>
+                                </a>
                                 {% endfor %}
                             </div>
                         </div>

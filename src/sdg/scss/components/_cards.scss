@@ -2,18 +2,27 @@
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 16px;
+  margin-top: 16px;
 
   .cards__card {
     padding: 32px;
     background-color: $color_secondary;
     border-radius: 10px;
-    color: $color_secondary_darkest;
+    color: $color_primary;
     text-decoration: none;
+    font-weight: bold;
 
     &:hover {
-      text-decoration: underline;
+      text-decoration: none;
+      transform: translateY(-1px);
     }
+
+    .svg-inline--fa {
+      margin-right: 6px;
+      color: $color_secondary_darkest;
+    }
+
   }
 }

@@ -1,5 +1,8 @@
+@import "colors";
+
 .products {
   .products__title {
+    color: $color_primary;
     padding: 16px 0;
   }
 
@@ -63,7 +66,7 @@
   }
 
   .products__item {
-    background-color: #E0E4EA;
+    background-color: $color_secondary;
     padding: 16px;
     border-radius: 15px;
     display: grid;
@@ -71,8 +74,8 @@
     grid-gap: 16px;
     align-items: center;
     cursor: pointer;
-    color: #000;
     text-decoration: none;
+    color: $color_grey_darkest;
 
     .svg-inline--fa {
       color: #9fa2a7;
@@ -82,7 +85,7 @@
       transform: translateY(-1px);
 
       .products__item-title {
-        text-decoration: underline;
+        text-decoration: none;
       }
     }
 
@@ -101,7 +104,7 @@
   }
 
   .products__item-help {
-    color: #9fa2a7;
+    color: $color_secondary_darkest;
     font-size: 85%;
   }
 }
