@@ -28,7 +28,7 @@
     align-items: center;
     text-transform: capitalize;
 
-    .svg-inline--fa {
+    &>.svg-inline--fa {
       height: 40px;
       width: 40px;
       border-radius: 50%;
@@ -74,6 +74,13 @@
     background-color: rgba(255, 255, 255, 1);
     display: none;
     border-radius: 10px;
+
+    .svg-inline--fa {
+      float: left;
+      margin-top: 2px;
+      margin-right: 3px;
+    }
+
   }
 
   .header__dropdown-action {
