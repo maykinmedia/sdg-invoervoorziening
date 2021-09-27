@@ -5,11 +5,11 @@
         {{ field.label|title }}
         <i class="fas fa-info-circle fa-xs" title="{{ field.help_text }}"></i>
     </td>
-    <td class="tabs__table-cell">
+    <td class="tabs__table-cell {% if reference %}form__cell{% endif %}">
         {{ field|addclass:"form__input" }}
         {{ field.errors }}
         {% if reference %}
-            <a href="" class="tabs__table-help"><i class="fas fa-undo"></i> Gebruik referentie tekst</a>
+            <a href="" class="tabs__table-help form__reference-btn"><i class="fas fa-undo"></i> Gebruik referentie tekst</a>
         {% endif %}
     </td>
 </tr>

@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 

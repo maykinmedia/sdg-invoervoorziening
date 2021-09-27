@@ -23,7 +23,7 @@
             {{ form.media }}
             {{ form.management_form }}
 
-            {% for generic_information, form in informatie_form %}
+            {% for generic_information, reference_form, form in informatie_form %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">
                     {% if generic_information %}
@@ -37,14 +37,14 @@
                             </thead>
                             <tbody>
                             {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
-                                {%  table_row field %}
+                                {% table_row field %}
                             {% endfor %}
                             </tbody>
                         </table>
                         <hr class="divider">
                     {% endif %}
 
-                    <table class="tabs__table">
+                    <table class="tabs__table form__has-reference">
                         <thead>
                         <tr>
                             <th class="tabs__table-header" width="25%">Gegeven</th>
@@ -52,27 +52,30 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    {{ form.non_field_errors }}
-                                    {{ form.id }}
-                                    {{ form.taal.as_hidden }}
-                                </td>
-                            </tr>
-                            {%  table_field form.product_titel_decentraal reference=True %}
-                            {%  table_field form.specifieke_tekst reference=True %}
-                            {%  table_field form.verwijzing_links reference=True %}
-                            {%  table_field form.specifieke_link reference=True %}
-                            {%  table_field form.decentrale_link reference=True %}
-                            {%  table_field form.procedure_beschrijving reference=True %}
-                            {%  table_field form.vereisten reference=True %}
-                            {%  table_field form.bewijs reference=True %}
-                            {%  table_field form.bezwaar_en_beroep reference=True %}
-                            {%  table_field form.kosten_en_betaalmethoden reference=True %}
-                            {%  table_field form.uiterste_termijn reference=True %}
-                            {%  table_field form.wtd_bij_geen_reactie reference=True %}
-                            {%  table_field form.decentrale_procedure_link reference=True %}
+                        <tr>
+                            <td></td>
+                            <td>
+                                {{ form.non_field_errors }}
+                                {{ form.id }}
+                                {{ form.taal.as_hidden }}
+                            </td>
+                        </tr>
+                        <template class="form__reference">
+                            {{ reference_form.as_p }}
+                        </template>
+                        {% table_field form.product_titel_decentraal reference=True %}
+                        {% table_field form.specifieke_tekst reference=True %}
+                        {% table_field form.verwijzing_links reference=True %}
+                        {% table_field form.specifieke_link reference=True %}
+                        {% table_field form.decentrale_link reference=True %}
+                        {% table_field form.procedure_beschrijving reference=True %}
+                        {% table_field form.vereisten reference=True %}
+                        {% table_field form.bewijs reference=True %}
+                        {% table_field form.bezwaar_en_beroep reference=True %}
+                        {% table_field form.kosten_en_betaalmethoden reference=True %}
+                        {% table_field form.uiterste_termijn reference=True %}
+                        {% table_field form.wtd_bij_geen_reactie reference=True %}
+                        {% table_field form.decentrale_procedure_link reference=True %}
                         </tbody>
                     </table>
                 </div>
