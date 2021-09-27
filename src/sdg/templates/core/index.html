@@ -5,15 +5,19 @@
 
 {% block head_title %}{% trans "Home" %}{% endblock %}
 
-{% block container_title %}Home{% endblock container_title %}
+{% block container_title %}Lokale Overheden{% endblock container_title %}
 
 {% block inner %}
     <div class="products">
-        <h2 class="products__title">Lokale Overheden</h2>
         <div class="cards">
             {% for lokaleoverheid in lokale_overheden %}
                 <a class="cards__card"
-                   href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">{{ lokaleoverheid }}</a>
+                   href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">
+                    <i class="fa fa-landmark"></i>
+                    <span>
+                    {{ lokaleoverheid }}
+                </span>
+                </a>
             {% endfor %}
         </div>
     </div>

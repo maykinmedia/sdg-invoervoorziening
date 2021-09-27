@@ -72,7 +72,7 @@
 
     <div class="products">
         {% for catalog in catalogs %}
-            <h2 class="products__title primary">{{ catalog.naam }}</h2>
+            <h2 class="products__title darkest">{{ catalog.naam }}</h2>
             <div class="products__accordeon">
                 {% for informatiegebied, producten in catalog.area_and_products.items %}
                     <div class="products__accordeon-item">

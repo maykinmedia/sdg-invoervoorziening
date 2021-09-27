@@ -24,7 +24,7 @@
   }
 
   .form__block-group {
-    background-color: #e2e2ee;
+    background-color: $color_secondary;
     border-radius: 15px;
     padding: 32px;
     display: grid;
@@ -64,6 +64,7 @@
 
   .form__subforms {
     margin-bottom: 32px;
+    color: $color_secondary_darkest;
   }
 
   .form__help-text {

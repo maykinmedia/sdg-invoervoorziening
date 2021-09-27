@@ -1,12 +1,16 @@
 $color_primary_light: #D5E2EA;
 $color_primary: #396a88;
+$color_primary_dark: #054279;
+
+$color_secondary: #E0E4EA;
+$color_secondary_darkest: #556277;
 
 $color_accent: #ffbc2c;
+$color_accent_dark: #c79529;
 
 $color_grey_light: #e0e0e0;
 $color_grey_dark: #b5b6bb;
 $color_grey_darkest: #212121;
-
 
 .primary {
   color: $color_primary !important;
@@ -18,4 +22,8 @@ $color_grey_darkest: #212121;
 
 .dark {
   color: $color_grey_dark !important;
+}
+
+.dark {
+  color: $color_grey_darkest !important;
 }
