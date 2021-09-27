@@ -220,6 +220,25 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
             )
         ]
 
+    def localize_specific_products(self):
+        """
+        Localize all specific products related to this localized reference product.
+        """
+
+        product = self.product
+        if product.is_referentie_product:
+            LocalizedProduct.objects.bulk_create(
+                [
+                    specific_product.generate_localized_information(taal=self.taal)
+                    for specific_product in product.specifieke_producten.all()
+                ],
+                ignore_conflicts=True,
+            )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.localize_specific_products()
+
 
 class LocalizedProductuitvoering(TaalMixin, models.Model):
 

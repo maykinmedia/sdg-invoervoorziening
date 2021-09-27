@@ -167,29 +167,21 @@ class Product(models.Model):
             **kwargs,
         )
 
-    def create_localized_products(self):
-        """Create localized product information for this reference product."""
-
-        localized_products = []
+    def localize_from_reference(self):
+        """Create localized product information for this specific product based on reference."""
 
         if self.is_referentie_product:
-            reference_languages = self.beschikbare_talen.values()
-            for specific_product in self.specifieke_producten.all():
-                localized_products.extend(
-                    [
-                        specific_product.generate_localized_information(taal=taal)
-                        for taal in reference_languages
-                    ]
-                )
-        else:
-            localized_products.extend(
-                [
-                    self.generate_localized_information(taal=taal)
-                    for taal in self.referentie_product.beschikbare_talen.values()
-                ]
+            raise ValueError(
+                "localize_from_reference must be called on a specific product"
             )
 
-        LocalizedProduct.objects.bulk_create(localized_products, ignore_conflicts=True)
+        LocalizedProduct.objects.bulk_create(
+            [
+                self.generate_localized_information(taal=taal)
+                for taal in self.referentie_product.beschikbare_talen.values()
+            ],
+            ignore_conflicts=True,
+        )
 
     def get_or_create_specific_product(self, specific_catalog) -> Product:
         """Create a specific product for a reference product, including localized information."""
@@ -208,7 +200,7 @@ class Product(models.Model):
                         "publicatie_datum": self.publicatie_datum,
                     },
                 )
-                specific_product.create_localized_products()
+                specific_product.localize_from_reference()
                 return specific_product
         else:
             return self
@@ -238,10 +230,6 @@ class Product(models.Model):
             validate_reference_product(self)
         else:
             validate_specific_product(self)
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        self.create_localized_products()
 
 
 class Productuitvoering(models.Model):
