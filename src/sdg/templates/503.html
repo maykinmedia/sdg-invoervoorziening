@@ -1,11 +1,13 @@
 {% extends 'account/base.html' %}
 
+{% load i18n %}
 {% block menu %}{% endblock %}
 
 {% block login_right %}
-    <h3 class="login__container-title">Sorry, this website is closed for repair / is unavailable (503)</h3>
-    <p class="lead">Please try again in a few moments.</p>
-    <p class="lead">
-        <a href="/" class="btn btn-lg btn-default">Back to home</a>
+    <h1>Error 503</h1>
+    <p>{% trans "Sorry, deze website is gesloten voor reparatie / is niet beschikbaar." %}</p>
+    <p>{% trans "Probeer het over een paar minuten nog eens." %}</p>
+    <p>
+        <a href="/" class="btn btn-lg btn-default">{% trans "Terug naar homepage." %}</a>
     </p>
 {% endblock login_right %}

@@ -1,12 +1,14 @@
 {% extends 'account/base.html' %}
 
+{% load i18n %}
+
 {% block menu %}{% endblock %}
 
 {% block login_right %}
-    <h1 class="cover-heading">Sorry, a server error has occurred (500)</h1>
-    <p class="lead">We have been automatically notified about the problem and will investigate as soon as possible.</p>
+    <h1>Error 500</h1>
+    <p>{% trans "Wij zijn automatisch op de hoogte gebracht van het probleem en zullen het zo spoedig mogelijk onderzoeken." %}</p>
     {% if request.sentry.id %}
-        <p>If you need assistance, you may reference this error as
+        <p>{% trans "Als u hulp nodig heeft, kunt u deze fout als volgt bestempelen" %}
             <strong>{{ request.sentry.id }}</strong>.</p>
     {% endif %}
     <p class="lead">

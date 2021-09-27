@@ -1,3 +1,5 @@
+@import "colors";
+
 .cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -5,9 +7,9 @@
 
   .cards__card {
     padding: 32px;
-    background-color: #e0e3ec;
+    background-color: $color_secondary;
     border-radius: 10px;
-    color: #212121;
+    color: $color_secondary_darkest;
     text-decoration: none;
 
     &:hover {

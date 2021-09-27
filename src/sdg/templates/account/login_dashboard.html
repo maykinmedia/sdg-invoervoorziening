@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load account %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block head_title %}{% trans "Aanmelden" %}{% endblock %}
 
 {% block login_right %}
     <h3 class="login__container-title">SDG voor gemeenten</h3>
@@ -14,7 +14,7 @@
     <p class="login__container-info">Log in om verder te gaan.</p>
     <a class="login__button button" href="{% url 'account_login' %}?next={{ next }}">
         Inloggen met Login Service X
-        <i>icon</i>
+        <i class="fas fa-door-open"></i>
     </a>
 {% endblock %}
 
