@@ -11,5 +11,8 @@
     {% if field.help_text %}
         <p class="form__help-text">{{ field.help_text }}</p>
     {% endif %}
-    {{ field.errors }}
+
+    {% if field.errors %}
+        <span>{{ field.errors }}</span>
+    {% endif %}
 </fieldset>

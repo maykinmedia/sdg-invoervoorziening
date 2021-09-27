@@ -5,11 +5,7 @@ from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.core.models import ProductenCatalogus, Thema
-from sdg.organisaties.forms import (
-    LokaleOverheidForm,
-    LokatieFormHelper,
-    LokatieInlineFormSet,
-)
+from sdg.organisaties.forms import LokaleOverheidForm, LokatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
 
@@ -17,6 +13,7 @@ from sdg.producten.models import Product
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
+
     required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
@@ -85,11 +82,9 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["lokatie_formset"] = kwargs.get("formset") or LokatieInlineFormSet(
+        context["formset"] = kwargs.get("formset") or LokatieInlineFormSet(
             instance=self.object, prefix="form"
         )
-        context["lokatie_helper"] = LokatieFormHelper()
-
         return context
 
     def get(self, request, *args, **kwargs):

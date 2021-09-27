@@ -1,0 +1,11 @@
+{% load utils %}
+
+<fieldset class="form__group">
+    <label for="{{ field.id_for_label }}" class="checkbox ">
+        {{ field|addclass:"form__checkbox" }}
+        {{ field.label }}
+    </label>
+    {% if field.errors %}
+        {{ field.errors }}
+    {% endif %}
+</fieldset>

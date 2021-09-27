@@ -1,0 +1,7 @@
+@import 'colors';
+
+.divider {
+  border: none;
+  margin: 32px 0;
+  border-bottom: 4px dotted $color_grey_dark;
+}

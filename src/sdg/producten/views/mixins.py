@@ -1,6 +1,4 @@
-from django.forms import BaseFormSet, inlineformset_factory
-
-from sdg.producten.forms import GegevensFormHelper, ProductGegevensForm
+from django.forms import BaseFormSet
 
 
 def make_form_optional(form_class):

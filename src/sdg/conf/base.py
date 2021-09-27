@@ -118,7 +118,6 @@ INSTALLED_APPS = [
     "markdownify",
     "allauth",
     "allauth.account",
-    "crispy_forms",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
@@ -449,8 +448,3 @@ ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_FORMS = {
-    "login": "sdg.accounts.forms.SdgLoginForm",
-    "signup": "sdg.accounts.forms.SdgSignupForm",
-    "reset_password": "sdg.accounts.forms.SdgResetPasswordForm",
-}

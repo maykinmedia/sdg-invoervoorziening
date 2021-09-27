@@ -1,27 +1,66 @@
 {% extends 'organisaties/base.html' %}
 
-{% load static utils %}
+{% load static %}
 {% load i18n %}
-{% load crispy_forms_tags %}
+{% load utils %}
 
 {% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
 {% block container_title %}SDG voor de
     <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
 
 {% block inner %}
-
     <form action="{% url "organisaties:overheid_edit" pk=lokaleoverheid.pk %}" method="post" class="form">
-        {% form_field form.ondersteunings_organisatie %}
-        {% form_field form.verantwoordelijke_organisatie %}
-        {% form_field form.bevoegde_organisatie %}
-        {% form_field form.organisatie %}
-        {% form_field form.lau_code %}
-        {% form_field form.contact_naam %}
-        {% form_field form.contact_website %}
-        {% form_field form.contact_telefoonnummer %}
-        {% form_field form.contact_emailadres %}
+        {% csrf_token %}
 
-        {% crispy lokatie_formset lokatie_helper %}
+        {% field form.ondersteunings_organisatie %}
+        {% field form.verantwoordelijke_organisatie %}
+        {% field form.bevoegde_organisatie %}
+        {% field form.organisatie %}
+        {% field form.lau_code %}
+        {% field form.contact_naam %}
+        {% field form.contact_website %}
+        {% field form.contact_telefoonnummer %}
+        {% field form.contact_emailadres %}
+
+        <div class="form__subforms formset">
+            <div>
+                {{ formset.management_form }}
+            </div>
+            <div class="formset__body">
+                <div class="form__subforms">
+                    {% for subform in formset %}
+                        {% for hidden in subform.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        <div class="form__block-group">
+                            <div>
+                                <div class="form__group">
+                                    {% field subform.naam %}
+                                    {% field subform.straat %}
+                                    {% field subform.nummer %}
+                                    {% field subform.plaats %}
+                                    <div class="form__table form__special-group">
+                                        {% field subform.postcode %}
+                                        {% field subform.land %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form__table">
+                                <div class="form__table-header">Dag</div>
+                                <div class="form__table-header">Openingstijden</div>
+                                {% table_grid_field subform.maandag  %}
+                                {% table_grid_field subform.dinsdag  %}
+                                {% table_grid_field subform.woensdag  %}
+                                {% table_grid_field subform.donderdag  %}
+                                {% table_grid_field subform.vrijdag  %}
+                                {% table_grid_field subform.zaterdag  %}
+                                {% table_grid_field subform.zondag  %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
 
         <div class="formset__add form__add-subform" data-formset-prefix="{{ lokatie_formset.prefix }}">
             <i class="fas fa-plus"></i>

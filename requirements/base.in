@@ -16,7 +16,6 @@ django-redis
 django-rosetta
 django-sniplates
 django-allauth
-django-crispy-forms
 django-markdownx
 django-markdownify
 
