@@ -6,7 +6,7 @@ class ContactgegevensMixin(models.Model):
     contact_naam = models.CharField(
         _("contact naam"),
         max_length=40,
-        help_text=_("De naam van de verantwoordelijke contactpersoon."),
+        help_text=_("de naam van de verantwoordelijke contactpersoon."),
     )
     contact_website = models.URLField(
         _("contact website"),

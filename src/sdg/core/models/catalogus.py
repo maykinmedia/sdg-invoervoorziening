@@ -57,8 +57,9 @@ class ProductenCatalogus(models.Model):
 
     @property
     def verantwoordelijke_organisatie(self):
-        """Het departement dat verantwoordelijk is (medebewind producten), bv BZK voor paspoort; "gemeenten" voor
-        autonome producten (bv terrasvergunning)"""
+        """The department that is responsible (co-management products), e.g. BZK for passport; "municipalities" for
+        autonomous products (e.g. terrace permit)"""
+
         return self.lokale_overheid.verantwoordelijke_organisatie
 
     def user_is_redacteur(self, user: User) -> bool:
@@ -69,7 +70,7 @@ class ProductenCatalogus(models.Model):
             return False
 
     def has_reference_catalog(self) -> bool:
-        """Geeft als resultaat of het een referentiecatalogus heeft of niet."""
+        """Returns whether this catalog has a reference catalog."""
         return bool(self.referentie_catalogus)
 
     def __str__(self):

@@ -21,7 +21,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         "core.Overheidsorganisatie",
         on_delete=models.CASCADE,
         verbose_name=_("ondersteunings organisatie"),
-        help_text=_("Organisatie voor ondersteuning."),
+        help_text=_("organisatie voor ondersteuning."),
         related_name="ondersteunings",
     )
     verantwoordelijke_organisatie = models.ForeignKey(

@@ -12,7 +12,7 @@ from sdg.accounts.views.password_reset import PasswordResetView
 handler500 = "sdg.utils.views.server_error"
 admin.site.site_header = _("SDG Invoervoorziening")
 admin.site.site_title = _("SDG Invoervoorziening")
-admin.site.index_title = _("Welcome to the SDG admin")
+admin.site.index_title = _("Welkom bij de SDG-admin")
 
 urlpatterns = [
     path(

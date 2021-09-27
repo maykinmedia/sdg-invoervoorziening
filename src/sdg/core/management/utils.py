@@ -12,9 +12,9 @@ from sdg.core.utils import string_to_date
 
 def load_gemeenten(data: List[Dict[str, Any]]) -> int:
     """
-    Laadt gemeenten op basis van een CSV/XML-bestand.
+    Loads municipalities based on a CSV or XML file.
 
-    :return: De totale telling van de gecreëerde objecten.
+    :return: The total count of the created objects.
     """
 
     gemeente_list = [
@@ -33,9 +33,9 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
 
 def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     """
-    Laadt informatiegebieden op basis van een CSV/XML-bestand.
+    Loads information areas based on a CSV or XML file.
 
-    :return: De totale telling van de gecreëerde objecten.
+    :return: The total count of the created objects.
     """
 
     codes = [obj.pop("SDG_Code") for obj in data]
@@ -69,9 +69,9 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
 
 def load_upn(data: List[Dict[str, Any]]) -> int:
     """
-    Laadt uniformeproductnamen op basis van een CSV/XML-bestand.
+    Loads UPNs based on a CSV or XML file.
 
-    :return: De totale telling van de gecreëerde objecten.
+    :return: The total count of the created objects.
     """
 
     upn_list = [

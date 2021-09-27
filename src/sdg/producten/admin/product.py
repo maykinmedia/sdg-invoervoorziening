@@ -78,7 +78,7 @@ class ProductAdmin(MarkdownxModelAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """
-        Ervoor zorgen dat alleen referentieproducten kunnen worden geselecteerd.
+        Ensure that only reference products can be selected.
         """
 
         if db_field.name == "referentie_product":

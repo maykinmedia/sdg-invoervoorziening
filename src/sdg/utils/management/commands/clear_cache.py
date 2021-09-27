@@ -7,7 +7,7 @@ class Command(BaseCommand):
     help = "Clears the Django cache"
 
     def add_arguments(self, parser):
-        parser.add_argument("--alias", help=_("Clear given cache only"))
+        parser.add_argument("--alias", help=_("Alleen voorziene cache wissen"))
 
     def handle(self, *args, **options):
         alias = options["alias"]

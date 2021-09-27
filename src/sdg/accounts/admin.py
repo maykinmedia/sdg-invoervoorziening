@@ -17,12 +17,12 @@ class RoleInline(admin.TabularInline):
     def get_role_user(self, obj):
         return obj.user.username
 
-    get_role_user.short_description = _("User")
+    get_role_user.short_description = _("Gebruik")
 
     def get_role_organization(self, obj):
         return obj.lokale_overheid.organisatie.owms_pref_label
 
-    get_role_organization.short_description = _("Organization")
+    get_role_organization.short_description = _("Organisatie")
 
 
 @admin.register(User)
