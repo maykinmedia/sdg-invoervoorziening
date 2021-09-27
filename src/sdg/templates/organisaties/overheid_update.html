@@ -12,15 +12,17 @@
     <form action="{% url "organisaties:overheid_edit" pk=lokaleoverheid.pk %}" method="post" class="form">
         {% csrf_token %}
 
-        {% field form.ondersteunings_organisatie %}
-        {% field form.verantwoordelijke_organisatie %}
-        {% field form.bevoegde_organisatie %}
-        {% field form.organisatie %}
-        {% field form.lau_code %}
-        {% field form.contact_naam %}
-        {% field form.contact_website %}
-        {% field form.contact_telefoonnummer %}
-        {% field form.contact_emailadres %}
+        <div class="form__forms">
+            {% field form.ondersteunings_organisatie %}
+            {% field form.verantwoordelijke_organisatie %}
+            {% field form.bevoegde_organisatie %}
+            {% field form.organisatie %}
+            {% field form.lau_code %}
+            {% field form.contact_naam %}
+            {% field form.contact_website %}
+            {% field form.contact_telefoonnummer %}
+            {% field form.contact_emailadres %}
+        </div>
 
         <div class="form__subforms formset">
             <div>
@@ -34,27 +36,26 @@
                         {% endfor %}
                         <div class="form__block-group">
                             <div>
-                                <div class="form__group">
-                                    {% field subform.naam %}
-                                    {% field subform.straat %}
-                                    {% field subform.nummer %}
-                                    {% field subform.plaats %}
-                                    <div class="form__table form__special-group">
-                                        {% field subform.postcode %}
-                                        {% field subform.land %}
-                                    </div>
+                                <div class="form__table-header-left">Lokatie</div>
+                                {% field subform.naam %}
+                                {% field subform.straat %}
+                                {% field subform.nummer %}
+                                {% field subform.plaats %}
+                                <div class="form__table form__special-group">
+                                    {% field subform.postcode %}
+                                    {% field subform.land %}
                                 </div>
                             </div>
                             <div class="form__table">
                                 <div class="form__table-header">Dag</div>
                                 <div class="form__table-header">Openingstijden</div>
-                                {% table_grid_field subform.maandag  %}
-                                {% table_grid_field subform.dinsdag  %}
-                                {% table_grid_field subform.woensdag  %}
-                                {% table_grid_field subform.donderdag  %}
-                                {% table_grid_field subform.vrijdag  %}
-                                {% table_grid_field subform.zaterdag  %}
-                                {% table_grid_field subform.zondag  %}
+                                {% table_grid_field subform.maandag %}
+                                {% table_grid_field subform.dinsdag %}
+                                {% table_grid_field subform.woensdag %}
+                                {% table_grid_field subform.donderdag %}
+                                {% table_grid_field subform.vrijdag %}
+                                {% table_grid_field subform.zaterdag %}
+                                {% table_grid_field subform.zondag %}
                             </div>
                         </div>
                     {% endfor %}

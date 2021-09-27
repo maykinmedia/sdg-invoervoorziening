@@ -45,11 +45,21 @@
     font-weight: bold;
   }
 
+  .form__table-header-left {
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+
   .form__subtitle {
     padding: 16px 0;
     font-size: 16px;
     display: flex;
     justify-content: space-between;
+  }
+
+  .form__forms {
+    width: 62%;
   }
 
   .form__subforms {
