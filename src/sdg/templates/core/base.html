@@ -22,7 +22,7 @@
                 {% endif %}
 
                 <div class="header__dropdown-list">
-                    <a class="header__dropdown-action" href="{% url 'account_logout' %}">Log out</a>
+                    <a class="header__dropdown-action" href="{% url 'account_logout' %}">{% trans "Uitloggen" %}</a>
                 </div>
             </div>
         </div>
@@ -49,8 +49,8 @@
             Een initiatief van <img class="footer__logo" src="{% static 'images/vng_logo.png' %}"/>
         </div>
     <div class="footer__right">
-        <a class="footer__link" href="#" rel="noopener noreferrer">Toegankelijkheid</a>
-        <a class="footer__link" href="#" rel="noopener noreferrer">Privacy Policy</a>
+        <a class="footer__link" href="#" rel="noopener noreferrer">{% trans "Toegankelijkheid" %}</a>
+        <a class="footer__link" href="#" rel="noopener noreferrer">{% trans "Privacybeleid" %}</a>
     </div>
 </div>
 {% endblock footer %}

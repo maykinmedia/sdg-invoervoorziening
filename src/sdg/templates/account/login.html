@@ -4,13 +4,13 @@
 {% load account %}
 {% load utils %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
+{% block head_title %}{% trans "Aanmelden" %}{% endblock %}
 
 {% block login_right %}
-    <h3 class="login__container-title">{% trans "Sign In" %}</h3>
+    <h3 class="login__container-title">{% trans "Aanmelden" %}</h3>
     <p class="login__container-info">
-        {% blocktrans %}If you have not created an account yet, then please
-            <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
+        {% blocktrans %}Als u nog geen account hebt aangemaakt,
+            <a href="{{ signup_url }}">meld u dan eerst aan</a>.{% endblocktrans %}
     </p>
 
     <form action="{% url "account_login" %}" class="form" method="post">

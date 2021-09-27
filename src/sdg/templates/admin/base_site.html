@@ -32,15 +32,15 @@
         <a href="{{ site_url }}">{{ settings.SITE_TITLE }}</a> /
     {% endif %}
     {% if user.has_usable_password %}
-    <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> /
+    <a href="{% url 'admin:password_change' %}">{% trans 'Wachtwoord wijzigen' %}</a> /
     {% endif %}
 
     {% url 'admin:two_factor:profile' as 2fa_profile_url %}
     {% if 2fa_profile_url %}
-        <a href="{{ 2fa_profile_url }}">{% trans "Manage two-factor auth" %}</a> /
+        <a href="{{ 2fa_profile_url }}">{% trans "Beheer two-factor auth" %}</a> /
     {% endif %}
 
-    <a href="{% url 'admin:logout' %}">{% trans 'Log out' %}</a>
+    <a href="{% url 'admin:logout' %}">{% trans 'Uitloggen' %}</a>
 {% endblock %}
 
 {% block nav-global %}
