@@ -8,10 +8,6 @@ $color_grey_dark: #b5b6bb;
 $color_grey_darkest: #212121;
 
 
-.markdownx-preview {
-  float: right;
-}
-
 .primary {
   color: $color_primary !important;
 }
@@ -22,10 +18,4 @@ $color_grey_darkest: #212121;
 
 .dark {
   color: $color_grey_dark !important;
-}
-
-.divider {
-  border: none;
-  margin: 32px 0;
-  border-bottom: 4px dotted $color_grey_dark;
 }

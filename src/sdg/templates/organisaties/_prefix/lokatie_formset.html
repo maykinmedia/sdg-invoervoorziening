@@ -17,13 +17,13 @@
         <div class="form__table">
             <div class="form__table-header">Dag</div>
             <div class="form__table-header">Openingstijden</div>
-            {% field formset.empty_form.maandag no_fieldset=True %}
-            {% field formset.empty_form.dinsdag no_fieldset=True %}
-            {% field formset.empty_form.woensdag no_fieldset=True %}
-            {% field formset.empty_form.donderdag no_fieldset=True %}
-            {% field formset.empty_form.vrijdag no_fieldset=True %}
-            {% field formset.empty_form.zaterdag no_fieldset=True %}
-            {% field formset.empty_form.zondag no_fieldset=True %}
+            {% table_grid_field formset.empty_form.maandag  %}
+            {% table_grid_field formset.empty_form.dinsdag  %}
+            {% table_grid_field formset.empty_form.woensdag  %}
+            {% table_grid_field formset.empty_form.donderdag  %}
+            {% table_grid_field formset.empty_form.vrijdag  %}
+            {% table_grid_field formset.empty_form.zaterdag  %}
+            {% table_grid_field formset.empty_form.zondag  %}
         </div>
     </div>
 </div>

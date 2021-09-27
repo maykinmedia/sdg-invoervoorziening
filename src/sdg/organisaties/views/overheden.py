@@ -11,6 +11,7 @@ from sdg.producten.models import Product
 class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
+
     required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
@@ -83,6 +84,9 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
             instance=self.object, prefix="form"
         )
         return context
+
+    def get(self, request, *args, **kwargs):
+        return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, instance=self.object)
