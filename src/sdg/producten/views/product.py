@@ -44,7 +44,9 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
 class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
     template_name = "producten/product_detail.html"
     context_object_name = "product"
-    queryset = Product.objects.prefetch_related(
+    queryset = Product.objects.select_related(
+        "catalogus__lokale_overheid"
+    ).prefetch_related(
         "lokaties",
         "vertalingen",
         "referentie_product__vertalingen",
@@ -53,7 +55,7 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
             queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
         ),
     )
-    model = Product
+    # model = Product
     required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
@@ -69,11 +71,10 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
 class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "producten/product_edit.html"
     context_object_name = "product"
-    model = Product
-    child_model = LocalizedProduct
+    queryset = Product.objects.select_related("catalogus__lokale_overheid")
     form_class = inlineformset_factory(
-        model,
-        child_model,
+        Product,
+        LocalizedProduct,
         form=LocalizedProductForm,
         extra=0,
     )
@@ -94,6 +95,7 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
         context["informatie_form"] = zip_longest(
             generic_information, reference_formset.forms, context["form"].forms
         )
+        context["lokale_overheid"] = self.object.catalogus.lokale_overheid
         return context
 
     def get(self, request, *args, **kwargs):
