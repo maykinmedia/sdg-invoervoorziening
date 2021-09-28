@@ -1,11 +1,21 @@
 {% extends 'producten/base.html' %}
 
-{% load utils %}
 {% load i18n %}
+{% load static %}
+{% load utils %}
 {% load producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de <b>{{ lokale_overheid }}</b>{% endblock container_title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'simplemde.min.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'simplemde.min.js' %}"></script>
+{% endblock %}
 
 {% block inner %}
     <div class="tabs">
@@ -20,7 +30,6 @@
         {% include "core/_notifications.html" %}
         <form action="." method="POST" class="form tabs__tab-contents">
             {% csrf_token %}
-            {{ form.media }}
             {{ form.management_form }}
 
             {% for generic_information, reference_form, form in informatie_form %}

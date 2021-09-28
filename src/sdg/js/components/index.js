@@ -4,3 +4,4 @@ import "./selection";
 import "./tabs";
 import "./notifications";
 import "./reference";
+import "./markdown";

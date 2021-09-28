@@ -55,7 +55,6 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
             queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
         ),
     )
-    # model = Product
     required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
@@ -86,7 +85,7 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        generic_information = self.object.get_generic_product().vertalingen.all()
+        generic_information = self.object.get_generic_product().translations.all()
         reference_formset = inlineformset_factory(
             Product, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(

@@ -69,6 +69,7 @@ COPY --from=backend-build /app/src/ /app/src/
 # copy frontend build statics
 COPY --from=frontend-build /app/src/sdg/static /app/src/sdg/static
 COPY --from=frontend-build /app/node_modules/formset.js /app/node_modules/formset.js
+COPY --from=frontend-build /app/node_modules/simplemde/dist /app/node_modules/simplemde/dist
 
 # copy source code
 COPY ./src /app/src
