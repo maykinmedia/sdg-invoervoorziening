@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from django.contrib.auth import get_user_model
 from django.db import models, transaction
 from django.db.models import Model
 from django.shortcuts import get_object_or_404
@@ -11,6 +12,8 @@ from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.producten.models import LocalizedProduct
+
+User = get_user_model()
 
 
 class GeneriekProduct(models.Model):
@@ -114,14 +117,6 @@ class Product(models.Model):
         help_text=_("Geeft aan of het product al dan niet beschikbaar is."),
         default=False,
     )
-    versie = models.PositiveIntegerField(
-        verbose_name=_("versie"),
-        help_text=_("Het versienummer van het item."),
-        default=1,
-    )
-    publicatie_datum = models.DateTimeField(
-        _("publicatie datum"), help_text=_("De datum van publicatie van de product.")
-    )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
         verbose_name=_("lokaties"),
@@ -197,7 +192,6 @@ class Product(models.Model):
                     catalogus=specific_catalog,
                     defaults={
                         "doelgroep": self.doelgroep,
-                        "publicatie_datum": self.publicatie_datum,
                     },
                 )
                 specific_product.localize_from_reference()
@@ -232,6 +226,49 @@ class Product(models.Model):
             validate_specific_product(self)
 
 
+class ProductVersie(models.Model):
+    """
+    Product Version
+
+    The version of a product.
+    """
+
+    product = models.ForeignKey(
+        "producten.Product",
+        related_name="versies",
+        on_delete=models.PROTECT,
+        verbose_name=_("referentie"),
+        help_text=_("Het product voor het product versie."),
+    )
+    gemaakt_door = models.ForeignKey(
+        User,
+        related_name="productversies",
+        on_delete=models.PROTECT,
+        verbose_name=_("crea"),
+        help_text=_("De maker van deze productversie."),
+    )
+    versie = models.PositiveIntegerField(
+        verbose_name=_("versie"),
+        help_text=_("Het versienummer van het product."),
+        default=1,
+    )
+
+    publicatie_datum = models.DateTimeField(
+        _("publicatie datum"),
+        help_text=_("De datum van publicatie van de productversie."),
+    )
+    gemaakt_op = models.DateTimeField(
+        _("gemaakt op"),
+        help_text=_("De oorspronkelijke aanmaakdatum voor deze productversie."),
+        auto_now_add=True,
+    )
+    gewijzigd_op = models.DateTimeField(
+        _("gewijzigd op"),
+        help_text=_("De wijzigingsdatum voor deze productversie."),
+        auto_now=True,
+    )
+
+
 class Productuitvoering(models.Model):
     """
     Product variant
@@ -244,8 +281,8 @@ class Productuitvoering(models.Model):
         "producten.Product",
         related_name="uitvoeringen",
         on_delete=models.PROTECT,
-        verbose_name=_("referentie"),
-        help_text=_("Het referentieproduct voor het product."),
+        verbose_name=_("product"),
+        help_text=_("Het product voor het productuitvoering."),
     )
 
     def __str__(self):
