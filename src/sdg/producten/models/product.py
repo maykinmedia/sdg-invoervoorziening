@@ -244,7 +244,7 @@ class ProductVersie(models.Model):
         User,
         related_name="productversies",
         on_delete=models.PROTECT,
-        verbose_name=_("crea"),
+        verbose_name=_("gemaakt_door"),
         help_text=_("De maker van deze productversie."),
     )
     versie = models.PositiveIntegerField(
