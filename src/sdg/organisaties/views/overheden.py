@@ -74,7 +74,10 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
                             )
                         )
 
-                if reference_catalog.user_is_redacteur(self.request.user):
+                if (
+                    reference_catalog.user_is_redacteur(self.request.user)
+                    and reference_catalog.lokale_overheid == self.object
+                ):
                     setattr(
                         reference_catalog,
                         "area_and_products",
