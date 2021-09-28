@@ -2,7 +2,7 @@
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-gap: 16px;
   margin-top: 16px;
 
@@ -10,7 +10,7 @@
     padding: 32px;
     background-color: $color_secondary;
     border-radius: 10px;
-    color: $color_primary;
+    color: $color_secondary_darkest;
     text-decoration: none;
     font-weight: bold;
 
