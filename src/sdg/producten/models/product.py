@@ -42,11 +42,6 @@ class GeneriekProduct(models.Model):
     )
 
     @property
-    def translations(self):
-        """Return all translations for this product, sorted inversely by language."""
-        return self.vertalingen.order_by("-taal")
-
-    @property
     def upn_uri(self):
         return self.upn.upn_uri
 
@@ -147,17 +142,12 @@ class Product(models.Model):
 
     @cached_property
     def beschikbare_talen(self):
-        return {i.get_taal_display(): i.taal for i in self.translations.all()}
+        return {i.get_taal_display(): i.taal for i in self.vertalingen.all()}
 
     @cached_property
     def is_referentie_product(self) -> bool:
         """:returns: Whether this is a reference product or not."""
         return bool(not self.referentie_product)
-
-    @property
-    def translations(self):
-        """Return all translations for this product, sorted inversely by language."""
-        return self.vertalingen.order_by("-taal")
 
     def get_generic_product(self):
         """:returns: The generic product of this product."""
@@ -257,11 +247,6 @@ class Productuitvoering(models.Model):
         verbose_name=_("referentie"),
         help_text=_("Het referentieproduct voor het product."),
     )
-
-    @property
-    def translations(self):
-        """Return all translations for this product, sorted inversely by language."""
-        return self.vertalingen.order_by("-taal")
 
     def __str__(self):
         return f"{self.product} (uitvoering)"
