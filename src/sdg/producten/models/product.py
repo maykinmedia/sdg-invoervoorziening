@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import Model
 from django.shortcuts import get_object_or_404
@@ -149,15 +150,19 @@ class Product(models.Model):
 
     @cached_property
     def laatste_versie(self):
-        """
-        :returns: Latest version for this product.
-        """
+        """:returns: Latest version for this product."""
 
         return (
             self.versies.filter(publicatie_datum__lte=now())
             .order_by("publicatie_datum")
-            .last()
+            .first()
         )
+
+    @cached_property
+    def laatste_ongepubliceerde_versie(self):
+        """:returns: Latest unpublished version for this product."""
+
+        return self.versies.order_by("publicatie_datum").first()
 
     def get_generic_product(self):
         """:returns: The generic product of this product."""
@@ -297,6 +302,18 @@ class ProductVersie(models.Model):
             taal=taal,
             **kwargs,
         )
+
+    def clean(self):
+        super().clean()
+        latest_unpublished_version = self.product.versies.order_by(
+            "publicatie_datum"
+        ).first()
+        if self.publicatie_datum <= latest_unpublished_version.publicatie_datum:
+            raise ValidationError(
+                _(
+                    "De publicatie datum kan niet vroeger zijn dan een toekomstige publicatiedatum."
+                )
+            )
 
 
 class Productuitvoering(models.Model):
