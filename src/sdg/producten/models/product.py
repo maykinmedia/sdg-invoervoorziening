@@ -276,6 +276,8 @@ class ProductVersie(models.Model):
     publicatie_datum = models.DateTimeField(
         _("publicatie datum"),
         help_text=_("De datum van publicatie van de productversie."),
+        blank=True,
+        null=True,
     )
     gemaakt_op = models.DateTimeField(
         _("gemaakt op"),
