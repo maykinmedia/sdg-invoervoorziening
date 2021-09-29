@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.accounts.models import Role
@@ -48,7 +47,7 @@ class ProductenCatalogus(models.Model):
     )
     naam = models.CharField(
         _("naam"),
-        max_length=40,
+        max_length=120,
         help_text=_("De naam van de producten catalogus."),
     )
     toelichting = models.TextField(

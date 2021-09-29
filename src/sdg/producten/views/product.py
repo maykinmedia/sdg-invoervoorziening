@@ -53,8 +53,8 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
         "catalogus__lokale_overheid"
     ).prefetch_related(
         "lokaties",
-        "vertalingen",
-        "referentie_product__vertalingen",
+        "versies__vertalingen",
+        "referentie_product__versies__vertalingen",
         Prefetch(
             "referentie_product__generiek_product",
             queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
@@ -74,7 +74,7 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
 
 class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "producten/product_edit.html"
-    context_object_name = "product"
+    context_object_name = "product_versie"
     queryset = Product.objects.select_related("catalogus__lokale_overheid")
     form_class = inlineformset_factory(
         ProductVersie,
@@ -85,21 +85,25 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
-        self.object = self.get_object()
-        return self.object.catalogus.lokale_overheid
+        self.product = self.get_object()
+        self.lokale_overheid = self.product.catalogus.lokale_overheid
+        self.object = self.product.laatste_versie
+        return self.lokale_overheid
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        generic_information = self.object.get_generic_product().vertalingen.all()
+        generic_information = self.product.get_generic_product().vertalingen.all()
         reference_formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(
-            instance=self.object.referentie_product,
+            instance=self.product.referentie_product.laatste_versie,
         )
+
+        context["product"] = self.product
+        context["lokale_overheid"] = self.product.catalogus.lokale_overheid
         context["informatie_form"] = zip_longest(
             generic_information, reference_formset.forms, context["form"].forms
         )
-        context["lokale_overheid"] = self.object.catalogus.lokale_overheid
         return context
 
     def get(self, request, *args, **kwargs):

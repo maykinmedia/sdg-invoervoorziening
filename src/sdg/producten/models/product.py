@@ -139,8 +139,7 @@ class Product(models.Model):
     @cached_property
     def beschikbare_talen(self):
         return {
-            i.get_taal_display(): i.taal
-            for i in self.get_latest_version().vertalingen.all()
+            i.get_taal_display(): i.taal for i in self.laatste_versie.vertalingen.all()
         }
 
     @cached_property
@@ -148,7 +147,12 @@ class Product(models.Model):
         """:returns: Whether this is a reference product or not."""
         return bool(not self.referentie_product)
 
-    def get_latest_version(self):
+    @cached_property
+    def laatste_versie(self):
+        """
+        :returns: Latest version for this product.
+        """
+
         return (
             self.versies.filter(publicatie_datum__lte=now())
             .order_by("publicatie_datum")
@@ -164,17 +168,21 @@ class Product(models.Model):
             else self.referentie_product.generiek_product
         )
 
-    def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
-        """Generate localized information for this product."""
+    def create_version_from_reference(self) -> ProductVersie:
+        """Create fist version for this product based on latest reference version."""
 
-        LocalizedProduct(
-            product_version=self,
-            taal=taal,
-            **kwargs,
+        if self.is_referentie_product:
+            raise ValueError(
+                "create_version_from_reference must be called on a specific product"
+            )
+        return ProductVersie.objects.create(
+            product=self,
+            gemaakt_door=self.referentie_product.laatste_versie.gemaakt_door,
+            publicatie_datum=now(),
         )
 
-    def localize_from_reference(self):
-        """Create localized product information for this specific product based on reference."""
+    def localize_version_from_reference(self, version: ProductVersie):
+        """Create localized product information for this specific product based on available reference languages."""
 
         if self.is_referentie_product:
             raise ValueError(
@@ -183,7 +191,7 @@ class Product(models.Model):
 
         LocalizedProduct.objects.bulk_create(
             [
-                self.generate_localized_information(taal=taal)
+                version.generate_localized_information(taal=taal)
                 for taal in self.referentie_product.beschikbare_talen.values()
             ],
             ignore_conflicts=True,
@@ -205,7 +213,8 @@ class Product(models.Model):
                         "doelgroep": self.doelgroep,
                     },
                 )
-                specific_product.localize_from_reference()
+                version = specific_product.create_version_from_reference()
+                specific_product.localize_version_from_reference(version)
                 return specific_product
         else:
             return self
@@ -278,6 +287,14 @@ class ProductVersie(models.Model):
         help_text=_("De wijzigingsdatum voor deze productversie."),
         auto_now=True,
     )
+
+    def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
+        """Generate localized information for this product."""
+        return LocalizedProduct(
+            product_versie=self,
+            taal=taal,
+            **kwargs,
+        )
 
 
 class Productuitvoering(models.Model):

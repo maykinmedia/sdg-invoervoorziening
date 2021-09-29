@@ -71,7 +71,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
                     is_referentie_catalogus=False,
                     domein=catalog.domein,
                     versie=catalog.versie,
-                    naam=catalog.naam,
+                    naam=f"{str(self)} ({catalog.naam})",
                 )
             )
         return ProductenCatalogus.objects.bulk_create(

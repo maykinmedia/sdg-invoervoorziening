@@ -213,10 +213,8 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     @cached_property
     def generiek_informatie(self):
-        return (
-            self.product_versie.product.get_generic_product()
-            .get_latest_version()
-            .vertalingen.get(taal=self.taal)
+        return self.product_versie.product.get_generic_product().vertalingen.get(
+            taal=self.taal
         )
 
     def localize_specific_products(self):
@@ -225,11 +223,12 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         """
 
         product = self.product_versie.product
-        # TODO: Adjust for productversie
         if product.is_referentie_product:
             LocalizedProduct.objects.bulk_create(
                 [
-                    specific_product.generate_localized_information(taal=self.taal)
+                    specific_product.laatste_versie.generate_localized_information(
+                        taal=self.taal
+                    )
                     for specific_product in product.specifieke_producten.all()
                 ],
                 ignore_conflicts=True,
