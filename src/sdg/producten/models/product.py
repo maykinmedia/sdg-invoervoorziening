@@ -6,6 +6,7 @@ from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices
@@ -137,12 +138,22 @@ class Product(models.Model):
 
     @cached_property
     def beschikbare_talen(self):
-        return {i.get_taal_display(): i.taal for i in self.vertalingen.all()}
+        return {
+            i.get_taal_display(): i.taal
+            for i in self.get_latest_version().vertalingen.all()
+        }
 
     @cached_property
     def is_referentie_product(self) -> bool:
         """:returns: Whether this is a reference product or not."""
         return bool(not self.referentie_product)
+
+    def get_latest_version(self):
+        return (
+            self.versies.filter(publicatie_datum__lte=now())
+            .order_by("publicatie_datum")
+            .last()
+        )
 
     def get_generic_product(self):
         """:returns: The generic product of this product."""
@@ -156,8 +167,8 @@ class Product(models.Model):
     def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""
 
-        return LocalizedProduct(
-            product=self,
+        LocalizedProduct(
+            product_version=self,
             taal=taal,
             **kwargs,
         )
@@ -237,7 +248,7 @@ class ProductVersie(models.Model):
         "producten.Product",
         related_name="versies",
         on_delete=models.PROTECT,
-        verbose_name=_("referentie"),
+        verbose_name=_("product"),
         help_text=_("Het product voor het product versie."),
     )
     gemaakt_door = models.ForeignKey(

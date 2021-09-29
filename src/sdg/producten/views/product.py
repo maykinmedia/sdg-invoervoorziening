@@ -12,7 +12,12 @@ from django.views.generic.detail import SingleObjectMixin
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.core.models import ProductenCatalogus
 from sdg.producten.forms import LocalizedProductForm
-from sdg.producten.models import GeneriekProduct, LocalizedProduct, Product
+from sdg.producten.models import (
+    GeneriekProduct,
+    LocalizedProduct,
+    Product,
+    ProductVersie,
+)
 
 
 class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
@@ -55,7 +60,6 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
             queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
         ),
     )
-    # model = Product
     required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
@@ -73,7 +77,7 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     context_object_name = "product"
     queryset = Product.objects.select_related("catalogus__lokale_overheid")
     form_class = inlineformset_factory(
-        Product,
+        ProductVersie,
         LocalizedProduct,
         form=LocalizedProductForm,
         extra=0,
@@ -88,7 +92,7 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         generic_information = self.object.get_generic_product().vertalingen.all()
         reference_formset = inlineformset_factory(
-            Product, LocalizedProduct, form=LocalizedProductForm, extra=0
+            ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(
             instance=self.object.referentie_product,
         )

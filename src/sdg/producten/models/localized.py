@@ -95,8 +95,8 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     Localized information for a product.
     """
 
-    product = models.ForeignKey(
-        "producten.Product",
+    product_versie = models.ForeignKey(
+        "producten.ProductVersie",
         on_delete=models.CASCADE,
         related_name="vertalingen",
         verbose_name=_("specifieke product"),
@@ -204,21 +204,28 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     @cached_property
     def referentie_informatie(self):
-        if self.product.referentie_product:
-            return self.product.referentie_product.vertalingen.get(taal=self.taal)
+        if self.product_versie.product.referentie_product:
+            return self.product_versie.product.referentie_product.get_latest_version().vertalingen.get(
+                taal=self.taal
+            )
         else:
             return None
 
     @cached_property
     def generiek_informatie(self):
-        return self.product.get_generic_product().vertalingen.get(taal=self.taal)
+        return (
+            self.product_versie.product.get_generic_product()
+            .get_latest_version()
+            .vertalingen.get(taal=self.taal)
+        )
 
     def localize_specific_products(self):
         """
         Localize all specific products related to this localized reference product.
         """
 
-        product = self.product
+        product = self.product_versie.product
+        # TODO: Adjust for productversie
         if product.is_referentie_product:
             LocalizedProduct.objects.bulk_create(
                 [
@@ -236,7 +243,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         verbose_name_plural = _("vertaalde producten")
         constraints = [
             models.UniqueConstraint(
-                fields=["product", "taal"],
+                fields=["product_versie", "taal"],
                 name="unique_language_per_product",
             )
         ]
