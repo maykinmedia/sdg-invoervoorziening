@@ -213,7 +213,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     @cached_property
     def generiek_informatie(self):
-        return self.product_versie.product.get_generic_product().vertalingen.get(
+        return self.product_versie.product.generic_product.vertalingen.get(
             taal=self.taal
         )
 

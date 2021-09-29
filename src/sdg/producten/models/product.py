@@ -131,11 +131,11 @@ class Product(models.Model):
 
     @property
     def upn_uri(self):
-        return self.get_generic_product().upn.upn_uri
+        return self.generic_product.upn.upn_uri
 
     @property
     def upn_label(self):
-        return self.get_generic_product().upn.upn_label
+        return self.generic_product.upn.upn_label
 
     @cached_property
     def beschikbare_talen(self):
@@ -164,7 +164,8 @@ class Product(models.Model):
 
         return self.versies.order_by("publicatie_datum").first()
 
-    def get_generic_product(self):
+    @cached_property
+    def generic_product(self):
         """:returns: The generic product of this product."""
 
         return (
