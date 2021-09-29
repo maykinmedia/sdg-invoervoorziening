@@ -86,15 +86,19 @@
             <div class="form-actions">
                 <div></div>
                 <div>
-                    <div class="form-actions__title">Wijzigingen publiceren</div>
+                    <div class="form-actions__title">{% trans "Wijzigingen publiceren" %}</div>
                     <div class="form-actions__options">
                         <label for="now">
                             <input type="radio" name="publish" id="now">
-                            <label for="now">Publiceer direct</label>
+                            <label for="now">{% trans "Publiceer direct" %}</label>
                         </label>
                         <label for="later">
                             <input type="radio" name="publish" id="later">
-                            <label for="later">Kies datum</label>
+                            <label for="later">{% trans "Kies datum" %}</label>
+                        </label>
+                        <label for="concept">
+                            <input type="radio" name="publish" id="concept">
+                            <label for="concept">{% trans "Opslaan als concept" %}</label>
                         </label>
                     </div>
                     <input class="button tabs__form-button" type="submit" value="Opslaan">
