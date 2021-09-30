@@ -183,6 +183,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(DJANGO_PROJECT_DIR, "static"),
     os.path.join(BASE_DIR, "node_modules", "formset.js", "dist"),
+    os.path.join(BASE_DIR, "node_modules", "flatpickr", "dist"),
 ]
 
 # List of finder classes that know how to find static files in
