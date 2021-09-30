@@ -155,7 +155,7 @@ class Product(models.Model):
         return (
             self.versies.filter(publicatie_datum__lte=now())
             .order_by("publicatie_datum")
-            .first()
+            .last()
         )
 
     @cached_property

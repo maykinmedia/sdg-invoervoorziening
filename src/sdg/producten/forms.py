@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import LocalizedProduct
+from .models import LocalizedProduct, ProductVersie
 
 
 class LocalizedProductForm(forms.ModelForm):
@@ -22,4 +22,15 @@ class LocalizedProductForm(forms.ModelForm):
             "uiterste_termijn",
             "wtd_bij_geen_reactie",
             "decentrale_procedure_link",
+        )
+
+
+class ProductVersionForm(forms.ModelForm):
+    class Meta:
+        model = ProductVersie
+        fields = (
+            "product",
+            "gemaakt_door",
+            "versie",
+            "publicatie_datum",
         )
