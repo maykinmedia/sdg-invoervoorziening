@@ -66,13 +66,21 @@ class ProductVersieInlineAdmin(admin.StackedInline):
 @admin.register(ProductVersie)
 class ProductVersieAdmin(MarkdownxModelAdmin):
     list_display = (
-        "gemaakt_door",
         "versie",
+        "product",
+        "lokale_overheid",
+        "gemaakt_door",
         "publicatie_datum",
         "gemaakt_op",
         "gewijzigd_op",
     )
     inlines = (LocalizedProductInline,)
+    ordering = ("-publicatie_datum",)
+
+    def lokale_overheid(self, obj):
+        return obj.product.catalogus.lokale_overheid
+
+    lokale_overheid.admin_order_field = "product__catalogus__lokale_overheid"
 
 
 @admin.register(Product)
