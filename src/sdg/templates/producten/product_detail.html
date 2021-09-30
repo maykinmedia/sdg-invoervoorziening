@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load utils %}
 {% load producten %}
+{% load humanize %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de <b>{{ product.catalogus.lokale_overheid }}</b>{% endblock container_title %}
@@ -105,41 +106,16 @@
                         {% endif %}
                         <div class="tabs__fotter-right">
                             <h3 class="tabs__footer-title">Revisies</h3>
-                            <ul class="revision-list">
-                                <li class="revision-list__item">
-                                    <i class="fas fa-user"></i>
-                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                    00:00</a>)
-                                </li>
-                            </ul>
-                            <ul class="revision-list">
-                                <li class="revision-list__item">
-                                    <i class="fas fa-user"></i>
-                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                    00:00</a>)
-                                </li>
-                            </ul>
-                            <ul class="revision-list">
-                                <li class="revision-list__item">
-                                    <i class="fas fa-user"></i>
-                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                    00:00</a>)
-                                </li>
-                            </ul>
-                            <ul class="revision-list">
-                                <li class="revision-list__item">
-                                    <i class="fas fa-user"></i>
-                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                    00:00</a>)
-                                </li>
-                            </ul>
-                            <ul class="revision-list">
-                                <li class="revision-list__item">
-                                    <i class="fas fa-user"></i>
-                                    John Doe, gepland over 2 maanden (<a class="revision-list-link" href="#">01-03-2021
-                                    00:00</a>)
-                                </li>
-                            </ul>
+                            {% for version in product.versies.all %}
+                                <ul class="revision-list">
+                                    <li class="revision-list__item">
+                                        <i class="fas fa-user"></i>
+                                        {% with user=version.gemaakt_door %}
+                                            {{ user.get_full_name|default:user.username|capfirst }}, {{ version.publicatie_datum|naturaltime }} (<a class="revision-list-link" href="#">{{ version.gewijzigd_op|date:"d-m-Y H:i" }}</a>)
+                                        {% endwith %}
+                                    </li>
+                                </ul>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

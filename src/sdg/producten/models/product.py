@@ -161,7 +161,6 @@ class Product(models.Model):
     @cached_property
     def laatste_ongepubliceerde_versie(self):
         """:returns: Latest unpublished version for this product."""
-
         return self.versies.order_by("publicatie_datum").first()
 
     @cached_property
@@ -176,7 +175,6 @@ class Product(models.Model):
 
     def create_version_from_reference(self) -> ProductVersie:
         """Create fist version for this product based on latest reference version."""
-
         if self.is_referentie_product:
             raise ValueError(
                 "create_version_from_reference must be called on a specific product"

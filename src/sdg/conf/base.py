@@ -106,7 +106,7 @@ INSTALLED_APPS = [
     "django_admin_index",
     "django.contrib.admin",
     # 'django.contrib.admindocs',
-    # 'django.contrib.humanize',
+    "django.contrib.humanize",
     # 'django.contrib.sitemaps',
     # External applications.
     "axes",
