@@ -304,14 +304,9 @@ class ProductVersie(models.Model):
 
     def clean(self):
         super().clean()
-        latest_unpublished_version = self.product.versies.order_by(
-            "publicatie_datum"
-        ).first()
-        if self.publicatie_datum <= latest_unpublished_version.publicatie_datum:
+        if self.publicatie_datum < now():
             raise ValidationError(
-                _(
-                    "De publicatie datum kan niet vroeger zijn dan een toekomstige publicatiedatum."
-                )
+                _("De publicatiedatum kan niet in het verleden liggen.")
             )
 
 
