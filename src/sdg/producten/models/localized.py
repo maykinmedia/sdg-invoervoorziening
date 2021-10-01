@@ -76,9 +76,6 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
     )
 
-    def __str__(self):
-        return self.product_titel
-
     class Meta:
         verbose_name = _("Vertaald generiek product")
         verbose_name_plural = _("Vertaalde generieke producten")
@@ -88,6 +85,9 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
                 name="unique_language_per_generiekproduct",
             )
         ]
+
+    def __str__(self):
+        return self.product_titel
 
 
 class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
@@ -234,9 +234,6 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
                 ignore_conflicts=True,
             )
 
-    def __str__(self):
-        return self.product_titel_decentraal
-
     class Meta:
         verbose_name = _("vertaald product")
         verbose_name_plural = _("vertaalde producten")
@@ -246,6 +243,9 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
                 name="unique_language_per_product",
             )
         ]
+
+    def __str__(self):
+        return self.product_titel_decentraal
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -274,9 +274,6 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
         help_text=_("De titel van de uitvoering van het product."),
     )
 
-    def __str__(self):
-        return self.product_titel_uitvoering
-
     class Meta:
         verbose_name = _("vertaalde productuitvoering")
         verbose_name_plural = _("vertaalde productuitvoeringen")
@@ -286,3 +283,6 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
                 name="unique_language_per_productuitvoering",
             )
         ]
+
+    def __str__(self):
+        return self.product_titel_uitvoering

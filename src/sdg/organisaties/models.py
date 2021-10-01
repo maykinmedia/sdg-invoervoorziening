@@ -78,15 +78,15 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
             catalogus_list, ignore_conflicts=True
         )
 
-    def get_absolute_url(self):
-        return reverse("organisaties:overheid_detail", kwargs={"pk": self.pk})
+    class Meta:
+        verbose_name = _("lokale overheid")
+        verbose_name_plural = _("lokale overheden")
 
     def __str__(self):
         return self.organisatie.owms_pref_label
 
-    class Meta:
-        verbose_name = _("lokale overheid")
-        verbose_name_plural = _("lokale overheden")
+    def get_absolute_url(self):
+        return reverse("organisaties:overheid_detail", kwargs={"pk": self.pk})
 
 
 class Lokatie(models.Model):
@@ -180,9 +180,9 @@ class Lokatie(models.Model):
     def get_formatted_address(self):
         return f"{self.naam}\n{self.straat} {self.nummer}\n{self.postcode} {self.plaats}\n{self.land}"
 
-    def __str__(self):
-        return self.naam
-
     class Meta:
         verbose_name = _("lokatie")
         verbose_name_plural = _("lokaties")
+
+    def __str__(self):
+        return self.naam

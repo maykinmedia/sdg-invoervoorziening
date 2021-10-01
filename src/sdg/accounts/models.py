@@ -111,10 +111,6 @@ class Role(models.Model):
             if f.name.startswith("is_") and getattr(cls, f.name)
         ]
 
-    def __str__(self):
-        allowed_roles = [str(r.verbose_name) for r in self.get_roles()]
-        return f"{self.user} @ {self.lokale_overheid.organisatie.owms_pref_label}: {', '.join(allowed_roles)}"
-
     class Meta:
         verbose_name = _("role")
         verbose_name_plural = _("roles")
@@ -124,3 +120,7 @@ class Role(models.Model):
                 name="unique_user_per_lokaleoverheid",
             )
         ]
+
+    def __str__(self):
+        allowed_roles = [str(r.verbose_name) for r in self.get_roles()]
+        return f"{self.user} @ {self.lokale_overheid.organisatie.owms_pref_label}: {', '.join(allowed_roles)}"

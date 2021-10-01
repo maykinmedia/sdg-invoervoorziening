@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from typing import Any
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models import Model
+from django.db.models import F, Model, Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -13,7 +15,9 @@ from django.utils.translation import ugettext_lazy as _
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
+from sdg.producten.constants import PublishChoices
 from sdg.producten.models import LocalizedProduct
+from sdg.producten.utils import is_past_date
 
 User = get_user_model()
 
@@ -54,12 +58,12 @@ class GeneriekProduct(models.Model):
     def upn_label(self):
         return self.upn.upn_label
 
-    def __str__(self):
-        return f"{self.upn.upn_label}"
-
     class Meta:
         verbose_name = _("generiek product")
         verbose_name_plural = _("generieke producten")
+
+    def __str__(self):
+        return f"{self.upn.upn_label}"
 
 
 class Product(models.Model):
@@ -151,17 +155,18 @@ class Product(models.Model):
     @cached_property
     def laatste_versie(self):
         """:returns: Latest version for this product."""
-
         return (
-            self.versies.filter(publicatie_datum__lte=now())
-            .order_by("publicatie_datum")
+            self.versies.filter(
+                Q(publicatie_datum__lte=now()) | Q(publicatie_datum__isnull=True)
+            )
+            .order_by(F("publicatie_datum").asc(nulls_first=True))
             .last()
         )
 
     @cached_property
     def laatste_ongepubliceerde_versie(self):
         """:returns: Latest unpublished version for this product."""
-        return self.versies.order_by("publicatie_datum").first()
+        return self.versies.order_by(F("publicatie_datum").asc(nulls_first=True)).last()
 
     @cached_property
     def generic_product(self):
@@ -223,8 +228,15 @@ class Product(models.Model):
         else:
             return self
 
-    def get_absolute_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.pk})
+    def get_latest_versions(self, quantity=5):
+        """:returns: The latest N versions for this product."""
+        return self.versies.all().order_by(F("publicatie_datum").desc(nulls_last=True))[
+            :quantity:-1
+        ]
+
+    class Meta:
+        verbose_name = _("product")
+        verbose_name_plural = _("producten")
 
     def __str__(self):
         if self.is_referentie_product:
@@ -232,9 +244,8 @@ class Product(models.Model):
         else:
             return f"{self.referentie_product.upn_label}"
 
-    class Meta:
-        verbose_name = _("product")
-        verbose_name_plural = _("producten")
+    def get_absolute_url(self):
+        return reverse("producten:detail", kwargs={"pk": self.pk})
 
     def clean(self):
         from sdg.producten.models.validators import (
@@ -294,6 +305,15 @@ class ProductVersie(models.Model):
         auto_now=True,
     )
 
+    def get_published_status(self) -> Any[PublishChoices.choices]:
+        """:returns: The current published status for this product version."""
+        if not self.publicatie_datum:
+            return PublishChoices.concept
+        elif self.publicatie_datum < now():
+            return PublishChoices.now
+        else:
+            return PublishChoices.later
+
     def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""
         return LocalizedProduct(
@@ -302,9 +322,17 @@ class ProductVersie(models.Model):
             **kwargs,
         )
 
+    class Meta:
+        verbose_name = _("product versie")
+        verbose_name_plural = _("product versie")
+        ordering = ("-versie",)
+
+    def __str__(self):
+        return f"{self.product} - {self.versie}"
+
     def clean(self):
         super().clean()
-        if self.publicatie_datum < now():
+        if self.publicatie_datum and is_past_date(self.publicatie_datum):
             raise ValidationError(
                 _("De publicatiedatum kan niet in het verleden liggen.")
             )
@@ -326,9 +354,9 @@ class Productuitvoering(models.Model):
         help_text=_("Het product voor het productuitvoering."),
     )
 
-    def __str__(self):
-        return f"{self.product} (uitvoering)"
-
     class Meta:
         verbose_name = _("productuitvoering")
         verbose_name_plural = _("productuitvoeringen")
+
+    def __str__(self):
+        return f"{self.product} (uitvoering)"

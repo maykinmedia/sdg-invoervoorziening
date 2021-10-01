@@ -50,6 +50,8 @@
 
   .tabs__status-label {
     margin-right: 16px;
+    font-weight: bold;
+    color: $color_grey_darkest;
   }
 
   .tabs__status-label--result {
@@ -61,6 +63,10 @@
   }
 
   .tabs__status-unpublished {
+    color: $color_accent_dark;
+  }
+
+  .tabs__status-concept {
     color: $color_secondary_darkest;
   }
 

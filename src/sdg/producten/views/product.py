@@ -12,6 +12,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.core.models import ProductenCatalogus
+from sdg.producten.constants import PublishChoices
 from sdg.producten.forms import LocalizedProductForm, ProductVersionForm
 from sdg.producten.models import (
     GeneriekProduct,
@@ -19,6 +20,7 @@ from sdg.producten.models import (
     Product,
     ProductVersie,
 )
+from sdg.producten.utils import duplicate_localized_products
 
 
 class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
@@ -111,19 +113,22 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        # TODO: Refactor pseudocode [.->122] (use form clean)
-        if request.POST.get("publish") == "now":
-            publicatie_datum = now()
+        if self.object.get_published_status() != PublishChoices.now:
+            instance = self.object
+            versie = self.object.versie
         else:
-            publicatie_datum = request.POST.get("publicatie_datum", None)
+            instance = None
+            versie = self.object.versie + 1
 
         version_form = ProductVersionForm(
             data={
                 "product": self.product.pk,
                 "gemaakt_door": self.request.user.pk,
-                "versie": self.object.versie + 1,
-                "publicatie_datum": publicatie_datum,
-            }
+                "versie": versie,
+                "publish": request.POST.get("publish"),
+                "date": request.POST.get("date"),
+            },
+            instance=instance,
         )
 
         form = self.form_class(request.POST, instance=self.object)
@@ -133,19 +138,14 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
             return self.form_invalid(form)
 
     def form_valid(self, form, version_form):
-        # version_form saves new product version
         new_version = version_form.save()
 
-        # Duplicate localized versions into new version
-        localized_products = []
-        for subform in form:
-            product = subform.save(commit=False)
-            product.product_versie = new_version
-            product.pk = None
-            localized_products.append(product)
-        LocalizedProduct.objects.bulk_create(localized_products)
+        if self.object.pk != new_version.pk:
+            duplicate_localized_products(form, new_version)
+        else:
+            form.save()
 
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.object.pk})
+        return reverse("producten:detail", kwargs={"pk": self.product.pk})

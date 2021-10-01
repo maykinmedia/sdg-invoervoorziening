@@ -79,12 +79,6 @@ class ProductenCatalogus(models.Model):
         """Returns whether this catalog has a reference catalog."""
         return bool(self.referentie_catalogus)
 
-    def __str__(self):
-        if self.is_referentie_catalogus:
-            return f"{self.naam} (referentie)"
-        else:
-            return f"{self.naam}"
-
     class Meta:
         verbose_name = _("producten catalogus")
         verbose_name_plural = _("producten catalogi")
@@ -94,6 +88,12 @@ class ProductenCatalogus(models.Model):
                 name="unique_referentie_catalogus_and_lokale_overheid",
             )
         ]
+
+    def __str__(self):
+        if self.is_referentie_catalogus:
+            return f"{self.naam} (referentie)"
+        else:
+            return f"{self.naam}"
 
     def clean(self):
         super().clean()

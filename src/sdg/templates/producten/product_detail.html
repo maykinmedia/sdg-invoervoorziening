@@ -20,106 +20,115 @@
         </div>
         {% include "core/_notifications.html" %}
         <div class="tabs__tab-contents">
-            {% for info in product.laatste_versie.vertalingen.all %}
-                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
-                     id="{{ info.taal }}">
-                    <div class="tabs__tab-header">
-                        <div class="tabs__status">
-                            <span class="tabs__status-label">Status:</span>
-                            {% if product.beschikbaar %}
-                                <div class="tabs__status-published">
-                                    <i class="fas fa-calendar-check"></i>
-                                    <span class="tabs__status-label--result">
-                                    gepubliceerd
-                                    </span>
-                                </div>
-                            {% else %}
-                                <div class="tabs__status-unpublished">
-                                    <i class="fas fa-calendar-times"></i>
-                                    <span class="tabs__status-label--result">
-                                    ongepubliceerd
-                                    </span>
-                                </div>
-                            {% endif %}
+            {% with latest_version=product.laatste_versie %}
+                {% for info in latest_version.vertalingen.all %}
+                    <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
+                         id="{{ info.taal }}">
+                        <div class="tabs__tab-header">
+                            <div class="tabs__status">
+                                <span class="tabs__status-label">Status:</span>
+                                {% with status=latest_version.get_published_status %}
+                                    {% if status == "now" %}
+                                        <div class="tabs__status-published">
+                                            <i class="fas fa-calendar-check"></i>
+                                            <span class="tabs__status-label--result">{% trans "gepubliceerd" %}</span>
+                                        </div>
+                                    {% elif status == "concept" %}
+                                        <div class="tabs__status-concept">
+                                            <i class="fas fa-calendar-minus"></i>
+                                            <span class="tabs__status-label--result">{% trans "concept" %}</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="tabs__status-unpublished">
+                                            <i class="fas fa-calendar-times"></i>
+                                            <span class="tabs__status-label--result">{% trans "ongepubliceerd" %}</span>
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                            <div>
+                                <a href="#" class="button button--light">{{ info.get_taal_display }} Deactiveren</a>
+                                <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
+                            </div>
                         </div>
-                        <div>
-                            <a href="#" class="button button--light">{{ info.get_taal_display }} Deactiveren</a>
-                            <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
-                        </div>
-                    </div>
 
-                    <div class="notifications notifications--inline">
-                        <div class="notifications__notification notification__info">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Ingeplande wijzigingen op 01-01-2021</span>
-                            <a href="#">Bekijk wijzigingen</a>
+                        <div class="notifications notifications--inline">
+                            <div class="notifications__notification notification__info">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Ingeplande wijzigingen op 01-01-2021</span>
+                                <a href="#">Bekijk wijzigingen</a>
+                            </div>
                         </div>
-                    </div>
 
-                    {% if info.generiek_informatie %}
+                        {% if info.generiek_informatie %}
+                            <table class="tabs__table">
+                                <thead>
+                                <tr>
+                                    <th class="tabs__table-header" width="25%">generieke gegevens</th>
+                                    <th class="tabs__table-header">huidige informatie</th>
+                                    <th class="tabs__table-header">gewijzigd</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
+                                    {% table_row field %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                            <hr class="divider">
+                        {% endif %}
+
                         <table class="tabs__table">
                             <thead>
                             <tr>
-                                <th class="tabs__table-header" width="25%">generieke gegevens</th>
+                                <th class="tabs__table-header" width="25%">gegeven</th>
                                 <th class="tabs__table-header">huidige informatie</th>
                                 <th class="tabs__table-header">gewijzigd</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
+                            {% for field in info.get_fields|exclude:"id,taal,product" %}
                                 {% table_row field %}
                             {% endfor %}
                             </tbody>
                         </table>
 
-                        <hr class="divider">
-                    {% endif %}
-
-                    <table class="tabs__table">
-                        <thead>
-                        <tr>
-                            <th class="tabs__table-header" width="25%">gegeven</th>
-                            <th class="tabs__table-header">huidige informatie</th>
-                            <th class="tabs__table-header">gewijzigd</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for field in info.get_fields|exclude:"id,taal,product" %}
-                            {% table_row field %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-
-                    <div class="tabs__footer">
-                        {% if product.lokaties %}
-                            <div class="tabs__footer-left">
-                                <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                                <ul class="tabs__footer-list">
-                                    {% for lokatie in product.lokaties.all %}
-                                        <li class="tabs__footer-list-item">
-                                            <input type="checkbox" name="" checked disabled>
-                                            {{ lokatie.naam }}
+                        <div class="tabs__footer">
+                            {% if product.lokaties %}
+                                <div class="tabs__footer-left">
+                                    <h3 class="tabs__footer-title">Locaties met dit product</h3>
+                                    <ul class="tabs__footer-list">
+                                        {% for lokatie in product.lokaties.all %}
+                                            <li class="tabs__footer-list-item">
+                                                <input type="checkbox" name="" checked disabled>
+                                                {{ lokatie.naam }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            <div class="tabs__fotter-right">
+                                <h3 class="tabs__footer-title">Revisies</h3>
+                                {% for version in product.get_latest_versions %}
+                                    <ul class="revision-list">
+                                        <li class="revision-list__item">
+                                            <i class="fas fa-user"></i>
+                                            {% with user=version.gemaakt_door %}
+                                                {{ user.get_full_name|default:user.username|capfirst }} —
+                                                {{ version.publicatie_datum|naturaltime|default:_("concept") }} (
+                                                <a class="revision-list-link"
+                                                   href="#">{{ version.gewijzigd_op|date:"d-m-Y H:i" }}</a>
+                                                )
+                                            {% endwith %}
                                         </li>
-                                    {% endfor %}
-                                </ul>
+                                    </ul>
+                                {% endfor %}
                             </div>
-                        {% endif %}
-                        <div class="tabs__fotter-right">
-                            <h3 class="tabs__footer-title">Revisies</h3>
-                            {% for version in product.versies.all %}
-                                <ul class="revision-list">
-                                    <li class="revision-list__item">
-                                        <i class="fas fa-user"></i>
-                                        {% with user=version.gemaakt_door %}
-                                            {{ user.get_full_name|default:user.username|capfirst }}, {{ version.publicatie_datum|naturaltime }} (<a class="revision-list-link" href="#">{{ version.gewijzigd_op|date:"d-m-Y H:i" }}</a>)
-                                        {% endwith %}
-                                    </li>
-                                </ul>
-                            {% endfor %}
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            {% endwith %}
         </div>
     </div>
 {% endblock inner %}
