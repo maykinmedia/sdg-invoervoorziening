@@ -11,8 +11,13 @@
         <div class="login__left">
             <img class="login__background-image" src="{% static 'images/gemeentes.png' %}" alt="">
             {% block login_left %}
-                <h1 class="login__title">SD<span class="login__colored">G</span></h1>
-                <h2 class="login__subtitle">voor gemeenten</h2>
+                <div class="logo">
+                    <h1 class="logo__title logo__title-large"><a href="{% url 'core:home' %}">
+                        <span class="logo__uncolored">SD</span><span class="logo__colored">G</span>
+                    </a>
+                    </h1>
+                    <h2 class="logo__subtitle logo__subtitle-large">voor gemeenten</h2>
+                </div>
             {% endblock %}
         </div>
         <div class="login__right">
