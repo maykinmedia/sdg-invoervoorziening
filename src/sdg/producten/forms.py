@@ -1,8 +1,8 @@
 from django import forms
 from django.utils.timezone import now
 
-from sdg.producten.constants import PublishChoices
-from sdg.producten.models import LocalizedProduct, ProductVersie
+from .constants import PublishChoices
+from .models import LocalizedProduct, ProductVersie
 
 
 class LocalizedProductForm(forms.ModelForm):
@@ -42,9 +42,8 @@ class ProductVersionForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        now_ = now()
-        if cleaned_data["publish"] == "now":
-            cleaned_data["publicatie_datum"] = now_
+        if cleaned_data["publish"] == PublishChoices.now:
+            cleaned_data["publicatie_datum"] = now()
         else:
             cleaned_data["publicatie_datum"] = cleaned_data.get("date", None)
 

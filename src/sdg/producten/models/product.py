@@ -324,7 +324,7 @@ class ProductVersie(models.Model):
 
     class Meta:
         verbose_name = _("product versie")
-        verbose_name_plural = _("product versie")
+        verbose_name_plural = _("product versies")
         ordering = ("-versie",)
 
     def __str__(self):
