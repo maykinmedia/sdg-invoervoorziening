@@ -1,0 +1,63 @@
+@import 'colors';
+
+.logo {
+  height: 100%;
+
+  .logo__title {
+
+    &.logo__title-medium {
+      font-size: 48px;
+
+      .logo__uncolored {
+        color: #fff;
+        text-shadow: 2px 0 $color_secondary_dark;
+      }
+
+      .logo__colored {
+        color: $color_accent;
+        text-shadow: 2px 0 $color_accent_dark;
+      }
+    }
+
+    &.logo__title-large {
+      font-size: 72px;
+
+      .logo__uncolored {
+        color: #fff;
+        text-shadow: 3px 0 $color_secondary_dark;
+      }
+
+      .logo__colored {
+        color: $color_accent;
+        text-shadow: 3px 0 $color_accent_dark;
+      }
+    }
+
+    color: #fff;
+    margin: 0;
+    position: relative;
+    letter-spacing: -1px;
+
+    a {
+      text-decoration: none;
+      color: white;
+    }
+
+  }
+
+  .logo__subtitle {
+
+    &.logo__subtitle-medium {
+      font-size: 12px;
+    }
+
+    &.logo__subtitle-large {
+      font-size: 18px;
+    }
+
+    color: #fff;
+    margin: -8px 0;
+    position: relative;
+  }
+
+}

@@ -1,3 +1,5 @@
+@import 'colors';
+
 .header {
   height: 390px;
   width: 100%;
@@ -18,12 +20,7 @@
     flex-direction: row;
   }
 
-  .header__logo {
-    height: 100%;
-  }
-
   .header__user {
-    color: #8eaec7;
     display: flex;
     align-items: center;
     text-transform: capitalize;
@@ -32,14 +29,14 @@
       height: 40px;
       width: 40px;
       border-radius: 50%;
-      background-color: #e2ebf2;
-      color: #9E9E9E;
+      background-color: $color_primary_light;
+      color: $color_grey_darker;
       padding-top: 4px;
       overflow: hidden;
       margin-right: 8px;
 
       path {
-        color: #9E9E9E;
+        color: $color_grey_darker;
       }
     }
   }
@@ -58,6 +55,7 @@
   .header__dropdown {
     position: relative;
     padding: 12px;
+    color: #fff;
 
     &:hover {
       .header__dropdown-list {
