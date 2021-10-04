@@ -96,10 +96,16 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
+
+        if self.product.is_referentie_product:
+            reference_product = self.product
+        else:
+            reference_product = self.product.referentie_product
+
         reference_formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(
-            instance=self.product.referentie_product.laatste_versie,
+            instance=reference_product.laatste_versie,
         )
 
         context["product"] = self.product
