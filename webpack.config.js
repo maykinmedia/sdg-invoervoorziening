@@ -1,6 +1,9 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const argv = require('yargs').argv;
 const paths = require('./build/paths');
+const CKEditorWebpackPlugin = require( '@ckeditor/ckeditor5-dev-webpack-plugin' );
+const { styles } = require( '@ckeditor/ckeditor5-dev-utils' );
+
 
 
 // Set isProduction based on environment or argv.
@@ -35,21 +38,52 @@ module.exports = {
     // Plugins
     plugins: [
         new MiniCssExtractPlugin(),
+        new CKEditorWebpackPlugin( {
+            language: 'nl'
+        } )
     ],
 
     // Modules
     module: {
         rules: [
+
             // .js
             {
-                test: /.js?$/,
+                test: /src\/.*.js?$/,
                 exclude: /node_modules/,
                 loader: 'babel-loader',
             },
-
+            // ckeditor
+            {
+                test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+                use: [ 'raw-loader' ]
+            },
+            {
+                test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+                use: [
+                      {
+                        loader: 'style-loader',
+                        options: {
+                            injectType: 'singletonStyleTag',
+                            attributes: {
+                                'data-cke': true
+                            }
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: styles.getPostCssConfig( {
+                            themeImporter: {
+                                themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' )
+                            },
+                            minify: true
+                        } )
+                    },
+                ]
+            },
             // .scss
             {
-                test: /\.(sa|sc|c)ss$/,
+                test: /src\/.*\.(sa|sc|c)ss$/,
                 use: [
                     // Writes css files.
                     MiniCssExtractPlugin.loader,
