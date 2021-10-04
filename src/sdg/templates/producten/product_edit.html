@@ -11,6 +11,12 @@
 {% block extra_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'flatpickr.min.css' %}" />
     <script src="{% static 'flatpickr.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'simplemde.min.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css">
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'simplemde.min.js' %}"></script>
 {% endblock %}
 
 {% block inner %}
@@ -26,7 +32,6 @@
         {% include "core/_notifications.html" %}
         <form action="." method="POST" class="form tabs__tab-contents">
             {% csrf_token %}
-            {{ form.media }}
             {{ form.management_form }}
 
             {% for generic_information, reference_form, form in informatie_form %}

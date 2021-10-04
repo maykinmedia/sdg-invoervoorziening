@@ -11,7 +11,12 @@ class FormWithReference {
             const formReferenceBtn = cell.querySelector(".form__reference-btn");
             formReferenceBtn.addEventListener("click", (event) => {
                 event.preventDefault();
-                formInput.value = this.referenceForm.content.getElementById(formInput.id).value;
+                const referenceValue = this.referenceForm.content.getElementById(formInput.id).value
+                if (mdeObject.hasOwnProperty(formInput.id)) {
+                    mdeObject[formInput.id].value(referenceValue);
+                } else {
+                    formInput.value = referenceValue;
+                }
             })
         });
     }
