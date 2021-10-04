@@ -1,11 +1,14 @@
-const markdownFields = document.querySelectorAll(".markdownx textarea");
+import ClassicEditor from './ckeditor';
 
-mdeObject = {};
+export default function applyMarkdownEditors (selector) {
+    const markdownFields = document.querySelectorAll(selector);
+    const availableEditors = {};
 
-[...markdownFields].forEach(field => {
-    mdeObject[field.id] = new SimpleMDE({
-        element: field,
-        autoDownloadFontAwesome: false,
-        spellChecker: false,
+    [...markdownFields].forEach(field => {
+         ClassicEditor.create(field).then(editor => {
+            availableEditors[field.id] = editor
+        });
     });
-});
+
+    return availableEditors;
+}
