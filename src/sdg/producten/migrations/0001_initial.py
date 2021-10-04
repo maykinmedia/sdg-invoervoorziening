@@ -13,7 +13,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ("core", "0002_auto_20210921_1340"),
         ("organisaties", "0001_initial"),
     ]
 
