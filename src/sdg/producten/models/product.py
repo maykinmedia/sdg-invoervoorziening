@@ -154,14 +154,7 @@ class Product(models.Model):
 
     @cached_property
     def laatste_versie(self):
-        """:returns: Latest version for this product."""
-        return (
-            self.versies.filter(
-                Q(publicatie_datum__lte=now()) | Q(publicatie_datum__isnull=True)
-            )
-            .order_by(F("publicatie_datum").asc(nulls_first=True))
-            .last()
-        )
+        return self.get_latest_versions(1)[0]
 
     @cached_property
     def laatste_ongepubliceerde_versie(self):
