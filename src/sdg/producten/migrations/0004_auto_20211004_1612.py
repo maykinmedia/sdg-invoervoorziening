@@ -10,7 +10,18 @@ def create_first_version_for_products(apps, schema_editor):
     Product = apps.get_model("producten", "Product")
     ProductVersie = apps.get_model("producten", "ProductVersie")
     User = apps.get_model("accounts", "User")
-    first_user = User.objects.get(pk=1)
+
+    try:
+        first_user = User.objects.get(pk=1)
+    except User.DoesNotExist:
+        first_user = User.objects.create(
+            username="maykin",
+            is_active=True,
+            email="admin@maykinmedia.nl",
+            first_name="Maykin",
+            last_name="Media",
+        )
+
     for product in Product.objects.all():
         product_version = ProductVersie.objects.create(
             product=product, gemaakt_door=first_user, versie=1
