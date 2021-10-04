@@ -10,7 +10,7 @@
 
 {% block extra_css %}
     {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'bundles/flatpickr.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'bundles/flatpickr.css' %}"/>
 {% endblock %}
 
 {% block inner %}
@@ -32,7 +32,7 @@
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">
 
-                    {% include 'producten/_include/beschikbaar_notification.html' %}
+                    {% include 'producten/_include/beschikbaar_warning.html' %}
 
                     {% if generic_information %}
                         <table class="tabs__table">
@@ -50,6 +50,8 @@
                             </tbody>
                         </table>
                         <hr class="divider">
+                    {% else %}
+                        {% include 'producten/_include/generiek_warning.html' %}
                     {% endif %}
 
                     <table class="tabs__table form__has-reference">

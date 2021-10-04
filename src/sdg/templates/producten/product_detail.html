@@ -25,7 +25,7 @@
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ info.taal }}">
 
-                        {% include 'producten/_include/beschikbaar_notification.html' %}
+                        {% include 'producten/_include/beschikbaar_warning.html' %}
 
                         <div class="tabs__tab-header">
                             <div class="tabs__status">
@@ -80,6 +80,8 @@
                             </table>
 
                             <hr class="divider">
+                        {% else %}
+                            {% include 'producten/_include/generiek_warning.html' %}
                         {% endif %}
 
 
