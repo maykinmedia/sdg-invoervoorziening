@@ -18,3 +18,8 @@ class UserFactory(DjangoModelFactory):
 
     class Meta:
         model = User
+
+
+class SuperUserFactory(UserFactory):
+    is_staff = True
+    is_superuser = True

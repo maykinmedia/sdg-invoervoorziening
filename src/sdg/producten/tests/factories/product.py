@@ -14,7 +14,7 @@ from sdg.producten.models import GeneriekProduct, Product, ProductVersie
 class GeneriekProductFactory(DjangoModelFactory):
     upn = factory.SubFactory(UniformeProductnaamFactory)
     verantwoordelijke_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
-    verplicht_product = factory.Faker("pyint")
+    verplicht_product = factory.Faker("pybool")
 
     class Meta:
         model = GeneriekProduct
@@ -23,7 +23,7 @@ class GeneriekProductFactory(DjangoModelFactory):
 class ProductFactory(DjangoModelFactory):
     beschikbaar = factory.Faker("pybool")
     catalogus = factory.SubFactory(ProductenCatalogusFactory)
-    lokaties = factory.SubFactory(LokatieFactory)
+    lokaties = factory.RelatedFactoryList(LokatieFactory, size=3)
 
     class Meta:
         model = Product

@@ -30,7 +30,7 @@ class InformatiegebiedFactory(DjangoModelFactory):
 class ThemaFactory(DjangoModelFactory):
     informatiegebied = factory.SubFactory(InformatiegebiedFactory)
     thema = factory.Faker("word")
-    informatiegebied_uri = factory.Faker("url")
+    thema_uri = factory.Faker("url")
 
     class Meta:
         model = Thema

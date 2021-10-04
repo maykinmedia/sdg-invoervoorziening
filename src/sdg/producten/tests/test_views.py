@@ -1,11 +1,30 @@
+from django.urls import reverse_lazy
+
 from django_webtest import WebTest
+
+from sdg.accounts.tests.factories import SuperUserFactory
+from sdg.producten.tests.factories.product import SpecifiekProductFactory
+
+PRODUCT_EDIT = "producten:edit"
+PRODUCT_DETAIL = "producten:detail"
 
 
 class ProductDetailViewTests(WebTest):
     ...
 
 
-class ProductUpdateViewTests(WebTest):
+class ReferentieProductUpdateViewTests(WebTest):
+    ...
+
+
+class SpecifiekProductUpdateViewTests(WebTest):
+    def setUp(self):
+        super().setUp()
+
+        self.superuser = SuperUserFactory.create()
+        self.app.set_user(self.superuser)
+        self.specific_product = SpecifiekProductFactory.create()
+
     def test_publish_now(self):
         ...
 
