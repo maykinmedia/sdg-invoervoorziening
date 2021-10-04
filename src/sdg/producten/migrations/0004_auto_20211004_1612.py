@@ -12,7 +12,7 @@ def create_first_version_for_products(apps, schema_editor):
     User = apps.get_model("accounts", "User")
 
     try:
-        first_user = User.objects.get(pk=1)
+        first_user = User.objects.order_by("-is_staff", "-is_superuser", "pk").first()
     except User.DoesNotExist:
         first_user = User.objects.create(
             username="maykin",
@@ -21,6 +21,8 @@ def create_first_version_for_products(apps, schema_editor):
             first_name="Maykin",
             last_name="Media",
         )
+        first_user.set_password("test")
+        first_user.save()
 
     for product in Product.objects.all():
         product_version = ProductVersie.objects.create(
