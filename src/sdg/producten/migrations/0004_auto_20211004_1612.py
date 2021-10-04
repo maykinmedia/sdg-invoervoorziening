@@ -21,7 +21,7 @@ def create_first_version_for_products(apps, schema_editor):
             first_name="Maykin",
             last_name="Media",
         )
-        first_user.set_password("test")
+        first_user.set_unusable_password()
         first_user.save()
 
     for product in Product.objects.all():
