@@ -21,6 +21,10 @@
       text-decoration: none;
     }
 
+    .svg-inline--fa {
+      margin-right: 10px;
+    }
+
     &.notification__info {
       border-left: 5px solid #0B71A1;
       background-color: $color_primary_light;
@@ -44,11 +48,11 @@
     &.notification__accent {
       border-left: 5px solid $color_accent;
       background-color: $color_accent_notification-bg;
-      color: $color_accent_dark;
+      color: $color_accent_darkest;
 
       .svg-inline--fa,
       a {
-        color: $color_accent_dark;
+        color: $color_accent_darkest;
       }
     }
 

@@ -31,6 +31,16 @@
             {% for generic_information, reference_form, form in informatie_form %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">
+
+                    {% if not product.beschikbaar %}
+                        <div class="notifications notifications">
+                            <div class="notifications__notification notification__accent">
+                                <i class="fas fa-info-circle"></i>
+                                <span>{% trans "Dit product is van de productenlijst verwijderd. Uw product is nog zichtbaar omdat u deze in het verleden heeft toegevoegd aan uw catalogus maar zal niet meer getoond worden op de Nationale Portalen." %}</span>
+                            </div>
+                        </div>
+                     {% endif %}
+
                     {% if generic_information %}
                         <table class="tabs__table">
                             <thead>
