@@ -21,7 +21,7 @@ class HomeViewTests(WebTest):
         RoleFactory.create()
         RoleFactory.create()
 
-        response = self.app.get(reverse_lazy("core:home"))
+        response = self.app.get(reverse_lazy(HOME_URL))
         self.assertEqual(response.status_code, Status.OK)
 
         municipalities = response.pyquery(".cards__card")
@@ -40,7 +40,7 @@ class HomeViewTests(WebTest):
         )
 
     def test_real_name_is_displayed(self):
-        response = self.app.get(reverse_lazy("core:home"))
+        response = self.app.get(reverse_lazy(HOME_URL))
         self.assertEqual(response.status_code, Status.OK)
         self.assertIn(
             self.user.get_full_name(),
