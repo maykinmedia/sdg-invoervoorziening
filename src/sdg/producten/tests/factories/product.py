@@ -21,7 +21,7 @@ class GeneriekProductFactory(DjangoModelFactory):
 
 
 class ProductFactory(DjangoModelFactory):
-    beschikbaar = factory.Faker("pybool")
+    beschikbaar = True
     catalogus = factory.SubFactory(ProductenCatalogusFactory)
     lokaties = factory.RelatedFactoryList(LokatieFactory, size=3)
 
@@ -46,3 +46,11 @@ class ProductVersieFactory(DjangoModelFactory):
 
     class Meta:
         model = ProductVersie
+
+
+class ReferentieProductVersieFactory(ProductVersieFactory):
+    product = factory.SubFactory(ReferentieProductFactory)
+
+
+class SpecifiekProductVersieFactory(ProductVersieFactory):
+    product = factory.SubFactory(SpecifiekProductFactory)

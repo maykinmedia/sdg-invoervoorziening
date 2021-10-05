@@ -9,7 +9,7 @@ class TaalChoices(DjangoChoices):
 
     @classmethod
     def get_available_languages(cls):
-        return dict(cls).keys()
+        return list(dict(cls).keys())
 
 
 class DoelgroepChoices(DjangoChoices):
