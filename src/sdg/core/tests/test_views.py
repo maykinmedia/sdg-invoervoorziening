@@ -6,6 +6,7 @@ from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.tests.constants import Status
 
 HOME_URL = "core:home"
+CARD_CLASS_NAME = ".cards__card"
 
 
 class HomeViewTests(WebTest):
@@ -24,7 +25,7 @@ class HomeViewTests(WebTest):
         response = self.app.get(reverse_lazy(HOME_URL))
         self.assertEqual(response.status_code, Status.OK)
 
-        municipalities = response.pyquery(".cards__card")
+        municipalities = response.pyquery(CARD_CLASS_NAME)
 
         self.assertEqual(len(municipalities), 2)
 
