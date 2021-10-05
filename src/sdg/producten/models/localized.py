@@ -242,7 +242,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=["product_versie", "taal"],
-                name="unique_language_per_product",
+                name="unique_language_per_productversie",
             )
         ]
 
