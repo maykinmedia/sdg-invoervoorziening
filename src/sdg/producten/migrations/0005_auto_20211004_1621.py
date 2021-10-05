@@ -27,9 +27,5 @@ class Migration(migrations.Migration):
                 verbose_name="product versie",
                 null=False,
             ),
-        ),
-        migrations.RemoveConstraint(
-            model_name="localizedproduct",
-            name="unique_language_per_product",
-        ),
+        )
     ]
