@@ -8,6 +8,7 @@ from sdg.producten.tests.factories.localized import (
 )
 from sdg.producten.tests.factories.product import (
     ProductVersieFactory,
+    ReferentieProductVersieFactory,
     SpecifiekProductFactory,
     SpecifiekProductVersieFactory,
 )
@@ -27,7 +28,6 @@ class ProductDetailViewTests(WebTest):
         self.app.set_user(self.user)
 
     def test_unavailable_product_displays_warning(self):
-
         product = SpecifiekProductFactory.create(beschikbaar=False)
         product_version = ProductVersieFactory.create(product=product)
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
@@ -68,9 +68,7 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(generic_en.korte_omschrijving, text_en)
 
     def test_reference_product_details_are_displayed(self):
-        product_version = SpecifiekProductVersieFactory.create()
-
-        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+        product_version = ReferentieProductVersieFactory.create()
         reference_nl, reference_en = LocalizedProductFactory.create_batch(
             2, product_versie=product_version
         )
@@ -95,9 +93,7 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(reference_en.specifieke_link, text_en)
 
     def test_specific_product_details_are_displayed(self):
-
         product_version = SpecifiekProductVersieFactory.create()
-
         specific_nl, specific_en = LocalizedProductFactory.create_batch(
             2, product_versie=product_version
         )
@@ -123,16 +119,18 @@ class ProductDetailViewTests(WebTest):
 
     def test_reference_product_fills_missing_specific_fields(self):
         product_version = SpecifiekProductVersieFactory.create()
+        reference_product = product_version.product.referentie_product
 
         specific_nl, specific_en = LocalizedProductFactory.create_batch(
             2,
             product_versie=product_version,
-            specifieke_tekst=None,
-            specifieke_link=None,
+            specifieke_tekst="",
+            specifieke_link="",
         )
+
+        reference_versie = ProductVersieFactory.create(product=reference_product)
         reference_nl, reference_en = LocalizedProductFactory.create_batch(
-            2,
-            product_versie=product_version,
+            2, product_versie=reference_versie
         )
 
         RoleFactory.create(
@@ -150,7 +148,7 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(reference_nl.specifieke_tekst, text_nl)
         self.assertIn(reference_nl.specifieke_link, text_nl)
 
-        self.assertIn(specific_nl.product_titel_decentraal, text_en)
+        self.assertIn(specific_en.product_titel_decentraal, text_en)
         self.assertIn(reference_en.specifieke_tekst, text_en)
         self.assertIn(reference_en.specifieke_link, text_en)
 

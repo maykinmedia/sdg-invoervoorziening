@@ -23,7 +23,7 @@ class LocalizedGeneriekProductFactory(DjangoModelFactory):
     korte_omschrijving = factory.Faker("sentence")
     landelijke_link = factory.Faker("url")
 
-    taal = factory.Sequence(lambda n: TaalChoices.get_available_languages()[n])
+    taal = factory.Sequence(lambda n: TaalChoices.get_available_languages()[n % 2])
 
     class Meta:
         model = LocalizedGeneriekProduct
