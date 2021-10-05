@@ -24,6 +24,9 @@
                 {% for info in latest_version.vertalingen.all %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ info.taal }}">
+
+                        {% include 'producten/_include/beschikbaar_warning.html' %}
+
                         <div class="tabs__tab-header">
                             <div class="tabs__status">
                                 <span class="tabs__status-label">Status:</span>
@@ -77,7 +80,10 @@
                             </table>
 
                             <hr class="divider">
+                        {% else %}
+                            {% include 'producten/_include/generiek_warning.html' %}
                         {% endif %}
+
 
                         <table class="tabs__table">
                             <thead>
