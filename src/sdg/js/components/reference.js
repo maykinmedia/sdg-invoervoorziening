@@ -1,4 +1,7 @@
+import applyMarkdownEditors from './markdown';
 const forms = document.querySelectorAll(".form__has-reference");
+
+const availableEditors = applyMarkdownEditors(".markdownx textarea");
 
 class FormWithReference {
     constructor(node) {
@@ -11,7 +14,12 @@ class FormWithReference {
             const formReferenceBtn = cell.querySelector(".form__reference-btn");
             formReferenceBtn.addEventListener("click", (event) => {
                 event.preventDefault();
-                formInput.value = this.referenceForm.content.getElementById(formInput.id).value;
+                const referenceValue = this.referenceForm.content.getElementById(formInput.id).value
+                if (availableEditors.hasOwnProperty(formInput.id)) {
+                    availableEditors[formInput.id].setData(referenceValue);
+                } else {
+                    formInput.value = referenceValue;
+                }
             })
         });
     }

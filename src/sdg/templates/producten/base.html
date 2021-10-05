@@ -1,5 +1,10 @@
 {% extends 'core/base.html' %}
+
 {% load i18n %}
+{% load static %}
 
 {% block title %}SDG | {% trans "Producten" %}{% endblock %}
 {% block notifications %}{% endblock %}
+{% block extra_css %}
+    <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
+{% endblock %}
