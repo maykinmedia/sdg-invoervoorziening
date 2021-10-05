@@ -6,13 +6,21 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from django.utils.timezone import now
 from django.views.generic import DetailView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.forms import LocalizedProductForm
-from sdg.producten.models import GeneriekProduct, LocalizedProduct, Product
+from sdg.producten.constants import PublishChoices
+from sdg.producten.forms import LocalizedProductForm, ProductVersionForm
+from sdg.producten.models import (
+    GeneriekProduct,
+    LocalizedProduct,
+    Product,
+    ProductVersie,
+)
+from sdg.producten.utils import duplicate_localized_products
 
 
 class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
@@ -48,14 +56,13 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
         "catalogus__lokale_overheid"
     ).prefetch_related(
         "lokaties",
-        "vertalingen",
-        "referentie_product__vertalingen",
+        "versies__vertalingen",
+        "referentie_product__versies__vertalingen",
         Prefetch(
             "referentie_product__generiek_product",
             queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
         ),
     )
-    # model = Product
     required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
@@ -70,10 +77,10 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
 
 class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     template_name = "producten/product_edit.html"
-    context_object_name = "product"
+    context_object_name = "product_versie"
     queryset = Product.objects.select_related("catalogus__lokale_overheid")
     form_class = inlineformset_factory(
-        Product,
+        ProductVersie,
         LocalizedProduct,
         form=LocalizedProductForm,
         extra=0,
@@ -81,36 +88,70 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
-        self.object = self.get_object()
-        return self.object.catalogus.lokale_overheid
+        self.product = self.get_object()
+        self.lokale_overheid = self.product.catalogus.lokale_overheid
+        self.object = self.product.laatste_versie
+        return self.lokale_overheid
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        generic_information = self.object.get_generic_product().vertalingen.all()
+        generic_information = self.product.generic_product.vertalingen.all()
+
+        if self.product.is_referentie_product:
+            reference_product = self.product
+        else:
+            reference_product = self.product.referentie_product
+
         reference_formset = inlineformset_factory(
-            Product, LocalizedProduct, form=LocalizedProductForm, extra=0
+            ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(
-            instance=self.object.referentie_product,
+            instance=reference_product.laatste_versie,
         )
+
+        context["product"] = self.product
+        context["lokale_overheid"] = self.product.catalogus.lokale_overheid
         context["informatie_form"] = zip_longest(
             generic_information, reference_formset.forms, context["form"].forms
         )
-        context["lokale_overheid"] = self.object.catalogus.lokale_overheid
         return context
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
+        if self.object.get_published_status() != PublishChoices.now:
+            instance = self.object
+            versie = self.object.versie
+        else:
+            instance = None
+            versie = self.object.versie + 1
+
+        version_form = ProductVersionForm(
+            data={
+                "product": self.product.pk,
+                "gemaakt_door": self.request.user.pk,
+                "versie": versie,
+                "publish": request.POST.get("publish"),
+                "date": request.POST.get("date"),
+            },
+            instance=instance,
+        )
+
         form = self.form_class(request.POST, instance=self.object)
-        if form.is_valid():
-            return self.form_valid(form)
+        if form.is_valid() and version_form.is_valid():
+            return self.form_valid(form, version_form)
         else:
             return self.form_invalid(form)
 
-    def form_valid(self, form):
-        form.save()
+    def form_valid(self, form, version_form):
+        new_version = version_form.save()
+
+        if self.object.pk != new_version.pk:
+            duplicate_localized_products(form, new_version)
+        else:
+            form.save()
+
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.object.pk})
+        return reverse("producten:detail", kwargs={"pk": self.product.pk})

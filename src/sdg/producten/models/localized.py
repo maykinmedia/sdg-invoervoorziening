@@ -76,9 +76,6 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
     )
 
-    def __str__(self):
-        return self.product_titel
-
     class Meta:
         verbose_name = _("Vertaald generiek product")
         verbose_name_plural = _("Vertaalde generieke producten")
@@ -89,14 +86,17 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             )
         ]
 
+    def __str__(self):
+        return self.product_titel
+
 
 class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     """
     Localized information for a product.
     """
 
-    product = models.ForeignKey(
-        "producten.Product",
+    product_versie = models.ForeignKey(
+        "producten.ProductVersie",
         on_delete=models.CASCADE,
         related_name="vertalingen",
         verbose_name=_("specifieke product"),
@@ -204,42 +204,48 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     @cached_property
     def referentie_informatie(self):
-        if self.product.referentie_product:
-            return self.product.referentie_product.vertalingen.get(taal=self.taal)
+        if self.product_versie.product.referentie_product:
+            return self.product_versie.product.referentie_product.get_latest_version().vertalingen.get(
+                taal=self.taal
+            )
         else:
             return None
 
     @cached_property
     def generiek_informatie(self):
-        return self.product.get_generic_product().vertalingen.get(taal=self.taal)
+        return self.product_versie.product.generic_product.vertalingen.get(
+            taal=self.taal
+        )
 
     def localize_specific_products(self):
         """
         Localize all specific products related to this localized reference product.
         """
 
-        product = self.product
+        product = self.product_versie.product
         if product.is_referentie_product:
             LocalizedProduct.objects.bulk_create(
                 [
-                    specific_product.generate_localized_information(taal=self.taal)
+                    specific_product.laatste_versie.generate_localized_information(
+                        taal=self.taal
+                    )
                     for specific_product in product.specifieke_producten.all()
                 ],
                 ignore_conflicts=True,
             )
-
-    def __str__(self):
-        return self.product_titel_decentraal
 
     class Meta:
         verbose_name = _("vertaald product")
         verbose_name_plural = _("vertaalde producten")
         constraints = [
             models.UniqueConstraint(
-                fields=["product", "taal"],
+                fields=["product_versie", "taal"],
                 name="unique_language_per_product",
             )
         ]
+
+    def __str__(self):
+        return self.product_titel_decentraal
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -268,9 +274,6 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
         help_text=_("De titel van de uitvoering van het product."),
     )
 
-    def __str__(self):
-        return self.product_titel_uitvoering
-
     class Meta:
         verbose_name = _("vertaalde productuitvoering")
         verbose_name_plural = _("vertaalde productuitvoeringen")
@@ -280,3 +283,6 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
                 name="unique_language_per_productuitvoering",
             )
         ]
+
+    def __str__(self):
+        return self.product_titel_uitvoering

@@ -9,16 +9,25 @@
 
 {% block inner %}
     <div class="products">
-        <div class="cards">
-            {% for lokaleoverheid in lokale_overheden %}
-                <a class="cards__card"
-                   href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">
-                    <i class="fa fa-landmark"></i>
-                    <span>
+        {% if lokale_overheden %}
+            <div class="cards">
+                {% for lokaleoverheid in lokale_overheden %}
+                    <a class="cards__card"
+                       href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">
+                        <i class="fa fa-landmark"></i>
+                        <span>
                     {{ lokaleoverheid }}
                 </span>
-                </a>
-            {% endfor %}
-        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="notifications notifications">
+                <div class="notifications__notification notification__accent">
+                    <i class="fas fa-info-circle"></i>
+                    <span>{% trans "Je hebt geen toegang tot enige lokale overheid." %}</span>
+                </div>
+            </div>
+        {% endif %}
     </div>
 {% endblock inner %}

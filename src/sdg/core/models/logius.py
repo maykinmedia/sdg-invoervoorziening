@@ -30,12 +30,12 @@ class Overheidsorganisatie(models.Model):
 
     objects = OrganisatieManager()
 
-    def __str__(self):
-        return self.owms_pref_label
-
     class Meta:
         verbose_name = _("overheidsorganisatie")
         verbose_name_plural = _("overheidsorganisaties")
+
+    def __str__(self):
+        return self.owms_pref_label
 
 
 class Informatiegebied(models.Model):
@@ -61,12 +61,12 @@ class Informatiegebied(models.Model):
         ),
     )
 
-    def __str__(self):
-        return f"{self.informatiegebied} [{self.code}]"
-
     class Meta:
         verbose_name = _("informatiegebied")
         verbose_name_plural = _("informatiegebieden")
+
+    def __str__(self):
+        return f"{self.informatiegebied} [{self.code}]"
 
 
 class Thema(models.Model):
@@ -97,12 +97,12 @@ class Thema(models.Model):
     def code(self):
         return self.informatiegebied.code
 
-    def __str__(self):
-        return f"{self.thema}"
-
     class Meta:
         verbose_name = _("thema")
         verbose_name_plural = _("thema's")
+
+    def __str__(self):
+        return f"{self.thema}"
 
 
 class UniformeProductnaam(models.Model):
@@ -215,9 +215,9 @@ class UniformeProductnaam(models.Model):
         null=True,
     )
 
-    def __str__(self):
-        return self.upn_label
-
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
+
+    def __str__(self):
+        return self.upn_label

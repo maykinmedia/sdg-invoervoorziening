@@ -1,6 +1,8 @@
 from django import forms
+from django.utils.timezone import now
 
-from .models import LocalizedProduct
+from .constants import PublishChoices
+from .models import LocalizedProduct, ProductVersie
 
 
 class LocalizedProductForm(forms.ModelForm):
@@ -13,7 +15,6 @@ class LocalizedProductForm(forms.ModelForm):
             "verwijzing_links",
             "specifieke_link",
             "decentrale_link",
-            # "datum_wijziging",
             "procedure_beschrijving",
             "vereisten",
             "bewijs",
@@ -23,3 +24,27 @@ class LocalizedProductForm(forms.ModelForm):
             "wtd_bij_geen_reactie",
             "decentrale_procedure_link",
         )
+
+
+class ProductVersionForm(forms.ModelForm):
+    publish = forms.ChoiceField(choices=PublishChoices.choices)
+    date = forms.DateTimeField(required=False)
+
+    class Meta:
+        model = ProductVersie
+        fields = (
+            "product",
+            "gemaakt_door",
+            "versie",
+            "publicatie_datum",
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if cleaned_data["publish"] == PublishChoices.now:
+            cleaned_data["publicatie_datum"] = now()
+        else:
+            cleaned_data["publicatie_datum"] = cleaned_data.get("date", None)
+
+        return cleaned_data

@@ -1,16 +1,25 @@
 from __future__ import annotations
 
+from typing import Any
+
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models import Model
+from django.db.models import F, Model, Q
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
+from sdg.producten.constants import PublishChoices
 from sdg.producten.models import LocalizedProduct
+from sdg.producten.utils import is_past_date
+
+User = get_user_model()
 
 
 class GeneriekProduct(models.Model):
@@ -49,12 +58,12 @@ class GeneriekProduct(models.Model):
     def upn_label(self):
         return self.upn.upn_label
 
-    def __str__(self):
-        return f"{self.upn.upn_label}"
-
     class Meta:
         verbose_name = _("generiek product")
         verbose_name_plural = _("generieke producten")
+
+    def __str__(self):
+        return f"{self.upn.upn_label}"
 
 
 class Product(models.Model):
@@ -114,14 +123,6 @@ class Product(models.Model):
         help_text=_("Geeft aan of het product al dan niet beschikbaar is."),
         default=False,
     )
-    versie = models.PositiveIntegerField(
-        verbose_name=_("versie"),
-        help_text=_("Het versienummer van het item."),
-        default=1,
-    )
-    publicatie_datum = models.DateTimeField(
-        _("publicatie datum"), help_text=_("De datum van publicatie van de product.")
-    )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
         verbose_name=_("lokaties"),
@@ -134,22 +135,34 @@ class Product(models.Model):
 
     @property
     def upn_uri(self):
-        return self.get_generic_product().upn.upn_uri
+        return self.generic_product.upn.upn_uri
 
     @property
     def upn_label(self):
-        return self.get_generic_product().upn.upn_label
+        return self.generic_product.upn.upn_label
 
     @cached_property
     def beschikbare_talen(self):
-        return {i.get_taal_display(): i.taal for i in self.vertalingen.all()}
+        return {
+            i.get_taal_display(): i.taal for i in self.laatste_versie.vertalingen.all()
+        }
 
     @cached_property
     def is_referentie_product(self) -> bool:
         """:returns: Whether this is a reference product or not."""
         return bool(not self.referentie_product)
 
-    def get_generic_product(self):
+    @cached_property
+    def laatste_versie(self):
+        return self.get_latest_versions(1)[0]
+
+    @cached_property
+    def laatste_ongepubliceerde_versie(self):
+        """:returns: Latest unpublished version for this product."""
+        return self.versies.order_by(F("publicatie_datum").asc(nulls_first=True)).last()
+
+    @cached_property
+    def generic_product(self):
         """:returns: The generic product of this product."""
 
         return (
@@ -158,17 +171,20 @@ class Product(models.Model):
             else self.referentie_product.generiek_product
         )
 
-    def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
-        """Generate localized information for this product."""
-
-        return LocalizedProduct(
+    def create_version_from_reference(self) -> ProductVersie:
+        """Create fist version for this product based on latest reference version."""
+        if self.is_referentie_product:
+            raise ValueError(
+                "create_version_from_reference must be called on a specific product"
+            )
+        return ProductVersie.objects.create(
             product=self,
-            taal=taal,
-            **kwargs,
+            gemaakt_door=self.referentie_product.laatste_versie.gemaakt_door,
+            publicatie_datum=now(),
         )
 
-    def localize_from_reference(self):
-        """Create localized product information for this specific product based on reference."""
+    def localize_version_from_reference(self, version: ProductVersie):
+        """Create localized product information for this specific product based on available reference languages."""
 
         if self.is_referentie_product:
             raise ValueError(
@@ -177,7 +193,7 @@ class Product(models.Model):
 
         LocalizedProduct.objects.bulk_create(
             [
-                self.generate_localized_information(taal=taal)
+                version.generate_localized_information(taal=taal)
                 for taal in self.referentie_product.beschikbare_talen.values()
             ],
             ignore_conflicts=True,
@@ -197,16 +213,23 @@ class Product(models.Model):
                     catalogus=specific_catalog,
                     defaults={
                         "doelgroep": self.doelgroep,
-                        "publicatie_datum": self.publicatie_datum,
                     },
                 )
-                specific_product.localize_from_reference()
+                version = specific_product.create_version_from_reference()
+                specific_product.localize_version_from_reference(version)
                 return specific_product
         else:
             return self
 
-    def get_absolute_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.pk})
+    def get_latest_versions(self, quantity=5):
+        """:returns: The latest N versions for this product."""
+        return self.versies.all().order_by(F("publicatie_datum").desc(nulls_last=True))[
+            :quantity:-1
+        ]
+
+    class Meta:
+        verbose_name = _("product")
+        verbose_name_plural = _("producten")
 
     def __str__(self):
         if self.is_referentie_product:
@@ -214,9 +237,8 @@ class Product(models.Model):
         else:
             return f"{self.referentie_product.upn_label}"
 
-    class Meta:
-        verbose_name = _("product")
-        verbose_name_plural = _("producten")
+    def get_absolute_url(self):
+        return reverse("producten:detail", kwargs={"pk": self.pk})
 
     def clean(self):
         from sdg.producten.models.validators import (
@@ -232,6 +254,83 @@ class Product(models.Model):
             validate_specific_product(self)
 
 
+class ProductVersie(models.Model):
+    """
+    Product Version
+
+    The version of a product.
+    """
+
+    product = models.ForeignKey(
+        "producten.Product",
+        related_name="versies",
+        on_delete=models.PROTECT,
+        verbose_name=_("product"),
+        help_text=_("Het product voor het product versie."),
+    )
+    gemaakt_door = models.ForeignKey(
+        User,
+        related_name="productversies",
+        on_delete=models.PROTECT,
+        verbose_name=_("gemaakt_door"),
+        help_text=_("De maker van deze productversie."),
+    )
+    versie = models.PositiveIntegerField(
+        verbose_name=_("versie"),
+        help_text=_("Het versienummer van het product."),
+        default=1,
+    )
+
+    publicatie_datum = models.DateTimeField(
+        _("publicatie datum"),
+        help_text=_("De datum van publicatie van de productversie."),
+        blank=True,
+        null=True,
+    )
+    gemaakt_op = models.DateTimeField(
+        _("gemaakt op"),
+        help_text=_("De oorspronkelijke aanmaakdatum voor deze productversie."),
+        auto_now_add=True,
+    )
+    gewijzigd_op = models.DateTimeField(
+        _("gewijzigd op"),
+        help_text=_("De wijzigingsdatum voor deze productversie."),
+        auto_now=True,
+    )
+
+    def get_published_status(self) -> Any[PublishChoices.choices]:
+        """:returns: The current published status for this product version."""
+        if not self.publicatie_datum:
+            return PublishChoices.concept
+        elif self.publicatie_datum < now():
+            return PublishChoices.now
+        else:
+            return PublishChoices.later
+
+    def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
+        """Generate localized information for this product."""
+        return LocalizedProduct(
+            product_versie=self,
+            taal=taal,
+            **kwargs,
+        )
+
+    class Meta:
+        verbose_name = _("product versie")
+        verbose_name_plural = _("product versies")
+        ordering = ("-versie",)
+
+    def __str__(self):
+        return f"{self.product} - {self.versie}"
+
+    def clean(self):
+        super().clean()
+        if self.publicatie_datum and is_past_date(self.publicatie_datum):
+            raise ValidationError(
+                _("De publicatiedatum kan niet in het verleden liggen.")
+            )
+
+
 class Productuitvoering(models.Model):
     """
     Product variant
@@ -244,13 +343,13 @@ class Productuitvoering(models.Model):
         "producten.Product",
         related_name="uitvoeringen",
         on_delete=models.PROTECT,
-        verbose_name=_("referentie"),
-        help_text=_("Het referentieproduct voor het product."),
+        verbose_name=_("product"),
+        help_text=_("Het product voor het productuitvoering."),
     )
-
-    def __str__(self):
-        return f"{self.product} (uitvoering)"
 
     class Meta:
         verbose_name = _("productuitvoering")
         verbose_name_plural = _("productuitvoeringen")
+
+    def __str__(self):
+        return f"{self.product} (uitvoering)"

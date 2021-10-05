@@ -1,11 +1,17 @@
 {% extends 'producten/base.html' %}
 
 {% load utils %}
+{% load static %}
 {% load i18n %}
 {% load producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de <b>{{ lokale_overheid }}</b>{% endblock container_title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'flatpickr.min.css' %}" />
+    <script src="{% static 'flatpickr.min.js' %}"></script>
+{% endblock %}
 
 {% block inner %}
     <div class="tabs">
@@ -86,16 +92,23 @@
             <div class="form-actions">
                 <div></div>
                 <div>
-                    <div class="form-actions__title">Wijzigingen publiceren</div>
+                    <div class="form-actions__title">{% trans "Wijzigingen publiceren" %}</div>
                     <div class="form-actions__options">
                         <label for="now">
-                            <input type="radio" name="publish" id="now">
-                            <label for="now">Publiceer direct</label>
+                            <input type="radio" name="publish" id="now" value="now">
+                            <label for="now">{% trans "Publiceer direct" %}</label>
                         </label>
                         <label for="later">
-                            <input type="radio" name="publish" id="later">
-                            <label for="later">Kies datum</label>
+                            <input type="radio" name="publish" id="later" value="later">
+                            <label for="later">{% trans "Kies datum" %}</label>
                         </label>
+                        <label for="concept">
+                            <input type="radio" name="publish" id="concept" value="concept">
+                            <label for="concept">{% trans "Opslaan als concept" %}</label>
+                        </label>
+                        <div class="calendar-container closed">
+                            <input name="date" type="date" class="calendar form__input">
+                        </div>
                     </div>
                     <input class="button tabs__form-button" type="submit" value="Opslaan">
                 </div>

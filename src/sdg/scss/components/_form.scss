@@ -107,8 +107,8 @@
     grid-gap: 8px;
 
     li {
-      background-color: $color_grey_dark;
-      color: #fff;
+      background-color: $color_grey_darker;
+      color: $color_bg;
       padding: 8px;
     }
   }

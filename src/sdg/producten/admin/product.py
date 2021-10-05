@@ -7,6 +7,7 @@ from sdg.producten.models import (
     LocalizedGeneriekProduct,
     LocalizedProduct,
     Product,
+    ProductVersie,
 )
 
 
@@ -50,6 +51,38 @@ class GeneriekProductAdmin(MarkdownxModelAdmin):
     raw_id_fields = ("verantwoordelijke_organisatie", "upn")
 
 
+class ProductVersieInlineAdmin(admin.StackedInline):
+    list_display = (
+        "gemaakt_door",
+        "versie",
+        "publicatie_datum",
+        "gemaakt_op",
+        "gewijzigd_op",
+    )
+    model = ProductVersie
+    extra = 1
+
+
+@admin.register(ProductVersie)
+class ProductVersieAdmin(MarkdownxModelAdmin):
+    list_display = (
+        "versie",
+        "product",
+        "lokale_overheid",
+        "gemaakt_door",
+        "publicatie_datum",
+        "gemaakt_op",
+        "gewijzigd_op",
+    )
+    inlines = (LocalizedProductInline,)
+    ordering = ("-publicatie_datum",)
+
+    def lokale_overheid(self, obj):
+        return obj.product.catalogus.lokale_overheid
+
+    lokale_overheid.admin_order_field = "product__catalogus__lokale_overheid"
+
+
 @admin.register(Product)
 class ProductAdmin(MarkdownxModelAdmin):
     list_display = (
@@ -65,7 +98,7 @@ class ProductAdmin(MarkdownxModelAdmin):
         "generiek_product",
         IsReferenceProductFilter,
     )
-    inlines = (LocalizedProductInline,)
+    inlines = (ProductVersieInlineAdmin,)
 
     def is_referentie(self, obj):
         return obj.is_referentie_product

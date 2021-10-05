@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.accounts.models import Role
@@ -48,7 +47,7 @@ class ProductenCatalogus(models.Model):
     )
     naam = models.CharField(
         _("naam"),
-        max_length=40,
+        max_length=120,
         help_text=_("De naam van de producten catalogus."),
     )
     toelichting = models.TextField(
@@ -80,12 +79,6 @@ class ProductenCatalogus(models.Model):
         """Returns whether this catalog has a reference catalog."""
         return bool(self.referentie_catalogus)
 
-    def __str__(self):
-        if self.is_referentie_catalogus:
-            return f"{self.naam} (referentie)"
-        else:
-            return f"{self.naam}"
-
     class Meta:
         verbose_name = _("producten catalogus")
         verbose_name_plural = _("producten catalogi")
@@ -95,6 +88,12 @@ class ProductenCatalogus(models.Model):
                 name="unique_referentie_catalogus_and_lokale_overheid",
             )
         ]
+
+    def __str__(self):
+        if self.is_referentie_catalogus:
+            return f"{self.naam} (referentie)"
+        else:
+            return f"{self.naam}"
 
     def clean(self):
         super().clean()
