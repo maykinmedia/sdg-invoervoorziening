@@ -11,7 +11,7 @@ from sdg.core.models import (
 
 class OverheidsorganisatieFactory(DjangoModelFactory):
     owms_identifier = factory.Faker("company")
-    owms_pref_label = factory.Faker("url")
+    owms_pref_label = factory.Faker("word")
     owms_end_date = factory.Faker("date")
 
     class Meta:

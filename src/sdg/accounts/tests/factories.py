@@ -4,6 +4,9 @@ from django.utils.timezone import now
 import factory
 from factory.django import DjangoModelFactory
 
+from sdg.accounts.models import Role
+from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
+
 User = get_user_model()
 
 
@@ -23,3 +26,13 @@ class UserFactory(DjangoModelFactory):
 class SuperUserFactory(UserFactory):
     is_staff = True
     is_superuser = True
+
+
+class RoleFactory(DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    lokale_overheid = factory.SubFactory(LokaleOverheidFactory)
+    is_beheerder = True
+    is_redacteur = True
+
+    class Meta:
+        model = Role
