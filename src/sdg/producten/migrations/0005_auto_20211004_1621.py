@@ -28,4 +28,8 @@ class Migration(migrations.Migration):
                 null=False,
             ),
         ),
+        migrations.RemoveConstraint(
+            model_name="localizedproduct",
+            name="unique_language_per_product",
+        ),
     ]
