@@ -264,7 +264,7 @@ class ProductVersie(models.Model):
     product = models.ForeignKey(
         "producten.Product",
         related_name="versies",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         verbose_name=_("product"),
         help_text=_("Het product voor het product versie."),
     )
