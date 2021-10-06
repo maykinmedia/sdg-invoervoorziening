@@ -119,49 +119,49 @@ class Lokatie(models.Model):
         _("maandag"),
         blank=True,
         null=True,
-        max_length=16,
+        max_length=80,
         validators=[validate_openingstijden],
     )
     dinsdag = models.CharField(
         _("dinsdag"),
         blank=True,
         null=True,
-        max_length=16,
+        max_length=80,
         validators=[validate_openingstijden],
     )
     woensdag = models.CharField(
         _("woensdag"),
         blank=True,
         null=True,
-        max_length=16,
+        max_length=80,
         validators=[validate_openingstijden],
     )
     donderdag = models.CharField(
         _("donderdag"),
         blank=True,
         null=True,
-        max_length=16,
+        max_length=80,
         validators=[validate_openingstijden],
     )
     vrijdag = models.CharField(
         _("vrijdag"),
         blank=True,
         null=True,
-        max_length=16,
+        max_length=80,
         validators=[validate_openingstijden],
     )
     zaterdag = models.CharField(
         _("zaterdag"),
         blank=True,
         null=True,
-        max_length=16,
+        max_length=80,
         validators=[validate_openingstijden],
     )
     zondag = models.CharField(
         _("zondag"),
         blank=True,
         null=True,
-        max_length=16,
+        max_length=80,
         validators=[validate_openingstijden],
     )
 

@@ -23,7 +23,9 @@ postcode_validator = RegexValidator(
 )
 
 openingstijden_validator = RegexValidator(
-    _lazy_re_compile(r"^[0-9]{1,2}(:|\.)[0-9]{2}(\s?-\s?[0-9]{1,2}(:|\.)[0-9]{2})?$"),
+    _lazy_re_compile(
+        r"^((\s?[0-9]{1,2}(:|\.)[0-9]{2}(\s?-\s?[0-9]{1,2}(:|\.)[0-9]{2})?(\suur)[./|]?\s?)){1,2}$"
+    ),
     message=_(
         "Voer een geldige openingstijd in of laat leeg indien gesloten. Bijvoorbeeld: 09:00 - 17:00"
     ),
