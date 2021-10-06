@@ -19,7 +19,7 @@
     padding: 8px 16px;
     display: block;
     text-decoration: none;
-    color: #0B71A1;
+    color: $color_primary;
 
     &.selection__tab--selected {
       border-top: 1px solid #ddd;
@@ -43,7 +43,17 @@
   }
 
   .selection__title {
-    color: #aaaaaa;
+    color: $color_primary;
+    margin-bottom: 4px;
+  }
+
+  .selection__subtitle {
+    color: $color_grey_darkest;
+    margin-bottom: 4px;
+  }
+
+  .selection__subtitle--secondary {
+    color: $color_grey_darker;
     margin-bottom: 4px;
   }
 

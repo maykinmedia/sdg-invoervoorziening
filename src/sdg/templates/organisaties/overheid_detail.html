@@ -29,20 +29,13 @@
                     <div>
                         <div class="selection__title">Openingstijden</div>
                         <div class="selection__tabled">
-                            <div>Maandag</div>
-                            <div>{{ lokatie.maandag|default:_("Gesloten") }}</div>
-                            <div>Dinsdag</div>
-                            <div>{{ lokatie.dinsdag|default:_("Gesloten") }}</div>
-                            <div>Woensdag</div>
-                            <div>{{ lokatie.woensdag|default:_("Gesloten") }}</div>
-                            <div>Donderdag</div>
-                            <div>{{ lokatie.donderdag|default:_("Gesloten") }}</div>
-                            <div>Vrijdag</div>
-                            <div>{{ lokatie.vrijdag|default:_("Gesloten") }}</div>
-                            <div>Zaterdag</div>
-                            <div>{{ lokatie.zaterdag|default:_("Gesloten") }}</div>
-                            <div>Zondag</div>
-                            <div>{{ lokatie.zondag|default:_("Gesloten") }}</div>
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Mandaag" openingstijd=lokatie.maandag  %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Dinsdag" openingstijd=lokatie.dinsdag  %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Woensdag" openingstijd=lokatie.woensdag  %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Donderdag" openingstijd=lokatie.donderdag  %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Vrijdag" openingstijd=lokatie.vrijdag  %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Zaterdag" openingstijd=lokatie.zaterdag  %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Zondag" openingstijd=lokatie.zondag  %}
                         </div>
                     </div>
                 </div>
