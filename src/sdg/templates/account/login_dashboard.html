@@ -6,15 +6,12 @@
 {% block head_title %}{% trans "Aanmelden" %}{% endblock %}
 
 {% block login_right %}
-    <h3 class="login__container-title">SDG voor gemeenten</h3>
-    <p class="login__container-info">Welkom bij de Single Digital Gateway (SDG) Invoervoorziening van VNG
-        Realisatie.</p>
-    <p class="login__container-info">Hier beheert u gemeente specifieke teksten voor gemeentelijke producten.</p>
-    <p class="login__container-info">Deze informatie wordt gepresenteerd op <a href="#">Rijksoverheid.nl</a> en <a href="#">Digitaalondernemersplein.nl</a>.</p>
-    <p class="login__container-info">Log in om verder te gaan.</p>
-    <a class="login__button button" href="{% url 'account_login' %}?next={{ next }}">
-        Inloggen met Login Service X
-        <i class="fas fa-door-open"></i>
+    <h3 class="login__container-title">{%  trans "SDG voor gemeenten" %}</h3>
+    <p class="login__container-info">{% trans "Welkom bij de Single Digital Gateway (SDG) Invoervoorziening van VNG Realisatie." %}</p>
+    <p class="login__container-info">{% trans "Hier beheert u gemeente specifieke teksten voor gemeentelijke producten." %}</p>
+    <p class="login__container-info">{% blocktrans %}Deze informatie wordt gepresenteerd op <a href="#">Rijksoverheid.nl</a> en <a href="#">Digitaalondernemersplein.nl</a>.{% endblocktrans %}</p>
+    <p class="login__container-info">{% trans "Log in om verder te gaan." %}</p>
+    <a class="login__button button" href="{% url 'account_login' %}?next={{ next }}">{% trans "Inloggen" %}<i class="fa fa-sign-in-alt login__button__icon"></i>
     </a>
 {% endblock %}
 

@@ -48,4 +48,13 @@
     font-size: 16px;
     margin-bottom: 24px;
   }
+
+  .login__button {
+
+    .svg-inline--fa {
+      margin-left: 6px;
+      color: $color_accent_darkest;
+    }
+
+  }
 }

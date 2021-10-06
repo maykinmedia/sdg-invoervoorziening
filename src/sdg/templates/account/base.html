@@ -2,6 +2,9 @@
 {% load i18n static %}
 {% block title %}{% block head_title %}{% endblock head_title %} | SDG {% trans "Rekeningen" %}{% endblock title %}
 {% block main_container %}{% endblock %}
+{% block extra_css %}
+    <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
+{% endblock %}
 
 {% block outer_content %}
     <div class="login">
