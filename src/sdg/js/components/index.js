@@ -7,3 +7,4 @@ import "./reference";
 import "./formset";
 import "./calendar.radio";
 import "./calendar";
+import "./markdown";
