@@ -154,7 +154,9 @@ class Product(models.Model):
 
     @cached_property
     def laatste_versie(self):
-        return self.get_latest_versions(1)[0]
+        latest_version = self.get_latest_versions(1)
+        if latest_version:
+            return latest_version[0]
 
     @cached_property
     def laatste_ongepubliceerde_versie(self):
