@@ -1,0 +1,25 @@
+@import 'colors';
+
+.legend {
+  margin-top: 64px;
+  min-height: 24px;
+  display: flex;
+  justify-content: flex-end;
+
+  .legend__content {
+    background-color: $color_grey_lightest;
+    border-bottom: 4px solid $color_grey_light;
+    padding: 18px;
+    width: 62%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    font-weight: bold;
+
+    .legend__content__item {
+      display: grid;
+      grid-template-columns: 1fr 6fr;
+    }
+
+  }
+
+}
