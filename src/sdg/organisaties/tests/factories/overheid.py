@@ -24,9 +24,10 @@ class LokatieFactory(DjangoModelFactory):
     straat = factory.Faker("street_name")
     nummer = factory.Faker("building_number")
     postcode = factory.LazyFunction(
-        lambda: str(random.randint(1000, 9999)) + "".join(string.ascii_uppercase),
+        lambda: str(random.randint(1000, 9999))
+        + "".join(random.sample(string.ascii_uppercase, k=2)),
     )
-    plaats = factory.LazyFunction("city")
+    plaats = factory.Faker("city")
     land = factory.Faker("country")
     maandag = factory.LazyFunction(lambda: "08:00 - 17:00")
     dinsdag = factory.LazyFunction(lambda: "08:00 - 17:00")
