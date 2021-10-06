@@ -3,6 +3,7 @@ import "./products";
 import "./selection";
 import "./tabs";
 import "./notifications";
+import "./reference";
+import "./formset";
 import "./calendar.radio";
 import "./calendar";
-import "./reference";

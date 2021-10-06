@@ -1,6 +1,14 @@
 {% load utils %}
+{% load i18n %}
 
 <div class="form__subforms">
+    <h3 class="form__subtitle">
+                    <span class="formset__title">Lokatie __prefix__</span>
+                    <a class="formset__remove" href="#">
+                        <i class="far fa-trash-alt"></i>
+                        {% trans "Lokatie verwijderen" %}
+                    </a>
+                </h3>
     <div class="form__block-group">
         <div>
             <div class="form__table-header-left">Lokatie</div>
