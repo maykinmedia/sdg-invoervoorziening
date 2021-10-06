@@ -34,6 +34,7 @@
                         {% for hidden in subform.hidden_fields %}
                             {{ hidden }}
                         {% endfor %}
+                        {{ subform.DELETE|addclass:"hidden" }}
                         <h3 class="form__subtitle">
                             <span>Lokatie {{ forloop.counter }}</span>
                             <a class="formset__remove" href="#">

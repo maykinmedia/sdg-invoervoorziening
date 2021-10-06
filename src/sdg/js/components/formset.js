@@ -110,8 +110,9 @@ class Formset {
      * Removes the selected form
      */
     removeForm(e) {
-        FORMSET_BODY.removeChild(e.target.parentNode.parentNode);
-        FORMSET.querySelector('[name="form-TOTAL_FORMS"]').value--;
+        const form = e.target.parentNode.parentNode;
+        form.classList.add("hidden");
+        form.querySelector(`[name="form-${this.getFormIndex(form)}-DELETE"]`).checked = true;
     }
 }
 
