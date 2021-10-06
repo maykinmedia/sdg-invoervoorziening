@@ -1,0 +1,13 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Aanmelden gesloten" %}{% endblock %}
+
+{% block login_right %}
+{% block content %}
+    <h1>{% trans "Aanmelden gesloten" %}</h1>
+
+    <p>{% trans "Het spijt ons, maar de inschrijving is momenteel gesloten. Neem contact op met een SDG-beheerder." %}</p>
+{% endblock %}
+{% endblock %}
