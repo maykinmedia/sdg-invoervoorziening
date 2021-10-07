@@ -29,11 +29,11 @@ class LokatieFactory(DjangoModelFactory):
     )
     plaats = factory.Faker("city")
     land = factory.Faker("country")
-    maandag = factory.LazyFunction(lambda: "08:00 - 17:00")
-    dinsdag = factory.LazyFunction(lambda: "08:00 - 17:00")
-    woensdag = factory.LazyFunction(lambda: "08:00 - 17:00")
-    donderdag = factory.LazyFunction(lambda: "08:00 - 17:00")
-    vrijdag = factory.LazyFunction(lambda: "08:00 - 17:00")
+    maandag = ["09:00 - 17:00"]
+    dinsdag = ["09:00 - 17:00"]
+    woensdag = ["09:00 - 17:00"]
+    donderdag = ["09:00 - 17:00"]
+    vrijdag = ["09:00 - 17:00"]
 
     class Meta:
         model = Lokatie

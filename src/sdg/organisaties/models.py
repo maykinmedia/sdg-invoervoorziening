@@ -5,6 +5,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from sdg.core.db.fields import DynamicArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.core.models.mixins import ContactgegevensMixin
 from sdg.core.models.validators import validate_openingstijden, validate_postcode
@@ -115,54 +116,61 @@ class Lokatie(models.Model):
         max_length=128,
     )
 
-    maandag = models.CharField(
-        _("maandag"),
+    maandag = DynamicArrayField(
+        verbose_name=_("maandag"),
+        base_field=models.CharField(
+            max_length=32, validators=[validate_openingstijden]
+        ),
         blank=True,
-        null=True,
-        max_length=16,
-        validators=[validate_openingstijden],
+        default=list,
     )
-    dinsdag = models.CharField(
-        _("dinsdag"),
+    dinsdag = DynamicArrayField(
+        verbose_name=_("dinsdag"),
+        base_field=models.CharField(
+            max_length=32, validators=[validate_openingstijden]
+        ),
         blank=True,
-        null=True,
-        max_length=16,
-        validators=[validate_openingstijden],
+        default=list,
     )
-    woensdag = models.CharField(
-        _("woensdag"),
+    woensdag = DynamicArrayField(
+        verbose_name=_("woensdag"),
+        base_field=models.CharField(
+            max_length=32, validators=[validate_openingstijden]
+        ),
         blank=True,
-        null=True,
-        max_length=16,
-        validators=[validate_openingstijden],
+        default=list,
     )
-    donderdag = models.CharField(
-        _("donderdag"),
+    donderdag = DynamicArrayField(
+        verbose_name=_("donderdag"),
+        base_field=models.CharField(
+            max_length=32, validators=[validate_openingstijden]
+        ),
         blank=True,
-        null=True,
-        max_length=16,
-        validators=[validate_openingstijden],
+        default=list,
     )
-    vrijdag = models.CharField(
-        _("vrijdag"),
+    vrijdag = DynamicArrayField(
+        verbose_name=_("vrijdag"),
+        base_field=models.CharField(
+            max_length=32, validators=[validate_openingstijden]
+        ),
         blank=True,
-        null=True,
-        max_length=16,
-        validators=[validate_openingstijden],
+        default=list,
     )
-    zaterdag = models.CharField(
-        _("zaterdag"),
+    zaterdag = DynamicArrayField(
+        verbose_name=_("zaterdag"),
+        base_field=models.CharField(
+            max_length=32, validators=[validate_openingstijden]
+        ),
         blank=True,
-        null=True,
-        max_length=16,
-        validators=[validate_openingstijden],
+        default=list,
     )
-    zondag = models.CharField(
-        _("zondag"),
+    zondag = DynamicArrayField(
+        verbose_name=_("zondag"),
+        base_field=models.CharField(
+            max_length=32, validators=[validate_openingstijden]
+        ),
         blank=True,
-        null=True,
-        max_length=16,
-        validators=[validate_openingstijden],
+        default=list,
     )
 
     def get_formatted_address(self):
