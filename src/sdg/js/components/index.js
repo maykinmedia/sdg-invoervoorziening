@@ -8,3 +8,5 @@ import "./formset";
 import "./calendar.radio";
 import "./calendar";
 import "./markdown";
+import "./reference";
+import "./dynamic_array";

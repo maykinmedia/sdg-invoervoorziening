@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
     # Admin auth
     "django_otp",
     "django_otp.plugins.otp_static",
@@ -165,6 +166,7 @@ TEMPLATES = [
         },
     },
 ]
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 WSGI_APPLICATION = "sdg.wsgi.application"
 
