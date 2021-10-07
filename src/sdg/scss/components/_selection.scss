@@ -44,7 +44,8 @@
 
   .selection__title {
     color: $color_primary;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid $color_grey_light;
   }
 
   .selection__subtitle {
