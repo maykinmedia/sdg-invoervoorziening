@@ -10,7 +10,7 @@ from sdg.core.models import (
 
 
 class OverheidsorganisatieFactory(DjangoModelFactory):
-    owms_identifier = factory.Faker("company")
+    owms_identifier = factory.Sequence(lambda n: f"OWMS #{n}")
     owms_pref_label = factory.Faker("word")
     owms_end_date = factory.Faker("date")
 
