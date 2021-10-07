@@ -28,11 +28,19 @@
                 {{ formset.management_form }}
             </div>
             <div class="formset__body">
-                <div class="form__subforms">
-                    {% for subform in formset %}
+                {% for subform in formset %}
+                    <div class="form__subforms">
                         {% for hidden in subform.hidden_fields %}
                             {{ hidden }}
                         {% endfor %}
+                        {{ subform.DELETE|addclass:"hidden" }}
+                        <h3 class="form__subtitle">
+                            <span>Lokatie {{ forloop.counter }}</span>
+                            <a class="formset__remove" href="#">
+                                <i class="far fa-trash-alt"></i>
+                                {% trans "Lokatie verwijderen" %}
+                            </a>
+                        </h3>
                         <div class="form__block-group">
                             <div>
                                 <div class="form__table-header-left">Lokatie</div>
@@ -57,8 +65,8 @@
                                 {% table_grid_field subform.zondag %}
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
 
@@ -79,8 +87,4 @@
 {% endblock inner %}
 
 {% block extra_js %}
-    <script src="{% static 'formset.js' %}"></script>
-    <script>
-        new Formset();
-    </script>
 {% endblock %}
