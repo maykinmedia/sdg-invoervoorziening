@@ -1,6 +1,7 @@
 from django_webtest import WebTest
 
 from sdg.accounts.tests.factories import RoleFactory, SuperUserFactory, UserFactory
+from sdg.producten.models import LocalizedProduct
 from sdg.producten.tests.factories.localized import (
     LocalizedGeneriekProductFactory,
     LocalizedProductFactory,
@@ -69,8 +70,10 @@ class ProductDetailViewTests(WebTest):
 
     def test_reference_product_details_are_displayed(self):
         product_version = ReferentieProductVersieFactory.create()
-        reference_nl, reference_en = LocalizedProductFactory.create_batch(
-            2, product_versie=product_version
+        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+
+        reference_nl, reference_en = LocalizedProduct.objects.filter(
+            product_versie=product_version
         )
 
         RoleFactory.create(
@@ -94,8 +97,9 @@ class ProductDetailViewTests(WebTest):
 
     def test_specific_product_details_are_displayed(self):
         product_version = SpecifiekProductVersieFactory.create()
-        specific_nl, specific_en = LocalizedProductFactory.create_batch(
-            2, product_versie=product_version
+        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+        specific_nl, specific_en = LocalizedProduct.objects.filter(
+            product_versie=product_version
         )
 
         RoleFactory.create(
@@ -121,16 +125,22 @@ class ProductDetailViewTests(WebTest):
         product_version = SpecifiekProductVersieFactory.create()
         reference_product = product_version.product.referentie_product
 
-        specific_nl, specific_en = LocalizedProductFactory.create_batch(
-            2,
-            product_versie=product_version,
-            specifieke_tekst="",
-            specifieke_link="",
+        reference_product_version = ProductVersieFactory.create(
+            product=reference_product
         )
 
-        reference_versie = ProductVersieFactory.create(product=reference_product)
-        reference_nl, reference_en = LocalizedProductFactory.create_batch(
-            2, product_versie=reference_versie
+        LocalizedProductFactory.create_batch(
+            2, product_versie=product_version, specifieke_tekst="", specifieke_link=""
+        )
+        LocalizedProductFactory.create_batch(
+            2, product_versie=reference_product_version
+        )
+
+        specific_nl, specific_en = LocalizedProduct.objects.filter(
+            product_versie=product_version
+        )
+        reference_nl, reference_en = LocalizedProduct.objects.filter(
+            product_versie=reference_product_version
         )
 
         RoleFactory.create(
