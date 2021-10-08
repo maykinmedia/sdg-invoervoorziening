@@ -3,7 +3,7 @@
 .header {
   height: 390px;
   width: 100%;
-  background: rgb(57,106,136);
+  background: rgb(57, 106, 136);
   background: linear-gradient(353.15deg, #002337 -68.3%, #4C85A6 179.94%);
   padding: 50px 0 53px 0;
   justify-content: space-between;
@@ -25,7 +25,7 @@
     align-items: center;
     text-transform: capitalize;
 
-    &>.svg-inline--fa {
+    & > .svg-inline--fa {
       height: 50px;
       width: 50px;
       border-radius: 50%;
@@ -35,6 +35,7 @@
       overflow: hidden;
       margin-right: 8px;
       border: 3px solid $color_secondary_dark;
+      z-index: 1;
 
       path {
         color: $color_primary;
@@ -42,13 +43,23 @@
     }
   }
 
+  .header__username {
+    background-color: $color_primary_dark;
+    position: relative;
+    right: 30px;
+    width: 155px;
+    border-radius: 84px;
+    padding: 10px;
+    text-align: center;
+  }
+
   .header__title {
-    color: #fff;
-    font-size: 32px;
+    color: $color_secondary_dark;
+    font-size: 30px;
   }
 
   .header__subtitle {
-    color: #fff;
+    color: $color_secondary_darker;
     font-size: 14px;
     margin-bottom: 8px;
   }
@@ -70,14 +81,19 @@
     top: 100%;
     left: 0;
     right: 0;
-    background-color: rgba(255, 255, 255, 1);
+    background-color: $color_primary_dark;
+    color: #fff;
     display: none;
     border-radius: 10px;
+
+    a {
+      color: $color_primary_light;
+    }
 
     .svg-inline--fa {
       float: left;
       margin-top: 2px;
-      margin-right: 3px;
+      margin-right: 8px;
     }
 
   }
@@ -85,7 +101,7 @@
   .header__dropdown-action {
     padding: 12px;
     display: block;
-    text-align: right;
+    text-align: left;
     text-decoration: none;
 
     &:hover {

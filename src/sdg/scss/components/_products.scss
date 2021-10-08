@@ -55,7 +55,7 @@
 
   .products__list-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     grid-gap: 12px;
 
     &.products__list-container--add {
@@ -67,6 +67,7 @@
 
   .products__item {
     background-color: $color_secondary;
+    border-bottom: 3px solid #d3dee3;
     padding: 16px;
     border-radius: 15px;
     display: grid;
@@ -82,7 +83,9 @@
     }
 
     &:hover {
-      transform: translateY(-1px);
+      transform: translateY(1px);
+      border-bottom: none;
+      margin-bottom: 3px;
 
       .products__item-title {
         text-decoration: none;

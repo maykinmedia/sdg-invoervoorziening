@@ -18,14 +18,18 @@
                 </a>
             {% endfor %}
         </div>
-        {% include "core/_notifications.html" %}
+
+        <div class="notifications">
+            {% include "core/_notifications.html" %}
+            {% include 'producten/_include/beschikbaar_warning.html' %}
+        </div>
+
         <div class="tabs__tab-contents">
             {% with latest_version=product.laatste_versie %}
                 {% for info in latest_version.vertalingen.all %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ info.taal }}">
 
-                        {% include 'producten/_include/beschikbaar_warning.html' %}
 
                         <div class="tabs__tab-header">
                             <div class="tabs__status">

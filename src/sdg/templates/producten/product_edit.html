@@ -23,7 +23,10 @@
                 </a>
             {% endfor %}
         </div>
-        {% include "core/_notifications.html" %}
+        <div class="notifications">
+            {% include "core/_notifications.html" %}
+            {% include 'producten/_include/beschikbaar_warning.html' %}
+        </div>
         <form action="." method="POST" class="form tabs__tab-contents">
             {% csrf_token %}
             {{ form.management_form }}
@@ -31,8 +34,6 @@
             {% for generic_information, reference_form, form in informatie_form %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">
-
-                    {% include 'producten/_include/beschikbaar_warning.html' %}
 
                     {% if generic_information %}
                         <table class="tabs__table">
