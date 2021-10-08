@@ -101,6 +101,11 @@
     .svg-inline--fa {
       margin-left: 4px;
       color: $color_primary_dark;
+
+      &.fa-asterisk {
+        float: right;
+      }
+
     }
 
     ul {

@@ -3,7 +3,7 @@
 .header {
   height: 390px;
   width: 100%;
-  background: rgb(57,106,136);
+  background: rgb(57, 106, 136);
   background: linear-gradient(353.15deg, #002337 -68.3%, #4C85A6 179.94%);
   padding: 50px 0 53px 0;
   justify-content: space-between;
@@ -25,7 +25,7 @@
     align-items: center;
     text-transform: capitalize;
 
-    &>.svg-inline--fa {
+    & > .svg-inline--fa {
       height: 50px;
       width: 50px;
       border-radius: 50%;
