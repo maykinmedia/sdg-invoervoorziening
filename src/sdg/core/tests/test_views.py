@@ -16,7 +16,7 @@ class HomeViewTests(WebTest):
         self.app.set_user(self.user)
 
     def test_only_allowed_municipalities_are_displayed(self):
-        role1, role2 = RoleFactory.create_batch(2, user=self.user)
+        role1, role2 = RoleFactory.create_batch(2, user=self.user, is_redacteur=True)
         RoleFactory.create_batch(3)
 
         response = self.app.get(reverse_lazy(HOME_URL))
