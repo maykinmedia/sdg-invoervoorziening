@@ -30,8 +30,6 @@ class LocalizedGeneriekProductFactory(DjangoModelFactory):
 
 
 class LocalizedProductFactory(DjangoModelFactory):
-    product_versie = factory.SubFactory(ProductVersieFactory)
-
     taal = factory.Sequence(lambda n: TaalChoices.get_available_languages()[n % 2])
 
     product_titel_decentraal = factory.Faker("word")
@@ -54,9 +52,9 @@ class LocalizedProductFactory(DjangoModelFactory):
         model = LocalizedProduct
 
 
-class LocalizedReferentieProductFactory(DjangoModelFactory):
+class LocalizedReferentieProductFactory(LocalizedProductFactory):
     product_versie = factory.SubFactory(ReferentieProductVersieFactory)
 
 
-class LocalizedSpecifiekProductFactory(DjangoModelFactory):
+class LocalizedSpecifiekProductFactory(LocalizedProductFactory):
     product_versie = factory.SubFactory(SpecifiekProductVersieFactory)
