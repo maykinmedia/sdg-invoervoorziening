@@ -20,11 +20,14 @@
             </div>
             <div class="header__user header__dropdown">
                 <i class="fas fa-user"></i>
+
+                <span class="header__username">
                 {% if request.user.first_name %}
                     {{ request.user.get_full_name }}
                 {% else %}
                     {{ request.user.username }}
                 {% endif %}
+                </span>
 
                 <div class="header__dropdown-list">
                     <a class="header__dropdown-action" href="{% url 'account_logout' %}"><i
