@@ -30,8 +30,10 @@ class Formset {
      * Gets called when class get instantiated
      */
     constructor() {
-        this.setUpAddForm();
-        this.setUpRemoveForm();
+        if (ADD) {
+            this.setUpAddForm();
+            this.setUpRemoveForm();
+        }
     }
 
     /**
@@ -115,6 +117,5 @@ class Formset {
         form.querySelector(`[name="form-${this.getFormIndex(form)}-DELETE"]`).checked = true;
     }
 }
-
 
 new Formset();
