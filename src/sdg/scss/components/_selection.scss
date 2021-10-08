@@ -57,7 +57,14 @@
   .selection__subtitle--secondary {
     color: $color_grey_darker;
     margin-bottom: 4px;
+
+    &--last {
+      @extend .selection__subtitle--secondary;
+      margin-bottom: 12px;
+    }
+
   }
+
 
   .selection__information {
     line-height: 1.4;
