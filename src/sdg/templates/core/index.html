@@ -5,13 +5,22 @@
 
 {% block head_title %}{% trans "Home" %}{% endblock %}
 
+{% block notifications %}{% endblock %}
 {% block container_title %}
     <div class="header__title text-center">
-        Lokale Overheden
+        <b>SDG</b> {% trans "Home Panel" %}
     </div>
 {% endblock container_title %}
 
 {% block inner %}
+    <div class="tabs">
+    <div class="tabs__tabs">
+        <a href="#{{ value }}" data-id="{{ value }}"
+           class="tabs__tab tabs__tab--selected">
+            {% trans "Overheden" %}
+        </a>
+    </div>
+    {% include "core/_notifications.html" %}
     <div class="products">
         {% if lokale_overheden %}
             <div class="cards">
