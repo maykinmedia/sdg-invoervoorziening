@@ -45,7 +45,9 @@
 
 {% block content %}
     {% block notifications %}
-        {% include "core/_notifications.html" %}
+        <div class="notifications">
+            {% include "core/_notifications.html" %}
+        </div>
     {% endblock %}
 
     {% block inner %}

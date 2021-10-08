@@ -20,7 +20,9 @@
             {% trans "Overheden" %}
         </a>
     </div>
-    {% include "core/_notifications.html" %}
+    <div class="notifications">
+        {% include "core/_notifications.html" %}
+    </div>
     <div class="products">
         {% if lokale_overheden %}
             <div class="cards">
@@ -35,7 +37,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="notifications notifications">
+            <div>
                 <div class="notifications__notification notification__accent">
                     <i class="fas fa-info-circle"></i>
                     <span>{% trans "Je hebt geen toegang tot enige lokale overheid." %}</span>
