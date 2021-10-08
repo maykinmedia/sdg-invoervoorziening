@@ -3,10 +3,9 @@ from django.urls import reverse_lazy
 from django_webtest import WebTest
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
-from sdg.core.tests.constants import Status
 
 HOME_URL = "core:home"
-CARD_CLASS_NAME = ".cards__card"
+CARD_SELECTOR = ".cards__card"
 
 
 class HomeViewTests(WebTest):
@@ -22,9 +21,9 @@ class HomeViewTests(WebTest):
 
         response = self.app.get(reverse_lazy(HOME_URL))
 
-        municipalities = response.pyquery(CARD_CLASS_NAME)
+        municipalities = response.pyquery(CARD_SELECTOR)
 
-        self.assertEqual(len(municipalities), 2)
+        self.assertEqual(municipalities.length, 2)
 
         self.assertEqual(
             municipalities[0].text_content().strip(), str(role1.lokale_overheid)

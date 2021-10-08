@@ -31,7 +31,9 @@ class ProductDetailViewTests(WebTest):
         product_version = ProductVersieFactory.create(product=product)
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
         RoleFactory.create(
-            user=self.user, lokale_overheid=product.catalogus.lokale_overheid
+            user=self.user,
+            lokale_overheid=product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
@@ -49,6 +51,7 @@ class ProductDetailViewTests(WebTest):
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
@@ -73,6 +76,7 @@ class ProductDetailViewTests(WebTest):
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
@@ -97,6 +101,7 @@ class ProductDetailViewTests(WebTest):
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
@@ -131,6 +136,7 @@ class ProductDetailViewTests(WebTest):
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
