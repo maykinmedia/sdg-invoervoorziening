@@ -1,7 +1,6 @@
 from django_webtest import WebTest
 
 from sdg.accounts.tests.factories import RoleFactory, SuperUserFactory, UserFactory
-from sdg.core.tests.constants import Status
 from sdg.producten.tests.factories.localized import (
     LocalizedGeneriekProductFactory,
     LocalizedProductFactory,
@@ -36,7 +35,6 @@ class ProductDetailViewTests(WebTest):
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
 
@@ -54,7 +52,6 @@ class ProductDetailViewTests(WebTest):
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()
@@ -79,7 +76,6 @@ class ProductDetailViewTests(WebTest):
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()
@@ -104,7 +100,6 @@ class ProductDetailViewTests(WebTest):
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()
@@ -139,7 +134,6 @@ class ProductDetailViewTests(WebTest):
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()
