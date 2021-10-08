@@ -1,7 +1,7 @@
 from django_webtest import WebTest
 
 from sdg.accounts.tests.factories import RoleFactory, SuperUserFactory, UserFactory
-from sdg.core.tests.constants import Status
+from sdg.producten.models import LocalizedProduct
 from sdg.producten.tests.factories.localized import (
     LocalizedGeneriekProductFactory,
     LocalizedProductFactory,
@@ -32,11 +32,12 @@ class ProductDetailViewTests(WebTest):
         product_version = ProductVersieFactory.create(product=product)
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
         RoleFactory.create(
-            user=self.user, lokale_overheid=product.catalogus.lokale_overheid
+            user=self.user,
+            lokale_overheid=product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
 
@@ -51,10 +52,10 @@ class ProductDetailViewTests(WebTest):
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()
@@ -69,17 +70,19 @@ class ProductDetailViewTests(WebTest):
 
     def test_reference_product_details_are_displayed(self):
         product_version = ReferentieProductVersieFactory.create()
-        reference_nl, reference_en = LocalizedProductFactory.create_batch(
-            2, product_versie=product_version
+        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+
+        reference_nl, reference_en = LocalizedProduct.objects.filter(
+            product_versie=product_version
         )
 
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()
@@ -94,17 +97,18 @@ class ProductDetailViewTests(WebTest):
 
     def test_specific_product_details_are_displayed(self):
         product_version = SpecifiekProductVersieFactory.create()
-        specific_nl, specific_en = LocalizedProductFactory.create_batch(
-            2, product_versie=product_version
+        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+        specific_nl, specific_en = LocalizedProduct.objects.filter(
+            product_versie=product_version
         )
 
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()
@@ -121,25 +125,31 @@ class ProductDetailViewTests(WebTest):
         product_version = SpecifiekProductVersieFactory.create()
         reference_product = product_version.product.referentie_product
 
-        specific_nl, specific_en = LocalizedProductFactory.create_batch(
-            2,
-            product_versie=product_version,
-            specifieke_tekst="",
-            specifieke_link="",
+        reference_product_version = ProductVersieFactory.create(
+            product=reference_product
         )
 
-        reference_versie = ProductVersieFactory.create(product=reference_product)
-        reference_nl, reference_en = LocalizedProductFactory.create_batch(
-            2, product_versie=reference_versie
+        LocalizedProductFactory.create_batch(
+            2, product_versie=product_version, specifieke_tekst="", specifieke_link=""
+        )
+        LocalizedProductFactory.create_batch(
+            2, product_versie=reference_product_version
+        )
+
+        specific_nl, specific_en = LocalizedProduct.objects.filter(
+            product_versie=product_version
+        )
+        reference_nl, reference_en = LocalizedProduct.objects.filter(
+            product_versie=reference_product_version
         )
 
         RoleFactory.create(
             user=self.user,
             lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
         )
 
         response = self.app.get(product_version.product.get_absolute_url())
-        self.assertEqual(response.status_code, Status.OK)
 
         text_nl = response.pyquery(TAB_NL).text()
         text_en = response.pyquery(TAB_EN).text()

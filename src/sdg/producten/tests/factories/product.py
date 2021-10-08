@@ -22,7 +22,6 @@ class GeneriekProductFactory(DjangoModelFactory):
 
 class ProductFactory(DjangoModelFactory):
     beschikbaar = True
-    catalogus = factory.SubFactory(ProductenCatalogusFactory)
     lokaties = factory.RelatedFactoryList(LokatieFactory, size=3)
 
     class Meta:
@@ -30,17 +29,22 @@ class ProductFactory(DjangoModelFactory):
 
 
 class ReferentieProductFactory(ProductFactory):
+    catalogus = factory.SubFactory(
+        ProductenCatalogusFactory, is_referentie_catalogus=True
+    )
     generiek_product = factory.SubFactory(GeneriekProductFactory)
     referentie_product = None
 
 
 class SpecifiekProductFactory(ProductFactory):
-    generiek_product = None
+    catalogus = factory.SubFactory(
+        ProductenCatalogusFactory, is_referentie_catalogus=False
+    )
     referentie_product = factory.SubFactory(ReferentieProductFactory)
+    generiek_product = None
 
 
 class ProductVersieFactory(DjangoModelFactory):
-    product = factory.SubFactory(ProductFactory)
     gemaakt_door = factory.SubFactory(UserFactory)
     versie = factory.Sequence(lambda n: n)
 

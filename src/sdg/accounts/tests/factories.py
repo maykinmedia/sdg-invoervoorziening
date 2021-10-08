@@ -31,8 +31,8 @@ class SuperUserFactory(UserFactory):
 class RoleFactory(DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     lokale_overheid = factory.SubFactory(LokaleOverheidFactory)
-    is_beheerder = True
-    is_redacteur = True
+    is_beheerder = False
+    is_redacteur = False
 
     class Meta:
         model = Role
