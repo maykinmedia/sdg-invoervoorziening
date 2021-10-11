@@ -40,7 +40,9 @@
                                         <td class="tabs__table-cell">{{ user.username }}</td>
                                         <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
                                         <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
-                                        <td class="tabs__table-cell"><a href="#">{% trans "Verwijderen" %}</a></td>
+                                        <td class="tabs__table-cell">
+                                            <a href="{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+                                        </td>
                                     </tr>
                                 {% endwith %}
                             {% endfor %}

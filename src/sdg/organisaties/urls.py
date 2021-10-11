@@ -2,12 +2,14 @@ from django.conf.urls import url
 
 from .views import (
     LokaleOverheidDetailView,
-    LokaleOverheidRoleView,
     LokaleOverheidUpdateView,
+    RoleDeleteView,
+    RoleListView,
 )
 
 app_name = "organisaties"
 urlpatterns = [
+    # Municipality
     url(
         r"^overheid/(?P<pk>[\d]+)/$",
         LokaleOverheidDetailView.as_view(),
@@ -18,9 +20,15 @@ urlpatterns = [
         LokaleOverheidUpdateView.as_view(),
         name="overheid_edit",
     ),
+    # Roles
     url(
         r"^overheid/(?P<pk>[\d]+)/roles/$",
-        LokaleOverheidRoleView.as_view(),
+        RoleListView.as_view(),
         name="overheid_roles",
+    ),
+    url(
+        r"^overheid/(?P<pk>[\d]+)/roles/(?P<role_pk>[\d]+)/delete$",
+        RoleDeleteView.as_view(),
+        name="overheid_role_delete",
     ),
 ]
