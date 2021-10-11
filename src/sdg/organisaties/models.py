@@ -67,6 +67,13 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
             catalogus_list, ignore_conflicts=True
         )
 
+    def user_has_manager_role(self, user: User) -> bool:
+        """:returns: Boolean indicating if the provided user has manager role for this municipality."""
+        return self.roles.filter(
+            user=user,
+            is_beheerder=True,
+        ).exists()
+
     class Meta:
         verbose_name = _("lokale overheid")
         verbose_name_plural = _("lokale overheden")

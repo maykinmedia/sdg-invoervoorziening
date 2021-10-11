@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -78,7 +79,7 @@ class Role(models.Model):
     lokale_overheid = models.ForeignKey(
         "organisaties.LokaleOverheid",
         on_delete=models.PROTECT,
-        related_name="lokale_overheden",
+        related_name="roles",
     )
 
     is_beheerder = models.BooleanField(
@@ -124,3 +125,8 @@ class Role(models.Model):
     def __str__(self):
         allowed_roles = [str(r.verbose_name) for r in self.get_roles()]
         return f"{self.user} @ {self.lokale_overheid.organisatie.owms_pref_label}: {', '.join(allowed_roles)}"
+
+    def get_absolute_url(self):
+        return reverse(
+            "organisaties:overheid_roles", kwargs={"pk": self.lokale_overheid.pk}
+        )

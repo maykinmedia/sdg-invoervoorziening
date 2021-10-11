@@ -12,51 +12,51 @@
 
 {% block inner %}
     <div class="roles">
-        {% with role_list.all as roles %}
-            <div class="tabs">
-                <div class="tabs__tabs">
-                    <a href="#roles" data-id="roles"
-                       class="tabs__tab tabs__tab--selected">{% trans "Roles" %}</a>
-                </div>
-                {% include "core/_notifications.html" %}
-                <div class="tabs__tab-contents">
-                    <div class="tabs__tab-content tabs__tab-content--active"
-                         id="roles">
-                        <table class="tabs__table">
-                            <thead>
+    {% with role_list.all as roles %}
+        <div class="tabs">
+        <div class="tabs__tabs">
+            <a href="#roles" data-id="roles"
+               class="tabs__tab tabs__tab--selected">{% trans "Roles" %}</a>
+        </div>
+        {% include "core/_notifications.html" %}
+        <div class="tabs__tab-contents">
+            <div class="tabs__tab-content tabs__tab-content--active"
+                 id="roles">
+                <table class="tabs__table">
+                    <thead>
+                    <tr>
+                        <th class="tabs__table-header">{% trans "Naam" %}</th>
+                        <th class="tabs__table-header">{% trans "Gebruikersnaam" %}</th>
+                        <th class="tabs__table-header">{% trans "Beheerder" %}</th>
+                        <th class="tabs__table-header">{% trans "Redacteur" %}</th>
+                        <th class="tabs__table-header" width="25%">{% trans "Acties" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for role in roles %}
+                        {% with role.user as user %}
                             <tr>
-                                <th class="tabs__table-header">{% trans "Naam" %}</th>
-                                <th class="tabs__table-header">{% trans "Gebruikersnaam" %}</th>
-                                <th class="tabs__table-header">{% trans "Beheerder" %}</th>
-                                <th class="tabs__table-header">{% trans "Redacteur" %}</th>
-                                <th class="tabs__table-header" width="25%">{% trans "Acties" %}</th>
+                                <td class="tabs__table-cell">{{ user.get_full_name }}</td>
+                                <td class="tabs__table-cell">{{ user.username }}</td>
+                                <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
+                                <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
+                                <td class="tabs__table-cell">
+                                    {% if lokaleoverheid_beheerder %}
+                                        <a href="{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+                                    {% endif %}
+                                </td>
                             </tr>
-                            </thead>
-                            <tbody>
-                            {% for role in roles %}
-                                {% with role.user as user %}
-                                    <tr>
-                                        <td class="tabs__table-cell">{{ user.get_full_name }}</td>
-                                        <td class="tabs__table-cell">{{ user.username }}</td>
-                                        <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
-                                        <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
-                                        <td class="tabs__table-cell">
-                                            <a href="{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
-                                        </td>
-                                    </tr>
-                                {% endwith %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                        <div class="roles__control">
-                            <a href="#">
-                                <i class="fas fa-plus"></i>
-                                {% trans "Nieuwe gebruiker toevoegen" %}
-                            </a>
-                        </div>
-                    </div>
+                        {% endwith %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <div class="roles__control">
+                    <a href="#">
+                        <i class="fas fa-plus"></i>
+                        {% trans "Nieuwe gebruiker toevoegen" %}
                 </div>
             </div>
-        {% endwith %}
-    </div>
+        </div>
+    {% endwith %}
+</div>
 {% endblock inner %}
