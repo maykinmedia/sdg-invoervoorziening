@@ -1,9 +1,9 @@
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView, ListView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.accounts.models import Role
-from sdg.organisaties.forms import LokaleOverheidForm
 from sdg.organisaties.models import LokaleOverheid
 
 
@@ -27,7 +27,6 @@ class RoleListView(OverheidRoleRequiredMixin, ListView):
         return context
 
 
-# TODO: user cannot delete own role
 class RoleDeleteView(OverheidRoleRequiredMixin, DeleteView):
     queryset = Role.objects.all()
     template_name = "organisaties/overheid_role_delete.html"
@@ -48,6 +47,13 @@ class RoleDeleteView(OverheidRoleRequiredMixin, DeleteView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(lokale_overheid=self.lokale_overheid)
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        if self.request.user.pk == self.object.user.pk:
+            raise PermissionDenied()
+
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
