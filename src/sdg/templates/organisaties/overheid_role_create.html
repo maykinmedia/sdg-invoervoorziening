@@ -15,9 +15,10 @@
         {% csrf_token %}
         <div class="subheading">
             {% blocktrans %}
-                <p>Weet je zeker dat je <span class="primary text-bold">{{ object }}</span> wilt verwijderen?</p>
+                <p>Creëer nieuwe gebruikersrol voor <span class="text-bold">{{ lokaleoverheid }}.</span></p>
             {% endblocktrans %}
         </div>
+        {{ form.as_p }}
         <input type="submit" class="button" value="{% trans 'Bevestig' %}">
     </form>
 {% endblock inner %}

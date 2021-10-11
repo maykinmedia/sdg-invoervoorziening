@@ -3,11 +3,14 @@ from django.conf.urls import url
 from .views import (
     LokaleOverheidDetailView,
     LokaleOverheidUpdateView,
+    RoleCreateView,
     RoleDeleteView,
     RoleListView,
 )
 
 app_name = "organisaties"
+
+
 urlpatterns = [
     # Municipality
     url(
@@ -25,6 +28,11 @@ urlpatterns = [
         r"^overheid/(?P<pk>[\d]+)/roles/$",
         RoleListView.as_view(),
         name="overheid_roles",
+    ),
+    url(
+        r"^overheid/(?P<pk>[\d]+)/roles/create$",
+        RoleCreateView.as_view(),
+        name="overheid_role_create",
     ),
     url(
         r"^overheid/(?P<pk>[\d]+)/roles/(?P<role_pk>[\d]+)/delete$",
