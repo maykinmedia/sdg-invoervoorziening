@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django.db.models import OuterRef, Subquery
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView
 
@@ -45,6 +46,14 @@ class RoleCreateView(OverheidRoleRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["lokaleoverheid"] = self.lokale_overheid
         return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        existing_qs = self.lokale_overheid.roles.all()
+        form.fields["user"].queryset = form.fields["user"].queryset.exclude(
+            pk__in=Subquery(existing_qs.values_list("user__pk"))
+        )
+        return form
 
     def form_valid(self, form):
         form.instance.lokale_overheid = self.lokale_overheid
