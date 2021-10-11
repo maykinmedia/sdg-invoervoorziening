@@ -11,14 +11,27 @@
 {% block notifications %}{% endblock %}
 
 {% block inner %}
-    <form method="post">
+    <form method="post" class="form">
         {% csrf_token %}
+        {{ form.non_field_errors }}
+
         <div class="subheading">
             {% blocktrans %}
                 <p>Creëer nieuwe gebruikersrol voor <span class="text-bold">{{ lokaleoverheid }}.</span></p>
             {% endblocktrans %}
         </div>
-        {{ form.as_p }}
-        <input type="submit" class="button" value="{% trans 'Bevestig' %}">
+
+        <div class="form__block">
+            {% field form.user %}
+            <div class="form__block-inline">
+                {% checkbox form.is_beheerder %}
+                {% checkbox form.is_redacteur %}
+            </div>
+            <input type="hidden" name="next" value="{{ redirect_field_value }}">
+            <div class="form__buttons">
+                <input type="submit" class="button" value="{% trans 'Bevestig' %}">
+            </div>
+        </div>
+
     </form>
 {% endblock inner %}
