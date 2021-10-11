@@ -7,8 +7,9 @@
   }
 
   .roles__control {
-    margin-top: 24px;
-
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr 2fr;
   }
 
 }

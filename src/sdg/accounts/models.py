@@ -1,8 +1,13 @@
+from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
+from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.crypto import get_random_string
+from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
 from .managers import UserManager
@@ -64,6 +69,60 @@ class User(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         """Returns the short name for the user."""
         return self.first_name
+
+
+class UserInvitation(models.Model):
+    user = models.OneToOneField(
+        "User",
+        on_delete=models.CASCADE,
+        related_name="invitaties",
+        verbose_name=_("invitaties"),
+    )
+
+    key = models.CharField(
+        verbose_name=_("key"), max_length=64, unique=True, default=get_random_string
+    )
+    accepted = models.BooleanField(verbose_name=_("accepted"), default=False)
+
+    created = models.DateTimeField(verbose_name=_("created"), default=timezone.now)
+    sent = models.DateTimeField(verbose_name=_("sent"), null=True)
+
+    inviter = models.ForeignKey("User", null=True, blank=True, on_delete=models.CASCADE)
+
+    def send_invitation(self, request, **kwargs):
+        invite_url = reverse("organisaties:accept_invitation", args=[self.key])
+        invite_url = request.build_absolute_uri(invite_url)
+        ctx = kwargs
+
+        ctx.update(
+            {
+                "invite_url": invite_url,
+                "email": self.user.email,
+                "key": self.key,
+                "inviter": self.inviter,
+            }
+        )
+        subject = settings.INVITATION_SUBJECT
+        email_template = settings.INVITATION_TEMPLATE
+        html_message = render_to_string(email_template, {"context": ctx})
+
+        send_mail(
+            subject,
+            strip_tags(html_message),
+            settings.DEFAULT_FROM_EMAIL,
+            [self.user.email],
+            html_message=html_message,
+        )
+
+        self.sent = timezone.now()
+        self.save()
+
+    class Meta:
+        verbose_name = _("user invitation")
+        verbose_name_plural = _("user invitations")
+
+    def __str__(self):
+        return f"Invitation {self.user.email}"
 
 
 class Role(models.Model):
