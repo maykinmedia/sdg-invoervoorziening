@@ -1,6 +1,4 @@
-from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
 from django.utils.timezone import now
 
@@ -11,16 +9,6 @@ def is_past_date(date: datetime) -> bool:
         return True
     else:
         return False
-
-
-@dataclass
-class ProductField:
-    name: str
-    verbose_name: str
-    value: Any
-    help_text: str
-    is_reference: bool
-    is_markdown: bool
 
 
 def duplicate_localized_products(form, new_version):

@@ -1,9 +1,10 @@
 from copy import deepcopy
 
 from django.http import HttpResponseRedirect
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, ListView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.accounts.models import Role
 from sdg.core.models import Thema
 from sdg.organisaties.forms import LokaleOverheidForm, LokatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
@@ -139,3 +140,23 @@ class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
         )
+
+
+class LokaleOverheidRoleView(OverheidRoleRequiredMixin, ListView):
+    template_name = "organisaties/overheid_roles.html"
+    form_class = LokaleOverheidForm
+    queryset = Role.objects.all().prefetch_related("user")
+    required_roles = ["is_redacteur"]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(lokale_overheid=self.lokale_overheid)
+
+    def get_lokale_overheid(self):
+        self.lokale_overheid = LokaleOverheid.objects.get(pk=self.kwargs["pk"])
+        return self.lokale_overheid
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["lokaleoverheid"] = self.lokale_overheid
+        return context
