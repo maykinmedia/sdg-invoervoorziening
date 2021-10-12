@@ -100,7 +100,7 @@ class InvitationTests(WebTest):
 
         invite.refresh_from_db()
 
-        user = User.objects.get(pk=2)
+        user = User.objects.get(username="user1")
         self.assertEqual(invite.accepted, True)
         self.assertEqual(user.check_password("Test@1234"), True)
 
