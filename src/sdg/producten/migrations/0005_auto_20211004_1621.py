@@ -12,10 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="localizedproduct",
-            name="product",
-        ),
         migrations.AlterField(
             model_name="localizedproduct",
             name="product_versie",
