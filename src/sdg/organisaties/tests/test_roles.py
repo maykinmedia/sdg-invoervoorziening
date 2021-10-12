@@ -6,9 +6,6 @@ from sdg.accounts.models import Role
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
-CATALOG_SELECTOR = ".products__title"
-PRODUCT_SELECTOR = ".products__item"
-
 
 class RoleTests(WebTest):
     def setUp(self):
