@@ -1,4 +1,5 @@
 from django.contrib.auth.models import BaseUserManager
+from django.db import models
 
 
 class UserManager(BaseUserManager):
@@ -32,3 +33,9 @@ class UserManager(BaseUserManager):
             raise ValueError("Superuser must have is_superuser=True.")
 
         return self._create_user(username, email, password, **extra_fields)
+
+
+class UserInvitationManager(models.Manager):
+    def create_and_send(self, user, request):
+        invitation = self.model.objects.create(user=user, inviter=request.user)
+        invitation.send_invitation(request)

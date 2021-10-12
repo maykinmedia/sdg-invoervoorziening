@@ -10,7 +10,7 @@ from django.utils.crypto import get_random_string
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
-from .managers import UserManager
+from .managers import UserInvitationManager, UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -89,22 +89,24 @@ class UserInvitation(models.Model):
 
     inviter = models.ForeignKey("User", null=True, blank=True, on_delete=models.CASCADE)
 
+    objects = UserInvitationManager()
+
     def send_invitation(self, request, **kwargs):
-        invite_url = reverse("organisaties:accept_invitation", args=[self.key])
+        invite_url = reverse("organisaties:invitation_accept", args=[self.key])
         invite_url = request.build_absolute_uri(invite_url)
         ctx = kwargs
 
         ctx.update(
             {
                 "invite_url": invite_url,
-                "email": self.user.email,
+                "user_full_name": self.user.get_full_name(),
                 "key": self.key,
                 "inviter": self.inviter,
             }
         )
         subject = settings.INVITATION_SUBJECT
         email_template = settings.INVITATION_TEMPLATE
-        html_message = render_to_string(email_template, {"context": ctx})
+        html_message = render_to_string(email_template, context=ctx)
 
         send_mail(
             subject,
@@ -182,7 +184,9 @@ class Role(models.Model):
         ]
 
     def __str__(self):
-        allowed_roles = [str(r.verbose_name) for r in self.get_roles()]
+        allowed_roles = [
+            str(r.verbose_name) for r in self.get_roles() if getattr(self, r.name)
+        ]
         return f"{self.user} @ {self.lokale_overheid.organisatie.owms_pref_label}: {', '.join(allowed_roles)}"
 
     def get_absolute_url(self):
