@@ -1,6 +1,8 @@
 from django.conf.urls import url
 
 from .views import (
+    InvitationAcceptView,
+    InvitationCreateView,
     LokaleOverheidDetailView,
     LokaleOverheidUpdateView,
     RoleCreateView,
@@ -38,5 +40,16 @@ urlpatterns = [
         r"^overheid/(?P<pk>[\d]+)/roles/(?P<role_pk>[\d]+)/delete$",
         RoleDeleteView.as_view(),
         name="overheid_role_delete",
+    ),
+    # Invitation
+    url(
+        r"^overheid/(?P<pk>[\d]+)/invite/$",
+        InvitationCreateView.as_view(),
+        name="invitation_create",
+    ),
+    url(
+        r"^accept-invitation/(?P<key>\w+)/?$",
+        InvitationAcceptView.as_view(),
+        name="invitation_accept",
     ),
 ]
