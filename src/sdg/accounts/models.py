@@ -31,10 +31,11 @@ class User(AbstractBaseUser, PermissionsMixin):
         error_messages={
             "unique": _("Een gebruiker met die gebruikersnaam bestaat al."),
         },
+        blank=True,
     )
     first_name = models.CharField(_("voornaam"), max_length=255, blank=True)
     last_name = models.CharField(_("achternaam"), max_length=255, blank=True)
-    email = models.EmailField(_("e-mailadres"), blank=True)
+    email = models.EmailField(_("e-mailadres"), unique=True)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
