@@ -121,7 +121,7 @@
                                         <li class="revision-list__item">
                                             <i class="fas fa-user"></i>
                                             {% with user=version.gemaakt_door %}
-                                                {{ user.get_full_name|default:user.username|capfirst }} —
+                                                {{ user.get_full_name|capfirst }} —
                                                 {{ version.publicatie_datum|naturaltime|default:_("concept") }} (
                                                 <a class="revision-list-link"
                                                    href="#">{{ version.gewijzigd_op|date:"d-m-Y H:i" }}</a>

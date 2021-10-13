@@ -9,7 +9,6 @@ class UserManagerTests(TestCase):
         self.assertIsNotNone(user.pk)
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
-        self.assertEqual(user.username, "god")
         self.assertEqual(user.email, "god@heaven.com")
         self.assertTrue(user.check_password("praisejebus"))
         self.assertNotEqual(user.password, "praisejebus")
