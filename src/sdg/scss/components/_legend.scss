@@ -4,7 +4,19 @@
   margin-top: 64px;
   min-height: 24px;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  flex-direction: column;
+
+  .legend__header {
+    display: grid;
+      grid-template-columns: 1fr 9fr;
+      width: 62%;
+      text-align: center;
+      background-color: #396A88;
+      border-bottom: 3px solid $color_primary_dark;
+      color: $color_grey_lightest;
+      padding: 6px;
+  }
 
   .legend__content {
     background-color: $color_grey_lightest;
@@ -12,8 +24,9 @@
     padding: 18px;
     width: 62%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    font-weight: bold;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: 1fr 9fr;
+    grid-gap: 24px;
 
     .legend__content__item {
       display: grid;
