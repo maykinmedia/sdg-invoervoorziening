@@ -1,9 +1,11 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+from two_factor.views import OTPRequiredMixin
 
 from sdg.accounts.models import Role
 
 
-class OverheidRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+class OverheidRoleRequiredMixin(OTPRequiredMixin, UserPassesTestMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
     required_roles = {i.name for i in Role.get_roles()}
