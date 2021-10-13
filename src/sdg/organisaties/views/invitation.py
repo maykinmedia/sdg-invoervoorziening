@@ -39,6 +39,7 @@ class InvitationCreateView(OverheidRoleRequiredMixin, CreateView):
         return context
 
     def post(self, request, *args, **kwargs):
+        self.object = None
         form = self.get_form()
         formset = RoleInlineFormSet(request.POST, prefix="form")
 
@@ -85,6 +86,11 @@ class InvitationAcceptView(SingleObjectMixin, FormView):
             return queryset.get(key=self.kwargs["key"])
         except UserInvitation.DoesNotExist:
             return None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.object.user
+        return context
 
     def get(self, *args, **kwargs):
         self.object = invitation = self.get_object()
