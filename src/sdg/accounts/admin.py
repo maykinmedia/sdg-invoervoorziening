@@ -15,7 +15,7 @@ class RoleInline(admin.TabularInline):
     extra = 1
 
     def get_role_user(self, obj):
-        return obj.user.username
+        return obj.user.email
 
     get_role_user.short_description = _("Gebruik")
 
@@ -27,6 +27,47 @@ class RoleInline(admin.TabularInline):
 
 @admin.register(User)
 class UserAdmin(_UserAdmin, HijackUserAdminMixin):
-    search_fields = ["first_name"]
-    list_display = _UserAdmin.list_display + ("hijack_field",)
+    fieldsets = (
+        (None, {"fields": ("email", "password")}),
+        (
+            _("Personal info"),
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                )
+            },
+        ),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                    "groups",
+                    "user_permissions",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("email", "password1", "password2"),
+            },
+        ),
+    )
+    search_fields = ("email", "first_name", "last_name")
+    list_display = (
+        "email",
+        "first_name",
+        "last_name",
+        "is_staff",
+        "hijack_field",
+    )
+    ordering = ("email",)
     inlines = (RoleInline,)
