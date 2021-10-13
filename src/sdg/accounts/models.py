@@ -62,8 +62,8 @@ class UserInvitation(models.Model):
     user = models.OneToOneField(
         "User",
         on_delete=models.CASCADE,
-        related_name="invitaties",
-        verbose_name=_("invitaties"),
+        related_name="invitatie",
+        verbose_name=_("user"),
     )
 
     key = models.CharField(
