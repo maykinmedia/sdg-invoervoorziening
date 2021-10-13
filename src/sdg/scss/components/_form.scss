@@ -61,7 +61,7 @@
   }
 
   .form__subtitle {
-    padding: 16px 0;
+    padding: 16px 16px;
     font-size: 16px;
     display: flex;
     justify-content: space-between;
@@ -69,6 +69,7 @@
 
   .form__forms {
     width: 62%;
+    padding-bottom: 48px;
   }
 
   .form__subforms {
@@ -77,6 +78,10 @@
 
     .form__help-text {
       color: $color_secondary_darker;
+    }
+
+    .formset__remove {
+      text-decoration: none;
     }
 
   }

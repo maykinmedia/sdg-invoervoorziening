@@ -30,7 +30,6 @@
 
   .tabs__tab-content {
     display: none;
-    padding: 56px 0;
 
     &.tabs__tab-content--active {
       display: block;
@@ -38,7 +37,7 @@
   }
 
   .tabs__tab-header {
-    padding: 32px 0;
+    padding: 0;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -101,6 +100,12 @@
 
     .svg-inline--fa {
       margin-left: 4px;
+      color: $color_primary_dark;
+
+      &.fa-asterisk {
+        float: right;
+      }
+
     }
 
     ul {
