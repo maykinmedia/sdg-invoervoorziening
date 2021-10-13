@@ -69,20 +69,6 @@
         </div>
     </div>
 
-    <div class="legend">
-        <div class="legend__content">
-            <div class="legend__content__item primary">
-                <i class="fas fa-dot-circle"></i>{% trans "Beschikbaar" %}
-            </div>
-            <div class="legend__content__item accent">
-                <i class="fas fa-dot-circle"></i>{% trans "Onbeschikbaar" %}
-            </div>
-            <div class="legend__content__item dark">
-                <i class="fas fa-dot-circle"></i>{% trans "Onbestaand" %}
-            </div>
-        </div>
-    </div>
-
     {% include "core/_notifications.html" %}
 
     <div class="products">
@@ -132,5 +118,8 @@
                 <hr class="divider">
             {% endif %}
         {% endfor %}
+
+        {% include "producten/_include/legend.html" %}
+
     </div>
 {% endblock inner %}
