@@ -34,7 +34,6 @@ class InvitationTests(WebTest):
         form["email"] = "test@example.com"
         form["first_name"] = "Arthur"
         form["last_name"] = "Dent"
-        form["username"] = "user1"
         form["form-0-is_beheerder"] = False
         form["form-0-is_redacteur"] = True
 
@@ -50,7 +49,7 @@ class InvitationTests(WebTest):
 
         self.assertEqual(User.objects.count(), 2)
 
-        role = self.lokale_overheid.roles.get(user__username="user1")
+        role = self.lokale_overheid.roles.get(user__email="test@example.com")
         self.assertEqual(role.is_redacteur, True)
         self.assertEqual(role.is_beheerder, False)
 
@@ -100,7 +99,7 @@ class InvitationTests(WebTest):
 
         invite.refresh_from_db()
 
-        user = User.objects.get(username="user1")
+        user = User.objects.get(email="test@example.com")
         self.assertEqual(invite.accepted, True)
         self.assertEqual(user.check_password("Test@1234"), True)
 
