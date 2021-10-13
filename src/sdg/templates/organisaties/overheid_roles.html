@@ -26,7 +26,6 @@
                     <thead>
                     <tr>
                         <th class="tabs__table-header">{% trans "Naam" %}</th>
-                        <th class="tabs__table-header">{% trans "Gebruikersnaam" %}</th>
                         <th class="tabs__table-header">{% trans "Beheerder" %}</th>
                         <th class="tabs__table-header">{% trans "Redacteur" %}</th>
                         <th class="tabs__table-header" width="25%">{% trans "Acties" %}</th>
@@ -37,7 +36,6 @@
                         {% with role.user as user %}
                             <tr>
                                 <td class="tabs__table-cell">{{ user.get_full_name }}</td>
-                                <td class="tabs__table-cell">{{ user.username }}</td>
                                 <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
                                 <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
                                 <td class="tabs__table-cell">

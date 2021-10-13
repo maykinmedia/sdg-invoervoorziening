@@ -24,7 +24,6 @@ class InvitationCreateView(OverheidRoleRequiredMixin, CreateView):
         "email",
         "first_name",
         "last_name",
-        "username",
     ]
 
     def get_lokale_overheid(self):
