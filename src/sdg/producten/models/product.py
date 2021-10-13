@@ -337,10 +337,13 @@ class ProductVersie(models.Model):
 
     def clean(self):
         super().clean()
-        if self.publicatie_datum and is_past_date(self.publicatie_datum):
-            raise ValidationError(
-                _("De publicatiedatum kan niet in het verleden liggen.")
-            )
+
+        if not self.pk:
+            # Validators for new instances
+            if self.publicatie_datum and is_past_date(self.publicatie_datum):
+                raise ValidationError(
+                    _("De publicatiedatum kan niet in het verleden liggen.")
+                )
 
 
 class Productuitvoering(models.Model):
