@@ -20,19 +20,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username_validator = UnicodeUsernameValidator()
 
-    username = models.CharField(
-        _("gebruikersnaam"),
-        max_length=150,
-        unique=True,
-        help_text=_(
-            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-        ),
-        validators=[username_validator],
-        error_messages={
-            "unique": _("Een gebruiker met die gebruikersnaam bestaat al."),
-        },
-        blank=True,
-    )
     first_name = models.CharField(_("voornaam"), max_length=255, blank=True)
     last_name = models.CharField(_("achternaam"), max_length=255, blank=True)
     email = models.EmailField(_("e-mailadres"), unique=True)
@@ -53,8 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    USERNAME_FIELD = "email"
 
     class Meta:
         verbose_name = _("gebruiker")
