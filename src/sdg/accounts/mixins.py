@@ -1,11 +1,17 @@
-from django.contrib.auth.mixins import UserPassesTestMixin
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from two_factor.views import OTPRequiredMixin
 
 from sdg.accounts.models import Role
 
+if getattr(settings, "TWO_FACTOR_FORCE_OTP", True):
+    VerificationMixin = OTPRequiredMixin
+else:
+    VerificationMixin = LoginRequiredMixin
 
-class OverheidRoleRequiredMixin(OTPRequiredMixin, UserPassesTestMixin):
+
+class OverheidRoleRequiredMixin(VerificationMixin, UserPassesTestMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
     required_roles = {i.name for i in Role.get_roles()}
