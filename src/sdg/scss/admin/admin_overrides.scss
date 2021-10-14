@@ -20,28 +20,29 @@ $color_lightest: #fff;
 a:link, a:visited {
   color: $color_link;
 }
+
 a:focus, a:hover {
   color: $color_link_hover;
 }
 
 #header {
-	color: $color_secondary_light;
+  color: $color_secondary_light;
   background: $color_primary_dark;
   /* border-bottom: 8px solid $color_secondary; */
   position: sticky;
   top: 0;
   z-index: 100000;
 
-	a:link, a:visited {
-	  color: $color_lightest;
-	}
+  a:link, a:visited {
+    color: $color_lightest;
+  }
 }
 
 #user-tools a {
   border-bottom: none;
-	text-decoration: underline;
+  text-decoration: underline;
 
-	&:focus, &:hover {
+  &:focus, &:hover {
     color: $color_primary;
   }
 }
@@ -81,8 +82,10 @@ div.breadcrumbs {
   a:focus, a:hover {
     color: $color_link !important;
   }
+
   li.selected a {
     color: $color_link !important;
+
     &:focus, &:hover {
       color: $color_primary !important;
     }
@@ -100,12 +103,15 @@ div.breadcrumbs {
   color: $color_lightest;
   /* border: 2px solid $color_dark; */
 }
+
 .button:active, input[type=submit]:active, input[type=button]:active, .button:focus, input[type=submit]:focus, input[type=button]:focus, .button:hover, input[type=submit]:hover, input[type=button]:hover {
   background: $color_primary_dark;
 }
+
 .button.default, input[type=submit].default, .submit-row input.default {
   background: $color_primary_dark;
 }
+
 .button.default:active, input[type=submit].default:active, .button.default:focus, input[type=submit].default:focus, .button.default:hover, input[type=submit].default:hover {
   background: $color_darkest;
 }
@@ -114,9 +120,11 @@ div.breadcrumbs {
   form {
     input[type=submit] {
     }
+
     .cancel-link {
-	  background: $color_primary_light;
-	  color: $color_lightest;
+      background: $color_primary_light;
+      color: $color_lightest;
+
       &:active, &:focus, &:hover {
         background: $color_dark;
       }
@@ -140,6 +148,7 @@ div.breadcrumbs {
       &:active {
         background: $color_primary !important;
       }
+
       &:focus, &:hover {
         background: $color_primary_dark !important;
       }
@@ -150,6 +159,7 @@ div.breadcrumbs {
     }
   }
 }
+
 .calendarbox h2 {
   background: $color_secondary_dark !important;
   color: $color_dark !important;
@@ -158,12 +168,14 @@ div.breadcrumbs {
 /* Time widget */
 .timelist {
   a:active {
-   background: $color_primary !important;
+    background: $color_primary !important;
   }
+
   a:focus, a:hover {
     background: $color_primary_dark !important;
   }
 }
+
 .module.clockbox h2 {
   /* Match the clock widget with the calendar widget */
   background: $color_secondary_dark !important;
@@ -179,3 +191,27 @@ div.breadcrumbs {
   float: right;
   margin-left: 16px !important;
 }
+
+.dynamic {
+  float: left;
+
+  .dynamic__container__button--side {
+    padding: 5px 10px;
+    margin-left: 3px;
+    margin-top: 6px;
+    background: $color_primary_light;
+    color: $color_lightest;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:active, &:focus, &:hover {
+      background: $color_dark;
+    }
+  }
+
+  .dynamic__container__button--low {
+    margin-top: 6px;
+  }
+}
+

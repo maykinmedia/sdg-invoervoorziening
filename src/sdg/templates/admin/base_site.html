@@ -7,9 +7,14 @@
 
 {% block extrastyle %}
     {{ block.super }}
-
     <link rel="stylesheet" type="text/css" href="{% static 'hijack/hijack-styles.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'bundles/admin_overrides.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script defer src="{% static 'bundles/sdg-js.js' %}"></script>
+    <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
 {% endblock %}
 
 {% block branding %}
