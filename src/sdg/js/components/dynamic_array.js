@@ -19,7 +19,10 @@ function initializeWidget(widgetElement) {
 
     widgetElement.querySelector('.dynamic__container-add').addEventListener('click', () => {
         item_count++;
+
         const newElement = elementTemplate.cloneNode(true);
+        ['style', 'data-isnone'].forEach(attribute => newElement.removeAttribute(attribute));
+
         const id_parts = newElement.querySelector('input').getAttribute('id').split('_');
         const id = id_parts.slice(0, -1).join('_') + '_' + String(item_count - 1);
         newElement.querySelector('input').setAttribute('id', id);
