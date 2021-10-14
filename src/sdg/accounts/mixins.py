@@ -1,5 +1,3 @@
-from abc import ABC
-
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from sdg.accounts.models import Role
@@ -36,4 +34,4 @@ class OverheidRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         except Role.DoesNotExist:
             return False
 
-        return all([getattr(role, r) for r in self.get_required_roles()])
+        return all(getattr(role, r) for r in self.get_required_roles())
