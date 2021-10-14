@@ -21,6 +21,10 @@ class CatalogusAdmin(admin.ModelAdmin):
         "naam",
         "domein",
     )
+    autocomplete_fields = (
+        "referentie_catalogus",
+        "lokale_overheid",
+    )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """
