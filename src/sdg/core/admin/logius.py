@@ -30,3 +30,4 @@ class ThemaAdmin(admin.ModelAdmin):
 class UniformeProductnaamAdmin(admin.ModelAdmin):
     search_fields = ("upn_label",)
     list_display = ("upn_label", "thema")
+    autocomplete_fields = ("thema",)
