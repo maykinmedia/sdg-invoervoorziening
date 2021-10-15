@@ -142,6 +142,11 @@
           height: 49px;
         }
 
+        &--low {
+          @extend .dynamic__container__button;
+          color: $color_primary !important;
+        }
+
       }
 
     }
