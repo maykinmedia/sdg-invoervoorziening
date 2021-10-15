@@ -87,13 +87,20 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     )
     required_roles = ["is_redacteur"]
 
-    def _save_version_form(self, version_form, version_number):
+    def _save_version_form(
+        self, version_form, version_number
+    ) -> Tuple[ProductVersie, bool]:
+        """
+        Saves the version form.
+        Return a tuple of (version object, created), where created is a boolean
+        specifying whether an object was created.
+        """
         new_version = version_form.save(commit=False)
         new_version.product = self.product
         new_version.gemaakt_door = self.request.user
         new_version.version = version_number
         new_version.save()
-        return new_version
+        return new_version, self.object != new_version
 
     def get_lokale_overheid(self):
         self.product = self.get_object()
@@ -136,8 +143,8 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
             return self.form_invalid(form, version_form)
 
     def form_valid(self, form, version_form, version_number):
-        new_version = self._save_version_form(version_form, version_number)
-        if self.object != new_version:  # New instance
+        new_version, created = self._save_version_form(version_form, version_number)
+        if created:
             duplicate_localized_products(form, new_version)
         else:
             form.save()
