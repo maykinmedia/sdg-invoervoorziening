@@ -157,12 +157,14 @@ class Product(models.Model):
         """:returns: Whether this product has expired in relation to the reference product."""
         if self.is_referentie_product:
             return False
-        if (
-            self.laatste_versie.publicatie_datum
-            < self.referentie_product.laatste_versie.publicatie_datum
-        ):
-            return True
-        return False
+
+        publication_date = self.laatste_versie.publicatie_datum
+        reference_publication_date = self.laatste_versie.publicatie_datum
+
+        return bool(
+            (publication_date and reference_publication_date)
+            and (publication_date < reference_publication_date)
+        )
 
     @cached_property
     def laatste_versie(self):
