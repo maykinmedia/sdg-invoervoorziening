@@ -5,8 +5,6 @@ from django.db import migrations
 
 
 def create_first_version_for_products(apps, schema_editor):
-    # We can't import the Person model directly as it may be a newer
-    # version than this migration expects. We use the historical version.
     Product = apps.get_model("producten", "Product")
     ProductVersie = apps.get_model("producten", "ProductVersie")
     User = apps.get_model("accounts", "User")

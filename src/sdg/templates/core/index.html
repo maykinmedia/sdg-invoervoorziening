@@ -5,9 +5,24 @@
 
 {% block head_title %}{% trans "Home" %}{% endblock %}
 
-{% block container_title %}Lokale Overheden{% endblock container_title %}
+{% block notifications %}{% endblock %}
+{% block container_title %}
+    <div class="header__title text-center">
+        <b>SDG</b> {% trans "Home Panel" %}
+    </div>
+{% endblock container_title %}
 
 {% block inner %}
+    <div class="tabs">
+    <div class="tabs__tabs">
+        <a href="#{{ value }}" data-id="{{ value }}"
+           class="tabs__tab tabs__tab--selected">
+            {% trans "Overheden" %}
+        </a>
+    </div>
+    <div class="notifications">
+        {% include "core/_notifications.html" %}
+    </div>
     <div class="products">
         {% if lokale_overheden %}
             <div class="cards">
@@ -22,7 +37,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <div class="notifications notifications">
+            <div>
                 <div class="notifications__notification notification__accent">
                     <i class="fas fa-info-circle"></i>
                     <span>{% trans "Je hebt geen toegang tot enige lokale overheid." %}</span>

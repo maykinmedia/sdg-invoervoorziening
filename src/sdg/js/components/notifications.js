@@ -5,9 +5,11 @@ class Notification {
         this.node = node;
         this.close = node.querySelector(".notifications__close");
 
-        this.close.addEventListener("click", () => {
-            this.node.remove()
-        });
+        if (this.close) {
+            this.close.addEventListener("click", () => {
+                this.node.remove()
+            });
+        }
     }
 }
 

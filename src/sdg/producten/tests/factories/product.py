@@ -14,35 +14,47 @@ from sdg.producten.models import GeneriekProduct, Product, ProductVersie
 class GeneriekProductFactory(DjangoModelFactory):
     upn = factory.SubFactory(UniformeProductnaamFactory)
     verantwoordelijke_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
-    verplicht_product = factory.Faker("pyint")
+    verplicht_product = factory.Faker("pybool")
 
     class Meta:
         model = GeneriekProduct
 
 
 class ProductFactory(DjangoModelFactory):
-    beschikbaar = factory.Faker("pybool")
-    catalogus = factory.SubFactory(ProductenCatalogusFactory)
-    lokaties = factory.SubFactory(LokatieFactory)
+    beschikbaar = True
+    lokaties = factory.RelatedFactoryList(LokatieFactory, size=3)
 
     class Meta:
         model = Product
 
 
 class ReferentieProductFactory(ProductFactory):
+    catalogus = factory.SubFactory(
+        ProductenCatalogusFactory, is_referentie_catalogus=True
+    )
     generiek_product = factory.SubFactory(GeneriekProductFactory)
     referentie_product = None
 
 
 class SpecifiekProductFactory(ProductFactory):
-    generiek_product = None
+    catalogus = factory.SubFactory(
+        ProductenCatalogusFactory, is_referentie_catalogus=False
+    )
     referentie_product = factory.SubFactory(ReferentieProductFactory)
+    generiek_product = None
 
 
 class ProductVersieFactory(DjangoModelFactory):
-    product = factory.SubFactory(ProductFactory)
     gemaakt_door = factory.SubFactory(UserFactory)
     versie = factory.Sequence(lambda n: n)
 
     class Meta:
         model = ProductVersie
+
+
+class ReferentieProductVersieFactory(ProductVersieFactory):
+    product = factory.SubFactory(ReferentieProductFactory)
+
+
+class SpecifiekProductVersieFactory(ProductVersieFactory):
+    product = factory.SubFactory(SpecifiekProductFactory)

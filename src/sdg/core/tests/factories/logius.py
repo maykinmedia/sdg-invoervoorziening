@@ -10,8 +10,8 @@ from sdg.core.models import (
 
 
 class OverheidsorganisatieFactory(DjangoModelFactory):
-    owms_identifier = factory.Faker("company")
-    owms_pref_label = factory.Faker("url")
+    owms_identifier = factory.Sequence(lambda n: f"OWMS #{n}")
+    owms_pref_label = factory.Faker("word")
     owms_end_date = factory.Faker("date")
 
     class Meta:
@@ -30,7 +30,7 @@ class InformatiegebiedFactory(DjangoModelFactory):
 class ThemaFactory(DjangoModelFactory):
     informatiegebied = factory.SubFactory(InformatiegebiedFactory)
     thema = factory.Faker("word")
-    informatiegebied_uri = factory.Faker("url")
+    thema_uri = factory.Faker("url")
 
     class Meta:
         model = Thema

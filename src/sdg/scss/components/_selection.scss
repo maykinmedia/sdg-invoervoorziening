@@ -19,7 +19,7 @@
     padding: 8px 16px;
     display: block;
     text-decoration: none;
-    color: #0B71A1;
+    color: $color_primary;
 
     &.selection__tab--selected {
       border-top: 1px solid #ddd;
@@ -43,9 +43,28 @@
   }
 
   .selection__title {
-    color: #aaaaaa;
+    color: $color_primary;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid $color_grey_light;
+  }
+
+  .selection__subtitle {
+    color: $color_grey_darkest;
     margin-bottom: 4px;
   }
+
+  .selection__subtitle--secondary {
+    color: $color_grey_darker;
+    margin-bottom: 4px;
+
+    &--last {
+      @extend .selection__subtitle--secondary;
+      margin-bottom: 12px;
+    }
+
+  }
+
 
   .selection__information {
     line-height: 1.4;
@@ -66,7 +85,7 @@
   }
 
   .selection__general-link {
-    color: #000;
+    color: $color_primary_dark;
     display: flex;
     align-items: center;
     text-decoration: none;

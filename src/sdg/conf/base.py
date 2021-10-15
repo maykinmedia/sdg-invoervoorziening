@@ -96,6 +96,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
     # Admin auth
     "django_otp",
     "django_otp.plugins.otp_static",
@@ -165,6 +166,7 @@ TEMPLATES = [
         },
     },
 ]
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 WSGI_APPLICATION = "sdg.wsgi.application"
 
@@ -182,8 +184,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # Additional locations of static files
 STATICFILES_DIRS = [
     os.path.join(DJANGO_PROJECT_DIR, "static"),
-    os.path.join(BASE_DIR, "node_modules", "formset.js", "dist"),
-    os.path.join(BASE_DIR, "node_modules", "flatpickr", "dist"),
 ]
 
 # List of finder classes that know how to find static files in

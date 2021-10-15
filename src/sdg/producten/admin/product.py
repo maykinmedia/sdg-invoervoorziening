@@ -48,7 +48,8 @@ class GeneriekProductAdmin(MarkdownxModelAdmin):
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
-    raw_id_fields = ("verantwoordelijke_organisatie", "upn")
+    autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
+    search_fields = ("upn_label",)
 
 
 class ProductVersieInlineAdmin(admin.StackedInline):
@@ -99,6 +100,12 @@ class ProductAdmin(MarkdownxModelAdmin):
         IsReferenceProductFilter,
     )
     inlines = (ProductVersieInlineAdmin,)
+    autocomplete_fields = (
+        "generiek_product",
+        "referentie_product",
+        "catalogus",
+    )
+    search_fields = ("upn_label",)
 
     def is_referentie(self, obj):
         return obj.is_referentie_product
