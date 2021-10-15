@@ -269,6 +269,7 @@ class ProductVersie(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("product"),
         help_text=_("Het product voor het product versie."),
+        blank=True,
     )
     gemaakt_door = models.ForeignKey(
         User,
@@ -276,11 +277,13 @@ class ProductVersie(models.Model):
         on_delete=models.PROTECT,
         verbose_name=_("gemaakt door"),
         help_text=_("De maker van deze productversie."),
+        blank=True,
     )
     versie = models.PositiveIntegerField(
         verbose_name=_("versie"),
         help_text=_("Het versienummer van het product."),
         default=1,
+        blank=True,
     )
 
     publicatie_datum = models.DateTimeField(
