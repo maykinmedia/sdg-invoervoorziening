@@ -153,6 +153,20 @@ class Product(models.Model):
         return bool(not self.referentie_product)
 
     @cached_property
+    def has_expired(self) -> bool:
+        """:returns: Whether this product has expired in relation to the reference product."""
+        if self.is_referentie_product:
+            return False
+
+        publication_date = self.laatste_versie.publicatie_datum
+        reference_publication_date = self.laatste_versie.publicatie_datum
+
+        return bool(
+            (publication_date and reference_publication_date)
+            and (publication_date < reference_publication_date)
+        )
+
+    @cached_property
     def laatste_versie(self):
         latest_version = self.get_latest_versions(1)
         if latest_version:
@@ -327,10 +341,13 @@ class ProductVersie(models.Model):
 
     def clean(self):
         super().clean()
-        if self.publicatie_datum and is_past_date(self.publicatie_datum):
-            raise ValidationError(
-                _("De publicatiedatum kan niet in het verleden liggen.")
-            )
+
+        if not self.pk:
+            # Validators for new instances
+            if self.publicatie_datum and is_past_date(self.publicatie_datum):
+                raise ValidationError(
+                    _("De publicatiedatum kan niet in het verleden liggen.")
+                )
 
 
 class Productuitvoering(models.Model):

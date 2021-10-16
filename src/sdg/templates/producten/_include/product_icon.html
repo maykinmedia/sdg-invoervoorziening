@@ -1,0 +1,9 @@
+{% if product.is_referentie_product %}
+    <i class="fas fa-times red"></i>
+{% elif product.has_expired %}
+    <i class="fas fa-exclamation accent"></i>
+{% elif not product.beschikbaar %}
+    <i class="fas fa-minus green"></i>
+{% else %}
+    <i class="fas fa-check green"></i>
+{% endif %}
