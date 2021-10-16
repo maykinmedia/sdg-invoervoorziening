@@ -1,4 +1,5 @@
 from itertools import zip_longest
+from typing import Optional, Tuple
 
 from django.core.exceptions import PermissionDenied
 from django.db.models import Prefetch
@@ -6,7 +7,6 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.utils.timezone import now
 from django.views.generic import DetailView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
@@ -87,6 +87,21 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     )
     required_roles = ["is_redacteur"]
 
+    def _save_version_form(
+        self, version_form, version_number
+    ) -> Tuple[ProductVersie, bool]:
+        """
+        Saves the version form.
+        Return a tuple of (version object, created), where created is a boolean
+        specifying whether an object was created.
+        """
+        new_version = version_form.save(commit=False)
+        new_version.product = self.product
+        new_version.gemaakt_door = self.request.user
+        new_version.version = version_number
+        new_version.save()
+        return new_version, self.object != new_version
+
     def get_lokale_overheid(self):
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
@@ -97,61 +112,64 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
 
+        # TODO: simplify
         if self.product.is_referentie_product:
             reference_product = self.product
         else:
             reference_product = self.product.referentie_product
-
         reference_formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
-        )(
-            instance=reference_product.laatste_versie,
-        )
+        )(instance=reference_product.laatste_versie)
 
         context["product"] = self.product
         context["lokale_overheid"] = self.product.catalogus.lokale_overheid
         context["informatie_form"] = zip_longest(
             generic_information, reference_formset.forms, context["form"].forms
         )
+        context["version_form"] = kwargs.get("version_form") or ProductVersionForm()
         return context
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        if self.object.get_published_status() != PublishChoices.now:
-            instance = self.object
-            versie = self.object.versie
-        else:
-            instance = None
-            versie = self.object.versie + 1
-
-        version_form = ProductVersionForm(
-            data={
-                "product": self.product.pk,
-                "gemaakt_door": self.request.user.pk,
-                "versie": versie,
-                "publish": request.POST.get("publish"),
-                "date": request.POST.get("date"),
-            },
-            instance=instance,
-        )
+        instance, version = _get_version_and_number(product=self.object)
+        version_form = ProductVersionForm(request.POST, instance=instance)
 
         form = self.form_class(request.POST, instance=self.object)
         if form.is_valid() and version_form.is_valid():
-            return self.form_valid(form, version_form)
+            return self.form_valid(form, version_form, version)
         else:
-            return self.form_invalid(form)
+            return self.form_invalid(form, version_form)
 
-    def form_valid(self, form, version_form):
-        new_version = version_form.save()
-
-        if self.object.pk != new_version.pk:
+    def form_valid(self, form, version_form, version_number):
+        new_version, created = self._save_version_form(version_form, version_number)
+        if created:
             duplicate_localized_products(form, new_version)
         else:
             form.save()
 
         return HttpResponseRedirect(self.get_success_url())
 
+    def form_invalid(self, form, version_form):
+        return self.render_to_response(
+            self.get_context_data(form=form, version_form=version_form)
+        )
+
     def get_success_url(self):
         return reverse("producten:detail", kwargs={"pk": self.product.pk})
+
+
+def _get_version_and_number(
+    product: ProductVersie,
+) -> Tuple[Optional[ProductVersie], int]:
+    """Decides between updating an existing product version or creating a new version instance.
+
+    - Version is published: create a new version.
+    - Version is a concept: update the existing instance.
+    - Version is in the future: update the existing instance.
+    """
+    if product.get_published_status() != PublishChoices.now:
+        return product, product.versie
+    else:
+        return None, product.versie + 1
