@@ -1,4 +1,4 @@
-from django.urls import reverse_lazy
+from django.urls import reverse
 
 from django_webtest import WebTest
 
@@ -19,7 +19,7 @@ class HomeViewTests(WebTest):
         role1, role2 = RoleFactory.create_batch(2, user=self.user, is_redacteur=True)
         RoleFactory.create_batch(3)
 
-        response = self.app.get(reverse_lazy(HOME_URL))
+        response = self.app.get(reverse(HOME_URL))
 
         municipalities = response.pyquery(CARD_SELECTOR)
 
@@ -37,7 +37,7 @@ class HomeViewTests(WebTest):
         )
 
     def test_real_name_is_displayed(self):
-        response = self.app.get(reverse_lazy(HOME_URL))
+        response = self.app.get(reverse(HOME_URL))
         self.assertIn(
             self.user.get_full_name(),
             response.text,
