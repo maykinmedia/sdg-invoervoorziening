@@ -43,8 +43,12 @@ $color-bg: #f5f5f5;
   font-weight: bold;
 }
 
+.heading {
+  font-size: 20px;
+}
+
 .subheading {
-  font-size: 18px;
+  font-size: 16px;
   color: $color_grey_darker;
   margin: 16px 0;
 }

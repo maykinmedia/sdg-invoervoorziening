@@ -26,7 +26,9 @@
       margin-right: 10px;
     }
 
-    &.notification__info {
+    &.notification__info,
+    &.notification__success,
+    {
       border-left: 5px solid #0B71A1;
       background-color: $color_primary_lightest;
 
@@ -36,7 +38,7 @@
       }
     }
 
-    &.notification__grey {
+    &.notification__error {
       border-left: 5px solid $color_grey_dark;
       background-color: $color_grey_light;
 
