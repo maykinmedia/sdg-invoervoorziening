@@ -53,6 +53,34 @@ class InvitationTests(WebTest):
         self.assertEqual(role.is_redacteur, True)
         self.assertEqual(role.is_beheerder, False)
 
+    def test_manager_can_create_invitation_for_existing_user(self):
+        response = self.app.get(
+            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+        self.extra_user = UserFactory.create(email="test@example.com")
+        self.assertEqual(User.objects.count(), 2)
+
+        self._fill_invitation_form(response.form)
+        response.form.submit()
+
+        self.assertEqual(User.objects.count(), 2)
+
+        role = self.lokale_overheid.roles.get(user__email="test@example.com")
+        self.assertEqual(role.is_redacteur, True)
+        self.assertEqual(role.is_beheerder, False)
+
+    def test_editor_cannot_create_invitation(self):
+        editor_user = UserFactory.create()
+        RoleFactory.create(
+            user=editor_user,
+            lokale_overheid=self.lokale_overheid,
+            is_redacteur=True,
+        )
+        self.app.set_user(editor_user)
+        self.app.get(
+            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk}), status=403
+        )
+
     def test_invitation_email_is_sent(self):
         response = self.app.get(
             reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})

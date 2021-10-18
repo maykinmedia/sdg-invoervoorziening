@@ -87,29 +87,3 @@ class RoleTests(WebTest):
         self.app.get(delete_url, status=403)
 
         self.assertEqual(Role.objects.count(), 2)
-
-    def test_manager_can_create_roles(self):
-        self.app.set_user(self.manager_user)
-        self.assertEqual(Role.objects.count(), 2)
-
-        new_user = UserFactory.create()
-        create_url = reverse_lazy(
-            "organisaties:overheid_role_create",
-            kwargs={"pk": self.lokale_overheid.pk},
-        )
-        response = self.app.get(create_url)
-        response.form["user"].value = new_user.pk
-        response.form.submit()
-
-        self.assertEqual(Role.objects.count(), 3)
-
-    def test_editor_cannot_create_roles(self):
-        self.app.set_user(self.editor_user)
-        self.assertEqual(Role.objects.count(), 2)
-
-        create_url = reverse_lazy(
-            "organisaties:overheid_role_create",
-            kwargs={"pk": self.lokale_overheid.pk},
-        )
-        self.app.get(create_url, status=403)
-        self.assertEqual(Role.objects.count(), 2)
