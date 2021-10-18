@@ -1,7 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
@@ -23,6 +25,7 @@ class InvitationCreateView(OverheidRoleRequiredMixin, CreateView):
         "first_name",
         "last_name",
     ]
+    formset_class = RoleInlineFormSet
 
     def get_lokale_overheid(self):
         self.lokale_overheid = self.get_object()
@@ -32,13 +35,24 @@ class InvitationCreateView(OverheidRoleRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
 
         context["lokaleoverheid"] = self.lokale_overheid
-        context["formset"] = kwargs.get("formset") or RoleInlineFormSet(prefix="form")
+        context["formset"] = kwargs.get("formset") or self.formset_class(prefix="form")
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        data = kwargs.get("data")
+        if data:
+            try:
+                user = User.objects.get(email=data["email"])
+                kwargs["instance"] = user
+            except User.DoesNotExist:
+                return kwargs
+        return kwargs
 
     def post(self, request, *args, **kwargs):
         self.object = None
         form = self.get_form()
-        formset = RoleInlineFormSet(request.POST, prefix="form")
+        formset = self.formset_class(request.POST, prefix="form")
 
         if form.is_valid() and formset.is_valid():
             return self.form_valid(form, formset=formset)
@@ -47,12 +61,27 @@ class InvitationCreateView(OverheidRoleRequiredMixin, CreateView):
 
     def form_valid(self, form, formset=None):
         with transaction.atomic():
-            self.object = form.save()
+
+            if form.instance.pk:
+                self.object = form.instance  # do not update existing user
+            else:
+                self.object = form.save()
+                UserInvitation.objects.create_and_send(self.object, self.request)
+
             if formset:
                 formset.instance = self.object
                 self._set_form_lokale_overheid(formset)
-                formset.save()
-            UserInvitation.objects.create_and_send(self.object, self.request)
+                try:
+                    formset.save()
+                except IntegrityError:
+                    messages.add_message(
+                        self.request,
+                        messages.ERROR,
+                        _(
+                            "Er bestaat al een gebruiker met dit e-mailadres binnen deze organisatie."
+                        ),
+                    )
+
             return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, formset=None):
