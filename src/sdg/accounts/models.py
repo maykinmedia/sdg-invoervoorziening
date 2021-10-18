@@ -136,7 +136,7 @@ class Role(models.Model):
 
     user = models.ForeignKey(
         "User",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="roles",
     )
     lokale_overheid = models.ForeignKey(
