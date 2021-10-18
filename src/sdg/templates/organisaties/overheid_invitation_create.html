@@ -11,15 +11,18 @@
 {% block notifications %}{% endblock %}
 
 {% block inner %}
+    {% blocktrans %}
+        <div>
+            <p>Nieuwe gebruiker toevoegen.</p>
+            <p class="subheading">U nodigt hiermee een nieuwe of bestaande gebruiker uit voor {{ lokaleoverheid }}. Een gebruiker in de rol van redacteur kan
+                producten in uw catalogi aanpassen. Een beheerder kan alleen gebruikers beheren voor uw organisatie,
+                binnen deze applicatie. Een gebruiker mag ook beide rollen vervullen.</p>
+        </div>
+    {% endblocktrans %}
+
     <form method="post" class="form">
         {% csrf_token %}
         {{ form.non_field_errors }}
-
-        <div class="subheading">
-            {% blocktrans %}
-                <p>Creëer nieuwe invitatie voor <span class="text-bold">{{ lokaleoverheid }}.</span></p>
-            {% endblocktrans %}
-        </div>
 
         <div class="form__block">
             {% field form.email %}
@@ -34,7 +37,7 @@
             </div>
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
             <div class="form__buttons">
-                <input type="submit" class="button" value="{% trans 'Bevestig' %}">
+                <input type="submit" class="button" value="{% trans 'Opslaan' %}">
             </div>
         </div>
 

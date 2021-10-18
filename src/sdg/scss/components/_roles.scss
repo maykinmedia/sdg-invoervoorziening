@@ -1,15 +1,13 @@
 @import "colors";
 
 .roles {
-  a {
-    text-decoration: none;
-    color: $color_primary;
+  .svg-inline--fa {
+    color: $color_accent_darkest;
+    margin-right: 4px;
   }
 
   .roles__control {
-    margin-top: 32px;
-    display: grid;
-    grid-template-columns: 0.8fr 1.2fr 2fr;
+    margin-top: 16px;
   }
 
 }

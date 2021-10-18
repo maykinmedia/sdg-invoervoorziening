@@ -17,7 +17,7 @@
 
         <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
             {% csrf_token %}
-            <button type="submit" class="login_button button">{% trans "Bevestig" %}</button>
+            <button type="submit" class="login_button button">{% trans "Opslaan" %}</button>
         </form>
 
     {% else %}

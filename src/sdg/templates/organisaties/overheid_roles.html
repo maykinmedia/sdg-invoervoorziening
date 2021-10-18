@@ -40,12 +40,12 @@
                                 <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
                                 <td class="tabs__table-cell">
                                     {% if lokaleoverheid_beheerder %}
-                                        {% if user.invitatie and not user.invitatie.accepted %}
-                                            <span>{% trans "Uitnodiging verstuurd." %}</span>
-                                        {% else %}
-                                            <a href="
+                                        <a href="
 
-                                                {% if user != request.user %}{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}{% endif %}">{% trans "Verwijderen" %}</a>
+                                            {% if user != request.user %}{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}{% endif %}">{% trans "Verwijderen" %}</a>
+
+                                        {% if user.invitatie and not user.invitatie.accepted %}
+                                            <span class="text-small">({% trans "Uitnodiging verstuurd." %})</span>
                                         {% endif %}
                                     {% endif %}
                                 </td>
@@ -55,12 +55,9 @@
                     </tbody>
                 </table>
                 <div class="roles__control">
-                    <a href="{% url 'organisaties:overheid_role_create' pk=lokaleoverheid.pk %}">
-                        <i class="fas fa-plus"></i>
-                        {% trans "Nieuwe rol toevoegen" %}
-                        <a href="{% url 'organisaties:invitation_create' pk=lokaleoverheid.pk %}">
+                        <a class="button" href="{% url 'organisaties:invitation_create' pk=lokaleoverheid.pk %}">
                             <i class="far fa-envelope"></i>
-                            {% trans "Nieuwe gebruiker uitnodigen" %}
+                            {% trans "Nieuwe gebruiker toevoegen" %}</a>
                 </div>
             </div>
         </div>

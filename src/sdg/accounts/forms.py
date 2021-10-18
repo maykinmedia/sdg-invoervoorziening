@@ -22,8 +22,13 @@ RoleInlineFormSet = inlineformset_factory(
 
 
 class InvitationAcceptForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput())
-    password_confirm = forms.CharField(widget=forms.PasswordInput())
+    password = forms.CharField(
+        widget=forms.PasswordInput(),
+        label=_("Wachtwoord"),
+    )
+    password_confirm = forms.CharField(
+        widget=forms.PasswordInput(), label=_("Wachtwoord bevestigen")
+    )
 
     def clean(self):
         cleaned_data = super().clean()
