@@ -126,9 +126,10 @@
     grid-gap: 8px;
 
     li {
-      background-color: $color_grey_darker;
-      color: $color_bg;
+      background-color: $color_accent;
+      color: $color_accent_darkest;
       padding: 8px;
+      list-style: none;
     }
   }
 }

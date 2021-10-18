@@ -153,6 +153,20 @@ class Product(models.Model):
         return bool(not self.referentie_product)
 
     @cached_property
+    def has_expired(self) -> bool:
+        """:returns: Whether this product has expired in relation to the reference product."""
+        if self.is_referentie_product:
+            return False
+
+        publication_date = self.laatste_versie.publicatie_datum
+        reference_publication_date = self.laatste_versie.publicatie_datum
+
+        return bool(
+            (publication_date and reference_publication_date)
+            and (publication_date < reference_publication_date)
+        )
+
+    @cached_property
     def laatste_versie(self):
         latest_version = self.get_latest_versions(1)
         if latest_version:
@@ -269,6 +283,7 @@ class ProductVersie(models.Model):
         on_delete=models.CASCADE,
         verbose_name=_("product"),
         help_text=_("Het product voor het product versie."),
+        blank=True,
     )
     gemaakt_door = models.ForeignKey(
         User,
@@ -276,11 +291,13 @@ class ProductVersie(models.Model):
         on_delete=models.PROTECT,
         verbose_name=_("gemaakt door"),
         help_text=_("De maker van deze productversie."),
+        blank=True,
     )
     versie = models.PositiveIntegerField(
         verbose_name=_("versie"),
         help_text=_("Het versienummer van het product."),
         default=1,
+        blank=True,
     )
 
     publicatie_datum = models.DateTimeField(
@@ -327,10 +344,13 @@ class ProductVersie(models.Model):
 
     def clean(self):
         super().clean()
-        if self.publicatie_datum and is_past_date(self.publicatie_datum):
-            raise ValidationError(
-                _("De publicatiedatum kan niet in het verleden liggen.")
-            )
+
+        if not self.pk:
+            # Validators for new instances
+            if self.publicatie_datum and is_past_date(self.publicatie_datum):
+                raise ValidationError(
+                    _("De publicatiedatum kan niet in het verleden liggen.")
+                )
 
 
 class Productuitvoering(models.Model):

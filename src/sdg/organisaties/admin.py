@@ -21,7 +21,7 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
         "contact_website",
     )
     inlines = (LokatieInline,)
-    raw_id_fields = (
+    autocomplete_fields = (
         "organisatie",
         "ondersteunings_organisatie",
         "verantwoordelijke_organisatie",
@@ -32,3 +32,4 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
 @admin.register(Lokatie)
 class LokatieAdmin(admin.ModelAdmin):
     model = Lokatie
+    autocomplete_fields = ("lokale_overheid",)

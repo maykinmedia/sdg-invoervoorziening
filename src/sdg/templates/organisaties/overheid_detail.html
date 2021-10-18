@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load producten %}
+{% load utils %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de
@@ -101,7 +102,7 @@
                                            href="{% url 'producten:redirect' pk=product.pk catalog_pk=catalog.pk %}">
                                     {% endif %}
                                 <div class="products__item-icon">
-                                    <i class="fas fa-dot-circle {% if product.is_referentie_product %}grey{% elif product.beschikbaar %}primary{% else %}accent{% endif %}"></i>
+                                    {% product_icon product %}
                                 </div>
                                 <div>
                                     <div class="products__item-title">{{ product.upn_label }}</div>
@@ -122,5 +123,8 @@
                 <hr class="divider">
             {% endif %}
         {% endfor %}
+
+        {% include "producten/_include/legend.html" %}
+
     </div>
 {% endblock inner %}

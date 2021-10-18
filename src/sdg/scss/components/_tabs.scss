@@ -132,6 +132,30 @@
       width: 100%;
       padding: 12px;
     }
+
+    .dynamic__container {
+
+      input {
+        width: 96%;
+      }
+
+      .dynamic__container__button {
+
+        &--side {
+          @extend .dynamic__container__button;
+          background-color: transparent;
+          height: 49px;
+        }
+
+        &--low {
+          @extend .dynamic__container__button;
+          color: $color_primary !important;
+        }
+
+      }
+
+    }
+
   }
 
   .tabs__table-edit {

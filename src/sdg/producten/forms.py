@@ -3,6 +3,7 @@ from django.utils.timezone import now
 
 from .constants import PublishChoices
 from .models import LocalizedProduct, ProductVersie
+from .widgets import ProductRadioSelect
 
 
 class LocalizedProductForm(forms.ModelForm):
@@ -27,7 +28,9 @@ class LocalizedProductForm(forms.ModelForm):
 
 
 class ProductVersionForm(forms.ModelForm):
-    publish = forms.ChoiceField(choices=PublishChoices.choices)
+    publish = forms.ChoiceField(
+        choices=PublishChoices.choices, widget=ProductRadioSelect
+    )
     date = forms.DateTimeField(required=False)
 
     class Meta:
