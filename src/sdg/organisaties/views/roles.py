@@ -22,29 +22,6 @@ class RoleListView(RoleBaseMixin, OverheidRoleRequiredMixin, ListView):
         return context
 
 
-class RoleCreateView(RoleBaseMixin, OverheidRoleRequiredMixin, CreateView):
-    model = Role
-    template_name = "organisaties/overheid_role_create.html"
-    required_roles = ["is_beheerder"]
-    fields = [
-        "is_beheerder",
-        "is_redacteur",
-        "user",
-    ]
-
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        existing_qs = self.lokale_overheid.roles.all()
-        form.fields["user"].queryset = form.fields["user"].queryset.exclude(
-            pk__in=Subquery(existing_qs.values_list("user__pk"))
-        )
-        return form
-
-    def form_valid(self, form):
-        form.instance.lokale_overheid = self.lokale_overheid
-        return super().form_valid(form)
-
-
 class RoleDeleteView(
     DisallowOwnRoleMixin, RoleBaseMixin, OverheidRoleRequiredMixin, DeleteView
 ):

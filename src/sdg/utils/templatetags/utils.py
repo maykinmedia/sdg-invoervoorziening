@@ -104,12 +104,12 @@ def table_row(field, **kwargs):
 def checkbox(field, **kwargs):
     return {**kwargs, "field": field}
 
-  
+
 @register.inclusion_tag("forms/status_icon.html")
 def status_icon(status, **kwargs):
     return {**kwargs, "status": status}
 
-  
+
 @register.inclusion_tag("producten/_include/product_icon.html")
 def product_icon(product, **kwargs):
     return {**kwargs, "product": product}
