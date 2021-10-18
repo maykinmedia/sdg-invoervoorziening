@@ -8,6 +8,7 @@ from .views import (
     RoleCreateView,
     RoleDeleteView,
     RoleListView,
+    RoleUpdateView,
 )
 
 app_name = "organisaties"
@@ -35,6 +36,11 @@ urlpatterns = [
         r"^overheid/(?P<pk>[\d]+)/roles/create$",
         RoleCreateView.as_view(),
         name="overheid_role_create",
+    ),
+    url(
+        r"^overheid/(?P<pk>[\d]+)/roles/(?P<role_pk>[\d]+)/update$",
+        RoleUpdateView.as_view(),
+        name="overheid_role_update",
     ),
     url(
         r"^overheid/(?P<pk>[\d]+)/roles/(?P<role_pk>[\d]+)/delete$",

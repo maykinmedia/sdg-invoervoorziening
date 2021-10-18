@@ -1,34 +1,14 @@
 from django.core.exceptions import PermissionDenied
 from django.db.models import Subquery
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, ListView
+from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from sdg.accounts.mixins import OverheidRoleRequiredMixin
 from sdg.accounts.models import Role
-from sdg.organisaties.models import LokaleOverheid
-
-
-class RoleBaseMixin:
-    def get_lokale_overheid(self):
-        self.lokale_overheid = LokaleOverheid.objects.get(pk=self.kwargs["pk"])
-        return self.lokale_overheid
-
-    def get_queryset(self):
-        return self.lokale_overheid.roles.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["lokaleoverheid"] = self.lokale_overheid
-        return context
-
-    def get_success_url(self):
-        return reverse_lazy(
-            "organisaties:overheid_roles", kwargs={"pk": self.lokale_overheid.pk}
-        )
+from sdg.organisaties.views.mixins import DisallowOwnRoleMixin, RoleBaseMixin
 
 
 class RoleListView(RoleBaseMixin, OverheidRoleRequiredMixin, ListView):
-    template_name = "organisaties/overheid_roles.html"
+    template_name = "organisaties/overheid_role_list.html"
     required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_queryset(self):
@@ -65,15 +45,20 @@ class RoleCreateView(RoleBaseMixin, OverheidRoleRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class RoleDeleteView(RoleBaseMixin, OverheidRoleRequiredMixin, DeleteView):
+class RoleDeleteView(
+    DisallowOwnRoleMixin, RoleBaseMixin, OverheidRoleRequiredMixin, DeleteView
+):
     queryset = Role.objects.all()
     template_name = "organisaties/overheid_role_delete.html"
     pk_url_kwarg = "role_pk"
     required_roles = ["is_beheerder"]
 
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        if self.request.user.pk == self.object.user.pk:
-            raise PermissionDenied()
 
-        return response
+class RoleUpdateView(
+    DisallowOwnRoleMixin, RoleBaseMixin, OverheidRoleRequiredMixin, UpdateView
+):
+    queryset = Role.objects.all()
+    template_name = "organisaties/overheid_role_update.html"
+    pk_url_kwarg = "role_pk"
+    required_roles = ["is_beheerder"]
+    fields = ["is_beheerder", "is_redacteur"]

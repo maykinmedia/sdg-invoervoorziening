@@ -39,19 +39,20 @@
                     {% for role in roles %}
                         {% with role.user as user %}
                             <tr>
-                                <td class="tabs__table-cell">{{ user.get_full_name }}</td>
+                                <td class="tabs__table-cell">{{ user.get_full_name }}
+                                    {% if user.invitatie and not user.invitatie.accepted %}
+                                        <i class="fa fa-envelope fa-xs dark"
+                                           title="{% trans 'Uitnodiging verstuurd' %}"></i>
+                                    {% endif %}
+                                </td>
                                 <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
                                 <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
                                 <td class="tabs__table-cell">
-                                    {% if lokaleoverheid_beheerder %}
-                                        <a href="
-
-
-                                            {% if user != request.user %}{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}{% endif %}">{% trans "Verwijderen" %}</a>
-
-                                        {% if user.invitatie and not user.invitatie.accepted %}
-                                            <span class="text-small">({% trans "Uitnodiging verstuurd" %})</span>
-                                        {% endif %}
+                                    {% if lokaleoverheid_beheerder and user != request.user %}
+                                        <a class="button--small button--light"
+                                           href="{% url 'organisaties:overheid_role_update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
+                                        <a class="button--small button--light"
+                                           href="{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
                                     {% endif %}
                                 </td>
                             </tr>
