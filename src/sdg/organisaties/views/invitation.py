@@ -100,5 +100,5 @@ class InvitationAcceptView(SingleObjectMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        self.object.accept_initation(self.request, form.cleaned_data)
+        self.object.accept_invitation(self.request, form.cleaned_data)
         return super().form_valid(form)

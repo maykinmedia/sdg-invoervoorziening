@@ -11,6 +11,8 @@ from django.utils.crypto import get_random_string
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
+from allauth.account.models import EmailAddress
+
 from .managers import UserInvitationManager, UserManager
 
 
@@ -115,11 +117,21 @@ class UserInvitation(models.Model):
             self.accepted = True
             self.save()
 
+            self.verify_email()
+
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 _("Uitnodiging met succes aanvaard."),
             )
+
+    def verify_email(self):
+        return EmailAddress.objects.create(
+            email=self.user.email,
+            user=self.user,
+            verified=True,
+            primary=True,
+        )
 
     class Meta:
         verbose_name = _("user invitation")
