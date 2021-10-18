@@ -1,8 +1,9 @@
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
-from django.db import models
+from django.db import models, transaction
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
@@ -105,6 +106,20 @@ class UserInvitation(models.Model):
 
         self.sent = timezone.now()
         self.save()
+
+    def accept_invitation(self, request, cleaned_data):
+        with transaction.atomic():
+            self.user.set_password(cleaned_data["password"])
+            self.user.save()
+
+            self.accepted = True
+            self.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                _("Uitnodiging met succes aanvaard."),
+            )
 
     class Meta:
         verbose_name = _("user invitation")

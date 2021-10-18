@@ -1,9 +1,7 @@
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
@@ -102,20 +100,5 @@ class InvitationAcceptView(SingleObjectMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        _accept_invitation(self.object, self.request, form.cleaned_data)
+        self.object.accept_initation(self.request, form.cleaned_data)
         return super().form_valid(form)
-
-
-def _accept_invitation(invitation, request, cleaned_data):
-    with transaction.atomic():
-        invitation.user.set_password(cleaned_data["password"])
-        invitation.user.save()
-
-        invitation.accepted = True
-        invitation.save()
-
-        messages.add_message(
-            request,
-            messages.SUCCESS,
-            _("Uitnodiging met succes aanvaard."),
-        )
