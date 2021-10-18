@@ -3,6 +3,16 @@
 from django.db import migrations, models
 
 
+def update_existing_opening_times(apps, schema_editor):
+    LokaleOverheid = apps.get_model("organisaties", "LokaleOverheid")
+
+    LokaleOverheid.objects.filter(contact_emailadres=None).update(contact_emailadres="")
+    LokaleOverheid.objects.filter(contact_telefoonnummer=None).update(
+        contact_telefoonnummer=""
+    )
+    LokaleOverheid.objects.filter(contact_website=None).update(contact_website="")
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,39 +20,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name="lokaleoverheid",
-            name="contact_emailadres",
-            field=models.EmailField(
-                blank=True,
-                default="",
-                help_text="Het e-mailadres van de verantwoordelijke contactpersoon.",
-                max_length=254,
-                verbose_name="contact emailadres",
-            ),
-            preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name="lokaleoverheid",
-            name="contact_telefoonnummer",
-            field=models.CharField(
-                blank=True,
-                default="",
-                help_text="Het telefoonnummer van de verantwoordelijke contactpersoon.",
-                max_length=20,
-                verbose_name="contact telefoonnummer",
-            ),
-            preserve_default=False,
-        ),
-        migrations.AlterField(
-            model_name="lokaleoverheid",
-            name="contact_website",
-            field=models.URLField(
-                blank=True,
-                default="",
-                help_text="De website van de verantwoordelijke contactpersoon.",
-                verbose_name="contact website",
-            ),
-            preserve_default=False,
-        ),
+        migrations.RunPython(update_existing_opening_times),
     ]

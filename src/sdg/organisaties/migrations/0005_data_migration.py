@@ -1,10 +1,10 @@
 import re
 
 from django.db import migrations, models
-from sdg.organisaties.models import Lokatie
 
 
 def update_existing_opening_times(apps, schema_editor):
+    Lokatie = apps.get_model("organisaties", "Lokatie")
     locations = Lokatie.objects.all()
 
     target_fields = [
