@@ -13,11 +13,6 @@
   border: 0;
   cursor: pointer;
 
-  &.button--light {
-    --main-color: #e0e3ea;
-    --shadow-color: #b5b6bb;
-  }
-
   &:hover {
     transform: translateY(-1px);
     --shadow-size: 5px;
@@ -26,5 +21,21 @@
   &:active {
     transform: translateY(4px);
     box-shadow: none;
+  }
+
+  &--small {
+    @extend .button;
+    padding: 2px 20px;
+    margin-top: 0px;
+    --shadow-size: 2px;
+
+    &:hover {
+      --shadow-size: 3px;
+    }
+  }
+
+  &.button--light {
+    --main-color: #e0e3ea;
+    --shadow-color: #b5b6bb;
   }
 }

@@ -9,6 +9,7 @@
   grid-template-columns: 1fr 3fr 2fr;
   margin-bottom: 32px;
   min-height: 284px;
+  border-top: 3px solid $color_primary;
 
   .selection__tabs {
     padding: 24px 0;
@@ -111,11 +112,19 @@
     right: 16px;
     color: #0B71A1;
     font-weight: 600;
-    text-decoration: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 16px;
+
+    a {
+      text-decoration: none;
+    }
 
     .svg-inline--fa {
       color: #0B71A1;
-      margin-right: 8px;
+      margin-right: 6px;
     }
+
   }
+
 }

@@ -48,3 +48,20 @@ $color-bg: #f5f5f5;
   color: $color_green !important;
 }
 
+.text-small {
+  font-size: 12px;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.heading {
+  font-size: 20px;
+}
+
+.subheading {
+  font-size: 16px;
+  color: $color_grey_darker;
+  margin: 16px 0;
+}

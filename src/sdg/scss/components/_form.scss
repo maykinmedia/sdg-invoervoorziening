@@ -23,6 +23,15 @@
     width: 100%;
   }
 
+  .form__block {
+    width: 425px;
+  }
+
+  .form__block-inline {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .form__block-group {
     background-color: $color_secondary;
     border-radius: 15px;

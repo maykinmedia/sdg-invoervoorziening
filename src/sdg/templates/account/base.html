@@ -18,6 +18,11 @@
             {% endblock %}
         </div>
         <div class="login__right">
+            {% block notifications %}
+                <div class="notifications notifications--inline">
+                    {% include "core/_notifications.html" %}
+                </div>
+            {% endblock %}
             <div class="login__container">
                 {% block login_right %}
                 {% endblock %}
