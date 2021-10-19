@@ -1,9 +1,6 @@
 {% extends 'producten/base.html' %}
 
-{% load i18n %}
-{% load utils %}
-{% load producten %}
-{% load humanize %}
+{% load i18n utils producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de <b>{{ product.catalogus.lokale_overheid }}</b>{% endblock container_title %}
@@ -120,17 +117,21 @@
                             {% endif %}
                             <div class="tabs__fotter-right">
                                 <h3 class="tabs__footer-title">Revisies</h3>
-                                {% for version in product.get_latest_versions %}
+                                {% for product_version in product.get_latest_versions %}
                                     <ul class="revision-list">
                                         <li class="revision-list__item">
                                             <i class="fas fa-user"></i>
-                                            {% with user=version.gemaakt_door %}
-                                                {{ user.get_full_name|capfirst }} —
-                                                {{ version.publicatie_datum|naturaltime|default:_("concept") }} (
-                                                <a class="revision-list-link"
-                                                   href="#">{{ version.gewijzigd_op|date:"d-m-Y H:i" }}</a>
-                                                )
-                                            {% endwith %}
+                                            {% blocktrans with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.versie|default:_("concept") %}
+                                                Gebruiker <strong>{{ user }}</strong> heeft op
+                                                <strong>{{ last_modified }}</strong> product versie
+                                                <strong>{{ version }}</strong> gewijzigd.
+                                            {% endblocktrans %}
+
+                                            {% if product_version.publicatie_datum %}
+                                                {% blocktrans with publication_date=product_version.publicatie_datum %}
+                                                    Gepubliceerd op <strong>{{ publication_date }}</strong>.
+                                                {% endblocktrans %}
+                                            {% endif %}
                                         </li>
                                     </ul>
                                 {% endfor %}
