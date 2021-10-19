@@ -27,6 +27,8 @@ from sdg.producten.utils import is_now
 
 
 class ProductDetailViewTests(WebTest):
+    # TODO: past + future -> CMS shows active + notification of future
+    # TODO: past + concept -> CMS shows active + notification of concept
     def setUp(self):
         super().setUp()
 
@@ -46,6 +48,11 @@ class ProductDetailViewTests(WebTest):
         response = self.app.get(product_version.product.get_absolute_url())
 
         self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
+
+    def test_concept_product_displays_warning(self):
+        # TODO: show concept notification
+        # TODO: show status as concept
+        ...
 
     def test_generic_information_is_displayed_next_to_information(self):
         product_version = SpecifiekProductVersieFactory.create()
@@ -174,6 +181,8 @@ class ReferentieProductUpdateViewTests(WebTest):
 
 
 class SpecifiekProductUpdateViewTests(WebTest):
+    # TODO: check if concept notification appears
+
     def setUp(self):
         super().setUp()
 
@@ -351,17 +360,43 @@ class SpecifiekProductUpdateViewTests(WebTest):
         # TODO: show scheduled notification
         ...
 
-    def test_publish_now_existing_later(self):
+    def test_published_and_scheduled_save_concept(self):
+        self._change_product_status(PublishChoices.now)
+        future_product_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=FUTURE_DATE,
+            versie=1,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
+
+        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+
+        self._fill_product_form(response.form, PublishChoices.concept)
+
+        response.form.submit()
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_version = self.product.laatste_versie
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, None)
+        self.assertEqual(latest_version.get_published_status(), PublishChoices.concept)
+        self.assertEqual(latest_version.versie, 1)
+        # TODO: notification checks
+
+    def test_published_and_scheduled_save_now(self):
         ...
 
-    def test_publish_concept(self):
+    def test_published_and_scheduled_save_later(self):
         ...
 
-    def test_publish_later(self):
+    def test_published_and_concept_save_concept(self):
         ...
 
-    def test_publish_concept_existing_concept(self):
+    def test_published_and_concept_save_now(self):
         ...
 
-    def test_publish_later_existing_concept(self):
+    def test_published_and_concept_save_later(self):
         ...
