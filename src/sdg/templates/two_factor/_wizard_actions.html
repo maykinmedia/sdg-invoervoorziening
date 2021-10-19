@@ -1,10 +1,5 @@
 {% load i18n %}
 
 <div class="button-row">
-  {% if wizard.steps.prev %}
-    <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}" class="button button--light">{% trans "Back" %}</button>
-  {% else %}
-    <button disabled name="" type="button" class="button button--light" disabled>{% trans "Back" %}</button>
-  {% endif %}
-  <button type="submit" class="button">{% trans "Next" %}</button>
+      <button type="submit" class="button">{% trans "Next" %}</button>
 </div>

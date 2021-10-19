@@ -12,7 +12,7 @@
   {% if not phone_methods %}
     <div class="m-top">
       <a href="{% url 'core:home' %}"
-        class="btn btn-block btn-secondary">{% trans "Back to Account Security" %}</a>
+        class="button">{% trans "Naar de homepage" %}</a>
     </div>
   {% else %}
     <p>{% blocktrans trimmed %}However, it might happen that you don't have access to
@@ -20,7 +20,7 @@
       number.{% endblocktrans %}</p>
 
     <a href="{% url 'core:home' %}"
-        class="float-right btn btn-link">{% trans "Back to Account Security" %}</a>
+        class="float-right button">{% trans "Naar de homepage" %}</a>
   {% endif %}
 
 {% endblock %}

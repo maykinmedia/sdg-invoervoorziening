@@ -1,5 +1,5 @@
 {% extends "account/base.html" %}
-{% load i18n two_factor %}
+{% load i18n two_factor utils %}
 
 {% block nav-global %}{% endblock %}
 {% block django_admin_index_menu %}{% endblock %}
@@ -53,7 +53,13 @@
                 </p>
             {% endif %}
 
-            {% include "two_factor/_wizard_actions.html" %}
+            {% if wizard.steps.current == 'auth' %}
+                <div class="button-row">
+                    <button type="submit" class="button">{% trans "Login" %}</button>
+                </div>
+            {% else %}
+                {% include "two_factor/_wizard_actions.html" %}
+            {% endif %}
         </form>
         {% url 'account_reset_password' as password_reset_url %}
         {% if password_reset_url %}
