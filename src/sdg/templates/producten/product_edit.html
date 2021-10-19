@@ -27,6 +27,14 @@
             {% include "core/_notifications.html" %}
             {% include 'producten/_include/beschikbaar_warning.html' %}
         </div>
+
+{#        TODO: Refactor #}
+        {% for generic_information, reference_form, form in informatie_form %}
+            <template class="form__reference-{{ form.taal.value }}">
+                {{ reference_form.as_p }}
+            </template>
+        {% endfor %}
+
         <form action="." method="POST" class="form tabs__tab-contents">
             {% csrf_token %}
             {{ form.management_form }}
@@ -55,7 +63,7 @@
                         {% include 'producten/_include/generiek_warning.html' %}
                     {% endif %}
 
-                    <table class="tabs__table form__has-reference">
+                    <table class="tabs__table form__has-reference" data-reference=".form__reference-{{ form.taal.value }}">
                         <thead>
                         <tr>
                             <th class="tabs__table-header" width="25%">Gegeven</th>
@@ -71,9 +79,6 @@
                                 {{ form.taal.as_hidden }}
                             </td>
                         </tr>
-                        <template class="form__reference">
-                            {{ reference_form.as_p }}
-                        </template>
                         {% with reference=product.is_referentie_product %}
                             {% table_field form.product_titel_decentraal is_reference=reference %}
                             {% table_field form.specifieke_tekst is_reference=reference %}
