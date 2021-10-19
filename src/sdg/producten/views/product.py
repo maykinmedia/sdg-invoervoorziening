@@ -123,8 +123,10 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
 
         context["product"] = self.product
         context["lokale_overheid"] = self.product.catalogus.lokale_overheid
-        context["informatie_form"] = zip_longest(
-            generic_information, reference_formset.forms, context["form"].forms
+        context["informatie_form"] = list(
+            zip_longest(
+                generic_information, reference_formset.forms, context["form"].forms
+            )
         )
         context["version_form"] = kwargs.get("version_form") or ProductVersionForm()
         return context

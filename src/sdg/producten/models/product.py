@@ -239,9 +239,7 @@ class Product(models.Model):
 
     def get_latest_versions(self, quantity=5):
         """:returns: The latest N versions for this product."""
-        return self.versies.all().order_by(F("publicatie_datum").desc(nulls_last=True))[
-            :quantity:-1
-        ]
+        return self.versies.all().order_by("-versie")[:quantity:-1]
 
     class Meta:
         verbose_name = _("product")
