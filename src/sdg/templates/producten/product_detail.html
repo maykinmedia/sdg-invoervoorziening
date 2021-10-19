@@ -1,9 +1,6 @@
 {% extends 'producten/base.html' %}
 
-{% load i18n %}
-{% load utils %}
-{% load producten %}
-{% load humanize %}
+{% load i18n utils producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor de <b>{{ product.catalogus.lokale_overheid }}</b>{% endblock container_title %}
@@ -120,7 +117,7 @@
                             {% endif %}
                             <div class="tabs__fotter-right">
                                 <h3 class="tabs__footer-title">Revisies</h3>
-                                {% for pv in product.versies.all %}
+                                {% for pv in product.get_latest_versions %}
                                     <ul class="revision-list">
                                         <li class="revision-list__item">
                                             <i class="fas fa-user"></i>
