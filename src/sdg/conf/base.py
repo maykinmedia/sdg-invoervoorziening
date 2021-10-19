@@ -1,4 +1,5 @@
 import os
+import sys
 
 # Django-hijack (and Django-hijack-admin)
 from django.urls import reverse_lazy
@@ -421,6 +422,8 @@ RELEASE = get_current_version()
 #
 TWO_FACTOR_FORCE_OTP_ADMIN = config("TWO_FACTOR_FORCE_OTP_ADMIN", default=not DEBUG)
 TWO_FACTOR_PATCH_ADMIN = config("TWO_FACTOR_PATCH_ADMIN", default=True)
+if "test" in sys.argv:  # Allow testing with 2FA
+    TWO_FACTOR_FORCE_OTP = False
 
 if SENTRY_DSN:
     SENTRY_CONFIG = {

@@ -1,0 +1,8 @@
+{% load utils %}
+
+{{ wizard.management_form }}
+{{ wizard.form.non_field_errors }}
+
+{% for field in wizard.form %}
+    {% field field %}
+{% endfor %}
