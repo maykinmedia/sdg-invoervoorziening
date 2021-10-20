@@ -1,13 +1,11 @@
-from django.core.exceptions import PermissionDenied
-from django.db.models import Subquery
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import DeleteView, ListView, UpdateView
 
-from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
 from sdg.organisaties.views.mixins import DisallowOwnRoleMixin, RoleBaseMixin
 
 
-class RoleListView(RoleBaseMixin, OverheidRoleRequiredMixin, ListView):
+class RoleListView(RoleBaseMixin, OverheidMixin, ListView):
     template_name = "organisaties/overheid_role_list.html"
     required_roles = ["is_beheerder", "is_redacteur"]
 
@@ -22,18 +20,14 @@ class RoleListView(RoleBaseMixin, OverheidRoleRequiredMixin, ListView):
         return context
 
 
-class RoleDeleteView(
-    DisallowOwnRoleMixin, RoleBaseMixin, OverheidRoleRequiredMixin, DeleteView
-):
+class RoleDeleteView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, DeleteView):
     queryset = Role.objects.all()
     template_name = "organisaties/overheid_role_delete.html"
     pk_url_kwarg = "role_pk"
     required_roles = ["is_beheerder"]
 
 
-class RoleUpdateView(
-    DisallowOwnRoleMixin, RoleBaseMixin, OverheidRoleRequiredMixin, UpdateView
-):
+class RoleUpdateView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, UpdateView):
     queryset = Role.objects.all()
     template_name = "organisaties/overheid_role_update.html"
     pk_url_kwarg = "role_pk"

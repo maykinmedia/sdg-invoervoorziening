@@ -10,7 +10,7 @@ from django.urls import reverse
 from django.views.generic import DetailView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 
-from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
 from sdg.producten.constants import PublishChoices
 from sdg.producten.forms import LocalizedProductForm, ProductVersionForm
@@ -49,7 +49,7 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
         return reverse("producten:detail", kwargs={"pk": kwargs.get("obj").pk})
 
 
-class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
+class ProductDetailView(OverheidMixin, DetailView):
     template_name = "producten/product_detail.html"
     context_object_name = "product"
     queryset = Product.objects.select_related(
@@ -75,7 +75,7 @@ class ProductDetailView(OverheidRoleRequiredMixin, DetailView):
         return self.render_to_response(context)
 
 
-class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
+class ProductUpdateView(OverheidMixin, UpdateView):
     template_name = "producten/product_edit.html"
     context_object_name = "product_versie"
     queryset = Product.objects.select_related("catalogus__lokale_overheid")
