@@ -10,3 +10,4 @@ class ProductField:
     help_text: str
     is_markdown: bool
     is_reference: bool
+    is_list: bool

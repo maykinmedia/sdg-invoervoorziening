@@ -300,7 +300,7 @@ class ProductVersie(models.Model):
         blank=True,
     )
 
-    publicatie_datum = models.DateTimeField(
+    publicatie_datum = models.DateField(
         _("publicatie datum"),
         help_text=_("De datum van publicatie van de productversie."),
         blank=True,

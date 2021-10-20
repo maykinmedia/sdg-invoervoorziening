@@ -116,6 +116,7 @@
     ul {
       padding-left: 32px;
       list-style-type: none;
+      margin: 8px 0;
 
       li {
         text-indent: -32px;
@@ -123,8 +124,8 @@
       }
 
       li:before {
-        content: "-";
-        margin-right: 27px;
+        content: "—";
+        margin-right: 8px;
       }
     }
 
