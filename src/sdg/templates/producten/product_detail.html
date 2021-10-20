@@ -122,9 +122,11 @@
                                         <li class="revision-list__item">
                                             <i class="fas fa-user"></i>
                                             {% blocktrans with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.versie|default:_("concept") %}
-                                                Gebruiker <strong>{{ user }}</strong> heeft op
-                                                <strong>{{ last_modified }}</strong> product versie
-                                                <strong>{{ version }}</strong> gewijzigd.
+                                                <div class="revision-list__item-text">
+                                                    <span class="primary">{{ user }}</span> heeft op
+                                                    <span class="primary">{{ last_modified }}</span> versie
+                                                    <span class="primary">{{ version }}</span> gewijzigd.
+                                                </div>
                                             {% endblocktrans %}
 
                                             {% if product_version.publicatie_datum %}
