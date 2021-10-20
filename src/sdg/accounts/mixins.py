@@ -83,6 +83,6 @@ class OverheidMixin(OverheidExpirationMixin, OverheidRoleRequiredMixin):
     """
     The standard mixin for all municipality views.
 
-    - Denies access if a municipality end date is not expired.
+    - Denies access if a municipality end date is expired.
     - Ensures a user has the appropriate role to access the municipality.
     """
