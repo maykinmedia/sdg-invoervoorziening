@@ -303,8 +303,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
         }
         self.product.laatste_versie.publicatie_datum = dates.get(publish_choice)
         self.product.laatste_versie.save()
-        self.product.laatste_versie.refresh_from_db()
-        del self.product.laatste_versie
+        self.product.refresh_from_db()
+        del self.product.laatste_versie  # clear cached_property
 
     def _fill_product_form(self, form, publish_choice: PublishChoices.choices):
         form_data = {
