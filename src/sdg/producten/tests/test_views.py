@@ -2,6 +2,7 @@ from django.urls import reverse
 from django.utils.timezone import now
 
 from django_webtest import WebTest
+from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.producten.constants import PublishChoices
@@ -9,6 +10,7 @@ from sdg.producten.models import LocalizedProduct
 from sdg.producten.tests.constants import (
     DUMMY_TITLE,
     FUTURE_DATE,
+    NOW_DATE,
     PRODUCT_EDIT,
     TAB_EN,
     TAB_NL,
@@ -81,6 +83,7 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(generic_en.generieke_tekst, text_en)
         self.assertIn(generic_en.korte_omschrijving, text_en)
 
+    @freeze_time(NOW_DATE)
     def test_reference_product_details_are_displayed(self):
         product_version = ReferentieProductVersieFactory.create()
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
@@ -108,6 +111,7 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(reference_en.specifieke_tekst, text_en)
         self.assertIn(reference_en.specifieke_link, text_en)
 
+    @freeze_time(NOW_DATE)
     def test_specific_product_details_are_displayed(self):
         product_version = SpecifiekProductVersieFactory.create()
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
@@ -134,6 +138,7 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(specific_en.specifieke_tekst, text_en)
         self.assertIn(specific_en.specifieke_link, text_en)
 
+    @freeze_time(NOW_DATE)
     def test_reference_product_fills_missing_specific_fields(self):
         product_version = SpecifiekProductVersieFactory.create()
         reference_product = product_version.product.referentie_product
@@ -237,12 +242,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         form["date"] = data.get("date", None)
         form["publish"].value = data["publish"]
 
+    @freeze_time(NOW_DATE)
     def test_unavailable_product_displays_warning(self):
         self.product.beschikbaar = False
         self.product.save()
         response = self.app.get(self.product.get_absolute_url())
         self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
 
+    @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
         self._change_product_status(PublishChoices.concept)
 
@@ -260,6 +267,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.get_published_status(), PublishChoices.concept)
         self.assertEqual(latest_version.versie, 1)
 
+    @freeze_time(NOW_DATE)
     def test_concept_save_now(self):
         self._change_product_status(PublishChoices.concept)
 
@@ -279,6 +287,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.get_published_status(), PublishChoices.now)
         self.assertEqual(latest_version.versie, 1)
 
+    @freeze_time(NOW_DATE)
     def test_concept_save_later(self):
         self._change_product_status(PublishChoices.concept)
 
@@ -298,6 +307,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
         self.assertEqual(latest_version.versie, 1)
 
+    @freeze_time(NOW_DATE)
     def test_published_save_concept(self):
         self._change_product_status(PublishChoices.now)
 
@@ -317,6 +327,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.get_published_status(), PublishChoices.concept)
         self.assertEqual(latest_version.versie, 2)
 
+    @freeze_time(NOW_DATE)
     def test_published_save_now(self):
         self._change_product_status(PublishChoices.now)
 
@@ -336,6 +347,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.get_published_status(), PublishChoices.now)
         self.assertEqual(latest_version.versie, 2)
 
+    @freeze_time(NOW_DATE)
     def test_published_save_later(self):
         self._change_product_status(PublishChoices.now)
 
@@ -355,11 +367,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
         self.assertEqual(latest_version.versie, 2)
 
-    def test_scheduled_displays_warning(self):
-        # TODO: edit shows ?
-        # TODO: show scheduled notification
-        ...
-
+    @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_concept(self):
         self._change_product_status(PublishChoices.now)
         future_product_version = ProductVersieFactory.create(
@@ -386,6 +394,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.versie, 1)
         # TODO: notification checks
 
+    @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_now(self):
         ...
 
