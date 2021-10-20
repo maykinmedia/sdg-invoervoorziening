@@ -21,6 +21,10 @@
     outline: none;
     font-size: 16px;
     width: 100%;
+
+    &--disabled {
+      background-color: $color_grey_light;
+    }
   }
 
   .form__block {
