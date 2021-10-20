@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.constants import TaalChoices
+from sdg.core.db.fields import DynamicArrayField
 from sdg.producten.types import ProductField
 
 
@@ -34,6 +35,7 @@ class ProductFieldMixin:
             help_text=field.help_text,
             is_reference=is_reference,
             is_markdown=type(field) == MarkdownxField,
+            is_list=type(field) == DynamicArrayField,
         )
 
     def get_fields(self) -> List[ProductField]:
