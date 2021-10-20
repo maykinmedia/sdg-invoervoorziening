@@ -5,7 +5,7 @@
 {% load utils %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor de
+{% block container_title %}SDG voor
     <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
 {% block notifications %}{% endblock %}
 
@@ -22,7 +22,7 @@
                 <div class="selection__tab-content selection__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ lokatie.pk }}">
                     <div>
-                        <div class="selection__title">Bezoek adres</div>
+                        <div class="selection__title">Bezoekadres</div>
                         <div class="selection__information">
                             {{ lokatie.get_formatted_address|linebreaks }}
                         </div>
@@ -30,7 +30,7 @@
                     <div>
                         <div class="selection__title">Openingstijden</div>
                         <div class="selection__tabled">
-                            {% include 'organisaties/_include/openingstijd.html' with naam="Mandaag" openingstijd=lokatie.maandag %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Maandag" openingstijd=lokatie.maandag %}
                             {% include 'organisaties/_include/openingstijd.html' with naam="Dinsdag" openingstijd=lokatie.dinsdag %}
                             {% include 'organisaties/_include/openingstijd.html' with naam="Woensdag" openingstijd=lokatie.woensdag %}
                             {% include 'organisaties/_include/openingstijd.html' with naam="Donderdag" openingstijd=lokatie.donderdag %}
@@ -57,12 +57,12 @@
             </a>
             {#            <a class="selection__edit--left" href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">#}
             {#                <i class="fas fa-user"></i>#}
-            {#                {% trans "Roles" %}#}
+            {#                {% trans "Gebruikers" %}#}
             {#            </a>#}
             <div class="selection__edit">
                 <a href="{% url 'organisaties:overheid_roles' pk=lokaleoverheid.pk %}">
                     <i class="fas fa-user"></i>
-                    {% trans "Roles" %}
+                    {% trans "Gebruikers" %}
                 </a>
                 <a href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">
                     <i class="fas fa-pencil-alt"></i>
