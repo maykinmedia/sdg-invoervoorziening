@@ -323,7 +323,7 @@ class ProductVersie(models.Model):
         """:returns: The current published status for this product version."""
         if not self.publicatie_datum:
             return PublishChoices.concept
-        elif self.publicatie_datum <= now():
+        elif self.publicatie_datum <= now().date():
             return PublishChoices.now
         else:
             return PublishChoices.later

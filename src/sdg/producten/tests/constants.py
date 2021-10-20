@@ -8,5 +8,5 @@ TAB_EN = ".tabs #en"
 
 DUMMY_TITLE = "abc"
 
-NOW_DATE = datetime(day=20, month=10, year=2021)
-FUTURE_DATE = datetime(day=1, month=1, year=2022)
+NOW_DATE = datetime(day=20, month=10, year=2021).date()
+FUTURE_DATE = datetime(day=1, month=1, year=2022).date()
