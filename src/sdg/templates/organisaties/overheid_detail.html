@@ -5,8 +5,7 @@
 {% load utils %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor
-    <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
+{% block container_title %}SDG voor <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
 {% block notifications %}{% endblock %}
 
 {% block inner %}
@@ -55,10 +54,6 @@
                 <i class="fas fa-envelope"></i>
                 {{ lokaleoverheid.contact_emailadres|default:_("Geen e-mailadres") }}
             </a>
-            {#            <a class="selection__edit--left" href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">#}
-            {#                <i class="fas fa-user"></i>#}
-            {#                {% trans "Gebruikers" %}#}
-            {#            </a>#}
             <div class="selection__edit">
                 <a href="{% url 'organisaties:overheid_roles' pk=lokaleoverheid.pk %}">
                     <i class="fas fa-user"></i>
