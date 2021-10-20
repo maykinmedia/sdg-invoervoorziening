@@ -3,20 +3,9 @@ from datetime import datetime
 from django.utils.timezone import now
 
 
-def is_now(date: datetime) -> bool:
-    """Checks if a date is now ignoring seconds."""
-    if date.replace(second=0, microsecond=0) == now().replace(second=0, microsecond=0):
-        return True
-    else:
-        return False
-
-
-def is_past_date(date: datetime) -> bool:
-    """Checks if a date is in the past ignoring seconds."""
-    if date.replace(second=0, microsecond=0) < now().replace(second=0, microsecond=0):
-        return True
-    else:
-        return False
+def is_past_date(date: datetime.date) -> bool:
+    """Checks if a date is in the past."""
+    return date < now().date()
 
 
 def duplicate_localized_products(form, new_version):

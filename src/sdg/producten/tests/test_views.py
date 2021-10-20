@@ -24,7 +24,6 @@ from sdg.producten.tests.factories.product import (
     SpecifiekProductFactory,
     SpecifiekProductVersieFactory,
 )
-from sdg.producten.utils import is_now
 
 
 class ProductDetailViewTests(WebTest):
@@ -458,7 +457,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_active_version.versie, 2)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
-        self.assertEqual(is_now(latest_version.publicatie_datum), True)
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
         self.assertEqual(latest_version.get_published_status(), PublishChoices.now)
         self.assertEqual(latest_version.versie, 2)
 
