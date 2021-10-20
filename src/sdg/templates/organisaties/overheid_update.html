@@ -5,7 +5,7 @@
 {% load utils %}
 
 {% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
-{% block container_title %}SDG voor de
+{% block container_title %}SDG voor
     <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
 
 {% block inner %}
@@ -13,10 +13,10 @@
         {% csrf_token %}
 
         <div class="form__forms">
-            {% field form.ondersteunings_organisatie %}
-            {% field form.verantwoordelijke_organisatie %}
-            {% field form.bevoegde_organisatie %}
-            {% field form.organisatie %}
+            {% field_readonly form.ondersteunings_organisatie value=lokaleoverheid.ondersteunings_organisatie %}
+            {% field_readonly form.verantwoordelijke_organisatie value=lokaleoverheid.verantwoordelijke_organisatie %}
+            {% field_readonly form.bevoegde_organisatie value=lokaleoverheid.bevoegde_organisatie %}
+            {% field_readonly form.organisatie value=lokaleoverheid.organisatie %}
             {% field form.contact_naam %}
             {% field form.contact_website %}
             {% field form.contact_telefoonnummer %}

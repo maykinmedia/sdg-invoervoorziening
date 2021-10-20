@@ -6,7 +6,7 @@
 {% load producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor de <b>{{ lokale_overheid }}</b>{% endblock container_title %}
+{% block container_title %}SDG voor <b>{{ lokale_overheid }}</b>{% endblock container_title %}
 
 {% block extra_css %}
     {{ block.super }}
@@ -48,11 +48,10 @@
                             <tr>
                                 <th class="tabs__table-header" width="25%">generieke gegevens</th>
                                 <th class="tabs__table-header">huidige informatie</th>
-                                <th class="tabs__table-header">gewijzigd</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
+                            {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product" %}
                                 {% table_row field %}
                             {% endfor %}
                             </tbody>
