@@ -87,20 +87,19 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
     )
     required_roles = ["is_redacteur"]
 
-    def _save_version_form(
-        self, version_form, version_number
-    ) -> Tuple[ProductVersie, bool]:
+    def _save_version_form(self, version_form) -> Tuple[ProductVersie, bool]:
         """
         Saves the version form.
         Return a tuple of (version object, created), where created is a boolean
         specifying whether an object was created.
         """
         new_version = version_form.save(commit=False)
+        created = self.object != new_version
         new_version.product = self.product
         new_version.gemaakt_door = self.request.user
-        new_version.version = version_number
+        new_version.versie = self.object.versie + 1 if created else self.object.versie
         new_version.save()
-        return new_version, self.object != new_version
+        return new_version, created
 
     def get_lokale_overheid(self):
         self.product = self.get_object()
@@ -123,10 +122,10 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
 
         context["product"] = self.product
         context["lokale_overheid"] = self.product.catalogus.lokale_overheid
-        context["informatie_form"] = list(
-            zip_longest(
-                generic_information, reference_formset.forms, context["form"].forms
-            )
+
+        context["reference_forms"] = reference_formset.forms
+        context["informatie_forms"] = zip_longest(
+            generic_information, context["form"].forms
         )
         context["version_form"] = kwargs.get("version_form") or ProductVersionForm()
         return context
@@ -135,17 +134,17 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        instance, version = _get_version_and_number(product=self.object)
+        instance = _get_version_instance(product=self.object)
         version_form = ProductVersionForm(request.POST, instance=instance)
 
         form = self.form_class(request.POST, instance=self.object)
         if form.is_valid() and version_form.is_valid():
-            return self.form_valid(form, version_form, version)
+            return self.form_valid(form, version_form)
         else:
             return self.form_invalid(form, version_form)
 
-    def form_valid(self, form, version_form, version_number):
-        new_version, created = self._save_version_form(version_form, version_number)
+    def form_valid(self, form, version_form):
+        new_version, created = self._save_version_form(version_form)
         if created:
             duplicate_localized_products(form, new_version)
         else:
@@ -162,16 +161,13 @@ class ProductUpdateView(OverheidRoleRequiredMixin, UpdateView):
         return reverse("producten:detail", kwargs={"pk": self.product.pk})
 
 
-def _get_version_and_number(
-    product: ProductVersie,
-) -> Tuple[Optional[ProductVersie], int]:
+def _get_version_instance(product: ProductVersie) -> Optional[ProductVersie]:
     """Decides between updating an existing product version or creating a new version instance.
 
     - Version is published: create a new version.
     - Version is a concept: update the existing instance.
     - Version is in the future: update the existing instance.
     """
-    if product.get_published_status() != PublishChoices.now:
-        return product, product.versie
-    else:
-        return None, product.versie + 1
+    if product.get_published_status() == PublishChoices.now:
+        return None
+    return product

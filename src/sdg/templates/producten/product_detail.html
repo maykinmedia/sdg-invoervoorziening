@@ -25,8 +25,23 @@
         </div>
 
         <div class="tabs__tab-contents">
-            {% with latest_version=product.laatste_versie %}
-                {% for info in latest_version.vertalingen.all %}
+            {% with latest_version=product.laatste_versie latest_active_version=product.laatste_actieve_versie %}
+                <div class="notifications notifications--inline">
+                    {% with status=latest_version.get_published_status %}
+                        {% if status != "now" %}
+                            <div class="notifications__notification notification__info">
+                                <i class="fas fa-info-circle"></i>
+                                {% if latest_version.publicatie_datum %}
+                                    <span>{% trans "Ingeplande wijzigingen op" %} {{ latest_version.publicatie_datum }}</span>
+                                {% else %}
+                                    <span>{% trans "Er is een bestaand concept voor dit product." %}</span>
+                                {% endif %}
+                                <span></span>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                {% for info in latest_active_version.vertalingen.all %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ info.taal }}">
 
@@ -34,7 +49,7 @@
                         <div class="tabs__tab-header">
                             <div class="tabs__status">
                                 <span class="tabs__status-label">Status:</span>
-                                {% with status=latest_version.get_published_status %}
+                                {% with status=latest_active_version.get_published_status %}
                                     {% if status == "now" %}
                                         <div class="tabs__status-published">
                                             <i class="fas fa-calendar-check"></i>
@@ -56,14 +71,6 @@
                             <div>
                                 <a href="#" class="button button--light">{{ info.get_taal_display }} Deactiveren</a>
                                 <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
-                            </div>
-                        </div>
-
-                        <div class="notifications notifications--inline">
-                            <div class="notifications__notification notification__info">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Ingeplande wijzigingen op 01-01-2021</span>
-                                <a href="#">Bekijk wijzigingen</a>
                             </div>
                         </div>
 

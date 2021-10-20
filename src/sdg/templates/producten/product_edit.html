@@ -28,9 +28,8 @@
             {% include 'producten/_include/beschikbaar_warning.html' %}
         </div>
 
-{#        TODO: Refactor #}
-        {% for generic_information, reference_form, form in informatie_form %}
-            <template class="form__reference-{{ form.taal.value }}">
+        {% for reference_form in reference_forms %}
+            <template class="form__reference-{{ reference_form.initial.taal }}">
                 {{ reference_form.as_p }}
             </template>
         {% endfor %}
@@ -39,7 +38,7 @@
             {% csrf_token %}
             {{ form.management_form }}
 
-            {% for generic_information, reference_form, form in informatie_form %}
+            {% for generic_information, form in informatie_forms %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">
 
@@ -63,7 +62,8 @@
                         {% include 'producten/_include/generiek_warning.html' %}
                     {% endif %}
 
-                    <table class="tabs__table form__has-reference" data-reference=".form__reference-{{ form.taal.value }}">
+                    <table class="tabs__table form__has-reference"
+                           data-reference=".form__reference-{{ form.taal.value }}">
                         <thead>
                         <tr>
                             <th class="tabs__table-header" width="25%">Gegeven</th>
@@ -101,7 +101,11 @@
 
 
             <div class="form-actions">
-                <div class="form-actions__title">{% trans "Wijzigingen publiceren" %}</div>
+                <div class="notifications">
+                    {% if product_versie.get_published_status == "later" %}
+                        {% include 'producten/_include/schedule_to_concept_warning.html' %}
+                    {% endif %}
+                </div>
                 <div>
                     <div class="form-actions__options">
                         {{ version_form.non_field_errors }}
@@ -113,6 +117,7 @@
                     <input class="button tabs__form-button" type="submit" value="Opslaan">
                 </div>
             </div>
+
         </form>
     </div>
 {% endblock inner %}

@@ -5,7 +5,7 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models import F, Model, Q
+from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -323,7 +323,7 @@ class ProductVersie(models.Model):
         """:returns: The current published status for this product version."""
         if not self.publicatie_datum:
             return PublishChoices.concept
-        elif self.publicatie_datum < now():
+        elif self.publicatie_datum <= now():
             return PublishChoices.now
         else:
             return PublishChoices.later
