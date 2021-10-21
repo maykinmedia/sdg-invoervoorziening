@@ -72,6 +72,3 @@ ENVIRONMENT = "CI"
 # Django-axes
 #
 AXES_BEHIND_REVERSE_PROXY = False
-
-# Two factor auth
-TWO_FACTOR_FORCE_OTP_ADMIN = False

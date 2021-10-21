@@ -1,0 +1,43 @@
+{% extends 'organisaties/base.html' %}
+
+{% load i18n %}
+{% load producten %}
+{% load utils %}
+{% load humanize %}
+
+{% block container_title %}SDG voor <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
+{% block notifications %}{% endblock %}
+
+{% block inner %}
+    {% blocktrans %}
+        <div>
+            <p class="heading">Nieuwe gebruiker toevoegen.</p>
+            <p class="subheading">U nodigt hiermee een nieuwe of bestaande gebruiker uit voor {{ lokaleoverheid }}. Een gebruiker in de rol van redacteur kan
+                producten in uw catalogi aanpassen. Een beheerder kan alleen gebruikers beheren voor uw organisatie,
+                binnen deze applicatie. Een gebruiker mag ook beide rollen vervullen.</p>
+        </div>
+    {% endblocktrans %}
+
+    <form method="post" class="form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="form__block">
+            {% field form.email %}
+            {% field form.first_name %}
+            {% field form.last_name %}
+            <div class="form__block-inline">
+                {{ formset.management_form }}
+                {% for subform in formset %}
+                    {% checkbox subform.is_beheerder %}
+                    {% checkbox subform.is_redacteur %}
+                {% endfor %}
+            </div>
+            <input type="hidden" name="next" value="{{ redirect_field_value }}">
+            <div class="form__buttons">
+                <input type="submit" class="button" value="{% trans 'Opslaan' %}">
+            </div>
+        </div>
+
+    </form>
+{% endblock inner %}

@@ -30,7 +30,9 @@
     background-color: #f5f5f5;
     padding: 75px;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
   }
 
   .login__container {

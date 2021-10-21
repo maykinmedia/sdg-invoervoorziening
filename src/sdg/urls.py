@@ -7,6 +7,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.utils.translation import ugettext_lazy as _
 
+from two_factor.urls import urlpatterns as tf_urls
+
 from sdg.accounts.views.password_reset import PasswordResetView
 
 handler500 = "sdg.utils.views.server_error"
@@ -43,6 +45,7 @@ urlpatterns = [
     path("producten/", include("sdg.producten.urls", namespace="producten")),
     path("", include("sdg.organisaties.urls", namespace="organisaties")),
     path("", include("sdg.core.urls", namespace="core")),
+    path("", include(tf_urls)),
 ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static

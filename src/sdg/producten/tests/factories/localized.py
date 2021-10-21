@@ -1,12 +1,14 @@
 import factory.fuzzy
+from factory import post_generation
 from factory.django import DjangoModelFactory
 
 from sdg.core.constants import TaalChoices
-from sdg.organisaties.models import LokaleOverheid, Lokatie
 from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,
     ProductVersieFactory,
+    ReferentieProductVersieFactory,
+    SpecifiekProductVersieFactory,
 )
 
 
@@ -18,19 +20,17 @@ class LocalizedGeneriekProductFactory(DjangoModelFactory):
     product_titel = factory.Faker("word")
 
     generieke_tekst = factory.Faker("paragraph")
-    korte_omschrijving = factory.Faker("paragraph")
+    korte_omschrijving = factory.Faker("sentence")
     landelijke_link = factory.Faker("url")
 
-    taal = factory.fuzzy.FuzzyChoice(TaalChoices.values)
+    taal = factory.Sequence(lambda n: TaalChoices.get_available_languages()[n % 2])
 
     class Meta:
         model = LocalizedGeneriekProduct
 
 
 class LocalizedProductFactory(DjangoModelFactory):
-    product_versie = factory.SubFactory(ProductVersieFactory)
-
-    taal = factory.fuzzy.FuzzyChoice(TaalChoices.values)
+    taal = factory.Sequence(lambda n: TaalChoices.get_available_languages()[n % 2])
 
     product_titel_decentraal = factory.Faker("word")
     bewijs = factory.Faker("paragraph")
@@ -50,3 +50,11 @@ class LocalizedProductFactory(DjangoModelFactory):
 
     class Meta:
         model = LocalizedProduct
+
+
+class LocalizedReferentieProductFactory(LocalizedProductFactory):
+    product_versie = factory.SubFactory(ReferentieProductVersieFactory)
+
+
+class LocalizedSpecifiekProductFactory(LocalizedProductFactory):
+    product_versie = factory.SubFactory(SpecifiekProductVersieFactory)

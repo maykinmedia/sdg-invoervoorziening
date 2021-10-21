@@ -1,0 +1,36 @@
+@import 'colors';
+
+.dynamic {
+
+  .dynamic__container {
+
+    .form__input {
+      width: 93%;
+    }
+
+    .dynamic__container__button {
+      border: none;
+      color: #fff;
+      padding: 6px;
+
+      &--side {
+        @extend .dynamic__container__button;
+        background-color: $color_secondary_darker;
+        height: 42px;
+      }
+
+      &--low {
+        @extend .dynamic__container__button;
+        background-color: transparent;
+        color: $color_secondary_darkest;
+        font-weight: bold;
+        margin-right: 10px;
+        margin-top: 3px;
+        width: 98%;
+      }
+
+    }
+
+  }
+
+}

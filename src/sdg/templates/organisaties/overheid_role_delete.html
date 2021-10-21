@@ -1,0 +1,22 @@
+{% extends 'organisaties/base.html' %}
+
+{% load i18n %}
+{% load producten %}
+{% load utils %}
+{% load humanize %}
+
+{% block header_classes %}header--inset{% endblock header_classes %}
+{% block container_title %}SDG voor <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
+{% block notifications %}{% endblock %}
+
+{% block inner %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="subheading">
+            {% blocktrans %}
+                <p>Weet je zeker dat je <span class="primary text-bold">{{ object }}</span> wilt verwijderen?</p>
+            {% endblocktrans %}
+        </div>
+        <input type="submit" class="button" value="{% trans 'Opslaan' %}">
+    </form>
+{% endblock inner %}

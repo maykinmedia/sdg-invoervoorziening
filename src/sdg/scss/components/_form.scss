@@ -23,6 +23,15 @@
     width: 100%;
   }
 
+  .form__block {
+    width: 425px;
+  }
+
+  .form__block-inline {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .form__block-group {
     background-color: $color_secondary;
     border-radius: 15px;
@@ -52,7 +61,7 @@
   }
 
   .form__subtitle {
-    padding: 16px 0;
+    padding: 16px 16px;
     font-size: 16px;
     display: flex;
     justify-content: space-between;
@@ -60,11 +69,21 @@
 
   .form__forms {
     width: 62%;
+    padding-bottom: 48px;
   }
 
   .form__subforms {
     margin-bottom: 32px;
     color: $color_secondary_darkest;
+
+    .form__help-text {
+      color: $color_secondary_darker;
+    }
+
+    .formset__remove {
+      text-decoration: none;
+    }
+
   }
 
   .form__help-text {
@@ -107,9 +126,10 @@
     grid-gap: 8px;
 
     li {
-      background-color: $color_grey_darker;
-      color: $color_bg;
+      background-color: $color_accent;
+      color: $color_accent_darkest;
       padding: 8px;
+      list-style: none;
     }
   }
 }

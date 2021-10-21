@@ -1,0 +1,6 @@
+{% if openingstijd %}
+    {% for o in openingstijd %}
+        <div class="selection__subtitle">{% if forloop.first %}{{ naam }}{% endif %}</div>
+        <div class="selection__subtitle--secondary{% if forloop.last %}--last{% endif %}">{{ o }} uur.</div>
+    {% endfor %}
+{% endif %}

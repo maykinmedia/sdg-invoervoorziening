@@ -10,19 +10,18 @@
     <td class="tabs__table-cell">
         {% if field.is_markdown %}
             {{ field.value|markdownify }}
+        {% elif field.is_list %}
+            <ul>
+                {% for item in field.value %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
         {% else %}
             {{ field.value }}
         {% endif %}
         {% if field.is_reference %}
             <i class="fa fa-asterisk fa-xs primary"
                title="{% trans 'Dit veld gebruikt referentietekst.' %}"></i>
-        {% endif %}
-    </td>
-    <td class="tabs__table-cell">
-        {% if info.datum_wijziging %}
-            {{ info.datum_wijziging|date:"d-m-y" }}
-        {% else %}
-            -
         {% endif %}
     </td>
 </tr>

@@ -1,13 +1,9 @@
 {% load i18n %}
 
-{% if messages %}
-    <div class="notifications">
-        {% for message in messages %}
-            <div class="notifications__notification notification__grey">
-                <i class="fas fa-user"></i>
-                <span>{{ message }}</span>
-                <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
-            </div>
-        {% endfor %}
+{% for message in messages %}
+    <div class="notifications__notification notification__{{ message.tags }}">
+        <i class="fas fa-exclamation-circle"></i>
+        <span>{{ message }}</span>
+        <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
     </div>
-{% endif %}
+{% endfor %}

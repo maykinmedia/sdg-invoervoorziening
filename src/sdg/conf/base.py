@@ -1,4 +1,5 @@
 import os
+import sys
 
 # Django-hijack (and Django-hijack-admin)
 from django.urls import reverse_lazy
@@ -96,6 +97,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.forms",
     # Admin auth
     "django_otp",
     "django_otp.plugins.otp_static",
@@ -165,6 +167,7 @@ TEMPLATES = [
         },
     },
 ]
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 WSGI_APPLICATION = "sdg.wsgi.application"
 
@@ -182,8 +185,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # Additional locations of static files
 STATICFILES_DIRS = [
     os.path.join(DJANGO_PROJECT_DIR, "static"),
-    os.path.join(BASE_DIR, "node_modules", "formset.js", "dist"),
-    os.path.join(BASE_DIR, "node_modules", "flatpickr", "dist"),
 ]
 
 # List of finder classes that know how to find static files in
@@ -421,6 +422,8 @@ RELEASE = get_current_version()
 #
 TWO_FACTOR_FORCE_OTP_ADMIN = config("TWO_FACTOR_FORCE_OTP_ADMIN", default=not DEBUG)
 TWO_FACTOR_PATCH_ADMIN = config("TWO_FACTOR_PATCH_ADMIN", default=True)
+if "test" in sys.argv:  # Allow testing with 2FA
+    TWO_FACTOR_FORCE_OTP = False
 
 if SENTRY_DSN:
     SENTRY_CONFIG = {
@@ -445,9 +448,17 @@ if not ELASTIC_APM_SERVER_URL:
     ELASTIC_APM["SERVER_URL"] = "http://localhost:8200"
 
 # django-allauth
+ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
+ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_UNIQUE_EMAIL = True
+
+# SDG Invitations
+INVITATION_TEMPLATE = "core/email/invitation.html"
+INVITATION_SUBJECT = "SDG Invoervoorziening Invitatie"
 
 ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"

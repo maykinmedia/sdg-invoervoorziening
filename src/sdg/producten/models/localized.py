@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from markdownx.models import MarkdownxField
 
+from sdg.core.db.fields import DynamicArrayField
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
 
@@ -53,7 +54,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "het portaal getoond."
         ),
     )
-    verwijzing_links = ArrayField(
+    verwijzing_links = DynamicArrayField(
         models.URLField(_("url van verwijzing"), max_length=1000),
         help_text=_(
             "Zowel de Nationale Portalen als de decentrale overheden kunnen een x-tal 'verwijzingen' opnemen bij een "
@@ -119,7 +120,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         help_text=_("Decentrale omschrijving."),
         blank=True,
     )
-    verwijzing_links = ArrayField(
+    verwijzing_links = DynamicArrayField(
         models.URLField(_("url van verwijzing"), max_length=1000),
         help_text=_("Decentrale verwijzingen."),
         blank=True,
@@ -205,10 +206,9 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     @cached_property
     def referentie_informatie(self):
-        if self.product_versie.product.referentie_product:
-            return self.product_versie.product.referentie_product.get_latest_version().vertalingen.get(
-                taal=self.taal
-            )
+        reference_product = self.product_versie.product.referentie_product
+        if reference_product:
+            return reference_product.laatste_versie.vertalingen.get(taal=self.taal)
         else:
             return None
 

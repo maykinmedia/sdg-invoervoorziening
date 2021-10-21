@@ -2,10 +2,10 @@
 
 {% load i18n %}
 {% load producten %}
+{% load utils %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor de
-    <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
+{% block container_title %}SDG voor <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
 {% block notifications %}{% endblock %}
 
 {% block inner %}
@@ -21,7 +21,7 @@
                 <div class="selection__tab-content selection__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ lokatie.pk }}">
                     <div>
-                        <div class="selection__title">Bezoek adres</div>
+                        <div class="selection__title">Bezoekadres</div>
                         <div class="selection__information">
                             {{ lokatie.get_formatted_address|linebreaks }}
                         </div>
@@ -29,20 +29,13 @@
                     <div>
                         <div class="selection__title">Openingstijden</div>
                         <div class="selection__tabled">
-                            <div>Maandag</div>
-                            <div>{{ lokatie.maandag|default:_("Gesloten") }}</div>
-                            <div>Dinsdag</div>
-                            <div>{{ lokatie.dinsdag|default:_("Gesloten") }}</div>
-                            <div>Woensdag</div>
-                            <div>{{ lokatie.woensdag|default:_("Gesloten") }}</div>
-                            <div>Donderdag</div>
-                            <div>{{ lokatie.donderdag|default:_("Gesloten") }}</div>
-                            <div>Vrijdag</div>
-                            <div>{{ lokatie.vrijdag|default:_("Gesloten") }}</div>
-                            <div>Zaterdag</div>
-                            <div>{{ lokatie.zaterdag|default:_("Gesloten") }}</div>
-                            <div>Zondag</div>
-                            <div>{{ lokatie.zondag|default:_("Gesloten") }}</div>
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Maandag" openingstijd=lokatie.maandag %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Dinsdag" openingstijd=lokatie.dinsdag %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Woensdag" openingstijd=lokatie.woensdag %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Donderdag" openingstijd=lokatie.donderdag %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Vrijdag" openingstijd=lokatie.vrijdag %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Zaterdag" openingstijd=lokatie.zaterdag %}
+                            {% include 'organisaties/_include/openingstijd.html' with naam="Zondag" openingstijd=lokatie.zondag %}
                         </div>
                     </div>
                 </div>
@@ -61,14 +54,22 @@
                 <i class="fas fa-envelope"></i>
                 {{ lokaleoverheid.contact_emailadres|default:_("Geen e-mailadres") }}
             </a>
-            <a class="selection__edit" href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">
-                <i class="fas fa-pencil-alt"></i>
-                {% trans "Wijzigen" %}
-            </a>
+            <div class="selection__edit">
+                <a href="{% url 'organisaties:overheid_roles' pk=lokaleoverheid.pk %}">
+                    <i class="fas fa-user"></i>
+                    {% trans "Gebruikers" %}
+                </a>
+                <a href="{% url 'organisaties:overheid_edit' pk=lokaleoverheid.pk %}">
+                    <i class="fas fa-pencil-alt"></i>
+                    {% trans "Wijzigen" %}
+                </a>
+            </div>
         </div>
     </div>
 
-    {% include "core/_notifications.html" %}
+    <div class="notifications">
+        {% include "core/_notifications.html" %}
+    </div>
 
     <div class="products">
         {% for catalog in catalogs %}
@@ -96,7 +97,7 @@
                                            href="{% url 'producten:redirect' pk=product.pk catalog_pk=catalog.pk %}">
                                     {% endif %}
                                 <div class="products__item-icon">
-                                    <i class="fas fa-dot-circle {% if product.is_referentie_product %}grey{% elif product.beschikbaar %}primary{% else %}accent{% endif %}"></i>
+                                    {% product_icon product %}
                                 </div>
                                 <div>
                                     <div class="products__item-title">{{ product.upn_label }}</div>
@@ -117,5 +118,8 @@
                 <hr class="divider">
             {% endif %}
         {% endfor %}
+
+        {% include "producten/_include/legend.html" %}
+
     </div>
 {% endblock inner %}

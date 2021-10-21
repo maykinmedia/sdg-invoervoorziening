@@ -1,10 +1,19 @@
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.db import models
+from django.core.mail import send_mail
+from django.db import models, transaction
+from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils import timezone
+from django.utils.crypto import get_random_string
+from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
-from .managers import UserManager
+from allauth.account.models import EmailAddress
+
+from .managers import UserInvitationManager, UserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -14,21 +23,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username_validator = UnicodeUsernameValidator()
 
-    username = models.CharField(
-        _("gebruikersnaam"),
-        max_length=150,
-        unique=True,
-        help_text=_(
-            "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-        ),
-        validators=[username_validator],
-        error_messages={
-            "unique": _("Een gebruiker met die gebruikersnaam bestaat al."),
-        },
-    )
     first_name = models.CharField(_("voornaam"), max_length=255, blank=True)
     last_name = models.CharField(_("achternaam"), max_length=255, blank=True)
-    email = models.EmailField(_("e-mailadres"), blank=True)
+    email = models.EmailField(_("e-mailadres"), unique=True)
     is_staff = models.BooleanField(
         _("staff status"),
         default=False,
@@ -46,8 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email"]
+    USERNAME_FIELD = "email"
 
     class Meta:
         verbose_name = _("gebruiker")
@@ -65,6 +61,86 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
 
+class UserInvitation(models.Model):
+    user = models.OneToOneField(
+        "User",
+        on_delete=models.CASCADE,
+        related_name="invitatie",
+        verbose_name=_("user"),
+    )
+
+    key = models.CharField(
+        verbose_name=_("key"), max_length=64, unique=True, default=get_random_string
+    )
+    accepted = models.BooleanField(verbose_name=_("accepted"), default=False)
+
+    created = models.DateTimeField(verbose_name=_("created"), default=timezone.now)
+    sent = models.DateTimeField(verbose_name=_("sent"), null=True)
+
+    inviter = models.ForeignKey("User", null=True, blank=True, on_delete=models.CASCADE)
+
+    objects = UserInvitationManager()
+
+    def send_invitation(self, request, **kwargs):
+        invite_url = reverse("organisaties:invitation_accept", args=[self.key])
+        invite_url = request.build_absolute_uri(invite_url)
+        ctx = kwargs
+
+        ctx.update(
+            {
+                "invite_url": invite_url,
+                "user_full_name": self.user.get_full_name(),
+                "key": self.key,
+                "inviter": self.inviter,
+            }
+        )
+        subject = settings.INVITATION_SUBJECT
+        email_template = settings.INVITATION_TEMPLATE
+        html_message = render_to_string(email_template, context=ctx)
+
+        send_mail(
+            subject,
+            strip_tags(html_message),
+            settings.DEFAULT_FROM_EMAIL,
+            [self.user.email],
+            html_message=html_message,
+        )
+
+        self.sent = timezone.now()
+        self.save()
+
+    def accept_invitation(self, request, password):
+        with transaction.atomic():
+            self.user.set_password(password)
+            self.user.save()
+
+            self.accepted = True
+            self.save()
+
+            self.verify_email()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                _("Uitnodiging met succes aanvaard."),
+            )
+
+    def verify_email(self):
+        return EmailAddress.objects.create(
+            email=self.user.email,
+            user=self.user,
+            verified=True,
+            primary=True,
+        )
+
+    class Meta:
+        verbose_name = _("user invitation")
+        verbose_name_plural = _("user invitations")
+
+    def __str__(self):
+        return f"Invitation {self.user.email}"
+
+
 class Role(models.Model):
     """
     A role that governs the relationship between a municipality and user.
@@ -72,13 +148,13 @@ class Role(models.Model):
 
     user = models.ForeignKey(
         "User",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="roles",
     )
     lokale_overheid = models.ForeignKey(
         "organisaties.LokaleOverheid",
         on_delete=models.PROTECT,
-        related_name="lokale_overheden",
+        related_name="roles",
     )
 
     is_beheerder = models.BooleanField(
@@ -122,5 +198,12 @@ class Role(models.Model):
         ]
 
     def __str__(self):
-        allowed_roles = [str(r.verbose_name) for r in self.get_roles()]
+        allowed_roles = [
+            str(r.verbose_name) for r in self.get_roles() if getattr(self, r.name)
+        ]
         return f"{self.user} @ {self.lokale_overheid.organisatie.owms_pref_label}: {', '.join(allowed_roles)}"
+
+    def get_absolute_url(self):
+        return reverse(
+            "organisaties:overheid_roles", kwargs={"pk": self.lokale_overheid.pk}
+        )

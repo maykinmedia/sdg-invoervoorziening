@@ -1,0 +1,10 @@
+{% load i18n %}
+
+{% autoescape off %}
+    {% blocktrans %}
+        <div>Hallo {{ user_full_name }},</div>
+        <div>Je bent uitgenodigd om lid te worden van SDG.</div>
+        <div>Als je mee wilt doen, ga dan naar <a href="{{ invite_url }}">{{ invite_url }}</a></div>
+    {% endblocktrans %}
+{% endautoescape %}
+

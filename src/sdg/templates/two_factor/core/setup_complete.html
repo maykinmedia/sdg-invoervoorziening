@@ -1,0 +1,26 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+
+{% block header %}{% trans "Setup completed" %}{% endblock header %}
+
+{% block login_right %}
+  <h1>{% block title %}{% trans "Enable Two-Factor Authentication" %}{% endblock %}</h1>
+
+  <p>{% blocktrans trimmed %}Congratulations, you've successfully enabled two-factor
+      authentication.{% endblocktrans %}</p>
+
+  {% if not phone_methods %}
+    <div class="m-top">
+      <a href="{% url 'core:home' %}"
+        class="button">{% trans "Naar de homepage" %}</a>
+    </div>
+  {% else %}
+    <p>{% blocktrans trimmed %}However, it might happen that you don't have access to
+      your primary token device. To enable account recovery, add a phone
+      number.{% endblocktrans %}</p>
+
+    <a href="{% url 'core:home' %}"
+        class="float-right button">{% trans "Naar de homepage" %}</a>
+  {% endif %}
+
+{% endblock %}

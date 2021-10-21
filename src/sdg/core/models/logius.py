@@ -136,83 +136,35 @@ class UniformeProductnaam(models.Model):
         ),
     )
 
-    rijk = models.BooleanField(
-        _("rijk"),
-        default=False,
-    )
-    provincie = models.BooleanField(
-        _("provincie"),
-        default=False,
-    )
-    waterschap = models.BooleanField(
-        _("waterschap"),
-        default=False,
-    )
-    gemeente = models.BooleanField(
-        _("gemeente"),
-        default=False,
-    )
-    burger = models.BooleanField(
-        _("burger"),
-        default=False,
-    )
-    bedrijf = models.BooleanField(
-        _("bedrijf"),
-        default=False,
-    )
-    dienstenwet = models.BooleanField(
-        _("dienstenwet"),
-        default=False,
-    )
-    sdg = models.BooleanField(
-        _("sdg"),
-        default=False,
-    )
-    autonomie = models.BooleanField(
-        _("autonomie"),
-        default=False,
-    )
-    medebewind = models.BooleanField(
-        _("medebewind"),
-        default=False,
-    )
-    aanvraag = models.BooleanField(
-        _("aanvraag"),
-        default=False,
-    )
-    subsidie = models.BooleanField(
-        _("subsidie"),
-        default=False,
-    )
-    melding = models.BooleanField(
-        _("melding"),
-        default=False,
-    )
-    verplichting = models.BooleanField(
-        _("verplichting"),
-        default=False,
-    )
-    digi_d_macht = models.BooleanField(
-        _("digi_d_macht"),
-        default=False,
-    )
+    rijk = models.BooleanField(_("rijk"), default=False)
+    provincie = models.BooleanField(_("provincie"), default=False)
+    waterschap = models.BooleanField(_("waterschap"), default=False)
+    gemeente = models.BooleanField(_("gemeente"), default=False)
+    burger = models.BooleanField(_("burger"), default=False)
+    bedrijf = models.BooleanField(_("bedrijf"), default=False)
+    dienstenwet = models.BooleanField(_("dienstenwet"), default=False)
+    sdg = models.BooleanField(_("sdg"), default=False)
+    autonomie = models.BooleanField(_("autonomie"), default=False)
+    medebewind = models.BooleanField(_("medebewind"), default=False)
+    aanvraag = models.BooleanField(_("aanvraag"), default=False)
+    subsidie = models.BooleanField(_("subsidie"), default=False)
+    melding = models.BooleanField(_("melding"), default=False)
+    verplichting = models.BooleanField(_("verplichting"), default=False)
+    digi_d_macht = models.BooleanField(_("digi_d_macht"), default=False)
 
     grondslag = models.CharField(
         _("grondslag"),
         blank=True,
-        null=True,
         max_length=80,
     )
     grondslaglabel = models.CharField(
         _("grondslaglabel"),
         blank=True,
-        null=True,
         max_length=512,
     )
     grondslaglink = models.URLField(
         _("grondslaglink"),
         blank=True,
-        null=True,
     )
 
     class Meta:

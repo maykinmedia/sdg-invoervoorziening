@@ -6,7 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.constants import TaalChoices
-from sdg.producten.utils import ProductField
+from sdg.core.db.fields import DynamicArrayField
+from sdg.producten.types import ProductField
 
 
 class ProductFieldMixin:
@@ -23,7 +24,7 @@ class ProductFieldMixin:
         return value, False
 
     def _get_field(self, field) -> ProductField:
-        """Gets field specific information."""
+        """Gets field specific information for products."""
         if isinstance(field, str):
             field = self.__class__._meta.get_field(field)
         value, is_reference = self._get_field_value(field)
@@ -34,6 +35,7 @@ class ProductFieldMixin:
             help_text=field.help_text,
             is_reference=is_reference,
             is_markdown=type(field) == MarkdownxField,
+            is_list=type(field) == DynamicArrayField,
         )
 
     def get_fields(self) -> List[ProductField]:
@@ -47,7 +49,6 @@ class ProductFieldMixin:
 
 
 class TaalMixin(models.Model):
-
     taal = models.CharField(
         _("taal"),
         choices=TaalChoices.choices,

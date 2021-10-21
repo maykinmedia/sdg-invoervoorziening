@@ -12,7 +12,6 @@ class LokaleOverheidForm(forms.ModelForm):
             "verantwoordelijke_organisatie",
             "bevoegde_organisatie",
             "organisatie",
-            "lau_code",
             "contact_naam",
             "contact_website",
             "contact_telefoonnummer",

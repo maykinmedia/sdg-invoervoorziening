@@ -1,12 +1,9 @@
 {% extends 'producten/base.html' %}
 
-{% load i18n %}
-{% load utils %}
-{% load producten %}
-{% load humanize %}
+{% load i18n utils producten %}
 
 {% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor de <b>{{ product.catalogus.lokale_overheid }}</b>{% endblock container_title %}
+{% block container_title %}SDG voor <b>{{ product.catalogus.lokale_overheid }}</b>{% endblock container_title %}
 
 {% block inner %}
     <div class="tabs">
@@ -18,19 +15,38 @@
                 </a>
             {% endfor %}
         </div>
-        {% include "core/_notifications.html" %}
+
+        <div class="notifications">
+            {% include "core/_notifications.html" %}
+            {% include 'producten/_include/beschikbaar_warning.html' %}
+        </div>
+
         <div class="tabs__tab-contents">
-            {% with latest_version=product.laatste_versie %}
-                {% for info in latest_version.vertalingen.all %}
+            {% with latest_version=product.laatste_versie latest_active_version=product.laatste_actieve_versie %}
+                <div class="notifications notifications--inline">
+                    {% with status=latest_version.get_published_status %}
+                        {% if status != "now" %}
+                            <div class="notifications__notification notification__info">
+                                <i class="fas fa-info-circle"></i>
+                                {% if latest_version.publicatie_datum %}
+                                    <span>{% trans "Ingeplande wijzigingen op" %} {{ latest_version.publicatie_datum }}</span>
+                                {% else %}
+                                    <span>{% trans "Er is een bestaand concept voor dit product." %}</span>
+                                {% endif %}
+                                <span></span>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                </div>
+                {% for info in latest_active_version.vertalingen.all %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ info.taal }}">
 
-                        {% include 'producten/_include/beschikbaar_warning.html' %}
 
                         <div class="tabs__tab-header">
                             <div class="tabs__status">
                                 <span class="tabs__status-label">Status:</span>
-                                {% with status=latest_version.get_published_status %}
+                                {% with status=latest_active_version.get_published_status %}
                                     {% if status == "now" %}
                                         <div class="tabs__status-published">
                                             <i class="fas fa-calendar-check"></i>
@@ -50,16 +66,7 @@
                                 {% endwith %}
                             </div>
                             <div>
-                                <a href="#" class="button button--light">{{ info.get_taal_display }} Deactiveren</a>
                                 <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
-                            </div>
-                        </div>
-
-                        <div class="notifications notifications--inline">
-                            <div class="notifications__notification notification__info">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Ingeplande wijzigingen op 01-01-2021</span>
-                                <a href="#">Bekijk wijzigingen</a>
                             </div>
                         </div>
 
@@ -69,11 +76,10 @@
                                 <tr>
                                     <th class="tabs__table-header" width="25%">generieke gegevens</th>
                                     <th class="tabs__table-header">huidige informatie</th>
-                                    <th class="tabs__table-header">gewijzigd</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product,verantwoordelijke_organisatie" %}
+                                {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product" %}
                                     {% table_row field %}
                                 {% endfor %}
                                 </tbody>
@@ -88,13 +94,12 @@
                         <table class="tabs__table">
                             <thead>
                             <tr>
-                                <th class="tabs__table-header" width="25%">gegeven</th>
+                                <th class="tabs__table-header" width="25%">specifieke gegevens</th>
                                 <th class="tabs__table-header">huidige informatie</th>
-                                <th class="tabs__table-header">gewijzigd</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for field in info.get_fields|exclude:"id,taal,product" %}
+                            {% for field in info.get_fields|exclude:"id,taal,product_versie" %}
                                 {% table_row field %}
                             {% endfor %}
                             </tbody>
@@ -116,17 +121,21 @@
                             {% endif %}
                             <div class="tabs__fotter-right">
                                 <h3 class="tabs__footer-title">Revisies</h3>
-                                {% for version in product.get_latest_versions %}
+                                {% for product_version in product.get_latest_versions %}
                                     <ul class="revision-list">
                                         <li class="revision-list__item">
                                             <i class="fas fa-user"></i>
-                                            {% with user=version.gemaakt_door %}
-                                                {{ user.get_full_name|default:user.username|capfirst }} —
-                                                {{ version.publicatie_datum|naturaltime|default:_("concept") }} (
-                                                <a class="revision-list-link"
-                                                   href="#">{{ version.gewijzigd_op|date:"d-m-Y H:i" }}</a>
-                                                )
-                                            {% endwith %}
+                                            {% blocktrans with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.versie|default:_("concept") %}
+                                                Gebruiker <strong>{{ user }}</strong> heeft op
+                                                <strong>{{ last_modified }}</strong> product versie
+                                                <strong>{{ version }}</strong> gewijzigd.
+                                            {% endblocktrans %}
+
+                                            {% if product_version.publicatie_datum %}
+                                                {% blocktrans with publication_date=product_version.publicatie_datum %}
+                                                    Gepubliceerd op <strong>{{ publication_date }}</strong>.
+                                                {% endblocktrans %}
+                                            {% endif %}
                                         </li>
                                     </ul>
                                 {% endfor %}

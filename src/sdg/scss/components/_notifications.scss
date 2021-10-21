@@ -5,10 +5,12 @@
   grid-template-columns: 1fr;
   grid-gap: 16px;
   width: 100%;
+  margin-bottom: 16px;
+  margin-top: 8px;
 
   &.notifications--inline {
     width: 60%;
-    margin-bottom: 32px;
+    margin-bottom: 16px;
   }
 
   .notifications__notification {
@@ -25,9 +27,11 @@
       margin-right: 10px;
     }
 
-    &.notification__info {
+    &.notification__info,
+    &.notification__success,
+    {
       border-left: 5px solid #0B71A1;
-      background-color: $color_primary_light;
+      background-color: $color_primary_lightest;
 
       .svg-inline--fa,
       a {
@@ -35,7 +39,7 @@
       }
     }
 
-    &.notification__grey {
+    &.notification__error {
       border-left: 5px solid $color_grey_dark;
       background-color: $color_grey_light;
 
