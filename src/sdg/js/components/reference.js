@@ -1,5 +1,7 @@
 import applyMarkdownEditors from './markdown';
+import showdown from 'showdown';
 
+const converter = new showdown.Converter();
 const forms = document.querySelectorAll(".form__has-reference");
 
 const availableEditors = applyMarkdownEditors(".markdownx textarea");
@@ -36,11 +38,11 @@ class FormWithReference {
                     existingDisplay.remove();
                 } else {
                     icon.classList.add("fa-chevron-down");
-                    const referenceField = this.referenceForm.content.getElementById(formInput.id).cloneNode();
-                    referenceField.classList.add("reference__display", "form__input", "form__input--disabled");
-                    referenceField.readOnly = true;
-                    referenceField.name = null;
-                    cell.appendChild(referenceField);
+                    const referenceField = this.referenceForm.content.getElementById(formInput.id);
+                    const displayField = document.createElement("div");
+                    displayField.classList.add("reference__display", "form__input", "form__input--disabled");
+                    displayField.innerHTML = converter.makeHtml(referenceField.value);
+                    cell.appendChild(displayField);
                 }
             });
 

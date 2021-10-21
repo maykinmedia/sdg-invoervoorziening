@@ -3,6 +3,15 @@
 .form {
   padding: 28px 0;
 
+  .form__cell {
+    ol,
+    ul,
+    li {
+     margin: 1em 1em;
+    }
+  }
+
+
   .form__group {
     display: flex;
     flex-direction: column;
