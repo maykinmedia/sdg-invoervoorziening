@@ -9,14 +9,17 @@ from .factories import SuperUserFactory
 
 
 class AdminTests(WebTest):
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = SuperUserFactory.create()
+        cls.user_add_url = reverse("admin:accounts_user_add")
+
     def setUp(self):
         super().setUp()
-
-        self.user = SuperUserFactory.create()
         self.app.set_user(self.user)
 
     def test_invitation_email_is_sent_after_creating_user(self):
-        response = self.app.get(reverse("admin:accounts_user_add"))
+        response = self.app.get(self.user_add_url)
 
         response.form["email"] = "test@example.com"
         response.form["first_name"] = "Arthur"
