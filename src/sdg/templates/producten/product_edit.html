@@ -38,6 +38,10 @@
             {% csrf_token %}
             {{ form.management_form }}
 
+            <div class="text-right">
+                {% checkbox version_form.beschikbaar %}
+            </div>
+
             {% for generic_information, form in informatie_forms %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">

@@ -32,6 +32,7 @@ class ProductVersionForm(forms.ModelForm):
         choices=PublishChoices.choices, widget=ProductRadioSelect
     )
     date = forms.DateTimeField(required=False)
+    beschikbaar = forms.BooleanField(required=False)
 
     class Meta:
         model = ProductVersie
@@ -41,6 +42,10 @@ class ProductVersionForm(forms.ModelForm):
             "versie",
             "publicatie_datum",
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["beschikbaar"].initial = self.instance.product.beschikbaar
 
     def clean(self):
         cleaned_data = super().clean()

@@ -2,6 +2,7 @@ from itertools import zip_longest
 from typing import Optional, Tuple
 
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
@@ -93,13 +94,24 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         Return a tuple of (version object, created), where created is a boolean
         specifying whether an object was created.
         """
-        new_version = version_form.save(commit=False)
-        created = self.object != new_version
-        new_version.product = self.product
-        new_version.gemaakt_door = self.request.user
-        new_version.versie = self.object.versie + 1 if created else self.object.versie
-        new_version.save()
-        return new_version, created
+        with transaction.atomic():
+            new_version = version_form.save(commit=False)
+
+            created = self.object != new_version
+            new_version.product = self.product
+            new_version.gemaakt_door = self.request.user
+            new_version.versie = (
+                self.object.versie + 1 if created else self.object.versie
+            )
+            new_version.save()
+
+            if "beschikbaar" in version_form.changed_data:
+                new_version.product.beschikbaar = version_form.cleaned_data[
+                    "beschikbaar"
+                ]
+                new_version.product.save()
+
+            return new_version, created
 
     def get_lokale_overheid(self):
         self.product = self.get_object()
@@ -127,7 +139,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context["informatie_forms"] = zip_longest(
             generic_information, context["form"].forms
         )
-        context["version_form"] = kwargs.get("version_form") or ProductVersionForm()
+        context["version_form"] = kwargs.get("version_form") or ProductVersionForm(
+            instance=self.object
+        )
         return context
 
     def get(self, request, *args, **kwargs):
