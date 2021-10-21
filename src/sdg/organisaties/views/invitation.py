@@ -10,6 +10,7 @@ from django.views.generic.detail import SingleObjectMixin
 from sdg.accounts.forms import InvitationAcceptForm, RoleInlineFormSet
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import UserInvitation
+from sdg.core.events import post_event
 from sdg.organisaties.models import LokaleOverheid
 
 User = get_user_model()
@@ -66,7 +67,7 @@ class InvitationCreateView(OverheidMixin, CreateView):
                 self.object = form.instance  # do not update existing user
             else:
                 self.object = form.save()
-                UserInvitation.objects.create_and_send(self.object, self.request)
+                post_event("save_user", user=self.object, request=self.request)
 
             if formset:
                 formset.instance = self.object

@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from hijack_admin.admin import HijackUserAdminMixin
 
+from ..core.events import post_event
 from .models import Role
 
 User = get_user_model()
@@ -71,3 +72,7 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
     )
     ordering = ("email",)
     inlines = (RoleInline,)
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        post_event("save_user", user=form.instance, request=request)
