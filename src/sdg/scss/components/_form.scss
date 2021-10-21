@@ -126,8 +126,8 @@
     grid-gap: 8px;
 
     li {
-      background-color: $color_accent;
-      color: $color_accent_darkest;
+      color: $color_accent_darker;
+      background-color: $color_accent_light;
       padding: 8px;
       list-style: none;
     }

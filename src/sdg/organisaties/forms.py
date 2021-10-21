@@ -1,6 +1,8 @@
 from django import forms
 from django.forms import inlineformset_factory
 
+from sdg.core.forms import DynamicArrayField
+from sdg.organisaties.constants import opening_times_error_messages
 from sdg.organisaties.models import LokaleOverheid, Lokatie
 
 
@@ -18,8 +20,28 @@ class LokaleOverheidForm(forms.ModelForm):
             "contact_emailadres",
         )
 
+    readonly_fields = (
+        "ondersteunings_organisatie",
+        "verantwoordelijke_organisatie",
+        "bevoegde_organisatie",
+        "organisatie",
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        cleaned_data = {
+            k: v for k, v in cleaned_data.items() if k not in self.readonly_fields
+        }
+        return cleaned_data
+
 
 class LokatieForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field, DynamicArrayField):
+                field.error_messages.update(opening_times_error_messages)
+
     class Meta:
         model = Lokatie
         fields = (
