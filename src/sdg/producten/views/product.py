@@ -148,8 +148,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        instance = _get_version_instance(product=self.object)
-        version_form = ProductVersionForm(request.POST, instance=instance)
+        version_form = ProductVersionForm(request.POST, instance=self.object)
 
         form = self.form_class(request.POST, instance=self.object)
         if form.is_valid() and version_form.is_valid():
@@ -173,15 +172,3 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("producten:detail", kwargs={"pk": self.product.pk})
-
-
-def _get_version_instance(product: ProductVersie) -> Optional[ProductVersie]:
-    """Decides between updating an existing product version or creating a new version instance.
-
-    - Version is published: create a new version.
-    - Version is a concept: update the existing instance.
-    - Version is in the future: update the existing instance.
-    """
-    if product.get_published_status() == PublishChoices.now:
-        return None
-    return product
