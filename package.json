@@ -25,7 +25,8 @@
         "flatpickr": "^4.6.9",
         "formset.js": "^0.0.1",
         "microscope-sass": "latest",
-        "reseter.css": "^2.0.0"
+        "reseter.css": "^2.0.0",
+        "showdown": "^1.9.1"
     },
     "devDependencies": {
         "@babel/core": "latest",

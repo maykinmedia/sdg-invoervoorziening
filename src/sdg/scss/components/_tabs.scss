@@ -95,7 +95,16 @@
     line-height: 1.5;
     color: #212121;
 
-    &.tabs__table-cell--edit {
+    &--tools {
+      display: flex;
+      justify-content: flex-end;
+
+      a {
+        margin-left: 18px;
+      }
+    }
+
+    &--edit {
       padding-top: 24px;
     }
 
@@ -138,6 +147,10 @@
 
       input {
         width: 96%;
+      }
+
+      .dynamic__container-add {
+        width: auto;
       }
 
       .dynamic__container__button {
