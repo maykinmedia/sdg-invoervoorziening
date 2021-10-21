@@ -5,7 +5,7 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models import F, Model, Q
+from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -168,14 +168,15 @@ class Product(models.Model):
 
     @cached_property
     def laatste_versie(self):
+        """:returns: Latest version (can be published, concept or scheduled) for this product."""
         latest_version = self.get_latest_versions(1)
-        if latest_version:
-            return latest_version[0]
+        return latest_version[0] if latest_version else None
 
     @cached_property
-    def laatste_ongepubliceerde_versie(self):
-        """:returns: Latest unpublished version for this product."""
-        return self.versies.order_by(F("publicatie_datum").asc(nulls_first=True)).last()
+    def laatste_actieve_versie(self):
+        """:returns: Latest active version for this product."""
+        latest_version = self.get_latest_versions(1, active=True)
+        return latest_version[0] if latest_version else None
 
     @cached_property
     def generic_product(self):
@@ -186,6 +187,13 @@ class Product(models.Model):
             if self.is_referentie_product
             else self.referentie_product.generiek_product
         )
+
+    def get_latest_versions(self, quantity=5, active=False):
+        """:returns: The latest N versions for this product."""
+        queryset = self.versies.all().order_by("-versie")
+        if active:
+            queryset = queryset.filter(publicatie_datum__lte=now())
+        return queryset[:quantity:-1]
 
     def create_version_from_reference(self) -> ProductVersie:
         """Create fist version for this product based on latest reference version."""
@@ -236,12 +244,6 @@ class Product(models.Model):
                 return specific_product
         else:
             return self
-
-    def get_latest_versions(self, quantity=5):
-        """:returns: The latest N versions for this product."""
-        return self.versies.all().order_by(F("publicatie_datum").desc(nulls_last=True))[
-            :quantity:-1
-        ]
 
     class Meta:
         verbose_name = _("product")
@@ -321,7 +323,7 @@ class ProductVersie(models.Model):
         """:returns: The current published status for this product version."""
         if not self.publicatie_datum:
             return PublishChoices.concept
-        elif self.publicatie_datum < now():
+        elif self.publicatie_datum <= now().date():
             return PublishChoices.now
         else:
             return PublishChoices.later

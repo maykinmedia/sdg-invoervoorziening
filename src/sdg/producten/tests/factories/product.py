@@ -46,7 +46,8 @@ class SpecifiekProductFactory(ProductFactory):
 
 class ProductVersieFactory(DjangoModelFactory):
     gemaakt_door = factory.SubFactory(UserFactory)
-    versie = factory.Sequence(lambda n: n)
+    versie = factory.Sequence(lambda n: n + 1)
+    publicatie_datum = None
 
     class Meta:
         model = ProductVersie

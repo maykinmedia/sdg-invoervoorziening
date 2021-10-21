@@ -8,14 +8,14 @@ from django.views.generic import CreateView, FormView
 from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.forms import InvitationAcceptForm, RoleInlineFormSet
-from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import UserInvitation
 from sdg.organisaties.models import LokaleOverheid
 
 User = get_user_model()
 
 
-class InvitationCreateView(OverheidRoleRequiredMixin, CreateView):
+class InvitationCreateView(OverheidMixin, CreateView):
     template_name = "organisaties/overheid_invitation_create.html"
     queryset = LokaleOverheid.objects.all()
     model = User
@@ -129,5 +129,5 @@ class InvitationAcceptView(SingleObjectMixin, FormView):
         return super().post(request, *args, **kwargs)
 
     def form_valid(self, form):
-        self.object.accept_invitation(self.request, form.cleaned_data)
+        self.object.accept_invitation(self.request, form.cleaned_data["password"])
         return super().form_valid(form)

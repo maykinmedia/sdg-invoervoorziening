@@ -27,11 +27,18 @@
             {% include "core/_notifications.html" %}
             {% include 'producten/_include/beschikbaar_warning.html' %}
         </div>
+
+        {% for reference_form in reference_forms %}
+            <template class="form__reference-{{ reference_form.initial.taal }}">
+                {{ reference_form.as_p }}
+            </template>
+        {% endfor %}
+
         <form action="." method="POST" class="form tabs__tab-contents">
             {% csrf_token %}
             {{ form.management_form }}
 
-            {% for generic_information, reference_form, form in informatie_form %}
+            {% for generic_information, form in informatie_forms %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ form.taal.value }}">
 
@@ -54,7 +61,8 @@
                         {% include 'producten/_include/generiek_warning.html' %}
                     {% endif %}
 
-                    <table class="tabs__table form__has-reference">
+                    <table class="tabs__table form__has-reference"
+                           data-reference=".form__reference-{{ form.taal.value }}">
                         <thead>
                         <tr>
                             <th class="tabs__table-header" width="25%">Gegeven</th>
@@ -70,9 +78,6 @@
                                 {{ form.taal.as_hidden }}
                             </td>
                         </tr>
-                        <template class="form__reference">
-                            {{ reference_form.as_p }}
-                        </template>
                         {% with reference=product.is_referentie_product %}
                             {% table_field form.product_titel_decentraal is_reference=reference %}
                             {% table_field form.specifieke_tekst is_reference=reference %}
@@ -95,7 +100,11 @@
 
 
             <div class="form-actions">
-                <div class="form-actions__title">{% trans "Wijzigingen publiceren" %}</div>
+                <div class="notifications">
+                    {% if product_versie.get_published_status == "later" %}
+                        {% include 'producten/_include/schedule_to_concept_warning.html' %}
+                    {% endif %}
+                </div>
                 <div>
                     <div class="form-actions__options">
                         {{ version_form.non_field_errors }}
@@ -105,8 +114,12 @@
                         </div>
                     </div>
                     <input class="button tabs__form-button" type="submit" value="Opslaan">
+                    <a href="{% url 'producten:detail' pk=product.pk %}">
+                        <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                    </a>
                 </div>
             </div>
+
         </form>
     </div>
 {% endblock inner %}
