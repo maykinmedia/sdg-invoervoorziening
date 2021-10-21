@@ -4,10 +4,13 @@ from django.urls import reverse
 
 from django_webtest import WebTest
 
+from sdg.tests.utils import disable_2fa
+
 from ..models import UserInvitation
 from .factories import SuperUserFactory
 
 
+@disable_2fa
 class AdminTests(WebTest):
     @classmethod
     def setUpTestData(cls):
