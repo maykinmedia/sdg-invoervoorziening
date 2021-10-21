@@ -27,6 +27,9 @@
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
             <div class="form__buttons">
                 <input type="submit" class="button" value="{% trans 'Opslaan' %}">
+                <a href="{% url 'organisaties:overheid_roles' pk=lokaleoverheid.pk %}">
+                    <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                </a>
             </div>
         </div>
 
