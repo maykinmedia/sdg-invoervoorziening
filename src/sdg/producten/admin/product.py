@@ -32,12 +32,12 @@ class IsReferenceProductFilter(admin.SimpleListFilter):
 
 class LocalizedGeneriekProductInline(admin.StackedInline):
     model = LocalizedGeneriekProduct
-    extra = 1
+    extra = 0
 
 
 class LocalizedProductInline(admin.StackedInline):
     model = LocalizedProduct
-    extra = 1
+    extra = 0
 
 
 @admin.register(GeneriekProduct)

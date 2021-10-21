@@ -109,9 +109,9 @@ class UserInvitation(models.Model):
         self.sent = timezone.now()
         self.save()
 
-    def accept_invitation(self, request, cleaned_data):
+    def accept_invitation(self, request, password):
         with transaction.atomic():
-            self.user.set_password(cleaned_data["password"])
+            self.user.set_password(password)
             self.user.save()
 
             self.accepted = True
