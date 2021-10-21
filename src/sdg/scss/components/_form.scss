@@ -3,6 +3,15 @@
 .form {
   padding: 28px 0;
 
+  .form__cell {
+    ol,
+    ul,
+    li {
+     margin: 1em 1em;
+    }
+  }
+
+
   .form__group {
     display: flex;
     flex-direction: column;
@@ -21,6 +30,10 @@
     outline: none;
     font-size: 16px;
     width: 100%;
+
+    &--disabled {
+      background-color: $color_grey_light;
+    }
   }
 
   .form__block {

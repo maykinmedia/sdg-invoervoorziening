@@ -1,7 +1,7 @@
+from datetime import date
 from typing import Optional
 
 from django import forms
-from django.utils.timezone import now
 
 from .constants import PublishChoices
 from .models import LocalizedProduct, ProductVersie
@@ -67,7 +67,7 @@ class ProductVersionForm(forms.ModelForm):
         cleaned_data = super().clean()
 
         if cleaned_data["publish"] == PublishChoices.now:
-            cleaned_data["publicatie_datum"] = now()
+            cleaned_data["publicatie_datum"] = date.today()
         else:
             cleaned_data["publicatie_datum"] = cleaned_data.get("date", None)
 
