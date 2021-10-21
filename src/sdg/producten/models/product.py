@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import date
 from typing import Any
 
 from django.contrib.auth import get_user_model
@@ -9,7 +10,6 @@ from django.db.models import Model
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import DoelgroepChoices
@@ -192,7 +192,7 @@ class Product(models.Model):
         """:returns: The latest N versions for this product."""
         queryset = self.versies.all().order_by("-versie")
         if active:
-            queryset = queryset.filter(publicatie_datum__lte=now())
+            queryset = queryset.filter(publicatie_datum__lte=date.today())
         return queryset[:quantity:-1]
 
     def create_version_from_reference(self) -> ProductVersie:
@@ -204,7 +204,7 @@ class Product(models.Model):
         return ProductVersie.objects.create(
             product=self,
             gemaakt_door=self.referentie_product.laatste_versie.gemaakt_door,
-            publicatie_datum=now(),
+            publicatie_datum=date.today(),
         )
 
     def localize_version_from_reference(self, version: ProductVersie):
@@ -323,7 +323,7 @@ class ProductVersie(models.Model):
         """:returns: The current published status for this product version."""
         if not self.publicatie_datum:
             return PublishChoices.concept
-        elif self.publicatie_datum <= now().date():
+        elif self.publicatie_datum <= date.today():
             return PublishChoices.now
         else:
             return PublishChoices.later
