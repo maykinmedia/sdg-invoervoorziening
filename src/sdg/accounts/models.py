@@ -23,8 +23,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username_validator = UnicodeUsernameValidator()
 
-    first_name = models.CharField(_("voornaam"), max_length=255, blank=True)
-    last_name = models.CharField(_("achternaam"), max_length=255, blank=True)
+    first_name = models.CharField(_("voornaam"), max_length=255)
+    last_name = models.CharField(_("achternaam"), max_length=255)
     email = models.EmailField(_("e-mailadres"), unique=True)
     is_staff = models.BooleanField(
         _("staff status"),

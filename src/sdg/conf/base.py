@@ -459,3 +459,6 @@ ACCOUNT_UNIQUE_EMAIL = True
 # SDG Invitations
 INVITATION_TEMPLATE = "core/email/invitation.html"
 INVITATION_SUBJECT = "SDG Invoervoorziening Invitatie"
+
+ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
+ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"

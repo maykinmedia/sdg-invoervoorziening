@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
@@ -5,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from hijack_admin.admin import HijackUserAdminMixin
 
+from ..core.events import post_event
 from .models import Role
 
 User = get_user_model()
@@ -23,6 +25,30 @@ class RoleInline(admin.TabularInline):
         return obj.lokale_overheid.organisatie.owms_pref_label
 
     get_role_organization.short_description = _("Organisatie")
+
+
+class UserCreationForm(forms.ModelForm):
+    """
+    A form that creates a user (with an unusable password) from the given email and name.
+    """
+
+    class Meta:
+        model = User
+        fields = ("email", "first_name", "last_name")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self._meta.model.USERNAME_FIELD in self.fields:
+            self.fields[self._meta.model.USERNAME_FIELD].widget.attrs.update(
+                {"autofocus": True}
+            )
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.set_unusable_password()
+        if commit:
+            user.save()
+        return user
 
 
 @admin.register(User)
@@ -57,10 +83,11 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
             None,
             {
                 "classes": ("wide",),
-                "fields": ("email", "password1", "password2"),
+                "fields": ("email", "first_name", "last_name"),
             },
         ),
     )
+    add_form = UserCreationForm
     search_fields = ("email", "first_name", "last_name")
     list_display = (
         "email",
@@ -71,3 +98,7 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
     )
     ordering = ("email",)
     inlines = (RoleInline,)
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        post_event("save_user", user=form.instance, request=request)
