@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from django_webtest import WebTest
+from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.models import ProductenCatalogus
@@ -38,6 +41,30 @@ class LokaleOverheidDetailViewTests(WebTest):
             is_redacteur=True,
         )
         self.app.get(lokale_overheid.get_absolute_url())
+
+    @freeze_time("Jan 1th, 2021")
+    def test_able_to_access_municipality_before_end_date(self):
+        lokale_overheid = LokaleOverheidFactory.create()
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=lokale_overheid,
+            is_redacteur=True,
+        )
+        lokale_overheid.organisatie.owms_end_date = datetime(day=3, month=1, year=2021)
+        lokale_overheid.organisatie.save()
+        self.app.get(lokale_overheid.get_absolute_url(), status=200)
+
+    @freeze_time("Jan 5th, 2021")
+    def test_unable_to_access_municipality_after_end_date(self):
+        lokale_overheid = LokaleOverheidFactory.create()
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=lokale_overheid,
+            is_redacteur=True,
+        )
+        lokale_overheid.organisatie.owms_end_date = datetime(day=3, month=1, year=2021)
+        lokale_overheid.organisatie.save()
+        self.app.get(lokale_overheid.get_absolute_url(), status=403)
 
     def test_municipality_details_are_displayed(self):
         lokale_overheid = LokaleOverheidFactory.create()

@@ -3,14 +3,14 @@ from copy import deepcopy
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
-from sdg.accounts.mixins import OverheidRoleRequiredMixin
+from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import Thema
 from sdg.organisaties.forms import LokaleOverheidForm, LokatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
 
 
-class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
+class LokaleOverheidDetailView(OverheidMixin, DetailView):
     template_name = "organisaties/overheid_detail.html"
     model = LokaleOverheid
     required_roles = ["is_redacteur"]
@@ -97,7 +97,7 @@ class LokaleOverheidDetailView(OverheidRoleRequiredMixin, DetailView):
         return queryset.prefetch_related("lokaties", "organisatie", "catalogi")
 
 
-class LokaleOverheidUpdateView(OverheidRoleRequiredMixin, UpdateView):
+class LokaleOverheidUpdateView(OverheidMixin, UpdateView):
     template_name = "organisaties/overheid_update.html"
     form_class = LokaleOverheidForm
     model = LokaleOverheid

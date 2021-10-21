@@ -1,5 +1,8 @@
+from abc import ABC, abstractmethod
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.utils.timezone import now
 
 from two_factor.views import OTPRequiredMixin
 
@@ -11,10 +14,14 @@ else:
     VerificationMixin = LoginRequiredMixin
 
 
-class OverheidRoleRequiredMixin(VerificationMixin, UserPassesTestMixin):
-    """Ensures an authenticated user has a given list of role permissions."""
+class BaseOverheidMixin(VerificationMixin, UserPassesTestMixin, ABC):
+    _lokale_overheid = None
 
-    required_roles = {i.name for i in Role.get_roles()}
+    def _get_lokale_overheid(self):
+        if not self._lokale_overheid:
+            self._lokale_overheid = self.get_lokale_overheid()
+
+        return self._lokale_overheid
 
     def get_lokale_overheid(self):
         """
@@ -26,6 +33,16 @@ class OverheidRoleRequiredMixin(VerificationMixin, UserPassesTestMixin):
             )
         )
 
+    @abstractmethod
+    def test_func(self):
+        return True
+
+
+class OverheidRoleRequiredMixin(BaseOverheidMixin, UserPassesTestMixin):
+    """Ensures an authenticated user has a given list of role permissions."""
+
+    required_roles = {i.name for i in Role.get_roles()}
+
     def get_required_roles(self):
         """
         :returns: A list of required roles (for a lokale overheid) for the user to access the view.
@@ -35,11 +52,37 @@ class OverheidRoleRequiredMixin(VerificationMixin, UserPassesTestMixin):
         return self.required_roles
 
     def test_func(self):
+        result = super().test_func()
+        if not result:
+            return False
+
         try:
             role = self.request.user.roles.get(
-                lokale_overheid=self.get_lokale_overheid()
+                lokale_overheid=self._get_lokale_overheid()
             )
         except Role.DoesNotExist:
             return False
 
         return any(getattr(role, r) for r in self.get_required_roles())
+
+
+class OverheidExpirationMixin(BaseOverheidMixin, UserPassesTestMixin):
+    """Ensures a municipality view can no longer be access if the end date has passed."""
+
+    def test_func(self):
+        result = super().test_func()
+        if not result:
+            return False
+
+        lokale_overheid = self._get_lokale_overheid()
+        end_date = lokale_overheid.organisatie.owms_end_date
+        return not end_date or end_date >= now()
+
+
+class OverheidMixin(OverheidExpirationMixin, OverheidRoleRequiredMixin):
+    """
+    The standard mixin for all municipality views.
+
+    - Denies access if a municipality end date is expired.
+    - Ensures a user has the appropriate role to access the municipality.
+    """
