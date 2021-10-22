@@ -7,7 +7,9 @@
             <span class="asteriskField">*</span>
         {% endif %}
     </label>
-    <span class="form__input form__input--disabled">{% if value %}{{ value }}{% elif field.value %}{{ field.value }}{% endif %}</span>
+    {{ field|addclass:"form__input form__input--disabled readonly" }}
+{#    <input type="text" name="{{ field.html_name }}" value="{% if value %}{{ value }}{% elif field.value %}{{ field.value }}{% endif %}"#}
+{#           class="form__input form__input--disabled" readonly>#}
     {% if field.help_text %}
         <p class="form__help-text">{{ field.help_text }}</p>
     {% endif %}
