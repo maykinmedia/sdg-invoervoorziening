@@ -1,3 +1,5 @@
+@import "colors";
+
 .button {
   --main-color: #FFBC2C;
   --shadow-color: #c79529;
@@ -12,6 +14,11 @@
   transition: transform 150ms, box-shadow 100ms;
   border: 0;
   cursor: pointer;
+
+  .svg-inline--fa {
+    color: $color_accent_darkest;
+    margin-left: 4px;
+  }
 
   &:hover {
     transform: translateY(-1px);
