@@ -33,8 +33,10 @@ class ProductDetailViewTests(WebTest):
         self.user = UserFactory.create()
         self.app.set_user(self.user)
 
-    def test_unavailable_product_displays_warning(self):
-        product = SpecifiekProductFactory.create(beschikbaar=False)
+    def test_unavailable_reference_product_displays_warning(self):
+        product = SpecifiekProductFactory.create(
+            beschikbaar=False, referentie_product__beschikbaar=False
+        )
         product_version = ProductVersieFactory.create(product=product)
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
         RoleFactory.create(
@@ -325,9 +327,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
         form["publish"].value = data["publish"]
 
     @freeze_time(NOW_DATE)
-    def test_unavailable_product_displays_warning(self):
-        self.product.beschikbaar = False
-        self.product.save()
+    def test_unavailable_reference_product_displays_warning(self):
+        self.product.referentie_product.beschikbaar = False
+        self.product.referentie_product.save()
         response = self.app.get(self.product.get_absolute_url())
         self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
 
