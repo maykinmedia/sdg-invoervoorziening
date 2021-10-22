@@ -23,53 +23,10 @@
 
         <div class="tabs__tab-contents">
             {% with latest_version=product.laatste_versie latest_active_version=product.laatste_actieve_versie %}
-                <div class="notifications notifications--inline">
-                    {% with status=latest_version.get_published_status %}
-                        {% if status != "now" %}
-                            <div class="notifications__notification notification__info">
-                                <i class="fas fa-info-circle"></i>
-                                {% if latest_version.publicatie_datum %}
-                                    <span>{% trans "Ingeplande wijzigingen op" %} {{ latest_version.publicatie_datum }}</span>
-                                {% else %}
-                                    <span>{% trans "Er is een bestaand concept voor dit product." %}</span>
-                                {% endif %}
-                                <span></span>
-                            </div>
-                        {% endif %}
-                    {% endwith %}
-                </div>
+                {% include "producten/_include/product_status.html" %}
                 {% for info in latest_active_version.vertalingen.all %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ info.taal }}">
-
-
-                        <div class="tabs__tab-header">
-                            <div class="tabs__status">
-                                <span class="tabs__status-label">Status:</span>
-                                {% with status=latest_active_version.get_published_status %}
-                                    {% if status == "now" %}
-                                        <div class="tabs__status-published">
-                                            <i class="fas fa-calendar-check"></i>
-                                            <span class="tabs__status-label--result">{% trans "gepubliceerd" %}</span>
-                                        </div>
-                                    {% elif status == "concept" %}
-                                        <div class="tabs__status-concept">
-                                            <i class="fas fa-calendar-minus"></i>
-                                            <span class="tabs__status-label--result">{% trans "concept" %}</span>
-                                        </div>
-                                    {% else %}
-                                        <div class="tabs__status-unpublished">
-                                            <i class="fas fa-calendar-times"></i>
-                                            <span class="tabs__status-label--result">{% trans "ongepubliceerd" %}</span>
-                                        </div>
-                                    {% endif %}
-                                {% endwith %}
-                            </div>
-                            <div>
-                                <a class="button" href="{% url 'producten:edit' pk=product.pk %}">Wijzigen</a>
-                            </div>
-                        </div>
-
                         {% if info.generiek_informatie %}
                             <table class="tabs__table">
                                 <thead>
@@ -89,8 +46,6 @@
                         {% else %}
                             {% include 'producten/_include/generiek_warning.html' %}
                         {% endif %}
-
-
                         <table class="tabs__table">
                             <thead>
                             <tr>

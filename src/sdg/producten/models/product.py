@@ -204,7 +204,7 @@ class Product(models.Model):
         return ProductVersie.objects.create(
             product=self,
             gemaakt_door=self.referentie_product.laatste_versie.gemaakt_door,
-            publicatie_datum=date.today(),
+            publicatie_datum=None,
         )
 
     def localize_version_from_reference(self, version: ProductVersie):
