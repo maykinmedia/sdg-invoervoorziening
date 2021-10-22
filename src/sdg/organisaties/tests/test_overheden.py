@@ -294,6 +294,23 @@ class LokaleOverheidUpdateViewTests(WebTest):
         self.assertEqual(self.lokale_overheid.contact_emailadres, "email@example.com")
         self.assertEqual(self.lokale_overheid.contact_telefoonnummer, "0619123123")
 
+    def test_municipality_organization_is_readonly(self):
+        response = self.app.get(
+            reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+
+        response.form["contact_naam"] = "Municipality Contact Name"
+        response.form[
+            "bevoegde_organisatie"
+        ].value = self.lokale_overheid.organisatie.pk
+        response.form.submit()
+
+        self.lokale_overheid.refresh_from_db()
+        self.assertEqual(self.lokale_overheid.contact_naam, "Municipality Contact Name")
+        self.assertNotEqual(
+            self.lokale_overheid.bevoegde_organisatie, self.lokale_overheid.organisatie
+        )
+
     def test_can_update_municipality_location(self):
         LokatieFactory.create(lokale_overheid=self.lokale_overheid)
 
