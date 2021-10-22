@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 
 from django import forms
 
@@ -33,6 +34,7 @@ class ProductVersionForm(forms.ModelForm):
         choices=PublishChoices.choices, widget=ProductRadioSelect
     )
     date = forms.DateTimeField(required=False)
+    beschikbaar = forms.BooleanField(required=False)
 
     class Meta:
         model = ProductVersie
@@ -42,6 +44,24 @@ class ProductVersionForm(forms.ModelForm):
             "versie",
             "publicatie_datum",
         )
+
+    @staticmethod
+    def _get_version_instance(instance: ProductVersie) -> Optional[ProductVersie]:
+        """Decides between updating an existing product version or creating a new version instance.
+
+        - Version is published: create a new version.
+        - Version is a concept: update the existing instance.
+        - Version is in the future: update the existing instance.
+        """
+        if instance and instance.get_published_status() == PublishChoices.now:
+            return None
+        return instance
+
+    def __init__(self, *args, **kwargs):
+        _instance = kwargs.get("instance", None)
+        kwargs["instance"] = self._get_version_instance(_instance)
+        super().__init__(*args, **kwargs)
+        self.fields["beschikbaar"].initial = _instance.product.beschikbaar
 
     def clean(self):
         cleaned_data = super().clean()

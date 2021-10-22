@@ -1,12 +1,10 @@
 from django.contrib import admin
 
-from markdownx.admin import MarkdownxModelAdmin
-
 from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
 
 
 @admin.register(LocalizedGeneriekProduct)
-class LocalizedGeneriekProductAdmin(MarkdownxModelAdmin):
+class LocalizedGeneriekProductAdmin(admin.ModelAdmin):
     model = LocalizedGeneriekProduct
 
     list_display = (
@@ -26,7 +24,7 @@ class LocalizedGeneriekProductAdmin(MarkdownxModelAdmin):
 
 
 @admin.register(LocalizedProduct)
-class LocalizedProductAdmin(MarkdownxModelAdmin):
+class LocalizedProductAdmin(admin.ModelAdmin):
     model = LocalizedProduct
 
     list_display = ("product_titel_decentraal",)

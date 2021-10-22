@@ -33,6 +33,10 @@ WORKDIR /app
 COPY ./build /app/build/
 COPY ./*.json ./*.js ./.babelrc /app/
 
+# prevent caching stage 2 (if there are changes)
+COPY src/sdg/scss/ /app/src/sdg/scss/
+COPY src/sdg/js/ /app/src/sdg/js/
+
 # install WITH dev tooling
 RUN npm ci
 

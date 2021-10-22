@@ -1,7 +1,5 @@
 from django.contrib import admin
 
-from markdownx.admin import MarkdownxModelAdmin
-
 from sdg.producten.models import (
     GeneriekProduct,
     LocalizedGeneriekProduct,
@@ -41,7 +39,7 @@ class LocalizedProductInline(admin.StackedInline):
 
 
 @admin.register(GeneriekProduct)
-class GeneriekProductAdmin(MarkdownxModelAdmin):
+class GeneriekProductAdmin(admin.ModelAdmin):
     list_display = ("upn_label", "verplicht_product")
     list_filter = (
         "verantwoordelijke_organisatie",
@@ -65,7 +63,7 @@ class ProductVersieInlineAdmin(admin.StackedInline):
 
 
 @admin.register(ProductVersie)
-class ProductVersieAdmin(MarkdownxModelAdmin):
+class ProductVersieAdmin(admin.ModelAdmin):
     list_display = (
         "versie",
         "product",
@@ -85,7 +83,7 @@ class ProductVersieAdmin(MarkdownxModelAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(MarkdownxModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "upn_label",
         "is_referentie",

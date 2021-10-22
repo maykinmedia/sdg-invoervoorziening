@@ -98,6 +98,7 @@
     &--tools {
       display: flex;
       justify-content: flex-end;
+      padding-bottom: 12px;
 
       a {
         margin-left: 18px;
@@ -122,7 +123,8 @@
 
     }
 
-    ul {
+    ul,
+    ol {
       padding-left: 32px;
       list-style-type: none;
       margin: 8px 0;

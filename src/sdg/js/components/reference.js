@@ -10,7 +10,7 @@ class FormWithReference {
     constructor(node) {
         this.node = node;
         this.referenceForm = document.querySelector(this.node.dataset.reference);
-        this.formCell = this.node.querySelectorAll(".form__cell");
+        this.formCells = this.node.querySelectorAll(".form__cell");
 
         [...this.formCells].forEach(cell => {
             const formInput = cell.querySelector(".form__input");

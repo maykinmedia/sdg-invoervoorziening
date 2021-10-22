@@ -2,6 +2,7 @@ from itertools import zip_longest
 from typing import Optional, Tuple
 
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
@@ -93,13 +94,24 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         Return a tuple of (version object, created), where created is a boolean
         specifying whether an object was created.
         """
-        new_version = version_form.save(commit=False)
-        created = self.object != new_version
-        new_version.product = self.product
-        new_version.gemaakt_door = self.request.user
-        new_version.versie = self.object.versie + 1 if created else self.object.versie
-        new_version.save()
-        return new_version, created
+        with transaction.atomic():
+            new_version = version_form.save(commit=False)
+
+            created = self.object != new_version
+            new_version.product = self.product
+            new_version.gemaakt_door = self.request.user
+            new_version.versie = (
+                self.object.versie + 1 if created else self.object.versie
+            )
+            new_version.save()
+
+            if "beschikbaar" in version_form.changed_data:
+                new_version.product.beschikbaar = version_form.cleaned_data[
+                    "beschikbaar"
+                ]
+                new_version.product.save()
+
+            return new_version, created
 
     def get_lokale_overheid(self):
         self.product = self.get_object()
@@ -127,15 +139,16 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context["informatie_forms"] = zip_longest(
             generic_information, context["form"].forms
         )
-        context["version_form"] = kwargs.get("version_form") or ProductVersionForm()
+        context["version_form"] = kwargs.get("version_form") or ProductVersionForm(
+            instance=self.object
+        )
         return context
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        instance = _get_version_instance(product=self.object)
-        version_form = ProductVersionForm(request.POST, instance=instance)
+        version_form = ProductVersionForm(request.POST, instance=self.object)
 
         form = self.form_class(request.POST, instance=self.object)
         if form.is_valid() and version_form.is_valid():
@@ -159,15 +172,3 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def get_success_url(self):
         return reverse("producten:detail", kwargs={"pk": self.product.pk})
-
-
-def _get_version_instance(product: ProductVersie) -> Optional[ProductVersie]:
-    """Decides between updating an existing product version or creating a new version instance.
-
-    - Version is published: create a new version.
-    - Version is a concept: update the existing instance.
-    - Version is in the future: update the existing instance.
-    """
-    if product.get_published_status() == PublishChoices.now:
-        return None
-    return product

@@ -2,7 +2,7 @@
 
 <div class="tabs__tab-header">
     <div class="tabs__status">
-        <span class="tabs__status-label">Status:</span>
+        <span class="tabs__status-label">{% trans "Status" %}:</span>
         {% with status=latest_active_version.get_published_status %}
             {% if status == "now" %}
                 <div class="tabs__status-published">
@@ -23,9 +23,17 @@
         {% endwith %}
     </div>
     <div>
-        <a class="button" href="{% url 'producten:edit' pk=product.pk %}">{% trans "Wijzigen" %}</a>
+        <a class="button" href="{% url 'producten:edit' pk=product.pk %}">
+            {% trans "Wijzigen" %}
+            {% if product.beschikbaar %}
+                <i class="fa fa-sm fa-check text-accent" title="Dit product is beschikbaar."></i>
+            {% else %}
+                <i class="fa fa-sm fa-times text-accent" title="Dit product is niet beschikbaar."></i>
+            {% endif %}
+        </a>
     </div>
 </div>
+<hr class="divider">
 <div class="notifications notifications--inline">
     {% with status=latest_version.get_published_status %}
         {% if status != "now" %}

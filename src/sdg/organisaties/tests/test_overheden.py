@@ -1,11 +1,14 @@
 from datetime import datetime
 
+from django.urls import reverse
+
 from django_webtest import WebTest
 from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.models import ProductenCatalogus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
+from sdg.organisaties.tests.constants import ORGANIZATION_EDIT_URL
 from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
     LokatieFactory,
@@ -258,3 +261,76 @@ class LokaleOverheidDetailViewTests(WebTest):
                 str(product),
                 response_text,
             )
+
+
+class LokaleOverheidUpdateViewTests(WebTest):
+    def setUp(self):
+        super().setUp()
+
+        self.user = UserFactory.create()
+        self.app.set_user(self.user)
+
+        self.lokale_overheid = LokaleOverheidFactory.create()
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=self.lokale_overheid,
+            is_redacteur=True,
+        )
+
+    def test_can_update_municipality_details(self):
+        response = self.app.get(
+            reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+
+        response.form["contact_naam"] = "Municipality Contact Name"
+        response.form["contact_website"] = "https://example.com"
+        response.form["contact_emailadres"] = "email@example.com"
+        response.form["contact_telefoonnummer"] = "0619123123"
+        response.form.submit()
+
+        self.lokale_overheid.refresh_from_db()
+        self.assertEqual(self.lokale_overheid.contact_naam, "Municipality Contact Name")
+        self.assertEqual(self.lokale_overheid.contact_website, "https://example.com")
+        self.assertEqual(self.lokale_overheid.contact_emailadres, "email@example.com")
+        self.assertEqual(self.lokale_overheid.contact_telefoonnummer, "0619123123")
+
+    def test_municipality_organization_is_readonly(self):
+        response = self.app.get(
+            reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+
+        response.form["contact_naam"] = "Municipality Contact Name"
+        response.form[
+            "bevoegde_organisatie"
+        ].value = self.lokale_overheid.organisatie.pk
+        response.form.submit()
+
+        self.lokale_overheid.refresh_from_db()
+        self.assertEqual(self.lokale_overheid.contact_naam, "Municipality Contact Name")
+        self.assertNotEqual(
+            self.lokale_overheid.bevoegde_organisatie, self.lokale_overheid.organisatie
+        )
+
+    def test_can_update_municipality_location(self):
+        LokatieFactory.create(lokale_overheid=self.lokale_overheid)
+
+        response = self.app.get(
+            reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+
+        response.form["form-0-naam"] = "Name"
+        response.form["form-0-straat"] = "Street"
+        response.form["form-0-nummer"] = 91
+        response.form["form-0-plaats"] = "Town"
+        response.form["form-0-postcode"] = "1234AB"
+        response.form["form-0-land"] = "Country"
+        response.form.submit()
+
+        self.lokale_overheid.refresh_from_db()
+        location = self.lokale_overheid.lokaties.get()
+        self.assertEqual(location.naam, "Name")
+        self.assertEqual(location.straat, "Street")
+        self.assertEqual(location.nummer, 91)
+        self.assertEqual(location.plaats, "Town")
+        self.assertEqual(location.postcode, "1234AB")
+        self.assertEqual(location.land, "Country")

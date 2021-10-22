@@ -10,7 +10,7 @@ from sdg.producten.tests.constants import (
     DUMMY_TITLE,
     FUTURE_DATE,
     NOW_DATE,
-    PRODUCT_EDIT,
+    PRODUCT_EDIT_URL,
     TAB_EN,
     TAB_NL,
 )
@@ -32,6 +32,22 @@ class ProductDetailViewTests(WebTest):
 
         self.user = UserFactory.create()
         self.app.set_user(self.user)
+
+    def test_unavailable_reference_product_displays_warning(self):
+        product = SpecifiekProductFactory.create(
+            beschikbaar=False, referentie_product__beschikbaar=False
+        )
+        product_version = ProductVersieFactory.create(product=product)
+        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=product.catalogus.lokale_overheid,
+            is_redacteur=True,
+        )
+
+        response = self.app.get(product_version.product.get_absolute_url())
+
+        self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
 
     def test_concept_product_displays_warning(self):
         product = SpecifiekProductFactory.create(
@@ -311,10 +327,19 @@ class SpecifiekProductUpdateViewTests(WebTest):
         form["publish"].value = data["publish"]
 
     @freeze_time(NOW_DATE)
+    def test_unavailable_reference_product_displays_warning(self):
+        self.product.referentie_product.beschikbaar = False
+        self.product.referentie_product.save()
+        response = self.app.get(self.product.get_absolute_url())
+        self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
+
+    @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
         self._change_product_status(PublishChoices.concept)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.concept)
         response.form.submit()
@@ -336,7 +361,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
     def test_concept_save_now(self):
         self._change_product_status(PublishChoices.concept)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.now)
 
@@ -364,7 +391,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
     def test_concept_save_later(self):
         self._change_product_status(PublishChoices.concept)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.later)
 
@@ -388,7 +417,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
     def test_published_save_concept(self):
         self._change_product_status(PublishChoices.now)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.concept)
 
@@ -416,7 +447,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
     def test_published_save_now(self):
         self._change_product_status(PublishChoices.now)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.now)
 
@@ -444,7 +477,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
     def test_published_save_later(self):
         self._change_product_status(PublishChoices.now)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.later)
 
@@ -478,7 +513,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.concept)
 
@@ -516,7 +553,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.now)
 
@@ -550,7 +589,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.later)
 
@@ -584,7 +625,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.concept)
 
@@ -618,7 +661,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.now)
 
@@ -652,7 +697,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
-        response = self.app.get(reverse(PRODUCT_EDIT, kwargs={"pk": self.product.pk}))
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
 
         self._fill_product_form(response.form, PublishChoices.later)
 
