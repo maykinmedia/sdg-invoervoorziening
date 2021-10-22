@@ -13,3 +13,7 @@
 .d-none {
   display: none;
 }
+
+.readonly {
+  pointer-events: none;
+}

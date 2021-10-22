@@ -27,6 +27,12 @@ class LokaleOverheidForm(forms.ModelForm):
         "organisatie",
     )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if field_name in self.readonly_fields:
+                field.widget.attrs["readonly"] = True
+
     def clean(self):
         cleaned_data = super().clean()
         cleaned_data = {
