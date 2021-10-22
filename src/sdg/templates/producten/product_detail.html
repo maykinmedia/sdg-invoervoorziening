@@ -18,7 +18,14 @@
 
         <div class="notifications">
             {% include "core/_notifications.html" %}
-            {% include 'producten/_include/beschikbaar_warning.html' %}
+            {% with reference_product=product.referentie_product %}
+                {% if reference_product and not reference_product.beschikbaar %}
+                    {% include 'producten/_include/beschikbaar_warning.html' %}
+                {% endif %}
+                {% if reference_product and not reference_product.generiek_product %}
+                    {% include 'producten/_include/generiek_warning.html' %}
+                {% endif %}
+            {% endwith %}
         </div>
 
         <div class="tabs__tab-contents">
@@ -43,8 +50,6 @@
                             </table>
 
                             <hr class="divider">
-                        {% else %}
-                            {% include 'producten/_include/generiek_warning.html' %}
                         {% endif %}
                         <table class="tabs__table">
                             <thead>
