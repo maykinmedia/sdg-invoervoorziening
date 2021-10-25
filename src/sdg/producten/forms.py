@@ -4,7 +4,7 @@ from typing import Optional
 from django import forms
 
 from .constants import PublishChoices
-from .models import LocalizedProduct, ProductVersie
+from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import ProductRadioSelect
 
 
@@ -35,6 +35,7 @@ class ProductVersionForm(forms.ModelForm):
     )
     date = forms.DateTimeField(required=False)
     beschikbaar = forms.BooleanField(required=False)
+    lokaties = forms.ModelMultipleChoiceField(queryset=None)
 
     class Meta:
         model = ProductVersie
@@ -57,11 +58,27 @@ class ProductVersionForm(forms.ModelForm):
             return None
         return instance
 
+    def fill_product_data(self, instance: Product) -> bool:
+        """Fill product instance with cleaned data
+        :returns: A boolean specifying whether a product has changed.
+        """
+        fields = {"beschikbaar", "lokaties"}
+        if not any(True for i in fields if i in self.changed_data):
+            return False
+
+        instance.beschikbaar = self.cleaned_data["beschikbaar"]
+        instance.lokaties.set(self.cleaned_data["lokaties"])
+        return True
+
     def __init__(self, *args, **kwargs):
         _instance = kwargs.get("instance", None)
         kwargs["instance"] = self._get_version_instance(_instance)
         super().__init__(*args, **kwargs)
         self.fields["beschikbaar"].initial = _instance.product.beschikbaar
+        self.fields[
+            "lokaties"
+        ].queryset = _instance.product.get_municipality_locations()
+        self.fields["lokaties"].initial = _instance.product.lokaties.all()
 
     def clean(self):
         cleaned_data = super().clean()
