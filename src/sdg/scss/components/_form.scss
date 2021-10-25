@@ -11,6 +11,10 @@
     }
   }
 
+  .form__group--nopad {
+    flex-direction: column;
+    border: 0;
+  }
 
   .form__group {
     display: flex;

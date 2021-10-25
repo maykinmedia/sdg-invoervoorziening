@@ -1,0 +1,9 @@
+@import "colors";
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+  background-color: $color_primary;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+  margin-left: 12px;
+}
