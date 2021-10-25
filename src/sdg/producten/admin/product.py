@@ -120,4 +120,15 @@ class ProductAdmin(admin.ModelAdmin):
 
         if db_field.name == "referentie_product":
             kwargs["queryset"] = Product.objects.filter(referentie_product=None)
+
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """Ensure that only locations belonging to a product's municipality can be selected."""
+
+        if db_field.name == "lokaties":
+            kwargs["queryset"] = Product.objects.get(
+                pk=request.resolver_match.kwargs["object_id"]
+            ).get_municipality_locations()
+
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
