@@ -252,6 +252,14 @@ class Product(models.Model):
                         "doelgroep": self.doelgroep,
                     },
                 )
+
+                lokaties = list(
+                    specific_catalog.lokale_overheid.lokaties.all()
+                )  # extra query, could be removed
+                if len(lokaties) == 1:
+                    specific_product.lokaties.add(lokaties[0])
+                    specific_product.save()
+
                 version = specific_product.create_version_from_reference()
                 specific_product.localize_version_from_reference(version)
                 return specific_product
