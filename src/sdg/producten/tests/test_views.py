@@ -343,7 +343,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self._fill_product_form(response.form, PublishChoices.concept)
         response.form.submit()
-        self.product_version.refresh_from_db()
+        self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 1)
 

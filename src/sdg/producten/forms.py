@@ -35,7 +35,7 @@ class ProductVersionForm(forms.ModelForm):
     )
     date = forms.DateTimeField(required=False)
     beschikbaar = forms.BooleanField(required=False)
-    lokaties = forms.ModelMultipleChoiceField(queryset=None)
+    lokaties = forms.ModelMultipleChoiceField(queryset=None, required=False)
 
     class Meta:
         model = ProductVersie
