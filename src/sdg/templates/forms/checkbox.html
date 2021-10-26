@@ -1,15 +1,15 @@
 {% load utils %}
 
 <fieldset class="form__group--nopad">
-    <div class="pretty p-default p-curve">
+    <div class="pretty p-default p-curve p-pulse">
         {{ field|addclass:"form__checkbox" }}
-        <div class="state">
+        <div class="state p-primary">
             <label for="{{ field.id_for_label }}" class="checkbox ">
                 {{ field.label }}
             </label>
         </div>
         {% if field.errors %}
-            {{ field.errors }
+            {{ field.errors }}
         {% endif %}
     </div>
 </fieldset>

@@ -72,9 +72,16 @@
                                     <ul class="tabs__footer-list">
                                         {% for lokatie in product.get_municipality_locations %}
                                             <li class="tabs__footer-list-item">
-                                                <input type="checkbox"
-                                                       {% if lokatie.is_product_location %}checked{% endif %} disabled>
-                                                {{ lokatie.naam }}
+                                                <div class="pretty p-default p-curve">
+                                                    <input type="checkbox" class="form__checkbox"
+                                                           {% if lokatie.is_product_location %}checked{% endif %}
+                                                           disabled>
+                                                    <div class="state">
+                                                        <label class="checkbox">
+                                                            {{ lokatie.naam }}
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </li>
                                         {% endfor %}
                                     </ul>

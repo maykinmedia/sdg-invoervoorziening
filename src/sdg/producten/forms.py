@@ -5,7 +5,7 @@ from django import forms
 
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
-from .widgets import ProductRadioSelect
+from .widgets import CheckboxSelectMultiple, ProductRadioSelect
 
 
 class LocalizedProductForm(forms.ModelForm):
@@ -35,7 +35,9 @@ class ProductVersionForm(forms.ModelForm):
     )
     date = forms.DateTimeField(required=False)
     beschikbaar = forms.BooleanField(required=False)
-    lokaties = forms.ModelMultipleChoiceField(queryset=None, required=False)
+    lokaties = forms.ModelMultipleChoiceField(
+        queryset=None, required=False, widget=CheckboxSelectMultiple()
+    )
 
     class Meta:
         model = ProductVersie

@@ -8,12 +8,6 @@
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor <b>{{ lokale_overheid }}</b>{% endblock container_title %}
 
-{% block extra_css %}
-    {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'bundles/flatpickr.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/select2.min.css' %}">
-{% endblock %}
-
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
