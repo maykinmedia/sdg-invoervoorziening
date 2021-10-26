@@ -146,13 +146,3 @@
         </form>
     </div>
 {% endblock inner %}
-
-{% block extra_js %}
-    <script src="{% static 'jquery.slim.js' %}"></script>
-    <script src="{% static 'js/select2.min.js' %}"></script>
-    <script>
-        $("select").select2({
-            width: "60%"
-        });
-    </script>
-{% endblock %}
