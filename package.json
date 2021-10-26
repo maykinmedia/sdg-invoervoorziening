@@ -23,11 +23,9 @@
         "@fortawesome/fontawesome-free": "^5.15.4",
         "ckeditor5": "^30.0.0",
         "flatpickr": "^4.6.9",
-        "jquery": "^3.6.0",
         "microscope-sass": "latest",
         "pretty-checkbox": "^3.0.3",
         "reseter.css": "^2.0.0",
-        "select2": "^4.1.0-rc.0",
         "showdown": "^1.9.1"
     },
     "devDependencies": {
