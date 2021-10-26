@@ -65,7 +65,7 @@ class ProductVersionForm(forms.ModelForm):
         :returns: A boolean specifying whether a product has changed.
         """
         fields = {"beschikbaar", "lokaties"}
-        if not any(True for i in fields if i in self.changed_data):
+        if all(i not in self.changed_data for i in fields):
             return False
 
         instance.beschikbaar = self.cleaned_data["beschikbaar"]
@@ -75,12 +75,14 @@ class ProductVersionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         _instance = kwargs.get("instance", None)
         kwargs["instance"] = self._get_version_instance(_instance)
+
         super().__init__(*args, **kwargs)
+
         self.fields["beschikbaar"].initial = _instance.product.beschikbaar
-        self.fields[
-            "lokaties"
-        ].queryset = _instance.product.get_municipality_locations()
-        self.fields["lokaties"].initial = _instance.product.lokaties.all()
+
+        locations = _instance.product.get_municipality_locations()
+        self.fields["lokaties"].queryset = locations
+        self.fields["lokaties"].initial = locations.filter(is_product_location=True)
 
     def clean(self):
         cleaned_data = super().clean()
