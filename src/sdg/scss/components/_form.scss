@@ -138,8 +138,13 @@
     margin-right: 16px;
   }
 
-  .form__buttons-link {
-    margin-left: 16px;
+  .form__buttons {
+    margin-top: 24px;
+
+    &-link {
+      margin-left: 16px;
+    }
+
   }
 
   .errorlist {
