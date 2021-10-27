@@ -13,7 +13,6 @@ from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.constants import PublishChoices
 from sdg.producten.forms import LocalizedProductForm, ProductVersionForm
 from sdg.producten.models import (
     GeneriekProduct,
