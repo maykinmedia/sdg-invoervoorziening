@@ -266,12 +266,22 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(specific_nl.specifieke_link, text_nl)
         self.assertIn("Er is een bestaand concept voor dit product.", response.text)
 
+    def test_manager_cannot_see_edit_button(self):
+        product = SpecifiekProductFactory.create()
+        product_version = ProductVersieFactory.create(product=product)
+        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=product.catalogus.lokale_overheid,
+            is_beheerder=True,
+        )
 
-class ReferentieProductUpdateViewTests(WebTest):
-    ...
+        response = self.app.get(product_version.product.get_absolute_url())
+
+        self.assertNotIn("Wijzigen", response.text)
 
 
-class SpecifiekProductUpdateViewTests(WebTest):
+class ProductUpdateViewTests(WebTest):
     def setUp(self):
         super().setUp()
 
@@ -291,7 +301,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
             2, product_versie=self.reference_product_version
         )
 
-        RoleFactory.create(
+        self.role = RoleFactory.create(
             user=self.user,
             lokale_overheid=self.product_version.product.catalogus.lokale_overheid,
             is_redacteur=True,
@@ -722,3 +732,12 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
         self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
         self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_manager_cannot_access_product_edit(self):
+        self._change_product_status(PublishChoices.now)
+        self.role.is_redacteur = False
+        self.role.is_beheerder = True
+        self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk}), status=403
+        )
