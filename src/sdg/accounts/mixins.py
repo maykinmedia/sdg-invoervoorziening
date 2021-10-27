@@ -38,7 +38,7 @@ class BaseOverheidMixin(VerificationMixin, UserPassesTestMixin, ABC):
         return True
 
 
-class OverheidRoleRequiredMixin(BaseOverheidMixin, UserPassesTestMixin):
+class OverheidRoleRequiredMixin(BaseOverheidMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
     required_roles = {i.name for i in Role.get_roles()}
@@ -66,7 +66,7 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin, UserPassesTestMixin):
         return any(getattr(role, r) for r in self.get_required_roles())
 
 
-class OverheidExpirationMixin(BaseOverheidMixin, UserPassesTestMixin):
+class OverheidExpirationMixin(BaseOverheidMixin):
     """Ensures a municipality view can no longer be access if the end date has passed."""
 
     def test_func(self):
