@@ -124,6 +124,7 @@ class Lokatie(models.Model):
     )
     land = models.CharField(
         _("land"),
+        default="Nederlands",
         max_length=128,
     )
 
