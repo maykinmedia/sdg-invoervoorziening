@@ -738,6 +738,7 @@ class ProductUpdateViewTests(WebTest):
         self._change_product_status(PublishChoices.now)
         self.role.is_redacteur = False
         self.role.is_beheerder = True
+        self.role.save()
         self.app.get(
             reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk}), status=403
         )
