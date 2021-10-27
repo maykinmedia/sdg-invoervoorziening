@@ -35,15 +35,15 @@
                         {% endfor %}
                         {{ subform.DELETE|addclass:"hidden" }}
                         <h3 class="form__subtitle">
-                            <span>Lokatie {{ forloop.counter }}</span>
+                            <span>{% trans "Locatie" %} {{ forloop.counter }}</span>
                             <a class="formset__remove" href="#">
                                 <i class="far fa-trash-alt"></i>
-                                {% trans "Lokatie verwijderen" %}
+                                {% trans "Locatie verwijderen" %}
                             </a>
                         </h3>
                         <div class="form__block-group">
                             <div>
-                                <div class="form__table-header-left">Lokatie</div>
+                                <div class="form__table-header-left">{% trans "Locatie" %}</div>
                                 {% field subform.naam %}
                                 {% field subform.straat %}
                                 {% field subform.nummer %}
