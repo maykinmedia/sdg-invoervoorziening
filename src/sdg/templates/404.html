@@ -4,5 +4,7 @@
 
 {% block login_right %}
     <h1>Error 404</h1>
-    <p> {% trans "Sorry, de aanvraagpagina kon niet worden gevonden." %} </p>
+    <p class="heading">{% trans "Sorry, de aanvraagpagina kon niet worden gevonden." %}</p>
+    <hr class="divider">
+    <p class="subheading">{{ exception }}</p>
 {% endblock login_right %}
