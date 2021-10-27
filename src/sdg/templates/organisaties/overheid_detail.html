@@ -42,18 +42,24 @@
             {% endfor %}
         </div>
         <div class="selection__general">
-            <a class="selection__general-link" href="#">
-                <i class="fas fa-mouse-pointer"></i>
-                {{ lokaleoverheid.contact_website|default:_("Geen website") }}
-            </a>
-            <a class="selection__general-link" href="#">
-                <i class="fas fa-phone"></i>
-                {{ lokaleoverheid.contact_telefoonnummer|default:_("Geen telefoonnummer") }}
-            </a>
-            <a class="selection__general-link" href="#">
-                <i class="fas fa-envelope"></i>
-                {{ lokaleoverheid.contact_emailadres|default:_("Geen e-mailadres") }}
-            </a>
+            {% with website=lokaleoverheid.contact_website %}
+                <a class="selection__general-link" href="{{ website }}" target="_blank">
+                    <i class="fas fa-mouse-pointer"></i>
+                    {{ website|default:_("Geen website") }}
+                </a>
+            {% endwith %}
+            {% with phone=lokaleoverheid.contact_telefoonnummer %}
+                <a class="selection__general-link" href="tel:{{ phone }}" target="_blank">
+                    <i class="fas fa-phone"></i>
+                    {{ phone|default:_("Geen telefoonnummer") }}
+                </a>
+            {% endwith %}
+            {% with email=lokaleoverheid.contact_emailadres %}
+                <a class="selection__general-link" href="mailto:{{ email }}" target="_blank">
+                    <i class="fas fa-envelope"></i>
+                    {{ email|default:_("Geen e-mailadres") }}
+                </a>
+            {% endwith %}
             <div class="selection__edit">
                 <a href="{% url 'organisaties:overheid_roles' pk=lokaleoverheid.pk %}">
                     <i class="fas fa-user"></i>
