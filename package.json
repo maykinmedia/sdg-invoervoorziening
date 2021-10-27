@@ -24,6 +24,7 @@
         "ckeditor5": "^30.0.0",
         "flatpickr": "^4.6.9",
         "formset.js": "^0.0.1",
+        "js-cookie": "^3.0.1",
         "microscope-sass": "latest",
         "reseter.css": "^2.0.0",
         "showdown": "^1.9.1"
