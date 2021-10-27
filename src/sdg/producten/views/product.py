@@ -13,7 +13,6 @@ from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.constants import PublishChoices
 from sdg.producten.forms import LocalizedProductForm, ProductVersionForm
 from sdg.producten.models import (
     GeneriekProduct,
@@ -64,7 +63,7 @@ class ProductDetailView(OverheidMixin, DetailView):
             queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
         ),
     )
-    required_roles = ["is_redacteur"]
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()

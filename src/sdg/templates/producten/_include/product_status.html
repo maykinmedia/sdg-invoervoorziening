@@ -23,14 +23,20 @@
         {% endwith %}
     </div>
     <div>
-        <a class="button" href="{% url 'producten:edit' pk=product.pk %}">
-            {% trans "Wijzigen" %}
-            {% if product.beschikbaar %}
-                <i class="fa fa-sm fa-check text-accent" title="Dit product is beschikbaar."></i>
-            {% else %}
-                <i class="fa fa-sm fa-times text-accent" title="Dit product is niet beschikbaar."></i>
+        {% with is_redacteur=role.is_redacteur %}
+            {% if is_redacteur %}
+                <a class="button" href="{% url 'producten:edit' pk=product.pk %}">
+                {% trans "Wijzigen" %}
             {% endif %}
-        </a>
+                {% if product.beschikbaar %}
+                    <i class="fa fa-sm fa-check accent-dark" title="Dit product is beschikbaar."></i>
+                {% else %}
+                    <i class="fa fa-sm fa-times accent-dark" title="Dit product is niet beschikbaar."></i>
+                {% endif %}
+            {% if is_redacteur %}
+                </a>
+            {% endif %}
+        {% endwith %}
     </div>
 </div>
 <hr class="divider">

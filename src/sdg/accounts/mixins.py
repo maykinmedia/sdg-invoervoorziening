@@ -57,13 +57,19 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin, UserPassesTestMixin):
             return False
 
         try:
-            role = self.request.user.roles.get(
+            self.role = self.request.user.roles.get(
                 lokale_overheid=self._get_lokale_overheid()
             )
         except Role.DoesNotExist:
             return False
 
-        return any(getattr(role, r) for r in self.get_required_roles())
+        return any(getattr(self.role, r) for r in self.get_required_roles())
+
+    def get_context_data(self, **kwargs):
+        """Add municipality role to context data."""
+        context = super().get_context_data(**kwargs)
+        context["role"] = self.role
+        return context
 
 
 class OverheidExpirationMixin(BaseOverheidMixin, UserPassesTestMixin):
@@ -85,4 +91,5 @@ class OverheidMixin(OverheidExpirationMixin, OverheidRoleRequiredMixin):
 
     - Denies access if a municipality end date is expired.
     - Ensures a user has the appropriate role to access the municipality.
+    - Adds municipality role to context.
     """
