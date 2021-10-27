@@ -81,7 +81,7 @@
                             {% endif %}
                             <div class="tabs__fotter-right">
                                 <h3 class="tabs__footer-title">Revisies</h3>
-                                {% for product_version in product.get_latest_versions %}
+                                {% for product_version in product.get_revision_list %}
                                     <ul class="revision-list">
                                         <li class="revision-list__item">
                                             <i class="fas fa-user"></i>

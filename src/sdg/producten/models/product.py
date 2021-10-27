@@ -188,12 +188,16 @@ class Product(models.Model):
             else self.referentie_product.generiek_product
         )
 
-    def get_latest_versions(self, quantity=5, active=False):
+    def get_revision_list(self):
+        return self.get_latest_versions(reverse_order=False)
+
+    def get_latest_versions(self, quantity=5, active=False, reverse_order=True):
         """:returns: The latest N versions for this product."""
+        step_slice = -1 if reverse_order else 1
         queryset = self.versies.all().order_by("-versie")
         if active:
             queryset = queryset.filter(publicatie_datum__lte=date.today())
-        return queryset[:quantity:-1]
+        return queryset[:quantity:step_slice]
 
     def create_version_from_reference(self) -> ProductVersie:
         """Create fist version for this product based on latest reference version."""
