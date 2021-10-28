@@ -18,8 +18,11 @@ django-sniplates
 django-allauth
 django-markdownx
 django-markdownify
+django-celery-beat
+celery
 
 maykin-django-two-factor-auth[phonenumbers]
+
 
 # API libraries
 # djangorestframework
