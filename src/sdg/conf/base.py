@@ -120,6 +120,7 @@ INSTALLED_APPS = [
     "markdownify",
     "allauth",
     "allauth.account",
+    "django_celery_beat",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
@@ -462,3 +463,14 @@ INVITATION_SUBJECT = "SDG Invoervoorziening Invitatie"
 
 ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
+
+# Celery
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/4")
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_TIME_LIMIT = 5 * 60
+CELERY_TASK_SOFT_TIME_LIMIT = 60
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+SILENCED_SYSTEM_CHECKS = ["utils.E001"]
