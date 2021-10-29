@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -6,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.db.fields import DynamicArrayField
+from sdg.producten.models.managers import LocalizedManager
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
 
@@ -78,6 +78,8 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "invoervoorziening) "
         ),
     )
+
+    objects = LocalizedManager()
 
     class Meta:
         verbose_name = _("Vertaald generiek product")
@@ -205,6 +207,8 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
         blank=True,
     )
+
+    objects = LocalizedManager()
 
     @cached_property
     def referentie_informatie(self):
