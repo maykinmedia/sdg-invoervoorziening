@@ -16,7 +16,7 @@ from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.producten.constants import PublishChoices
-from sdg.producten.models import LocalizedProduct
+from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
 from sdg.producten.utils import is_past_date
 
 User = get_user_model()
@@ -60,6 +60,16 @@ class GeneriekProduct(models.Model):
     @property
     def upn_label(self):
         return self.upn.upn_label
+
+    def generate_localized_information(
+        self, language, **kwargs
+    ) -> LocalizedGeneriekProduct:
+        """Generate localized information for this generic product."""
+        return LocalizedGeneriekProduct(
+            generiek_product=self,
+            taal=language,
+            **kwargs,
+        )
 
     class Meta:
         verbose_name = _("generiek product")
@@ -332,11 +342,11 @@ class ProductVersie(models.Model):
         else:
             return PublishChoices.later
 
-    def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
+    def generate_localized_information(self, language, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""
         return LocalizedProduct(
             product_versie=self,
-            taal=taal,
+            taal=language,
             **kwargs,
         )
 

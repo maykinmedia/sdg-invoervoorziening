@@ -2,6 +2,14 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.managers import OrganisatieManager
+from sdg.core.models import ProductenCatalogus
+from sdg.producten.models import (
+    GeneriekProduct,
+    LocalizedGeneriekProduct,
+    LocalizedProduct,
+    Product,
+    ProductVersie,
+)
 
 
 class Overheidsorganisatie(models.Model):
@@ -167,9 +175,33 @@ class UniformeProductnaam(models.Model):
         blank=True,
     )
 
+    def generate_initial_data(self, catalog: ProductenCatalogus):
+        generic = GeneriekProduct.objects.create(upn=self)
+
+        product = Product.objects.create(generiek_product=generic, catalogus=catalog)
+        LocalizedGeneriekProduct.objects.create_localized(
+            instance=generic, languages=["nl", "en"]
+        )
+
+        version = ProductVersie.objects.create(product=product, publicatie_datum=None)
+        LocalizedProduct.objects.create_localized(
+            instance=version, languages=["nl", "en"]
+        )
+
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
 
     def __str__(self):
         return self.upn_label
+
+    def save(self, *args, **kwargs):
+        adding = self._state.adding
+        super().save(*args, **kwargs)
+
+        if adding:
+            for catalog in ProductenCatalogus.objects.filter(
+                autofill=True, is_referentie_catalogus=True
+            ):
+                if all(f in self.upn_label for f in catalog.autofill_upn_filter):
+                    self.generate_initial_data(catalog)
