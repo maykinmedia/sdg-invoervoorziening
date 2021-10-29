@@ -53,6 +53,8 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "Nationale portalen houden bij wanneer de informatie voor het laasts is 'gecheckt'.  Deze datum wordt op "
             "het portaal getoond."
         ),
+        blank=True,
+        null=True,
     )
     verwijzing_links = DynamicArrayField(
         models.URLField(_("url van verwijzing"), max_length=1000),

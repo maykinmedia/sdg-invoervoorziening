@@ -33,7 +33,7 @@ class GeneriekProduct(models.Model):
     upn = models.ForeignKey(
         "core.UniformeProductnaam",
         on_delete=models.PROTECT,
-        related_name="generiek_product",
+        related_name="generiek_producten",
         help_text=_("De uniforme productnaam met betrekking tot dit product."),
     )
     verantwoordelijke_organisatie = models.ForeignKey(
@@ -42,12 +42,15 @@ class GeneriekProduct(models.Model):
         related_name="generiek_informatie",
         verbose_name=_("verantwoordelijke organisatie"),
         help_text=_("Organisatie verantwoordelijk voor de landelijke informatie"),
+        blank=True,
+        null=True,
     )
     verplicht_product = models.BooleanField(
         _("verplicht product"),
         help_text=_(
             "Geeft aan of decentrale overheden verplicht zijn informatie over dit product te leveren."
         ),
+        default=False,
     )
 
     @property
@@ -294,6 +297,7 @@ class ProductVersie(models.Model):
         verbose_name=_("gemaakt door"),
         help_text=_("De maker van deze productversie."),
         blank=True,
+        null=True,
     )
     versie = models.PositiveIntegerField(
         verbose_name=_("versie"),
