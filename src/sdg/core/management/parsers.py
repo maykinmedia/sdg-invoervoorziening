@@ -1,9 +1,11 @@
 import csv
 import os
+from tempfile import NamedTemporaryFile
 from typing import Any, Dict, List
 
 from django.core.management import BaseCommand, CommandError
 
+import requests
 from lxml import etree
 
 
@@ -18,11 +20,20 @@ class OwmsParser:
         self.xml_column_names = xml_column_names
 
     def parse(self, filename: str):
-        """Calls parsing function based on filename extension."""
+        """Call parsing function based on filename extension."""
 
         _, extension = os.path.splitext(filename)
         file_format = extension[1:]
 
+        if not filename.startswith("http"):
+            return self.process_file(filename, file_format)
+
+        with NamedTemporaryFile() as f:
+            f.write(requests.get(filename, file_format).content)
+            return self.process_file(f.name, file_format)
+
+    def process_file(self, filename, file_format):
+        """Process a given file, calling a specific method based on the given format."""
         if file_format in self.available_parsers:
             return getattr(self, file_format)(filename)
         else:

@@ -1,17 +1,19 @@
 from enum import Enum
+from functools import partial
+from types import DynamicClassAttribute
 from urllib.parse import urljoin
 
-ROOT_URL = "https://standaarden.overheid.nl"
-
-
-def url(path):
-    return urljoin(ROOT_URL, path)
+root_url = partial(urljoin, base="https://standaarden.overheid.nl")
 
 
 class PublicData(Enum):
     """External data source URLs, used to load in application data."""
 
-    GEMEENTE = url("owms/terms/Gemeente.xml")
-    UPN = url("/owms/oquery/UPL-actueel.csv")
-    INFORMATIEGEBIED = url("/owms/oquery/SDG-Informatiegebieden.csv")
-    UPN_INFORMATIEGEBIED = url("/owms/oquery/UPL-SDG-Informatiegebied.csv")
+    GEMEENTE = "owms/terms/Gemeente.xml"
+    UPN = "owms/oquery/UPL-actueel.csv"
+    INFORMATIEGEBIED = "owms/oquery/SDG-Informatiegebieden.csv"
+    UPN_INFORMATIEGEBIED = "owms/oquery/UPL-SDG-Informatiegebied.csv"
+
+    @DynamicClassAttribute
+    def value(self):
+        return root_url(url=self._value_)
