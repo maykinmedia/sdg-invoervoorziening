@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
+from sdg.core.admin.mixins import BaseProductFilter
 from sdg.producten.models import (
     GeneriekProduct,
     LocalizedGeneriekProduct,
@@ -9,23 +11,10 @@ from sdg.producten.models import (
 )
 
 
-class IsReferenceProductFilter(admin.SimpleListFilter):
-    title = "Is Referentie"
+class IsReferenceProductFilter(BaseProductFilter):
+    title = _("Is Referentie")
     parameter_name = "referentie_product"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("Ja", "Ja"),
-            ("Nee", "Nee"),
-        )
-
-    def queryset(self, request, queryset):
-        value = self.value()
-        if value == "Ja":
-            return queryset.filter(referentie_product__isnull=True)
-        elif value == "Nee":
-            return queryset.filter(referentie_product__isnull=False)
-        return queryset
+    filter_field = "referentie_product__isnull"
 
 
 class LocalizedGeneriekProductInline(admin.StackedInline):
