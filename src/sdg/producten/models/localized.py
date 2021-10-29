@@ -231,14 +231,14 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
         product = self.product_versie.product
         if product.is_referentie_product:
-            LocalizedProduct.objects.bulk_create(
-                [
-                    specific_product.laatste_versie.generate_localized_information(
-                        taal=self.taal
+            LocalizedProduct.objects.bulk_localize(
+                instances=(
+                    p.laatste_versie
+                    for p in product.specifieke_producten.all().prefetch_related(
+                        "versies"
                     )
-                    for specific_product in product.specifieke_producten.all()
-                ],
-                ignore_conflicts=True,
+                ),
+                languages=[self.taal],
             )
 
     class Meta:

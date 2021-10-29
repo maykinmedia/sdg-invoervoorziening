@@ -179,14 +179,12 @@ class UniformeProductnaam(models.Model):
         generic = GeneriekProduct.objects.create(upn=self)
 
         product = Product.objects.create(generiek_product=generic, catalogus=catalog)
-        LocalizedGeneriekProduct.objects.create_localized(
+        LocalizedGeneriekProduct.objects.localize(
             instance=generic, languages=["nl", "en"]
         )
 
         version = ProductVersie.objects.create(product=product, publicatie_datum=None)
-        LocalizedProduct.objects.create_localized(
-            instance=version, languages=["nl", "en"]
-        )
+        LocalizedProduct.objects.localize(instance=version, languages=["nl", "en"])
 
     class Meta:
         verbose_name = _("uniforme productnaam")
