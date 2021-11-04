@@ -6,7 +6,7 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models import Model
+from django.db.models import BooleanField, Case, Model, Q, Value, When
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -133,11 +133,11 @@ class Product(models.Model):
         blank=True,
     )
 
-    @property
+    @cached_property
     def upn_uri(self):
         return self.generic_product.upn.upn_uri
 
-    @property
+    @cached_property
     def upn_label(self):
         return self.generic_product.upn.upn_label
 
@@ -188,6 +188,18 @@ class Product(models.Model):
             else self.referentie_product.generiek_product
         )
 
+    def get_municipality_locations(self):
+        """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
+        return self.catalogus.lokale_overheid.lokaties.annotate(
+            is_product_location=Case(
+                When(
+                    Q(pk__in=self.lokaties.all().values_list("pk")),
+                    then=Value(True),
+                ),
+                output_field=BooleanField(default=False),
+            ),
+        )
+
     def get_latest_versions(self, quantity=5, active=False):
         """:returns: The latest N versions for this product."""
         queryset = self.versies.all().order_by("-versie")
@@ -232,6 +244,7 @@ class Product(models.Model):
                     specific_catalog = get_object_or_404(
                         ProductenCatalogus, pk=specific_catalog
                     )
+
                 specific_product, created = Product.objects.get_or_create(
                     referentie_product=self,
                     catalogus=specific_catalog,
@@ -239,6 +252,14 @@ class Product(models.Model):
                         "doelgroep": self.doelgroep,
                     },
                 )
+
+                lokaties = list(
+                    specific_catalog.lokale_overheid.lokaties.all()
+                )  # extra query, could be removed
+                if len(lokaties) == 1:
+                    specific_product.lokaties.add(lokaties[0])
+                    specific_product.save()
+
                 version = specific_product.create_version_from_reference()
                 specific_product.localize_version_from_reference(version)
                 return specific_product

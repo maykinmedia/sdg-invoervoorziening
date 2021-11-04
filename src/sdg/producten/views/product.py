@@ -13,7 +13,6 @@ from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.constants import PublishChoices
 from sdg.producten.forms import LocalizedProductForm, ProductVersionForm
 from sdg.producten.models import (
     GeneriekProduct,
@@ -103,13 +102,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             new_version.versie = (
                 self.object.versie + 1 if created else self.object.versie
             )
-            new_version.save()
 
-            if "beschikbaar" in version_form.changed_data:
-                new_version.product.beschikbaar = version_form.cleaned_data[
-                    "beschikbaar"
-                ]
-                new_version.product.save()
+            new_version.save()
+            product_changed = version_form.fill_product_data(instance=self.product)
+            if product_changed:
+                self.product.save()
 
             return new_version, created
 

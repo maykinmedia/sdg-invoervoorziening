@@ -1,0 +1,12 @@
+<fieldset class="form__group--pad">
+    <div class="pretty p-default p-curve p-pulse">
+        <input type="checkbox" id="{{ widget.attrs.id }}" name="{{ widget.name }}" class="form__checkbox"
+               value="{{ widget.value }}"
+               {% if widget.selected %}checked{% endif %}>
+        <div class="state p-primary">
+            <label for="{{ widget.attrs.id }}" class="checkbox">
+                {{ widget.label }}
+            </label>
+        </div>
+    </div>
+</fieldset>

@@ -70,16 +70,25 @@
                                 <div class="tabs__footer-left">
                                     <h3 class="tabs__footer-title">Locaties met dit product</h3>
                                     <ul class="tabs__footer-list">
-                                        {% for lokatie in product.lokaties.all %}
+                                        {% for lokatie in product.get_municipality_locations %}
                                             <li class="tabs__footer-list-item">
-                                                <input type="checkbox" name="" checked disabled>
-                                                {{ lokatie.naam }}
+                                                <div class="pretty p-default p-curve">
+                                                    <input type="checkbox" class="form__checkbox"
+                                                           {% if lokatie.is_product_location %}checked{% endif %}
+                                                           value="{{ lokatie.pk }}"
+                                                           disabled>
+                                                    <div class="state">
+                                                        <label class="checkbox">
+                                                            {{ lokatie.naam }}
+                                                        </label>
+                                                    </div>
+                                                </div>
                                             </li>
                                         {% endfor %}
                                     </ul>
                                 </div>
                             {% endif %}
-                            <div class="tabs__fotter-right">
+                            <div class="tabs__footer-right">
                                 <h3 class="tabs__footer-title">Revisies</h3>
                                 {% for product_version in product.get_latest_versions %}
                                     <ul class="revision-list">
