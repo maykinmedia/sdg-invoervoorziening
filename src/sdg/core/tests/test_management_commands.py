@@ -29,7 +29,7 @@ class TestImportData(CommandTestCase):
             "load_gemeenten", os.path.join(TESTS_DIR, "data/Gemeente.xml")
         )
 
-        self.assertIn("Succesfully imported", out)
+        self.assertIn("Successfully imported", out)
         self.assertIn("(5 objects)", out)
         self.assertEqual(Overheidsorganisatie.objects.count(), 5)
 
@@ -47,9 +47,9 @@ class TestImportData(CommandTestCase):
             os.path.join(TESTS_DIR, "data/SDG-Informatiegebieden.csv"),
         )
 
-        self.assertIn("Succesfully imported", out)
-        self.assertIn("(14 objects)", out)
-        self.assertEqual(Informatiegebied.objects.count(), 14)
+        self.assertIn("Successfully imported", out)
+        self.assertIn("(24 objects)", out)
+        self.assertEqual(Informatiegebied.objects.count(), 24)
 
         informatiegebied = Informatiegebied.objects.get(pk=1)
         self.assertEqual(informatiegebied.code, "A1")
@@ -64,7 +64,7 @@ class TestImportData(CommandTestCase):
             "load_upn", os.path.join(TESTS_DIR, "data/UPL-actueel.csv")
         )
 
-        self.assertIn("Succesfully imported", out)
+        self.assertIn("Successfully imported", out)
         self.assertIn("(19 objects)", out)
         self.assertEqual(UniformeProductnaam.objects.count(), 19)
 
@@ -75,3 +75,32 @@ class TestImportData(CommandTestCase):
         self.assertEqual(upn.upn_label, "aanleunwoning")
         self.assertEqual(upn.rijk, False)
         self.assertEqual(upn.burger, True)
+
+    def test_load_upn_informatiegebieden(self):
+        self.call_command("load_upn", os.path.join(TESTS_DIR, "data/UPL-actueel.csv"))
+        self.call_command(
+            "load_informatiegebieden",
+            os.path.join(TESTS_DIR, "data/SDG-Informatiegebieden.csv"),
+        )
+        out = self.call_command(
+            "load_upn_informatiegebieden",
+            os.path.join(TESTS_DIR, "data/UPL-SDG-Informatiegebied.csv"),
+        )
+
+        self.assertIn("Successfully imported", out)
+        self.assertIn("(3 objects)", out)
+
+        upn = UniformeProductnaam.objects.get(upn_label="adoptie")
+        self.assertEqual(
+            str(upn.thema.informatiegebied), "Burger- en familierechten [G1]"
+        )
+
+        upn = UniformeProductnaam.objects.get(
+            upn_label="aanpassing zelfgebouwd vliegtuig melding"
+        )
+        self.assertEqual(str(upn.thema.informatiegebied), "Voertuigen in de Unie [C5]")
+
+        upn = UniformeProductnaam.objects.get(upn_label="adoptie aangifte")
+        self.assertEqual(
+            str(upn.thema.informatiegebied), "Burger- en familierechten [G1]"
+        )
