@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 
 import sentry_sdk
 
-from .utils import config, get_current_version, get_sentry_integrations
+from .utils import config, get_current_version, get_sentry_integrations, read_file
 
 # Build paths inside the project, so further paths can be defined relative to
 # the code root.
@@ -121,6 +121,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "django_celery_beat",
+    "drf_spectacular",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
@@ -474,3 +475,15 @@ CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 SILENCED_SYSTEM_CHECKS = ["utils.E001"]
+
+# DRF
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "SDG Invoervoorziening API",
+    "DESCRIPTION": read_file(os.path.join(BASE_DIR, "README.rst")),
+    "VERSION": "1.0.0",
+}

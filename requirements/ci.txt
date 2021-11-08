@@ -13,6 +13,11 @@ appdirs==1.4.4
     # via black
 astroid==2.6.5
     # via pylint
+attrs==21.2.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   jsonschema
 beautifulsoup4==4.9.3
     # via webtest
 billiard==3.6.4.0
@@ -89,6 +94,8 @@ django==2.2.24
     #   django-rosetta
     #   django-sniplates
     #   django-timezone-field
+    #   djangorestframework
+    #   drf-spectacular
     #   maykin-django-two-factor-auth
 django-admin-index==1.4.0
     # via
@@ -182,6 +189,15 @@ django-timezone-field==3.1
     #   django-celery-beat
 django-webtest==1.9.7
     # via -r requirements/test-tools.in
+djangorestframework==3.12.4
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   drf-spectacular
+drf-spectacular==0.20.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 elastic-apm==6.3.3
     # via
     #   -c requirements/base.txt
@@ -204,6 +220,11 @@ idna==3.2
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   requests
+inflection==0.5.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   drf-spectacular
 isort==5.9.3
     # via
     #   -r requirements/test-tools.in
@@ -213,6 +234,11 @@ kombu==4.6.11
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   celery
+jsonschema==4.2.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   drf-spectacular
 lazy-object-proxy==1.6.0
     # via astroid
 lxml==4.6.3
@@ -294,6 +320,11 @@ python-crontab==2.6.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   django-celery-beat
+pyrsistent==0.18.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   jsonschema
 python-dateutil==2.8.2
     # via
     #   -c requirements/base.txt
@@ -321,6 +352,11 @@ pytz==2021.1
     #   celery
     #   django
     #   django-timezone-field
+pyyaml==6.0
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   drf-spectacular
 qrcode==6.1
     # via
     #   -c requirements/base.txt
@@ -383,6 +419,11 @@ toml==0.10.2
     # via pylint
 tomli==1.2.1
     # via black
+uritemplate==4.1.1
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   drf-spectacular
 urllib3==1.26.6
     # via
     #   -c requirements/base.txt

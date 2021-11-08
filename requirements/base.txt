@@ -8,6 +8,8 @@ amqp==2.6.1
     # via kombu
 billiard==3.6.4.0
     # via celery
+attrs==21.2.0
+    # via jsonschema
 bleach==4.1.0
     # via django-markdownify
 celery==4.4.6
@@ -44,6 +46,8 @@ django==2.2.24
     #   django-rosetta
     #   django-sniplates
     #   django-timezone-field
+    #   djangorestframework
+    #   drf-spectacular
     #   maykin-django-two-factor-auth
 django-admin-index==1.4.0
     # via -r requirements/base.in
@@ -85,6 +89,12 @@ django-sniplates==0.7.0
     # via -r requirements/base.in
 django-timezone-field==3.1
     # via django-celery-beat
+djangorestframework==3.12.4
+    # via
+    #   -r requirements/base.in
+    #   drf-spectacular
+drf-spectacular==0.20.2
+    # via -r requirements/base.in
 elastic-apm==6.3.3
     # via -r requirements/base.in
 future==0.18.2
@@ -93,6 +103,10 @@ idna==3.2
     # via requests
 kombu==4.6.11
     # via celery
+inflection==0.5.1
+    # via drf-spectacular
+jsonschema==4.2.1
+    # via drf-spectacular
 markdown==3.3.4
     # via
     #   django-markdownify
@@ -123,6 +137,8 @@ python-crontab==2.6.0
     # via django-celery-beat
 python-dateutil==2.8.2
     # via python-crontab
+pyrsistent==0.18.0
+    # via jsonschema
 python-decouple==3.4
     # via -r requirements/base.in
 python-dotenv==0.19.0
@@ -135,6 +151,8 @@ pytz==2021.1
     #   celery
     #   django
     #   django-timezone-field
+pyyaml==6.0
+    # via drf-spectacular
 qrcode==6.1
     # via maykin-django-two-factor-auth
 redis==3.5.3
@@ -158,6 +176,8 @@ six==1.16.0
     #   qrcode
 sqlparse==0.4.2
     # via django
+uritemplate==4.1.1
+    # via drf-spectacular
 urllib3==1.26.6
     # via
     #   elastic-apm

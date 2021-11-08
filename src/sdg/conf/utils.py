@@ -1,3 +1,4 @@
+import codecs
 import logging
 import os
 from shutil import which
@@ -106,3 +107,11 @@ def get_current_version():
         return _get_version_from_git()
 
     return _get_version_from_file()
+
+
+def read_file(filename):
+    """
+    Read a utf8 encoded text file and return its contents.
+    """
+    with codecs.open(filename, "r", "utf8") as f:
+        return f.read()
