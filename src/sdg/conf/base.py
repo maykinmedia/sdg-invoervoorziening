@@ -6,7 +6,13 @@ from django.urls import reverse_lazy
 
 import sentry_sdk
 
-from .utils import config, get_current_version, get_sentry_integrations, read_file
+from .utils import (
+    clean_rst,
+    config,
+    get_current_version,
+    get_sentry_integrations,
+    read_file,
+)
 
 # Build paths inside the project, so further paths can be defined relative to
 # the code root.
@@ -484,6 +490,8 @@ REST_FRAMEWORK = {
 }
 SPECTACULAR_SETTINGS = {
     "TITLE": "SDG Invoervoorziening API",
-    "DESCRIPTION": read_file(os.path.join(BASE_DIR, "README.rst")),
+    "DESCRIPTION": clean_rst(
+        read_file(os.path.join(BASE_DIR, "README.rst")),
+    ),
     "VERSION": "1.0.0",
 }
