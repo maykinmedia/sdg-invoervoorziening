@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from datetime import date
 from typing import Any
 
@@ -145,6 +146,7 @@ class Product(models.Model):
         ),
         blank=True,
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     @cached_property
     def upn_uri(self):

@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -54,6 +56,7 @@ class ProductenCatalogus(models.Model):
     toelichting = models.TextField(
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     autofill = models.BooleanField(_("autofill"), default=False)
     autofill_upn_filter = DynamicArrayField(

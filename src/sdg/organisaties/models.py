@@ -1,3 +1,4 @@
+import uuid
 from typing import List
 
 from django.contrib.auth import get_user_model
@@ -51,6 +52,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         blank=True,
     )
     users = models.ManyToManyField(User, through="accounts.Role")
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def create_specific_catalogs(self) -> List[ProductenCatalogus]:
         """Create a specific catalog (if it doesn't exist) for each reference catalog."""
@@ -183,6 +185,7 @@ class Lokatie(models.Model):
         blank=True,
         default=list,
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
 
     def get_formatted_address(self):
         return f"{self.naam}\n{self.straat} {self.nummer}\n{self.postcode} {self.plaats}\n{self.land}"
