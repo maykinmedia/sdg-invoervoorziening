@@ -8,7 +8,18 @@ from drf_spectacular.views import (
 )
 from rest_framework import routers
 
+from sdg.api.views import (
+    CatalogusViewSet,
+    LokaleOverheidViewSet,
+    LokatieViewSet,
+    ProductViewSet,
+)
+
 router = routers.DefaultRouter(trailing_slash=False)
+router.register("catalogi", CatalogusViewSet)
+router.register("producten", ProductViewSet)
+router.register("organisaties", LokaleOverheidViewSet)
+router.register("locaties", LokatieViewSet)
 
 urlpatterns = [
     path("v1/", include(router.urls)),
@@ -16,8 +27,8 @@ urlpatterns = [
         "v1/",
         include(
             [
-                url(
-                    r"schema/openapi\.(?:yaml|yml)",
+                path(
+                    "schema/openapi.yaml",
                     SpectacularYAMLAPIView.as_view(),
                     name="schema",
                 ),

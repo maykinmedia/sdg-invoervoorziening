@@ -120,4 +120,7 @@ def read_file(filename):
 
 def clean_rst(text: str) -> str:
     """Clean up unneeded rst characters."""
-    return re.sub(r"((?P<title>.*)\n={2,})", r"# \g<title>", text)
+    text = re.sub(r"((?P<title>.*)\n={2,})", r"# \g<title>", text)
+    text = re.sub(r"[|:][\w-]+[|:]", "", text)
+    text = re.sub(r"(.)\1{4,}", "", text)
+    return text
