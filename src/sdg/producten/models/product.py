@@ -146,7 +146,7 @@ class Product(models.Model):
         ),
         blank=True,
     )
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
     @cached_property
     def upn_uri(self):
