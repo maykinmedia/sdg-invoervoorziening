@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "django_celery_beat",
     "drf_spectacular",
+    "django_filters",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",

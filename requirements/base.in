@@ -19,6 +19,7 @@ django-allauth
 django-markdownx
 django-markdownify
 django-celery-beat
+django-filter
 celery
 
 maykin-django-two-factor-auth[phonenumbers]

@@ -36,6 +36,7 @@ django==2.2.24
     #   django-axes
     #   django-celery-beat
     #   django-choices
+    #   django-filter
     #   django-formtools
     #   django-hijack
     #   django-markdownify
@@ -61,6 +62,8 @@ django-choices==1.7.2
     # via -r requirements/base.in
 django-compat==1.0.15
     # via django-hijack-admin
+django-filter==21.1
+    # via -r requirements/base.in
 django-formtools==2.3
     # via maykin-django-two-factor-auth
 django-hijack==2.3.0
