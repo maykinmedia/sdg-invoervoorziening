@@ -489,6 +489,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
     "PAGE_SIZE": 25,
 }
 SPECTACULAR_SETTINGS = {
