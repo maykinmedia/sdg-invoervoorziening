@@ -7,8 +7,6 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for ProductenCatalogus details, including organizations and products."""
 
     class Meta:
-        """Meta class for CatalogusSerializer."""
-
         model = ProductenCatalogus
         fields = (
             "uuid",

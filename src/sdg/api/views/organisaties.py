@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 
+from sdg.api.filters import LokatieFilterSet
 from sdg.api.mixins import MultipleSerializerMixin
 from sdg.api.serializers import (
     LokaleOverheidListSerializer,
@@ -24,9 +25,9 @@ class LokaleOverheidViewSet(MultipleSerializerMixin, viewsets.ReadOnlyModelViewS
 class LokatieViewSet(MultipleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     """Viewset for a location, retrieved by uuid"""
 
-    serializer_class = LokatieSerializer
     lookup_field = "uuid"
     queryset = Lokatie.objects.all()
+    filterset_class = LokatieFilterSet
     serializer_classes = {
         "retrieve": LokatieSerializer,
         "list": LokatieListSerializer,

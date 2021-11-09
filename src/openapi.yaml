@@ -164,12 +164,21 @@ paths:
         description: Number of results to return per page.
         schema:
           type: integer
+      - in: query
+        name: lokale_overheid
+        schema:
+          type: integer
       - name: offset
         required: false
         in: query
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - in: query
+        name: organisatie
+        schema:
+          type: string
+        description: Toont catalogi die bij de opgegeven organisatie horen.
       tags:
       - catalogi
       security:
@@ -181,7 +190,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedCatalogusList'
+                $ref: '#/components/schemas/PaginatedProductenCatalogusList'
           description: ''
   /api/v1/catalogi/{uuid}:
     get:
@@ -205,7 +214,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Catalogus'
+                $ref: '#/components/schemas/ProductenCatalogus'
           description: ''
   /api/v1/locaties:
     get:
@@ -218,12 +227,21 @@ paths:
         description: Number of results to return per page.
         schema:
           type: integer
+      - in: query
+        name: lokale_overheid
+        schema:
+          type: integer
       - name: offset
         required: false
         in: query
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - in: query
+        name: organisatie
+        schema:
+          type: string
+        description: Toont locaties die bij de opgegeven organisatie horen.
       tags:
       - locaties
       security:
@@ -320,6 +338,22 @@ paths:
       operationId: producten_list
       description: Viewset for a municipality catalog, retrieved by uuid
       parameters:
+      - in: query
+        name: catalog_uuid
+        schema:
+          type: string
+          format: uuid
+        description: Toont producten die behoren tot de catalogus van de opgegeven
+          uuid.
+      - in: query
+        name: catalogus
+        schema:
+          type: integer
+      - in: query
+        name: doelgroep
+        schema:
+          type: string
+        description: Toont producten die overeenkomen met de opgegeven doelgroepen.
       - name: limit
         required: false
         in: query
@@ -332,6 +366,18 @@ paths:
         description: The initial index from which to return the results.
         schema:
           type: integer
+      - in: query
+        name: organisatie
+        schema:
+          type: string
+        description: Toont producten die bij de opgegeven organisatie horen.
+      - in: query
+        name: publicatie_datum
+        schema:
+          type: string
+          format: date
+        description: Toont producten met een publicatiedatum groter dan of gelijk
+          aan de opgegeven datum.
       tags:
       - producten
       security:
@@ -493,48 +539,6 @@ paths:
           description: ''
 components:
   schemas:
-    Catalogus:
-      type: object
-      description: Serializer for ProductenCatalogus details, including organizations
-        and products.
-      properties:
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-        domein:
-          type: string
-          description: Een afkorting die wordt gebruikt om het domein aan te duiden.
-          maxLength: 5
-        naam:
-          type: string
-          description: De naam van de producten catalogus.
-          maxLength: 120
-        is_referentie_catalogus:
-          type: boolean
-          description: Geeft aan of dit een referentiecatalogus is.
-        lokale_overheid:
-          type: string
-          format: uri
-          description: De lokale overheid die bij deze catalogus hoort.
-        referentie_catalogus:
-          type: string
-          format: uri
-          nullable: true
-          description: De catalogus van referentie.
-        toelichting:
-          type: string
-          description: Toelichting bij het catalogus.
-        versie:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          description: Het versienummer van het producten catalogus.
-      required:
-      - domein
-      - lokale_overheid
-      - naam
-      - uuid
     DoelgroepEnum:
       enum:
       - burgers
@@ -741,26 +745,6 @@ components:
       - land
       - naam
       - uuid
-    PaginatedCatalogusList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?offset=400&limit=100
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?offset=200&limit=100
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Catalogus'
     PaginatedLokaleOverheidListList:
       type: object
       properties:
@@ -821,6 +805,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductList'
+    PaginatedProductenCatalogusList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductenCatalogus'
     Product:
       type: object
       description: Serializer for a product, including UPN, availability, locations
@@ -844,6 +848,16 @@ components:
         beschikbaar:
           type: boolean
           description: Geeft aan of het product al dan niet beschikbaar is.
+        referentie_product:
+          $ref: '#/components/schemas/ProductList'
+        gerelateerde_producten:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductList'
+        catalogus:
+          type: string
+          format: uri
+          description: De catalogus waartoe dit product behoort.
         doelgroep:
           type: array
           items:
@@ -861,9 +875,12 @@ components:
           items:
             $ref: '#/components/schemas/LocalizedProduct'
       required:
+      - catalogus
+      - gerelateerde_producten
       - is_referentie_product
       - lokale_overheid
       - lokaties
+      - referentie_product
       - upn_label
       - upn_uri
       - uuid
@@ -892,6 +909,48 @@ components:
       - lokale_overheid
       - upn_label
       - upn_uri
+      - uuid
+    ProductenCatalogus:
+      type: object
+      description: Serializer for ProductenCatalogus details, including organizations
+        and products.
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        domein:
+          type: string
+          description: Een afkorting die wordt gebruikt om het domein aan te duiden.
+          maxLength: 5
+        naam:
+          type: string
+          description: De naam van de producten catalogus.
+          maxLength: 120
+        lokale_overheid:
+          type: string
+          format: uri
+          description: De lokale overheid die bij deze catalogus hoort.
+        is_referentie_catalogus:
+          type: boolean
+          description: Geeft aan of dit een referentiecatalogus is.
+        referentie_catalogus:
+          type: string
+          format: uri
+          nullable: true
+          description: De catalogus van referentie.
+        toelichting:
+          type: string
+          description: Toelichting bij het catalogus.
+        versie:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Het versienummer van het producten catalogus.
+      required:
+      - domein
+      - lokale_overheid
+      - naam
       - uuid
   securitySchemes:
     basicAuth:
