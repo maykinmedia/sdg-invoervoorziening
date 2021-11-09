@@ -8,7 +8,7 @@ from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
     LokatieFactory,
 )
-from sdg.producten.tests.constants import NOW_DATE
+from sdg.producten.tests.constants import NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.localized import LocalizedProductFactory
 from sdg.producten.tests.factories.product import (
     ReferentieProductFactory,
@@ -96,6 +96,22 @@ class ProductenTests(APITestCase):
         self.assertEqual(2, len(data["vertalingen"]))
         self.assertEqual(0, len(data["doelgroep"]))
         self.assertEqual(0, len(data["lokaties"]))
+
+    @freeze_time(NOW_DATE)
+    def test_retrieve_history(self):
+        product_versie = ReferentieProductVersieFactory.create(
+            publicatie_datum=NOW_DATE
+        )
+        product = product_versie.product
+        ReferentieProductVersieFactory.create_batch(
+            2, publicatie_datum=PAST_DATE, product=product
+        )
+        response = self.client.get(reverse("product-history", args=[product.uuid]))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(3, len(data))
 
 
 class OrganisatiesTests(APITestCase):
