@@ -1,0 +1,128 @@
+from freezegun import freeze_time
+from rest_framework import status
+from rest_framework.reverse import reverse
+from rest_framework.test import APITestCase
+
+from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
+from sdg.organisaties.tests.factories.overheid import LokatieFactory
+from sdg.producten.tests.constants import NOW_DATE
+from sdg.producten.tests.factories.product import (
+    ReferentieProductFactory,
+    ReferentieProductVersieFactory,
+)
+
+
+class ProductenCatalogusFilterTests(APITestCase):
+    url = reverse("productencatalogus-list")
+
+    def test_filter_organisatie(self):
+        org_name = "test_org_filter"
+
+        catalog1, catalog2 = ProductenCatalogusFactory.create_batch(
+            2, lokale_overheid__organisatie__owms_pref_label=org_name
+        )
+        ProductenCatalogusFactory.create_batch(3)
+
+        response = self.client.get(self.url, {"organisatie": org_name})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(2, len(data))
+        self.assertEqual(str(catalog1.uuid), data[0]["uuid"])
+        self.assertEqual(str(catalog2.uuid), data[1]["uuid"])
+
+
+class ProductFilterTests(APITestCase):
+    url = reverse("product-list")
+
+    def test_filter_organisatie(self):
+        filter_string = "test_org_filter"
+        product = ReferentieProductFactory.create(
+            catalogus__lokale_overheid__organisatie__owms_pref_label=filter_string
+        )
+        ReferentieProductFactory.create_batch(4)
+
+        response = self.client.get(self.url, {"organisatie": filter_string})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(product.uuid), data[0]["uuid"])
+
+    def test_filter_doelgroep(self):
+        filter_string = "test_doelgroep"
+        product = ReferentieProductFactory.create(
+            doelgroep=["abc1", filter_string, "abc2"]
+        )
+        ReferentieProductFactory.create_batch(4)
+
+        response = self.client.get(self.url, {"doelgroep": filter_string})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(product.uuid), data[0]["uuid"])
+
+    def test_filter_catalogus(self):
+        catalog = ProductenCatalogusFactory.create(
+            is_referentie_catalogus=True,
+        )
+        product1, product2 = ReferentieProductFactory.create_batch(2, catalogus=catalog)
+        ReferentieProductFactory.create_batch(3)
+
+        response = self.client.get(self.url, {"catalogus_uuid": catalog.uuid})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(2, len(data))
+        self.assertEqual(str(product1.uuid), data[0]["uuid"])
+        self.assertEqual(str(product2.uuid), data[1]["uuid"])
+
+    @freeze_time(NOW_DATE)
+    def test_filter_publicatie_datum(self):
+        product_version = ReferentieProductVersieFactory.create(
+            versie=1, publicatie_datum=NOW_DATE
+        )
+        product = product_version.product
+        ReferentieProductVersieFactory.create_batch(4)
+
+        response = self.client.get(
+            self.url, {"publicatie_datum": NOW_DATE.strftime("%Y-%m-%d")}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(product.uuid), data[0]["uuid"])
+
+
+class LokatieFilterTests(APITestCase):
+    url = reverse("lokatie-list")
+
+    def test_filter_organisatie(self):
+        org_name = "test_org_filter"
+
+        location1, location2 = LokatieFactory.create_batch(
+            2, lokale_overheid__organisatie__owms_pref_label=org_name
+        )
+        LokatieFactory.create_batch(3)
+
+        response = self.client.get(self.url, {"organisatie": org_name})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(2, len(data))
+        self.assertEqual(str(location1.uuid), data[0]["uuid"])
+        self.assertEqual(str(location2.uuid), data[1]["uuid"])
