@@ -1,9 +1,8 @@
 from rest_framework import serializers
 
-from sdg.api.serializers import ProductenCatalogusSerializer
 from sdg.api.serializers.organisaties import LokatieListSerializer
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.models import LocalizedProduct, Product
+from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
 
 class LocalizedProductSerializer(serializers.ModelSerializer):
@@ -27,6 +26,23 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "verwijzing_links",
             "wtd_bij_geen_reactie",
             "datum_wijziging",
+        )
+
+
+class ProductVersieSerializer(serializers.ModelSerializer):
+    """Serializer for the version of a product."""
+
+    vertalingen = LocalizedProductSerializer(many=True)
+
+    class Meta:
+        model = ProductVersie
+        fields = (
+            "versie",
+            "gemaakt_door",
+            "gemaakt_op",
+            "gewijzigd_op",
+            "publicatie_datum",
+            "vertalingen",
         )
 
 
