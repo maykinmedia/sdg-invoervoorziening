@@ -339,16 +339,12 @@ paths:
       description: Viewset for a municipality catalog, retrieved by uuid
       parameters:
       - in: query
-        name: catalog_uuid
+        name: catalogus_uuid
         schema:
           type: string
           format: uuid
         description: Toont producten die behoren tot de catalogus van de opgegeven
           uuid.
-      - in: query
-        name: catalogus
-        schema:
-          type: integer
       - in: query
         name: doelgroep
         schema:
@@ -414,6 +410,66 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+          description: ''
+  /api/v1/producten/{uuid}/historie:
+    get:
+      operationId: producten_historie_list
+      description: Retrieve the version history of a product.
+      parameters:
+      - in: query
+        name: catalogus_uuid
+        schema:
+          type: string
+          format: uuid
+        description: Toont producten die behoren tot de catalogus van de opgegeven
+          uuid.
+      - in: query
+        name: doelgroep
+        schema:
+          type: string
+        description: Toont producten die overeenkomen met de opgegeven doelgroepen.
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - in: query
+        name: organisatie
+        schema:
+          type: string
+        description: Toont producten die bij de opgegeven organisatie horen.
+      - in: query
+        name: publicatie_datum
+        schema:
+          type: string
+          format: date
+        description: Toont producten met een publicatiedatum groter dan of gelijk
+          aan de opgegeven datum.
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - producten
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductVersieList'
           description: ''
   /api/v1/schema/openapi.yaml:
     get:
@@ -805,6 +861,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductList'
+    PaginatedProductVersieList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=400&limit=100
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?offset=200&limit=100
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVersie'
     PaginatedProductenCatalogusList:
       type: object
       properties:
@@ -910,6 +986,41 @@ components:
       - upn_label
       - upn_uri
       - uuid
+    ProductVersie:
+      type: object
+      description: Serializer for the version of a product.
+      properties:
+        versie:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Het versienummer van het product.
+        gemaakt_door:
+          type: integer
+          description: De maker van deze productversie.
+        gemaakt_op:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De oorspronkelijke aanmaakdatum voor deze productversie.
+        gewijzigd_op:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De wijzigingsdatum voor deze productversie.
+        publicatie_datum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum van publicatie van de productversie.
+        vertalingen:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedProduct'
+      required:
+      - gemaakt_op
+      - gewijzigd_op
+      - vertalingen
     ProductenCatalogus:
       type: object
       description: Serializer for ProductenCatalogus details, including organizations
