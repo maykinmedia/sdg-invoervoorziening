@@ -220,11 +220,15 @@ class Product(models.Model):
             ),
         )
 
-    def get_latest_versions(self, quantity=5, active=False):
+    def get_latest_versions(self, quantity=5, active=False, exclude_concept=False):
         """:returns: The latest N versions for this product."""
         queryset = self.versies.all().order_by("-versie")
+
         if active:
             queryset = queryset.filter(publicatie_datum__lte=date.today())
+        if exclude_concept:
+            queryset = queryset.exclude(publicatie_datum=None)
+
         return queryset[:quantity:-1]
 
     def create_version_from_reference(self) -> ProductVersie:

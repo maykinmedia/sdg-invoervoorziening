@@ -113,6 +113,23 @@ class ProductenTests(APITestCase):
         data = response.json()
         self.assertEqual(3, len(data))
 
+    @freeze_time(NOW_DATE)
+    def test_retrieve_history_does_not_return_concept(self):
+        product_versie = ReferentieProductVersieFactory.create(
+            publicatie_datum=NOW_DATE
+        )
+        product = product_versie.product
+        ReferentieProductVersieFactory.create_batch(
+            2, publicatie_datum=PAST_DATE, product=product
+        )
+        ReferentieProductVersieFactory.create(product=product, publicatie_datum=None)
+        response = self.client.get(reverse("product-history", args=[product.uuid]))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+        self.assertEqual(3, len(data))
+
 
 class OrganisatiesTests(APITestCase):
     def test_list_organizations(self):

@@ -37,6 +37,6 @@ class ProductViewSet(MultipleSerializerMixin, viewsets.ReadOnlyModelViewSet):
     )
     def history(self, request, uuid=None):
         """Retrieve the version history of a product."""
-        product_versions = self.get_object().get_latest_versions()
+        product_versions = self.get_object().get_latest_versions(exclude_concept=True)
         serializer = self.get_serializer(product_versions, many=True)
         return Response(serializer.data)

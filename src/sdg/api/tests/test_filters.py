@@ -5,7 +5,7 @@ from rest_framework.test import APITestCase
 
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.factories.overheid import LokatieFactory
-from sdg.producten.tests.constants import NOW_DATE
+from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.product import (
     ReferentieProductFactory,
     ReferentieProductVersieFactory,
@@ -88,11 +88,9 @@ class ProductFilterTests(APITestCase):
 
     @freeze_time(NOW_DATE)
     def test_filter_publicatie_datum(self):
-        product_version = ReferentieProductVersieFactory.create(
-            versie=1, publicatie_datum=NOW_DATE
-        )
-        product = product_version.product
-        ReferentieProductVersieFactory.create_batch(4)
+        ReferentieProductVersieFactory.create(publicatie_datum=NOW_DATE)
+        ReferentieProductVersieFactory.create_batch(2, publicatie_datum=FUTURE_DATE)
+        ReferentieProductVersieFactory.create_batch(3, publicatie_datum=PAST_DATE)
 
         response = self.client.get(
             self.url, {"publicatie_datum": NOW_DATE.strftime("%Y-%m-%d")}
@@ -102,8 +100,7 @@ class ProductFilterTests(APITestCase):
 
         data = response.json()["results"]
 
-        self.assertEqual(1, len(data))
-        self.assertEqual(str(product.uuid), data[0]["uuid"])
+        self.assertEqual(3, len(data))
 
 
 class LokatieFilterTests(APITestCase):
