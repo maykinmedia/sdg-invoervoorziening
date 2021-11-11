@@ -96,6 +96,8 @@ djangorestframework==3.12.4
     # via
     #   -r requirements/base.in
     #   drf-spectacular
+djangorestframework-camel-case==1.2.0
+    # via -r requirements/base.in
 drf-spectacular==0.20.2
     # via -r requirements/base.in
 elastic-apm==6.3.3

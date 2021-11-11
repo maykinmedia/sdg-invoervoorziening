@@ -27,6 +27,7 @@ maykin-django-two-factor-auth[phonenumbers]
 
 # API libraries
 djangorestframework
+djangorestframework-camel-case
 drf-spectacular  # api documentation
 # django-extra-fields
 # django-filter

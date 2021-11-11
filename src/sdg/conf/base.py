@@ -469,7 +469,6 @@ ACCOUNT_UNIQUE_EMAIL = True
 INVITATION_TEMPLATE = "core/email/invitation.html"
 INVITATION_SUBJECT = "SDG Invoervoorziening Invitatie"
 
-ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
 
 # Celery
@@ -485,8 +484,12 @@ SILENCED_SYSTEM_CHECKS = ["utils.E001"]
 
 # DRF
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
-    "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser"],
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+    ),
+    "DEFAULT_PARSER_CLASSES": (
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+    ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],

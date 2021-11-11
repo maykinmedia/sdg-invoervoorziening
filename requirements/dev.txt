@@ -239,6 +239,10 @@ djangorestframework==3.12.4
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   drf-spectacular
+djangorestframework-camel-case==1.2.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 docutils==0.16
     # via
     #   sphinx
