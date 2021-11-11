@@ -1,3 +1,5 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.relations import HyperlinkedRelatedField
@@ -95,5 +97,6 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
 
+    @extend_schema_field(OpenApiTypes.STR)
     def get_beschikbare_talen(self, obj):
         return obj.beschikbare_talen.values()

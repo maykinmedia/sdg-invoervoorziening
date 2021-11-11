@@ -37,7 +37,7 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
             "openingstijden",
         )
 
-    def get_openingstijden(self, obj):
+    def get_openingstijden(self, obj: Lokatie) -> OpeningstijdenSerializer:
         return OpeningstijdenSerializer(obj).data
 
 

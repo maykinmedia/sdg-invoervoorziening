@@ -461,7 +461,8 @@ components:
           type: string
           maxLength: 256
         openingstijden:
-          type: string
+          allOf:
+          - $ref: '#/components/schemas/Openingstijden'
           readOnly: true
       required:
       - land
@@ -472,6 +473,44 @@ components:
       - postcode
       - straat
       - uuid
+    Openingstijden:
+      type: object
+      properties:
+        maandag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        dinsdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        woensdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        donderdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        vrijdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        zaterdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        zondag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
     Overheidsorganisatie:
       type: object
       description: Serializer for Overheidsorganisatie, including identifier, label

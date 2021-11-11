@@ -3,7 +3,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from sdg.api.filters import ProductFilterSet
 from sdg.api.serializers import ProductSerializer, ProductVersieSerializer
-from sdg.producten.models import Product
+from sdg.producten.models import Product, ProductVersie
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
@@ -19,6 +19,7 @@ class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
     """Viewset for the version history of a product."""
 
     lookup_field = "uuid"
+    queryset = ProductVersie.objects.all()
     serializer_class = ProductVersieSerializer
 
     def get_queryset(self):
