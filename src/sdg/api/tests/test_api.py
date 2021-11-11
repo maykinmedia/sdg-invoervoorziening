@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
+from sdg.api.serializers import LocalizedProductSerializer, ProductSerializer
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
@@ -43,9 +44,9 @@ class CatalogiTests(APITestCase):
                 "uuid": str(catalog.uuid),
                 "domein": catalog.domein,
                 "naam": catalog.naam,
-                "lokale_overheid": f"http://testserver{reverse('lokaleoverheid-detail', args=[catalog.lokale_overheid.uuid])}",
-                "is_referentie_catalogus": catalog.is_referentie_catalogus,
-                "referentie_catalogus": catalog.referentie_catalogus,
+                "producten": ProductSerializer(catalog.producten, many=True).data,
+                "isReferentieCatalogus": catalog.is_referentie_catalogus,
+                "referentieCatalogus": catalog.referentie_catalogus,
                 "toelichting": catalog.toelichting,
                 "versie": catalog.versie,
             },
@@ -81,24 +82,23 @@ class ProductenTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(data["uuid"], str(product.uuid))
-        self.assertEqual(data["upn_uri"], product.upn_uri)
-        self.assertEqual(data["upn_label"], product.upn_label)
-        self.assertEqual(data["beschikbaar"], product.beschikbaar)
-        self.assertEqual(data["referentie_product"], product.referentie_product)
-        self.assertEqual(data["is_referentie_product"], product.is_referentie_product)
+        self.assertEqual(f"{product.uuid}", data["uuid"])
         self.assertEqual(
-            data["catalogus"],
-            f"http://testserver{reverse('productencatalogus-detail', args=[product.catalogus.uuid])}",
+            f"http://testserver{reverse('lokaleoverheid-detail', args=[product.catalogus.lokale_overheid.uuid])}",
+            data["lokaleOverheid"],
         )
-
-        self.assertEqual(0, len(data["gerelateerde_producten"]))
+        self.assertEqual(
+            f"http://testserver{reverse('productencatalogus-detail', args=[product.catalogus.uuid])}",
+            data["catalogus"],
+        )
         self.assertEqual(2, len(data["vertalingen"]))
-        self.assertEqual(0, len(data["doelgroep"]))
         self.assertEqual(0, len(data["lokaties"]))
+        self.assertEqual(0, len(data["doelgroep"]))
+        self.assertEqual(2, len(data["beschikbareTalen"]))
+        self.assertEqual(0, len(data["gerelateerdeProducten"]))
 
     @freeze_time(NOW_DATE)
-    def test_retrieve_history(self):
+    def test_list_product_history(self):
         product_versie = ReferentieProductVersieFactory.create(
             publicatie_datum=NOW_DATE
         )
@@ -106,15 +106,15 @@ class ProductenTests(APITestCase):
         ReferentieProductVersieFactory.create_batch(
             2, publicatie_datum=PAST_DATE, product=product
         )
-        response = self.client.get(reverse("product-history", args=[product.uuid]))
+        response = self.client.get(reverse("product-history-list", args=[product.uuid]))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        data = response.json()
+        data = response.json()["results"]
         self.assertEqual(3, len(data))
 
     @freeze_time(NOW_DATE)
-    def test_retrieve_history_does_not_return_concept(self):
+    def test_list_product_history_does_not_return_concept(self):
         product_versie = ReferentieProductVersieFactory.create(
             publicatie_datum=NOW_DATE
         )
@@ -123,11 +123,11 @@ class ProductenTests(APITestCase):
             2, publicatie_datum=PAST_DATE, product=product
         )
         ReferentieProductVersieFactory.create(product=product, publicatie_datum=None)
-        response = self.client.get(reverse("product-history", args=[product.uuid]))
+        response = self.client.get(reverse("product-history-list", args=[product.uuid]))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        data = response.json()
+        data = response.json()["results"]
         self.assertEqual(3, len(data))
 
 
@@ -156,15 +156,20 @@ class OrganisatiesTests(APITestCase):
         self.assertEqual(
             {
                 "uuid": str(municipality.uuid),
-                "organisatie": str(municipality.organisatie),
-                "bevoegde_organisatie": str(municipality.bevoegde_organisatie),
-                "ondersteunings_organisatie": str(
-                    municipality.ondersteunings_organisatie
-                ),
-                "verantwoordelijke_organisatie": str(
-                    municipality.verantwoordelijke_organisatie
-                ),
+                "organisatie": {
+                    "owmsIdentifier": municipality.organisatie.owms_identifier,
+                    "owmsPrefLabel": municipality.organisatie.owms_pref_label,
+                    "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
+                },
                 "lokaties": [],
+                "catalogi": [],
+                "contactNaam": municipality.contact_naam,
+                "contactWebsite": municipality.contact_website,
+                "contactEmailadres": municipality.contact_emailadres,
+                "contactTelefoonnummer": municipality.contact_telefoonnummer,
+                "bevoegdeOrganisatie": f"{municipality.bevoegde_organisatie}",
+                "ondersteuningsOrganisatie": f"{municipality.ondersteunings_organisatie}",
+                "verantwoordelijkeOrganisatie": f"{municipality.verantwoordelijke_organisatie}",
             },
             data,
         )
@@ -201,13 +206,15 @@ class LocatiesTests(APITestCase):
                 "plaats": lokatie.plaats,
                 "postcode": lokatie.postcode,
                 "straat": lokatie.straat,
-                "maandag": lokatie.maandag,
-                "dinsdag": lokatie.dinsdag,
-                "woensdag": lokatie.woensdag,
-                "donderdag": lokatie.donderdag,
-                "vrijdag": lokatie.vrijdag,
-                "zaterdag": lokatie.zaterdag,
-                "zondag": lokatie.zondag,
+                "openingstijden": {
+                    "maandag": lokatie.maandag,
+                    "dinsdag": lokatie.dinsdag,
+                    "woensdag": lokatie.woensdag,
+                    "donderdag": lokatie.donderdag,
+                    "vrijdag": lokatie.vrijdag,
+                    "zaterdag": lokatie.zaterdag,
+                    "zondag": lokatie.zondag,
+                },
             },
             data,
         )
