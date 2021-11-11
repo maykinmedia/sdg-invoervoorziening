@@ -501,4 +501,5 @@ SPECTACULAR_SETTINGS = {
         read_file(os.path.join(BASE_DIR, "README.rst")),
     ),
     "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
