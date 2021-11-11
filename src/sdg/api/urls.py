@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.conf.urls import include
 from django.urls import path
 
 from drf_spectacular.views import (
@@ -6,18 +6,29 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularYAMLAPIView,
 )
-from rest_framework import routers
+from vng_api_common import routers
 
 from sdg.api.views import (
     CatalogusViewSet,
     LokaleOverheidViewSet,
     LokatieViewSet,
+    ProductHistoryViewSet,
     ProductViewSet,
 )
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register("catalogi", CatalogusViewSet)
-router.register("producten", ProductViewSet)
+router.register(
+    "producten",
+    ProductViewSet,
+    [
+        routers.nested(
+            "historie",
+            ProductHistoryViewSet,
+            basename="product-history",
+        )
+    ],
+)
 router.register("organisaties", LokaleOverheidViewSet)
 router.register("locaties", LokatieViewSet)
 
@@ -28,8 +39,13 @@ urlpatterns = [
         include(
             [
                 path(
-                    "schema/openapi.yaml",
+                    "openapi.yaml",
                     SpectacularYAMLAPIView.as_view(),
+                    name="schema",
+                ),
+                path(
+                    "openapi.json",
+                    SpectacularJSONAPIView.as_view(),
                     name="schema",
                 ),
                 path(
@@ -39,10 +55,5 @@ urlpatterns = [
                 ),
             ]
         ),
-    ),
-    path(
-        "v1/",
-        SpectacularJSONAPIView.as_view(),
-        name="schema-json",
     ),
 ]

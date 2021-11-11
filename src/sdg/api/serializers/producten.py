@@ -1,7 +1,8 @@
 from rest_framework import serializers
+from rest_framework.fields import SerializerMethodField
+from rest_framework.relations import HyperlinkedRelatedField
 
-from sdg.api.serializers.organisaties import LokatieListSerializer
-from sdg.core.models import ProductenCatalogus
+from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
 
@@ -12,6 +13,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
         model = LocalizedProduct
         fields = (
             "product_versie",
+            "taal",
             "decentrale_link",
             "specifieke_link",
             "specifieke_tekst",
@@ -46,53 +48,52 @@ class ProductVersieSerializer(serializers.ModelSerializer):
         )
 
 
-class ProductListSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer for a product listing, including UPN information."""
-
-    lokale_overheid = serializers.CharField(source="catalogus.lokale_overheid")
-
-    class Meta:
-        model = Product
-        fields = (
-            "uuid",
-            "upn_uri",
-            "upn_label",
-            "is_referentie_product",
-            "lokale_overheid",
-        )
-
-
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 
-    lokale_overheid = serializers.CharField(source="catalogus.lokale_overheid")
-    lokaties = LokatieListSerializer(many=True)
-    vertalingen = LocalizedProductSerializer(
-        source="laatste_actieve_versie.vertalingen", many=True
+    lokale_overheid = HyperlinkedRelatedField(
+        source="catalogus.lokale_overheid",
+        lookup_field="uuid",
+        view_name="lokaleoverheid-detail",
+        queryset=LokaleOverheid.objects.all(),
     )
-    referentie_product = ProductListSerializer()
-    gerelateerde_producten = ProductListSerializer(many=True)
+    vertalingen = LocalizedProductSerializer(
+        source="laatste_actieve_versie.vertalingen", many=True, default=[]
+    )
+    beschikbare_talen = SerializerMethodField(
+        method_name="get_beschikbare_talen", default=[]
+    )
 
     class Meta:
         model = Product
         fields = (
             "uuid",
-            "upn_uri",
-            "upn_label",
-            "is_referentie_product",
             "lokale_overheid",
-            "beschikbaar",
-            # "generiek_product",
-            "referentie_product",
-            "gerelateerde_producten",
             "catalogus",
-            "doelgroep",
             "lokaties",
+            "doelgroep",
             "vertalingen",
+            "beschikbare_talen",
+            "gerelateerde_producten",
         )
         extra_kwargs = {
             "catalogus": {
                 "lookup_field": "uuid",
-                "queryset": ProductenCatalogus.objects.all(),
+                "view_name": "productencatalogus-detail",
+            },
+            "referentie_product": {
+                "lookup_field": "uuid",
+                "view_name": "product-detail",
+            },
+            "gerelateerde_producten": {
+                "lookup_field": "uuid",
+                "view_name": "product-detail",
+            },
+            "lokaties": {
+                "lookup_field": "uuid",
+                "view_name": "lokatie-detail",
             },
         }
+
+    def get_beschikbare_talen(self, obj):
+        return obj.beschikbare_talen.values()

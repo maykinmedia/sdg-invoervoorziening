@@ -127,6 +127,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "django_celery_beat",
+    "rest_framework",
     "drf_spectacular",
     "django_filters",
     # Project applications.

@@ -12,19 +12,16 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
             "uuid",
             "domein",
             "naam",
-            "lokale_overheid",
             "is_referentie_catalogus",
             "referentie_catalogus",
             "toelichting",
             "versie",
+            "producten",
         )
         extra_kwargs = {
-            "lokale_overheid": {
-                "lookup_field": "uuid",
-                "view_name": "lokaleoverheid-detail",
-            },
             "referentie_catalogus": {
                 "lookup_field": "uuid",
                 "view_name": "productencatalogus-detail",
             },
+            "producten": {"lookup_field": "uuid", "view_name": "product-detail"},
         }

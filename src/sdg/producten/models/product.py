@@ -148,16 +148,19 @@ class Product(models.Model):
     )
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
-    @cached_property
+    @property
     def upn_uri(self):
-        return self.generic_product.upn.upn_uri
+        return self.generic_upn.upn_uri
 
-    @cached_property
+    @property
     def upn_label(self):
-        return self.generic_product.upn.upn_label
+        return self.generic_upn.upn_label
 
     @cached_property
-    def beschikbare_talen(self):
+    def beschikbare_talen(self) -> dict:
+        if not self.laatste_versie:
+            return {}
+
         return {
             i.get_taal_display(): i.taal for i in self.laatste_versie.vertalingen.all()
         }
@@ -207,6 +210,10 @@ class Product(models.Model):
     def reference_product(self):
         """:returns: The reference product of this product."""
         return self if self.is_referentie_product else self.referentie_product
+
+    @cached_property
+    def generic_upn(self):
+        return self.generic_product.upn
 
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""

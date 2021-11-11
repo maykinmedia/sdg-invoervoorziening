@@ -32,6 +32,7 @@ drf-spectacular  # api documentation
 # django-extra-fields
 # django-filter
 # drf-yasg  # api documentation
+vng-api-common
 
 # WSGI servers & monitoring - production oriented
 uwsgi
