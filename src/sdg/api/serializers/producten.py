@@ -88,7 +88,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
 
-    def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer:
+    def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
         vertalingen = []
         if obj.laatste_actieve_versie:
             vertalingen = obj.laatste_actieve_versie.vertalingen

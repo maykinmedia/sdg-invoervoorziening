@@ -669,8 +669,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
-        beschikbareTalen:
-          type: string
           readOnly: true
         gerelateerdeProducten:
           type: array
@@ -681,7 +679,6 @@ components:
           title: Gerelateerd aan
           description: Een verwijzing naar een gerelateerd product.
       required:
-      - beschikbareTalen
       - catalogus
       - lokaleOverheid
       - uuid
