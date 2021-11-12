@@ -55,7 +55,6 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "uuid",
             "organisatie",
-            "organisatie",
             "lokaties",
             "catalogi",
             "contact_naam",

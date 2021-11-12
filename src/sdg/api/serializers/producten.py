@@ -1,5 +1,3 @@
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.relations import HyperlinkedRelatedField
@@ -58,11 +56,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         view_name="lokaleoverheid-detail",
         queryset=LokaleOverheid.objects.all(),
     )
-    vertalingen = LocalizedProductSerializer(
-        source="laatste_actieve_versie.vertalingen",
-        many=True,
-    )
-    beschikbare_talen = SerializerMethodField(method_name="get_beschikbare_talen")
+    vertalingen = SerializerMethodField(method_name="get_vertalingen")
 
     class Meta:
         model = Product
@@ -73,7 +67,6 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             "lokaties",
             "doelgroep",
             "vertalingen",
-            "beschikbare_talen",
             "gerelateerde_producten",
         )
         extra_kwargs = {
@@ -95,6 +88,9 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
 
-    @extend_schema_field(OpenApiTypes.STR)
-    def get_beschikbare_talen(self, obj):
-        return obj.beschikbare_talen.values()
+    def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer:
+        vertalingen = []
+        if obj.laatste_actieve_versie:
+            vertalingen = obj.laatste_actieve_versie.vertalingen
+
+        return LocalizedProductSerializer(vertalingen, many=True).data

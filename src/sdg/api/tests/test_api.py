@@ -94,7 +94,6 @@ class ProductenTests(APITestCase):
         self.assertEqual(2, len(data["vertalingen"]))
         self.assertEqual(0, len(data["lokaties"]))
         self.assertEqual(0, len(data["doelgroep"]))
-        self.assertEqual(2, len(data["beschikbareTalen"]))
         self.assertEqual(0, len(data["gerelateerdeProducten"]))
 
     @freeze_time(NOW_DATE)
@@ -167,9 +166,21 @@ class OrganisatiesTests(APITestCase):
                 "contactWebsite": municipality.contact_website,
                 "contactEmailadres": municipality.contact_emailadres,
                 "contactTelefoonnummer": municipality.contact_telefoonnummer,
-                "bevoegdeOrganisatie": f"{municipality.bevoegde_organisatie}",
-                "ondersteuningsOrganisatie": f"{municipality.ondersteunings_organisatie}",
-                "verantwoordelijkeOrganisatie": f"{municipality.verantwoordelijke_organisatie}",
+                "bevoegdeOrganisatie": {
+                    "owmsIdentifier": municipality.bevoegde_organisatie.owms_identifier,
+                    "owmsPrefLabel": municipality.bevoegde_organisatie.owms_pref_label,
+                    "owmsEndDate": municipality.bevoegde_organisatie.owms_end_date.isoformat(),
+                },
+                "ondersteuningsOrganisatie": {
+                    "owmsIdentifier": municipality.ondersteunings_organisatie.owms_identifier,
+                    "owmsPrefLabel": municipality.ondersteunings_organisatie.owms_pref_label,
+                    "owmsEndDate": municipality.ondersteunings_organisatie.owms_end_date.isoformat(),
+                },
+                "verantwoordelijkeOrganisatie": {
+                    "owmsIdentifier": municipality.verantwoordelijke_organisatie.owms_identifier,
+                    "owmsPrefLabel": municipality.verantwoordelijke_organisatie.owms_pref_label,
+                    "owmsEndDate": municipality.verantwoordelijke_organisatie.owms_end_date.isoformat(),
+                },
             },
             data,
         )
