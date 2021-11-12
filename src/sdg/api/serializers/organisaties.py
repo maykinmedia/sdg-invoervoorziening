@@ -46,9 +46,9 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
 
     organisatie = OverheidsorganisatieSerializer()
 
-    bevoegde_organisatie = serializers.CharField()
-    ondersteunings_organisatie = serializers.CharField()
-    verantwoordelijke_organisatie = serializers.CharField()
+    bevoegde_organisatie = OverheidsorganisatieSerializer()
+    ondersteunings_organisatie = OverheidsorganisatieSerializer()
+    verantwoordelijke_organisatie = OverheidsorganisatieSerializer()
 
     class Meta:
         model = LokaleOverheid

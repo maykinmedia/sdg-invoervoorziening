@@ -35,7 +35,7 @@ info:
 paths:
   /api/v1/catalogi:
     get:
-      operationId: catalogi_list
+      operationId: catalogiList
       description: Viewset for a municipality catalog, retrieved by uuid
       parameters:
       - in: query
@@ -65,7 +65,7 @@ paths:
           description: ''
   /api/v1/catalogi/{uuid}:
     get:
-      operationId: catalogi_retrieve
+      operationId: catalogiRetrieve
       description: Viewset for a municipality catalog, retrieved by uuid
       parameters:
       - in: path
@@ -89,7 +89,7 @@ paths:
           description: ''
   /api/v1/locaties:
     get:
-      operationId: locaties_list
+      operationId: locatiesList
       description: Viewset for a location, retrieved by uuid
       parameters:
       - in: query
@@ -119,7 +119,7 @@ paths:
           description: ''
   /api/v1/locaties/{uuid}:
     get:
-      operationId: locaties_retrieve
+      operationId: locatiesRetrieve
       description: Viewset for a location, retrieved by uuid
       parameters:
       - in: path
@@ -143,7 +143,7 @@ paths:
           description: ''
   /api/v1/organisaties:
     get:
-      operationId: organisaties_list
+      operationId: organisatiesList
       description: Viewset for a municipality, retrieved by uuid
       parameters:
       - in: query
@@ -171,7 +171,7 @@ paths:
           description: ''
   /api/v1/organisaties/{uuid}:
     get:
-      operationId: organisaties_retrieve
+      operationId: organisatiesRetrieve
       description: Viewset for a municipality, retrieved by uuid
       parameters:
       - in: path
@@ -195,7 +195,7 @@ paths:
           description: ''
   /api/v1/producten:
     get:
-      operationId: producten_list
+      operationId: productenList
       description: Viewset for a product, retrieved by uuid
       parameters:
       - in: query
@@ -242,9 +242,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
           description: ''
-  /api/v1/producten/{product_uuid}/historie:
+  /api/v1/producten/{productUuid}/historie:
     get:
-      operationId: producten_historie_list
+      operationId: productenHistorieList
       description: Viewset for the version history of a product.
       parameters:
       - name: page
@@ -254,7 +254,7 @@ paths:
         schema:
           type: integer
       - in: path
-        name: product_uuid
+        name: productUuid
         schema:
           type: string
         required: true
@@ -273,7 +273,7 @@ paths:
           description: ''
   /api/v1/producten/{uuid}:
     get:
-      operationId: producten_retrieve
+      operationId: productenRetrieve
       description: Viewset for a product, retrieved by uuid
       parameters:
       - in: path
@@ -306,7 +306,7 @@ components:
       type: object
       description: Serializer for the localized version of a product.
       properties:
-        product_versie:
+        productVersie:
           type: integer
           title: Specifieke product
           description: Het specifieke product van deze vertaling.
@@ -315,48 +315,48 @@ components:
           - $ref: '#/components/schemas/TaalEnum'
           description: De taal waarin de betreffende tekst is geschreven.ISO 639-1
             (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-        decentrale_link:
+        decentraleLink:
           type: string
           format: uri
           description: Link naar decentrale productpagina voor burgers en / of bedrijven.
           maxLength: 200
-        specifieke_link:
+        specifiekeLink:
           type: string
           format: uri
           description: URL decentrale productpagina.
           maxLength: 200
-        specifieke_tekst:
+        specifiekeTekst:
           type: string
           description: Decentrale omschrijving.
         bewijs:
           type: string
           description: Bewijs (type/format).
-        bezwaar_en_beroep:
+        bezwaarEnBeroep:
           type: string
           description: Bezwaar en beroep.
-        decentrale_procedure_link:
+        decentraleProcedureLink:
           type: string
           format: uri
           description: Link naar de procedure voor burgers en / of bedrijven.
           maxLength: 200
-        kosten_en_betaalmethoden:
+        kostenEnBetaalmethoden:
           type: string
           description: Kosten en betaalmethoden.
-        procedure_beschrijving:
+        procedureBeschrijving:
           type: string
           description: Procedurebeschrijving.
-        product_titel_decentraal:
+        productTitelDecentraal:
           type: string
           description: De titel van het decentrale product, die immers kan afwijken
             van de landelijke titel.
           maxLength: 50
-        uiterste_termijn:
+        uitersteTermijn:
           type: string
           description: Deadlines.
         vereisten:
           type: string
           description: Vereisten auth/id/sign.
-        verwijzing_links:
+        verwijzingLinks:
           type: array
           items:
             type: string
@@ -364,18 +364,18 @@ components:
             title: Url van verwijzing
             maxLength: 1000
           description: Decentrale verwijzingen.
-        wtd_bij_geen_reactie:
+        wtdBijGeenReactie:
           type: string
           description: Wat te doen bij geen reactie.
-        datum_wijziging:
+        datumWijziging:
           type: string
           format: date-time
           readOnly: true
           description: 'Decentrale overheden geven een wijzigingsdatum mee voor hun
             informatie. Deze datum wordt op het portaal getoond. '
       required:
-      - datum_wijziging
-      - product_versie
+      - datumWijziging
+      - productVersie
       - taal
     LokaleOverheid:
       type: object
@@ -398,39 +398,39 @@ components:
           items:
             type: string
             format: uri
-        contact_naam:
+        contactNaam:
           type: string
           description: de naam van de verantwoordelijke contactpersoon.
           maxLength: 40
-        contact_website:
+        contactWebsite:
           type: string
           format: uri
           description: De website van de verantwoordelijke contactpersoon.
           maxLength: 200
-        contact_emailadres:
+        contactEmailadres:
           type: string
           format: email
           description: Het e-mailadres van de verantwoordelijke contactpersoon.
           maxLength: 254
-        contact_telefoonnummer:
+        contactTelefoonnummer:
           type: string
           description: Het telefoonnummer van de verantwoordelijke contactpersoon.
           maxLength: 20
-        bevoegde_organisatie:
-          type: string
-        ondersteunings_organisatie:
-          type: string
-        verantwoordelijke_organisatie:
-          type: string
+        bevoegdeOrganisatie:
+          $ref: '#/components/schemas/Overheidsorganisatie'
+        ondersteuningsOrganisatie:
+          $ref: '#/components/schemas/Overheidsorganisatie'
+        verantwoordelijkeOrganisatie:
+          $ref: '#/components/schemas/Overheidsorganisatie'
       required:
-      - bevoegde_organisatie
+      - bevoegdeOrganisatie
       - catalogi
-      - contact_naam
+      - contactNaam
       - lokaties
-      - ondersteunings_organisatie
+      - ondersteuningsOrganisatie
       - organisatie
       - uuid
-      - verantwoordelijke_organisatie
+      - verantwoordelijkeOrganisatie
     Lokatie:
       type: object
       description: Serializer for location details, including contact details, address
@@ -516,25 +516,25 @@ components:
       description: Serializer for Overheidsorganisatie, including identifier, label
         and end date.
       properties:
-        owms_identifier:
+        owmsIdentifier:
           type: string
           format: uri
           description: De metadatastandaard voor informatie van de nederlandse overheid
             op internet.
           maxLength: 200
-        owms_pref_label:
+        owmsPrefLabel:
           type: string
           description: De wettelijk erkende naam van de organisatie.
           maxLength: 200
-        owms_end_date:
+        owmsEndDate:
           type: string
           format: date-time
           nullable: true
           title: End date
           description: De endDate, zoals gevonden in het OWMS-model.
       required:
-      - owms_identifier
-      - owms_pref_label
+      - owmsIdentifier
+      - owmsPrefLabel
     PaginatedLokaleOverheidList:
       type: object
       properties:
@@ -644,7 +644,7 @@ components:
           type: string
           format: uuid
           readOnly: true
-        lokale_overheid:
+        lokaleOverheid:
           type: string
           format: uri
         catalogus:
@@ -669,12 +669,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
-          default: []
-        beschikbare_talen:
+        beschikbareTalen:
           type: string
           readOnly: true
-          default: []
-        gerelateerde_producten:
+        gerelateerdeProducten:
           type: array
           items:
             type: string
@@ -683,10 +681,11 @@ components:
           title: Gerelateerd aan
           description: Een verwijzing naar een gerelateerd product.
       required:
-      - beschikbare_talen
+      - beschikbareTalen
       - catalogus
-      - lokale_overheid
+      - lokaleOverheid
       - uuid
+      - vertalingen
     ProductVersie:
       type: object
       description: Serializer for the version of a product.
@@ -696,20 +695,17 @@ components:
           maximum: 2147483647
           minimum: 0
           description: Het versienummer van het product.
-        gemaakt_door:
-          type: integer
-          description: De maker van deze productversie.
-        gemaakt_op:
+        gemaaktOp:
           type: string
           format: date-time
           readOnly: true
           description: De oorspronkelijke aanmaakdatum voor deze productversie.
-        gewijzigd_op:
+        gewijzigdOp:
           type: string
           format: date-time
           readOnly: true
           description: De wijzigingsdatum voor deze productversie.
-        publicatie_datum:
+        publicatieDatum:
           type: string
           format: date
           nullable: true
@@ -719,8 +715,8 @@ components:
           items:
             $ref: '#/components/schemas/LocalizedProduct'
       required:
-      - gemaakt_op
-      - gewijzigd_op
+      - gemaaktOp
+      - gewijzigdOp
       - vertalingen
     ProductenCatalogus:
       type: object
@@ -739,10 +735,10 @@ components:
           type: string
           description: De naam van de producten catalogus.
           maxLength: 120
-        is_referentie_catalogus:
+        isReferentieCatalogus:
           type: boolean
           description: Geeft aan of dit een referentiecatalogus is.
-        referentie_catalogus:
+        referentieCatalogus:
           type: string
           format: uri
           nullable: true

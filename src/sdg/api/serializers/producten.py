@@ -42,7 +42,6 @@ class ProductVersieSerializer(serializers.ModelSerializer):
         model = ProductVersie
         fields = (
             "versie",
-            "gemaakt_door",
             "gemaakt_op",
             "gewijzigd_op",
             "publicatie_datum",
@@ -60,11 +59,10 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         queryset=LokaleOverheid.objects.all(),
     )
     vertalingen = LocalizedProductSerializer(
-        source="laatste_actieve_versie.vertalingen", many=True, default=[]
+        source="laatste_actieve_versie.vertalingen",
+        many=True,
     )
-    beschikbare_talen = SerializerMethodField(
-        method_name="get_beschikbare_talen", default=[]
-    )
+    beschikbare_talen = SerializerMethodField(method_name="get_beschikbare_talen")
 
     class Meta:
         model = Product
