@@ -301,14 +301,14 @@ class LokaleOverheidUpdateViewTests(WebTest):
 
         response.form["contact_naam"] = "Municipality Contact Name"
         response.form[
-            "bevoegde_organisatie"
-        ].value = self.lokale_overheid.organisatie.pk
+            "organisatie"
+        ].value = self.lokale_overheid.bevoegde_organisatie.pk
         response.form.submit()
 
         self.lokale_overheid.refresh_from_db()
         self.assertEqual(self.lokale_overheid.contact_naam, "Municipality Contact Name")
         self.assertNotEqual(
-            self.lokale_overheid.bevoegde_organisatie, self.lokale_overheid.organisatie
+            self.lokale_overheid.organisatie, self.lokale_overheid.bevoegde_organisatie
         )
 
     def test_can_update_municipality_location(self):

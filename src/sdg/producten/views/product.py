@@ -120,14 +120,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
 
-        # TODO: simplify
-        if self.product.is_referentie_product:
-            reference_product = self.product
-        else:
-            reference_product = self.product.referentie_product
         reference_formset = inlineformset_factory(
-            ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
-        )(instance=reference_product.laatste_versie)
+            ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=1
+        )(instance=self.product.reference_product.laatste_versie)
 
         context["product"] = self.product
         context["lokale_overheid"] = self.product.catalogus.lokale_overheid

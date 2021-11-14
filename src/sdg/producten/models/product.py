@@ -188,6 +188,11 @@ class Product(models.Model):
             else self.referentie_product.generiek_product
         )
 
+    @cached_property
+    def reference_product(self):
+        """:returns: The reference product of this product."""
+        return self if self.is_referentie_product else self.referentie_product
+
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
         return self.catalogus.lokale_overheid.lokaties.annotate(

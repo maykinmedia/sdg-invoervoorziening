@@ -126,9 +126,10 @@ class ProductAdmin(admin.ModelAdmin):
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         """Ensure that only locations belonging to a product's municipality can be selected."""
 
-        if db_field.name == "lokaties":
+        object_id = request.resolver_match.kwargs.get("object_id", None)
+        if db_field.name == "lokaties" and object_id:
             kwargs["queryset"] = Product.objects.get(
-                pk=request.resolver_match.kwargs["object_id"]
+                pk=object_id
             ).get_municipality_locations()
 
         return super().formfield_for_manytomany(db_field, request, **kwargs)
