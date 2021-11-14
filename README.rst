@@ -3,11 +3,11 @@ SDG invoervoorziening
 =====================
 
 :Version: 0.1.0
-:Source: https://bitbucket.org/maykinmedia/sdg
+:Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: vng, sdg, pdc
 :PythonVersion: 3.8
 
-|build-status| |black| |python-versions|
+|build-status| |docker| |black| |python-versions|
 
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
 (SDG).
@@ -25,7 +25,7 @@ ontsloten via een API.
 Gemeenten kunnen een referentie-productbeschrijving overnemen of kunnen hiervan 
 afwijken en hun eigen beschrijving maken.
 
-Speerpunten zijn
+Speerpunten zijn:
 
 * Ontzorging: Gemeenten hoeven voor SDG informeren hun website niet aan te 
   passen.
@@ -36,15 +36,31 @@ Speerpunten zijn
   de generieke teksten die met de specifieke teksten worden getoond op de 
   nationale portalen. 
 * Gemeenten beheren SDG content in de invoervoorziening. Gemeenten beheren hun 
-  eigen webcontent in hun eigen CMS. d. SDG content wordt bijgehouden ten 
+  eigen webcontent in hun eigen CMS. De SDG content wordt bijgehouden ten 
   behoeve van publicatie op de nationale portalen. De gemeente kan de SDG 
   content op haar eigen website en via andere kanalen gebruiken en publiceren, 
-  mits ze zelf een API maken die dit mogelijk maakt. Dit is buiten scope van 
-  het project zoals beschreven in dit document.
+  mits ze zelf een API maken die dit mogelijk maakt (dit laatste is buiten 
+  scope van het project).
+
+
+API specificatie
+================
+
+De API specificatie is beschikbaar in het Open API Specification (OAS) versie 3
+formaat.
+
+==============  ==============  =============================
+Versie          Release date    API specificatie
+==============  ==============  =============================
+latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_
+==============  ==============  =============================
+
+Zie: `Alle versies en wijzigingen <https://github.com/maykinmedia/sdg-invoervoorziening/blob/master/CHANGELOG.rst>`_
 
 
 Documentatie
-=============
+============
 
 Zie ``INSTALL.rst`` voor installatie instructies, beschikbare configuratie 
 mogelijkheden en commando's.
@@ -53,8 +69,18 @@ mogelijkheden en commando's.
 Links
 =====
 
-* `Issues <https://taiga.maykinmedia.nl/project/vng-sdg-invoervoorziening>`_
+* `Docker image <https://hub.docker.com/r/maykinmedia/sdg-invoervoorziening>`_
+* `Issues <https://github.com/maykinmedia/sdg-invoervoorziening/issues>`_
 * `Code <https://github.com/maykinmedia/sdg-invoervoorziening>`_
+
+
+Licentie
+========
+
+Copyright © `VNG Realisatie`_, 2021 - 2022
+
+Licensed under the `EUPL`_.
+
 
 .. |build-status| image:: https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml/badge.svg
     :alt: Build status
@@ -64,6 +90,10 @@ Links
     :alt: Code style
     :target: https://github.com/psf/black
 
+.. |docker| image:: https://img.shields.io/docker/v/maykinmedia/sdg-invoervoorziening
+    :alt: Docker image
+    :target: https://hub.docker.com/r/maykinmedia/sdg-invoervoorziening
+
 .. |python-versions| image:: https://img.shields.io/badge/python-3.8%2B-blue.svg
     :alt: Supported Python version
 
@@ -71,3 +101,4 @@ Links
 .. _`Maykin Media B.V.`: https://www.maykinmedia.nl
 .. _`VNG Realisatie`: https://www.vngrealisatie.nl/
 .. _`Single Digital Gateway`: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ:L:2018:295:TOC
+.. _`EUPL`: LICENSE.md
