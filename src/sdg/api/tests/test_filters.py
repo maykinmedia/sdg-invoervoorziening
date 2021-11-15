@@ -4,7 +4,10 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
-from sdg.organisaties.tests.factories.overheid import LokatieFactory
+from sdg.organisaties.tests.factories.overheid import (
+    LokaleOverheidFactory,
+    LokatieFactory,
+)
 from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.product import (
     ReferentieProductFactory,
@@ -86,7 +89,7 @@ class ProductFilterTests(APITestCase):
         ReferentieProductVersieFactory.create_batch(3, publicatie_datum=PAST_DATE)
 
         response = self.client.get(
-            self.url, {"publicatie_datum": NOW_DATE.strftime("%Y-%m-%d")}
+            self.url, {"publicatieDatum": NOW_DATE.strftime("%Y-%m-%d")}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -112,3 +115,21 @@ class LokatieFilterTests(APITestCase):
 
         self.assertEqual(1, len(data))
         self.assertEqual(str(location.uuid), data[0]["uuid"])
+
+
+class LokaleOverheidFilterTests(APITestCase):
+    url = reverse("lokaleoverheid-list")
+
+    def test_filter_organisatie(self):
+        municipality, *_ = LokaleOverheidFactory.create_batch(5)
+
+        response = self.client.get(
+            self.url, {"owmsIdentifier": f"{municipality.organisatie.owms_identifier}"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(municipality.uuid), data[0]["uuid"])
