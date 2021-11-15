@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -5,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.db.fields import DynamicArrayField
+from sdg.core.forms import LabeledURLWidget
+from sdg.core.models.validators import labeled_url_validator
 from sdg.producten.models.managers import LocalizedManager
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
@@ -57,7 +60,11 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         null=True,
     )
     verwijzing_links = DynamicArrayField(
-        models.URLField(_("url van verwijzing"), max_length=1000),
+        ArrayField(
+            models.CharField(max_length=512),
+        ),
+        subwidget_form=LabeledURLWidget,
+        validators=[labeled_url_validator],
         help_text=_(
             "Zowel de Nationale Portalen als de decentrale overheden kunnen een x-tal 'verwijzingen' opnemen bij een "
             "product. Voorstel hierbij om zo'n 'verwijzing' te laten bestaan uit een -bij elkaar horende-  "
@@ -125,7 +132,11 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
     )
     verwijzing_links = DynamicArrayField(
-        models.URLField(_("url van verwijzing"), max_length=1000),
+        ArrayField(
+            models.CharField(max_length=512),
+        ),
+        subwidget_form=LabeledURLWidget,
+        validators=[labeled_url_validator],
         help_text=_("Decentrale verwijzingen."),
         blank=True,
         default=list,
