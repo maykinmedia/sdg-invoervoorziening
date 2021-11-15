@@ -8,11 +8,15 @@ def create_first_version_for_products(apps, schema_editor):
     LocalizedProduct = apps.get_model("producten", "LocalizedProduct")
 
     for lp in LocalizedProduct.objects.all():
-        lp.verwijzing_links_tmp = [["", url] for url in lp.verwijzing_links]
+        lp.verwijzing_links_tmp = [
+            [f"Link #{idx}", url] for idx, url in enumerate(lp.verwijzing_links)
+        ]
         lp.save()
 
     for lgp in LocalizedGeneriekProduct.objects.all():
-        lgp.verwijzing_links_tmp = [["", url] for url in lgp.verwijzing_links]
+        lgp.verwijzing_links_tmp = [
+            [f"Link #{idx}", url] for idx, url in enumerate(lgp.verwijzing_links)
+        ]
         lgp.save()
 
 
