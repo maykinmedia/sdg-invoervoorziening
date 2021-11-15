@@ -10,7 +10,7 @@ LOGLEVEL=${CELERY_LOGLEVEL:-INFO}
 mkdir -p celerybeat
 
 echo "Starting celery beat"
-exec python -m celery -A sdg.conf beat \
+exec python -m celery -A sdg beat \
     --scheduler django_celery_beat.schedulers:DatabaseScheduler \
     -l $LOGLEVEL \
     -s ../celerybeat/beat

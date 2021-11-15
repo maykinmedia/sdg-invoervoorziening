@@ -1,8 +1,3 @@
-from .celery_app import app as celery_app
-
-__all__ = ("celery_app",)
-
-
 def load_tests(*args):
     """
     Do not load tests from the conf/ dir.

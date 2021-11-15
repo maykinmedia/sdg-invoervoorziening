@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from sdg.conf import celery_app
+from sdg.celery import app
 from sdg.core.constants.logius import PublicData
 from sdg.core.types import LoadCommand
 
@@ -12,7 +12,7 @@ management_commands = [
 ]
 
 
-@celery_app.task()
+@app.task()
 def import_logius_data():
     """Import logius data using external public sources."""
 

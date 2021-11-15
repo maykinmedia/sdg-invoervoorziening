@@ -12,7 +12,7 @@ QUEUE=${1:-${CELERY_WORKER_QUEUE:=celery}}
 WORKER_NAME=${2:-${CELERY_WORKER_NAME:="${QUEUE}"@%n}}
 
 echo "Starting celery worker $WORKER_NAME with queue $QUEUE"
-exec python -m celery -A sdg.conf worker \
+exec python -m celery -A sdg worker \
     -Q $QUEUE \
     -n $WORKER_NAME \
     -l $LOGLEVEL \
