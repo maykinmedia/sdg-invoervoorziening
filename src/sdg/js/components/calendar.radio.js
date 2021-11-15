@@ -8,7 +8,6 @@ class CalendarRadioButton {
             const container = event.target.parentNode.parentNode.querySelector(".calendar-container");
             if (event.target.value === "later") {
                 container.classList.remove("closed");
-                container.querySelector('.calendar').click();
             } else {
                 container.classList.add("closed");
             }

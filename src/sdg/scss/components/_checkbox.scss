@@ -1,0 +1,9 @@
+@import 'colors';
+
+$pretty--color-primary: $color_primary;
+@import '~pretty-checkbox/src/pretty-checkbox.scss';
+
+
+.pretty input[disabled] ~ * {
+  opacity: 0.8;
+}

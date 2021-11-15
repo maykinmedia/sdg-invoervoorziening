@@ -7,16 +7,25 @@
     ol,
     ul,
     li {
-     margin: 1em 1em;
+      margin: 1em 1em;
     }
   }
-
 
   .form__group {
     display: flex;
     flex-direction: column;
     border: 0;
     margin-bottom: 24px;
+
+    &--pad {
+      border: 0;
+      padding-bottom: 8px;
+    }
+
+    &--nopad {
+      border: 0;
+    }
+
   }
 
   .form__label {
@@ -129,8 +138,13 @@
     margin-right: 16px;
   }
 
-  .form__buttons-link {
-    margin-left: 16px;
+  .form__buttons {
+    margin-top: 24px;
+
+    &-link {
+      margin-left: 16px;
+    }
+
   }
 
   .errorlist {

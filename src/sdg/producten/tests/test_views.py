@@ -4,6 +4,7 @@ from django_webtest import WebTest
 from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.organisaties.tests.factories.overheid import LokatieFactory
 from sdg.producten.constants import PublishChoices
 from sdg.producten.models import LocalizedProduct
 from sdg.producten.tests.constants import (
@@ -157,6 +158,32 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(specific_en.product_titel_decentraal, text_en)
         self.assertIn(specific_en.specifieke_tekst, text_en)
         self.assertIn(specific_en.specifieke_link, text_en)
+
+    @freeze_time(NOW_DATE)
+    def test_product_locations_are_displayed(self):
+        product_version = SpecifiekProductVersieFactory.create(
+            publicatie_datum=NOW_DATE
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=product_version)
+        product = product_version.product
+        lokale_overheid = product.catalogus.lokale_overheid
+        lokaties = LokatieFactory.create_batch(3, lokale_overheid=lokale_overheid)
+
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
+        )
+
+        product.lokaties.set(lokaties[:2])
+        product.save()
+
+        response = self.app.get(product_version.product.get_absolute_url())
+
+        checkboxes = response.pyquery("input[type=checkbox]")
+        self.assertEquals(checkboxes[0].checked, True)
+        self.assertEquals(checkboxes[1].checked, True)
+        self.assertEquals(checkboxes[2].checked, False)
 
     @freeze_time(NOW_DATE)
     def test_reference_product_fills_missing_specific_fields(self):
@@ -343,7 +370,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self._fill_product_form(response.form, PublishChoices.concept)
         response.form.submit()
-        self.product_version.refresh_from_db()
+        self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 1)
 
@@ -722,3 +749,29 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
         self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
         self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_can_update_product_information(self):
+        self._change_product_status(PublishChoices.concept)
+        LokatieFactory.create_batch(
+            3, lokale_overheid=self.product.catalogus.lokale_overheid
+        )
+        locations = list(self.product.get_municipality_locations())
+        self.assertEqual(len(locations), 3)
+        for location in locations:
+            self.assertFalse(location.is_product_location)
+
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+        )
+
+        self._fill_product_form(response.form, PublishChoices.concept)
+        response.form.fields["beschikbaar"] = False
+        response.form.fields["lokaties"][0].checked = True
+        response.form.submit()
+        self.product.refresh_from_db()
+
+        locations = list(self.product.get_municipality_locations())
+        self.assertTrue(locations[0].is_product_location)
+        self.assertFalse(locations[1].is_product_location)
+        self.assertFalse(locations[2].is_product_location)

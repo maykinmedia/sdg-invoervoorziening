@@ -1,4 +1,6 @@
 import flatpickr from "flatpickr";
 
 const inputs = document.querySelectorAll(".calendar");
-[...inputs].forEach(input => flatpickr(input));
+[...inputs].forEach(input => flatpickr(input, {
+    defaultDate: new Date()
+}));

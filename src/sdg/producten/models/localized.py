@@ -39,7 +39,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
     )
     korte_omschrijving = models.CharField(
         _("korte omschrijving"),
-        max_length=80,
+        max_length=160,
         help_text=_(
             "Korte omschrijving van wat er op de pagina staat, gebruikt in de meta tags van de productpagina (meta "
             'name="description"). Deze tekst wordt gebruikt om te tonen wanneer de pagina wordt gevonden in een '
