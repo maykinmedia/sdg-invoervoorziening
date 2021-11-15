@@ -33,7 +33,7 @@ class GeneriekProduct(models.Model):
     upn = models.ForeignKey(
         "core.UniformeProductnaam",
         on_delete=models.PROTECT,
-        related_name="generiek_producten",
+        related_name="generieke_producten",
         help_text=_("De uniforme productnaam met betrekking tot dit product."),
     )
     verantwoordelijke_organisatie = models.ForeignKey(

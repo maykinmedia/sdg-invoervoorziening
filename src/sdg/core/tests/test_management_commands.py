@@ -52,8 +52,8 @@ class TestImportData(CommandTestCase):
         )
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(14 objects)", out)
-        self.assertEqual(14, Informatiegebied.objects.count())
+        self.assertIn("(24 objects)", out)
+        self.assertEqual(24, Informatiegebied.objects.count())
 
         informatiegebied = Informatiegebied.objects.first()
         self.assertEqual("A1", informatiegebied.code)
@@ -70,7 +70,7 @@ class TestImportData(CommandTestCase):
 
         self.assertIn("Successfully imported", out)
         self.assertIn("(18 objects)", out)
-        self.assertEqual(UniformeProductnaam.objects.count(), 19)
+        self.assertEqual(18, UniformeProductnaam.objects.count())
 
         upn = UniformeProductnaam.objects.first()
         self.assertEqual(
@@ -115,7 +115,7 @@ class TestImportData(CommandTestCase):
         m.get(PublicData.GEMEENTE.value, content=binary.GEMEENTE)
         out = self.call_command("load_gemeenten", PublicData.GEMEENTE.value)
 
-        self.assertIn("Succesfully imported", out)
+        self.assertIn("Successfully imported", out)
         self.assertIn("(5 objects)", out)
         self.assertEqual(5, Overheidsorganisatie.objects.count())
 
@@ -134,7 +134,7 @@ class TestImportData(CommandTestCase):
             "load_informatiegebieden", PublicData.INFORMATIEGEBIED.value
         )
 
-        self.assertIn("Succesfully imported", out)
+        self.assertIn("Successfully imported", out)
         self.assertIn("(14 objects)", out)
         self.assertEqual(14, Informatiegebied.objects.count())
 
@@ -151,7 +151,7 @@ class TestImportData(CommandTestCase):
         m.get(PublicData.UPN.value, content=binary.UPN)
         out = self.call_command("load_upn", PublicData.UPN.value)
 
-        self.assertIn("Succesfully imported", out)
+        self.assertIn("Successfully imported", out)
         self.assertIn("(18 objects)", out)
         self.assertEqual(18, UniformeProductnaam.objects.count())
 

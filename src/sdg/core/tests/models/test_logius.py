@@ -17,8 +17,8 @@ class TestUniformeProductnaam(TestCase):
         self.assertEqual(1, UniformeProductnaam.objects.count())
         self.assertEqual(1, autofill_catalog.producten.count())
 
-        self.assertEqual(1, upn.generiek_producten.count())
-        generic_product = upn.generiek_producten.get()
+        self.assertEqual(1, upn.generieke_producten.count())
+        generic_product = upn.generieke_producten.get()
         self.assertEqual(2, generic_product.vertalingen.count())
 
         self.assertEqual(1, generic_product.producten.count())
