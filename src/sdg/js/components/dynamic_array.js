@@ -26,7 +26,9 @@ function initializeWidget(widgetElement) {
         const id_parts = newElement.querySelector('input').getAttribute('id').split('_');
         const id = id_parts.slice(0, -1).join('_') + '_' + String(item_count - 1);
         newElement.querySelector('input').setAttribute('id', id);
-        newElement.querySelector('input').value = '';
+        newElement.querySelectorAll("input").forEach(element => {
+            element.value = ""
+        });
 
         addRemoveEventListener(newElement);
         parentElement.appendChild(newElement);

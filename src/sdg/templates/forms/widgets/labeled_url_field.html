@@ -1,0 +1,13 @@
+{% load static %}
+{% load i18n %}
+
+{% spaceless %}
+    <input type="text" name="{{ widget.name }}" class="form__input form__input--left" placeholder="Label"
+        {% if widget.label_value != None %} value="{{ widget.label_value|stringformat:'s' }}"{% endif %}
+        {% include "django/forms/widgets/attrs.html" %}
+    >
+    <input type="text" name="{{ widget.name }}" class="form__input form__input--right" placeholder="URL"
+        {% if widget.url_value != None %} value="{{ widget.url_value|stringformat:'s' }}"{% endif %}
+        {% include "django/forms/widgets/attrs.html" %}
+    >
+{% endspaceless %}

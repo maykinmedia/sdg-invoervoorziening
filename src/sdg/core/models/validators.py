@@ -1,7 +1,7 @@
 import re
 
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator, _lazy_re_compile
+from django.core.validators import RegexValidator, URLValidator, _lazy_re_compile
 from django.utils.translation import ugettext_lazy as _
 
 uppercase_validator = RegexValidator(
@@ -30,6 +30,11 @@ openingstijden_validator = RegexValidator(
     code="invalid",
 )
 
+url_validator = URLValidator(
+    message=_("Voer een geldige URL in."),
+    code="invalid",
+)
+
 
 def validate_uppercase(value):
     return uppercase_validator(value)
@@ -45,6 +50,17 @@ def validate_postcode(value):
 
 def validate_openingstijden(value):
     return openingstijden_validator(value)
+
+
+def labeled_url_validator(array):
+    """Ensure the array length equals two and the second item is a valid URL."""
+    for sub_array in array:
+        if len(sub_array) != 2:
+            raise ValidationError(
+                _("De link moet een label en een URL bevatten."), code="invalid"
+            )
+
+        url_validator(sub_array[1])
 
 
 def validate_reference_catalog(catalog):
