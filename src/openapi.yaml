@@ -52,10 +52,6 @@ paths:
           type: integer
       tags:
       - catalogi
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -76,10 +72,6 @@ paths:
         required: true
       tags:
       - catalogi
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -106,10 +98,6 @@ paths:
           type: integer
       tags:
       - locaties
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -130,10 +118,6 @@ paths:
         required: true
       tags:
       - locaties
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -147,7 +131,7 @@ paths:
       description: Viewset for a municipality, retrieved by uuid
       parameters:
       - in: query
-        name: owms_identifier
+        name: owmsIdentifier
         schema:
           type: string
       - name: page
@@ -158,10 +142,6 @@ paths:
           type: integer
       tags:
       - organisaties
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -182,10 +162,6 @@ paths:
         required: true
       tags:
       - organisaties
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -223,7 +199,7 @@ paths:
         schema:
           type: integer
       - in: query
-        name: publicatie_datum
+        name: publicatieDatum
         schema:
           type: string
           format: date
@@ -231,10 +207,6 @@ paths:
           aan de opgegeven datum.
       tags:
       - producten
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -260,10 +232,6 @@ paths:
         required: true
       tags:
       - producten
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -284,10 +252,6 @@ paths:
         required: true
       tags:
       - producten
-      security:
-      - cookieAuth: []
-      - basicAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -763,11 +727,3 @@ components:
       - nl
       - en
       type: string
-  securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-    cookieAuth:
-      type: apiKey
-      in: cookie
-      name: sdg_sessionid

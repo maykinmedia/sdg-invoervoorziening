@@ -494,13 +494,12 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": [],
     "PAGE_SIZE": 25,
 }
 SPECTACULAR_SETTINGS = {
     "TITLE": "SDG Invoervoorziening API",
-    "DESCRIPTION": clean_rst(
-        read_file(os.path.join(BASE_DIR, "README.rst")),
-    ),
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "CAMELIZE_NAMES": True,

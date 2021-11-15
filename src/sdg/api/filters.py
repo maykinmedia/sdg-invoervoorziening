@@ -37,7 +37,7 @@ class ProductFilterSet(FilterSet):
             "Toont producten die behoren tot de catalogus van de opgegeven uuid."
         ),
     )
-    publicatie_datum = filters.DateFilter(
+    publicatieDatum = filters.DateFilter(
         method="filter_publicatie_datum",
         help_text=_(
             "Toont producten met een publicatiedatum groter dan of gelijk aan de opgegeven datum."
@@ -54,7 +54,7 @@ class ProductFilterSet(FilterSet):
             "organisatie",
             "doelgroep",
             "catalogus",
-            "publicatie_datum",
+            "publicatieDatum",
         )
 
 
@@ -74,8 +74,8 @@ class LokatieFilterSet(FilterSet):
 class LokaleOverheidFilterSet(FilterSet):
     """Filter for municipalities. Allows filtering by OWMS identifier."""
 
-    owms_identifier = filters.CharFilter(field_name="organisatie__owms_identifier")
+    owmsIdentifier = filters.CharFilter(field_name="organisatie__owms_identifier")
 
     class Meta:
         model = LokaleOverheid
-        fields = ("owms_identifier",)
+        fields = ("owmsIdentifier",)

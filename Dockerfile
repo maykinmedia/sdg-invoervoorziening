@@ -77,9 +77,6 @@ COPY --from=frontend-build /app/src/sdg/static /app/src/sdg/static
 # copy source code
 COPY ./src /app/src
 
-# copy readme for api docs
-COPY ./README.rst /app/README.rst
-
 RUN useradd -M -u 1000 maykin
 RUN chown -R maykin /app
 
