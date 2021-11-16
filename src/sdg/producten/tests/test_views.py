@@ -181,9 +181,11 @@ class ProductDetailViewTests(WebTest):
         response = self.app.get(product_version.product.get_absolute_url())
 
         checkboxes = response.pyquery("input[type=checkbox]")
-        self.assertEquals(checkboxes[0].checked, True)
-        self.assertEquals(checkboxes[1].checked, True)
-        self.assertEquals(checkboxes[2].checked, False)
+        actual_loc_ids = set(product.lokaties.values_list("pk", flat=True))
+        display_loc_ids = {
+            int(checkbox.value) for checkbox in checkboxes if checkbox.value is not None
+        }
+        self.assertSetEqual(actual_loc_ids, display_loc_ids)
 
     @freeze_time(NOW_DATE)
     def test_reference_product_fills_missing_specific_fields(self):
