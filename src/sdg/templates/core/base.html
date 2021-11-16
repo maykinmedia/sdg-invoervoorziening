@@ -37,7 +37,12 @@
         </div>
         <div class="container">
             <p class="header__subtitle">{% block container_subtitle %}{% endblock container_subtitle %}</p>
-            <p class="header__title">{% block container_title %}{% endblock container_title %}</p>
+            <p class="header__title">
+                {% block container_title %}
+                    SDG voor <b>{{ lokaleoverheid }}</b>
+                    {% include "core/_municipality_switch.html" %}
+                {% endblock container_title %}
+            </p>
         </div>
     </header>
 {% endblock %}

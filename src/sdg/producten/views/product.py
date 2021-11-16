@@ -72,6 +72,7 @@ class ProductDetailView(OverheidMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(object=self.object)
+        context["lokaleoverheid"] = self.lokale_overheid
         return self.render_to_response(context)
 
 
@@ -116,7 +117,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         )(instance=self.product.reference_product.laatste_versie)
 
         context["product"] = self.product
-        context["lokale_overheid"] = self.product.catalogus.lokale_overheid
+        context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
 
         context["reference_forms"] = reference_formset.forms
         context["informatie_forms"] = zip_longest(
