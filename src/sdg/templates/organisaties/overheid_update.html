@@ -13,9 +13,6 @@
         {% csrf_token %}
 
         <div class="form__forms">
-            {% field_readonly form.ondersteunings_organisatie value=lokaleoverheid.ondersteunings_organisatie %}
-            {% field_readonly form.verantwoordelijke_organisatie value=lokaleoverheid.verantwoordelijke_organisatie %}
-            {% field_readonly form.bevoegde_organisatie value=lokaleoverheid.bevoegde_organisatie %}
             {% field_readonly form.organisatie value=lokaleoverheid.organisatie %}
             {% field form.contact_naam %}
             {% field form.contact_website %}

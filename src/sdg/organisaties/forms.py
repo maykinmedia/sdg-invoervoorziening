@@ -10,9 +10,6 @@ class LokaleOverheidForm(forms.ModelForm):
     class Meta:
         model = LokaleOverheid
         fields = (
-            "ondersteunings_organisatie",
-            "verantwoordelijke_organisatie",
-            "bevoegde_organisatie",
             "organisatie",
             "contact_naam",
             "contact_website",
@@ -20,12 +17,7 @@ class LokaleOverheidForm(forms.ModelForm):
             "contact_emailadres",
         )
 
-    readonly_fields = (
-        "ondersteunings_organisatie",
-        "verantwoordelijke_organisatie",
-        "bevoegde_organisatie",
-        "organisatie",
-    )
+    readonly_fields = ("organisatie",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

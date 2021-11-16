@@ -5,9 +5,8 @@
 
 {% block login_right %}
     <h1>Error 503</h1>
-    <p>{% trans "Sorry, deze website is gesloten voor reparatie / is niet beschikbaar." %}</p>
-    <p>{% trans "Probeer het over een paar minuten nog eens." %}</p>
-    <p>
-        <a href="/" class="btn btn-lg btn-default">{% trans "Terug naar homepage." %}</a>
-    </p>
+    <p class="heading">{% trans "Sorry, deze website is gesloten voor reparatie / is niet beschikbaar." %}</p>
+    <p class="subheading">{% trans "Probeer het over een paar minuten nog eens." %}</p>
+    <hr class="divider">
+    <p><a href="/" class="btn btn-lg btn-default">{% trans "Home" %}</a></p>
 {% endblock login_right %}

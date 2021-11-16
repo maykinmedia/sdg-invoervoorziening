@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from django.utils.timezone import now
+from django.utils.translation import ugettext_lazy as _
 
 from two_factor.views import OTPRequiredMixin
 
@@ -42,6 +44,9 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
     required_roles = {i.name for i in Role.get_roles()}
+    permission_denied_message = _(
+        "U hebt niet de vereiste rol om deze pagina te openen."
+    )
 
     def get_required_roles(self):
         """
@@ -52,8 +57,7 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin):
         return self.required_roles
 
     def test_func(self):
-        result = super().test_func()
-        if not result:
+        if not super().test_func():
             return False
 
         try:
@@ -63,20 +67,29 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin):
         except Role.DoesNotExist:
             return False
 
-        return any(getattr(role, r) for r in self.get_required_roles())
+        if not any(getattr(role, r) for r in self.get_required_roles()):
+            raise PermissionDenied(__class__.permission_denied_message)
+
+        return True
 
 
 class OverheidExpirationMixin(BaseOverheidMixin):
     """Ensures a municipality view can no longer be access if the end date has passed."""
 
+    permission_denied_message = _(
+        "De einddatum van deze lokale overheid is verstreken en zij is niet langer toegankelijk."
+    )
+
     def test_func(self):
-        result = super().test_func()
-        if not result:
+        if not super().test_func():
             return False
 
         lokale_overheid = self._get_lokale_overheid()
         end_date = lokale_overheid.organisatie.owms_end_date
-        return not end_date or end_date >= now()
+
+        if end_date and end_date <= now():
+            raise PermissionDenied(__class__.permission_denied_message)
+        return True
 
 
 class OverheidMixin(OverheidExpirationMixin, OverheidRoleRequiredMixin):

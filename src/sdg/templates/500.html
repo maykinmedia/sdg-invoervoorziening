@@ -6,12 +6,11 @@
 
 {% block login_right %}
     <h1>Error 500</h1>
-    <p>{% trans "Wij zijn automatisch op de hoogte gebracht van het probleem en zullen het zo spoedig mogelijk onderzoeken." %}</p>
+    <p class="heading">{% trans "Wij zijn automatisch op de hoogte gebracht van het probleem en zullen het zo spoedig mogelijk onderzoeken." %}</p>
     {% if request.sentry.id %}
-        <p>{% trans "Als u hulp nodig heeft, kunt u deze fout als volgt bestempelen" %}
+        <p class="subheading">{% trans "Als u hulp nodig heeft, kunt u deze fout als volgt bestempelen" %}
             <strong>{{ request.sentry.id }}</strong>.</p>
     {% endif %}
-    <p class="lead">
-        <a href="/" class="btn btn-lg btn-default">Back to home</a>
-    </p>
+    <hr class="divider">
+    <p><a href="/" class="btn btn-lg btn-default">{% trans "Home" %}</a></p>
 {% endblock login_right %}
