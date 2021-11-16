@@ -12,7 +12,7 @@ from sdg.organisaties.models import LokaleOverheid
 
 def load_gemeenten(data: List[Dict[str, Any]]) -> int:
     """
-    Loads municipalities based on a CSV or XML file.
+    Loads municipalities based on a list of dictionaries.
 
     :return: The total count of the created objects.
     """
@@ -49,7 +49,7 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
 
 def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     """
-    Loads information areas based on a CSV or XML file.
+    Loads information areas based on a list of dictionaries.
 
     :return: The total count of the created objects.
     """
@@ -85,7 +85,7 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
 
 def load_upn(data: List[Dict[str, Any]]) -> int:
     """
-    Loads UPNs based on a CSV or XML file.
+    Loads UPNs based on a list of dictionaries.
 
     :return: The total count of the created objects.
     """
@@ -117,3 +117,22 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
     ]
     created_objects = UniformeProductnaam.objects.bulk_create(upn_list)
     return len(created_objects)
+
+
+def load_upn_informatiegebieden(data: List[Dict[str, Any]]) -> int:
+    """
+    Link existing UPNs and information areas together.
+
+    :return: The total count of updated objects.
+    """
+
+    count = 0
+    for obj in data:
+        thema = Thema.objects.get(
+            thema=obj.get("SDG_Thema"),
+            informatiegebied__code=obj.get("SDG_Code"),
+        )
+        count += UniformeProductnaam.objects.filter(
+            upn_label=obj.get("UniformeProductnaam")
+        ).update(thema=thema)
+    return count

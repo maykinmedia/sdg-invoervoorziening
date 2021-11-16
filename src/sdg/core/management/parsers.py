@@ -1,9 +1,11 @@
 import csv
 import os
+from tempfile import NamedTemporaryFile
 from typing import Any, Dict, List
 
 from django.core.management import BaseCommand, CommandError
 
+import requests
 from lxml import etree
 
 
@@ -18,34 +20,41 @@ class OwmsParser:
         self.xml_column_names = xml_column_names
 
     def parse(self, filename: str):
-        """Calls parsing function based on filename extension."""
+        """Call parsing function based on filename extension."""
 
         _, extension = os.path.splitext(filename)
         file_format = extension[1:]
 
+        if not filename.startswith("http"):
+            return self.process_file(filename, file_format)
+
+        with NamedTemporaryFile() as f:
+            f.write(requests.get(filename, file_format).content)
+            f.seek(0)
+            return self.process_file(f.name, file_format)
+
+    def process_file(self, filename, file_format):
+        """Process a given file, calling a specific method based on the given format."""
         if file_format in self.available_parsers:
             return getattr(self, file_format)(filename)
         else:
-            raise ParserException()
+            raise ParserException("File format does not exist")
 
     def xml(self, filename: str) -> List[Dict[str, Any]]:
-        assert self.xml_column_names
-
-        output = []
+        if not self.xml_column_names:
+            raise ParserException("Invalid XML column names")
 
         tree = etree.parse(filename)
         values = tree.findall("value")
-        for value in values:
-            output.append(
-                {
-                    column: value.find(column).text
-                    if value.find(column) is not None
-                    else None
-                    for column in self.xml_column_names
-                }
-            )
-
-        return output
+        return [
+            {
+                column: value.find(column).text
+                if value.find(column) is not None
+                else None
+                for column in self.xml_column_names
+            }
+            for value in values
+        ]
 
     def csv(self, filename: str) -> List[Dict[str, Any]]:
         with open(filename, encoding="utf-8-sig") as f:
@@ -78,14 +87,13 @@ class ParserCommand(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"Succesfully imported {self.plural_object_name} from {filename} ({created_count} objects)."
+                f"Successfully imported {self.plural_object_name} from {filename} ({created_count} objects)."
             )
         )
 
     def parse(self, filename) -> List[Dict[str, Any]]:
         try:
-            data = self.parser.parse(filename)
-            return data
+            return self.parser.parse(filename)
         except ParserException:
             raise CommandError(
                 f"No parser available for that format. Available: {', '.join(self.parser.available_parsers)}"

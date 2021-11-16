@@ -5,11 +5,11 @@
 {% block django_admin_index_menu %}{% endblock %}
 {% block breadcrumbs %}{% endblock %}
 
-{% block header %}{% trans "Login" %}{% endblock header %}
+{% block head_title %}Inloggen{% endblock head_title %}
 
 {% block login_right %}
     <div class="login__container">
-        <h3 class="login__container-title">Aanmelden</h3>
+        <h3 class="login__container-title">Inloggen</h3>
         {% if wizard.steps.current == 'auth' %}
             <p>{% blocktrans %}Enter your credentials.{% endblocktrans %}</p>
         {% elif wizard.steps.current == 'token' %}
@@ -64,7 +64,7 @@
         {% url 'account_reset_password' as password_reset_url %}
         {% if password_reset_url %}
             <div class="password-reset-link">
-                <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+                <a href="{{ password_reset_url }}">Wachtwoord vergeten?</a>
             </div>
         {% endif %}
     </div>

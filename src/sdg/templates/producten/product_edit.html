@@ -8,11 +8,6 @@
 {% block header_classes %}header--inset{% endblock header_classes %}
 {% block container_title %}SDG voor <b>{{ lokale_overheid }}</b>{% endblock container_title %}
 
-{% block extra_css %}
-    {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'bundles/flatpickr.css' %}"/>
-{% endblock %}
-
 {% block inner %}
     <div class="tabs">
         <div class="tabs__tabs">
@@ -38,9 +33,27 @@
             {% csrf_token %}
             {{ form.management_form }}
 
-            <div class="text-right">
-                {% checkbox version_form.beschikbaar %}
-            </div>
+
+            <table class="tabs__table">
+                <thead>
+                <tr>
+                    <th class="tabs__table-header" width="25%">{% trans "Product Gegevens" %}</th>
+                    <th class="tabs__table-header">{% trans "Huidige Informatie" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="tabs__table-cell" width="25%">{% trans "Product Status" %}</td>
+                    <td class="tabs__table-cell">{% checkbox version_form.beschikbaar %}</td>
+                </tr>
+                <tr>
+                    <td class="tabs__table-cell">{% trans "Product Lokaties" %}</td>
+                    <td class="tabs__table-cell">{{ version_form.lokaties }}</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <hr class="divider">
 
             {% for generic_information, form in informatie_forms %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"

@@ -1,4 +1,3 @@
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -6,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.db.fields import DynamicArrayField
+from sdg.producten.models.managers import LocalizedManager
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
 
@@ -39,7 +39,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
     )
     korte_omschrijving = models.CharField(
         _("korte omschrijving"),
-        max_length=80,
+        max_length=160,
         help_text=_(
             "Korte omschrijving van wat er op de pagina staat, gebruikt in de meta tags van de productpagina (meta "
             'name="description"). Deze tekst wordt gebruikt om te tonen wanneer de pagina wordt gevonden in een '
@@ -53,6 +53,8 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "Nationale portalen houden bij wanneer de informatie voor het laasts is 'gecheckt'.  Deze datum wordt op "
             "het portaal getoond."
         ),
+        blank=True,
+        null=True,
     )
     verwijzing_links = DynamicArrayField(
         models.URLField(_("url van verwijzing"), max_length=1000),
@@ -76,6 +78,8 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "invoervoorziening) "
         ),
     )
+
+    objects = LocalizedManager()
 
     class Meta:
         verbose_name = _("Vertaald generiek product")
@@ -204,6 +208,8 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
     )
 
+    objects = LocalizedManager()
+
     @cached_property
     def referentie_informatie(self):
         reference_product = self.product_versie.product.referentie_product
@@ -225,14 +231,14 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
         product = self.product_versie.product
         if product.is_referentie_product:
-            LocalizedProduct.objects.bulk_create(
-                [
-                    specific_product.laatste_versie.generate_localized_information(
-                        taal=self.taal
+            LocalizedProduct.objects.bulk_localize(
+                instances=(
+                    p.laatste_versie
+                    for p in product.specifieke_producten.all().prefetch_related(
+                        "versies"
                     )
-                    for specific_product in product.specifieke_producten.all()
-                ],
-                ignore_conflicts=True,
+                ),
+                languages=[self.taal],
             )
 
     class Meta:

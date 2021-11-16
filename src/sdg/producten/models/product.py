@@ -6,7 +6,7 @@ from typing import Any
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
-from django.db.models import Model
+from django.db.models import BooleanField, Case, Model, Q, Value, When
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -16,7 +16,7 @@ from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.producten.constants import PublishChoices
-from sdg.producten.models import LocalizedProduct
+from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
 from sdg.producten.utils import is_past_date
 
 User = get_user_model()
@@ -33,7 +33,7 @@ class GeneriekProduct(models.Model):
     upn = models.ForeignKey(
         "core.UniformeProductnaam",
         on_delete=models.PROTECT,
-        related_name="generiek_product",
+        related_name="generieke_producten",
         help_text=_("De uniforme productnaam met betrekking tot dit product."),
     )
     verantwoordelijke_organisatie = models.ForeignKey(
@@ -42,12 +42,15 @@ class GeneriekProduct(models.Model):
         related_name="generiek_informatie",
         verbose_name=_("verantwoordelijke organisatie"),
         help_text=_("Organisatie verantwoordelijk voor de landelijke informatie"),
+        blank=True,
+        null=True,
     )
     verplicht_product = models.BooleanField(
         _("verplicht product"),
         help_text=_(
             "Geeft aan of decentrale overheden verplicht zijn informatie over dit product te leveren."
         ),
+        default=False,
     )
 
     @property
@@ -57,6 +60,16 @@ class GeneriekProduct(models.Model):
     @property
     def upn_label(self):
         return self.upn.upn_label
+
+    def generate_localized_information(
+        self, language, **kwargs
+    ) -> LocalizedGeneriekProduct:
+        """Generate localized information for this generic product."""
+        return LocalizedGeneriekProduct(
+            generiek_product=self,
+            taal=language,
+            **kwargs,
+        )
 
     class Meta:
         verbose_name = _("generiek product")
@@ -133,11 +146,11 @@ class Product(models.Model):
         blank=True,
     )
 
-    @property
+    @cached_property
     def upn_uri(self):
         return self.generic_product.upn.upn_uri
 
-    @property
+    @cached_property
     def upn_label(self):
         return self.generic_product.upn.upn_label
 
@@ -188,6 +201,23 @@ class Product(models.Model):
             else self.referentie_product.generiek_product
         )
 
+    @cached_property
+    def reference_product(self):
+        """:returns: The reference product of this product."""
+        return self if self.is_referentie_product else self.referentie_product
+
+    def get_municipality_locations(self):
+        """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
+        return self.catalogus.lokale_overheid.lokaties.annotate(
+            is_product_location=Case(
+                When(
+                    Q(pk__in=self.lokaties.all().values_list("pk")),
+                    then=Value(True),
+                ),
+                output_field=BooleanField(default=False),
+            ),
+        )
+
     def get_latest_versions(self, quantity=5, active=False):
         """:returns: The latest N versions for this product."""
         queryset = self.versies.all().order_by("-versie")
@@ -214,13 +244,9 @@ class Product(models.Model):
             raise ValueError(
                 "localize_from_reference must be called on a specific product"
             )
-
-        LocalizedProduct.objects.bulk_create(
-            [
-                version.generate_localized_information(taal=taal)
-                for taal in self.referentie_product.beschikbare_talen.values()
-            ],
-            ignore_conflicts=True,
+        LocalizedProduct.objects.localize(
+            instance=version,
+            languages=self.referentie_product.beschikbare_talen.values(),
         )
 
     def get_or_create_specific_product(self, specific_catalog) -> Product:
@@ -232,6 +258,7 @@ class Product(models.Model):
                     specific_catalog = get_object_or_404(
                         ProductenCatalogus, pk=specific_catalog
                     )
+
                 specific_product, created = Product.objects.get_or_create(
                     referentie_product=self,
                     catalogus=specific_catalog,
@@ -239,6 +266,14 @@ class Product(models.Model):
                         "doelgroep": self.doelgroep,
                     },
                 )
+
+                lokaties = list(
+                    specific_catalog.lokale_overheid.lokaties.all()
+                )  # extra query, could be removed
+                if len(lokaties) == 1:
+                    specific_product.lokaties.add(lokaties[0])
+                    specific_product.save()
+
                 version = specific_product.create_version_from_reference()
                 specific_product.localize_version_from_reference(version)
                 return specific_product
@@ -294,6 +329,7 @@ class ProductVersie(models.Model):
         verbose_name=_("gemaakt door"),
         help_text=_("De maker van deze productversie."),
         blank=True,
+        null=True,
     )
     versie = models.PositiveIntegerField(
         verbose_name=_("versie"),
@@ -328,11 +364,11 @@ class ProductVersie(models.Model):
         else:
             return PublishChoices.later
 
-    def generate_localized_information(self, taal, **kwargs) -> LocalizedProduct:
+    def generate_localized_information(self, language, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""
         return LocalizedProduct(
             product_versie=self,
-            taal=taal,
+            taal=language,
             **kwargs,
         )
 

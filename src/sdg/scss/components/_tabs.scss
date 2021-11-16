@@ -3,6 +3,10 @@
 .tabs {
   margin-top: -66px;
 
+  .tabs__subproduct {
+    margin-bottom: 94px;
+  }
+
   .tabs__tabs {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(145px, 145px));
@@ -209,7 +213,7 @@
   }
 
   .tabs__footer-list-item {
-    padding-bottom: 8px;
+    padding: 8px 0;
 
     &:last-child {
       padding-bottom: 0;

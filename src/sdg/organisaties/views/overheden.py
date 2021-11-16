@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from django.db.models import Case, Q, Subquery, When
 from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 
@@ -28,65 +29,50 @@ class LokaleOverheidDetailView(OverheidMixin, DetailView):
 
         self.object.create_specific_catalogs()
 
-        # TODO: Optimize / refactor [.->L86]
-        theme_list = (
+        # TODO: Optimize / refactor [.->L75]
+        themes = (
             Thema.objects.all()
             .select_related("informatiegebied")
             .prefetch_related("upn")
         )
         area_and_products = {
-            theme.informatiegebied.informatiegebied: [] for theme in theme_list
+            theme.informatiegebied.informatiegebied: [] for theme in themes
         }
         catalogs = []
         for role in self.request.user.roles.filter(
             is_redacteur=True, lokale_overheid=self.object
         ):
-            for catalog in role.get_catalogs(reference=False):
-                reference_catalog = catalog.referentie_catalogus
-
-                reference_catalog_area_and_products = deepcopy(area_and_products)
-                catalog_area_and_products = deepcopy(area_and_products)
-
-                for theme in theme_list:
-                    area = theme.informatiegebied.informatiegebied
-                    theme_upns = theme.upn.all()
-
-                    if theme_upns:
-                        specific_products = Product.objects.filter(
-                            referentie_product__generiek_product__upn__in=theme_upns,
-                            catalogus=catalog,
-                        )
-                        specific_upns = specific_products.values(
-                            "referentie_product__generiek_product__upn"
-                        )
-
-                        reference_products = Product.objects.filter(
-                            generiek_product__upn__in=theme_upns,
-                            catalogus=reference_catalog,
-                        )
-                        reference_catalog_area_and_products[area].extend(
+            for cat in role.get_catalogs(reference=False).select_related(
+                "referentie_catalogus"
+            ):
+                ref_cat = cat.referentie_catalogus
+                if (
+                    ref_cat.user_is_redacteur(self.request.user)
+                    and ref_cat.lokale_overheid == self.object
+                ):
+                    setattr(ref_cat, "area_and_products", deepcopy(area_and_products))
+                setattr(cat, "area_and_products", deepcopy(area_and_products))
+                catalogs.append(cat)
+            for theme in themes.filter(upn__generieke_producten__isnull=False):
+                area = theme.informatiegebied.informatiegebied
+                for catalog in catalogs:
+                    reference_catalog = catalog.referentie_catalogus
+                    products = Product.objects.filter(
+                        referentie_product__generiek_product__upn__in=theme.upn.all(),
+                        catalogus=catalog,
+                    )
+                    reference_products = Product.objects.filter(
+                        generiek_product__upn__in=theme.upn.all(),
+                        catalogus=reference_catalog,
+                    )
+                    catalog.area_and_products[area].extend(
+                        products
+                        | reference_products.exclude(specifieke_producten__in=products)
+                    )
+                    if getattr(reference_catalog, "area_and_products", None):
+                        reference_catalog.area_and_products[area].extend(
                             reference_products
                         )
-                        catalog_area_and_products[area].extend(
-                            specific_products
-                            | reference_products.exclude(
-                                generiek_product__upn__in=specific_upns
-                            )
-                        )
-
-                if (
-                    reference_catalog.user_is_redacteur(self.request.user)
-                    and reference_catalog.lokale_overheid == self.object
-                ):
-                    setattr(
-                        reference_catalog,
-                        "area_and_products",
-                        reference_catalog_area_and_products,
-                    )
-                    catalogs.append(reference_catalog)
-
-                setattr(catalog, "area_and_products", catalog_area_and_products)
-                catalogs.append(catalog)
 
         context["catalogs"] = catalogs
 
