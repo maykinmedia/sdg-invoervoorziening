@@ -2,13 +2,15 @@
 
 set -e
 
+toplevel=$(git rev-parse --show-toplevel)
+cd "$toplevel/src"
+
 LOGLEVEL=${CELERY_LOGLEVEL:-INFO}
 
 mkdir -p celerybeat
 
 echo "Starting celery beat"
-exec celery beat \
-    --app sdg \
+exec python -m celery -A sdg beat \
+    --scheduler django_celery_beat.schedulers:DatabaseScheduler \
     -l $LOGLEVEL \
-    --workdir src \
     -s ../celerybeat/beat

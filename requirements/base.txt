@@ -4,8 +4,16 @@
 #
 #    ./bin/compile_dependencies.sh
 #
+amqp==2.6.1
+    # via kombu
+billiard==3.6.4.0
+    # via celery
 bleach==4.1.0
     # via django-markdownify
+celery==4.4.6
+    # via
+    #   -r requirements/base.in
+    #   django-celery-beat
 certifi==2021.5.30
     # via
     #   elastic-apm
@@ -24,6 +32,7 @@ django==2.2.24
     #   -r requirements/base.in
     #   django-allauth
     #   django-axes
+    #   django-celery-beat
     #   django-choices
     #   django-formtools
     #   django-hijack
@@ -34,12 +43,15 @@ django==2.2.24
     #   django-redis
     #   django-rosetta
     #   django-sniplates
+    #   django-timezone-field
     #   maykin-django-two-factor-auth
 django-admin-index==1.4.0
     # via -r requirements/base.in
 django-allauth==0.45.0
     # via -r requirements/base.in
 django-axes==5.20.0
+    # via -r requirements/base.in
+django-celery-beat==1.6.0
     # via -r requirements/base.in
 django-choices==1.7.2
     # via -r requirements/base.in
@@ -71,10 +83,16 @@ django-rosetta==0.9.6
     # via -r requirements/base.in
 django-sniplates==0.7.0
     # via -r requirements/base.in
+django-timezone-field==3.1
+    # via django-celery-beat
 elastic-apm==6.3.3
     # via -r requirements/base.in
+future==0.18.2
+    # via celery
 idna==3.2
     # via requests
+kombu==4.6.11
+    # via celery
 markdown==3.3.4
     # via
     #   django-markdownify
@@ -101,6 +119,10 @@ pyjwt[crypto]==2.1.0
     # via django-allauth
 pyparsing==2.4.7
     # via packaging
+python-crontab==2.6.0
+    # via django-celery-beat
+python-dateutil==2.8.2
+    # via python-crontab
 python-decouple==3.4
     # via -r requirements/base.in
 python-dotenv==0.19.0
@@ -110,7 +132,9 @@ python3-openid==3.2.0
 pytz==2021.1
     # via
     #   -r requirements/base.in
+    #   celery
     #   django
+    #   django-timezone-field
 qrcode==6.1
     # via maykin-django-two-factor-auth
 redis==3.5.3
@@ -130,6 +154,7 @@ six==1.16.0
     #   django-choices
     #   django-compat
     #   django-rosetta
+    #   python-dateutil
     #   qrcode
 sqlparse==0.4.2
     # via django
@@ -140,5 +165,9 @@ urllib3==1.26.6
     #   sentry-sdk
 uwsgi==2.0.19.1
     # via -r requirements/base.in
+vine==1.3.0
+    # via
+    #   amqp
+    #   celery
 webencodings==0.5.1
     # via bleach

@@ -53,7 +53,7 @@ class LokaleOverheidDetailView(OverheidMixin, DetailView):
                     setattr(ref_cat, "area_and_products", deepcopy(area_and_products))
                 setattr(cat, "area_and_products", deepcopy(area_and_products))
                 catalogs.append(cat)
-            for theme in themes.filter(upn__generiek_product__isnull=False):
+            for theme in themes.filter(upn__generieke_producten__isnull=False):
                 area = theme.informatiegebied.informatiegebied
                 for catalog in catalogs:
                     reference_catalog = catalog.referentie_catalogus

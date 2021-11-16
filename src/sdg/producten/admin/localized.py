@@ -5,8 +5,6 @@ from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
 
 @admin.register(LocalizedGeneriekProduct)
 class LocalizedGeneriekProductAdmin(admin.ModelAdmin):
-    model = LocalizedGeneriekProduct
-
     list_display = (
         "get_upn_uri",
         "product_titel",
@@ -25,8 +23,6 @@ class LocalizedGeneriekProductAdmin(admin.ModelAdmin):
 
 @admin.register(LocalizedProduct)
 class LocalizedProductAdmin(admin.ModelAdmin):
-    model = LocalizedProduct
-
     list_display = ("product_titel_decentraal",)
     list_filter = ("datum_wijziging",)
     ordering = ("datum_wijziging", "product_titel_decentraal")

@@ -1,5 +1,4 @@
 UniformeProductnaam,URI,Rijk,Provincie,Waterschap,Gemeente,Burger,Bedrijf,Dienstenwet,SDG,Autonomie,Medebewind,Aanvraag,Subsidie,Melding,Verplichting,DigiDMacht,Grondslag,Grondslaglabel,Grondslaglink
-UPL-naam nog niet beschikbaar,http://standaarden.overheid.nl/owms/terms/UPL-naam_nog_niet_beschikbaar,X,X,X,X,,,,,,,,,,,,,,
 aanleunwoning,http://standaarden.overheid.nl/owms/terms/aanleunwoning,,,,X,X,,,,,,,,,,,,,
 aanpassing zelfgebouwd vliegtuig melding,http://standaarden.overheid.nl/owms/terms/aanpZelfbVliegtMeld,X,,,,X,,,X,,,,,X,,,http://standaarden.overheid.nl/owms/terms/RegAmLuchtv_art_7,Artikel 7 Regeling amateurbouwluchtvaartuigen,https://wetten.overheid.nl/jci1.3:c:BWBR0013494&Paragraaf=4&artikel=7
 aanschrijving,http://standaarden.overheid.nl/owms/terms/aanschrijving,,X,X,X,X,X,,,X,X,,,,,,http://standaarden.overheid.nl/owms/terms/Gemw_art_125,Artikel 125 Gemeentewet,https://wetten.overheid.nl/jci1.3:c:BWBR0005416&titeldeel=III&hoofdstuk=VIII&Paragraaf=4&artikel=125

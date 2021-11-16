@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.accounts.models import Role
+from sdg.core.db.fields import DynamicArrayField
 from sdg.core.models.validators import (
     validate_reference_catalog,
     validate_specific_catalog,
@@ -52,6 +53,14 @@ class ProductenCatalogus(models.Model):
     )
     toelichting = models.TextField(
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."
+    )
+
+    autofill = models.BooleanField(_("autofill"), default=False)
+    autofill_upn_filter = DynamicArrayField(
+        models.CharField(_("filter"), max_length=80),
+        help_text=_("autofill upn filter"),
+        blank=True,
+        default=list,
     )
 
     @property
