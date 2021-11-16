@@ -48,10 +48,12 @@ class FormWithReference {
             event.preventDefault();
 
             const referenceValue = this.referenceForm.content.getElementById(formInput.id).value;
-            if (availableEditors.hasOwnProperty(formInput.id)) {
-                availableEditors[formInput.id].setData(referenceValue);
-            } else {
-                formInput.value = referenceValue;
+            if (referenceValue) {
+                if (availableEditors.hasOwnProperty(formInput.id)) {
+                    availableEditors[formInput.id].setData(referenceValue);
+                } else {
+                    formInput.value = referenceValue;
+                }
             }
         });
     }
