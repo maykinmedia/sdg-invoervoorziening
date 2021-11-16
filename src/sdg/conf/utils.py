@@ -1,5 +1,7 @@
+import codecs
 import logging
 import os
+import re
 from shutil import which
 from subprocess import CalledProcessError, check_output
 
@@ -106,3 +108,19 @@ def get_current_version():
         return _get_version_from_git()
 
     return _get_version_from_file()
+
+
+def read_file(filename):
+    """
+    Read a utf8 encoded text file and return its contents.
+    """
+    with codecs.open(filename, "r", "utf8") as f:
+        return f.read()
+
+
+def clean_rst(text: str) -> str:
+    """Clean up unneeded rst characters."""
+    text = re.sub(r"((?P<title>.*)\n={2,})", r"# \g<title>", text)
+    text = re.sub(r"[|:][\w-]+[|:]", "", text)
+    text = re.sub(r"(.)\1{4,}", "", text)
+    return text

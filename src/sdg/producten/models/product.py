@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from datetime import date
 from typing import Any
 
@@ -145,17 +146,21 @@ class Product(models.Model):
         ),
         blank=True,
     )
+    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
 
-    @cached_property
+    @property
     def upn_uri(self):
-        return self.generic_product.upn.upn_uri
+        return self.generic_upn.upn_uri
 
-    @cached_property
+    @property
     def upn_label(self):
-        return self.generic_product.upn.upn_label
+        return self.generic_upn.upn_label
 
     @cached_property
-    def beschikbare_talen(self):
+    def beschikbare_talen(self) -> dict:
+        if not self.laatste_versie:
+            return {}
+
         return {
             i.get_taal_display(): i.taal for i in self.laatste_versie.vertalingen.all()
         }
@@ -206,6 +211,10 @@ class Product(models.Model):
         """:returns: The reference product of this product."""
         return self if self.is_referentie_product else self.referentie_product
 
+    @cached_property
+    def generic_upn(self):
+        return self.generic_product.upn
+
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
         return self.catalogus.lokale_overheid.lokaties.annotate(
@@ -218,11 +227,15 @@ class Product(models.Model):
             ),
         )
 
-    def get_latest_versions(self, quantity=5, active=False):
+    def get_latest_versions(self, quantity=5, active=False, exclude_concept=False):
         """:returns: The latest N versions for this product."""
         queryset = self.versies.all().order_by("-versie")
+
         if active:
             queryset = queryset.filter(publicatie_datum__lte=date.today())
+        if exclude_concept:
+            queryset = queryset.exclude(publicatie_datum=None)
+
         return queryset[:quantity:-1]
 
     def create_version_from_reference(self) -> ProductVersie:

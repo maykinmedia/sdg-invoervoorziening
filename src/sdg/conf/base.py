@@ -6,7 +6,13 @@ from django.urls import reverse_lazy
 
 import sentry_sdk
 
-from .utils import config, get_current_version, get_sentry_integrations
+from .utils import (
+    clean_rst,
+    config,
+    get_current_version,
+    get_sentry_integrations,
+    read_file,
+)
 
 # Build paths inside the project, so further paths can be defined relative to
 # the code root.
@@ -121,6 +127,9 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "django_celery_beat",
+    "rest_framework",
+    "drf_spectacular",
+    "django_filters",
     # Project applications.
     "sdg.accounts",
     "sdg.utils",
@@ -461,7 +470,6 @@ ACCOUNT_UNIQUE_EMAIL = True
 INVITATION_TEMPLATE = "core/email/invitation.html"
 INVITATION_SUBJECT = "SDG Invoervoorziening Invitatie"
 
-ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
 
 # Celery
@@ -474,3 +482,29 @@ CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_TASK_SOFT_TIME_LIMIT = 60
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 SILENCED_SYSTEM_CHECKS = ["utils.E001"]
+
+# DRF
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": (
+        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
+    ),
+    "DEFAULT_PARSER_CLASSES": (
+        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
+    ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "DEFAULT_PERMISSION_CLASSES": [],
+    "PAGE_SIZE": 25,
+}
+SPECTACULAR_SETTINGS = {
+    "TITLE": "SDG Invoervoorziening API",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "CAMELIZE_NAMES": True,
+    "POSTPROCESSING_HOOKS": [
+        "drf_spectacular.hooks.postprocess_schema_enums",
+        "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
+    ],
+}

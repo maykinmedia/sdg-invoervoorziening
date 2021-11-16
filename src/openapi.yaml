@@ -1,0 +1,729 @@
+openapi: 3.0.3
+info:
+  title: SDG Invoervoorziening API
+  version: 1.0.0
+  description: "\n# SDG invoervoorziening\n\n 0.1.0\n https://bitbucket.org/maykinmedia/sdg\n\
+    \ vng, sdg, pdc\n 3.8\n\n  \n\nBeheer de teksten van producten en diensten t.b.v.\
+    \ de `Single Digital Gateway`_\n(SDG).\n\nOntwikkeld door `Maykin Media B.V.`_\
+    \ in opdracht van `VNG Realisatie`_.\n\n\n# Introductie\n\nDe SDG invoervoorziening\
+    \ is een applicatie voor het beheren en ontsluiten van \nSDG productbeschrijvingen\
+    \ van gemeenten. Deze productomschrijvingen worden \nontsloten via een API. \n\
+    \nGemeenten kunnen een referentie-productbeschrijving overnemen of kunnen hiervan\
+    \ \nafwijken en hun eigen beschrijving maken.\n\nSpeerpunten zijn\n\n* Ontzorging:\
+    \ Gemeenten hoeven voor SDG informeren hun website niet aan te \n  passen.\n*\
+    \ Uniformeren productbeschrijvingen: Een gedeelde invoervoorziening maakt het\
+    \ \n  mogelijk om gemeenten te ondersteunen met een referentie-productencatalogus.\
+    \ \n  Gemeenten kunnen een referentie-productbeschrijving overnemen of kunnen\
+    \ \n  hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit\
+    \ op \n  de generieke teksten die met de specifieke teksten worden getoond op\
+    \ de \n  nationale portalen. \n* Gemeenten beheren SDG content in de invoervoorziening.\
+    \ Gemeenten beheren hun \n  eigen webcontent in hun eigen CMS. d. SDG content\
+    \ wordt bijgehouden ten \n  behoeve van publicatie op de nationale portalen. De\
+    \ gemeente kan de SDG \n  content op haar eigen website en via andere kanalen\
+    \ gebruiken en publiceren, \n  mits ze zelf een API maken die dit mogelijk maakt.\
+    \ Dit is buiten scope van \n  het project zoals beschreven in dit document.\n\n\
+    \n# Documentatie\n\nZie ``INSTALL.rst`` voor installatie instructies, beschikbare\
+    \ configuratie \nmogelijkheden en commando's.\n\n\n# Links\n\n* `Issues <https://taiga.maykinmedia.nl/project/vng-sdg-invoervoorziening>`_\n\
+    * `Code <https://github.com/maykinmedia/sdg-invoervoorziening>`_\n\n..  image::\
+    \ https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml/badge.svg\n\
+    Build status\nhttps://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml\n\
+    \n..  image:: https://img.shields.io/badge/code%20style-black-.svg\nCode style\n\
+    https://github.com/psf/black\n\n..  image:: https://img.shields.io/badge/python-3.8%2B-blue.svg\n\
+    Supported Python version\n\n\n.. _`Maykin Media B.V.`: https://www.maykinmedia.nl\n\
+    .. _`VNG Realisatie`: https://www.vngrealisatie.nl/\n.. _`Single Digital Gateway`:\
+    \ https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ2018TOC\n"
+paths:
+  /api/v1/catalogi:
+    get:
+      operationId: catalogiList
+      description: Viewset for a municipality catalog, retrieved by uuid
+      parameters:
+      - in: query
+        name: organisatie
+        schema:
+          type: string
+          format: uuid
+        description: Toont catalogi die bij de opgegeven organisatie horen.
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - catalogi
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductenCatalogusList'
+          description: ''
+  /api/v1/catalogi/{uuid}:
+    get:
+      operationId: catalogiRetrieve
+      description: Viewset for a municipality catalog, retrieved by uuid
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - catalogi
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductenCatalogus'
+          description: ''
+  /api/v1/locaties:
+    get:
+      operationId: locatiesList
+      description: Viewset for a location, retrieved by uuid
+      parameters:
+      - in: query
+        name: organisatie
+        schema:
+          type: string
+          format: uuid
+        description: Toont locaties die bij de opgegeven organisatie horen.
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - locaties
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLokatieList'
+          description: ''
+  /api/v1/locaties/{uuid}:
+    get:
+      operationId: locatiesRetrieve
+      description: Viewset for a location, retrieved by uuid
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - locaties
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Lokatie'
+          description: ''
+  /api/v1/organisaties:
+    get:
+      operationId: organisatiesList
+      description: Viewset for a municipality, retrieved by uuid
+      parameters:
+      - in: query
+        name: owmsIdentifier
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      tags:
+      - organisaties
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLokaleOverheidList'
+          description: ''
+  /api/v1/organisaties/{uuid}:
+    get:
+      operationId: organisatiesRetrieve
+      description: Viewset for a municipality, retrieved by uuid
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - organisaties
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LokaleOverheid'
+          description: ''
+  /api/v1/producten:
+    get:
+      operationId: productenList
+      description: Viewset for a product, retrieved by uuid
+      parameters:
+      - in: query
+        name: catalogus
+        schema:
+          type: string
+          format: uuid
+        description: Toont producten die behoren tot de catalogus van de opgegeven
+          uuid.
+      - in: query
+        name: doelgroep
+        schema:
+          type: string
+        description: Toont producten die overeenkomen met de opgegeven doelgroepen.
+      - in: query
+        name: organisatie
+        schema:
+          type: string
+          format: uuid
+        description: Toont producten die bij de opgegeven organisatie horen.
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: query
+        name: publicatieDatum
+        schema:
+          type: string
+          format: date
+        description: Toont producten met een publicatiedatum groter dan of gelijk
+          aan de opgegeven datum.
+      tags:
+      - producten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+  /api/v1/producten/{productUuid}/historie:
+    get:
+      operationId: productenHistorieList
+      description: Viewset for the version history of a product.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - producten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductVersieList'
+          description: ''
+  /api/v1/producten/{uuid}:
+    get:
+      operationId: productenRetrieve
+      description: Viewset for a product, retrieved by uuid
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        required: true
+      tags:
+      - producten
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+components:
+  schemas:
+    DoelgroepEnum:
+      enum:
+      - burgers
+      - bedrijven
+      type: string
+    LocalizedProduct:
+      type: object
+      description: Serializer for the localized version of a product.
+      properties:
+        productVersie:
+          type: integer
+          title: Specifieke product
+          description: Het specifieke product van deze vertaling.
+        taal:
+          allOf:
+          - $ref: '#/components/schemas/TaalEnum'
+          description: De taal waarin de betreffende tekst is geschreven.ISO 639-1
+            (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+        decentraleLink:
+          type: string
+          format: uri
+          description: Link naar decentrale productpagina voor burgers en / of bedrijven.
+          maxLength: 200
+        specifiekeLink:
+          type: string
+          format: uri
+          description: URL decentrale productpagina.
+          maxLength: 200
+        specifiekeTekst:
+          type: string
+          description: Decentrale omschrijving.
+        bewijs:
+          type: string
+          description: Bewijs (type/format).
+        bezwaarEnBeroep:
+          type: string
+          description: Bezwaar en beroep.
+        decentraleProcedureLink:
+          type: string
+          format: uri
+          description: Link naar de procedure voor burgers en / of bedrijven.
+          maxLength: 200
+        kostenEnBetaalmethoden:
+          type: string
+          description: Kosten en betaalmethoden.
+        procedureBeschrijving:
+          type: string
+          description: Procedurebeschrijving.
+        productTitelDecentraal:
+          type: string
+          description: De titel van het decentrale product, die immers kan afwijken
+            van de landelijke titel.
+          maxLength: 50
+        uitersteTermijn:
+          type: string
+          description: Deadlines.
+        vereisten:
+          type: string
+          description: Vereisten auth/id/sign.
+        verwijzingLinks:
+          type: array
+          items:
+            type: string
+            format: uri
+            title: Url van verwijzing
+            maxLength: 1000
+          description: Decentrale verwijzingen.
+        wtdBijGeenReactie:
+          type: string
+          description: Wat te doen bij geen reactie.
+        datumWijziging:
+          type: string
+          format: date-time
+          readOnly: true
+          description: 'Decentrale overheden geven een wijzigingsdatum mee voor hun
+            informatie. Deze datum wordt op het portaal getoond. '
+      required:
+      - datumWijziging
+      - productVersie
+      - taal
+    LokaleOverheid:
+      type: object
+      description: Serializer for municipality details, including organization details,
+        catalogs and locations.
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        organisatie:
+          $ref: '#/components/schemas/Overheidsorganisatie'
+        lokaties:
+          type: array
+          items:
+            type: string
+            format: uri
+        catalogi:
+          type: array
+          items:
+            type: string
+            format: uri
+        contactNaam:
+          type: string
+          description: de naam van de verantwoordelijke contactpersoon.
+          maxLength: 40
+        contactWebsite:
+          type: string
+          format: uri
+          description: De website van de verantwoordelijke contactpersoon.
+          maxLength: 200
+        contactEmailadres:
+          type: string
+          format: email
+          description: Het e-mailadres van de verantwoordelijke contactpersoon.
+          maxLength: 254
+        contactTelefoonnummer:
+          type: string
+          description: Het telefoonnummer van de verantwoordelijke contactpersoon.
+          maxLength: 20
+        bevoegdeOrganisatie:
+          $ref: '#/components/schemas/Overheidsorganisatie'
+        ondersteuningsOrganisatie:
+          $ref: '#/components/schemas/Overheidsorganisatie'
+        verantwoordelijkeOrganisatie:
+          $ref: '#/components/schemas/Overheidsorganisatie'
+      required:
+      - bevoegdeOrganisatie
+      - catalogi
+      - contactNaam
+      - lokaties
+      - ondersteuningsOrganisatie
+      - organisatie
+      - uuid
+      - verantwoordelijkeOrganisatie
+    Lokatie:
+      type: object
+      description: Serializer for location details, including contact details, address
+        and opening times.
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        land:
+          type: string
+          maxLength: 128
+        naam:
+          type: string
+          description: De naam van de lokatie.
+          maxLength: 40
+        nummer:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        plaats:
+          type: string
+          maxLength: 256
+        postcode:
+          type: string
+          maxLength: 6
+        straat:
+          type: string
+          maxLength: 256
+        openingstijden:
+          allOf:
+          - $ref: '#/components/schemas/Openingstijden'
+          readOnly: true
+      required:
+      - land
+      - naam
+      - nummer
+      - openingstijden
+      - plaats
+      - postcode
+      - straat
+      - uuid
+    Openingstijden:
+      type: object
+      properties:
+        maandag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        dinsdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        woensdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        donderdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        vrijdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        zaterdag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+        zondag:
+          type: array
+          items:
+            type: string
+            maxLength: 32
+    Overheidsorganisatie:
+      type: object
+      description: Serializer for Overheidsorganisatie, including identifier, label
+        and end date.
+      properties:
+        owmsIdentifier:
+          type: string
+          format: uri
+          description: De metadatastandaard voor informatie van de nederlandse overheid
+            op internet.
+          maxLength: 200
+        owmsPrefLabel:
+          type: string
+          description: De wettelijk erkende naam van de organisatie.
+          maxLength: 200
+        owmsEndDate:
+          type: string
+          format: date-time
+          nullable: true
+          title: End date
+          description: De endDate, zoals gevonden in het OWMS-model.
+      required:
+      - owmsIdentifier
+      - owmsPrefLabel
+    PaginatedLokaleOverheidList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LokaleOverheid'
+    PaginatedLokatieList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lokatie'
+    PaginatedProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+    PaginatedProductVersieList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVersie'
+    PaginatedProductenCatalogusList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductenCatalogus'
+    Product:
+      type: object
+      description: Serializer for a product, including UPN, availability, locations
+        and latest version translations.
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        lokaleOverheid:
+          type: string
+          format: uri
+        catalogus:
+          type: string
+          format: uri
+          description: De catalogus waartoe dit product behoort.
+        lokaties:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: De locaties die zijn toegewezen aan de product.
+        doelgroep:
+          type: array
+          items:
+            $ref: '#/components/schemas/DoelgroepEnum'
+          description: 'Geeft aan voor welke doelgroep het product is bedoeld: burgers,
+            bedrijven of burgers en bedrijven. Wordt gebruikt wanneer een portaal
+            informatie over het product ophaalt uit de invoervoorziening. Zo krijgen
+            de ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. '
+        vertalingen:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedProduct'
+          readOnly: true
+        gerelateerdeProducten:
+          type: array
+          items:
+            type: string
+            format: uri
+            title: Gerelateerd aan
+          title: Gerelateerd aan
+          description: Een verwijzing naar een gerelateerd product.
+      required:
+      - catalogus
+      - lokaleOverheid
+      - uuid
+      - vertalingen
+    ProductVersie:
+      type: object
+      description: Serializer for the version of a product.
+      properties:
+        versie:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Het versienummer van het product.
+        gemaaktOp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De oorspronkelijke aanmaakdatum voor deze productversie.
+        gewijzigdOp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De wijzigingsdatum voor deze productversie.
+        publicatieDatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum van publicatie van de productversie.
+        vertalingen:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedProduct'
+      required:
+      - gemaaktOp
+      - gewijzigdOp
+      - vertalingen
+    ProductenCatalogus:
+      type: object
+      description: Serializer for ProductenCatalogus details, including organizations
+        and products.
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+        domein:
+          type: string
+          description: Een afkorting die wordt gebruikt om het domein aan te duiden.
+          maxLength: 5
+        naam:
+          type: string
+          description: De naam van de producten catalogus.
+          maxLength: 120
+        isReferentieCatalogus:
+          type: boolean
+          description: Geeft aan of dit een referentiecatalogus is.
+        referentieCatalogus:
+          type: string
+          format: uri
+          nullable: true
+          description: De catalogus van referentie.
+        toelichting:
+          type: string
+          description: Toelichting bij het catalogus.
+        versie:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Het versienummer van het producten catalogus.
+        producten:
+          type: array
+          items:
+            type: string
+            format: uri
+      required:
+      - domein
+      - naam
+      - producten
+      - uuid
+    TaalEnum:
+      enum:
+      - nl
+      - en
+      type: string

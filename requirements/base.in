@@ -19,16 +19,20 @@ django-allauth
 django-markdownx
 django-markdownify
 django-celery-beat
+django-filter
 celery
 
 maykin-django-two-factor-auth[phonenumbers]
 
 
 # API libraries
-# djangorestframework
+djangorestframework
+djangorestframework-camel-case
+drf-spectacular  # api documentation
 # django-extra-fields
 # django-filter
 # drf-yasg  # api documentation
+vng-api-common
 
 # WSGI servers & monitoring - production oriented
 uwsgi

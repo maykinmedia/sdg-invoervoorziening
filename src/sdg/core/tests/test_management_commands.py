@@ -38,7 +38,7 @@ class TestImportData(CommandTestCase):
         self.assertEqual(5, Overheidsorganisatie.objects.count())
 
         organisatie = Overheidsorganisatie.objects.first()
-        self.assertEqual("'s-Graveland", organisatie.owms_pref_label)
+        self.assertEqual(organisatie.owms_pref_label, "'s-Graveland")
         self.assertEqual(
             "http://standaarden.overheid.nl/owms/terms/'s-Graveland_(gemeente)",
             organisatie.owms_identifier,
@@ -56,8 +56,8 @@ class TestImportData(CommandTestCase):
         self.assertEqual(24, Informatiegebied.objects.count())
 
         informatiegebied = Informatiegebied.objects.first()
-        self.assertEqual("A1", informatiegebied.code)
-        self.assertEqual("Reizen binnen de Unie", informatiegebied.informatiegebied)
+        self.assertEqual(informatiegebied.code, "A1")
+        self.assertEqual(informatiegebied.informatiegebied, "Reizen binnen de Unie")
         self.assertEqual(
             "http://standaarden.overheid.nl/owms/terms/sdg_reizUnie",
             informatiegebied.informatiegebied_uri,
@@ -70,7 +70,7 @@ class TestImportData(CommandTestCase):
 
         self.assertIn("Successfully imported", out)
         self.assertIn("(18 objects)", out)
-        self.assertEqual(18, UniformeProductnaam.objects.count())
+        self.assertEqual(UniformeProductnaam.objects.count(), 18)
 
         upn = UniformeProductnaam.objects.first()
         self.assertEqual(
