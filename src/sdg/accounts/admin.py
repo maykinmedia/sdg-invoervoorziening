@@ -101,4 +101,5 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
-        post_event("save_user", user=form.instance, request=request)
+        if not change:  # new user
+            post_event("save_user", user=form.instance, request=request)
