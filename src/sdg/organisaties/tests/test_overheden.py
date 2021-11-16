@@ -69,25 +69,6 @@ class LokaleOverheidDetailViewTests(WebTest):
         lokale_overheid.organisatie.save()
         self.app.get(lokale_overheid.get_absolute_url(), status=403)
 
-    def test_municipality_details_are_displayed(self):
-        lokale_overheid = LokaleOverheidFactory.create()
-        lokaties = LokatieFactory.create_batch(3, lokale_overheid=lokale_overheid)
-        RoleFactory.create(
-            user=self.user, lokale_overheid=lokale_overheid, is_redacteur=True
-        )
-
-        response = self.app.get(lokale_overheid.get_absolute_url())
-        response_text = response.text
-
-        self.assertIn(str(lokale_overheid), response_text)
-        self.assertIn(lokale_overheid.contact_website, response_text)
-        self.assertIn(lokale_overheid.contact_telefoonnummer, response_text)
-        self.assertIn(lokale_overheid.contact_emailadres, response_text)
-        for lokatie in lokaties:
-            self.assertIn(str(lokatie), response_text)
-            self.assertIn(lokatie.postcode, response_text)
-            self.assertIn(lokatie.maandag[0], response_text)
-
     def test_specific_catalog_is_automatically_generated(self):
         localized_reference_product = LocalizedReferentieProductFactory.create()
         reference_catalog = localized_reference_product.product_versie.product.catalogus
