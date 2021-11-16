@@ -90,8 +90,13 @@ class FormWithReference {
 
         editButton.addEventListener("click", (event) => {
             event.preventDefault();
-            cell.classList.remove(disabledCellClass);
-            enableCellInputs(cell);
+            if (cell.classList.contains(disabledCellClass)) {
+                cell.classList.remove(disabledCellClass);
+                enableCellInputs(cell);
+            } else {
+                cell.classList.add(disabledCellClass);
+                disableCellInputs(cell);
+            }
         });
     }
 
