@@ -7,6 +7,7 @@ from sdg.core.models import (
     UniformeProductnaam,
 )
 from sdg.core.utils import string_to_date
+from sdg.organisaties.models import LokaleOverheid
 
 
 def load_gemeenten(data: List[Dict[str, Any]]) -> int:
@@ -16,10 +17,14 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
     :return: The total count of the created objects.
     """
 
+    def _is_municipality(resource_identifier: str) -> bool:
+        return resource_identifier.endswith("(gemeente)")
+
     count = 0
     for obj in data:
-        _oo, created = Overheidsorganisatie.objects.update_or_create(
-            owms_identifier=obj.get("resourceIdentifier"),
+        resource_id = obj.get("resourceIdentifier")
+        organisatie, created = Overheidsorganisatie.objects.update_or_create(
+            owms_identifier=resource_id,
             defaults={
                 "owms_pref_label": obj.get("prefLabel"),
                 "owms_end_date": string_to_date(obj.get("endDate"), "%Y-%m-%d")
@@ -27,7 +32,17 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
                 else None,
             },
         )
-        count += int(created)
+        if _is_municipality(resource_id):
+            LokaleOverheid.objects.get_or_create(
+                organisatie=organisatie,
+                defaults={
+                    "bevoegde_organisatie": organisatie,
+                    "ondersteunings_organisatie": organisatie,
+                    "verantwoordelijke_organisatie": organisatie,
+                },
+            )
+        if created:
+            count += 1
 
     return count
 
