@@ -16,6 +16,8 @@ from sdg.api.views import (
     ProductViewSet,
 )
 
+app_name = "api"
+
 router = routers.DefaultRouter(trailing_slash=False)
 router.register("catalogi", CatalogusViewSet)
 router.register(

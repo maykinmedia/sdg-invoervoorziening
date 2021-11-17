@@ -16,7 +16,7 @@ from sdg.producten.tests.factories.product import (
 
 
 class ProductenCatalogusFilterTests(APITestCase):
-    url = reverse("productencatalogus-list")
+    url = reverse("api:productencatalogus-list")
 
     def test_filter_organisatie(self):
         catalog, *_ = ProductenCatalogusFactory.create_batch(5)
@@ -34,7 +34,7 @@ class ProductenCatalogusFilterTests(APITestCase):
 
 
 class ProductFilterTests(APITestCase):
-    url = reverse("product-list")
+    url = reverse("api:product-list")
 
     def test_filter_organisatie(self):
         product, *_ = ReferentieProductFactory.create_batch(5)
@@ -100,7 +100,7 @@ class ProductFilterTests(APITestCase):
 
 
 class LokatieFilterTests(APITestCase):
-    url = reverse("lokatie-list")
+    url = reverse("api:lokatie-list")
 
     def test_filter_organisatie(self):
         location, *_ = LokatieFactory.create_batch(5)
@@ -118,7 +118,7 @@ class LokatieFilterTests(APITestCase):
 
 
 class LokaleOverheidFilterTests(APITestCase):
-    url = reverse("lokaleoverheid-list")
+    url = reverse("api:lokaleoverheid-list")
 
     def test_filter_organisatie(self):
         municipality, *_ = LokaleOverheidFactory.create_batch(5)

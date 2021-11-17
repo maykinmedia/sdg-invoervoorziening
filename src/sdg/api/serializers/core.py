@@ -21,7 +21,7 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             "referentie_catalogus": {
                 "lookup_field": "uuid",
-                "view_name": "productencatalogus-detail",
+                "view_name": "api:productencatalogus-detail",
             },
-            "producten": {"lookup_field": "uuid", "view_name": "product-detail"},
+            "producten": {"lookup_field": "uuid", "view_name": "api:product-detail"},
         }

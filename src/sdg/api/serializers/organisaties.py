@@ -68,10 +68,10 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             "catalogi": {
                 "lookup_field": "uuid",
-                "view_name": "productencatalogus-detail",
+                "view_name": "api:productencatalogus-detail",
             },
             "lokaties": {
                 "lookup_field": "uuid",
-                "view_name": "lokatie-detail",
+                "view_name": "api:lokatie-detail",
             },
         }

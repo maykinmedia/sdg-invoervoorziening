@@ -20,7 +20,7 @@ from sdg.producten.tests.factories.product import (
 class CatalogiTests(APITestCase):
     def test_list_catalogs(self):
         ProductenCatalogusFactory.create_batch(2)
-        list_url = reverse("productencatalogus-list")
+        list_url = reverse("api:productencatalogus-list")
 
         response = self.client.get(list_url)
 
@@ -31,7 +31,7 @@ class CatalogiTests(APITestCase):
 
     def test_retrieve_catalog_by_uuid(self):
         catalog = ProductenCatalogusFactory.create()
-        detail_url = reverse("productencatalogus-detail", args=[catalog.uuid])
+        detail_url = reverse("api:productencatalogus-detail", args=[catalog.uuid])
 
         response = self.client.get(detail_url)
 
@@ -57,7 +57,7 @@ class CatalogiTests(APITestCase):
 class ProductenTests(APITestCase):
     def test_list_products(self):
         ReferentieProductFactory.create_batch(2)
-        list_url = reverse("product-list")
+        list_url = reverse("api:product-list")
 
         response = self.client.get(list_url)
 
@@ -74,7 +74,7 @@ class ProductenTests(APITestCase):
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
         product = product_version.product
 
-        detail_url = reverse("product-detail", args=[product.uuid])
+        detail_url = reverse("api:product-detail", args=[product.uuid])
 
         response = self.client.get(detail_url)
 
@@ -84,11 +84,11 @@ class ProductenTests(APITestCase):
 
         self.assertEqual(f"{product.uuid}", data["uuid"])
         self.assertEqual(
-            f"http://testserver{reverse('lokaleoverheid-detail', args=[product.catalogus.lokale_overheid.uuid])}",
+            f"http://testserver{reverse('api:lokaleoverheid-detail', args=[product.catalogus.lokale_overheid.uuid])}",
             data["lokaleOverheid"],
         )
         self.assertEqual(
-            f"http://testserver{reverse('productencatalogus-detail', args=[product.catalogus.uuid])}",
+            f"http://testserver{reverse('api:productencatalogus-detail', args=[product.catalogus.uuid])}",
             data["catalogus"],
         )
 
@@ -114,7 +114,9 @@ class ProductenTests(APITestCase):
         ReferentieProductVersieFactory.create_batch(
             2, publicatie_datum=PAST_DATE, product=product
         )
-        response = self.client.get(reverse("product-history-list", args=[product.uuid]))
+        response = self.client.get(
+            reverse("api:product-history-list", args=[product.uuid])
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -131,7 +133,9 @@ class ProductenTests(APITestCase):
             2, publicatie_datum=PAST_DATE, product=product
         )
         ReferentieProductVersieFactory.create(product=product, publicatie_datum=None)
-        response = self.client.get(reverse("product-history-list", args=[product.uuid]))
+        response = self.client.get(
+            reverse("api:product-history-list", args=[product.uuid])
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -142,7 +146,7 @@ class ProductenTests(APITestCase):
 class OrganisatiesTests(APITestCase):
     def test_list_organizations(self):
         LokaleOverheidFactory.create_batch(2)
-        list_url = reverse("lokaleoverheid-list")
+        list_url = reverse("api:lokaleoverheid-list")
 
         response = self.client.get(list_url)
 
@@ -153,7 +157,7 @@ class OrganisatiesTests(APITestCase):
 
     def test_retrieve_organization_by_uuid(self):
         municipality = LokaleOverheidFactory.create()
-        detail_url = reverse("lokaleoverheid-detail", args=[municipality.uuid])
+        detail_url = reverse("api:lokaleoverheid-detail", args=[municipality.uuid])
 
         response = self.client.get(detail_url)
 
@@ -198,7 +202,7 @@ class OrganisatiesTests(APITestCase):
 class LocatiesTests(APITestCase):
     def test_list_locations(self):
         LokatieFactory.create_batch(2)
-        list_url = reverse("lokatie-list")
+        list_url = reverse("api:lokatie-list")
 
         response = self.client.get(list_url)
 
@@ -209,7 +213,7 @@ class LocatiesTests(APITestCase):
 
     def test_retrieve_location_by_uuid(self):
         lokatie = LokatieFactory.create()
-        detail_url = reverse("lokatie-detail", args=[lokatie.uuid])
+        detail_url = reverse("api:lokatie-detail", args=[lokatie.uuid])
 
         response = self.client.get(detail_url)
 

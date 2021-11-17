@@ -56,7 +56,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     lokale_overheid = HyperlinkedRelatedField(
         source="catalogus.lokale_overheid",
         lookup_field="uuid",
-        view_name="lokaleoverheid-detail",
+        view_name="api:lokaleoverheid-detail",
         queryset=LokaleOverheid.objects.all(),
     )
     vertalingen = SerializerMethodField(method_name="get_vertalingen")
@@ -75,19 +75,19 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         extra_kwargs = {
             "catalogus": {
                 "lookup_field": "uuid",
-                "view_name": "productencatalogus-detail",
+                "view_name": "api:productencatalogus-detail",
             },
             "referentie_product": {
                 "lookup_field": "uuid",
-                "view_name": "product-detail",
+                "view_name": "api:product-detail",
             },
             "gerelateerde_producten": {
                 "lookup_field": "uuid",
-                "view_name": "product-detail",
+                "view_name": "api:product-detail",
             },
             "lokaties": {
                 "lookup_field": "uuid",
-                "view_name": "lokatie-detail",
+                "view_name": "api:lokatie-detail",
             },
         }
 
