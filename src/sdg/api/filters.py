@@ -1,6 +1,8 @@
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from django_filters.rest_framework import FilterSet, filters
+from djangorestframework_camel_case.util import camel_to_underscore
 
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid, Lokatie
@@ -43,6 +45,20 @@ class ProductFilterSet(FilterSet):
             "Toont producten met een publicatiedatum groter dan of gelijk aan de opgegeven datum."
         ),
     )
+    upnLabel = filters.CharFilter(
+        method="filter_upn", help_text=_("Toont producten met een UPN label")
+    )
+    upnUri = filters.CharFilter(
+        method="filter_upn", help_text=_("Toont producten met een UPN URI")
+    )
+
+    def filter_upn(self, queryset, name, value):
+        """:returns: filtered queryset for the given product's UPN."""
+        parameter = camel_to_underscore(name)
+        return queryset.all().filter(
+            Q(**{f"generiek_product__upn__{parameter}": value})
+            | Q(**{f"referentie_product__generiek_product__upn__{parameter}": value})
+        )
 
     def filter_publicatie_datum(self, queryset, name, value):
         """:returns: products having versions greater than or equal to provided date."""
@@ -55,6 +71,8 @@ class ProductFilterSet(FilterSet):
             "doelgroep",
             "catalogus",
             "publicatieDatum",
+            "upnLabel",
+            "upnUri",
         )
 
 
@@ -75,7 +93,8 @@ class LokaleOverheidFilterSet(FilterSet):
     """Filter for municipalities. Allows filtering by OWMS identifier."""
 
     owmsIdentifier = filters.CharFilter(field_name="organisatie__owms_identifier")
+    owmsPrefLabel = filters.CharFilter(field_name="organisatie__owms_pref_label")
 
     class Meta:
         model = LokaleOverheid
-        fields = ("owmsIdentifier",)
+        fields = ("owmsIdentifier", "owmsPrefLabel")
