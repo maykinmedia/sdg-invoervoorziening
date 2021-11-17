@@ -43,17 +43,17 @@ urlpatterns = [
                 path(
                     "openapi.yaml",
                     SpectacularYAMLAPIView.as_view(),
-                    name="schema",
+                    name="schema-yaml",
                 ),
                 path(
                     "openapi.json",
                     SpectacularJSONAPIView.as_view(),
-                    name="schema",
+                    name="schema-json",
                 ),
                 path(
                     "schema/",
-                    SpectacularRedocView.as_view(url_name="schema"),
-                    name="schema-redoc",
+                    SpectacularRedocView.as_view(url_name="api:schema-yaml"),
+                    name="schema",
                 ),
             ]
         ),
