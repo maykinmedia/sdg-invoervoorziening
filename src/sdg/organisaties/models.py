@@ -52,7 +52,15 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         blank=True,
     )
     users = models.ManyToManyField(User, through="accounts.Role")
-    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
 
     def create_specific_catalogs(self) -> List[ProductenCatalogus]:
         """Create a specific catalog (if it doesn't exist) for each reference catalog."""
@@ -185,7 +193,15 @@ class Lokatie(models.Model):
         blank=True,
         default=list,
     )
-    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
 
     def get_formatted_address(self):
         return f"{self.naam}\n{self.straat} {self.nummer}\n{self.postcode} {self.plaats}\n{self.land}"
