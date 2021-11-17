@@ -15,7 +15,6 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocalizedProduct
         fields = (
-            "product_versie",
             "taal",
             "decentrale_link",
             "specifieke_link",
@@ -53,22 +52,29 @@ class ProductVersieSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 
-    lokale_overheid = HyperlinkedRelatedField(
+    upn_label = serializers.CharField(source="generic_product.upn_label")
+    upn_uri = serializers.URLField(source="generic_product.upn_uri")
+    organisatie = HyperlinkedRelatedField(
         source="catalogus.lokale_overheid",
         lookup_field="uuid",
         view_name="api:lokaleoverheid-detail",
         queryset=LokaleOverheid.objects.all(),
     )
     vertalingen = SerializerMethodField(method_name="get_vertalingen")
+    versie = SerializerMethodField(method_name="get_versie")
 
     class Meta:
         model = Product
         fields = (
             "url",
             "uuid",
-            "lokale_overheid",
+            "upn_label",
+            "upn_uri",
+            "versie",
+            "organisatie",
+            "beschikbaar",
             "catalogus",
-            "lokaties",
+            "locaties",
             "doelgroep",
             "vertalingen",
             "gerelateerde_producten",
@@ -90,7 +96,8 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
                 "lookup_field": "uuid",
                 "view_name": "api:product-detail",
             },
-            "lokaties": {
+            "locaties": {
+                "source": "lokaties",
                 "lookup_field": "uuid",
                 "view_name": "api:lokatie-detail",
             },
@@ -99,3 +106,6 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
         vertalingen = getattr(obj.laatste_actieve_versie, "vertalingen", [])
         return LocalizedProductSerializer(vertalingen, many=True).data
+
+    def get_versie(self, obj: Product) -> int:
+        return getattr(obj.laatste_actieve_versie, "versie", 0)

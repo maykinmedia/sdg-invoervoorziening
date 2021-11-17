@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+from rest_framework.relations import HyperlinkedRelatedField
 
 from sdg.api.serializers.logius import OverheidsorganisatieSerializer
 from sdg.organisaties.models import LokaleOverheid, Lokatie
@@ -23,19 +24,26 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for location details, including contact details, address and opening times."""
 
     openingstijden = SerializerMethodField(method_name="get_openingstijden")
+    organisatie = HyperlinkedRelatedField(
+        source="lokale_overheid",
+        lookup_field="uuid",
+        view_name="api:lokaleoverheid-detail",
+        queryset=LokaleOverheid.objects.all(),
+    )
 
     class Meta:
         model = Lokatie
         fields = (
             "url",
             "uuid",
-            "land",
             "naam",
-            "nummer",
-            "plaats",
-            "postcode",
             "straat",
+            "nummer",
+            "postcode",
+            "plaats",
+            "land",
             "openingstijden",
+            "organisatie",
         )
         extra_kwargs = {
             "url": {
@@ -63,7 +71,7 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
             "url",
             "uuid",
             "organisatie",
-            "lokaties",
+            "locaties",
             "catalogi",
             "contact_naam",
             "contact_website",
@@ -82,7 +90,8 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
                 "lookup_field": "uuid",
                 "view_name": "api:productencatalogus-detail",
             },
-            "lokaties": {
+            "locaties": {
+                "source": "lokaties",
                 "lookup_field": "uuid",
                 "view_name": "api:lokatie-detail",
             },

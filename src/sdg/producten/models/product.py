@@ -158,11 +158,11 @@ class Product(models.Model):
 
     @property
     def upn_uri(self):
-        return self.generic_upn.upn_uri
+        return self.upn.upn_uri
 
     @property
     def upn_label(self):
-        return self.generic_upn.upn_label
+        return self.upn.upn_label
 
     @cached_property
     def beschikbare_talen(self) -> dict:
@@ -220,7 +220,7 @@ class Product(models.Model):
         return self if self.is_referentie_product else self.referentie_product
 
     @cached_property
-    def generic_upn(self):
+    def upn(self):
         return self.generic_product.upn
 
     def get_municipality_locations(self):

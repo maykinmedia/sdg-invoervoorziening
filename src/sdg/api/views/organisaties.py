@@ -1,4 +1,5 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import viewsets
 
 from sdg.api.filters import LokaleOverheidFilterSet, LokatieFilterSet
@@ -8,7 +9,19 @@ from sdg.organisaties.models import LokaleOverheid, Lokatie
 
 @extend_schema_view(
     list=extend_schema(
-        description="Lijst van alle organisaties die catalogi met producten aanbieden."
+        description="Lijst van alle organisaties die catalogi met producten aanbieden.",
+        parameters=[
+            OpenApiParameter(
+                "owmsIdentifier",
+                OpenApiTypes.URI,
+                description="De identificatie (URI) van de organisatie zoals deze gebruikt op standaarden.overheid.nl",
+            ),
+            OpenApiParameter(
+                "owmsPrefLabel",
+                OpenApiTypes.STR,
+                description="Het label van de organisatie zoals deze gebruikt op standaarden.overheid.nl",
+            ),
+        ],
     ),
     retrieve=extend_schema(
         description="Organisatie die catalogi met producten aanbiedt."
