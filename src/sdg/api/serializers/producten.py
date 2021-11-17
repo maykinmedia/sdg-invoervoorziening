@@ -2,12 +2,15 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.relations import HyperlinkedRelatedField
 
+from sdg.api.serializers.fields import LabeledUrlListField
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
 
 class LocalizedProductSerializer(serializers.ModelSerializer):
     """Serializer for the localized version of a product."""
+
+    verwijzing_links = LabeledUrlListField()
 
     class Meta:
         model = LocalizedProduct

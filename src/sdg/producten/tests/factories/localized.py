@@ -1,12 +1,10 @@
 import factory.fuzzy
-from factory import post_generation
 from factory.django import DjangoModelFactory
 
 from sdg.core.constants import TaalChoices
 from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,
-    ProductVersieFactory,
     ReferentieProductVersieFactory,
     SpecifiekProductVersieFactory,
 )
@@ -47,6 +45,11 @@ class LocalizedProductFactory(DjangoModelFactory):
     uiterste_termijn = factory.Faker("paragraph")
     vereisten = factory.Faker("paragraph")
     wtd_bij_geen_reactie = factory.Faker("paragraph")
+
+    verwijzing_links = [
+        ["label1", "https://example.com"],
+        ["label2", "https://example2.com"],
+    ]
 
     class Meta:
         model = LocalizedProduct
