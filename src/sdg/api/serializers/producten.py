@@ -64,6 +64,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
         fields = (
+            "url",
             "uuid",
             "lokale_overheid",
             "catalogus",
@@ -73,6 +74,10 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             "gerelateerde_producten",
         )
         extra_kwargs = {
+            "url": {
+                "view_name": "api:product-detail",
+                "lookup_field": "uuid",
+            },
             "catalogus": {
                 "lookup_field": "uuid",
                 "view_name": "api:productencatalogus-detail",

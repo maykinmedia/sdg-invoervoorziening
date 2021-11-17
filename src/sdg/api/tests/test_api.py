@@ -41,6 +41,7 @@ class CatalogiTests(APITestCase):
 
         self.assertEqual(
             {
+                "url": f"http://testserver{reverse('api:productencatalogus-detail', args=[catalog.uuid])}",
                 "uuid": str(catalog.uuid),
                 "domein": catalog.domein,
                 "naam": catalog.naam,
@@ -167,6 +168,7 @@ class OrganisatiesTests(APITestCase):
 
         self.assertEqual(
             {
+                "url": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[municipality.uuid])}",
                 "uuid": str(municipality.uuid),
                 "organisatie": {
                     "owmsIdentifier": municipality.organisatie.owms_identifier,
@@ -223,6 +225,7 @@ class LocatiesTests(APITestCase):
 
         self.assertEqual(
             {
+                "url": f"http://testserver{reverse('api:lokatie-detail', args=[lokatie.uuid])}",
                 "uuid": str(lokatie.uuid),
                 "nummer": int(lokatie.nummer),
                 "land": lokatie.land,

@@ -27,6 +27,7 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Lokatie
         fields = (
+            "url",
             "uuid",
             "land",
             "naam",
@@ -36,6 +37,12 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
             "straat",
             "openingstijden",
         )
+        extra_kwargs = {
+            "url": {
+                "view_name": "api:lokatie-detail",
+                "lookup_field": "uuid",
+            },
+        }
 
     def get_openingstijden(self, obj: Lokatie) -> OpeningstijdenSerializer:
         return OpeningstijdenSerializer(obj).data
@@ -53,6 +60,7 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = LokaleOverheid
         fields = (
+            "url",
             "uuid",
             "organisatie",
             "lokaties",
@@ -66,6 +74,10 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
             "verantwoordelijke_organisatie",
         )
         extra_kwargs = {
+            "url": {
+                "view_name": "api:lokaleoverheid-detail",
+                "lookup_field": "uuid",
+            },
             "catalogi": {
                 "lookup_field": "uuid",
                 "view_name": "api:productencatalogus-detail",
