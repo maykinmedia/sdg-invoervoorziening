@@ -84,9 +84,12 @@ class ProductenTests(APITestCase):
         data = response.json()
 
         self.assertEqual(f"{product.uuid}", data["uuid"])
+        self.assertEqual(f"{product.upn.upn_label}", data["upnLabel"])
+        self.assertEqual(f"{product.upn.upn_uri}", data["upnUri"])
+        self.assertEqual(1, data["versie"])
         self.assertEqual(
             f"http://testserver{reverse('api:lokaleoverheid-detail', args=[product.catalogus.lokale_overheid.uuid])}",
-            data["lokaleOverheid"],
+            data["organisatie"],
         )
         self.assertEqual(
             f"http://testserver{reverse('api:productencatalogus-detail', args=[product.catalogus.uuid])}",
@@ -101,8 +104,7 @@ class ProductenTests(APITestCase):
             ],
             data["vertalingen"][0]["verwijzingLinks"],
         )
-
-        self.assertEqual(0, len(data["lokaties"]))
+        self.assertEqual(0, len(data["locaties"]))
         self.assertEqual(0, len(data["doelgroep"]))
         self.assertEqual(0, len(data["gerelateerdeProducten"]))
 
@@ -175,7 +177,7 @@ class OrganisatiesTests(APITestCase):
                     "owmsPrefLabel": municipality.organisatie.owms_pref_label,
                     "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
                 },
-                "lokaties": [],
+                "locaties": [],
                 "catalogi": [],
                 "contactNaam": municipality.contact_naam,
                 "contactWebsite": municipality.contact_website,
@@ -242,6 +244,7 @@ class LocatiesTests(APITestCase):
                     "zaterdag": lokatie.zaterdag,
                     "zondag": lokatie.zondag,
                 },
+                "organisatie": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[lokatie.lokale_overheid.uuid])}",
             },
             data,
         )

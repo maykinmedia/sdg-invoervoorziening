@@ -98,6 +98,36 @@ class ProductFilterTests(APITestCase):
 
         self.assertEqual(3, len(data))
 
+    def test_filter_upn_label(self):
+        catalog = ProductenCatalogusFactory.create(
+            is_referentie_catalogus=True,
+        )
+        product, *_ = ReferentieProductFactory.create_batch(5, catalogus=catalog)
+
+        response = self.client.get(self.url, {"upnLabel": product.upn.upn_label})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(product.uuid), data[0]["uuid"])
+
+    def test_filter_upn_uri(self):
+        catalog = ProductenCatalogusFactory.create(
+            is_referentie_catalogus=True,
+        )
+        product, *_ = ReferentieProductFactory.create_batch(5, catalogus=catalog)
+
+        response = self.client.get(self.url, {"upnUri": product.upn.upn_uri})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(product.uuid), data[0]["uuid"])
+
 
 class LokatieFilterTests(APITestCase):
     url = reverse("api:lokatie-list")
@@ -133,3 +163,5 @@ class LokaleOverheidFilterTests(APITestCase):
 
         self.assertEqual(1, len(data))
         self.assertEqual(str(municipality.uuid), data[0]["uuid"])
+
+    # TODO: Add test for filter by label
