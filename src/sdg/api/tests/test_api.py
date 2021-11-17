@@ -98,7 +98,7 @@ class ProductenTests(APITestCase):
                 {"label": "label1", "url": "https://example.com"},
                 {"label": "label2", "url": "https://example2.com"},
             ],
-            data["vertalingen"]["verwijzing_links"],
+            data["vertalingen"][0]["verwijzingLinks"],
         )
 
         self.assertEqual(0, len(data["lokaties"]))
