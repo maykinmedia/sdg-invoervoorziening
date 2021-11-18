@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_filters.rest_framework import FilterSet, filters
 from djangorestframework_camel_case.util import camel_to_underscore
 
+from sdg.core.constants import DoelgroepChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid, Lokatie
 from sdg.producten.models import Product
@@ -29,9 +30,10 @@ class ProductFilterSet(FilterSet):
         field_name="catalogus__lokale_overheid__uuid",
         help_text=_("Toont producten die bij de opgegeven organisatie horen."),
     )
-    doelgroep = filters.CharFilter(
-        lookup_expr="icontains",
+    doelgroep = filters.ChoiceFilter(
+        choices=DoelgroepChoices.choices,
         help_text=_("Toont producten die overeenkomen met de opgegeven doelgroepen."),
+        lookup_expr="icontains",
     )
     catalogus = filters.UUIDFilter(
         field_name="catalogus__uuid",

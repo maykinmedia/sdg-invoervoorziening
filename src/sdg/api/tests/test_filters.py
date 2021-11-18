@@ -50,10 +50,8 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(str(product.uuid), data[0]["uuid"])
 
     def test_filter_doelgroep(self):
-        filter_string = "test_doelgroep"
-        product = ReferentieProductFactory.create(
-            doelgroep=["abc1", filter_string, "abc2"]
-        )
+        filter_string = "burgers"
+        product = ReferentieProductFactory.create(doelgroep=[filter_string])
         ReferentieProductFactory.create_batch(4)
 
         response = self.client.get(self.url, {"doelgroep": filter_string})
