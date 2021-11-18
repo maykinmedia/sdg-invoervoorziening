@@ -1,4 +1,4 @@
-{% extends 'organisaties/base.html' %}
+{% extends 'core/base.html' %}
 
 {% load i18n %}
 {% load producten %}
@@ -9,14 +9,10 @@
 {% block notifications %}{% endblock %}
 
 {% block inner %}
+    {{ block.super }}
     <div class="roles">
     {% with role_list.all as roles %}
         <div class="tabs">
-        <div class="tabs__tabs">
-            <a href="#roles" data-id="roles"
-               class="tabs__tab tabs__tab--selected">{% trans "Gebruikers" %}</a>
-        </div>
-
         <div class="notifications">
             {% include "core/_notifications.html" %}
         </div>
@@ -48,9 +44,9 @@
                                 <td class="tabs__table-cell">
                                     {% if lokaleoverheid_beheerder and user != request.user %}
                                         <a class="button--small button--light"
-                                           href="{% url 'organisaties:overheid_role_update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
+                                           href="{% url 'organisaties:role:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
                                         <a class="button--small button--light"
-                                           href="{% url 'organisaties:overheid_role_delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+                                           href="{% url 'organisaties:role:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
                                     {% endif %}
                                 </td>
                             </tr>

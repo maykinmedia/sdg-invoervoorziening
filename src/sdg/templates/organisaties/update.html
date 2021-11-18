@@ -70,7 +70,7 @@
             {% trans "Nog een locatie toevoegen" %}
         </div>
         <input type="submit" value="Opslaan" class="primaryAction login_button button">
-        <a href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">
+        <a href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}">
             <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
         </a>
     </form>

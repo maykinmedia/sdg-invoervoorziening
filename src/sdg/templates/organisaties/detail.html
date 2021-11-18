@@ -8,6 +8,7 @@
 {% block notifications %}{% endblock %}
 
 {% block inner %}
+    {{ block.super }}
     <div class="notifications">
         {% include "core/_notifications.html" %}
     </div>

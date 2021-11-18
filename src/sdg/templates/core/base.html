@@ -1,72 +1,23 @@
-{% extends 'master.html' %}
-{% load static %}
+{% extends 'core/base_home.html' %}
 {% load i18n %}
-{% block title %}{% block head_title %}{% endblock head_title %} | SDG{% endblock title %}
 
-{% block extra_css %}
-    <script defer src="{% static 'bundles/fontawesome.js' %}"></script>
-{% endblock %}
-
-{% block outer_content %}
-    <header class="header {% block header_classes %}{% endblock header_classes %}">
-        <div class="container header__top">
-            <div class="logo">
-                <h1 class="logo__title logo__title-medium">
-                    <a href="{% url 'core:home' %}">
-                        <span class="logo__uncolored">SD</span><span class="logo__colored">G</span>
-                    </a>
-                </h1>
-                <h2 class="logo__subtitle logo__subtitle-medium">voor gemeenten</h2>
-            </div>
-            <div class="header__user header__dropdown">
-                <i class="fas fa-user"></i>
-
-                <span class="header__username">
-                {% if request.user.first_name %}
-                    {{ request.user.get_full_name }}
-                {% else %}
-                    {{ request.user.username }}
-                {% endif %}
-                </span>
-
-                <div class="header__dropdown-list">
-                    <a class="header__dropdown-action" href="{% url 'account_logout' %}"><i
-                        class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}</a>
-                </div>
+{% block inner %}
+    {% with namespace=request.resolver_match.namespaces|last pk=lokaleoverheid.pk %}
+        <div class="tabs">
+            <div class="tabs__tabs">
+                <a href="{% url 'organisaties:catalogi:list' pk=pk %}"
+                   class="tabs__tab tabs__tab{% if namespace == "catalogi" %}--selected{% endif %}">
+                    {% trans "Catalogi" %}
+                </a>
+                <a href="#{{ value }}"
+                   class="tabs__tab tabs__tab{% if namespace == "locaties" %}--selected{% endif %}">
+                    {% trans "Locaties" %}
+                </a>
+                <a href="{% url 'organisaties:roles:list' pk=pk %}"
+                   class="tabs__tab tabs__tab{% if namespace == "roles" %}--selected{% endif %}">
+                    {% trans "Gebruikers" %}
+                </a>
             </div>
         </div>
-        <div class="container">
-            <p class="header__subtitle">{% block container_subtitle %}{% endblock container_subtitle %}</p>
-            <p class="header__title">
-                {% block container_title %}
-                    SDG voor <b>{{ lokaleoverheid }}</b>
-                    {% include "core/_municipality_switch.html" %}
-                {% endblock container_title %}
-            </p>
-        </div>
-    </header>
-{% endblock %}
-
-
-{% block content %}
-    {% block notifications %}
-        <div class="notifications">
-            {% include "core/_notifications.html" %}
-        </div>
-    {% endblock %}
-
-    {% block inner %}
-    {% endblock %}
-{% endblock %}
-
-{% block footer %}
-    <div class="footer">
-        <div class="footer__left">
-            Een initiatief van <img class="footer__logo" src="{% static 'images/vng_logo.png' %}"/>
-        </div>
-        <div class="footer__right">
-            <a class="footer__link" href="#" rel="noopener noreferrer">{% trans "Toegankelijkheid" %}</a>
-            <a class="footer__link" href="#" rel="noopener noreferrer">{% trans "Privacybeleid" %}</a>
-        </div>
-    </div>
-{% endblock footer %}
+    {% endwith %}
+{% endblock inner %}

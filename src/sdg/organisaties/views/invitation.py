@@ -17,7 +17,7 @@ User = get_user_model()
 
 
 class InvitationCreateView(OverheidMixin, CreateView):
-    template_name = "organisaties/overheid_invitation_create.html"
+    template_name = "organisaties/invitation_create.html"
     queryset = LokaleOverheid.objects.all()
     model = User
     required_roles = ["is_beheerder"]
@@ -102,7 +102,7 @@ class InvitationCreateView(OverheidMixin, CreateView):
 
 class InvitationAcceptView(SingleObjectMixin, FormView):
     queryset = UserInvitation.objects.filter(accepted=False)
-    template_name = "organisaties/overheid_invitation_accept.html"
+    template_name = "organisaties/invitation_accept.html"
     form_class = InvitationAcceptForm
     success_url = reverse_lazy("core:home")
 

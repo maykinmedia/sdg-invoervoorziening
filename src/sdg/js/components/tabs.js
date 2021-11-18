@@ -6,12 +6,14 @@ class TabsToggle {
         this.node = node;
 
         this.node.addEventListener("click", (event) => {
-            event.preventDefault();
-            [...tabsContents].forEach(tabsContent => tabsContent.classList.remove("tabs__tab-content--active"));
-            [...tabsTabs].forEach(tabsTab => tabsTab.classList.remove("tabs__tab--selected"));
-            event.currentTarget.classList.add("tabs__tab--selected");
-            const selectedContent = document.getElementById(event.currentTarget.dataset.id);
-            selectedContent.classList.add("tabs__tab-content--active");
+            if (event.target.href === "#") {
+                event.preventDefault();
+                [...tabsContents].forEach(tabsContent => tabsContent.classList.remove("tabs__tab-content--active"));
+                [...tabsTabs].forEach(tabsTab => tabsTab.classList.remove("tabs__tab--selected"));
+                event.currentTarget.classList.add("tabs__tab--selected");
+                const selectedContent = document.getElementById(event.currentTarget.dataset.id);
+                selectedContent.classList.add("tabs__tab-content--active");
+            }
         });
     }
 }

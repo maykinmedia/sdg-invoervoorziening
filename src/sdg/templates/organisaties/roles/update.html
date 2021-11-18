@@ -1,4 +1,4 @@
-{% extends 'organisaties/base.html' %}
+{% extends 'core/base.html' %}
 
 {% load i18n %}
 {% load producten %}
@@ -8,6 +8,7 @@
 {% block notifications %}{% endblock %}
 
 {% block inner %}
+    {{ block.super }}
     <form method="post" class="form">
         {% csrf_token %}
         {{ form.non_field_errors }}
