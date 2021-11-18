@@ -132,10 +132,17 @@ class Product(models.Model):
         ),
         default=list,
     )
-    beschikbaar = models.BooleanField(
-        _("beschikbaar"),
-        help_text=_("Geeft aan of het product al dan niet beschikbaar is."),
-        default=False,
+    product_aanwezig = models.BooleanField(
+        _("product aanwezig"),
+        help_text=_("Voert u dit product?"),
+        blank=True,
+        null=True,
+    )
+    product_aanwezig_toelichting = models.TextField(
+        _("product aanwezig toelichting"),
+        help_text=_("Toelichting"),
+        blank=True,
+        default="",
     )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
