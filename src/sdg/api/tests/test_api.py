@@ -172,11 +172,9 @@ class OrganisatiesTests(APITestCase):
             {
                 "url": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[municipality.uuid])}",
                 "uuid": str(municipality.uuid),
-                "organisatie": {
-                    "owmsIdentifier": municipality.organisatie.owms_identifier,
-                    "owmsPrefLabel": municipality.organisatie.owms_pref_label,
-                    "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
-                },
+                "owmsIdentifier": municipality.organisatie.owms_identifier,
+                "owmsPrefLabel": municipality.organisatie.owms_pref_label,
+                "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
                 "locaties": [],
                 "catalogi": [],
                 "contactNaam": municipality.contact_naam,

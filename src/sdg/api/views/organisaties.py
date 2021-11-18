@@ -31,7 +31,7 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a municipality, retrieved by uuid"""
 
     lookup_field = "uuid"
-    queryset = LokaleOverheid.objects.all()
+    queryset = LokaleOverheid.objects.all().prefetch_related("organisatie")
     filterset_class = LokaleOverheidFilterSet
     serializer_class = LokaleOverheidSerializer
 

@@ -59,7 +59,18 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
 class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for municipality details, including organization details, catalogs and locations."""
 
-    organisatie = OverheidsorganisatieSerializer()
+    owms_identifier = serializers.URLField(
+        source="organisatie.owms_identifier",
+        help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
+    )
+    owms_pref_label = serializers.CharField(
+        source="organisatie.owms_pref_label",
+        help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
+    )
+    owms_end_date = serializers.DateTimeField(
+        source="organisatie.owms_end_date",
+        help_text="OWMS einddatum van de hoofdorganisatie van deze lokale overheid.",
+    )
 
     bevoegde_organisatie = OverheidsorganisatieSerializer()
     ondersteunings_organisatie = OverheidsorganisatieSerializer()
@@ -70,7 +81,9 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
         fields = (
             "url",
             "uuid",
-            "organisatie",
+            "owms_identifier",
+            "owms_pref_label",
+            "owms_end_date",
             "locaties",
             "catalogi",
             "contact_naam",
