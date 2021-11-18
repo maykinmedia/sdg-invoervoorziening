@@ -2,36 +2,6 @@ openapi: 3.0.3
 info:
   title: SDG Invoervoorziening API
   version: 1.0.0
-  description: "\n# SDG invoervoorziening\n\n 0.1.0\n https://bitbucket.org/maykinmedia/sdg\n\
-    \ vng, sdg, pdc\n 3.8\n\n  \n\nBeheer de teksten van producten en diensten t.b.v.\
-    \ de `Single Digital Gateway`_\n(SDG).\n\nOntwikkeld door `Maykin Media B.V.`_\
-    \ in opdracht van `VNG Realisatie`_.\n\n\n# Introductie\n\nDe SDG invoervoorziening\
-    \ is een applicatie voor het beheren en ontsluiten van \nSDG productbeschrijvingen\
-    \ van gemeenten. Deze productomschrijvingen worden \nontsloten via een API. \n\
-    \nGemeenten kunnen een referentie-productbeschrijving overnemen of kunnen hiervan\
-    \ \nafwijken en hun eigen beschrijving maken.\n\nSpeerpunten zijn\n\n* Ontzorging:\
-    \ Gemeenten hoeven voor SDG informeren hun website niet aan te \n  passen.\n*\
-    \ Uniformeren productbeschrijvingen: Een gedeelde invoervoorziening maakt het\
-    \ \n  mogelijk om gemeenten te ondersteunen met een referentie-productencatalogus.\
-    \ \n  Gemeenten kunnen een referentie-productbeschrijving overnemen of kunnen\
-    \ \n  hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit\
-    \ op \n  de generieke teksten die met de specifieke teksten worden getoond op\
-    \ de \n  nationale portalen. \n* Gemeenten beheren SDG content in de invoervoorziening.\
-    \ Gemeenten beheren hun \n  eigen webcontent in hun eigen CMS. d. SDG content\
-    \ wordt bijgehouden ten \n  behoeve van publicatie op de nationale portalen. De\
-    \ gemeente kan de SDG \n  content op haar eigen website en via andere kanalen\
-    \ gebruiken en publiceren, \n  mits ze zelf een API maken die dit mogelijk maakt.\
-    \ Dit is buiten scope van \n  het project zoals beschreven in dit document.\n\n\
-    \n# Documentatie\n\nZie ``INSTALL.rst`` voor installatie instructies, beschikbare\
-    \ configuratie \nmogelijkheden en commando's.\n\n\n# Links\n\n* `Issues <https://taiga.maykinmedia.nl/project/vng-sdg-invoervoorziening>`_\n\
-    * `Code <https://github.com/maykinmedia/sdg-invoervoorziening>`_\n\n..  image::\
-    \ https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml/badge.svg\n\
-    Build status\nhttps://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml\n\
-    \n..  image:: https://img.shields.io/badge/code%20style-black-.svg\nCode style\n\
-    https://github.com/psf/black\n\n..  image:: https://img.shields.io/badge/python-3.8%2B-blue.svg\n\
-    Supported Python version\n\n\n.. _`Maykin Media B.V.`: https://www.maykinmedia.nl\n\
-    .. _`VNG Realisatie`: https://www.vngrealisatie.nl/\n.. _`Single Digital Gateway`:\
-    \ https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ2018TOC\n"
 paths:
   /api/v1/catalogi:
     get:
@@ -266,6 +236,18 @@ components:
       - burgers
       - bedrijven
       type: string
+    LabeledUrl:
+      type: object
+      description: Default serializer for labeled urls.
+      properties:
+        label:
+          type: string
+        url:
+          type: string
+          format: uri
+      required:
+      - label
+      - url
     LocalizedProduct:
       type: object
       description: Serializer for the localized version of a product.
@@ -323,11 +305,7 @@ components:
         verwijzingLinks:
           type: array
           items:
-            type: string
-            format: uri
-            title: Url van verwijzing
-            maxLength: 1000
-          description: Decentrale verwijzingen.
+            $ref: '#/components/schemas/LabeledUrl'
         wtdBijGeenReactie:
           type: string
           description: Wat te doen bij geen reactie.
@@ -341,6 +319,7 @@ components:
       - datumWijziging
       - productVersie
       - taal
+      - verwijzingLinks
     LokaleOverheid:
       type: object
       description: Serializer for municipality details, including organization details,
