@@ -19,7 +19,7 @@
         <div class="notifications">
             {% include "core/_notifications.html" %}
             {% with reference_product=product.referentie_product %}
-                {% if reference_product and not reference_product.beschikbaar %}
+                {% if reference_product and not reference_product.product_aanwezig %}
                     {% include 'producten/_include/beschikbaar_warning.html' %}
                 {% endif %}
                 {% if reference_product and not reference_product.generiek_product %}

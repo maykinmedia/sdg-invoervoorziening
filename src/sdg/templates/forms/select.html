@@ -1,0 +1,10 @@
+{% load utils %}
+
+<fieldset class="form__group--nopad">
+    <div class="select">
+        {{ field }}
+        {% if field.errors %}
+            {{ field.errors }}
+        {% endif %}
+    </div>
+</fieldset>

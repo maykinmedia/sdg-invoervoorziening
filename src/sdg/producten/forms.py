@@ -34,7 +34,7 @@ class ProductVersionForm(forms.ModelForm):
         choices=PublishChoices.choices, widget=ProductRadioSelect
     )
     date = forms.DateTimeField(required=False)
-    beschikbaar = forms.BooleanField(required=False)
+    product_aanwezig = forms.NullBooleanField(required=False)
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None, required=False, widget=CheckboxSelectMultiple()
     )
@@ -64,11 +64,11 @@ class ProductVersionForm(forms.ModelForm):
         """Fill product instance with cleaned data
         :returns: A boolean specifying whether a product has changed.
         """
-        fields = {"beschikbaar", "lokaties"}
+        fields = {"product_aanwezig", "lokaties"}
         if all(i not in self.changed_data for i in fields):
             return False
 
-        instance.beschikbaar = self.cleaned_data["beschikbaar"]
+        instance.product_aanwezig = self.cleaned_data["product_aanwezig"]
         instance.lokaties.set(self.cleaned_data["lokaties"])
         return True
 
@@ -78,7 +78,7 @@ class ProductVersionForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
-        self.fields["beschikbaar"].initial = _instance.product.beschikbaar
+        self.fields["product_aanwezig"].initial = _instance.product.product_aanwezig
 
         locations = _instance.product.get_municipality_locations()
         self.fields["lokaties"].queryset = locations
