@@ -12,13 +12,10 @@ class LabeledUrlSerializer(serializers.Serializer):
 
     def to_representation(self, instance):
         """Split array value into dictionary with label and url."""
-        return [
-            {
-                "label": sub_arr[0],
-                "url": sub_arr[1],
-            }
-            for sub_arr in instance
-        ]
+        return {
+            "label": instance[0],
+            "url": instance[1],
+        }
 
 
 @extend_schema_field(LabeledUrlSerializer(many=True))
