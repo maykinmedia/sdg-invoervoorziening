@@ -6,6 +6,15 @@
 
     .form__input {
       width: 93%;
+
+      &--left {
+        width: 32% !important;
+      }
+
+      &--right {
+        width: 64% !important;
+      }
+
     }
 
     .dynamic__container__button {

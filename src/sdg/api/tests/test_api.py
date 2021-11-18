@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from sdg.api.serializers import LocalizedProductSerializer, ProductSerializer
+from sdg.api.serializers import ProductSerializer
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
@@ -91,7 +91,16 @@ class ProductenTests(APITestCase):
             f"http://testserver{reverse('productencatalogus-detail', args=[product.catalogus.uuid])}",
             data["catalogus"],
         )
+
         self.assertEqual(2, len(data["vertalingen"]))
+        self.assertEqual(
+            [
+                {"label": "label1", "url": "https://example.com"},
+                {"label": "label2", "url": "https://example2.com"},
+            ],
+            data["vertalingen"][0]["verwijzingLinks"],
+        )
+
         self.assertEqual(0, len(data["lokaties"]))
         self.assertEqual(0, len(data["doelgroep"]))
         self.assertEqual(0, len(data["gerelateerdeProducten"]))
