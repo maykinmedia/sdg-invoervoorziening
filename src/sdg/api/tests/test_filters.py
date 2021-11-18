@@ -148,7 +148,7 @@ class LokatieFilterTests(APITestCase):
 class LokaleOverheidFilterTests(APITestCase):
     url = reverse("api:lokaleoverheid-list")
 
-    def test_filter_organisatie(self):
+    def test_filter_owms_identifier(self):
         municipality, *_ = LokaleOverheidFactory.create_batch(5)
 
         response = self.client.get(
@@ -162,4 +162,16 @@ class LokaleOverheidFilterTests(APITestCase):
         self.assertEqual(1, len(data))
         self.assertEqual(str(municipality.uuid), data[0]["uuid"])
 
-    # TODO: Add test for filter by label
+    def test_filter_owms_pref_label(self):
+        municipality, *_ = LokaleOverheidFactory.create_batch(5)
+
+        response = self.client.get(
+            self.url, {"owmsPrefLabel": f"{municipality.organisatie.owms_pref_label}"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(municipality.uuid), data[0]["uuid"])
