@@ -6,8 +6,8 @@
 
 {% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
 
-{% block inner %}
-    <form action="{% url "organisaties:overheid_edit" pk=lokaleoverheid.pk %}" method="post" class="form">
+{% block inner_content %}
+    <form action="{% url "organisaties:edit" pk=lokaleoverheid.pk %}" method="post" class="form">
         {% csrf_token %}
 
         <div class="form__forms">
@@ -82,4 +82,4 @@
     <div class="form__actions">
         <p class="form__action-help">Wijzigingen worden direct gepubliceerd</p>
     </div>
-{% endblock inner %}
+{% endblock inner_content %}

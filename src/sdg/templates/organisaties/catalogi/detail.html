@@ -1,18 +1,13 @@
-{% extends 'organisaties/base.html' %}
+{% extends 'organisaties/catalogi/base.html' %}
 
 {% load i18n %}
 {% load producten %}
 {% load utils %}
 
-{% block header_classes %}header--inset{% endblock header_classes %}
 {% block notifications %}{% endblock %}
 
-{% block inner %}
+{% block inner_content %}
     {{ block.super }}
-    <div class="notifications">
-        {% include "core/_notifications.html" %}
-    </div>
-
     <div class="products">
         {% for catalog in catalogs %}
             {% include "_include/product_catalog.html" %}
@@ -24,4 +19,4 @@
         {% endfor %}
         {% include "producten/_include/legend.html" %}
     </div>
-{% endblock inner %}
+{% endblock inner_content %}

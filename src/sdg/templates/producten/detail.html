@@ -2,10 +2,9 @@
 
 {% load i18n utils producten %}
 
-{% block header_classes %}header--inset{% endblock header_classes %}
-
 {% block inner %}
-    <div class="tabs">
+    {{ block.super }}
+    <div class="tabs tabs--inline">
         <div class="tabs__tabs">
             {% for key, value in product.beschikbare_talen.items %}
                 <a href="#{{ value }}" data-id="{{ value }}"
@@ -15,19 +14,19 @@
             {% endfor %}
         </div>
 
-        <div class="notifications">
-            {% include "core/_notifications.html" %}
-            {% with reference_product=product.referentie_product %}
-                {% if reference_product and not reference_product.product_aanwezig %}
-                    {% include 'producten/_include/beschikbaar_warning.html' %}
-                {% endif %}
-                {% if reference_product and not reference_product.generiek_product %}
-                    {% include 'producten/_include/generiek_warning.html' %}
-                {% endif %}
-            {% endwith %}
-        </div>
-
         <div class="tabs__tab-contents">
+            <div class="notifications">
+                {% include "core/_notifications.html" %}
+                {% with reference_product=product.referentie_product %}
+                    {% if reference_product and not reference_product.product_aanwezig %}
+                        {% include 'producten/_include/beschikbaar_warning.html' %}
+                    {% endif %}
+                    {% if reference_product and not reference_product.generiek_product %}
+                        {% include 'producten/_include/generiek_warning.html' %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
             {% with latest_version=product.laatste_versie latest_active_version=product.laatste_actieve_versie %}
                 {% include "producten/_include/product_status.html" %}
                 <table class="tabs__table">

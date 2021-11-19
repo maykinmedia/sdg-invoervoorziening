@@ -6,7 +6,7 @@ class TabsToggle {
         this.node = node;
 
         this.node.addEventListener("click", (event) => {
-            if (event.target.href === "#") {
+            if (event.target.dataset.id) {
                 event.preventDefault();
                 [...tabsContents].forEach(tabsContent => tabsContent.classList.remove("tabs__tab-content--active"));
                 [...tabsTabs].forEach(tabsTab => tabsTab.classList.remove("tabs__tab--selected"));

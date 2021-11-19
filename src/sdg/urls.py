@@ -50,7 +50,6 @@ urlpatterns = [
     path("api/", include("sdg.api.urls", namespace="api")),
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
-    path("products/", include("sdg.producten.urls", namespace="producten")),
     path("organizations/", include("sdg.organisaties.urls", namespace="organisaties")),
     path("", include("sdg.core.urls", namespace="core")),
     path("", include(tf_urls)),
