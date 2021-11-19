@@ -29,24 +29,35 @@ class LocalizedProductForm(forms.ModelForm):
         )
 
 
-class ProductVersionForm(forms.ModelForm):
-    publish = forms.ChoiceField(
-        choices=PublishChoices.choices, widget=ProductRadioSelect
-    )
-    date = forms.DateTimeField(required=False)
+class ProductForm(forms.ModelForm):
     product_aanwezig = forms.NullBooleanField(required=False)
+    product_aanwezig_toelichting = forms.CharField(
+        required=False, widget=forms.Textarea
+    )
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None, required=False, widget=CheckboxSelectMultiple()
     )
 
     class Meta:
-        model = ProductVersie
+        model = Product
         fields = (
-            "product",
-            "gemaakt_door",
-            "versie",
-            "publicatie_datum",
+            "product_aanwezig",
+            "product_aanwezig_toelichting",
+            "lokaties",
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        locations = self.instance.get_municipality_locations()
+        self.fields["lokaties"].queryset = locations
+        self.fields["lokaties"].initial = locations.filter(is_product_location=True)
+
+
+class ProductVersionForm(forms.ModelForm):
+    publish = forms.ChoiceField(
+        choices=PublishChoices.choices, widget=ProductRadioSelect
+    )
+    date = forms.DateTimeField(required=False)
 
     @staticmethod
     def _get_version_instance(instance: ProductVersie) -> Optional[ProductVersie]:
