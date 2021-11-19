@@ -146,15 +146,23 @@ class Product(models.Model):
         ),
         blank=True,
     )
-    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
 
     @property
     def upn_uri(self):
-        return self.generic_upn.upn_uri
+        return self.upn.upn_uri
 
     @property
     def upn_label(self):
-        return self.generic_upn.upn_label
+        return self.upn.upn_label
 
     @cached_property
     def beschikbare_talen(self) -> dict:
@@ -212,7 +220,7 @@ class Product(models.Model):
         return self if self.is_referentie_product else self.referentie_product
 
     @cached_property
-    def generic_upn(self):
+    def upn(self):
         return self.generic_product.upn
 
     def get_municipality_locations(self):

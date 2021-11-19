@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, viewsets
 from rest_framework.viewsets import GenericViewSet
 
@@ -6,6 +7,12 @@ from sdg.api.serializers import ProductSerializer, ProductVersieSerializer
 from sdg.producten.models import Product, ProductVersie
 
 
+@extend_schema_view(
+    list=extend_schema(
+        description="Lijst van alle producten die voorkomen in alle catalogi."
+    ),
+    retrieve=extend_schema(description="Product dat voorkomt in een catalogus."),
+)
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a product, retrieved by uuid"""
 
@@ -15,6 +22,9 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProductSerializer
 
 
+@extend_schema_view(
+    list=extend_schema(description="Lijst van alle productversies van een product."),
+)
 class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
     """Viewset for the version history of a product."""
 

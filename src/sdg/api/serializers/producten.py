@@ -15,7 +15,6 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocalizedProduct
         fields = (
-            "product_versie",
             "taal",
             "decentrale_link",
             "specifieke_link",
@@ -53,44 +52,60 @@ class ProductVersieSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 
-    lokale_overheid = HyperlinkedRelatedField(
+    upn_label = serializers.CharField(source="generic_product.upn_label")
+    upn_uri = serializers.URLField(source="generic_product.upn_uri")
+    organisatie = HyperlinkedRelatedField(
         source="catalogus.lokale_overheid",
         lookup_field="uuid",
-        view_name="lokaleoverheid-detail",
+        view_name="api:lokaleoverheid-detail",
         queryset=LokaleOverheid.objects.all(),
     )
     vertalingen = SerializerMethodField(method_name="get_vertalingen")
+    versie = SerializerMethodField(method_name="get_versie")
 
     class Meta:
         model = Product
         fields = (
+            "url",
             "uuid",
-            "lokale_overheid",
+            "upn_label",
+            "upn_uri",
+            "versie",
+            "organisatie",
+            "beschikbaar",
             "catalogus",
-            "lokaties",
+            "locaties",
             "doelgroep",
             "vertalingen",
             "gerelateerde_producten",
         )
         extra_kwargs = {
+            "url": {
+                "view_name": "api:product-detail",
+                "lookup_field": "uuid",
+            },
             "catalogus": {
                 "lookup_field": "uuid",
-                "view_name": "productencatalogus-detail",
+                "view_name": "api:productencatalogus-detail",
             },
             "referentie_product": {
                 "lookup_field": "uuid",
-                "view_name": "product-detail",
+                "view_name": "api:product-detail",
             },
             "gerelateerde_producten": {
                 "lookup_field": "uuid",
-                "view_name": "product-detail",
+                "view_name": "api:product-detail",
             },
-            "lokaties": {
+            "locaties": {
+                "source": "lokaties",
                 "lookup_field": "uuid",
-                "view_name": "lokatie-detail",
+                "view_name": "api:lokatie-detail",
             },
         }
 
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
         vertalingen = getattr(obj.laatste_actieve_versie, "vertalingen", [])
         return LocalizedProductSerializer(vertalingen, many=True).data
+
+    def get_versie(self, obj: Product) -> int:
+        return getattr(obj.laatste_actieve_versie, "versie", 0)

@@ -16,7 +16,7 @@ from sdg.producten.tests.factories.product import (
 
 
 class ProductenCatalogusFilterTests(APITestCase):
-    url = reverse("productencatalogus-list")
+    url = reverse("api:productencatalogus-list")
 
     def test_filter_organisatie(self):
         catalog, *_ = ProductenCatalogusFactory.create_batch(5)
@@ -34,7 +34,7 @@ class ProductenCatalogusFilterTests(APITestCase):
 
 
 class ProductFilterTests(APITestCase):
-    url = reverse("product-list")
+    url = reverse("api:product-list")
 
     def test_filter_organisatie(self):
         product, *_ = ReferentieProductFactory.create_batch(5)
@@ -50,10 +50,8 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(str(product.uuid), data[0]["uuid"])
 
     def test_filter_doelgroep(self):
-        filter_string = "test_doelgroep"
-        product = ReferentieProductFactory.create(
-            doelgroep=["abc1", filter_string, "abc2"]
-        )
+        filter_string = "burgers"
+        product = ReferentieProductFactory.create(doelgroep=[filter_string])
         ReferentieProductFactory.create_batch(4)
 
         response = self.client.get(self.url, {"doelgroep": filter_string})
@@ -98,9 +96,39 @@ class ProductFilterTests(APITestCase):
 
         self.assertEqual(3, len(data))
 
+    def test_filter_upn_label(self):
+        catalog = ProductenCatalogusFactory.create(
+            is_referentie_catalogus=True,
+        )
+        product, *_ = ReferentieProductFactory.create_batch(5, catalogus=catalog)
+
+        response = self.client.get(self.url, {"upnLabel": product.upn.upn_label})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(product.uuid), data[0]["uuid"])
+
+    def test_filter_upn_uri(self):
+        catalog = ProductenCatalogusFactory.create(
+            is_referentie_catalogus=True,
+        )
+        product, *_ = ReferentieProductFactory.create_batch(5, catalogus=catalog)
+
+        response = self.client.get(self.url, {"upnUri": product.upn.upn_uri})
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(product.uuid), data[0]["uuid"])
+
 
 class LokatieFilterTests(APITestCase):
-    url = reverse("lokatie-list")
+    url = reverse("api:lokatie-list")
 
     def test_filter_organisatie(self):
         location, *_ = LokatieFactory.create_batch(5)
@@ -118,13 +146,27 @@ class LokatieFilterTests(APITestCase):
 
 
 class LokaleOverheidFilterTests(APITestCase):
-    url = reverse("lokaleoverheid-list")
+    url = reverse("api:lokaleoverheid-list")
 
-    def test_filter_organisatie(self):
+    def test_filter_owms_identifier(self):
         municipality, *_ = LokaleOverheidFactory.create_batch(5)
 
         response = self.client.get(
             self.url, {"owmsIdentifier": f"{municipality.organisatie.owms_identifier}"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(municipality.uuid), data[0]["uuid"])
+
+    def test_filter_owms_pref_label(self):
+        municipality, *_ = LokaleOverheidFactory.create_batch(5)
+
+        response = self.client.get(
+            self.url, {"owmsPrefLabel": f"{municipality.organisatie.owms_pref_label}"}
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

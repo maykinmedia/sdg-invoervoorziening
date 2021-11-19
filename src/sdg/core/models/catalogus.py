@@ -56,7 +56,15 @@ class ProductenCatalogus(models.Model):
     toelichting = models.TextField(
         _("toelichting"), blank=True, help_text="Toelichting bij het catalogus."
     )
-    uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
 
     autofill = models.BooleanField(_("autofill"), default=False)
     autofill_upn_filter = DynamicArrayField(

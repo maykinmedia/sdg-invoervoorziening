@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+from rest_framework.relations import HyperlinkedRelatedField
 
 from sdg.api.serializers.logius import OverheidsorganisatieSerializer
 from sdg.organisaties.models import LokaleOverheid, Lokatie
@@ -23,19 +24,33 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for location details, including contact details, address and opening times."""
 
     openingstijden = SerializerMethodField(method_name="get_openingstijden")
+    organisatie = HyperlinkedRelatedField(
+        source="lokale_overheid",
+        lookup_field="uuid",
+        view_name="api:lokaleoverheid-detail",
+        queryset=LokaleOverheid.objects.all(),
+    )
 
     class Meta:
         model = Lokatie
         fields = (
+            "url",
             "uuid",
-            "land",
             "naam",
-            "nummer",
-            "plaats",
-            "postcode",
             "straat",
+            "nummer",
+            "postcode",
+            "plaats",
+            "land",
             "openingstijden",
+            "organisatie",
         )
+        extra_kwargs = {
+            "url": {
+                "view_name": "api:lokatie-detail",
+                "lookup_field": "uuid",
+            },
+        }
 
     def get_openingstijden(self, obj: Lokatie) -> OpeningstijdenSerializer:
         return OpeningstijdenSerializer(obj).data
@@ -44,7 +59,18 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
 class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for municipality details, including organization details, catalogs and locations."""
 
-    organisatie = OverheidsorganisatieSerializer()
+    owms_identifier = serializers.URLField(
+        source="organisatie.owms_identifier",
+        help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
+    )
+    owms_pref_label = serializers.CharField(
+        source="organisatie.owms_pref_label",
+        help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
+    )
+    owms_end_date = serializers.DateTimeField(
+        source="organisatie.owms_end_date",
+        help_text="OWMS einddatum van de hoofdorganisatie van deze lokale overheid.",
+    )
 
     bevoegde_organisatie = OverheidsorganisatieSerializer()
     ondersteunings_organisatie = OverheidsorganisatieSerializer()
@@ -53,9 +79,12 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = LokaleOverheid
         fields = (
+            "url",
             "uuid",
-            "organisatie",
-            "lokaties",
+            "owms_identifier",
+            "owms_pref_label",
+            "owms_end_date",
+            "locaties",
             "catalogi",
             "contact_naam",
             "contact_website",
@@ -66,12 +95,19 @@ class LokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
             "verantwoordelijke_organisatie",
         )
         extra_kwargs = {
+            "url": {
+                "view_name": "api:lokaleoverheid-detail",
+                "lookup_field": "uuid",
+            },
             "catalogi": {
                 "lookup_field": "uuid",
-                "view_name": "productencatalogus-detail",
+                "view_name": "api:productencatalogus-detail",
+                "help_text": "Lijst van catalogi die deze organisatie gebruikt.",
             },
-            "lokaties": {
+            "locaties": {
+                "source": "lokaties",
                 "lookup_field": "uuid",
-                "view_name": "lokatie-detail",
+                "view_name": "api:lokatie-detail",
+                "help_text": "Lijst van locaties die bij deze organisatie horen.",
             },
         }

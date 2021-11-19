@@ -6,7 +6,7 @@ paths:
   /api/v1/catalogi:
     get:
       operationId: catalogiList
-      description: Viewset for a municipality catalog, retrieved by uuid
+      description: Lijst van alle catalogi die worden gebruikt door organisaties.
       parameters:
       - in: query
         name: organisatie
@@ -32,13 +32,15 @@ paths:
   /api/v1/catalogi/{uuid}:
     get:
       operationId: catalogiRetrieve
-      description: Viewset for a municipality catalog, retrieved by uuid
+      description: Catalogus die wordt gebruikt door een organisatie.
       parameters:
       - in: path
         name: uuid
         schema:
           type: string
           format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         required: true
       tags:
       - catalogi
@@ -52,7 +54,8 @@ paths:
   /api/v1/locaties:
     get:
       operationId: locatiesList
-      description: Viewset for a location, retrieved by uuid
+      description: Lijst van alle locaties waar de bijbehorende organisatie 1 of meer
+        producten aanbiedt.
       parameters:
       - in: query
         name: organisatie
@@ -78,13 +81,15 @@ paths:
   /api/v1/locaties/{uuid}:
     get:
       operationId: locatiesRetrieve
-      description: Viewset for a location, retrieved by uuid
+      description: Locatie waar de bijbehorende organisatie 1 of meer producten aanbiedt.
       parameters:
       - in: path
         name: uuid
         schema:
           type: string
           format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         required: true
       tags:
       - locaties
@@ -98,12 +103,20 @@ paths:
   /api/v1/organisaties:
     get:
       operationId: organisatiesList
-      description: Viewset for a municipality, retrieved by uuid
+      description: Lijst van alle organisaties die catalogi met producten aanbieden.
       parameters:
       - in: query
         name: owmsIdentifier
         schema:
           type: string
+          format: uri
+        description: De identificatie (URI) van de organisatie zoals deze gebruikt
+          op standaarden.overheid.nl
+      - in: query
+        name: owmsPrefLabel
+        schema:
+          type: string
+        description: Het label van de organisatie zoals deze gebruikt op standaarden.overheid.nl
       - name: page
         required: false
         in: query
@@ -122,13 +135,15 @@ paths:
   /api/v1/organisaties/{uuid}:
     get:
       operationId: organisatiesRetrieve
-      description: Viewset for a municipality, retrieved by uuid
+      description: Organisatie die catalogi met producten aanbiedt.
       parameters:
       - in: path
         name: uuid
         schema:
           type: string
           format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         required: true
       tags:
       - organisaties
@@ -142,7 +157,7 @@ paths:
   /api/v1/producten:
     get:
       operationId: productenList
-      description: Viewset for a product, retrieved by uuid
+      description: Lijst van alle producten die voorkomen in alle catalogi.
       parameters:
       - in: query
         name: catalogus
@@ -154,7 +169,15 @@ paths:
       - in: query
         name: doelgroep
         schema:
-          type: string
+          type: array
+          items:
+            enum:
+            - burgers
+            - bedrijven
+            type: string
+          enum:
+          - bedrijven
+          - burgers
         description: Toont producten die overeenkomen met de opgegeven doelgroepen.
       - in: query
         name: organisatie
@@ -175,6 +198,16 @@ paths:
           format: date
         description: Toont producten met een publicatiedatum groter dan of gelijk
           aan de opgegeven datum.
+      - in: query
+        name: upnLabel
+        schema:
+          type: string
+        description: Toont producten met een UPN label
+      - in: query
+        name: upnUri
+        schema:
+          type: string
+        description: Toont producten met een UPN URI
       tags:
       - producten
       responses:
@@ -187,7 +220,7 @@ paths:
   /api/v1/producten/{productUuid}/historie:
     get:
       operationId: productenHistorieList
-      description: Viewset for the version history of a product.
+      description: Lijst van alle productversies van een product.
       parameters:
       - name: page
         required: false
@@ -212,13 +245,15 @@ paths:
   /api/v1/producten/{uuid}:
     get:
       operationId: productenRetrieve
-      description: Viewset for a product, retrieved by uuid
+      description: Product dat voorkomt in een catalogus.
       parameters:
       - in: path
         name: uuid
         schema:
           type: string
           format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         required: true
       tags:
       - producten
@@ -252,10 +287,6 @@ components:
       type: object
       description: Serializer for the localized version of a product.
       properties:
-        productVersie:
-          type: integer
-          title: Specifieke product
-          description: Het specifieke product van deze vertaling.
         taal:
           allOf:
           - $ref: '#/components/schemas/TaalEnum'
@@ -317,7 +348,6 @@ components:
             informatie. Deze datum wordt op het portaal getoond. '
       required:
       - datumWijziging
-      - productVersie
       - taal
       - verwijzingLinks
     LokaleOverheid:
@@ -325,22 +355,39 @@ components:
       description: Serializer for municipality details, including organization details,
         catalogs and locations.
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
         uuid:
           type: string
           format: uuid
           readOnly: true
-        organisatie:
-          $ref: '#/components/schemas/Overheidsorganisatie'
-        lokaties:
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        owmsIdentifier:
+          type: string
+          format: uri
+          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
+        owmsPrefLabel:
+          type: string
+          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+        owmsEndDate:
+          type: string
+          format: date-time
+          description: OWMS einddatum van de hoofdorganisatie van deze lokale overheid.
+        locaties:
           type: array
           items:
             type: string
             format: uri
+          description: Lijst van locaties die bij deze organisatie horen.
         catalogi:
           type: array
           items:
             type: string
             format: uri
+          description: Lijst van catalogi die deze organisatie gebruikt.
         contactNaam:
           type: string
           description: de naam van de verantwoordelijke contactpersoon.
@@ -369,9 +416,12 @@ components:
       - bevoegdeOrganisatie
       - catalogi
       - contactNaam
-      - lokaties
+      - locaties
       - ondersteuningsOrganisatie
-      - organisatie
+      - owmsEndDate
+      - owmsIdentifier
+      - owmsPrefLabel
+      - url
       - uuid
       - verantwoordelijkeOrganisatie
     Lokatie:
@@ -379,42 +429,53 @@ components:
       description: Serializer for location details, including contact details, address
         and opening times.
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
         uuid:
           type: string
           format: uuid
           readOnly: true
-        land:
-          type: string
-          maxLength: 128
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de lokatie.
           maxLength: 40
+        straat:
+          type: string
+          maxLength: 256
         nummer:
           type: integer
           maximum: 2147483647
           minimum: 0
-        plaats:
-          type: string
-          maxLength: 256
         postcode:
           type: string
           maxLength: 6
-        straat:
+        plaats:
           type: string
           maxLength: 256
+        land:
+          type: string
+          maxLength: 128
         openingstijden:
           allOf:
           - $ref: '#/components/schemas/Openingstijden'
           readOnly: true
+        organisatie:
+          type: string
+          format: uri
       required:
       - land
       - naam
       - nummer
       - openingstijden
+      - organisatie
       - plaats
       - postcode
       - straat
+      - url
       - uuid
     Openingstijden:
       type: object
@@ -583,18 +644,35 @@ components:
       description: Serializer for a product, including UPN, availability, locations
         and latest version translations.
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
         uuid:
           type: string
           format: uuid
           readOnly: true
-        lokaleOverheid:
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        upnLabel:
+          type: string
+        upnUri:
           type: string
           format: uri
+        versie:
+          type: integer
+          readOnly: true
+        organisatie:
+          type: string
+          format: uri
+        beschikbaar:
+          type: boolean
+          description: Geeft aan of het product al dan niet beschikbaar is.
         catalogus:
           type: string
           format: uri
           description: De catalogus waartoe dit product behoort.
-        lokaties:
+        locaties:
           type: array
           items:
             type: string
@@ -623,8 +701,12 @@ components:
           description: Een verwijzing naar een gerelateerd product.
       required:
       - catalogus
-      - lokaleOverheid
+      - organisatie
+      - upnLabel
+      - upnUri
+      - url
       - uuid
+      - versie
       - vertalingen
     ProductVersie:
       type: object
@@ -663,10 +745,16 @@ components:
       description: Serializer for ProductenCatalogus details, including organizations
         and products.
       properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
         uuid:
           type: string
           format: uuid
           readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         domein:
           type: string
           description: Een afkorting die wordt gebruikt om het domein aan te duiden.
@@ -700,6 +788,7 @@ components:
       - domein
       - naam
       - producten
+      - url
       - uuid
     TaalEnum:
       enum:

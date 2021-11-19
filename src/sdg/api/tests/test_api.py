@@ -20,7 +20,7 @@ from sdg.producten.tests.factories.product import (
 class CatalogiTests(APITestCase):
     def test_list_catalogs(self):
         ProductenCatalogusFactory.create_batch(2)
-        list_url = reverse("productencatalogus-list")
+        list_url = reverse("api:productencatalogus-list")
 
         response = self.client.get(list_url)
 
@@ -31,7 +31,7 @@ class CatalogiTests(APITestCase):
 
     def test_retrieve_catalog_by_uuid(self):
         catalog = ProductenCatalogusFactory.create()
-        detail_url = reverse("productencatalogus-detail", args=[catalog.uuid])
+        detail_url = reverse("api:productencatalogus-detail", args=[catalog.uuid])
 
         response = self.client.get(detail_url)
 
@@ -41,6 +41,7 @@ class CatalogiTests(APITestCase):
 
         self.assertEqual(
             {
+                "url": f"http://testserver{reverse('api:productencatalogus-detail', args=[catalog.uuid])}",
                 "uuid": str(catalog.uuid),
                 "domein": catalog.domein,
                 "naam": catalog.naam,
@@ -57,7 +58,7 @@ class CatalogiTests(APITestCase):
 class ProductenTests(APITestCase):
     def test_list_products(self):
         ReferentieProductFactory.create_batch(2)
-        list_url = reverse("product-list")
+        list_url = reverse("api:product-list")
 
         response = self.client.get(list_url)
 
@@ -74,7 +75,7 @@ class ProductenTests(APITestCase):
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
         product = product_version.product
 
-        detail_url = reverse("product-detail", args=[product.uuid])
+        detail_url = reverse("api:product-detail", args=[product.uuid])
 
         response = self.client.get(detail_url)
 
@@ -83,12 +84,15 @@ class ProductenTests(APITestCase):
         data = response.json()
 
         self.assertEqual(f"{product.uuid}", data["uuid"])
+        self.assertEqual(f"{product.upn.upn_label}", data["upnLabel"])
+        self.assertEqual(f"{product.upn.upn_uri}", data["upnUri"])
+        self.assertEqual(1, data["versie"])
         self.assertEqual(
-            f"http://testserver{reverse('lokaleoverheid-detail', args=[product.catalogus.lokale_overheid.uuid])}",
-            data["lokaleOverheid"],
+            f"http://testserver{reverse('api:lokaleoverheid-detail', args=[product.catalogus.lokale_overheid.uuid])}",
+            data["organisatie"],
         )
         self.assertEqual(
-            f"http://testserver{reverse('productencatalogus-detail', args=[product.catalogus.uuid])}",
+            f"http://testserver{reverse('api:productencatalogus-detail', args=[product.catalogus.uuid])}",
             data["catalogus"],
         )
 
@@ -100,8 +104,7 @@ class ProductenTests(APITestCase):
             ],
             data["vertalingen"][0]["verwijzingLinks"],
         )
-
-        self.assertEqual(0, len(data["lokaties"]))
+        self.assertEqual(0, len(data["locaties"]))
         self.assertEqual(0, len(data["doelgroep"]))
         self.assertEqual(0, len(data["gerelateerdeProducten"]))
 
@@ -114,7 +117,9 @@ class ProductenTests(APITestCase):
         ReferentieProductVersieFactory.create_batch(
             2, publicatie_datum=PAST_DATE, product=product
         )
-        response = self.client.get(reverse("product-history-list", args=[product.uuid]))
+        response = self.client.get(
+            reverse("api:product-history-list", args=[product.uuid])
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -131,7 +136,9 @@ class ProductenTests(APITestCase):
             2, publicatie_datum=PAST_DATE, product=product
         )
         ReferentieProductVersieFactory.create(product=product, publicatie_datum=None)
-        response = self.client.get(reverse("product-history-list", args=[product.uuid]))
+        response = self.client.get(
+            reverse("api:product-history-list", args=[product.uuid])
+        )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -142,7 +149,7 @@ class ProductenTests(APITestCase):
 class OrganisatiesTests(APITestCase):
     def test_list_organizations(self):
         LokaleOverheidFactory.create_batch(2)
-        list_url = reverse("lokaleoverheid-list")
+        list_url = reverse("api:lokaleoverheid-list")
 
         response = self.client.get(list_url)
 
@@ -153,7 +160,7 @@ class OrganisatiesTests(APITestCase):
 
     def test_retrieve_organization_by_uuid(self):
         municipality = LokaleOverheidFactory.create()
-        detail_url = reverse("lokaleoverheid-detail", args=[municipality.uuid])
+        detail_url = reverse("api:lokaleoverheid-detail", args=[municipality.uuid])
 
         response = self.client.get(detail_url)
 
@@ -163,13 +170,12 @@ class OrganisatiesTests(APITestCase):
 
         self.assertEqual(
             {
+                "url": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[municipality.uuid])}",
                 "uuid": str(municipality.uuid),
-                "organisatie": {
-                    "owmsIdentifier": municipality.organisatie.owms_identifier,
-                    "owmsPrefLabel": municipality.organisatie.owms_pref_label,
-                    "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
-                },
-                "lokaties": [],
+                "owmsIdentifier": municipality.organisatie.owms_identifier,
+                "owmsPrefLabel": municipality.organisatie.owms_pref_label,
+                "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
+                "locaties": [],
                 "catalogi": [],
                 "contactNaam": municipality.contact_naam,
                 "contactWebsite": municipality.contact_website,
@@ -198,7 +204,7 @@ class OrganisatiesTests(APITestCase):
 class LocatiesTests(APITestCase):
     def test_list_locations(self):
         LokatieFactory.create_batch(2)
-        list_url = reverse("lokatie-list")
+        list_url = reverse("api:lokatie-list")
 
         response = self.client.get(list_url)
 
@@ -209,7 +215,7 @@ class LocatiesTests(APITestCase):
 
     def test_retrieve_location_by_uuid(self):
         lokatie = LokatieFactory.create()
-        detail_url = reverse("lokatie-detail", args=[lokatie.uuid])
+        detail_url = reverse("api:lokatie-detail", args=[lokatie.uuid])
 
         response = self.client.get(detail_url)
 
@@ -219,6 +225,7 @@ class LocatiesTests(APITestCase):
 
         self.assertEqual(
             {
+                "url": f"http://testserver{reverse('api:lokatie-detail', args=[lokatie.uuid])}",
                 "uuid": str(lokatie.uuid),
                 "nummer": int(lokatie.nummer),
                 "land": lokatie.land,
@@ -235,6 +242,7 @@ class LocatiesTests(APITestCase):
                     "zaterdag": lokatie.zaterdag,
                     "zondag": lokatie.zondag,
                 },
+                "organisatie": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[lokatie.lokale_overheid.uuid])}",
             },
             data,
         )
