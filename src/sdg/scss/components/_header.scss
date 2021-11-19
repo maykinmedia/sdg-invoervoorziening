@@ -1,7 +1,6 @@
 @import 'colors';
 
 .header {
-  height: 390px;
   width: 100%;
   background: rgb(57, 106, 136);
   background: linear-gradient(353.15deg, #002337 -68.3%, #4C85A6 179.94%);
@@ -55,10 +54,10 @@
 
   .header__title {
     color: $color_secondary_dark;
-    font-size: 30px;
+    font-size: 40px;
 
     .switch-icon {
-      color: $color_accent_light;
+      color: $color_accent;
       margin-left: 8px;
     }
   }
@@ -92,7 +91,7 @@
     border-radius: 10px;
 
     a {
-      color: $color_primary_light;
+      color: $color_primary_lighter;
     }
 
     .svg-inline--fa {
