@@ -132,10 +132,17 @@ class Product(models.Model):
         ),
         default=list,
     )
-    beschikbaar = models.BooleanField(
-        _("beschikbaar"),
-        help_text=_("Geeft aan of het product al dan niet beschikbaar is."),
-        default=False,
+    product_aanwezig = models.BooleanField(
+        _("product aanwezig"),
+        help_text=_("Voert u dit product?"),
+        blank=True,
+        null=True,
+    )
+    product_aanwezig_toelichting = models.TextField(
+        _("product aanwezig toelichting"),
+        help_text=_("Toelichting"),
+        blank=True,
+        default="",
     )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
@@ -316,11 +323,14 @@ class Product(models.Model):
 
     def clean(self):
         from sdg.producten.models.validators import (
+            validate_product,
             validate_reference_product,
             validate_specific_product,
         )
 
         super().clean()
+
+        validate_product(self)
 
         if self.is_referentie_product:
             validate_reference_product(self)

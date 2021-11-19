@@ -36,7 +36,7 @@ class ProductDetailViewTests(WebTest):
 
     def test_unavailable_reference_product_displays_warning(self):
         product = SpecifiekProductFactory.create(
-            beschikbaar=False, referentie_product__beschikbaar=False
+            product_aanwezig=False, referentie_product__product_aanwezig=False
         )
         product_version = ProductVersieFactory.create(product=product)
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
@@ -52,7 +52,7 @@ class ProductDetailViewTests(WebTest):
 
     def test_concept_product_displays_warning(self):
         product = SpecifiekProductFactory.create(
-            beschikbaar=False,
+            product_aanwezig=False,
         )
         product_version = ProductVersieFactory.create(
             product=product,
@@ -357,7 +357,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
     @freeze_time(NOW_DATE)
     def test_unavailable_reference_product_displays_warning(self):
-        self.product.referentie_product.beschikbaar = False
+        self.product.referentie_product.product_aanwezig = False
         self.product.referentie_product.save()
         response = self.app.get(self.product.get_absolute_url())
         self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
@@ -768,7 +768,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
 
         self._fill_product_form(response.form, PublishChoices.concept)
-        response.form.fields["beschikbaar"] = False
+        response.form.fields["product_aanwezig"] = False
         response.form.fields["lokaties"][0].checked = True
         response.form.submit()
         self.product.refresh_from_db()

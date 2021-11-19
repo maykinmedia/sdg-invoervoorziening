@@ -32,7 +32,7 @@
         <form action="." method="POST" class="form tabs__tab-contents">
             {% csrf_token %}
             {{ form.management_form }}
-
+            {{ product_form.non_field_errors }}
 
             <table class="tabs__table">
                 <thead>
@@ -43,12 +43,18 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td class="tabs__table-cell" width="25%">{% trans "Product Status" %}</td>
-                    <td class="tabs__table-cell">{% checkbox version_form.beschikbaar %}</td>
                 </tr>
                 <tr>
-                    <td class="tabs__table-cell">{% trans "Product Lokaties" %}</td>
-                    <td class="tabs__table-cell">{{ version_form.lokaties }}</td>
+                    <td class="tabs__table-cell" width="25%">{% trans "Product aanwezig" %}</td>
+                    <td class="tabs__table-cell">{% select product_form.product_aanwezig %}</td>
+                </tr>
+                <tr>
+                    <td class="tabs__table-cell" width="25%">{% trans "Product aanwezig toelichting" %}</td>
+                    <td class="tabs__table-cell">{{ product_form.product_aanwezig_toelichting|addclass:"form__input" }}</td>
+                </tr>
+                <tr>
+                    <td class="tabs__table-cell">{% trans "Product lokaties" %}</td>
+                    <td class="tabs__table-cell">{{ product_form.lokaties }}</td>
                 </tr>
                 </tbody>
             </table>

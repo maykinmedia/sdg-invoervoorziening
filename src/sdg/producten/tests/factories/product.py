@@ -21,7 +21,7 @@ class GeneriekProductFactory(DjangoModelFactory):
 
 
 class ProductFactory(DjangoModelFactory):
-    beschikbaar = True
+    product_aanwezig = True
     lokaties = factory.RelatedFactoryList(LokatieFactory, size=3)
 
     class Meta:

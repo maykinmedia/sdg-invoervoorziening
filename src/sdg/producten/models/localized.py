@@ -7,7 +7,7 @@ from markdownx.models import MarkdownxField
 
 from sdg.core.db.fields import DynamicArrayField
 from sdg.core.forms import LabeledURLWidget
-from sdg.core.models.validators import labeled_url_validator
+from sdg.core.models.validators import validate_labeled_url
 from sdg.producten.models.managers import LocalizedManager
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
@@ -64,7 +64,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             models.CharField(max_length=512),
         ),
         subwidget_form=LabeledURLWidget,
-        validators=[labeled_url_validator],
+        validators=[validate_labeled_url],
         help_text=_(
             "Zowel de Nationale Portalen als de decentrale overheden kunnen een x-tal 'verwijzingen' opnemen bij een "
             "product. Voorstel hierbij om zo'n 'verwijzing' te laten bestaan uit een -bij elkaar horende-  "
@@ -136,7 +136,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
             models.CharField(max_length=512),
         ),
         subwidget_form=LabeledURLWidget,
-        validators=[labeled_url_validator],
+        validators=[validate_labeled_url],
         help_text=_("Decentrale verwijzingen."),
         blank=True,
         default=list,

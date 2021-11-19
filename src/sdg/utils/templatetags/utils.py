@@ -105,6 +105,11 @@ def table_row(field, **kwargs):
     return {**kwargs, "field": field}
 
 
+@register.inclusion_tag("forms/select.html")
+def select(field, **kwargs):
+    return {**kwargs, "field": field}
+
+
 @register.inclusion_tag("forms/checkbox.html")
 def checkbox(field, **kwargs):
     return {**kwargs, "field": field}

@@ -29,24 +29,35 @@ class LocalizedProductForm(forms.ModelForm):
         )
 
 
-class ProductVersionForm(forms.ModelForm):
-    publish = forms.ChoiceField(
-        choices=PublishChoices.choices, widget=ProductRadioSelect
+class ProductForm(forms.ModelForm):
+    product_aanwezig = forms.NullBooleanField(required=False)
+    product_aanwezig_toelichting = forms.CharField(
+        required=False, widget=forms.Textarea
     )
-    date = forms.DateTimeField(required=False)
-    beschikbaar = forms.BooleanField(required=False)
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None, required=False, widget=CheckboxSelectMultiple()
     )
 
     class Meta:
-        model = ProductVersie
+        model = Product
         fields = (
-            "product",
-            "gemaakt_door",
-            "versie",
-            "publicatie_datum",
+            "product_aanwezig",
+            "product_aanwezig_toelichting",
+            "lokaties",
         )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        locations = self.instance.get_municipality_locations()
+        self.fields["lokaties"].queryset = locations
+        self.fields["lokaties"].initial = locations.filter(is_product_location=True)
+
+
+class ProductVersionForm(forms.ModelForm):
+    publish = forms.ChoiceField(
+        choices=PublishChoices.choices, widget=ProductRadioSelect
+    )
+    date = forms.DateTimeField(required=False)
 
     @staticmethod
     def _get_version_instance(instance: ProductVersie) -> Optional[ProductVersie]:
@@ -60,29 +71,19 @@ class ProductVersionForm(forms.ModelForm):
             return None
         return instance
 
-    def fill_product_data(self, instance: Product) -> bool:
-        """Fill product instance with cleaned data
-        :returns: A boolean specifying whether a product has changed.
-        """
-        fields = {"beschikbaar", "lokaties"}
-        if all(i not in self.changed_data for i in fields):
-            return False
-
-        instance.beschikbaar = self.cleaned_data["beschikbaar"]
-        instance.lokaties.set(self.cleaned_data["lokaties"])
-        return True
+    class Meta:
+        model = ProductVersie
+        fields = (
+            "product",
+            "gemaakt_door",
+            "versie",
+            "publicatie_datum",
+        )
 
     def __init__(self, *args, **kwargs):
         _instance = kwargs.get("instance", None)
         kwargs["instance"] = self._get_version_instance(_instance)
-
         super().__init__(*args, **kwargs)
-
-        self.fields["beschikbaar"].initial = _instance.product.beschikbaar
-
-        locations = _instance.product.get_municipality_locations()
-        self.fields["lokaties"].queryset = locations
-        self.fields["lokaties"].initial = locations.filter(is_product_location=True)
 
     def clean(self):
         cleaned_data = super().clean()

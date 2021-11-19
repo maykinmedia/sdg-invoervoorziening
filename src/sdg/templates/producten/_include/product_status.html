@@ -25,7 +25,7 @@
     <div>
         <a class="button" href="{% url 'producten:edit' pk=product.pk %}">
             {% trans "Wijzigen" %}
-            {% if product.beschikbaar %}
+            {% if product.product_aanwezig %}
                 <i class="fa fa-sm fa-check text-accent" title="Dit product is beschikbaar."></i>
             {% else %}
                 <i class="fa fa-sm fa-times text-accent" title="Dit product is niet beschikbaar."></i>
