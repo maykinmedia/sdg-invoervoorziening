@@ -1,12 +1,13 @@
 @import "colors";
 
 .products {
-  .products__title {
+  .products__title,
+  .products__catalog {
     color: $color_primary;
     padding: 16px 0;
   }
 
-  .products__title:not(:first-child) {
+  .products__catalog:not(:first-child) {
     padding-top: 32px;
   }
 
@@ -20,6 +21,7 @@
     .fa-angle-up {
       display: none;
     }
+
     .products__list {
       display: none;
     }
@@ -28,9 +30,11 @@
       .fa-angle-up {
         display: inline;
       }
+
       .fa-angle-down {
         display: none;
       }
+
       .products__list {
         display: grid;
       }

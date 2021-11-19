@@ -1,6 +1,6 @@
 {% load utils %}
 
-<h4 class="products__title">{{ catalog.naam }}</h4>
+<h4 class="products__catalog">{{ catalog.naam }}</h4>
 <div class="products__accordeon">
     {% for informatiegebied, producten in catalog.area_and_products.items %}
         <div class="products__accordeon-item">

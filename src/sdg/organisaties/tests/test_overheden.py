@@ -19,7 +19,7 @@ from sdg.producten.tests.factories.localized import (
 )
 from sdg.producten.tests.factories.product import ReferentieProductFactory
 
-CATALOG_SELECTOR = ".products__title"
+CATALOG_SELECTOR = ".products__catalog"
 PRODUCT_SELECTOR = ".products__item"
 
 

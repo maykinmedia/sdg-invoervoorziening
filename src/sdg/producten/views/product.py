@@ -59,6 +59,7 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
 class ProductDetailView(OverheidMixin, DetailView):
     template_name = "producten/detail.html"
     context_object_name = "product"
+    pk_url_kwarg = "product_pk"
     queryset = Product.objects.select_related(
         "catalogus__lokale_overheid"
     ).prefetch_related(
@@ -86,6 +87,7 @@ class ProductDetailView(OverheidMixin, DetailView):
 class ProductUpdateView(OverheidMixin, UpdateView):
     template_name = "producten/edit.html"
     context_object_name = "product_versie"
+    pk_url_kwarg = "product_pk"
     queryset = Product.objects.select_related("catalogus__lokale_overheid")
     form_class = inlineformset_factory(
         ProductVersie,

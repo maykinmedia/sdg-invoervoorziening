@@ -44,9 +44,9 @@
                                 <td class="tabs__table-cell">
                                     {% if lokaleoverheid_beheerder and user != request.user %}
                                         <a class="button--small button--light"
-                                           href="{% url 'organisaties:role:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
+                                           href="{% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
                                         <a class="button--small button--light"
-                                           href="{% url 'organisaties:role:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+                                           href="{% url 'organisaties:roles:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
                                     {% endif %}
                                 </td>
                             </tr>

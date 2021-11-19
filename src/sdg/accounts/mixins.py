@@ -57,7 +57,9 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin):
         return self.required_roles
 
     def test_func(self):
-        if not super().test_func():
+        _super = super()
+        message = _super.__thisclass__.permission_denied_message
+        if not _super.test_func():
             return False
 
         try:
@@ -65,10 +67,10 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin):
                 lokale_overheid=self._get_lokale_overheid()
             )
         except Role.DoesNotExist:
-            return False
+            raise PermissionDenied(message)
 
         if not any(getattr(role, r) for r in self.get_required_roles()):
-            raise PermissionDenied(__class__.permission_denied_message)
+            raise PermissionDenied(message)
 
         return True
 
@@ -81,14 +83,15 @@ class OverheidExpirationMixin(BaseOverheidMixin):
     )
 
     def test_func(self):
-        if not super().test_func():
+        _super = super()
+        if not _super.test_func():
             return False
 
         lokale_overheid = self._get_lokale_overheid()
         end_date = lokale_overheid.organisatie.owms_end_date
 
         if end_date and end_date <= now():
-            raise PermissionDenied(__class__.permission_denied_message)
+            raise PermissionDenied(_super.__thisclass__.permission_denied_message)
         return True
 
 

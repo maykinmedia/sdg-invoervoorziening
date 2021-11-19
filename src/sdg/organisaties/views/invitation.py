@@ -92,7 +92,7 @@ class InvitationCreateView(OverheidMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy(
-            "organisaties:overheid_roles", kwargs={"pk": self.lokale_overheid.pk}
+            "organisaties:roles:list", kwargs={"pk": self.lokale_overheid.pk}
         )
 
     def _set_form_lokale_overheid(self, form):

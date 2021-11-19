@@ -19,7 +19,7 @@ class RoleBaseMixin:
 
     def get_success_url(self):
         return reverse_lazy(
-            "organisaties:overheid_roles", kwargs={"pk": self.lokale_overheid.pk}
+            "organisaties:roles:list", kwargs={"pk": self.lokale_overheid.pk}
         )
 
 
