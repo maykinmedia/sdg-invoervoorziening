@@ -22,7 +22,6 @@ class GeneriekProductFactory(DjangoModelFactory):
 
 class ProductFactory(DjangoModelFactory):
     product_aanwezig = True
-    product_aanwezig_toelichting = "Toelichting"
     lokaties = factory.RelatedFactoryList(LokatieFactory, size=3)
 
     class Meta:

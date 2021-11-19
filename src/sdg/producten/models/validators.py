@@ -5,13 +5,13 @@ from sdg.producten.models import Product
 
 
 def validate_product(product: Product):
-    """Validate a product (specific and reference).
-    - If `product_aanwezig` is True, the product must declare `product_aanwezig_toelichting`.
+    """Validate a product (specific / reference).
+    - If `product_aanwezig` is False, the product must declare `product_aanwezig_toelichting`.
     """
-    if product.product_aanwezig and not product.product_aanwezig_toelichting:
+    if product.product_aanwezig is False and not product.product_aanwezig_toelichting:
         raise ValidationError(
             _(
-                "Een product met product_aanwezig moet een product_aanwezig_toelichting hebben."
+                "Het veld 'product_aanwezig_toelichting' is verplicht als het veld 'product_aanwezig' is uitgeschakeld."
             )
         )
 
