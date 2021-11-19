@@ -136,8 +136,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def post(self, request, *args, **kwargs):
         version_form = ProductVersionForm(request.POST, instance=self.object)
         product_form = ProductForm(request.POST, instance=self.product)
-
         form = self.form_class(request.POST, instance=self.object)
+
         if form.is_valid() and version_form.is_valid() and product_form.is_valid():
             return self.form_valid(form, version_form, product_form)
         else:
