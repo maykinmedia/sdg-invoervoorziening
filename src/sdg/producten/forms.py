@@ -71,29 +71,19 @@ class ProductVersionForm(forms.ModelForm):
             return None
         return instance
 
-    def fill_product_data(self, instance: Product) -> bool:
-        """Fill product instance with cleaned data
-        :returns: A boolean specifying whether a product has changed.
-        """
-        fields = {"product_aanwezig", "lokaties"}
-        if all(i not in self.changed_data for i in fields):
-            return False
-
-        instance.product_aanwezig = self.cleaned_data["product_aanwezig"]
-        instance.lokaties.set(self.cleaned_data["lokaties"])
-        return True
+    class Meta:
+        model = ProductVersie
+        fields = (
+            "product",
+            "gemaakt_door",
+            "versie",
+            "publicatie_datum",
+        )
 
     def __init__(self, *args, **kwargs):
         _instance = kwargs.get("instance", None)
         kwargs["instance"] = self._get_version_instance(_instance)
-
         super().__init__(*args, **kwargs)
-
-        self.fields["product_aanwezig"].initial = _instance.product.product_aanwezig
-
-        locations = _instance.product.get_municipality_locations()
-        self.fields["lokaties"].queryset = locations
-        self.fields["lokaties"].initial = locations.filter(is_product_location=True)
 
     def clean(self):
         cleaned_data = super().clean()

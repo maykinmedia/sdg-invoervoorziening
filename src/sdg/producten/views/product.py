@@ -1,5 +1,5 @@
 from itertools import zip_longest
-from typing import Optional, Tuple
+from typing import Tuple
 
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
@@ -13,7 +13,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.forms import LocalizedProductForm, ProductVersionForm
+from sdg.producten.forms import LocalizedProductForm, ProductForm, ProductVersionForm
 from sdg.producten.models import (
     GeneriekProduct,
     LocalizedProduct,
@@ -88,27 +88,18 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     required_roles = ["is_redacteur"]
 
     def _save_version_form(self, version_form) -> Tuple[ProductVersie, bool]:
-        """
-        Saves the version form.
+        """Save the version form.
         Return a tuple of (version object, created), where created is a boolean
         specifying whether an object was created.
         """
-        with transaction.atomic():
-            new_version = version_form.save(commit=False)
+        new_version = version_form.save(commit=False)
 
-            created = self.object != new_version
-            new_version.product = self.product
-            new_version.gemaakt_door = self.request.user
-            new_version.versie = (
-                self.object.versie + 1 if created else self.object.versie
-            )
-
-            new_version.save()
-            product_changed = version_form.fill_product_data(instance=self.product)
-            if product_changed:
-                self.product.save()
-
-            return new_version, created
+        created = self.object != new_version
+        new_version.product = self.product
+        new_version.gemaakt_door = self.request.user
+        new_version.versie = self.object.versie + 1 if created else self.object.versie
+        new_version.save()
+        return new_version, created
 
     def get_lokale_overheid(self):
         self.product = self.get_object()
@@ -131,6 +122,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context["informatie_forms"] = zip_longest(
             generic_information, context["form"].forms
         )
+        context["product_form"] = kwargs.get("product_form") or ProductForm(
+            instance=self.product
+        )
         context["version_form"] = kwargs.get("version_form") or ProductVersionForm(
             instance=self.object
         )
@@ -141,25 +135,29 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         version_form = ProductVersionForm(request.POST, instance=self.object)
+        product_form = ProductForm(request.POST, instance=self.product)
 
         form = self.form_class(request.POST, instance=self.object)
-        if form.is_valid() and version_form.is_valid():
-            return self.form_valid(form, version_form)
+        if form.is_valid() and version_form.is_valid() and product_form.is_valid():
+            return self.form_valid(form, version_form, product_form)
         else:
-            return self.form_invalid(form, version_form)
+            return self.form_invalid(form, version_form, product_form)
 
-    def form_valid(self, form, version_form):
-        new_version, created = self._save_version_form(version_form)
-        if created:
-            duplicate_localized_products(form, new_version)
-        else:
-            form.save()
+    def form_valid(self, form, version_form, product_form):
+        with transaction.atomic():
+            product_form.save()
+            new_version, created = self._save_version_form(version_form)
+            if created:
+                duplicate_localized_products(form, new_version)
+            else:
+                form.save()
+            return HttpResponseRedirect(self.get_success_url())
 
-        return HttpResponseRedirect(self.get_success_url())
-
-    def form_invalid(self, form, version_form):
+    def form_invalid(self, form, version_form, product_form):
         return self.render_to_response(
-            self.get_context_data(form=form, version_form=version_form)
+            self.get_context_data(
+                form=form, version_form=version_form, product_form=product_form
+            )
         )
 
     def get_success_url(self):
