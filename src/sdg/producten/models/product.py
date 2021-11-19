@@ -315,11 +315,14 @@ class Product(models.Model):
 
     def clean(self):
         from sdg.producten.models.validators import (
+            validate_product,
             validate_reference_product,
             validate_specific_product,
         )
 
         super().clean()
+
+        validate_product(self)
 
         if self.is_referentie_product:
             validate_reference_product(self)

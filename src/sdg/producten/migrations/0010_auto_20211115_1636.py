@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 default=list,
                 help_text="Zowel de Nationale Portalen als de decentrale overheden kunnen een x-tal 'verwijzingen' opnemen bij een product. Voorstel hierbij om zo'n 'verwijzing' te laten bestaan uit een -bij elkaar horende-  beschrijving en hyperlink. De tekst van artikel 9 geeft enkele voorbeelden hiervan: 'richtsnoeren/ NEN-specs bijv en ook links naar de wetgeving (dit laatste is inderdaad te verstaan als vertaling van 'Legal Acts'. Bart heeft dit bij Jurist van bNC (Vanessa) gecheckt. ",
                 size=None,
-                validators=[sdg.core.models.validators.labeled_url_validator],
+                validators=[sdg.core.models.validators.validate_labeled_url],
             ),
         ),
         migrations.AddField(
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
                 default=list,
                 help_text="Decentrale verwijzingen.",
                 size=None,
-                validators=[sdg.core.models.validators.labeled_url_validator],
+                validators=[sdg.core.models.validators.validate_labeled_url],
             ),
         ),
         migrations.AlterField(

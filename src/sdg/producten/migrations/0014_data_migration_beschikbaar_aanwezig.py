@@ -7,6 +7,7 @@ def update_product_aanwezig(apps, schema_editor):
     Product = apps.get_model("producten", "Product")
     for obj in Product.objects.filter(beschikbaar=True):
         obj.product_aanwezig = True
+        obj.product_aanwezig_toelichting = "Toelichting"
         obj.save()
 
 

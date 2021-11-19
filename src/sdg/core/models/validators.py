@@ -52,7 +52,7 @@ def validate_openingstijden(value):
     return openingstijden_validator(value)
 
 
-def labeled_url_validator(array):
+def validate_labeled_url(array):
     """Ensure the array length equals two and the second item is a valid URL."""
     for sub_array in array:
         if len(sub_array) != 2:
