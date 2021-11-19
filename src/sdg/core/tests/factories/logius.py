@@ -21,7 +21,7 @@ class OverheidsorganisatieFactory(DjangoModelFactory):
 
 
 class InformatiegebiedFactory(DjangoModelFactory):
-    code = factory.Faker("pyint")
+    code = factory.Sequence(lambda n: n)
     informatiegebied = factory.Faker("word")
     informatiegebied_uri = factory.Faker("url")
 

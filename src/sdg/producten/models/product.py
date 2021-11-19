@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import date
-from typing import Any
+from typing import Any, List
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -265,17 +265,23 @@ class Product(models.Model):
             publicatie_datum=None,
         )
 
-    def localize_version_from_reference(self, version: ProductVersie):
+    def localize_version_from_reference(
+        self, version: ProductVersie, field_names: List[str]
+    ):
         """Create localized product information for this specific product based on available reference languages."""
-
         if self.is_referentie_product:
             raise ValueError(
                 "localize_from_reference must be called on a specific product"
             )
-        LocalizedProduct.objects.localize(
-            instance=version,
-            languages=self.referentie_product.beschikbare_talen.values(),
-        )
+
+        localized_objects = [
+            version.generate_localized_information(
+                taal=translation.taal,
+                **{field: getattr(translation, field) for field in field_names},
+            )
+            for translation in self.referentie_product.laatste_versie.vertalingen.all()
+        ]
+        LocalizedProduct.objects.bulk_create(localized_objects, ignore_conflicts=True)
 
     def get_or_create_specific_product(self, specific_catalog) -> Product:
         """Create a specific product for a reference product, including localized information."""
@@ -303,7 +309,23 @@ class Product(models.Model):
                     specific_product.save()
 
                 version = specific_product.create_version_from_reference()
-                specific_product.localize_version_from_reference(version)
+                specific_product.localize_version_from_reference(
+                    version,
+                    field_names=[
+                        "bezwaar_en_beroep",
+                        "decentrale_link",
+                        "decentrale_procedure_link",
+                        "kosten_en_betaalmethoden",
+                        "procedure_beschrijving",
+                        "product_titel_decentraal",
+                        "specifieke_link",
+                        "specifieke_tekst",
+                        "uiterste_termijn",
+                        "vereisten",
+                        "verwijzing_links",
+                        "wtd_bij_geen_reactie",
+                    ],
+                )
                 return specific_product
         else:
             return self
