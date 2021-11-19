@@ -273,9 +273,6 @@ class Product(models.Model):
             raise ValueError(
                 "localize_from_reference must be called on a specific product"
             )
-        LocalizedProduct.objects.localize(
-            instance=version,
-            languages=self.referentie_product.beschikbare_talen.values(),
 
         localized_objects = [
             version.generate_localized_information(
@@ -284,10 +281,7 @@ class Product(models.Model):
             )
             for translation in self.referentie_product.laatste_versie.vertalingen.all()
         ]
-        LocalizedProduct.objects.bulk_create(
-            localized_objects,
-            ignore_conflicts=True,
-        )
+        LocalizedProduct.objects.bulk_create(localized_objects, ignore_conflicts=True)
 
     def get_or_create_specific_product(self, specific_catalog) -> Product:
         """Create a specific product for a reference product, including localized information."""

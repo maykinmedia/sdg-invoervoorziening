@@ -239,7 +239,6 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         """
         Localize all specific products related to this localized reference product.
         """
-
         product = self.product_versie.product
         if product.is_referentie_product:
             LocalizedProduct.objects.bulk_localize(
