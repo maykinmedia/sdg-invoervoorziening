@@ -1,0 +1,43 @@
+{% load i18n %}
+
+{% if latest_active_version %}
+    {% if latest_active_version.product_aanwezig %}
+    {% elif latest_active_version.product_aanwezig == False %}
+        <div class="notifications__notification notification__info">
+            <i class="fas fa-info-circle"></i>
+            <span>{% trans "U heeft aangegeven dat u dit product niet aanbiedt." %}</span>
+            <span></span>
+        </div>
+    {% elif latest_active_version.product_aanwezig == None %}
+        <div class="notifications__notification notification__accent">
+            <i class="fas fa-info-circle"></i>
+            <span>{% trans "U heeft nog niet aangegeven of u dit product aanbiedt." %}</span>
+            <span></span>
+        </div>
+    {% endif %}
+{% endif %}
+
+{% with publised_status=latest_version.get_published_status %}
+    {% if latest_active_version == latest_version %}
+    {% elif not latest_version %}
+        <div class="notifications__notification notification__accent">
+            <i class="fas fa-info-circle"></i>
+            <span>{% trans "Er is nog geen product tekst gepubliceerd." %}</span>
+            <span></span>
+        </div>
+    {% elif publised_status == "concept" %}
+        <div class="notifications__notification notification__info">
+            <i class="fas fa-info-circle"></i>
+            <span>{% trans "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig." %}</span>
+            <span></span>
+        </div>
+    {% elif publised_status == "later" %}
+        <div class="notifications__notification notification__info">
+            <i class="fas fa-info-circle"></i>
+            {% blocktrans %}
+                <span>Er staat een nieuwe product tekst klaar om gepubliceerd te worden op {{ latest_version.publicatie_datum }}. Hieronder ziet u de huidige product tekst.</span>
+            {% endblocktrans %}
+            <span></span>
+        </div>
+    {% endif %}
+{% endwith %}

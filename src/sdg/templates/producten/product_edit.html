@@ -20,7 +20,7 @@
         </div>
         <div class="notifications">
             {% include "core/_notifications.html" %}
-            {% include 'producten/_include/beschikbaar_warning.html' %}
+            {% include 'producten/_include/edit_warnings.html' %}
         </div>
 
         {% for reference_form in reference_forms %}
@@ -80,8 +80,6 @@
                             </tbody>
                         </table>
                         <hr class="divider">
-                    {% else %}
-                        {% include 'producten/_include/generiek_warning.html' %}
                     {% endif %}
 
                     <table class="tabs__table form__has-reference"
