@@ -17,7 +17,11 @@ from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.producten.constants import PublishChoices
-from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
+from sdg.producten.models import (
+    LocalizedGeneriekProduct,
+    LocalizedProduct,
+    ProductFieldMixin,
+)
 from sdg.producten.utils import is_past_date
 
 User = get_user_model()
@@ -80,7 +84,7 @@ class GeneriekProduct(models.Model):
         return f"{self.upn.upn_label}"
 
 
-class Product(models.Model):
+class Product(ProductFieldMixin, models.Model):
     """
     Product
 
