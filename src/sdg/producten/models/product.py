@@ -190,6 +190,8 @@ class Product(models.Model):
         """:returns: Whether this product has expired in relation to the reference product."""
         if self.is_referentie_product:
             return False
+        if not self.laatste_versie:
+            return False
 
         publication_date = self.laatste_versie.publicatie_datum
         reference_publication_date = self.laatste_versie.publicatie_datum
@@ -276,7 +278,7 @@ class Product(models.Model):
 
         localized_objects = [
             version.generate_localized_information(
-                taal=translation.taal,
+                language=translation.taal,
                 **{field: getattr(translation, field) for field in field_names},
             )
             for translation in self.referentie_product.laatste_versie.vertalingen.all()
