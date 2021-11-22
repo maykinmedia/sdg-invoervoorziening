@@ -48,7 +48,10 @@ class ProductDetailViewTests(WebTest):
 
         response = self.app.get(product_version.product.get_absolute_url())
 
-        self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
     def test_concept_product_displays_warning(self):
         product = SpecifiekProductFactory.create(
@@ -360,7 +363,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.product.referentie_product.product_aanwezig = False
         self.product.referentie_product.save()
         response = self.app.get(self.product.get_absolute_url())
-        self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
     @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
