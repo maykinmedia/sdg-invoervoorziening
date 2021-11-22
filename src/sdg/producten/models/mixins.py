@@ -1,12 +1,12 @@
 from typing import Any, List, Tuple
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from markdownx.models import MarkdownxField
 
 from sdg.core.constants import TaalChoices
-from sdg.core.db.fields import DynamicArrayField
 from sdg.producten.types import ProductField
 
 
@@ -34,8 +34,8 @@ class ProductFieldMixin:
             value=value,
             help_text=field.help_text,
             is_reference=is_reference,
-            is_markdown=type(field) == MarkdownxField,
-            is_list=type(field) == DynamicArrayField,
+            is_markdown=isinstance(field, MarkdownxField),
+            is_list=isinstance(field, ArrayField),
         )
 
     def get_fields(self) -> List[ProductField]:
