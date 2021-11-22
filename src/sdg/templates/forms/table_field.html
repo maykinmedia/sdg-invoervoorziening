@@ -5,17 +5,19 @@
         {{ field.label|capfirst }}
         <i class="fas fa-info-circle fa-xs" title="{{ field.help_text }}"></i>
     </td>
-    <td class="tabs__table-cell {% if not is_reference %}form__cell form__cell--disabled{% endif %}">
+    <td class="tabs__table-cell {% if not is_reference %}form__cell{% endif %} form__cell--disabled">
         {% if field %}
             {{ field|addclass:"form__input" }}
             {{ field.errors }}
-            {% if not is_reference %}
-                <div class="tabs__table-cell--tools">
-                    <a href="#" class="tabs__table-help form__edit-btn"><i class="fa fa-pen fa-xs"></i> Aanpassen</a>
-                    <a href="#" class="tabs__table-help form__display-btn"><i class="fa fa-chevron-down"></i> Toon standaardtekst</a>
-                    <a href="#" class="tabs__table-help form__reference-btn"><i class="fa fa-undo fa-xs"></i> Gebruik standaardtekst</a>
-                </div>
-            {% endif %}
+            <div class="tabs__table-cell--tools">
+                <a href="#" class="tabs__table-help form__edit-btn"><i class="fa fa-pen fa-xs"></i> Aanpassen</a>
+                {% if not is_reference %}
+                    <a href="#" class="tabs__table-help form__display-btn"><i class="fa fa-chevron-down"></i> Toon
+                        standaardtekst</a>
+                    <a href="#" class="tabs__table-help form__reference-btn"><i class="fa fa-undo fa-xs"></i> Gebruik
+                        standaardtekst</a>
+                {% endif %}
+            </div>
         {% endif %}
     </td>
 </tr>
