@@ -8,8 +8,9 @@ class Accordeon {
         [...this.items].forEach(item => {
             item.addEventListener("click", (event) => {
                 const wasOpen = event.currentTarget.classList.contains("products__accordeon-item--open");
-                [...this.items].forEach(accordeonItem => accordeonItem.classList.remove("products__accordeon-item--open"));
-                if (!wasOpen) {
+                if (wasOpen) {
+                    event.currentTarget.classList.remove("products__accordeon-item--open");
+                } else {
                     event.currentTarget.classList.add("products__accordeon-item--open");
                 }
             });
