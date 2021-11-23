@@ -324,7 +324,6 @@ class Product(ProductFieldMixin, models.Model):
                         "kosten_en_betaalmethoden",
                         "procedure_beschrijving",
                         "product_titel_decentraal",
-                        "specifieke_link",
                         "specifieke_tekst",
                         "uiterste_termijn",
                         "vereisten",
