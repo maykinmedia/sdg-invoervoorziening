@@ -4,8 +4,6 @@
 {% load i18n %}
 {% load utils %}
 
-{% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
-
 {% block inner_content %}
     <form action="{% url "organisaties:edit" pk=lokaleoverheid.pk %}" method="post" class="form">
         {% csrf_token %}

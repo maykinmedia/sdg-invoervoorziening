@@ -6,16 +6,16 @@
         <div class="tabs">
             <div class="tabs__tabs">
                 <a href="{% url 'organisaties:catalogi:list' pk=pk %}"
-                   class="tabs__tab tabs__tab{% if namespace in "catalogi,producten,organisaties" %}--selected{% endif %}">
+                   class="tabs__tab tabs__tab{% if namespace in "catalogi,producten" %}--selected{% endif %}">
                     {% trans "Catalogi" %}
                 </a>
-                <a href="#{{ value }}"
-                   class="tabs__tab tabs__tab{% if namespace == "locaties" %}--selected{% endif %}">
+                <a href="{% url 'organisaties:edit' pk=pk %}"
+                   class="tabs__tab tabs__tab{% if namespace == "organisaties" %}--selected{% endif %}">
                     {% trans "Locaties" %}
                 </a>
                 <a href="{% url 'organisaties:roles:list' pk=pk %}"
                    class="tabs__tab tabs__tab{% if namespace == "roles" %}--selected{% endif %}">
-                    {% trans "Roles" %}
+                    {% trans "Gebruikers" %}
                 </a>
             </div>
         </div>
@@ -25,17 +25,21 @@
         <div class="breadcrumbs">
             <div>
                 <a href="{% url 'core:home' %}">{% trans 'Home' %}</a>
-                {% if namespace != "organisaties" %}
-                    {% with kwargs=request.resolver_match.kwargs %}
-                        {% if kwargs.pk %}
-                            <a href="{% url 'organisaties:edit' pk=kwargs.pk %}">{% trans 'Organisaties' %}</a>
-                        {% endif %}
-                        {% if kwargs.catalog_pk %}
-                            <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{% trans 'Catalogi' %}</a>
-                        {% endif %}
-                    {% endwith %}
+                {% with kwargs=request.resolver_match.kwargs %}
+                    {% if kwargs.pk %}
+                        <a href="{% url 'organisaties:edit' pk=kwargs.pk %}">{{ lokaleoverheid }}</a>
+                    {% endif %}
+                    {% if kwargs.catalog_pk %}
+                        <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{% trans 'Catalogi' %}</a>
+                    {% endif %}
+                {% endwith %}
+                {% if namespace == "roles" %}
+                    <span>{% trans "Gebruikers" %}</span>
+                {% elif namespace == "organisaties" %}
+                    <span>{% trans "Locaties" %}</span>
+                {% else %}
+                    <span>{{ namespace|title }}</span>
                 {% endif %}
-                <span>{{ namespace|title }}</span>
             </div>
         </div>
         <h2 class="products__title primary">SDG {{ namespace|title }}</h2>
