@@ -21,6 +21,7 @@
       border: none;
       color: #fff;
       padding: 6px;
+      cursor: pointer;
 
       &--side {
         @extend .dynamic__container__button;

@@ -1,6 +1,6 @@
 import ClassicEditor from './ckeditor';
 
-export default function applyMarkdownEditors(selector) {
+function applyMarkdownEditors(selector) {
     const markdownFields = document.querySelectorAll(selector);
     const availableEditors = {};
 
@@ -13,3 +13,7 @@ export default function applyMarkdownEditors(selector) {
 
     return availableEditors;
 }
+
+const availableEditors = applyMarkdownEditors(".markdownx textarea");
+
+export {availableEditors};

@@ -31,6 +31,20 @@
         <div class="tabs__tab-contents">
             {% with latest_version=product.laatste_versie latest_active_version=product.laatste_actieve_versie %}
                 {% include "producten/_include/product_status.html" %}
+                <table class="tabs__table">
+                    <thead>
+                    <tr>
+                        <th class="tabs__table-header" width="25%">Product gegevens</th>
+                        <th class="tabs__table-header">Huidige informatie</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for field in product.get_fields|exclude:"id,generiek_product,referentie_product,catalogus" %}
+                        {% table_row field %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <hr class="divider">
                 {% for info in latest_active_version.vertalingen.all %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ info.taal }}">

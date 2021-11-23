@@ -243,10 +243,11 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         if product.is_referentie_product:
             LocalizedProduct.objects.bulk_localize(
                 instances=(
-                    p.laatste_versie
+                    last_version
                     for p in product.specifieke_producten.all().prefetch_related(
                         "versies"
                     )
+                    if (last_version := p.laatste_versie)
                 ),
                 languages=[self.taal],
             )
@@ -266,8 +267,10 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         return self.product_titel_decentraal
 
     def save(self, *args, **kwargs):
+        adding = self._state.adding
         super().save(*args, **kwargs)
-        self.localize_specific_products()
+        if adding:
+            self.localize_specific_products()
 
 
 class LocalizedProductuitvoering(TaalMixin, models.Model):
