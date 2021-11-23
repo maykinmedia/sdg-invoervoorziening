@@ -1,0 +1,50 @@
+@import 'colors';
+
+.filter {
+
+  .filter__text {
+    float: right;
+    margin-top: -44px;
+    width: 300px;
+
+    .filter__input {
+      border: 1px solid #dfdfdf;
+      padding: 8px 16px;
+      outline: none;
+      font-size: 16px;
+      width: 90%;
+      border-radius: 50px;
+    }
+
+    .expand {
+      margin-left: 12px;
+      cursor: pointer;
+    }
+  }
+
+  .filter__status {
+    margin-top: 8px;
+
+    .filter__button {
+      &--off {
+        svg {
+          color: $color_primary_lightest !important;
+        }
+      }
+
+      cursor: pointer;
+      background-color: $color_primary_dark;
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+      text-align: center;
+
+      svg {
+        margin-top: 5px;
+      }
+
+    }
+
+  }
+
+}

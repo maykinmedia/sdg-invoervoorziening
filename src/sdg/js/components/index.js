@@ -10,3 +10,5 @@ import "./markdown";
 import "./edit";
 import "./reference";
 import "./dynamic_array";
+import "./filter";
+import "./expand";

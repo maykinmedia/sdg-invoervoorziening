@@ -10,13 +10,12 @@
     {{ block.super }}
     <div class="products">
         {% for catalog in catalogs %}
-            {% include "_include/product_catalog.html" %}
+            {% include "organisaties/_include/product_catalog.html" %}
             {% with catalog=catalog.referentie_catalogus %}
                 {% if catalog.area_and_products %}
-                    {% include "_include/product_catalog.html" %}
+                    {% include "organisaties/_include/product_catalog.html" %}
                 {% endif %}
             {% endwith %}
         {% endfor %}
-        {% include "producten/_include/legend.html" %}
     </div>
 {% endblock inner_content %}
