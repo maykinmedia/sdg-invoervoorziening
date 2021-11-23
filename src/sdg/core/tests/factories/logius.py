@@ -41,7 +41,7 @@ class ThemaFactory(DjangoModelFactory):
 class UniformeProductnaamFactory(DjangoModelFactory):
     thema = factory.SubFactory(ThemaFactory)
     upn_uri = factory.Faker("url")
-    upn_label = factory.Faker("word")
+    upn_label = factory.Sequence(lambda n: f"upn label {n}")
 
     rijk = factory.Faker("pybool")
     provincie = factory.Faker("pybool")
