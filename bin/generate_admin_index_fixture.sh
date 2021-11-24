@@ -8,4 +8,4 @@
 #
 # Run this script from the root of the repository
 
-src/manage.py dumpdata --indent=4 --natural-foreign --natural-primary admin_index.AppGroup admin_index.AppLink > src/sdg/fixtures/default_admin_index.json
+src/manage.py dumpdata --indent=4 --natural-foreign --natural-primary admin_index.AppGroup admin_index.AppLink > src/sdg/fixtures/django_admin_index.json
