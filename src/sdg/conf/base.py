@@ -1,18 +1,11 @@
 import os
 import sys
 
-# Django-hijack (and Django-hijack-admin)
 from django.urls import reverse_lazy
 
 import sentry_sdk
 
-from .utils import (
-    clean_rst,
-    config,
-    get_current_version,
-    get_sentry_integrations,
-    read_file,
-)
+from .utils import config, get_current_version, get_sentry_integrations
 
 # Build paths inside the project, so further paths can be defined relative to
 # the code root.
