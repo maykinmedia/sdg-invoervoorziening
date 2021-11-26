@@ -123,11 +123,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "django_filters",
-    # Project applications.
-    "sdg.accounts",
-    "sdg.utils",
     # SDG applications
+    "sdg.api",
     "sdg.core",
+    "sdg.utils",
+    "sdg.accounts",
     "sdg.producten",
     "sdg.organisaties",
 ]
