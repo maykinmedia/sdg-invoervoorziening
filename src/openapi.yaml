@@ -192,6 +192,15 @@ paths:
         schema:
           type: integer
       - in: query
+        name: productAanwezig
+        schema:
+          type: string
+          enum:
+          - ja
+          - nee
+          - onbekend
+        description: Toont producten die aanwezig zijn in de opgegeven catalogus.
+      - in: query
         name: publicatieDatum
         schema:
           type: string
@@ -665,9 +674,13 @@ components:
         organisatie:
           type: string
           format: uri
-        beschikbaar:
+        productAanwezig:
           type: boolean
-          description: Geeft aan of het product al dan niet beschikbaar is.
+          nullable: true
+          description: Voert u dit product?
+        productAanwezigToelichting:
+          type: string
+          description: Toelichting
         catalogus:
           type: string
           format: uri
