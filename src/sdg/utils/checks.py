@@ -28,7 +28,9 @@ def check_modelform_exclude(app_configs, **kwargs):
 
     for form in get_subclasses(ModelForm):
         # ok, fields is defined
-        if form._meta.fields or getattr(form.Meta, "fields", None):
+        if form._meta.fields or (
+            hasattr(form, "Meta") and getattr(form.Meta, "fields", None)
+        ):
             continue
 
         # no `.fields` defined, so scream loud enough to prevent this
