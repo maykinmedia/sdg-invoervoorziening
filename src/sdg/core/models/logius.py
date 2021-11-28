@@ -82,7 +82,7 @@ class Thema(models.Model):
     Theme
     """
 
-    informatiegebied = models.OneToOneField(
+    informatiegebied = models.ForeignKey(
         "Informatiegebied",
         on_delete=models.PROTECT,
         related_name="thema",
@@ -99,6 +99,7 @@ class Thema(models.Model):
         help_text=_(
             "Thema URI van landelijk product",
         ),
+        unique=True,
     )
 
     @property
@@ -189,6 +190,7 @@ class UniformeProductnaam(models.Model):
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
+        unique_together = (("upn_uri", "grondslag"),)
 
     def __str__(self):
         return self.upn_label
