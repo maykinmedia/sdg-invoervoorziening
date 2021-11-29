@@ -9,3 +9,6 @@ install:
 compile:
 	./bin/compile_dependencies.sh
 
+schema:
+	./bin/generate_schema.sh
+
