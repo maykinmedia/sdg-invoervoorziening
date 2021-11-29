@@ -1,15 +1,11 @@
+from collections import Set
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.managers import OrganisatieManager
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.models import (
-    GeneriekProduct,
-    LocalizedGeneriekProduct,
-    LocalizedProduct,
-    Product,
-    ProductVersie,
-)
+from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
 
 class Overheidsorganisatie(models.Model):
@@ -177,15 +173,25 @@ class UniformeProductnaam(models.Model):
     )
 
     def generate_initial_data(self, catalog: ProductenCatalogus):
-        generic = GeneriekProduct.objects.create(upn=self)
-
+        generic = self.generieke_producten.first()
         product = Product.objects.create(generiek_product=generic, catalogus=catalog)
-        LocalizedGeneriekProduct.objects.localize(
-            instance=generic, languages=["nl", "en"]
-        )
 
         version = ProductVersie.objects.create(product=product, publicatie_datum=None)
         LocalizedProduct.objects.localize(instance=version, languages=["nl", "en"])
+
+    def get_active_fields(self) -> Set[str]:
+        """:returns: A set of active boolean field names for this UPN."""
+
+        def _is_active_boolean_field(field):
+            return isinstance(field, models.BooleanField) and getattr(
+                self, field.name, False
+            )
+
+        return {
+            field.name
+            for field in self._meta.get_fields()
+            if _is_active_boolean_field(field)
+        }
 
     class Meta:
         verbose_name = _("uniforme productnaam")
@@ -203,9 +209,23 @@ class UniformeProductnaam(models.Model):
         adding = self._state.adding
         super().save(*args, **kwargs)
 
+        generic_product, created = self.generieke_producten.get_or_create(upn=self)
+        if created:
+            generic_product.vertalingen.localize(
+                instance=generic_product, languages=["nl", "en"]
+            )
+
         if adding:
-            for catalog in ProductenCatalogus.objects.filter(
-                autofill=True, is_referentie_catalogus=True
+            _active_fields = self.get_active_fields()
+
+            for cat in ProductenCatalogus.objects.filter(
+                autofill=True,
+                is_referentie_catalogus=True,
             ):
-                if all(f in self.upn_label for f in catalog.autofill_upn_filter):
-                    self.generate_initial_data(catalog)
+                if any(f not in _active_fields for f in cat.autofill_upn_filter):
+                    continue  # Skip catalogus if it doesn't match the filter.
+
+                if cat.producten.filter(generiek_product=generic_product).exists():
+                    continue  # Skip catalogus if it already has this UPN.
+
+                self.generate_initial_data(cat)
