@@ -123,11 +123,11 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "django_filters",
-    # Project applications.
-    "sdg.accounts",
-    "sdg.utils",
     # SDG applications
+    "sdg.api",
     "sdg.core",
+    "sdg.utils",
+    "sdg.accounts",
     "sdg.producten",
     "sdg.organisaties",
 ]
@@ -484,11 +484,17 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": (
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
     ),
+    "DEFAULT_AUTHENTICATION_CLASSES": ["sdg.api.authentication.TokenAuthentication"],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "sdg.api.throttling.CustomRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {"user": "100/min"},
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-    "DEFAULT_AUTHENTICATION_CLASSES": [],
-    "DEFAULT_PERMISSION_CLASSES": [],
     "PAGE_SIZE": 25,
 }
 SPECTACULAR_SETTINGS = {
