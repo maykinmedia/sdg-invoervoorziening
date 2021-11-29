@@ -1,0 +1,23 @@
+@import 'colors';
+
+.breadcrumbs {
+  margin: 24px 0;
+  display: flex;
+}
+
+.breadcrumbs a {
+  text-decoration: none;
+  color: $color_primary;
+}
+
+.breadcrumbs a::after {
+  content: '»';
+  transition: .25s all ease;
+  pointer-events: none;
+  margin: 0 6px;
+  color: $color_grey_darker;
+}
+
+.breadcrumbs span {
+  color: $color_grey_darkest;
+}

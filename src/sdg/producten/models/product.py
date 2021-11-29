@@ -346,7 +346,14 @@ class Product(ProductFieldMixin, models.Model):
             return f"{self.referentie_product.upn_label}"
 
     def get_absolute_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.pk})
+        return reverse(
+            "organisaties:catalogi:producten:detail",
+            kwargs={
+                "pk": self.catalogus.lokale_overheid.pk,
+                "catalog_pk": self.catalogus.pk,
+                "product_pk": self.pk,
+            },
+        )
 
     def clean(self):
         from sdg.producten.models.validators import (

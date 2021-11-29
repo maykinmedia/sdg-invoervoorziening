@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_filters.rest_framework import FilterSet, filters
 from djangorestframework_camel_case.util import camel_to_underscore
 
+from sdg.api.filters import ProductAanwezigChoices
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid, Lokatie
@@ -35,6 +36,11 @@ class ProductFilterSet(FilterSet):
         help_text=_("Toont producten die overeenkomen met de opgegeven doelgroepen."),
         lookup_expr="icontains",
     )
+    productAanwezig = filters.ChoiceFilter(
+        choices=ProductAanwezigChoices.choices,
+        help_text=_("Toont producten die aanwezig zijn in de opgegeven catalogus."),
+        method="filter_product_aanwezig",
+    )
     catalogus = filters.UUIDFilter(
         field_name="catalogus__uuid",
         help_text=_(
@@ -54,6 +60,17 @@ class ProductFilterSet(FilterSet):
         method="filter_upn", help_text=_("Toont producten met een UPN URI")
     )
 
+    def filter_product_aanwezig(self, queryset, name, value):
+        """:returns: filtered queryset based on `product_aanwezig`'s boolean value."""
+        value = value.lower()
+        return queryset.all().filter(
+            product_aanwezig=ProductAanwezigChoices.get_choice(value).boolean
+        )
+
+    def filter_publicatie_datum(self, queryset, name, value):
+        """:returns: filtered queryset of products having versions greater than or equal to provided date."""
+        return queryset.all().filter(versies__publicatie_datum__gte=value)
+
     def filter_upn(self, queryset, name, value):
         """:returns: filtered queryset for the given product's UPN."""
         parameter = camel_to_underscore(name)
@@ -61,10 +78,6 @@ class ProductFilterSet(FilterSet):
             Q(**{f"generiek_product__upn__{parameter}": value})
             | Q(**{f"referentie_product__generiek_product__upn__{parameter}": value})
         )
-
-    def filter_publicatie_datum(self, queryset, name, value):
-        """:returns: products having versions greater than or equal to provided date."""
-        return queryset.all().filter(versies__publicatie_datum__gte=value)
 
     class Meta:
         model = Product

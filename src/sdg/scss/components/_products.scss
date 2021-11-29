@@ -1,9 +1,15 @@
 @import "colors";
 
 .products {
-  .products__title {
-    color: $color_primary;
-    padding: 16px 0;
+  .products__title,
+  .products__catalog {
+    color: #fff;
+    background-color: $color_primary;
+    padding: 24px;
+  }
+
+  .products__catalog:not(:first-child) {
+    margin-top: 32px;
   }
 
   .products__subtitle {
@@ -16,6 +22,7 @@
     .fa-angle-up {
       display: none;
     }
+
     .products__list {
       display: none;
     }
@@ -24,9 +31,11 @@
       .fa-angle-up {
         display: inline;
       }
+
       .fa-angle-down {
         display: none;
       }
+
       .products__list {
         display: grid;
       }

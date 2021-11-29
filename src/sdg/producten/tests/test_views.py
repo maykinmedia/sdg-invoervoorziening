@@ -361,7 +361,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self._change_product_status(PublishChoices.concept)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.concept)
@@ -385,7 +392,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self._change_product_status(PublishChoices.concept)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.now)
@@ -415,7 +429,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self._change_product_status(PublishChoices.concept)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.later)
@@ -441,7 +462,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self._change_product_status(PublishChoices.now)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.concept)
@@ -471,7 +499,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self._change_product_status(PublishChoices.now)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.now)
@@ -501,7 +536,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self._change_product_status(PublishChoices.now)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.later)
@@ -537,7 +579,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.concept)
@@ -577,7 +626,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.now)
@@ -613,7 +669,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.later)
@@ -649,7 +712,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.concept)
@@ -685,7 +755,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.now)
@@ -721,7 +798,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
         LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            )
         )
 
         self._fill_product_form(response.form, PublishChoices.later)
@@ -758,7 +842,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
             self.assertFalse(location.is_product_location)
 
         response = self.app.get(
-            reverse(PRODUCT_EDIT_URL, kwargs={"pk": self.product.pk})
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs={
+                    "pk": self.product.catalogus.lokale_overheid.pk,
+                    "catalog_pk": self.product.catalogus.pk,
+                    "product_pk": self.product.pk,
+                },
+            ),
         )
 
         self._fill_product_form(response.form, PublishChoices.concept)

@@ -29,7 +29,7 @@ class OwmsParser:
             return self.process_file(filename, file_format)
 
         with NamedTemporaryFile() as f:
-            f.write(requests.get(filename, file_format).content)
+            f.write(requests.get(filename).content)
             f.seek(0)
             return self.process_file(f.name, file_format)
 
