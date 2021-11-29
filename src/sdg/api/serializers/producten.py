@@ -105,7 +105,12 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
+        _request = self.context["request"]
         vertalingen = getattr(obj.laatste_actieve_versie, "vertalingen", [])
+
+        if taal := _request.query_params.get("taal", None):
+            vertalingen = vertalingen.filter(taal=taal)
+
         return LocalizedProductSerializer(vertalingen, many=True).data
 
     def get_versie(self, obj: Product) -> int:
