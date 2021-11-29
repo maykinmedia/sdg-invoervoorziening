@@ -1,5 +1,6 @@
 from django.apps import apps
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
@@ -10,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from two_factor.urls import urlpatterns as tf_urls
 
 from sdg.accounts.views.password_reset import PasswordResetView
+from sdg.organisaties.views import InvitationAcceptView
 
 handler500 = "sdg.utils.views.server_error"
 admin.site.site_header = _("SDG Invoervoorziening")
@@ -40,11 +42,15 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
+    url(
+        r"^accept-invitation/(?P<key>\w+)/?$",
+        InvitationAcceptView.as_view(),
+        name="invitation_accept",
+    ),
     path("api/", include("sdg.api.urls", namespace="api")),
     path("accounts/", include("allauth.urls")),
-    path("", include("sdg.organisaties.urls", namespace="organisaties")),
     path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
-    path("producten/", include("sdg.producten.urls", namespace="producten")),
+    path("organizations/", include("sdg.organisaties.urls", namespace="organisaties")),
     path("", include("sdg.core.urls", namespace="core")),
     path("", include(tf_urls)),
 ]

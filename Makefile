@@ -20,4 +20,3 @@ migrations:
 
 migrate:
 	venv/bin/python src/manage.py migrate
-

@@ -82,7 +82,7 @@ class UserInvitation(models.Model):
     objects = UserInvitationManager()
 
     def send_invitation(self, request, **kwargs):
-        invite_url = reverse("organisaties:invitation_accept", args=[self.key])
+        invite_url = reverse("invitation_accept", args=[self.key])
         invite_url = request.build_absolute_uri(invite_url)
         ctx = kwargs
 
@@ -205,5 +205,5 @@ class Role(models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "organisaties:overheid_roles", kwargs={"pk": self.lokale_overheid.pk}
+            "organisaties:roles:list", kwargs={"pk": self.lokale_overheid.pk}
         )

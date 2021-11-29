@@ -38,7 +38,9 @@ class HomeViewTests(WebTest):
 
     def test_real_name_is_displayed(self):
         response = self.app.get(reverse(HOME_URL))
-        self.assertIn(
-            self.user.get_full_name(),
-            response.text,
-        )
+        self.assertIn(self.user.get_full_name(), response.text)
+
+    def test_redirect_to_municipality_if_user_has_only_role(self):
+        role = RoleFactory.create(user=self.user, is_redacteur=True)
+        response = self.app.get(reverse(HOME_URL), auto_follow=True)
+        self.assertEqual(role.lokale_overheid.get_absolute_url(), response.request.path)

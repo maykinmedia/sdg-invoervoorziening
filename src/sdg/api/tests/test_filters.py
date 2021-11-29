@@ -126,6 +126,35 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(1, len(data))
         self.assertEqual(str(product.uuid), data[0]["uuid"])
 
+    def test_filter_product_aanwezig(self):
+        catalog = ProductenCatalogusFactory.create(
+            is_referentie_catalogus=True,
+        )
+        ReferentieProductFactory.create_batch(
+            3, catalogus=catalog, product_aanwezig=True
+        )
+        ReferentieProductFactory.create_batch(
+            2, catalogus=catalog, product_aanwezig=False
+        )
+        ReferentieProductFactory.create_batch(
+            1, catalogus=catalog, product_aanwezig=None
+        )
+
+        response = self.client.get(self.url, {"productAanwezig": "ja"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["results"]
+        self.assertEqual(3, len(data))
+
+        response = self.client.get(self.url, {"productAanwezig": "nee"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["results"]
+        self.assertEqual(2, len(data))
+
+        response = self.client.get(self.url, {"productAanwezig": "onbekend"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["results"]
+        self.assertEqual(1, len(data))
+
 
 class LokatieFilterTests(APITestCase):
     url = reverse("api:lokatie-list")
