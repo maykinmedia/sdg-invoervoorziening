@@ -7,3 +7,12 @@ $pretty--color-primary: $color_primary;
 .pretty input[disabled] ~ * {
   opacity: 0.8;
 }
+
+.state {
+  label {
+    &:before,
+    &:after {
+      background-color: #fff !important;
+    }
+  }
+}

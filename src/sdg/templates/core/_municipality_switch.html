@@ -1,0 +1,5 @@
+{% if user.roles.count > 1 %}
+    <a href="{% url "core:home" %}">
+        <i class="fa fa-exchange-alt fa-xs switch-icon"></i>
+    </a>
+{% endif %}

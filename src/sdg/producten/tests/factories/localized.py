@@ -37,7 +37,6 @@ class LocalizedProductFactory(DjangoModelFactory):
 
     decentrale_link = factory.Faker("url")
     decentrale_procedure_link = factory.Faker("url")
-    specifieke_link = factory.Faker("url")
 
     kosten_en_betaalmethoden = factory.Faker("paragraph")
     procedure_beschrijving = factory.Faker("paragraph")

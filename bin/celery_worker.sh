@@ -2,9 +2,6 @@
 
 set -e
 
-toplevel=$(git rev-parse --show-toplevel)
-cd "$toplevel/src"
-
 LOGLEVEL=${CELERY_LOGLEVEL:-INFO}
 CONCURRENCY=${CELERY_WORKER_CONCURRENCY:-1}
 
@@ -17,5 +14,6 @@ exec python -m celery -A sdg worker \
     -n $WORKER_NAME \
     -l $LOGLEVEL \
     -O fair \
+    --workdir src \
     -c $CONCURRENCY
 

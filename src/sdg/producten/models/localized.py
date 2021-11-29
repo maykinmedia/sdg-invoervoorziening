@@ -141,11 +141,6 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
         default=list,
     )
-    specifieke_link = models.URLField(
-        _("specifieke link"),
-        help_text=_("URL decentrale productpagina."),
-        blank=True,
-    )
     decentrale_link = models.URLField(
         _("decentrale link"),
         help_text=_(
@@ -243,10 +238,11 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         if product.is_referentie_product:
             LocalizedProduct.objects.bulk_localize(
                 instances=(
-                    p.laatste_versie
+                    last_version
                     for p in product.specifieke_producten.all().prefetch_related(
                         "versies"
                     )
+                    if (last_version := p.laatste_versie)
                 ),
                 languages=[self.taal],
             )
@@ -266,8 +262,10 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         return self.product_titel_decentraal
 
     def save(self, *args, **kwargs):
+        adding = self._state.adding
         super().save(*args, **kwargs)
-        self.localize_specific_products()
+        if adding:
+            self.localize_specific_products()
 
 
 class LocalizedProductuitvoering(TaalMixin, models.Model):

@@ -15,13 +15,19 @@ services:
 
   web:
     build: .
-    environment:
+    environment: &web_env
       - DJANGO_SETTINGS_MODULE=sdg.conf.docker
       - SECRET_KEY=${SECRET_KEY:-n0zyvjjcogd$hmoy5xruh%k!0c5d-t+(#w6^o-#al5diww&j2@}
+      - DB_NAME=sdg
+      - DB_USER=sdg
+      - DB_HOST=db
       - CACHE_DEFAULT=redis:6379/0
       - CACHE_AXES=redis:6379/0
       - TWO_FACTOR_PATCH_ADMIN=no
       - TWO_FACTOR_FORCE_OTP_ADMIN=no
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - CELERY_LOGLEVEL=DEBUG
     ports:
       - 8000:8000
     depends_on:
@@ -32,4 +38,20 @@ services:
     # See: https://hub.docker.com/_/redis/
     image: redis
     ports:
-        - 6379:6379
+      - 6379:6379
+
+  celery:
+    build: .
+    environment: *web_env
+    command: /celery_worker.sh
+    depends_on:
+      - db
+      - redis
+
+  celerybeat:
+    build: .
+    environment: *web_env
+    command: /celery_beat.sh
+    depends_on:
+      - db
+      - redis

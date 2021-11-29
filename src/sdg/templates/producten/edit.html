@@ -102,9 +102,8 @@
                         {% with reference=product.is_referentie_product %}
                             {% table_field form.product_titel_decentraal is_reference=reference %}
                             {% table_field form.specifieke_tekst is_reference=reference %}
-                            {% table_field form.verwijzing_links is_reference=reference %}
-                            {% table_field form.specifieke_link is_reference=reference %}
-                            {% table_field form.decentrale_link is_reference=reference %}
+                            {% table_field form.verwijzing_links is_reference=True %}
+                            {% table_field form.decentrale_link is_reference=True %}
                             {% table_field form.procedure_beschrijving is_reference=reference %}
                             {% table_field form.vereisten is_reference=reference %}
                             {% table_field form.bewijs is_reference=reference %}
@@ -135,7 +134,7 @@
                         </div>
                     </div>
                     <input class="button tabs__form-button" type="submit" value="Opslaan">
-                    <a href="{% url 'producten:detail' pk=product.pk %}">
+                    <a href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
                         <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
                     </a>
                 </div>

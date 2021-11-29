@@ -4,6 +4,7 @@ psycopg2 < 2.9 # database driver
 pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
+lxml
 
 # Framework libraries
 django < 3.0
@@ -21,9 +22,7 @@ django-markdownify
 django-celery-beat
 django-filter
 celery
-
 maykin-django-two-factor-auth[phonenumbers]
-
 
 # API libraries
 djangorestframework

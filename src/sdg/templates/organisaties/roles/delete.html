@@ -1,12 +1,10 @@
-{% extends 'organisaties/base.html' %}
+{% extends 'organisaties/roles/base.html' %}
 
 {% load i18n %}
 {% load producten %}
 {% load utils %}
 {% load humanize %}
 
-{% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
 {% block notifications %}{% endblock %}
 
 {% block inner %}
@@ -18,7 +16,7 @@
             {% endblocktrans %}
         </div>
         <input type="submit" class="button" value="{% trans 'Opslaan' %}">
-        <a href="{% url 'organisaties:overheid_roles' pk=lokaleoverheid.pk %}">
+        <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}">
             <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
         </a>
     </form>

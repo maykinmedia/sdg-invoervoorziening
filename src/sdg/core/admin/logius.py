@@ -30,4 +30,13 @@ class ThemaAdmin(admin.ModelAdmin):
 class UniformeProductnaamAdmin(admin.ModelAdmin):
     search_fields = ("upn_label",)
     list_display = ("upn_label", "thema")
+    list_filter = (
+        "sdg",
+        "gemeente",
+        "rijk",
+        "provincie",
+        "waterschap",
+        "burger",
+        "bedrijf",
+    )
     autocomplete_fields = ("thema",)

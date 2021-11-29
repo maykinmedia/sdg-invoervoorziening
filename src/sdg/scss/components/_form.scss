@@ -21,6 +21,12 @@
         background-color: transparent !important;
         border-color: transparent !important;
       }
+
+      .dynamic__container__button,
+      .dynamic__container__button svg,
+      {
+        color: transparent !important;
+      }
     }
   }
 
@@ -55,6 +61,10 @@
 
     &--disabled {
       background-color: $color_grey_light;
+    }
+
+    &[disabled]::placeholder {
+      color: transparent;
     }
   }
 

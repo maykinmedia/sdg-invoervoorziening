@@ -31,7 +31,7 @@ class RoleTests(WebTest):
         self.app.set_user(self.manager_user)
         response = self.app.get(self.manager_role.get_absolute_url())
         delete_url = reverse_lazy(
-            "organisaties:overheid_role_delete",
+            "organisaties:roles:delete",
             kwargs={"pk": self.lokale_overheid.pk, "role_pk": self.editor_role.pk},
         )
         self.assertIn(
@@ -43,7 +43,7 @@ class RoleTests(WebTest):
         self.app.set_user(self.editor_user)
         response = self.app.get(self.manager_role.get_absolute_url())
         delete_url = reverse_lazy(
-            "organisaties:overheid_role_delete",
+            "organisaties:roles:delete",
             kwargs={"pk": self.lokale_overheid.pk, "role_pk": self.manager_role.pk},
         )
         self.assertNotIn(
@@ -56,7 +56,7 @@ class RoleTests(WebTest):
         self.assertEqual(Role.objects.count(), 2)
 
         delete_url = reverse_lazy(
-            "organisaties:overheid_role_delete",
+            "organisaties:roles:delete",
             kwargs={"pk": self.lokale_overheid.pk, "role_pk": self.editor_role.pk},
         )
         response = self.app.get(delete_url)
@@ -69,7 +69,7 @@ class RoleTests(WebTest):
         self.assertEqual(Role.objects.count(), 2)
 
         delete_url = reverse_lazy(
-            "organisaties:overheid_role_delete",
+            "organisaties:roles:delete",
             kwargs={"pk": self.lokale_overheid.pk, "role_pk": self.manager_role.pk},
         )
         self.app.get(delete_url, status=403)
@@ -81,7 +81,7 @@ class RoleTests(WebTest):
         self.assertEqual(Role.objects.count(), 2)
 
         delete_url = reverse_lazy(
-            "organisaties:overheid_role_delete",
+            "organisaties:roles:delete",
             kwargs={"pk": self.lokale_overheid.pk, "role_pk": self.manager_role.pk},
         )
         self.app.get(delete_url, status=403)

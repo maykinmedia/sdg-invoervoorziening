@@ -17,7 +17,11 @@ from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.producten.constants import PublishChoices
-from sdg.producten.models import LocalizedGeneriekProduct, LocalizedProduct
+from sdg.producten.models import (
+    LocalizedGeneriekProduct,
+    LocalizedProduct,
+    ProductFieldMixin,
+)
 from sdg.producten.utils import is_past_date
 
 User = get_user_model()
@@ -80,7 +84,7 @@ class GeneriekProduct(models.Model):
         return f"{self.upn.upn_label}"
 
 
-class Product(models.Model):
+class Product(ProductFieldMixin, models.Model):
     """
     Product
 
@@ -190,6 +194,8 @@ class Product(models.Model):
         """:returns: Whether this product has expired in relation to the reference product."""
         if self.is_referentie_product:
             return False
+        if not self.laatste_versie:
+            return False
 
         publication_date = self.laatste_versie.publicatie_datum
         reference_publication_date = self.laatste_versie.publicatie_datum
@@ -276,7 +282,7 @@ class Product(models.Model):
 
         localized_objects = [
             version.generate_localized_information(
-                taal=translation.taal,
+                language=translation.taal,
                 **{field: getattr(translation, field) for field in field_names},
             )
             for translation in self.referentie_product.laatste_versie.vertalingen.all()
@@ -318,7 +324,6 @@ class Product(models.Model):
                         "kosten_en_betaalmethoden",
                         "procedure_beschrijving",
                         "product_titel_decentraal",
-                        "specifieke_link",
                         "specifieke_tekst",
                         "uiterste_termijn",
                         "vereisten",
@@ -341,7 +346,14 @@ class Product(models.Model):
             return f"{self.referentie_product.upn_label}"
 
     def get_absolute_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.pk})
+        return reverse(
+            "organisaties:catalogi:producten:detail",
+            kwargs={
+                "pk": self.catalogus.lokale_overheid.pk,
+                "catalog_pk": self.catalogus.pk,
+                "product_pk": self.pk,
+            },
+        )
 
     def clean(self):
         from sdg.producten.models.validators import (
