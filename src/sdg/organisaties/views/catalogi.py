@@ -9,7 +9,7 @@ from sdg.producten.models import Product
 
 
 class CatalogListView(OverheidMixin, DetailView):
-    template_name = "organisaties/catalogi/detail.html"
+    template_name = "organisaties/catalogi/list.html"
     model = LokaleOverheid
     required_roles = ["is_redacteur"]
 

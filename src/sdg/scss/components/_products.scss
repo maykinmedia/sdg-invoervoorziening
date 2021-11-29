@@ -3,12 +3,13 @@
 .products {
   .products__title,
   .products__catalog {
-    color: $color_primary;
-    padding: 16px 0;
+    color: #fff;
+    background-color: $color_primary;
+    padding: 24px;
   }
 
   .products__catalog:not(:first-child) {
-    padding-top: 32px;
+    margin-top: 32px;
   }
 
   .products__subtitle {

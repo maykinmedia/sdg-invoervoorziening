@@ -1,6 +1,9 @@
 {% load utils %}
 
-<h4 class="products__catalog">{{ catalog.naam }}</h4>
+<div class="products__catalog">
+    <h4>{{ catalog.naam }}</h4>
+    {% include "organisaties/_include/catalog_filter.html" %}
+</div>
 <div class="products__accordeon">
     {% for informatiegebied, producten in catalog.area_and_products.items %}
         <div class="products__accordeon-item">
@@ -24,7 +27,7 @@
                             <a class="products__item"
                                href="{% url 'organisaties:catalogi:producten:redirect' pk=lokaleoverheid.pk catalog_pk=catalog.pk product_pk=product.pk %}">
                         {% endif %}
-                    <div class="products__item-icon">
+                    <div class="products__item-icon products__status">
                         {% product_icon product %}
                     </div>
                     <div>
