@@ -124,11 +124,9 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(reference_nl.product_titel_decentraal, text_nl)
         self.assertIn(reference_nl.specifieke_tekst, text_nl)
-        self.assertIn(reference_nl.specifieke_link, text_nl)
 
         self.assertIn(reference_en.product_titel_decentraal, text_en)
         self.assertIn(reference_en.specifieke_tekst, text_en)
-        self.assertIn(reference_en.specifieke_link, text_en)
 
     @freeze_time(NOW_DATE)
     def test_specific_product_details_are_displayed(self):
@@ -153,11 +151,9 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn(specific_nl.specifieke_link, text_nl)
 
         self.assertIn(specific_en.product_titel_decentraal, text_en)
         self.assertIn(specific_en.specifieke_tekst, text_en)
-        self.assertIn(specific_en.specifieke_link, text_en)
 
     @freeze_time(NOW_DATE)
     def test_product_locations_are_displayed(self):
@@ -199,7 +195,9 @@ class ProductDetailViewTests(WebTest):
         )
 
         LocalizedProductFactory.create_batch(
-            2, product_versie=product_version, specifieke_tekst="", specifieke_link=""
+            2,
+            product_versie=product_version,
+            specifieke_tekst="",
         )
         LocalizedProductFactory.create_batch(
             2, product_versie=reference_product_version
@@ -225,11 +223,9 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(reference_nl.specifieke_tekst, text_nl)
-        self.assertIn(reference_nl.specifieke_link, text_nl)
 
         self.assertIn(specific_en.product_titel_decentraal, text_en)
         self.assertIn(reference_en.specifieke_tekst, text_en)
-        self.assertIn(reference_en.specifieke_link, text_en)
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_shows_active_data_with_schedule_notification(self):
@@ -260,7 +256,6 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn(specific_nl.specifieke_link, text_nl)
         self.assertIn("Ingeplande wijzigingen op", response.text)
 
     @freeze_time(NOW_DATE)
@@ -292,7 +287,6 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn(specific_nl.specifieke_link, text_nl)
         self.assertIn("Er is een bestaand concept voor dit product.", response.text)
 
 

@@ -141,11 +141,6 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
         default=list,
     )
-    specifieke_link = models.URLField(
-        _("specifieke link"),
-        help_text=_("URL decentrale productpagina."),
-        blank=True,
-    )
     decentrale_link = models.URLField(
         _("decentrale link"),
         help_text=_(
