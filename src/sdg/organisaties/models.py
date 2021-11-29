@@ -96,7 +96,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         return self.organisatie.owms_pref_label
 
     def get_absolute_url(self):
-        return reverse("organisaties:overheid_detail", kwargs={"pk": self.pk})
+        return reverse("organisaties:catalogi:list", kwargs={"pk": self.pk})
 
 
 class Lokatie(models.Model):

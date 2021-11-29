@@ -1,4 +1,4 @@
-const tabsTabs = document.querySelectorAll(".tabs__tab");
+const tabsTabs = document.querySelectorAll(".tabs--inline .tabs__tab");
 const tabsContents = document.querySelectorAll(".tabs__tab-content");
 
 class TabsToggle {

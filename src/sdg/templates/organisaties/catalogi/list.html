@@ -1,0 +1,21 @@
+{% extends 'organisaties/catalogi/base.html' %}
+
+{% load i18n %}
+{% load producten %}
+{% load utils %}
+
+{% block notifications %}{% endblock %}
+
+{% block inner_content %}
+    {{ block.super }}
+    <div class="products">
+        {% for catalog in catalogs %}
+            {% include "organisaties/_include/product_catalog.html" %}
+            {% with catalog=catalog.referentie_catalogus %}
+                {% if catalog.area_and_products %}
+                    {% include "organisaties/_include/product_catalog.html" %}
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
+{% endblock inner_content %}

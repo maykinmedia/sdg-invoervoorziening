@@ -1,0 +1,66 @@
+{% extends 'organisaties/roles/base.html' %}
+
+{% load i18n %}
+{% load producten %}
+{% load utils %}
+{% load humanize %}
+
+{% block notifications %}{% endblock %}
+
+{% block inner %}
+    {{ block.super }}
+    <div class="roles">
+        {% with role_list.all as roles %}
+            <div class="tabs">
+                <div class="notifications">
+                    {% include "core/_notifications.html" %}
+                </div>
+
+                <div class="tabs__tab-contents">
+                    <div class="tabs__tab-content tabs__tab-content--active"
+                         id="roles">
+                        <table class="tabs__table">
+                            <thead>
+                            <tr>
+                                <th class="tabs__table-header">{% trans "Naam" %}</th>
+                                <th class="tabs__table-header">{% trans "Beheerder" %}</th>
+                                <th class="tabs__table-header">{% trans "Redacteur" %}</th>
+                                <th class="tabs__table-header" width="25%">{% trans "Acties" %}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for role in roles %}
+                                {% with role.user as user %}
+                                    <tr>
+                                        <td class="tabs__table-cell">{{ user.get_full_name }}
+                                            {% if user.invitatie and not user.invitatie.accepted %}
+                                                <i class="fa fa-envelope fa-xs dark"
+                                                   title="{% trans 'Uitnodiging verstuurd' %}"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
+                                        <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
+                                        <td class="tabs__table-cell">
+                                            {% if lokaleoverheid_beheerder and user != request.user %}
+                                                <a class="button--small button--light"
+                                                   href="{% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
+                                                <a class="button--small button--light"
+                                                   href="{% url 'organisaties:roles:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endwith %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="roles__control">
+                            <a class="button" href="{% url 'organisaties:invitation_create' pk=lokaleoverheid.pk %}">
+                                <i class="far fa-envelope"></i>
+                                {% trans "Nieuwe gebruiker toevoegen" %}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endwith %}
+    </div>
+{% endblock inner %}

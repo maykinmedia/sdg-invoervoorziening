@@ -1,14 +1,14 @@
-{% extends 'organisaties/base.html' %}
+{% extends 'organisaties/roles/base.html' %}
 
 {% load i18n %}
 {% load producten %}
 {% load utils %}
 {% load humanize %}
 
-{% block container_title %}SDG voor <b>{{ lokaleoverheid }}</b>{% endblock container_title %}
 {% block notifications %}{% endblock %}
 
 {% block inner %}
+    {{ block.super }}
     <form method="post" class="form">
         {% csrf_token %}
         {{ form.non_field_errors }}
@@ -27,7 +27,7 @@
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
             <div class="form__buttons">
                 <input type="submit" class="button" value="{% trans 'Opslaan' %}">
-                <a href="{% url 'organisaties:overheid_roles' pk=lokaleoverheid.pk %}">
+                <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}">
                     <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
                 </a>
             </div>

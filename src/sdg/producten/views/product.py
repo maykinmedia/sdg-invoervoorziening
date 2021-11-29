@@ -42,16 +42,24 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
             else:
                 raise PermissionDenied()
 
-        kwargs["obj"] = obj
+        kwargs["product"] = obj
         return super().get(request, *args, **kwargs)
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse("producten:detail", kwargs={"pk": kwargs.get("obj").pk})
+        return reverse(
+            "organisaties:catalogi:producten:detail",
+            kwargs={
+                "pk": kwargs.get("product").catalogus.lokale_overheid.pk,
+                "catalog_pk": kwargs.get("product").catalogus.pk,
+                "product_pk": kwargs.get("product").pk,
+            },
+        )
 
 
 class ProductDetailView(OverheidMixin, DetailView):
-    template_name = "producten/product_detail.html"
+    template_name = "producten/detail.html"
     context_object_name = "product"
+    pk_url_kwarg = "product_pk"
     queryset = Product.objects.select_related(
         "catalogus__lokale_overheid"
     ).prefetch_related(
@@ -72,12 +80,14 @@ class ProductDetailView(OverheidMixin, DetailView):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data(object=self.object)
+        context["lokaleoverheid"] = self.lokale_overheid
         return self.render_to_response(context)
 
 
 class ProductUpdateView(OverheidMixin, UpdateView):
-    template_name = "producten/product_edit.html"
+    template_name = "producten/edit.html"
     context_object_name = "product_versie"
+    pk_url_kwarg = "product_pk"
     queryset = Product.objects.select_related("catalogus__lokale_overheid")
     form_class = inlineformset_factory(
         ProductVersie,
@@ -116,7 +126,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         )(instance=self.product.reference_product.laatste_versie)
 
         context["product"] = self.product
-        context["lokale_overheid"] = self.product.catalogus.lokale_overheid
+        context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
 
         context["reference_forms"] = reference_formset.forms
         context["informatie_forms"] = zip_longest(
@@ -161,4 +171,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         )
 
     def get_success_url(self):
-        return reverse("producten:detail", kwargs={"pk": self.product.pk})
+        return reverse(
+            "organisaties:catalogi:producten:detail",
+            kwargs={
+                "pk": self.lokale_overheid.pk,
+                "catalog_pk": self.product.catalogus.pk,
+                "product_pk": self.product.pk,
+            },
+        )

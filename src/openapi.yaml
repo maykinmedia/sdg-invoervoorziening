@@ -192,6 +192,15 @@ paths:
         schema:
           type: integer
       - in: query
+        name: productAanwezig
+        schema:
+          type: string
+          enum:
+          - ja
+          - nee
+          - onbekend
+        description: Toont producten die aanwezig zijn in de opgegeven catalogus.
+      - in: query
         name: publicatieDatum
         schema:
           type: string
