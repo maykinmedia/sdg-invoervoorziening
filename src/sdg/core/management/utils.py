@@ -57,8 +57,6 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     codes = [obj.pop("SDG_Code") for obj in data]
     grouped_data = dict(zip(codes, data))
 
-    count_informatiegebieden = 0
-
     for code, obj in grouped_data.items():
         informatiegebied, created = Informatiegebied.objects.update_or_create(
             code=code,
@@ -69,9 +67,6 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
         )
 
         obj["informatiegebied"] = informatiegebied
-
-        if created:
-            count_informatiegebieden += 1
 
     count_themas = 0
 

@@ -190,7 +190,11 @@ class UniformeProductnaam(models.Model):
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
-        unique_together = (("upn_uri", "grondslag"),)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["upn_uri", "grondslag"], name="unique_upn_uri_and_grondslag"
+            )
+        ]
 
     def __str__(self):
         return self.upn_label

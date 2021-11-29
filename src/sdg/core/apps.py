@@ -37,6 +37,3 @@ class CoreConfig(AppConfig):
     def ready(self):
         post_migrate.connect(register_project_models, sender=self)
         post_migrate.connect(load_app_fixtures, sender=self)
-
-        # This makes the tasks available in the Django Admin.
-        from . import tasks
