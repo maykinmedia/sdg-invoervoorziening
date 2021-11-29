@@ -15,3 +15,9 @@ schema:
 admin:
 	./bin/generate_admin_index_fixture.sh
 
+migrations:
+	venv/bin/python src/manage.py makemigrations
+
+migrate:
+	venv/bin/python src/manage.py migrate
+

@@ -484,9 +484,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PARSER_CLASSES": (
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
     ),
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "sdg.api.authentication.UserlessTokenAuthentication"
-    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": ["sdg.api.authentication.TokenAuthentication"],
     "DEFAULT_THROTTLE_CLASSES": [
         "sdg.api.throttling.CustomRateThrottle",
     ],

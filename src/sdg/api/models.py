@@ -6,7 +6,46 @@ class Token(models.Model):
     """Custom authorization token model without binding to a specific user."""
 
     key = models.CharField(_("key"), max_length=40, primary_key=True)
-    created = models.DateTimeField(_("created"), auto_now_add=True)
+
+    contact_person = models.CharField(
+        _("contactpersoon"),
+        max_length=100,
+        help_text=_("Naam van de contactpersoon"),
+    )
+    email = models.EmailField(
+        _("email"),
+        help_text=_("Email van de contactpersoon"),
+    )
+
+    organization = models.CharField(
+        _("organisatie"),
+        max_length=100,
+        help_text=_("Naam van de organisatie"),
+        blank=True,
+    )
+    application = models.CharField(
+        _("applicatie"),
+        max_length=100,
+        help_text=_("Naam van de applicatie"),
+        blank=True,
+    )
+    administration = models.CharField(
+        _("administratie"),
+        max_length=100,
+        help_text=_("Naam van de administratie"),
+        blank=True,
+    )
+
+    created = models.DateTimeField(
+        _("aangemaakt"),
+        auto_now_add=True,
+        help_text=_("Wanneer het token is aangemaakt"),
+    )
+    modified = models.DateTimeField(
+        _("aangepast"),
+        auto_now=True,
+        help_text=_("Wanneer het token is aangepast"),
+    )
 
     class Meta:
         verbose_name = _("token")

@@ -1,11 +1,11 @@
 from django.contrib.auth.models import AnonymousUser
 
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication as _TokenAuthentication
 
 from sdg.api.models import Token
 
 
-class UserlessTokenAuthentication(TokenAuthentication):
+class TokenAuthentication(_TokenAuthentication):
     """Custom token authentication without user binding."""
 
     model = Token
