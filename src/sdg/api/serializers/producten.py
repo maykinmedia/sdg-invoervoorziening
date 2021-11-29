@@ -104,8 +104,17 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
-        vertalingen = getattr(obj.laatste_actieve_versie, "vertalingen", [])
-        return LocalizedProductSerializer(vertalingen, many=True).data
+        active_version = obj.active_version
+        if active_version:
+            assert len(active_version) == 1
+            translations = active_version[0].vertalingen.all()
+        else:
+            translations = []
+        return LocalizedProductSerializer(translations, many=True).data
 
     def get_versie(self, obj: Product) -> int:
-        return getattr(obj.laatste_actieve_versie, "versie", 0)
+        active_version = obj.active_version
+        if active_version:
+            assert len(active_version) == 1
+            return active_version[0].versie
+        return 0

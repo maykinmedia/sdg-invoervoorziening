@@ -8,6 +8,8 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import BooleanField, Case, Model, Q, Value, When
+from django.db.models.expressions import Subquery
+from django.db.models.query import Prefetch
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -82,6 +84,67 @@ class GeneriekProduct(models.Model):
 
     def __str__(self):
         return f"{self.upn.upn_label}"
+
+
+class ProductQuerySet(models.QuerySet):
+    def active(self, active_on=None):
+        """
+        An active product is a product with its product version and its
+        translations as it was most recently published.
+
+        Unpublished (future versions or concept versions) products are not
+        included.
+
+        This function optimizes the queryset to prefetch the `ProductVersie`
+        that is active on given `active_on` date, including the appropriate
+        prefetched translations. The prefetched active version is available
+        via `Product.active_version` and is always a list, containing 0 or 1
+        `ProductVersie`.
+        """
+        if active_on is None:
+            active_on = date.today()
+
+        subquery = Subquery(
+            ProductVersie.objects.exclude(publicatie_datum=None)
+            .filter(publicatie_datum__lte=active_on)
+            .order_by("-versie")
+            .values_list("pk", flat=True)[:1]
+        )
+
+        return self.prefetch_related(
+            Prefetch(
+                "versies",
+                to_attr="active_version",
+                queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
+                    "vertalingen"
+                ),
+            )
+        )
+
+    def most_recent(self):
+        """
+        The most recent product is the product that was last published
+        (including future publications) or a concept.
+
+        This function optimizes the queryset to prefetch the most recent
+        `ProductVersie`, including the appropriate prefetched translations. The
+        prefetched most recent version is available via
+        `Product.most_recent_version` and is always a list, containing 0 or 1
+        `ProductVersie`.
+        """
+        subquery = Subquery(
+            ProductVersie.objects.order_by("-versie").values_list("pk", flat=True)[:1]
+        )
+
+        return self.prefetch_related(
+            Prefetch(
+                "versies",
+                to_attr="most_recent_version",
+                queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
+                    "vertalingen"
+                ),
+            )
+        )
 
 
 class Product(ProductFieldMixin, models.Model):
@@ -166,6 +229,8 @@ class Product(ProductFieldMixin, models.Model):
             "De identificatie die binnen deze API gebruikt wordt voor de resource."
         ),
     )
+
+    objects = ProductQuerySet.as_manager()
 
     @property
     def upn_uri(self):

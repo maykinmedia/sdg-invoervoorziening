@@ -28,6 +28,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
             "gerelateerde_producten",
             "lokaties",
         )
+        .active()
         .order_by("generiek_product__upn__upn_label")
     )
     filterset_class = ProductFilterSet
