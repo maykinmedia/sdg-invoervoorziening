@@ -1,1 +1,1 @@
-ORGANIZATION_EDIT_URL = "organisaties:overheid_edit"
+ORGANIZATION_EDIT_URL = "organisaties:edit"

@@ -5,11 +5,8 @@
 {% load i18n %}
 {% load producten %}
 
-{% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor <b>{{ lokale_overheid }}</b>{% endblock container_title %}
-
-{% block inner %}
-    <div class="tabs">
+{% block inner_content %}
+    <div class="tabs tabs--inline">
         <div class="tabs__tabs">
             {% for key, value in product.beschikbare_talen.items %}
                 <a href="#{{ value }}" data-id="{{ value }}"
@@ -18,11 +15,6 @@
                 </a>
             {% endfor %}
         </div>
-        <div class="notifications">
-            {% include "core/_notifications.html" %}
-            {% include 'producten/_include/beschikbaar_warning.html' %}
-        </div>
-
         {% for reference_form in reference_forms %}
             <template class="form__reference-{{ reference_form.initial.taal }}">
                 {{ reference_form.as_p }}
@@ -30,6 +22,11 @@
         {% endfor %}
 
         <form action="." method="POST" class="form tabs__tab-contents">
+            <div class="notifications">
+                {% include "core/_notifications.html" %}
+                {% include 'producten/_include/beschikbaar_warning.html' %}
+            </div>
+
             {% csrf_token %}
             {{ form.management_form }}
             {{ product_form.non_field_errors }}
@@ -135,7 +132,7 @@
                         </div>
                     </div>
                     <input class="button tabs__form-button" type="submit" value="Opslaan">
-                    <a href="{% url 'producten:detail' pk=product.pk %}">
+                    <a href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
                         <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
                     </a>
                 </div>
@@ -143,4 +140,4 @@
 
         </form>
     </div>
-{% endblock inner %}
+{% endblock inner_content %}

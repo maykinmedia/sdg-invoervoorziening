@@ -1,6 +1,6 @@
 {% load utils %}
 
-<h2 class="products__title">{{ catalog.naam }}</h2>
+<h4 class="products__catalog">{{ catalog.naam }}</h4>
 <div class="products__accordeon">
     {% for informatiegebied, producten in catalog.area_and_products.items %}
         <div class="products__accordeon-item">
@@ -18,10 +18,11 @@
                 <div class="products__list-container">
                     {% for product in producten %}
                         {% if catalog.is_referentie_catalogus %}
-                            <a class="products__item" href="{% url 'producten:detail' pk=product.pk %}">
+                            <a class="products__item"
+                               href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=catalog.pk product_pk=product.pk %}">
                         {% else %}
                             <a class="products__item"
-                               href="{% url 'producten:redirect' pk=product.pk catalog_pk=catalog.pk %}">
+                               href="{% url 'organisaties:catalogi:producten:redirect' pk=lokaleoverheid.pk catalog_pk=catalog.pk product_pk=product.pk %}">
                         {% endif %}
                     <div class="products__item-icon">
                         {% product_icon product %}

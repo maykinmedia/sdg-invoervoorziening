@@ -4,12 +4,8 @@
 {% load i18n %}
 {% load utils %}
 
-{% block container_subtitle %}Wijzig contactgegevens{% endblock container_subtitle %}
-{% block container_title %}SDG voor
-    <b>{{ lokaleoverheid.organisatie.owms_pref_label }}</b>{% endblock container_title %}
-
-{% block inner %}
-    <form action="{% url "organisaties:overheid_edit" pk=lokaleoverheid.pk %}" method="post" class="form">
+{% block inner_content %}
+    <form action="{% url "organisaties:edit" pk=lokaleoverheid.pk %}" method="post" class="form">
         {% csrf_token %}
 
         <div class="form__forms">
@@ -72,7 +68,7 @@
             {% trans "Nog een locatie toevoegen" %}
         </div>
         <input type="submit" value="Opslaan" class="primaryAction login_button button">
-        <a href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">
+        <a href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}">
             <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
         </a>
     </form>
@@ -84,4 +80,4 @@
     <div class="form__actions">
         <p class="form__action-help">Wijzigingen worden direct gepubliceerd</p>
     </div>
-{% endblock inner %}
+{% endblock inner_content %}

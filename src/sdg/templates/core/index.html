@@ -1,4 +1,4 @@
-{% extends "core/base.html" %}
+{% extends "core/base_home.html" %}
 
 {% load i18n %}
 {% load account %}
@@ -14,35 +14,36 @@
 
 {% block inner %}
     <div class="tabs">
-    <div class="tabs__tabs">
-        <a href="#{{ value }}" data-id="{{ value }}"
-           class="tabs__tab tabs__tab--selected">
-            {% trans "Overheden" %}
-        </a>
-    </div>
-    <div class="notifications">
-        {% include "core/_notifications.html" %}
-    </div>
-    <div class="products">
-        {% if lokale_overheden %}
-            <div class="cards">
-                {% for lokaleoverheid in lokale_overheden %}
-                    <a class="cards__card"
-                       href="{% url 'organisaties:overheid_detail' pk=lokaleoverheid.pk %}">
-                        <i class="fa fa-landmark"></i>
-                        <span>
+        <div class="tabs__tabs">
+            <a href="#{{ value }}" data-id="{{ value }}"
+               class="tabs__tab tabs__tab--selected">
+                {% trans "Overheden" %}
+            </a>
+        </div>
+        <div class="notifications">
+            {% include "core/_notifications.html" %}
+        </div>
+        <div class="products">
+            {% if lokale_overheden %}
+                <div class="cards">
+                    {% for lokaleoverheid in lokale_overheden %}
+                        <a class="cards__card"
+                           href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}">
+                            <i class="fa fa-landmark"></i>
+                            <span>
                     {{ lokaleoverheid }}
                 </span>
-                    </a>
-                {% endfor %}
-            </div>
-        {% else %}
-            <div>
-                <div class="notifications__notification notification__accent">
-                    <i class="fas fa-info-circle"></i>
-                    <span>{% trans "Je hebt geen toegang tot enige lokale overheid." %}</span>
+                        </a>
+                    {% endfor %}
                 </div>
-            </div>
-        {% endif %}
+            {% else %}
+                <div>
+                    <div class="notifications__notification notification__accent">
+                        <i class="fas fa-info-circle"></i>
+                        <span>{% trans "Je hebt geen toegang tot enige lokale overheid." %}</span>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
     </div>
 {% endblock inner %}
