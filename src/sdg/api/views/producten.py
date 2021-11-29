@@ -17,7 +17,19 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a product, retrieved by uuid"""
 
     lookup_field = "uuid"
-    queryset = Product.objects.all()
+    queryset = (
+        Product.objects.select_related(
+            "catalogus",
+            "catalogus__lokale_overheid",
+            "generiek_product",
+            "generiek_product__upn",
+        )
+        .prefetch_related(
+            "gerelateerde_producten",
+            "lokaties",
+        )
+        .order_by("generiek_product__upn__upn_label")
+    )
     filterset_class = ProductFilterSet
     serializer_class = ProductSerializer
 
