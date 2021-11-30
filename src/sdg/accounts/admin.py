@@ -26,13 +26,6 @@ class RoleInline(admin.TabularInline):
 
     get_role_organization.short_description = _("Organisatie")
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "lokale_overheid":
-            kwargs["queryset"] = db_field.related_model._default_manager.select_related(
-                "organisatie"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
 
 class UserCreationForm(forms.ModelForm):
     """
