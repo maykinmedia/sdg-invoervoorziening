@@ -56,6 +56,6 @@ class LokatieViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a location, retrieved by uuid"""
 
     lookup_field = "uuid"
-    queryset = Lokatie.objects.all()
+    queryset = Lokatie.objects.select_related("lokale_overheid")
     filterset_class = LokatieFilterSet
     serializer_class = LokatieSerializer
