@@ -137,6 +137,7 @@ class UniformeProductnaam(models.Model):
         help_text=_(
             "Uniforme Productnaam URI van landelijk product",
         ),
+        unique=True,
     )
     upn_label = models.CharField(
         _("UPN label"),
@@ -146,6 +147,12 @@ class UniformeProductnaam(models.Model):
             "volledige UPL. "
         ),
     )
+
+    # There can be several "grondslagen" (legal basis) for a UPN. The
+    # representation on standaarden.overheid.nl is flattened. For the sake of
+    # the UPN URI and UPN label, we don't need these fields at the moment nor
+    # their differences for each layer of government. The boolean fields below
+    # already reflect that they can be used by several layers of government.
 
     rijk = models.BooleanField(_("rijk"), default=False)
     provincie = models.BooleanField(_("provincie"), default=False)
@@ -162,21 +169,6 @@ class UniformeProductnaam(models.Model):
     melding = models.BooleanField(_("melding"), default=False)
     verplichting = models.BooleanField(_("verplichting"), default=False)
     digi_d_macht = models.BooleanField(_("digi_d_macht"), default=False)
-
-    grondslag = models.CharField(
-        _("grondslag"),
-        blank=True,
-        max_length=80,
-    )
-    grondslaglabel = models.CharField(
-        _("grondslaglabel"),
-        blank=True,
-        max_length=512,
-    )
-    grondslaglink = models.URLField(
-        _("grondslaglink"),
-        blank=True,
-    )
 
     def generate_initial_data(
         self, generic: GeneriekProduct, catalog: ProductenCatalogus
@@ -202,11 +194,6 @@ class UniformeProductnaam(models.Model):
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
-        constraints = [
-            models.UniqueConstraint(
-                fields=["upn_uri", "grondslag"], name="unique_upn_uri_and_grondslag"
-            )
-        ]
 
     def __str__(self):
         return self.upn_label
