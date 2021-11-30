@@ -13,6 +13,7 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
             "uuid",
             "domein",
             "naam",
+            "organisatie",
             "is_referentie_catalogus",
             "referentie_catalogus",
             "toelichting",
@@ -27,6 +28,11 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
             "referentie_catalogus": {
                 "lookup_field": "uuid",
                 "view_name": "api:productencatalogus-detail",
+            },
+            "organisatie": {
+                "source": "lokale_overheid",
+                "lookup_field": "uuid",
+                "view_name": "api:lokaleoverheid-detail",
             },
             "producten": {"lookup_field": "uuid", "view_name": "api:product-detail"},
         }
