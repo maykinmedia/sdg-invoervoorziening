@@ -1,11 +1,17 @@
-from collections import Set
+from typing import Set
 
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.managers import OrganisatieManager
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.models import LocalizedProduct, Product, ProductVersie
+from sdg.producten.models import (
+    GeneriekProduct,
+    LocalizedProduct,
+    Product,
+    ProductVersie,
+)
 
 
 class Overheidsorganisatie(models.Model):
@@ -172,10 +178,10 @@ class UniformeProductnaam(models.Model):
         blank=True,
     )
 
-    def generate_initial_data(self, catalog: ProductenCatalogus):
-        generic = self.generieke_producten.first()
+    def generate_initial_data(
+        self, generic: GeneriekProduct, catalog: ProductenCatalogus
+    ):
         product = Product.objects.create(generiek_product=generic, catalogus=catalog)
-
         version = ProductVersie.objects.create(product=product, publicatie_datum=None)
         LocalizedProduct.objects.localize(instance=version, languages=["nl", "en"])
 
@@ -219,13 +225,9 @@ class UniformeProductnaam(models.Model):
             _active_fields = self.get_active_fields()
 
             for cat in ProductenCatalogus.objects.filter(
+                ~Q(producten__generiek_product=generic_product),  # Exclude this UPN.
                 autofill=True,
                 is_referentie_catalogus=True,
             ):
-                if any(f not in _active_fields for f in cat.autofill_upn_filter):
-                    continue  # Skip catalogus if it doesn't match the filter.
-
-                if cat.producten.filter(generiek_product=generic_product).exists():
-                    continue  # Skip catalogus if it already has this UPN.
-
-                self.generate_initial_data(cat)
+                if all(f in _active_fields for f in cat.autofill_upn_filter):
+                    self.generate_initial_data(generic_product, cat)
