@@ -31,6 +31,7 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
 
     context_object_name = "product"
     model = Product
+    pk_url_kwarg = "product_pk"
 
     def get(self, request, *args, **kwargs):
         obj = super().get_object()
