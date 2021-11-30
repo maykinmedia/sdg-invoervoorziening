@@ -23,6 +23,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
             "catalogus__lokale_overheid",
             "generiek_product",
             "generiek_product__upn",
+            "referentie_product__generiek_product__upn",
         )
         .prefetch_related(
             "gerelateerde_producten",
@@ -46,5 +47,8 @@ class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
     serializer_class = ProductVersieSerializer
 
     def get_queryset(self):
-        product = Product.objects.get(uuid=self.kwargs["product_uuid"])
-        return product.get_latest_versions(exclude_concept=True)
+        return (
+            ProductVersie.objects.published()
+            .filter(product__uuid=self.kwargs["product_uuid"])
+            .prefetch_related("vertalingen")
+        )

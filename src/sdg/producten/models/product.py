@@ -437,6 +437,14 @@ class Product(ProductFieldMixin, models.Model):
             validate_specific_product(self)
 
 
+class ProductVersieQuerySet(models.QuerySet):
+    def published(self):
+        """
+        Returns versions that are published (ie. not concepts).
+        """
+        return self.exclude(publicatie_datum=None)
+
+
 class ProductVersie(models.Model):
     """
     Product Version
@@ -484,6 +492,8 @@ class ProductVersie(models.Model):
         help_text=_("De wijzigingsdatum voor deze productversie."),
         auto_now=True,
     )
+
+    objects = ProductVersieQuerySet.as_manager()
 
     def get_published_status(self) -> Any[PublishChoices.choices]:
         """:returns: The current published status for this product version."""
