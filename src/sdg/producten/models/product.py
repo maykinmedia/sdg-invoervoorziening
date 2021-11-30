@@ -22,6 +22,7 @@ from sdg.producten.models import (
     LocalizedProduct,
     ProductFieldMixin,
 )
+from sdg.producten.models.managers import ProductManager
 from sdg.producten.utils import is_past_date
 
 User = get_user_model()
@@ -166,6 +167,8 @@ class Product(ProductFieldMixin, models.Model):
             "De identificatie die binnen deze API gebruikt wordt voor de resource."
         ),
     )
+
+    objects = ProductManager()
 
     @property
     def upn_uri(self):
