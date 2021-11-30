@@ -4,6 +4,9 @@ from django.db.models import Case, Exists, ExpressionWrapper, F, When
 
 class ProductQuerySet(models.QuerySet):
     def annotate_is_reference(self):
+        """
+        Annotate whether this product is a reference product.
+        """
         self.annotate(
             has_referentie_product=models.Case(
                 models.When(referentie_product__isnull=True, then=models.Value(True)),
@@ -13,6 +16,11 @@ class ProductQuerySet(models.QuerySet):
         )
 
     def annotate_name_and_area(self):
+        """
+        Annotate `name` and `area` fields.
+        The name and area fields are filled with the data from the specific or reference product depending on
+        whether referentie_product exists.
+        """
         return self.annotate(
             name=Case(
                 When(
@@ -35,7 +43,9 @@ class ProductQuerySet(models.QuerySet):
         )
 
     def select_generic(self):
-        """Select generic product data."""
+        """
+        Select additional generic product data for extra performance.
+        """
         return self.select_related(
             "generiek_product",
             "generiek_product__upn",
