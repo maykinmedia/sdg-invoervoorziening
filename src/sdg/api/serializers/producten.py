@@ -1,3 +1,5 @@
+from datetime import date
+
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.relations import HyperlinkedRelatedField
@@ -59,6 +61,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         view_name="api:lokaleoverheid-detail",
         queryset=LokaleOverheid.objects.all(),
     )
+    publicatie_datum = SerializerMethodField(method_name="get_publicatie_datum")
     vertalingen = SerializerMethodField(method_name="get_vertalingen")
     versie = SerializerMethodField(method_name="get_versie")
 
@@ -70,6 +73,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             "upn_label",
             "upn_uri",
             "versie",
+            "publicatie_datum",
             "organisatie",
             "product_aanwezig",
             "product_aanwezig_toelichting",
@@ -118,3 +122,10 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             assert len(active_version) == 1
             return active_version[0].versie
         return 0
+
+    def get_publicatie_datum(self, obj: Product) -> date:
+        active_version = obj.active_version
+        if active_version:
+            assert len(active_version) == 1
+            return active_version[0].publicatie_datum
+        return None
