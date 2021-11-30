@@ -33,7 +33,7 @@ class CatalogListView(OverheidMixin, DetailView):
             .prefetch_related("upn")
         )
         area_and_products = {
-            theme.informatiegebied.informatiegebied: [] for theme in themes
+            theme.informatiegebied.informatiegebied: set() for theme in themes
         }
         catalogs = []
         for role in self.request.user.roles.filter(
@@ -62,12 +62,12 @@ class CatalogListView(OverheidMixin, DetailView):
                         generiek_product__upn__in=theme.upn.all(),
                         catalogus=reference_catalog,
                     )
-                    catalog.area_and_products[area].extend(
+                    catalog.area_and_products[area].update(
                         products
                         | reference_products.exclude(specifieke_producten__in=products)
                     )
                     if getattr(reference_catalog, "area_and_products", None):
-                        reference_catalog.area_and_products[area].extend(
+                        reference_catalog.area_and_products[area].update(
                             reference_products
                         )
 

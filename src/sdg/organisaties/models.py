@@ -10,6 +10,7 @@ from sdg.core.db.fields import DynamicArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.core.models.mixins import ContactgegevensMixin
 from sdg.core.models.validators import validate_openingstijden, validate_postcode
+from sdg.organisaties.managers import LokaleOverheidManager
 
 User = get_user_model()
 
@@ -61,6 +62,8 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
             "De identificatie die binnen deze API gebruikt wordt voor de resource."
         ),
     )
+
+    objects = LokaleOverheidManager()
 
     def create_specific_catalogs(self) -> List[ProductenCatalogus]:
         """Create a specific catalog (if it doesn't exist) for each reference catalog."""
