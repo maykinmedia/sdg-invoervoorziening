@@ -35,28 +35,3 @@ class TestUniformeProductnaam(TestCase):
         self.assertEqual(1, reference_product.versies.count())
         reference_version = reference_product.versies.get()
         self.assertEqual(2, reference_version.vertalingen.count())
-
-    def test_save_upn_with_autofill_catalog_does_not_generate_initial_data_if_no_match(
-        self,
-    ):
-        autofill_catalog = ProductenCatalogusFactory.create(
-            autofill=True,
-            autofill_upn_filter=["provincie", "waterschap"],
-            is_referentie_catalogus=True,
-        )
-        UniformeProductnaamFactory.create(
-            upn_label="UPN1", provincie=True, waterschap=False
-        )
-
-        self.assertEqual(1, UniformeProductnaam.objects.count())
-        self.assertEqual(0, autofill_catalog.producten.count())
-
-    def test_save_upn_without_autofill_catalog_does_not_generate_initial_data(self):
-        autofill_catalog = ProductenCatalogusFactory.create(
-            autofill=False,
-            is_referentie_catalogus=True,
-        )
-
-        UniformeProductnaamFactory.create(upn_label="UPN1")
-        self.assertEqual(1, UniformeProductnaam.objects.count())
-        self.assertEqual(0, autofill_catalog.producten.count())
