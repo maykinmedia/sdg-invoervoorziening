@@ -72,8 +72,8 @@ class TestImportData(CommandTestCase):
         )
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(18 objects)", out)
-        self.assertEqual(UniformeProductnaam.objects.count(), 18)
+        self.assertIn("(16 objects)", out)
+        self.assertEqual(UniformeProductnaam.objects.count(), 16)
 
         upn = UniformeProductnaam.objects.first()
         self.assertEqual(
@@ -155,8 +155,8 @@ class TestImportData(CommandTestCase):
         out = self.call_command("load_upn", PublicData.UPN.value)
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(18 objects)", out)
-        self.assertEqual(18, UniformeProductnaam.objects.count())
+        self.assertIn("(16 objects)", out)
+        self.assertEqual(16, UniformeProductnaam.objects.count())
 
         upn = UniformeProductnaam.objects.first()
         self.assertEqual(

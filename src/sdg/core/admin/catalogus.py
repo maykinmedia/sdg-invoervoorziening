@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.http.request import HttpRequest
 
 from sdg.core.models import ProductenCatalogus
 
@@ -25,6 +27,17 @@ class CatalogusAdmin(admin.ModelAdmin):
         "referentie_catalogus",
         "lokale_overheid",
     )
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "referentie_catalogus",
+                "lokale_overheid",
+                "lokale_overheid__organisatie",
+            )
+        )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models.query import QuerySet
+from django.http.request import HttpRequest
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.admin.mixins import BaseProductFilter
@@ -38,6 +40,9 @@ class GeneriekProductAdmin(admin.ModelAdmin):
     autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
     search_fields = ("upn_label",)
 
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        return super().get_queryset(request).select_related("upn")
+
 
 class ProductVersieInlineAdmin(admin.StackedInline):
     list_display = (
@@ -65,6 +70,22 @@ class ProductVersieAdmin(admin.ModelAdmin):
     inlines = (LocalizedProductInline,)
     ordering = ("-publicatie_datum",)
 
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "product__generiek_product",
+                "product__generiek_product__upn",
+                "product__referentie_product",
+                "product__referentie_product__generiek_product",
+                "product__referentie_product__generiek_product__upn",
+                "product__catalogus",
+                "product__catalogus__lokale_overheid",
+                "product__catalogus__lokale_overheid__organisatie",
+            )
+        )
+
     def lokale_overheid(self, obj):
         return obj.product.catalogus.lokale_overheid
 
@@ -83,7 +104,6 @@ class ProductAdmin(admin.ModelAdmin):
     )
     list_filter = (
         "catalogus__lokale_overheid",
-        "generiek_product",
         IsReferenceProductFilter,
     )
     inlines = (ProductVersieInlineAdmin,)
@@ -92,7 +112,26 @@ class ProductAdmin(admin.ModelAdmin):
         "referentie_product",
         "catalogus",
     )
-    search_fields = ("upn_label",)
+    search_fields = (
+        "generiek_product__upn__upn_label",
+        "referentie_product__generiek_product__upn__upn_label",
+    )
+
+    def get_queryset(self, request: HttpRequest) -> QuerySet:
+        return (
+            super()
+            .get_queryset(request)
+            .select_related(
+                "generiek_product",
+                "generiek_product__upn",
+                "referentie_product",
+                "referentie_product__generiek_product",
+                "referentie_product__generiek_product__upn",
+                "catalogus",
+                "catalogus__lokale_overheid",
+                "catalogus__lokale_overheid__organisatie",
+            )
+        )
 
     def is_referentie(self, obj):
         return obj.is_referentie_product
