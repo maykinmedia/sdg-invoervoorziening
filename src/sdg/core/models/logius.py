@@ -170,13 +170,6 @@ class UniformeProductnaam(models.Model):
     verplichting = models.BooleanField(_("verplichting"), default=False)
     digi_d_macht = models.BooleanField(_("digi_d_macht"), default=False)
 
-    def generate_initial_data(
-        self, generic: GeneriekProduct, catalog: ProductenCatalogus
-    ):
-        product = Product.objects.create(generiek_product=generic, catalogus=catalog)
-        version = ProductVersie.objects.create(product=product, publicatie_datum=None)
-        LocalizedProduct.objects.localize(instance=version, languages=["nl", "en"])
-
     def get_active_fields(self) -> Set[str]:
         """:returns: A set of active boolean field names for this UPN."""
 
@@ -197,24 +190,3 @@ class UniformeProductnaam(models.Model):
 
     def __str__(self):
         return self.upn_label
-
-    def save(self, *args, **kwargs):
-        adding = self._state.adding
-        super().save(*args, **kwargs)
-
-        generic_product, created = self.generieke_producten.get_or_create(upn=self)
-        if created:
-            generic_product.vertalingen.localize(
-                instance=generic_product, languages=["nl", "en"]
-            )
-
-        if adding:
-            _active_fields = self.get_active_fields()
-
-            for cat in ProductenCatalogus.objects.filter(
-                ~Q(producten__generiek_product=generic_product),  # Exclude this UPN.
-                autofill=True,
-                is_referentie_catalogus=True,
-            ):
-                if all(f in _active_fields for f in cat.autofill_upn_filter):
-                    self.generate_initial_data(generic_product, cat)

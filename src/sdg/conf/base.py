@@ -478,12 +478,12 @@ SILENCED_SYSTEM_CHECKS = ["utils.E001"]
 
 # DRF
 REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": (
+    "DEFAULT_RENDERER_CLASSES": [
         "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
-    ),
-    "DEFAULT_PARSER_CLASSES": (
+    ],
+    "DEFAULT_PARSER_CLASSES": [
         "djangorestframework_camel_case.parser.CamelCaseJSONParser",
-    ),
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": ["sdg.api.authentication.TokenAuthentication"],
     "DEFAULT_THROTTLE_CLASSES": [
         "sdg.api.throttling.CustomRateThrottle",
