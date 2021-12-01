@@ -20,4 +20,6 @@ class CatalogusViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ProductenCatalogusSerializer
     filterset_class = ProductenCatalogusFilterSet
     lookup_field = "uuid"
-    queryset = ProductenCatalogus.objects.all()
+    queryset = ProductenCatalogus.objects.select_related(
+        "lokale_overheid", "referentie_catalogus"
+    ).prefetch_related("producten")
