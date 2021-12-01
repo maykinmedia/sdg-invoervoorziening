@@ -43,9 +43,5 @@ class UniformeProductnaamFactory(DjangoModelFactory):
     upn_uri = factory.Faker("url")
     upn_label = factory.Sequence(lambda n: f"upn label {n}")
 
-    grondslag = factory.Faker("word")
-    grondslaglabel = factory.Faker("word")
-    grondslaglink = factory.Faker("word")
-
     class Meta:
         model = UniformeProductnaam
