@@ -131,12 +131,17 @@ def load_upn_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     """
 
     count = 0
+
     for obj in data:
-        thema = Thema.objects.get(
-            thema=obj.get("SDG_Thema"),
-            informatiegebied__code=obj.get("SDG_Code"),
-        )
+        try:
+            thema = Thema.objects.get(
+                thema=obj.get("SDG_Thema"), informatiegebied__code=obj.get("SDG_Code")
+            )
+        except Thema.DoesNotExist:
+            continue
+
         count += UniformeProductnaam.objects.filter(
             upn_label=obj.get("UniformeProductnaam")
         ).update(thema=thema)
+
     return count

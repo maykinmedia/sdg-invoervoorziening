@@ -37,7 +37,7 @@ class CatalogListView(OverheidMixin, DetailView):
         ).prefetch_related("lokale_overheid__catalogi__referentie_catalogus")
 
         area_and_products = {
-            theme.informatiegebied.informatiegebied: [] for theme in themes
+            theme.informatiegebied.informatiegebied: set() for theme in themes
         }
         catalogs = []
         for cat in specific_catalogs:
