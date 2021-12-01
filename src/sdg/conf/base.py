@@ -352,8 +352,6 @@ PROJECT_NAME = "sdg"
 ENVIRONMENT = config("ENVIRONMENT", "")
 SHOW_ALERT = True
 
-SDG_ACTIVE_LANGUAGES = ["nl", "en"]
-
 ##############################
 #                            #
 # 3RD PARTY LIBRARY SETTINGS #

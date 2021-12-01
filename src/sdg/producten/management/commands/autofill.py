@@ -2,6 +2,7 @@ from django.conf import settings
 from django.core.management import BaseCommand
 from django.db.models import Count
 
+from sdg.core.constants import TaalChoices
 from sdg.core.models import ProductenCatalogus, UniformeProductnaam
 from sdg.producten.models import (
     GeneriekProduct,
@@ -25,10 +26,6 @@ class Command(BaseCommand):
             if fields:
                 catalogs.append((catalog, fields))
 
-        # Bail early if no catalogs.
-        if not catalogs:
-            self.stdout.write("No catalogs found to autofill.")
-
         # Iterate over the UPL, create generic (+localized) and specific
         # (+localized, +version) products if they don't exist yet.
 
@@ -38,13 +35,14 @@ class Command(BaseCommand):
             if upn.generieke_producten__count == 0:
                 generic_product = GeneriekProduct.objects.create(upn=upn)
                 LocalizedGeneriekProduct.objects.localize(
-                    instance=generic_product, languages=settings.SDG_ACTIVE_LANGUAGES
+                    instance=generic_product,
+                    languages=TaalChoices.get_available_languages(),
                 )
                 self.stdout.write(f'Created new generic product for "{upn}".')
 
                 generic_products = [generic_product]
             else:
-                generic_products = GeneriekProduct.objects.filter(upn=upn)
+                generic_products = upn.generieke_producten.all()
 
             active_fields = upn.get_active_fields()
 
@@ -67,7 +65,7 @@ class Command(BaseCommand):
                             )
                             LocalizedProduct.objects.localize(
                                 instance=version,
-                                languages=settings.SDG_ACTIVE_LANGUAGES,
+                                languages=TaalChoices.get_available_languages(),
                             )
 
                             self.stdout.write(
