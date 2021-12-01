@@ -108,24 +108,12 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
-        active_version = obj.active_version
-        if active_version:
-            assert len(active_version) == 1
-            translations = active_version[0].vertalingen.all()
-        else:
-            translations = []
-        return LocalizedProductSerializer(translations, many=True).data
+        return LocalizedProductSerializer(
+            obj.get_active_field("vertalingen", default=[]), many=True
+        ).data
 
     def get_versie(self, obj: Product) -> int:
-        active_version = obj.active_version
-        if active_version:
-            assert len(active_version) == 1
-            return active_version[0].versie
-        return 0
+        return obj.get_active_field("versie", default=0)
 
     def get_publicatie_datum(self, obj: Product) -> date:
-        active_version = obj.active_version
-        if active_version:
-            assert len(active_version) == 1
-            return active_version[0].publicatie_datum
-        return None
+        return obj.get_active_field("publicatie_datum")

@@ -5,7 +5,7 @@ from datetime import date
 from typing import Any, List
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
+from django.core.exceptions import FieldError, ValidationError
 from django.db import models, transaction
 from django.db.models import BooleanField, Case, Model, Q, Value, When
 from django.db.models.expressions import Subquery
@@ -114,7 +114,7 @@ class ProductQuerySet(models.QuerySet):
         return self.prefetch_related(
             Prefetch(
                 "versies",
-                to_attr="active_version",
+                to_attr="active_versions",
                 queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
                     "vertalingen"
                 ),
@@ -300,6 +300,21 @@ class Product(ProductFieldMixin, models.Model):
     @cached_property
     def upn(self):
         return self.generic_product.upn
+
+    def get_active_field(self, field_name, default=None):
+        """
+        Get specific field value from `active_versions`.
+        Validate that `active_versions` equals 1.
+        """
+        active_versions = getattr(self, "active_versions", None)
+
+        if not active_versions:
+            return default
+
+        if len(active_versions) != 1:
+            raise FieldError("Active version must be equal to 1")
+
+        return getattr(active_versions[0], field_name)
 
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
