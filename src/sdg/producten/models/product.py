@@ -209,7 +209,7 @@ class Product(ProductFieldMixin, models.Model):
         )
 
     @cached_property
-    def laatste_versie(self):
+    def laatste_versie(self):  # TODO: optimize
         """:returns: Latest version (can be published, concept or scheduled) for this product."""
         latest_version = self.get_latest_versions(1)
         return latest_version[0] if latest_version else None

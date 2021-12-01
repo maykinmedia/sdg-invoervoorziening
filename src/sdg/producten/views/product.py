@@ -38,7 +38,7 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
 
         if kwargs.get("catalog_pk"):
             catalog = get_object_or_404(ProductenCatalogus, pk=kwargs["catalog_pk"])
-            if catalog.user_is_redacteur(self.request.user):
+            if catalog.user_is_redacteur(self.request.user):  # TODO: optimize
                 obj = obj.get_or_create_specific_product(specific_catalog=catalog)
             else:
                 raise PermissionDenied()

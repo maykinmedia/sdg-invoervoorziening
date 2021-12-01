@@ -4,8 +4,8 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.core.managers import OrganisatieManager
 from sdg.core.models import ProductenCatalogus
+from sdg.core.models.managers import OrganisatieManager
 from sdg.producten.models import (
     GeneriekProduct,
     LocalizedProduct,

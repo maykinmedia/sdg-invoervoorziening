@@ -1,4 +1,4 @@
-from copy import deepcopy
+from itertools import groupby
 
 from django.views.generic import DetailView
 
@@ -25,28 +25,9 @@ class CatalogListView(OverheidMixin, DetailView):
         context = super().get_context_data()
         self.object.create_specific_catalogs()
 
-        themes = (
-            Thema.objects.all()
-            .select_related("informatiegebied")
-            .prefetch_related("upn")
-        )
-
-        specific_catalogs = ProductenCatalogus.objects.filter(
-            lokale_overheid=self.object,
-            is_referentie_catalogus=False,
-        ).prefetch_related("lokale_overheid__catalogi__referentie_catalogus")
-
-        area_and_products = {
-            theme.informatiegebied.informatiegebied: set() for theme in themes
-        }
-        catalogs = []
-        for cat in specific_catalogs:
-            ref_cat = cat.referentie_catalogus
-            if ref_cat.lokale_overheid == self.object:
-                setattr(ref_cat, "area_and_products", deepcopy(area_and_products))
-            setattr(cat, "area_and_products", deepcopy(area_and_products))
-            catalogs.append(cat)
-
+        catalogs = ProductenCatalogus.objects.specific_catalogs(
+            municipality=self.object
+        ).annotate_area_and_products()
         for catalog in catalogs:
             reference_catalog = catalog.referentie_catalogus
 
@@ -54,28 +35,34 @@ class CatalogListView(OverheidMixin, DetailView):
                 Product.objects.filter(catalogus=catalog)
                 .annotate_name_and_area()
                 .select_generic()
-            ).exclude(area__isnull=True)
+                .exclude(area__isnull=True)
+            )
             reference_products = (
                 Product.objects.filter(catalogus=reference_catalog)
                 .annotate_name_and_area()
                 .select_generic()
-            ).exclude(area__isnull=True)
-
-            for product in [
-                *products,
-                *reference_products.exclude(specifieke_producten__in=products),
-            ]:
-                catalog.area_and_products[product.area].append(product)
-
-            has_reference_catalog = getattr(
-                reference_catalog, "area_and_products", False
+                .exclude(area__isnull=True)
             )
-            if has_reference_catalog:
-                for product in reference_products:
-                    reference_catalog.area_and_products[product.area].append(product)
+
+            intersected_products = products | reference_products.exclude(
+                specifieke_producten__in=products
+            )
+            catalog.area_and_products.update(
+                {
+                    a: list(p)
+                    for a, p in groupby(intersected_products, key=lambda p: p.area)
+                }
+            )
+            reference_areas = getattr(reference_catalog, "area_and_products", None)
+            if reference_areas:
+                reference_areas.update(
+                    {
+                        a: list(p)
+                        for a, p in groupby(reference_products, key=lambda p: p.area)
+                    }
+                )
 
         context["catalogs"] = catalogs
-
         return context
 
     def get_queryset(self):

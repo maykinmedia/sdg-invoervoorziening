@@ -82,8 +82,8 @@ class ProductAdmin(admin.ModelAdmin):
         "generiek_product",
     )
     list_filter = (
-        "catalogus__lokale_overheid",
-        "generiek_product",
+        # "catalogus__lokale_overheid",
+        # "generiek_product",
         IsReferenceProductFilter,
     )
     inlines = (ProductVersieInlineAdmin,)

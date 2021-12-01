@@ -8,6 +8,7 @@ from freezegun import freeze_time
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.models import ProductenCatalogus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
+from sdg.core.tests.factories.logius import ThemaFactory
 from sdg.organisaties.tests.constants import ORGANIZATION_EDIT_URL
 from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
@@ -119,6 +120,7 @@ class LokaleOverheidDetailViewTests(WebTest):
         self.assertEqual(response.pyquery(CATALOG_SELECTOR).length, 1)
 
     def test_both_reference_and_specific_catalog_are_displayed(self):
+        ThemaFactory.create_batch(3)  # TODO: remove
         localized_reference_product = LocalizedReferentieProductFactory.create()
         reference_product = localized_reference_product.product_versie.product
         reference_catalog = reference_product.catalogus

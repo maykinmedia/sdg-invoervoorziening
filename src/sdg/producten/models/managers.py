@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Case, Exists, ExpressionWrapper, F, When
+from django.db.models import Case, F, When
 
 
 class ProductQuerySet(models.QuerySet):
@@ -7,7 +7,7 @@ class ProductQuerySet(models.QuerySet):
         """
         Annotate whether this product is a reference product.
         """
-        self.annotate(
+        return self.annotate(
             has_referentie_product=models.Case(
                 models.When(referentie_product__isnull=True, then=models.Value(True)),
                 default=models.Value(False),
