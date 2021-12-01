@@ -1,5 +1,3 @@
-from itertools import groupby
-
 from django.views.generic import DetailView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -44,23 +42,17 @@ class CatalogListView(OverheidMixin, DetailView):
                 .exclude(area__isnull=True)
             )
 
-            intersected_products = products | reference_products.exclude(
-                specifieke_producten__in=products
+            intersected_products = list(
+                products | reference_products.exclude(specifieke_producten__in=products)
             )
-            catalog.area_and_products.update(
-                {
-                    a: list(p)
-                    for a, p in groupby(intersected_products, key=lambda p: p.area)
-                }
-            )
+
+            for product in intersected_products:
+                catalog.area_and_products[product.area].add(product)
+
             reference_areas = getattr(reference_catalog, "area_and_products", None)
             if reference_areas:
-                reference_areas.update(
-                    {
-                        a: list(p)
-                        for a, p in groupby(reference_products, key=lambda p: p.area)
-                    }
-                )
+                for product in reference_products:
+                    reference_areas[product.area].add(product)
 
         context["catalogs"] = catalogs
         return context
