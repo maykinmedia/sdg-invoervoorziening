@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.accounts.models import Role
 from sdg.core.db.fields import DynamicArrayField
+from sdg.core.models.managers import ProductenCatalogusQuerySet
 from sdg.core.models.validators import (
     validate_reference_catalog,
     validate_specific_catalog,
@@ -73,6 +73,8 @@ class ProductenCatalogus(models.Model):
         blank=True,
         default=list,
     )
+
+    objects = ProductenCatalogusQuerySet.as_manager()
 
     @property
     def verantwoordelijke_organisatie(self):

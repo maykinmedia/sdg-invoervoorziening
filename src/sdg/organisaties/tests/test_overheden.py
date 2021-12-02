@@ -8,6 +8,7 @@ from freezegun import freeze_time
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.models import ProductenCatalogus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
+from sdg.core.tests.factories.logius import ThemaFactory
 from sdg.organisaties.tests.constants import ORGANIZATION_EDIT_URL
 from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,

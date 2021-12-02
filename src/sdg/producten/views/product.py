@@ -1,7 +1,6 @@
 from itertools import zip_longest
 from typing import Tuple
 
-from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
@@ -47,7 +46,6 @@ class ProductCreateRedirectView(OverheidMixin, SingleObjectMixin, RedirectView):
                 specific_catalog=catalog
             )
             kwargs["product"] = object
-
         return super().get(request, *args, **kwargs)
 
     def get_redirect_url(self, *args, **kwargs):

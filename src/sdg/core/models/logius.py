@@ -1,17 +1,9 @@
 from typing import Set
 
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.core.managers import OrganisatieManager
-from sdg.core.models import ProductenCatalogus
-from sdg.producten.models import (
-    GeneriekProduct,
-    LocalizedProduct,
-    Product,
-    ProductVersie,
-)
+from sdg.core.models.managers import OrganisatieManager
 
 
 class Overheidsorganisatie(models.Model):

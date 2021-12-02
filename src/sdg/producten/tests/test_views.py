@@ -91,7 +91,10 @@ class ProductDetailViewTests(WebTest):
 
         response = self.app.get(product_version.product.get_absolute_url())
 
-        self.assertIn("Er is een bestaand concept voor dit product.", response.text)
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
     @freeze_time(NOW_DATE)
     def test_generic_information_is_displayed_next_to_information(self):
@@ -279,7 +282,13 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn("Ingeplande wijzigingen op", response.text)
+        self.assertIn(
+            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
+        )
+        self.assertIn(
+            "Er staat een nieuwe product tekst klaar om gepubliceerd te worden op . Hieronder ziet u de huidige product tekst.",
+            response.text,
+        )
 
     @freeze_time(NOW_DATE)
     def test_published_and_concept_shows_active_data_with_concept_notification(self):
@@ -310,11 +319,13 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn("Er is een bestaand concept voor dit product.", response.text)
-
-
-class ReferentieProductUpdateViewTests(WebTest):
-    ...
+        self.assertIn(
+            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
+        )
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
 
 class SpecifiekProductUpdateViewTests(WebTest):
