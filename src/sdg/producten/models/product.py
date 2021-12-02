@@ -180,12 +180,13 @@ class Product(ProductFieldMixin, models.Model):
 
     @cached_property
     def beschikbare_talen(self) -> dict:
-        if not self.laatste_versie:
-            return {}
+        most_recent_version = self.get_most_recent_version
+        if most_recent_version:
+            return {
+                i.get_taal_display(): i.taal for i in most_recent_version.vertalingen.all()
+            }
 
-        return {
-            i.get_taal_display(): i.taal for i in self.laatste_versie.vertalingen.all()
-        }
+        return {}
 
     @cached_property
     def is_referentie_product(self) -> bool:
@@ -207,6 +208,25 @@ class Product(ProductFieldMixin, models.Model):
             (publication_date and reference_publication_date)
             and (publication_date < reference_publication_date)
         )
+
+    @cached_property
+    def get_most_recent_version(self):
+        """
+        Returns the most recent `ProductVersie`.
+        """
+        # Check if prefetch cache is available from the manager.
+        result = getattr(self, "most_recent_version", None)
+
+        # If not, retrieve it via the manager for consistancy.
+        if result is None:
+            p = self.__class__.objects.most_recent().filter(pk=self.pk).first()
+            result = p.most_recent_version
+
+        # If there's a version, return it.
+        if result:
+            return result[0]
+
+        return None
 
     @cached_property
     def laatste_versie(self):  # TODO: optimize

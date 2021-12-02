@@ -31,12 +31,14 @@ class CatalogListView(OverheidMixin, DetailView):
 
             products = (
                 Product.objects.filter(catalogus=catalog)
+                .most_recent()
                 .annotate_name_and_area()
                 .select_generic()
                 .exclude(area__isnull=True)
             )
             reference_products = (
                 Product.objects.filter(catalogus=reference_catalog)
+                .most_recent()
                 .annotate_name_and_area()
                 .select_generic()
                 .exclude(area__isnull=True)
