@@ -48,9 +48,7 @@ class OwmsParser:
         values = tree.findall("value")
         return [
             {
-                column: value.find(column).text
-                if value.find(column) is not None
-                else None
+                column: getattr(value.find(column), "text", None)
                 for column in self.xml_column_names
             }
             for value in values

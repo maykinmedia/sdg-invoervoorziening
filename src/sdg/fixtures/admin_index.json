@@ -2,7 +2,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 1,
+        "order": 2,
         "name": "Logius",
         "slug": "logius",
         "models": [
@@ -28,7 +28,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 2,
+        "order": 3,
         "name": "Organisaties",
         "slug": "organisaties",
         "models": [
@@ -46,7 +46,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 4,
+        "order": 5,
         "name": "Producten",
         "slug": "producten",
         "models": [
@@ -68,7 +68,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 0,
+        "order": 1,
         "name": "Accounts",
         "slug": "accounts",
         "models": [
@@ -90,7 +90,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 7,
+        "order": 8,
         "name": "Logs",
         "slug": "logs",
         "models": [
@@ -112,7 +112,7 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 6,
+        "order": 7,
         "name": "Configuratie",
         "slug": "configuratie",
         "models": [
@@ -130,13 +130,27 @@
 {
     "model": "admin_index.appgroup",
     "fields": {
-        "order": 3,
+        "order": 4,
         "name": "Catalogus",
         "slug": "catalogus",
         "models": [
             [
                 "core",
                 "productencatalogus"
+            ]
+        ]
+    }
+},
+{
+    "model": "admin_index.appgroup",
+    "fields": {
+        "order": 0,
+        "name": "API",
+        "slug": "api",
+        "models": [
+            [
+                "api",
+                "token"
             ]
         ]
     }

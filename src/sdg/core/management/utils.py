@@ -57,30 +57,31 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     codes = [obj.pop("SDG_Code") for obj in data]
     grouped_data = dict(zip(codes, data))
 
-    informatiegebied_list = [
-        Informatiegebied(
+    for code, obj in grouped_data.items():
+        informatiegebied, created = Informatiegebied.objects.update_or_create(
             code=code,
-            informatiegebied=obj.get("SDG_Informatiegebied"),
-            informatiegebied_uri=obj.get("SDG_IGURI"),
+            defaults={
+                "informatiegebied": obj.get("SDG_Informatiegebied"),
+                "informatiegebied_uri": obj.get("SDG_IGURI"),
+            },
         )
-        for code, obj in grouped_data.items()
-    ]
-    informatiegebieden = Informatiegebied.objects.bulk_create(informatiegebied_list)
 
-    for informatiegebied in informatiegebieden:
-        grouped_data.get(informatiegebied.code)["informatiegebied"] = informatiegebied
+        obj["informatiegebied"] = informatiegebied
 
-    thema_list = [
-        Thema(
-            informatiegebied=obj.get("informatiegebied"),
-            thema=obj.get("SDG_Thema"),
+    count_themas = 0
+
+    for obj in grouped_data.values():
+        thema, created = Thema.objects.update_or_create(
             thema_uri=obj.get("SDG_ThemaURI"),
+            defaults={
+                "thema": obj.get("SDG_Thema"),
+                "informatiegebied": obj.get("informatiegebied"),
+            },
         )
-        for obj in grouped_data.values()
-    ]
+        if created:
+            count_themas += 1
 
-    created_objects = Thema.objects.bulk_create(thema_list)
-    return len(created_objects)
+    return count_themas
 
 
 def load_upn(data: List[Dict[str, Any]]) -> int:
@@ -89,34 +90,41 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
 
     :return: The total count of the created objects.
     """
+    count = 0
 
-    upn_list = [
-        UniformeProductnaam(
+    for obj in data:
+        upn, created = UniformeProductnaam.objects.update_or_create(
             upn_uri=obj.get("URI"),
-            upn_label=obj.get("UniformeProductnaam"),
-            rijk=bool(obj.get("Rijk")),
-            provincie=bool(obj.get("Provincie")),
-            waterschap=bool(obj.get("Waterschap")),
-            gemeente=bool(obj.get("Gemeente")),
-            burger=bool(obj.get("Burger")),
-            bedrijf=bool(obj.get("Bedrijf")),
-            dienstenwet=bool(obj.get("Dienstenwet")),
-            sdg=bool(obj.get("SDG")),
-            autonomie=bool(obj.get("Autonomie")),
-            medebewind=bool(obj.get("Medebewind")),
-            aanvraag=bool(obj.get("Aanvraag")),
-            subsidie=bool(obj.get("Subsidie")),
-            melding=bool(obj.get("Melding")),
-            verplichting=bool(obj.get("Verplichting")),
-            digi_d_macht=bool(obj.get("DigiDMacht")),
-            grondslag=obj.get("Grondslag"),
-            grondslaglabel=obj.get("Grondslaglabel"),
-            grondslaglink=obj.get("Grondslaglink"),
+            defaults={
+                "upn_label": obj.get("UniformeProductnaam"),
+                "rijk": bool(obj.get("Rijk")),
+                "provincie": bool(obj.get("Provincie")),
+                "waterschap": bool(obj.get("Waterschap")),
+                "gemeente": bool(obj.get("Gemeente")),
+                "burger": bool(obj.get("Burger")),
+                "bedrijf": bool(obj.get("Bedrijf")),
+                "dienstenwet": bool(obj.get("Dienstenwet")),
+                # The "sdg"-column got changed (without any notice or sense of
+                # versioning) from boolean to the relevant SDG code(s). For us,
+                # it's just important we know that this UPN concerns the SDG
+                # and we will obtain the SDG codes via another way.
+                "sdg": bool(obj.get("SDG")),
+                "autonomie": bool(obj.get("Autonomie")),
+                "medebewind": bool(obj.get("Medebewind")),
+                "aanvraag": bool(obj.get("Aanvraag")),
+                "subsidie": bool(obj.get("Subsidie")),
+                "melding": bool(obj.get("Melding")),
+                "verplichting": bool(obj.get("Verplichting")),
+                "digi_d_macht": bool(obj.get("DigiDMacht")),
+                # We leave out the "grondslagen" (legal basis) data because
+                # there can be more than 1 for a UPN. We don't use them at the
+                # moment so they are ignored.
+            },
         )
-        for obj in data
-    ]
-    created_objects = UniformeProductnaam.objects.bulk_create(upn_list)
-    return len(created_objects)
+        if created:
+            count += 1
+
+    return count
 
 
 def load_upn_informatiegebieden(data: List[Dict[str, Any]]) -> int:
@@ -127,12 +135,17 @@ def load_upn_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     """
 
     count = 0
+
     for obj in data:
-        thema = Thema.objects.get(
-            thema=obj.get("SDG_Thema"),
-            informatiegebied__code=obj.get("SDG_Code"),
-        )
+        try:
+            thema = Thema.objects.get(
+                thema=obj.get("SDG_Thema"), informatiegebied__code=obj.get("SDG_Code")
+            )
+        except Thema.DoesNotExist:
+            continue
+
         count += UniformeProductnaam.objects.filter(
             upn_label=obj.get("UniformeProductnaam")
         ).update(thema=thema)
+
     return count

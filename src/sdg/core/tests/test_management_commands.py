@@ -10,6 +10,9 @@ import requests_mock
 from sdg.core.constants import PublicData
 from sdg.core.models import Informatiegebied, Overheidsorganisatie, UniformeProductnaam
 from sdg.core.tests.data import binary
+from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
+from sdg.core.tests.factories.logius import UniformeProductnaamFactory
+from sdg.producten.tests.factories.product import GeneriekProductFactory
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -69,8 +72,8 @@ class TestImportData(CommandTestCase):
         )
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(18 objects)", out)
-        self.assertEqual(UniformeProductnaam.objects.count(), 18)
+        self.assertIn("(16 objects)", out)
+        self.assertEqual(UniformeProductnaam.objects.count(), 16)
 
         upn = UniformeProductnaam.objects.first()
         self.assertEqual(
@@ -152,8 +155,8 @@ class TestImportData(CommandTestCase):
         out = self.call_command("load_upn", PublicData.UPN.value)
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(18 objects)", out)
-        self.assertEqual(18, UniformeProductnaam.objects.count())
+        self.assertIn("(16 objects)", out)
+        self.assertEqual(16, UniformeProductnaam.objects.count())
 
         upn = UniformeProductnaam.objects.first()
         self.assertEqual(
@@ -163,3 +166,89 @@ class TestImportData(CommandTestCase):
         self.assertEqual("aanleunwoning", upn.upn_label)
         self.assertEqual(False, upn.rijk)
         self.assertEqual(True, upn.burger)
+
+
+class TestAutofill(CommandTestCase):
+    def test_autofill_matching_with_generic(self):
+        ProductenCatalogusFactory.create(
+            autofill=True,
+            autofill_upn_filter=["provincie", "waterschap"],
+            is_referentie_catalogus=True,
+        )
+        generic_product = GeneriekProductFactory.create(
+            upn__provincie=True,
+            upn__waterschap=True,
+        )
+
+        self.assertEqual(0, generic_product.producten.count())
+        out = self.call_command("autofill")
+
+        self.assertEqual(1, generic_product.producten.count())
+        reference_product = generic_product.producten.get(
+            referentie_product__isnull=True
+        )
+        self.assertEqual(1, reference_product.versies.count())
+        reference_version = reference_product.versies.get()
+        self.assertEqual(2, reference_version.vertalingen.count())
+        self.assertIn("Created new product", out)
+
+    def test_autofill_matching_without_generic(self):
+        ProductenCatalogusFactory.create(
+            autofill=True,
+            autofill_upn_filter=["provincie", "waterschap"],
+            is_referentie_catalogus=True,
+        )
+        upn = UniformeProductnaamFactory.create(
+            provincie=True,
+            waterschap=True,
+        )
+
+        self.assertEqual(0, upn.generieke_producten.count())
+        out = self.call_command("autofill")
+
+        self.assertEqual(1, upn.generieke_producten.count())
+        generic_product = upn.generieke_producten.get()
+        self.assertEqual(2, generic_product.vertalingen.count())
+        self.assertIn("Created new generic product", out)
+
+        self.assertEqual(1, generic_product.producten.count())
+        reference_product = generic_product.producten.get(
+            referentie_product__isnull=True
+        )
+        self.assertEqual(1, reference_product.versies.count())
+        reference_version = reference_product.versies.get()
+        self.assertEqual(2, reference_version.vertalingen.count())
+        self.assertIn("Created new product", out)
+
+    def test_autofill_catalog_not_matching(self):
+        ProductenCatalogusFactory.create(
+            autofill=True,
+            autofill_upn_filter=["provincie", "waterschap"],
+            is_referentie_catalogus=True,
+        )
+        upn = UniformeProductnaamFactory.create(
+            provincie=True,
+            waterschap=False,
+        )
+
+        self.call_command("autofill")
+        self.assertEqual(1, upn.generieke_producten.count())
+
+        generic_product = upn.generieke_producten.get()
+        self.assertEqual(0, generic_product.producten.count())
+
+    def test_non_autofill_catalog(self):
+        ProductenCatalogusFactory.create(
+            autofill=False,
+            is_referentie_catalogus=True,
+        )
+        upn = UniformeProductnaamFactory.create(
+            provincie=True,
+            waterschap=False,
+        )
+
+        self.call_command("autofill")
+        self.assertEqual(1, upn.generieke_producten.count())
+
+        generic_product = upn.generieke_producten.get()
+        self.assertEqual(0, generic_product.producten.count())

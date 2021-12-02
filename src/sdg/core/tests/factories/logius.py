@@ -43,25 +43,5 @@ class UniformeProductnaamFactory(DjangoModelFactory):
     upn_uri = factory.Faker("url")
     upn_label = factory.Sequence(lambda n: f"upn label {n}")
 
-    rijk = factory.Faker("pybool")
-    provincie = factory.Faker("pybool")
-    waterschap = factory.Faker("pybool")
-    gemeente = factory.Faker("pybool")
-    burger = factory.Faker("pybool")
-    bedrijf = factory.Faker("pybool")
-    dienstenwet = factory.Faker("pybool")
-    sdg = factory.Faker("pybool")
-    autonomie = factory.Faker("pybool")
-    medebewind = factory.Faker("pybool")
-    aanvraag = factory.Faker("pybool")
-    subsidie = factory.Faker("pybool")
-    melding = factory.Faker("pybool")
-    verplichting = factory.Faker("pybool")
-    digi_d_macht = factory.Faker("pybool")
-
-    grondslag = factory.Faker("word")
-    grondslaglabel = factory.Faker("word")
-    grondslaglink = factory.Faker("word")
-
     class Meta:
         model = UniformeProductnaam
