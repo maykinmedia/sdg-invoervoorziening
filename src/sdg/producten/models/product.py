@@ -5,7 +5,7 @@ from datetime import date
 from typing import Any, List
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
+from django.core.exceptions import FieldError, ValidationError
 from django.db import models, transaction
 from django.db.models import BooleanField, Case, Model, Q, Value, When
 from django.shortcuts import get_object_or_404
@@ -22,7 +22,7 @@ from sdg.producten.models import (
     LocalizedProduct,
     ProductFieldMixin,
 )
-from sdg.producten.models.managers import ProductManager
+from sdg.producten.models.managers import ProductQuerySet, ProductVersieQuerySet
 from sdg.producten.utils import is_past_date
 
 User = get_user_model()
@@ -168,7 +168,7 @@ class Product(ProductFieldMixin, models.Model):
         ),
     )
 
-    objects = ProductManager()
+    objects = ProductQuerySet.as_manager()
 
     @property
     def upn_uri(self):
@@ -238,6 +238,21 @@ class Product(ProductFieldMixin, models.Model):
     @cached_property
     def upn(self):
         return self.generic_product.upn
+
+    def get_active_field(self, field_name, default=None):
+        """
+        Get specific field value from `active_versions`.
+        Validate that `active_versions` equals 1.
+        """
+        active_versions = getattr(self, "active_versions", None)
+
+        if not active_versions:
+            return default
+
+        if len(active_versions) != 1:
+            raise FieldError("Active version must be equal to 1")
+
+        return getattr(active_versions[0], field_name)
 
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
@@ -422,6 +437,8 @@ class ProductVersie(models.Model):
         help_text=_("De wijzigingsdatum voor deze productversie."),
         auto_now=True,
     )
+
+    objects = ProductVersieQuerySet.as_manager()
 
     def get_published_status(self) -> Any[PublishChoices.choices]:
         """:returns: The current published status for this product version."""

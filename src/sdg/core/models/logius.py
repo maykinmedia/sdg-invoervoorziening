@@ -1,17 +1,9 @@
 from typing import Set
 
 from django.db import models
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.core.models import ProductenCatalogus
 from sdg.core.models.managers import OrganisatieManager
-from sdg.producten.models import (
-    GeneriekProduct,
-    LocalizedProduct,
-    Product,
-    ProductVersie,
-)
 
 
 class Overheidsorganisatie(models.Model):
@@ -137,6 +129,7 @@ class UniformeProductnaam(models.Model):
         help_text=_(
             "Uniforme Productnaam URI van landelijk product",
         ),
+        unique=True,
     )
     upn_label = models.CharField(
         _("UPN label"),
@@ -146,6 +139,12 @@ class UniformeProductnaam(models.Model):
             "volledige UPL. "
         ),
     )
+
+    # There can be several "grondslagen" (legal basis) for a UPN. The
+    # representation on standaarden.overheid.nl is flattened. For the sake of
+    # the UPN URI and UPN label, we don't need these fields at the moment nor
+    # their differences for each layer of government. The boolean fields below
+    # already reflect that they can be used by several layers of government.
 
     rijk = models.BooleanField(_("rijk"), default=False)
     provincie = models.BooleanField(_("provincie"), default=False)
@@ -162,28 +161,6 @@ class UniformeProductnaam(models.Model):
     melding = models.BooleanField(_("melding"), default=False)
     verplichting = models.BooleanField(_("verplichting"), default=False)
     digi_d_macht = models.BooleanField(_("digi_d_macht"), default=False)
-
-    grondslag = models.CharField(
-        _("grondslag"),
-        blank=True,
-        max_length=80,
-    )
-    grondslaglabel = models.CharField(
-        _("grondslaglabel"),
-        blank=True,
-        max_length=512,
-    )
-    grondslaglink = models.URLField(
-        _("grondslaglink"),
-        blank=True,
-    )
-
-    def generate_initial_data(
-        self, generic: GeneriekProduct, catalog: ProductenCatalogus
-    ):
-        product = Product.objects.create(generiek_product=generic, catalogus=catalog)
-        version = ProductVersie.objects.create(product=product, publicatie_datum=None)
-        LocalizedProduct.objects.localize(instance=version, languages=["nl", "en"])
 
     def get_active_fields(self) -> Set[str]:
         """:returns: A set of active boolean field names for this UPN."""
@@ -202,32 +179,6 @@ class UniformeProductnaam(models.Model):
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
-        constraints = [
-            models.UniqueConstraint(
-                fields=["upn_uri", "grondslag"], name="unique_upn_uri_and_grondslag"
-            )
-        ]
 
     def __str__(self):
         return self.upn_label
-
-    def save(self, *args, **kwargs):
-        adding = self._state.adding
-        super().save(*args, **kwargs)
-
-        generic_product, created = self.generieke_producten.get_or_create(upn=self)
-        if created:
-            generic_product.vertalingen.localize(
-                instance=generic_product, languages=["nl", "en"]
-            )
-
-        if adding:
-            _active_fields = self.get_active_fields()
-
-            for cat in ProductenCatalogus.objects.filter(
-                ~Q(producten__generiek_product=generic_product),  # Exclude this UPN.
-                autofill=True,
-                is_referentie_catalogus=True,
-            ):
-                if all(f in _active_fields for f in cat.autofill_upn_filter):
-                    self.generate_initial_data(generic_product, cat)

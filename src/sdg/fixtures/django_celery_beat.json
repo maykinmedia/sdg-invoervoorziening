@@ -20,10 +20,34 @@
     }
 },
 {
+    "model": "django_celery_beat.crontabschedule",
+    "pk": 2,
+    "fields": {
+        "minute": "0",
+        "hour": "1",
+        "day_of_week": "*",
+        "day_of_month": "*",
+        "month_of_year": "*",
+        "timezone": "UTC"
+    }
+},
+{
+    "model": "django_celery_beat.crontabschedule",
+    "pk": 3,
+    "fields": {
+        "minute": "0",
+        "hour": "2",
+        "day_of_week": "*",
+        "day_of_month": "*",
+        "month_of_year": "*",
+        "timezone": "UTC"
+    }
+},
+{
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2021-10-29T16:24:57.521"
+        "last_update": "2021-12-01T12:02:28.338"
     }
 },
 {
@@ -60,8 +84,8 @@
     "fields": {
         "name": "Logius Automatic Workflow",
         "task": "sdg.core.tasks.import_logius_data",
-        "interval": 1,
-        "crontab": null,
+        "interval": null,
+        "crontab": 3,
         "solar": null,
         "clocked": null,
         "args": "[]",
@@ -78,8 +102,36 @@
         "enabled": true,
         "last_run_at": "2021-10-29T16:06:37.577",
         "total_run_count": 1,
-        "date_changed": "2021-10-29T16:07:21.045",
-        "description": "Used for automatically loading data from external sources (csv, xml)"
+        "date_changed": "2021-12-01T12:02:14.143",
+        "description": "Used for automatically loading data from external sources (csv, xml)."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 3,
+    "fields": {
+        "name": "Autofill",
+        "task": "sdg.producten.tasks.autofill",
+        "interval": null,
+        "crontab": 2,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": "2021-10-29T16:06:37.577",
+        "total_run_count": 1,
+        "date_changed": "2021-12-01T12:02:28.351",
+        "description": "Used for automatically generating generic and reference products."
     }
 }
 ]

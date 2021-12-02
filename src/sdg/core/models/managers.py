@@ -6,8 +6,6 @@ from django.utils.timezone import now
 
 
 class ProductenCatalogusQuerySet(models.QuerySet):
-    ...
-
     def specific_catalogs(self, municipality):
         """
         Get specific catalogs for the given municipality.
