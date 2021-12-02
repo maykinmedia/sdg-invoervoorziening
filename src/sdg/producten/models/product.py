@@ -180,10 +180,11 @@ class Product(ProductFieldMixin, models.Model):
 
     @cached_property
     def beschikbare_talen(self) -> dict:
-        most_recent_version = self.get_most_recent_version
+        most_recent_version = self.most_recent_version
         if most_recent_version:
             return {
-                i.get_taal_display(): i.taal for i in most_recent_version.vertalingen.all()
+                i.get_taal_display(): i.taal
+                for i in most_recent_version.vertalingen.all()
             }
 
         return {}
@@ -210,27 +211,27 @@ class Product(ProductFieldMixin, models.Model):
         )
 
     @cached_property
-    def get_most_recent_version(self):
+    def most_recent_version(self):
         """
         Returns the most recent `ProductVersie`.
         """
         # Check if prefetch cache is available from the manager.
-        result = getattr(self, "most_recent_version", None)
+        result = getattr(self, "_most_recent_version", None)
 
-        # If not, retrieve it via the manager for consistancy.
-        if result is None:
-            p = self.__class__.objects.most_recent().filter(pk=self.pk).first()
-            result = p.most_recent_version
-
-        # If there's a version, return it.
+        # If there's a prefetched version, return it.
         if result:
             return result[0]
+        # If there's no prefetched version, retrieve it.
+        elif result is None:
+            p = self.__class__.objects.most_recent().filter(pk=self.pk).first()
+            return p.most_recent_version
 
         return None
 
     @cached_property
-    def laatste_versie(self):  # TODO: optimize
+    def laatste_versie(self):
         """:returns: Latest version (can be published, concept or scheduled) for this product."""
+        # TODO: Replace with `most_recent_version`.
         latest_version = self.get_latest_versions(1)
         return latest_version[0] if latest_version else None
 

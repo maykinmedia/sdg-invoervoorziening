@@ -49,7 +49,7 @@ class ProductQuerySet(models.QuerySet):
         This function optimizes the queryset to prefetch the most recent
         `ProductVersie`, including the appropriate prefetched translations. The
         prefetched most recent version is available via
-        `Product.most_recent_version` and is always a list, containing 0 or 1
+        `Product._most_recent_version` and is always a list, containing 0 or 1
         `ProductVersie`.
         """
         from sdg.producten.models import ProductVersie
@@ -61,7 +61,7 @@ class ProductQuerySet(models.QuerySet):
         return self.prefetch_related(
             Prefetch(
                 "versies",
-                to_attr="most_recent_version",
+                to_attr="_most_recent_version",
                 queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
                     "vertalingen"
                 ),
