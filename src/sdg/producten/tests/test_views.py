@@ -27,6 +27,14 @@ from sdg.producten.tests.factories.product import (
 )
 
 
+class TestProductCreateRedirectView(WebTest):
+    def setUp(self):
+        super().setUp()
+
+        self.user = UserFactory.create()
+        self.app.set_user(self.user)
+
+
 class ProductDetailViewTests(WebTest):
     def setUp(self):
         super().setUp()

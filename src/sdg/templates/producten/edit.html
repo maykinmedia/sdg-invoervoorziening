@@ -5,11 +5,13 @@
 {% load i18n %}
 {% load producten %}
 
-{% block header_classes %}header--inset{% endblock header_classes %}
-{% block container_title %}SDG voor <b>{{ lokale_overheid }}</b>{% endblock container_title %}
+{% block inner_content %}
+    <div class="notifications">
+        {% include "core/_notifications.html" %}
+        {% include 'producten/_include/edit_warnings.html' %}
+    </div>
 
-{% block inner %}
-    <div class="tabs">
+    <div class="tabs tabs--inline">
         <div class="tabs__tabs">
             {% for key, value in product.beschikbare_talen.items %}
                 <a href="#{{ value }}" data-id="{{ value }}"
@@ -18,11 +20,6 @@
                 </a>
             {% endfor %}
         </div>
-        <div class="notifications">
-            {% include "core/_notifications.html" %}
-            {% include 'producten/_include/edit_warnings.html' %}
-        </div>
-
         {% for reference_form in reference_forms %}
             <template class="form__reference-{{ reference_form.initial.taal }}">
                 {{ reference_form.as_p }}
@@ -142,4 +139,4 @@
 
         </form>
     </div>
-{% endblock inner %}
+{% endblock inner_content %}
