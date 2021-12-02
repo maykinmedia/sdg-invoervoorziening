@@ -25,6 +25,7 @@ from sdg.producten.tests.factories.product import (
     SpecifiekProductFactory,
     SpecifiekProductVersieFactory,
 )
+from sdg.producten.utils import build_url_kwargs
 
 
 class TestProductCreateRedirectView(WebTest):
@@ -400,11 +401,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -431,11 +428,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -468,11 +461,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -501,11 +490,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -538,11 +523,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -575,11 +556,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -618,11 +595,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -665,11 +638,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -708,11 +677,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -751,11 +716,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -794,11 +755,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -837,11 +794,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -881,11 +834,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             ),
         )
 

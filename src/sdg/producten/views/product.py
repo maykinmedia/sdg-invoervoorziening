@@ -19,7 +19,7 @@ from sdg.producten.models import (
     Product,
     ProductVersie,
 )
-from sdg.producten.utils import duplicate_localized_products
+from sdg.producten.utils import build_url_kwargs, duplicate_localized_products
 
 
 class ProductCreateRedirectView(OverheidMixin, SingleObjectMixin, RedirectView):
@@ -51,11 +51,7 @@ class ProductCreateRedirectView(OverheidMixin, SingleObjectMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         return reverse(
             "organisaties:catalogi:producten:detail",
-            kwargs={
-                "pk": kwargs.get("product").catalogus.lokale_overheid.pk,
-                "catalog_pk": kwargs.get("product").catalogus.pk,
-                "product_pk": kwargs.get("product").pk,
-            },
+            kwargs=build_url_kwargs(kwargs["product"]),
         )
 
 
@@ -176,9 +172,5 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_success_url(self):
         return reverse(
             "organisaties:catalogi:producten:detail",
-            kwargs={
-                "pk": self.lokale_overheid.pk,
-                "catalog_pk": self.product.catalogus.pk,
-                "product_pk": self.product.pk,
-            },
+            kwargs=build_url_kwargs(self.product),
         )
