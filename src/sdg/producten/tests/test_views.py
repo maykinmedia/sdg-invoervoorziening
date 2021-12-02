@@ -34,6 +34,18 @@ class TestProductCreateRedirectView(WebTest):
         self.user = UserFactory.create()
         self.app.set_user(self.user)
 
+    def test_specific_product_is_created(self):
+        reference_product = ReferentieProductVersieFactory.create().product
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=reference_product.catalogus.lokale_overheid,
+            is_redacteur=True,
+        )
+        self.assertEqual(0, reference_product.specifieke_producten.count())
+
+        self.app.get(reference_product.get_create_redirect_url())
+        self.assertEqual(1, reference_product.specifieke_producten.count())
+
 
 class ProductDetailViewTests(WebTest):
     def setUp(self):
