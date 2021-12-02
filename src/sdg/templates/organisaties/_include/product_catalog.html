@@ -21,11 +21,9 @@
                 <div class="products__list-container">
                     {% for product in producten %}
                         {% if catalog.is_referentie_catalogus %}
-                            <a class="products__item"
-                               href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=catalog.pk product_pk=product.pk %}">
+                            <a class="products__item" href="{{ product.get_absolute_url }}">
                         {% else %}
-                            <a class="products__item"
-                               href="{% url 'organisaties:catalogi:producten:redirect' pk=lokaleoverheid.pk catalog_pk=catalog.pk product_pk=product.pk %}">
+                            <a class="products__item" href="{{ product.get_create_redirect_url }}">
                         {% endif %}
                     <div class="products__item-icon products__status">
                         {% product_icon product %}

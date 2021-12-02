@@ -24,7 +24,7 @@ from sdg.producten.models import (
     LocalizedProduct,
     ProductFieldMixin,
 )
-from sdg.producten.utils import is_past_date
+from sdg.producten.utils import build_url_kwargs, is_past_date
 
 User = get_user_model()
 
@@ -415,12 +415,18 @@ class Product(ProductFieldMixin, models.Model):
         else:
             return self
 
+    def get_create_redirect_url(self):
+        return reverse(
+            "organisaties:catalogi:producten:redirect",
+            kwargs=build_url_kwargs(self),
+        )
+
     class Meta:
         verbose_name = _("product")
         verbose_name_plural = _("producten")
 
     def __str__(self):
-        if self.is_referentie_product:
+        if self.is_referentie_product:  # TODO: remove
             return f"{self.generiek_product.upn_label} (referentie)"
         else:
             return f"{self.referentie_product.upn_label}"
@@ -428,11 +434,7 @@ class Product(ProductFieldMixin, models.Model):
     def get_absolute_url(self):
         return reverse(
             "organisaties:catalogi:producten:detail",
-            kwargs={
-                "pk": self.catalogus.lokale_overheid.pk,
-                "catalog_pk": self.catalogus.pk,
-                "product_pk": self.pk,
-            },
+            kwargs=build_url_kwargs(self),
         )
 
     def clean(self):

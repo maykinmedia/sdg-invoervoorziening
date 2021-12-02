@@ -83,18 +83,6 @@ class ProductenCatalogus(models.Model):
 
         return self.lokale_overheid.verantwoordelijke_organisatie
 
-    def user_is_redacteur(self, user: User) -> bool:
-        """Determine whether the user is an editor of this catalog."""
-
-        try:
-            role = Role.objects.get(user=user, lokale_overheid=self.lokale_overheid)
-            if role.is_redacteur:
-                return True
-            else:
-                return False
-        except Role.DoesNotExist:
-            return False
-
     def has_reference_catalog(self) -> bool:
         """Returns whether this catalog has a reference catalog."""
         return bool(self.referentie_catalogus)

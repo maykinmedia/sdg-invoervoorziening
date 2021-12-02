@@ -23,7 +23,7 @@ from sdg.producten.models import (
 from sdg.producten.utils import duplicate_localized_products
 
 
-class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
+class ProductCreateRedirectView(OverheidMixin, SingleObjectMixin, RedirectView):
     """
     Get or create (children) specific product if this is a reference product.
     Redirect to product detail view.
@@ -31,19 +31,23 @@ class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
 
     context_object_name = "product"
     pk_url_kwarg = "product_pk"
-    model = Product
+    queryset = Product.objects.select_related(
+        "catalogus__lokale_overheid",
+    )
+
+    def get_lokale_overheid(self):
+        self.object = self.get_object()
+        return self.object.catalogus.lokale_overheid
 
     def get(self, request, *args, **kwargs):
-        obj = super().get_object()
-
+        kwargs["product"] = self.object
         if kwargs.get("catalog_pk"):
             catalog = get_object_or_404(ProductenCatalogus, pk=kwargs["catalog_pk"])
-            if catalog.user_is_redacteur(self.request.user):
-                obj = obj.get_or_create_specific_product(specific_catalog=catalog)
-            else:
-                raise PermissionDenied()
+            object = self.object.get_or_create_specific_product(
+                specific_catalog=catalog
+            )
+            kwargs["product"] = object
 
-        kwargs["product"] = obj
         return super().get(request, *args, **kwargs)
 
     def get_redirect_url(self, *args, **kwargs):
