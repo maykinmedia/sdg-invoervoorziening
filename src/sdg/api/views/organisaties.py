@@ -31,7 +31,15 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a municipality, retrieved by uuid"""
 
     lookup_field = "uuid"
-    queryset = LokaleOverheid.objects.all().prefetch_related("organisatie")
+    queryset = LokaleOverheid.objects.select_related(
+        "ondersteunings_organisatie",
+        "verantwoordelijke_organisatie",
+        "bevoegde_organisatie",
+        "organisatie",
+    ).prefetch_related(
+        "lokaties",
+        "catalogi",
+    )
     filterset_class = LokaleOverheidFilterSet
     serializer_class = LokaleOverheidSerializer
 
@@ -48,6 +56,6 @@ class LokatieViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a location, retrieved by uuid"""
 
     lookup_field = "uuid"
-    queryset = Lokatie.objects.all()
+    queryset = Lokatie.objects.select_related("lokale_overheid")
     filterset_class = LokatieFilterSet
     serializer_class = LokatieSerializer

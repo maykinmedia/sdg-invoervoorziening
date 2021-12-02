@@ -95,7 +95,6 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
     for obj in data:
         upn, created = UniformeProductnaam.objects.update_or_create(
             upn_uri=obj.get("URI"),
-            grondslag=obj.get("Grondslag"),
             defaults={
                 "upn_label": obj.get("UniformeProductnaam"),
                 "rijk": bool(obj.get("Rijk")),
@@ -105,6 +104,10 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
                 "burger": bool(obj.get("Burger")),
                 "bedrijf": bool(obj.get("Bedrijf")),
                 "dienstenwet": bool(obj.get("Dienstenwet")),
+                # The "sdg"-column got changed (without any notice or sense of
+                # versioning) from boolean to the relevant SDG code(s). For us,
+                # it's just important we know that this UPN concerns the SDG
+                # and we will obtain the SDG codes via another way.
                 "sdg": bool(obj.get("SDG")),
                 "autonomie": bool(obj.get("Autonomie")),
                 "medebewind": bool(obj.get("Medebewind")),
@@ -113,8 +116,9 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
                 "melding": bool(obj.get("Melding")),
                 "verplichting": bool(obj.get("Verplichting")),
                 "digi_d_macht": bool(obj.get("DigiDMacht")),
-                "grondslaglabel": obj.get("Grondslaglabel"),
-                "grondslaglink": obj.get("Grondslaglink"),
+                # We leave out the "grondslagen" (legal basis) data because
+                # there can be more than 1 for a UPN. We don't use them at the
+                # moment so they are ignored.
             },
         )
         if created:
@@ -131,12 +135,17 @@ def load_upn_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     """
 
     count = 0
+
     for obj in data:
-        thema = Thema.objects.get(
-            thema=obj.get("SDG_Thema"),
-            informatiegebied__code=obj.get("SDG_Code"),
-        )
+        try:
+            thema = Thema.objects.get(
+                thema=obj.get("SDG_Thema"), informatiegebied__code=obj.get("SDG_Code")
+            )
+        except Thema.DoesNotExist:
+            continue
+
         count += UniformeProductnaam.objects.filter(
             upn_label=obj.get("UniformeProductnaam")
         ).update(thema=thema)
+
     return count

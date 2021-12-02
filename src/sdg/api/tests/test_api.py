@@ -45,6 +45,7 @@ class CatalogiTests(APITestCase):
                 "uuid": str(catalog.uuid),
                 "domein": catalog.domein,
                 "naam": catalog.naam,
+                "organisatie": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[catalog.lokale_overheid.uuid])}",
                 "producten": ProductSerializer(catalog.producten, many=True).data,
                 "isReferentieCatalogus": catalog.is_referentie_catalogus,
                 "referentieCatalogus": catalog.referentie_catalogus,
