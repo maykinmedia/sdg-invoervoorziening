@@ -3,7 +3,7 @@ from typing import Set
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.core.models.managers import OrganisatieManager
+from sdg.core.models.managers import OrganisatieQuerySet
 
 
 class Overheidsorganisatie(models.Model):
@@ -30,7 +30,7 @@ class Overheidsorganisatie(models.Model):
         null=True,
     )
 
-    objects = OrganisatieManager()
+    objects = OrganisatieQuerySet.as_manager()
 
     class Meta:
         verbose_name = _("overheidsorganisatie")

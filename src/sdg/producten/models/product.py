@@ -170,24 +170,9 @@ class Product(ProductFieldMixin, models.Model):
 
     objects = ProductQuerySet.as_manager()
 
-    @property
-    def upn_uri(self):
-        return self.upn.upn_uri
-
-    @property
-    def upn_label(self):
-        return self.upn.upn_label
-
     @cached_property
-    def beschikbare_talen(self) -> dict:
-        most_recent_version = self.most_recent_version
-        if most_recent_version:
-            return {
-                i.get_taal_display(): i.taal
-                for i in most_recent_version.vertalingen.all()
-            }
-
-        return {}
+    def upn(self):
+        return self.generic_product.upn
 
     @cached_property
     def is_referentie_product(self) -> bool:
@@ -199,11 +184,11 @@ class Product(ProductFieldMixin, models.Model):
         """:returns: Whether this product has expired in relation to the reference product."""
         if self.is_referentie_product:
             return False
-        if not self.laatste_versie:
+        if not self.most_recent_version:
             return False
 
-        publication_date = self.laatste_versie.publicatie_datum
-        reference_publication_date = self.laatste_versie.publicatie_datum
+        publication_date = self.most_recent_version.publicatie_datum
+        reference_publication_date = self.most_recent_version.publicatie_datum
 
         return bool(
             (publication_date and reference_publication_date)
@@ -211,29 +196,18 @@ class Product(ProductFieldMixin, models.Model):
         )
 
     @cached_property
-    def most_recent_version(self):
+    def beschikbare_talen(self) -> dict:
         """
-        Returns the most recent `ProductVersie`.
+        :returns: A dictionary {display: value} of available languages for this product.
         """
-        # Check if prefetch cache is available from the manager.
-        result = getattr(self, "_most_recent_version", None)
-
-        # If there's a prefetched version, return it.
-        if result:
-            return result[0]
-        # If there's no prefetched version, retrieve it.
-        elif result is None:
-            p = self.__class__.objects.most_recent().filter(pk=self.pk).first()
-            return p.most_recent_version
-
-        return None
-
-    @cached_property
-    def laatste_versie(self):
-        """:returns: Latest version (can be published, concept or scheduled) for this product."""
-        # TODO: Replace with `most_recent_version`.
-        latest_version = self.get_latest_versions(1)
-        return latest_version[0] if latest_version else None
+        most_recent_version = self.most_recent_version
+        if most_recent_version:
+            return {
+                i.get_taal_display(): i.taal
+                for i in most_recent_version.vertalingen.all()
+            }
+        else:
+            return {}
 
     @cached_property
     def laatste_actieve_versie(self):
@@ -256,9 +230,36 @@ class Product(ProductFieldMixin, models.Model):
         """:returns: The reference product of this product."""
         return self if self.is_referentie_product else self.referentie_product
 
-    @cached_property
-    def upn(self):
-        return self.generic_product.upn
+    @property
+    def name(self):
+        """
+        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
+        :returns: The generic product's upn label.
+        """
+        _cached = getattr(self, "_name", None)
+
+        if _cached is None:
+            this = self.__class__.objects.annotate_name().get(pk=self.pk)
+            return this.name
+
+        return _cached
+
+    @property
+    def most_recent_version(self):
+        """
+        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
+        :returns: The most recent `ProductVersie`.
+        """
+        _cached = getattr(self, "_most_recent_version", None)
+
+        if _cached is None:
+            this = self.__class__.objects.most_recent().get(pk=self.pk)
+            return this.most_recent_version
+
+        try:
+            return _cached[0]
+        except IndexError:
+            return None  # no recent versions
 
     def get_active_field(self, field_name, default=None):
         """
@@ -306,7 +307,7 @@ class Product(ProductFieldMixin, models.Model):
             )
         return ProductVersie.objects.create(
             product=self,
-            gemaakt_door=self.referentie_product.laatste_versie.gemaakt_door,
+            gemaakt_door=self.referentie_product.most_recent_version.gemaakt_door,
             publicatie_datum=None,
         )
 
@@ -324,7 +325,7 @@ class Product(ProductFieldMixin, models.Model):
                 language=translation.taal,
                 **{field: getattr(translation, field) for field in field_names},
             )
-            for translation in self.referentie_product.laatste_versie.vertalingen.all()
+            for translation in self.referentie_product.most_recent_version.vertalingen.all()
         ]
         LocalizedProduct.objects.bulk_create(localized_objects, ignore_conflicts=True)
 
@@ -380,9 +381,9 @@ class Product(ProductFieldMixin, models.Model):
 
     def __str__(self):
         if self.is_referentie_product:
-            return f"{self.generiek_product.upn_label} (referentie)"
+            return f"{self.name} (referentie)"
         else:
-            return f"{self.referentie_product.upn_label}"
+            return f"{self.name}"
 
     def get_absolute_url(self):
         return reverse(

@@ -32,28 +32,7 @@ class ProductenCatalogusQuerySet(models.QuerySet):
             )
         )
 
-    def annotate_area_and_products(self):
-        """
-        Annotate all area and products to specific catalogs.
-        """
-        from sdg.core.models import Thema
 
-        themes = (
-            Thema.objects.all()
-            .select_related("informatiegebied")
-            .prefetch_related("upn")
-        )
-        area_and_products = {
-            theme.informatiegebied.informatiegebied: set() for theme in themes
-        }
-        for catalog in self:
-            setattr(catalog, "area_and_products", deepcopy(area_and_products))
-            if catalog.municipality_owns_reference:
-                ref_catalog = catalog.referentie_catalogus
-                setattr(ref_catalog, "area_and_products", deepcopy(area_and_products))
-        return self
-
-
-class OrganisatieManager(models.Manager):
+class OrganisatieQuerySet(models.QuerySet):
     def active(self):
-        return self.filter(Q(owms_end_date__lte=now()))
+        return self.filter(owms_end_date__lte=now())

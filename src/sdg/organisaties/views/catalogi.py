@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from django.views.generic import DetailView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -23,23 +25,33 @@ class CatalogListView(OverheidMixin, DetailView):
         context = super().get_context_data()
         self.object.create_specific_catalogs()
 
+        themes = (
+            Thema.objects.all()
+            .select_related("informatiegebied")
+            .prefetch_related("upn")
+        )
+        areas_template = {t.informatiegebied.informatiegebied: set() for t in themes}
+
         catalogs = ProductenCatalogus.objects.specific_catalogs(
             municipality=self.object
-        ).annotate_area_and_products()
+        )
         for catalog in catalogs:
             reference_catalog = catalog.referentie_catalogus
+            catalog.areas = deepcopy(areas_template)
 
             products = (
                 Product.objects.filter(catalogus=catalog)
                 .most_recent()
-                .annotate_name_and_area()
+                .annotate_name()
+                .annotate_area()
                 .select_generic()
                 .exclude(area__isnull=True)
             )
             reference_products = (
                 Product.objects.filter(catalogus=reference_catalog)
                 .most_recent()
-                .annotate_name_and_area()
+                .annotate_name()
+                .annotate_area()
                 .select_generic()
                 .exclude(area__isnull=True)
             )
@@ -49,12 +61,12 @@ class CatalogListView(OverheidMixin, DetailView):
             )
 
             for product in intersected_products:
-                catalog.area_and_products[product.area].add(product)
+                catalog.areas[product.area].add(product)
 
-            reference_areas = getattr(reference_catalog, "area_and_products", None)
-            if reference_areas:
+            if catalog.municipality_owns_reference:
+                reference_catalog.areas = deepcopy(areas_template)
                 for product in reference_products:
-                    reference_areas[product.area].add(product)
+                    reference_catalog.areas[product.area].add(product)
 
         context["catalogs"] = catalogs
         return context

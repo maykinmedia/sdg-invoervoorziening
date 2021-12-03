@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.db import models
-from django.db.models import Case, F, Prefetch, Subquery, When
+from django.db.models import Case, F, OuterRef, Prefetch, Subquery, When
 
 
 class ProductQuerySet(models.QuerySet):
@@ -68,32 +68,29 @@ class ProductQuerySet(models.QuerySet):
             )
         )
 
-    def annotate_is_reference(self):
+    def annotate_name(self):
         """
-        Annotate whether this product is a reference product.
-        """
-        return self.annotate(
-            has_referentie_product=models.Case(
-                models.When(referentie_product__isnull=True, then=models.Value(True)),
-                default=models.Value(False),
-                output_field=models.BooleanField(),
-            )
-        )
-
-    def annotate_name_and_area(self):
-        """
-        Annotate `name` and `area` fields.
-        The name and area fields are filled with the data from the specific or reference product depending on
-        whether referentie_product exists.
+        Annotate the name for the product.
+        The field is filled with the data from the specific or reference product depending on
+        whether `referentie_product` exists.
         """
         return self.annotate(
-            name=Case(
+            _name=Case(
                 When(
                     referentie_product__isnull=False,
                     then=F("referentie_product__generiek_product__upn__upn_label"),
                 ),
                 default=F("generiek_product__upn__upn_label"),
             ),
+        )
+
+    def annotate_area(self):
+        """
+        Annotate the area for the product.
+        The field is filled with the data from the specific or reference product depending on
+        whether `referentie_product` exists.
+        """
+        return self.annotate(
             area=Case(
                 When(
                     referentie_product__isnull=False,
