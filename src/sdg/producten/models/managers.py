@@ -55,7 +55,9 @@ class ProductQuerySet(models.QuerySet):
         from sdg.producten.models import ProductVersie
 
         subquery = Subquery(
-            ProductVersie.objects.order_by("-versie").values_list("pk", flat=True)[:1]
+            ProductVersie.objects.filter(product=OuterRef("product"))
+            .order_by("-versie")
+            .values_list("pk", flat=True)[:1]
         )
 
         return self.prefetch_related(
