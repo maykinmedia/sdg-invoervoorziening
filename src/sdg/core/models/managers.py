@@ -1,7 +1,5 @@
-from copy import deepcopy
-
 from django.db import models
-from django.db.models import BooleanField, Case, Q, Value, When
+from django.db.models import BooleanField, Case, Value, When
 from django.utils.timezone import now
 
 

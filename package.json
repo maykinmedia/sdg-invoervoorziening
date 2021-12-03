@@ -26,7 +26,8 @@
         "microscope-sass": "latest",
         "pretty-checkbox": "^3.0.3",
         "reseter.css": "^2.0.0",
-        "showdown": "^1.9.1"
+        "showdown": "^1.9.1",
+        "text-diff": "^1.0.1"
     },
     "devDependencies": {
         "@babel/core": "latest",
