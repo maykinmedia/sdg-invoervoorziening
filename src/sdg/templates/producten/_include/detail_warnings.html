@@ -17,9 +17,9 @@
     {% endif %}
 {% endif %}
 
-{% with publised_status=latest_version.get_published_status %}
-    {% if latest_active_version == latest_version %}
-    {% elif not latest_version %}
+{% with publised_status=most_recent_version.get_published_status %}
+    {% if latest_active_version == most_recent_version %}
+    {% elif not most_recent_version %}
         <div class="notifications__notification notification__accent">
             <i class="fas fa-info-circle"></i>
             <span>{% trans "Er is nog geen product tekst gepubliceerd." %}</span>
@@ -35,7 +35,7 @@
         <div class="notifications__notification notification__info">
             <i class="fas fa-info-circle"></i>
             {% blocktrans %}
-                <span>Er staat een nieuwe product tekst klaar om gepubliceerd te worden op {{ latest_version.publicatie_datum }}. Hieronder ziet u de huidige product tekst.</span>
+                <span>Er staat een nieuwe product tekst klaar om gepubliceerd te worden op {{ most_recent_version.publicatie_datum }}. Hieronder ziet u de huidige product tekst.</span>
             {% endblocktrans %}
             <span></span>
         </div>

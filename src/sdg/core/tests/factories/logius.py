@@ -40,7 +40,7 @@ class ThemaFactory(DjangoModelFactory):
 
 class UniformeProductnaamFactory(DjangoModelFactory):
     thema = factory.SubFactory(ThemaFactory)
-    upn_uri = factory.Faker("url")
+    upn_uri = factory.Sequence(lambda n: f"http://upn-uri{n}.com")
     upn_label = factory.Sequence(lambda n: f"upn label {n}")
 
     class Meta:
