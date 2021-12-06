@@ -1,0 +1,20 @@
+@import 'colors';
+
+.diff:hover {
+  cursor: pointer;
+
+  & > svg {
+    color: $color_primary_light !important;
+  }
+}
+
+
+del {
+  background-color: #ead5d5;
+  color: $color_red;
+}
+
+ins {
+  background-color: #2eff6e30;
+  color: $color_green;
+}

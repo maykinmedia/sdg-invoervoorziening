@@ -109,6 +109,12 @@
       }
     }
 
+    &--value {
+      br {
+        display: none;
+      }
+    }
+
     &--edit {
       padding-top: 24px;
     }
@@ -120,11 +126,6 @@
     .svg-inline--fa {
       margin-left: 4px;
       color: $color_primary_darker;
-
-      &.fa-asterisk {
-        float: right;
-      }
-
     }
 
     ul,
