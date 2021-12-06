@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from sdg.accounts.models import Role
 from sdg.core.db.fields import DynamicArrayField
+from sdg.core.models.managers import ProductenCatalogusQuerySet
 from sdg.core.models.validators import (
     validate_reference_catalog,
     validate_specific_catalog,
@@ -74,6 +75,8 @@ class ProductenCatalogus(models.Model):
         default=list,
     )
 
+    objects = ProductenCatalogusQuerySet.as_manager()
+
     @property
     def verantwoordelijke_organisatie(self):
         """
@@ -85,13 +88,9 @@ class ProductenCatalogus(models.Model):
 
     def user_is_redacteur(self, user: User) -> bool:
         """Determine whether the user is an editor of this catalog."""
-
         try:
             role = Role.objects.get(user=user, lokale_overheid=self.lokale_overheid)
-            if role.is_redacteur:
-                return True
-            else:
-                return False
+            return bool(role.is_redacteur)
         except Role.DoesNotExist:
             return False
 

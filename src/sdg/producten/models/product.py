@@ -8,8 +8,6 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import FieldError, ValidationError
 from django.db import models, transaction
 from django.db.models import BooleanField, Case, Model, Q, Value, When
-from django.db.models.expressions import Subquery
-from django.db.models.query import Prefetch
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -24,6 +22,7 @@ from sdg.producten.models import (
     LocalizedProduct,
     ProductFieldMixin,
 )
+from sdg.producten.models.managers import ProductQuerySet, ProductVersieQuerySet
 from sdg.producten.utils import is_past_date
 
 User = get_user_model()
@@ -84,67 +83,6 @@ class GeneriekProduct(models.Model):
 
     def __str__(self):
         return f"{self.upn.upn_label}"
-
-
-class ProductQuerySet(models.QuerySet):
-    def active(self, active_on=None):
-        """
-        An active product is a product with its product version and its
-        translations as it was most recently published.
-
-        Unpublished (future versions or concept versions) products are not
-        included.
-
-        This function optimizes the queryset to prefetch the `ProductVersie`
-        that is active on given `active_on` date, including the appropriate
-        prefetched translations. The prefetched active version is available
-        via `Product.active_version` and is always a list, containing 0 or 1
-        `ProductVersie`.
-        """
-        if active_on is None:
-            active_on = date.today()
-
-        subquery = Subquery(
-            ProductVersie.objects.exclude(publicatie_datum=None)
-            .filter(publicatie_datum__lte=active_on)
-            .order_by("-versie")
-            .values_list("pk", flat=True)[:1]
-        )
-
-        return self.prefetch_related(
-            Prefetch(
-                "versies",
-                to_attr="active_versions",
-                queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
-                    "vertalingen"
-                ),
-            )
-        )
-
-    def most_recent(self):
-        """
-        The most recent product is the product that was last published
-        (including future publications) or a concept.
-
-        This function optimizes the queryset to prefetch the most recent
-        `ProductVersie`, including the appropriate prefetched translations. The
-        prefetched most recent version is available via
-        `Product.most_recent_version` and is always a list, containing 0 or 1
-        `ProductVersie`.
-        """
-        subquery = Subquery(
-            ProductVersie.objects.order_by("-versie").values_list("pk", flat=True)[:1]
-        )
-
-        return self.prefetch_related(
-            Prefetch(
-                "versies",
-                to_attr="most_recent_version",
-                queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
-                    "vertalingen"
-                ),
-            )
-        )
 
 
 class Product(ProductFieldMixin, models.Model):
@@ -232,22 +170,9 @@ class Product(ProductFieldMixin, models.Model):
 
     objects = ProductQuerySet.as_manager()
 
-    @property
-    def upn_uri(self):
-        return self.upn.upn_uri
-
-    @property
-    def upn_label(self):
-        return self.upn.upn_label
-
     @cached_property
-    def beschikbare_talen(self) -> dict:
-        if not self.laatste_versie:
-            return {}
-
-        return {
-            i.get_taal_display(): i.taal for i in self.laatste_versie.vertalingen.all()
-        }
+    def upn(self):
+        return self.generic_product.upn
 
     @cached_property
     def is_referentie_product(self) -> bool:
@@ -259,11 +184,11 @@ class Product(ProductFieldMixin, models.Model):
         """:returns: Whether this product has expired in relation to the reference product."""
         if self.is_referentie_product:
             return False
-        if not self.laatste_versie:
+        if not self.most_recent_version:
             return False
 
-        publication_date = self.laatste_versie.publicatie_datum
-        reference_publication_date = self.laatste_versie.publicatie_datum
+        publication_date = self.most_recent_version.publicatie_datum
+        reference_publication_date = self.most_recent_version.publicatie_datum
 
         return bool(
             (publication_date and reference_publication_date)
@@ -271,10 +196,18 @@ class Product(ProductFieldMixin, models.Model):
         )
 
     @cached_property
-    def laatste_versie(self):
-        """:returns: Latest version (can be published, concept or scheduled) for this product."""
-        latest_version = self.get_latest_versions(1)
-        return latest_version[0] if latest_version else None
+    def beschikbare_talen(self) -> dict:
+        """
+        :returns: A dictionary {display: value} of available languages for this product.
+        """
+        most_recent_version = self.most_recent_version
+        if most_recent_version:
+            return {
+                i.get_taal_display(): i.taal
+                for i in most_recent_version.vertalingen.all()
+            }
+        else:
+            return {}
 
     @cached_property
     def laatste_actieve_versie(self):
@@ -297,9 +230,36 @@ class Product(ProductFieldMixin, models.Model):
         """:returns: The reference product of this product."""
         return self if self.is_referentie_product else self.referentie_product
 
-    @cached_property
-    def upn(self):
-        return self.generic_product.upn
+    @property
+    def name(self):
+        """
+        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
+        :returns: The generic product's upn label.
+        """
+        _cached = getattr(self, "_name", None)
+
+        if _cached is None:
+            this = self.__class__.objects.annotate_name().get(pk=self.pk)
+            return this.name
+
+        return _cached
+
+    @property
+    def most_recent_version(self):
+        """
+        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
+        :returns: The most recent `ProductVersie`.
+        """
+        _cached = getattr(self, "_most_recent_version", None)
+
+        if _cached is None:
+            this = self.__class__.objects.most_recent().get(pk=self.pk)
+            return this.most_recent_version
+
+        try:
+            return _cached[0]
+        except IndexError:
+            return None  # no recent versions
 
     def get_active_field(self, field_name, default=None):
         """
@@ -347,7 +307,7 @@ class Product(ProductFieldMixin, models.Model):
             )
         return ProductVersie.objects.create(
             product=self,
-            gemaakt_door=self.referentie_product.laatste_versie.gemaakt_door,
+            gemaakt_door=self.referentie_product.most_recent_version.gemaakt_door,
             publicatie_datum=None,
         )
 
@@ -365,7 +325,7 @@ class Product(ProductFieldMixin, models.Model):
                 language=translation.taal,
                 **{field: getattr(translation, field) for field in field_names},
             )
-            for translation in self.referentie_product.laatste_versie.vertalingen.all()
+            for translation in self.referentie_product.most_recent_version.vertalingen.all()
         ]
         LocalizedProduct.objects.bulk_create(localized_objects, ignore_conflicts=True)
 
@@ -421,9 +381,9 @@ class Product(ProductFieldMixin, models.Model):
 
     def __str__(self):
         if self.is_referentie_product:
-            return f"{self.generiek_product.upn_label} (referentie)"
+            return f"{self.name} (referentie)"
         else:
-            return f"{self.referentie_product.upn_label}"
+            return f"{self.name}"
 
     def get_absolute_url(self):
         return reverse(
@@ -450,14 +410,6 @@ class Product(ProductFieldMixin, models.Model):
             validate_reference_product(self)
         else:
             validate_specific_product(self)
-
-
-class ProductVersieQuerySet(models.QuerySet):
-    def published(self):
-        """
-        Returns versions that are published (ie. not concepts).
-        """
-        return self.exclude(publicatie_datum=None)
 
 
 class ProductVersie(models.Model):
