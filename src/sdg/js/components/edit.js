@@ -1,12 +1,15 @@
 const {availableEditors} = require("./markdown");
 
 const disabledCellClass = "form__cell--disabled";
+
 const disabledCells = document.querySelectorAll(`.${disabledCellClass}`);
 
 const forms = document.querySelectorAll(".form");
 
 function changeReadOnly(cell, readOnly) {
     // Modify the readonly status of the cell inputs.
+
+    readOnly ? cell.classList.add(disabledCellClass) : cell.classList.remove(disabledCellClass);
 
     cell.querySelectorAll('input, textarea').forEach(element => {
         element.readOnly = readOnly;
@@ -17,6 +20,7 @@ function changeReadOnly(cell, readOnly) {
     if (availableEditors.hasOwnProperty(formInput.id)) {
         availableEditors[formInput.id].isReadOnly = readOnly;
     }
+
 }
 
 class FormWithEditToggle {
@@ -28,10 +32,8 @@ class FormWithEditToggle {
             editButton.addEventListener("click", (event) => {
                 event.preventDefault();
                 if (cell.classList.contains(disabledCellClass)) {
-                    cell.classList.remove(disabledCellClass);
                     changeReadOnly(cell, false);
                 } else {
-                    cell.classList.add(disabledCellClass);
                     changeReadOnly(cell, true);
                 }
             });

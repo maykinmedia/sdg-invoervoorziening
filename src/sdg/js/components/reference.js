@@ -1,3 +1,5 @@
+import {DiffButton} from "./diff";
+
 const {availableEditors} = require("./markdown");
 import showdown from 'showdown';
 
@@ -28,7 +30,9 @@ class FormWithReference {
     }
 
     setupDisplayButton(cell) {
-        // Setup a button that displays a read-only reference text in the cell.
+        /*
+        Setup a button that displays a read-only reference text in the cell. With diff functionality.
+         */
 
         const formDisplayBtn = cell.querySelector(".form__display-btn");
         const formInput = cell.querySelector(".form__input");
@@ -44,22 +48,49 @@ class FormWithReference {
                     existingDisplay.remove();
                 } else {
                     icon.classList.add("fa-chevron-down");
+
                     const referenceField = this.referenceForm.content.getElementById(formInput.id);
+                    const currentVersionData = {
+                        "title": this.referenceForm.dataset.title,
+                        "text": referenceField.value
+                    };
+
+                    const previousReferenceField = this.previousReferenceForm.content.getElementById(formInput.id);
+                    const previousVersionData = {
+                        "title": this.previousReferenceForm.dataset.title,
+                        "text": previousReferenceField.value
+                    };
+
                     if (referenceField.value) {
-                        const displayField = document.createElement("div");
-                        displayField.classList.add("reference__display", "form__input", "form__input--disabled");
-                        displayField.innerHTML = converter.makeHtml(referenceField.value);
-                        cell.appendChild(displayField);
+
+                        const template = document.importNode(this.displayTemplate.content.children[0], true);
+                        const templateDisplay = template.querySelector(".reference__display--content");
+                        templateDisplay.innerHTML = converter.makeHtml(referenceField.value);
+                        cell.appendChild(template);
+
+                        // enable diff button
+                        new DiffButton(
+                            template.querySelector(".diff"),
+                            templateDisplay.innerHTML,
+                            previousVersionData,
+                            currentVersionData,
+                        );
+
                     }
                 }
+
             });
         }
     }
 
     constructor(node) {
         this.node = node;
+
         this.referenceForm = document.querySelector(this.node.dataset.reference);
+        this.previousReferenceForm = document.querySelector(this.node.dataset.previousreference);
+
         this.formCells = this.node.querySelectorAll(".tabs__table-cell");
+        this.displayTemplate = document.querySelector(".form__reference--display-template");
 
         [...this.formCells].forEach(cell => {
             this.setupReferenceButton(cell);
