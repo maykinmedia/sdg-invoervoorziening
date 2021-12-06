@@ -105,11 +105,13 @@ jobs:
         if: github.event_name == 'push'  # Exclude PRs
         run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      - name: Push the Docker image
+      - name: Push the Docker image and run downstream deployment
         if: github.event_name == 'push'  # Exclude PRs
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: docker push $IMAGE_NAME:$RELEASE_VERSION
+        run: |
+          docker push $IMAGE_NAME:$RELEASE_VERSION
+          curl -XPOST -u "${{ secrets.SDG_ACCESS_TOKEN }}" -H "Accept:application/vnd.github" -H "Content-Type:application/json" https://api.github.com/repos/maykinmedia/sdg-invoervoorziening-deployment/actions/workflows/deploy-aks.yml/dispatches --data '{"ref": "main", "inputs":{"version":"$RELEASE_VERSION"}}'
 
   # oas-lint:
   #   needs: tests
