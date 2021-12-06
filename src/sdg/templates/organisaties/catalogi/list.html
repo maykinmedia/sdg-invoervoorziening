@@ -12,7 +12,7 @@
         {% for catalog in catalogs %}
             {% include "organisaties/_include/product_catalog.html" %}
             {% with catalog=catalog.referentie_catalogus %}
-                {% if catalog.area_and_products %}
+                {% if catalog.areas %}
                     {% include "organisaties/_include/product_catalog.html" %}
                 {% endif %}
             {% endwith %}

@@ -3,7 +3,7 @@
 {% load i18n utils producten %}
 
 {% block inner_content %}
-    {% with latest_version=product.laatste_versie latest_active_version=product.laatste_actieve_versie %}
+    {% with most_recent_version=product.most_recent_version latest_active_version=product.laatste_actieve_versie %}
         <div class="notifications">
             {% include "core/_notifications.html" %}
             {% include 'producten/_include/detail_warnings.html' %}

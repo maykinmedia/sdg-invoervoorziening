@@ -95,7 +95,7 @@ class ProductVersieAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
-        "upn_label",
+        "name",
         "is_referentie",
         "lokale_overheid",
         "catalogus",
@@ -121,6 +121,7 @@ class ProductAdmin(admin.ModelAdmin):
         return (
             super()
             .get_queryset(request)
+            .annotate_name()
             .select_related(
                 "generiek_product",
                 "generiek_product__upn",

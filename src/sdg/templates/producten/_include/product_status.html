@@ -34,3 +34,19 @@
         </a>
     </div>
 </div>
+<hr class="divider">
+<div class="notifications notifications--inline">
+    {% with status=most_recent_version.get_published_status %}
+        {% if status != "now" %}
+            <div class="notifications__notification notification__info">
+                <i class="fas fa-info-circle"></i>
+                {% if most_recent_version.publicatie_datum %}
+                    <span>{% trans "Ingeplande wijzigingen op" %} {{ latest_version.publicatie_datum }}</span>
+                {% else %}
+                    <span>{% trans "Er is een bestaand concept voor dit product." %}</span>
+                {% endif %}
+                <span></span>
+            </div>
+        {% endif %}
+    {% endwith %}
+</div>

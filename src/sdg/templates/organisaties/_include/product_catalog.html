@@ -5,7 +5,7 @@
     {% include "organisaties/_include/catalog_filter.html" %}
 </div>
 <div class="products__accordeon">
-    {% for informatiegebied, producten in catalog.area_and_products.items %}
+    {% for informatiegebied, producten in catalog.areas.items %}
         <div class="products__accordeon-item">
             <div class="products__accordeon-title">
                             <span>

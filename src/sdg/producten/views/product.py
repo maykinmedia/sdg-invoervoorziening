@@ -87,7 +87,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     template_name = "producten/edit.html"
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"
-    queryset = Product.objects.select_related("catalogus__lokale_overheid")
+    queryset = Product.objects.most_recent().select_related(
+        "catalogus__lokale_overheid"
+    )
     form_class = inlineformset_factory(
         ProductVersie,
         LocalizedProduct,
@@ -113,7 +115,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_lokale_overheid(self):
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
-        self.object = self.product.laatste_versie
+        self.object = self.product.most_recent_version
         return self.lokale_overheid
 
     def get_context_data(self, **kwargs):
@@ -122,7 +124,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
         reference_formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=1
-        )(instance=self.product.reference_product.laatste_versie)
+        )(instance=self.product.reference_product.most_recent_version)
 
         context["product"] = self.product
         context["lokaleoverheid"] = self.product.catalogus.lokale_overheid

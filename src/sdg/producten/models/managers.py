@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.db import models
-from django.db.models import Case, F, Prefetch, Subquery, When
+from django.db.models import Case, F, OuterRef, Prefetch, Subquery, When
 
 
 class ProductQuerySet(models.QuerySet):
@@ -49,51 +49,50 @@ class ProductQuerySet(models.QuerySet):
         This function optimizes the queryset to prefetch the most recent
         `ProductVersie`, including the appropriate prefetched translations. The
         prefetched most recent version is available via
-        `Product.most_recent_version` and is always a list, containing 0 or 1
+        `Product._most_recent_version` and is always a list, containing 0 or 1
         `ProductVersie`.
         """
         from sdg.producten.models import ProductVersie
 
         subquery = Subquery(
-            ProductVersie.objects.order_by("-versie").values_list("pk", flat=True)[:1]
+            ProductVersie.objects.filter(product=OuterRef("product"))
+            .order_by("-versie")
+            .values_list("pk", flat=True)[:1]
         )
 
         return self.prefetch_related(
             Prefetch(
                 "versies",
-                to_attr="most_recent_version",
+                to_attr="_most_recent_version",
                 queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
                     "vertalingen"
                 ),
             )
         )
 
-    def annotate_is_reference(self):
+    def annotate_name(self):
         """
-        Annotate whether this product is a reference product.
-        """
-        return self.annotate(
-            has_referentie_product=models.Case(
-                models.When(referentie_product__isnull=True, then=models.Value(True)),
-                default=models.Value(False),
-                output_field=models.BooleanField(),
-            )
-        )
-
-    def annotate_name_and_area(self):
-        """
-        Annotate `name` and `area` fields.
-        The name and area fields are filled with the data from the specific or reference product depending on
-        whether referentie_product exists.
+        Annotate the name for the product.
+        The field is filled with the data from the specific or reference product depending on
+        whether `referentie_product` exists.
         """
         return self.annotate(
-            name=Case(
+            _name=Case(
                 When(
                     referentie_product__isnull=False,
                     then=F("referentie_product__generiek_product__upn__upn_label"),
                 ),
                 default=F("generiek_product__upn__upn_label"),
             ),
+        )
+
+    def annotate_area(self):
+        """
+        Annotate the area for the product.
+        The field is filled with the data from the specific or reference product depending on
+        whether `referentie_product` exists.
+        """
+        return self.annotate(
             area=Case(
                 When(
                     referentie_product__isnull=False,
