@@ -7,7 +7,7 @@ SDG invoervoorziening
 :Keywords: vng, sdg, pdc
 :PythonVersion: 3.8
 
-|build-status| |docker| |black| |python-versions|
+|build-status| |coverage| |docker| |black| |python-versions|
 
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
 (SDG).
