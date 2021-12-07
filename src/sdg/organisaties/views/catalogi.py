@@ -30,7 +30,9 @@ class CatalogListView(OverheidMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        self.object_list.create_specific_catalogs(municipality=self.lokale_overheid)
+
+        if self.lokale_overheid.automatisch_catalogus_aanmaken:
+            self.object_list.create_specific_catalogs(municipality=self.lokale_overheid)
 
         themes = (
             Thema.objects.all()
