@@ -27,6 +27,7 @@ class ProductQuerySet(models.QuerySet):
         subquery = Subquery(
             ProductVersie.objects.exclude(publicatie_datum=None)
             .filter(publicatie_datum__lte=active_on)
+            .filter(product=OuterRef("product"))
             .order_by("-versie")
             .values_list("pk", flat=True)[:1]
         )
@@ -34,7 +35,7 @@ class ProductQuerySet(models.QuerySet):
         return self.prefetch_related(
             Prefetch(
                 "versies",
-                to_attr="active_versions",
+                to_attr="_active_versions",
                 queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
                     "vertalingen"
                 ),
