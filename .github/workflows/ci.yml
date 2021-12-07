@@ -278,4 +278,4 @@ jobs:
         env:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
-          curl -XPOST -u "${{ secrets.SDG_ACCESS_TOKEN }}" -H "Accept:application/vnd.github" -H "Content-Type:application/json" https://api.github.com/repos/maykinmedia/sdg-invoervoorziening-deployment/actions/workflows/deploy-aks.yml/dispatches --data '{"ref": "main", "inputs":{"version":"$RELEASE_VERSION"}}'
+          curl -XPOST -u "${{ secrets.SDG_DEPLOYMENT_REPO_ACCESS_TOKEN }}" -H "Accept:application/vnd.github" -H "Content-Type:application/json" ${{ secrets.SDG_DEPLOYMENT_REPO_URL }} --data "{\"ref\": \"main\", \"inputs\": {\"version\": \"$RELEASE_VERSION\"}}"
