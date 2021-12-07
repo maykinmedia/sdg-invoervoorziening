@@ -1,6 +1,5 @@
-from datetime import date
-
-from django.db.models import F, OuterRef, Q, Subquery
+from django.db import models
+from django.db.models import Q, Value
 from django.utils.translation import ugettext_lazy as _
 
 from django_filters.rest_framework import FilterSet, filters
@@ -10,7 +9,7 @@ from sdg.api.filters import ProductAanwezigChoices
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid, Lokatie
-from sdg.producten.models import Product, ProductVersie
+from sdg.producten.models import Product
 
 
 class ProductenCatalogusFilterSet(FilterSet):
@@ -69,7 +68,6 @@ class ProductFilterSet(FilterSet):
 
     def filter_product_aanwezig(self, queryset, name, value):
         """:returns: filtered queryset based on `product_aanwezig`'s boolean value."""
-        value = value.lower()
         return queryset.all().filter(
             product_aanwezig=ProductAanwezigChoices.get_choice(value).boolean
         )
@@ -79,26 +77,10 @@ class ProductFilterSet(FilterSet):
         return queryset.all().filter(versies__publicatie_datum__gte=value)
 
     def filter_taal(self, queryset, name, value):
-        """:returns: filtered queryset for the given products containing translations for given language."""
-        active_version_qs = (
-            ProductVersie.objects.filter(
-                product=OuterRef("pk"),
-                publicatie_datum__lte=date.today(),
-            )
-            .order_by("-versie")
-            .values("pk")[:1]
+        """:returns: all products for this queryset, annotate the filter value for the inner serializer."""
+        return queryset.annotate(
+            _filter_taal=Value(value, output_field=models.CharField())
         )
-        language_qs = ProductVersie.objects.filter(
-            pk=OuterRef("active_version"),
-            vertalingen__taal=value,
-        ).values("pk")
-
-        queryset = queryset.filter(versies__in=Subquery(active_version_qs)).annotate(
-            active_version=F("versies")
-        )
-        queryset = queryset.filter(versies__in=Subquery(language_qs))
-
-        return queryset
 
     def filter_upn(self, queryset, name, value):
         """:returns: filtered queryset for the given product's UPN."""

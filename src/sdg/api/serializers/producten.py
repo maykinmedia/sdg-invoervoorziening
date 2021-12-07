@@ -1,7 +1,5 @@
 from datetime import date
 
-from django.db import connection
-
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.relations import HyperlinkedRelatedField
@@ -110,11 +108,10 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         }
 
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
-        _request = self.context["request"]
         translations = obj.get_active_field("vertalingen", default=[])
 
-        if translations and (taal := _request.query_params.get("taal", None)):
-            translations = (i for i in translations.all() if i.taal == taal)
+        if translations and obj._filter_taal:
+            translations = [i for i in translations.all() if i.taal == obj._filter_taal]
 
         return LocalizedProductSerializer(translations, many=True).data
 
