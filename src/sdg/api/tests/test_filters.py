@@ -183,15 +183,27 @@ class ProductFilterTests(APITestCase):
         response = self.client.get(self.url, {"taal": "en"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()["results"]
-        self.assertEqual(2, len(data))
-        self.assertEqual(str(product1.uuid), data[0]["uuid"])
-        self.assertEqual(str(product2.uuid), data[1]["uuid"])
+        self.assertEqual(5, len(data))
+
+        first_result, second_result, *_ = data
+
+        self.assertEqual(1, len(first_result["vertalingen"]))
+        self.assertEqual(1, len(second_result["vertalingen"]))
+
+        self.assertEqual("en", first_result["vertalingen"][0]["taal"])
+        self.assertEqual("en", second_result["vertalingen"][0]["taal"])
 
         response = self.client.get(self.url, {"taal": "nl"})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()["results"]
-        self.assertEqual(1, len(data))
-        self.assertEqual(str(product1.uuid), data[0]["uuid"])
+        self.assertEqual(5, len(data))
+
+        first_result, second_result, *_ = data
+
+        self.assertEqual(1, len(first_result["vertalingen"]))
+        self.assertEqual(0, len(second_result["vertalingen"]))
+
+        self.assertEqual("nl", first_result["vertalingen"][0]["taal"])
 
 
 class LokatieFilterTests(APITestCase):
