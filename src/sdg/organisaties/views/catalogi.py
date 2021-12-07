@@ -44,24 +44,17 @@ class CatalogListView(OverheidMixin, ListView):
             reference_catalog = catalog.referentie_catalogus
             catalog.areas = deepcopy(areas_template)
 
-            products = (
-                Product.objects.filter(catalogus=catalog)
-                .most_recent()
-                .annotate_name()
-                .annotate_area()
-                .select_generic()
-                .exclude(area__isnull=True)
-            )
-            reference_products = (
-                Product.objects.filter(catalogus=reference_catalog)
-                .most_recent()
-                .annotate_name()
-                .annotate_area()
-                .select_generic()
-                .exclude(area__isnull=True)
-            )
-            for queryset in [products, reference_products]:
-                queryset.select_related("catalogus__lokale_overheid")
+            products = Product.objects.filter(catalogus=catalog)
+            reference_products = Product.objects.filter(catalogus=reference_catalog)
+            for queryset in (products, reference_products):
+                (
+                    queryset.most_recent()
+                    .annotate_name()
+                    .annotate_area()
+                    .select_generic()
+                    .select_related("catalogus__lokale_overheid")
+                    .exclude(area__isnull=True)
+                )
 
             intersected_products = products | reference_products.exclude(
                 specifieke_producten__in=products
