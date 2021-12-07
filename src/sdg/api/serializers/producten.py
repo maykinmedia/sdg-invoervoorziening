@@ -110,7 +110,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
         translations = obj.get_active_field("vertalingen", default=[])
 
-        if translations and obj._filter_taal:
+        if translations and getattr(obj, "_filter_taal", None):
             translations = [i for i in translations.all() if i.taal == obj._filter_taal]
 
         return LocalizedProductSerializer(translations, many=True).data
