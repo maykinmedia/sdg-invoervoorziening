@@ -86,6 +86,10 @@ Licensed under the `EUPL`_.
     :alt: Build status
     :target: https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml
 
+.. |coverage| image:: https://codecov.io/github/maykinmedia/sdg-invoervoorziening/branch/master/graphs/badge.svg?branch=master
+    :alt: Coverage
+    :target: https://app.codecov.io/gh/maykinmedia/sdg-invoervoorziening
+
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :alt: Code style
     :target: https://github.com/psf/black
