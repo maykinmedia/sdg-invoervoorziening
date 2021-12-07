@@ -22,6 +22,9 @@ paths:
           type: integer
       tags:
       - catalogi
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -44,6 +47,9 @@ paths:
         required: true
       tags:
       - catalogi
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -71,6 +77,9 @@ paths:
           type: integer
       tags:
       - locaties
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -93,6 +102,9 @@ paths:
         required: true
       tags:
       - locaties
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -125,6 +137,9 @@ paths:
           type: integer
       tags:
       - organisaties
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -147,6 +162,9 @@ paths:
         required: true
       tags:
       - organisaties
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -227,6 +245,9 @@ paths:
         description: Toont producten met een UPN URI
       tags:
       - producten
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -249,9 +270,13 @@ paths:
         name: productUuid
         schema:
           type: string
+          format: uuid
         required: true
       tags:
       - producten
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -274,6 +299,9 @@ paths:
         required: true
       tags:
       - producten
+      security:
+      - tokenAuth: []
+      - {}
       responses:
         '200':
           content:
@@ -313,11 +341,6 @@ components:
           type: string
           format: uri
           description: Link naar decentrale productpagina voor burgers en / of bedrijven.
-          maxLength: 200
-        specifiekeLink:
-          type: string
-          format: uri
-          description: URL decentrale productpagina.
           maxLength: 200
         specifiekeTekst:
           type: string
@@ -679,6 +702,10 @@ components:
         versie:
           type: integer
           readOnly: true
+        publicatieDatum:
+          type: string
+          format: date
+          readOnly: true
         organisatie:
           type: string
           format: uri
@@ -723,6 +750,7 @@ components:
       required:
       - catalogus
       - organisatie
+      - publicatieDatum
       - upnLabel
       - upnUri
       - url
@@ -784,6 +812,10 @@ components:
           type: string
           description: De naam van de producten catalogus.
           maxLength: 120
+        organisatie:
+          type: string
+          format: uri
+          description: De lokale overheid die bij deze catalogus hoort.
         isReferentieCatalogus:
           type: boolean
           description: Geeft aan of dit een referentiecatalogus is.
@@ -808,6 +840,7 @@ components:
       required:
       - domein
       - naam
+      - organisatie
       - producten
       - url
       - uuid
@@ -816,3 +849,9 @@ components:
       - nl
       - en
       type: string
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"

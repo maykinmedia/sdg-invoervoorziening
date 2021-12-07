@@ -5,7 +5,7 @@
     {% include "organisaties/_include/catalog_filter.html" %}
 </div>
 <div class="products__accordeon">
-    {% for informatiegebied, producten in catalog.area_and_products.items %}
+    {% for informatiegebied, producten in catalog.areas.items %}
         <div class="products__accordeon-item">
             <div class="products__accordeon-title">
                             <span>
@@ -21,17 +21,15 @@
                 <div class="products__list-container">
                     {% for product in producten %}
                         {% if catalog.is_referentie_catalogus %}
-                            <a class="products__item"
-                               href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=catalog.pk product_pk=product.pk %}">
+                            <a class="products__item" href="{{ product.get_absolute_url }}">
                         {% else %}
-                            <a class="products__item"
-                               href="{% url 'organisaties:catalogi:producten:redirect' pk=lokaleoverheid.pk catalog_pk=catalog.pk product_pk=product.pk %}">
+                            <a class="products__item" href="{{ product.get_create_redirect_url }}">
                         {% endif %}
                     <div class="products__item-icon products__status">
                         {% product_icon product %}
                     </div>
                     <div>
-                        <div class="products__item-title">{{ product.upn_label }}</div>
+                        <div class="products__item-title">{{ product.name }}</div>
                         <div
                             class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
                     </div>

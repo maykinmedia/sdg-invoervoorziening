@@ -4,6 +4,7 @@ from django_webtest import WebTest
 from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.core.tests.utils import hard_refresh_from_db
 from sdg.organisaties.tests.factories.overheid import LokatieFactory
 from sdg.producten.constants import PublishChoices
 from sdg.producten.models import LocalizedProduct
@@ -25,6 +26,27 @@ from sdg.producten.tests.factories.product import (
     SpecifiekProductFactory,
     SpecifiekProductVersieFactory,
 )
+from sdg.producten.utils import build_url_kwargs
+
+
+class TestProductCreateRedirectView(WebTest):
+    def setUp(self):
+        super().setUp()
+
+        self.user = UserFactory.create()
+        self.app.set_user(self.user)
+
+    def test_specific_product_is_created(self):
+        reference_product = ReferentieProductVersieFactory.create().product
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=reference_product.catalogus.lokale_overheid,
+            is_redacteur=True,
+        )
+        self.assertEqual(0, reference_product.specifieke_producten.count())
+
+        self.app.get(reference_product.get_create_redirect_url())
+        self.assertEqual(1, reference_product.specifieke_producten.count())
 
 
 class ProductDetailViewTests(WebTest):
@@ -48,7 +70,10 @@ class ProductDetailViewTests(WebTest):
 
         response = self.app.get(product_version.product.get_absolute_url())
 
-        self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
     def test_concept_product_displays_warning(self):
         product = SpecifiekProductFactory.create(
@@ -68,7 +93,10 @@ class ProductDetailViewTests(WebTest):
 
         response = self.app.get(product_version.product.get_absolute_url())
 
-        self.assertIn("Er is een bestaand concept voor dit product.", response.text)
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
     @freeze_time(NOW_DATE)
     def test_generic_information_is_displayed_next_to_information(self):
@@ -256,7 +284,13 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn("Ingeplande wijzigingen op", response.text)
+        self.assertIn(
+            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
+        )
+        self.assertIn(
+            "Er staat een nieuwe product tekst klaar om gepubliceerd te worden op . Hieronder ziet u de huidige product tekst.",
+            response.text,
+        )
 
     @freeze_time(NOW_DATE)
     def test_published_and_concept_shows_active_data_with_concept_notification(self):
@@ -287,11 +321,13 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn("Er is een bestaand concept voor dit product.", response.text)
-
-
-class ReferentieProductUpdateViewTests(WebTest):
-    ...
+        self.assertIn(
+            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
+        )
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
 
 class SpecifiekProductUpdateViewTests(WebTest):
@@ -326,10 +362,11 @@ class SpecifiekProductUpdateViewTests(WebTest):
             PublishChoices.concept: None,
             PublishChoices.later: FUTURE_DATE,
         }
-        self.product.laatste_versie.publicatie_datum = dates.get(publish_choice)
-        self.product.laatste_versie.save()
-        self.product.refresh_from_db()
-        del self.product.laatste_versie  # clear cached_property
+        most_recent_version = self.product.most_recent_version
+        most_recent_version.publicatie_datum = dates.get(publish_choice)
+        most_recent_version.save()
+        most_recent_version.refresh_from_db()
+        self.product = hard_refresh_from_db(self.product)
 
     def _fill_product_form(self, form, publish_choice: PublishChoices.choices):
         form_data = {
@@ -354,7 +391,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.product.referentie_product.product_aanwezig = False
         self.product.referentie_product.save()
         response = self.app.get(self.product.get_absolute_url())
-        self.assertIn("Dit product is van de productenlijst verwijderd.", response.text)
+        self.assertIn(
+            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            response.text,
+        )
 
     @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
@@ -363,11 +403,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -378,7 +414,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 1)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version, None)
@@ -394,11 +430,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -410,7 +442,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 1)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -431,11 +463,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -447,7 +475,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 1)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version, None)
@@ -464,11 +492,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -480,7 +504,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -501,11 +525,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -517,7 +537,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -538,11 +558,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -554,7 +570,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -581,11 +597,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -597,7 +609,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -628,11 +640,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -644,7 +652,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -671,11 +679,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -687,7 +691,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -714,11 +718,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -730,7 +730,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -757,11 +757,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -773,7 +769,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -800,11 +796,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             )
         )
 
@@ -816,7 +808,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(self.product.versies.count(), 2)
 
         latest_active_version = self.product.laatste_actieve_versie
-        latest_version = self.product.laatste_versie
+        latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
@@ -844,11 +836,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         response = self.app.get(
             reverse(
                 PRODUCT_EDIT_URL,
-                kwargs={
-                    "pk": self.product.catalogus.lokale_overheid.pk,
-                    "catalog_pk": self.product.catalogus.pk,
-                    "product_pk": self.product.pk,
-                },
+                kwargs=build_url_kwargs(self.product),
             ),
         )
 

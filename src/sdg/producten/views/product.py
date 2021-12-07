@@ -1,7 +1,6 @@
 from itertools import zip_longest
 from typing import Tuple
 
-from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
@@ -20,39 +19,39 @@ from sdg.producten.models import (
     Product,
     ProductVersie,
 )
-from sdg.producten.utils import duplicate_localized_products
+from sdg.producten.utils import build_url_kwargs, duplicate_localized_products
 
 
-class ProductCreateRedirectView(SingleObjectMixin, RedirectView):
+class ProductCreateRedirectView(OverheidMixin, SingleObjectMixin, RedirectView):
     """
     Get or create (children) specific product if this is a reference product.
     Redirect to product detail view.
     """
 
     context_object_name = "product"
-    model = Product
+    pk_url_kwarg = "product_pk"
+    queryset = Product.objects.select_related(
+        "catalogus__lokale_overheid",
+    )
+
+    def get_lokale_overheid(self):
+        self.object = self.get_object()
+        return self.object.catalogus.lokale_overheid
 
     def get(self, request, *args, **kwargs):
-        obj = super().get_object()
-
+        kwargs["product"] = self.object
         if kwargs.get("catalog_pk"):
             catalog = get_object_or_404(ProductenCatalogus, pk=kwargs["catalog_pk"])
-            if catalog.user_is_redacteur(self.request.user):
-                obj = obj.get_or_create_specific_product(specific_catalog=catalog)
-            else:
-                raise PermissionDenied()
-
-        kwargs["product"] = obj
+            object = self.object.get_or_create_specific_product(
+                specific_catalog=catalog
+            )
+            kwargs["product"] = object
         return super().get(request, *args, **kwargs)
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse(
             "organisaties:catalogi:producten:detail",
-            kwargs={
-                "pk": kwargs.get("product").catalogus.lokale_overheid.pk,
-                "catalog_pk": kwargs.get("product").catalogus.pk,
-                "product_pk": kwargs.get("product").pk,
-            },
+            kwargs=build_url_kwargs(kwargs["product"]),
         )
 
 
@@ -88,7 +87,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     template_name = "producten/edit.html"
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"
-    queryset = Product.objects.select_related("catalogus__lokale_overheid")
+    queryset = Product.objects.most_recent().select_related(
+        "catalogus__lokale_overheid"
+    )
     form_class = inlineformset_factory(
         ProductVersie,
         LocalizedProduct,
@@ -114,7 +115,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_lokale_overheid(self):
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
-        self.object = self.product.laatste_versie
+        self.object = self.product.most_recent_version
         return self.lokale_overheid
 
     def get_context_data(self, **kwargs):
@@ -123,7 +124,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
         reference_formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=1
-        )(instance=self.product.reference_product.laatste_versie)
+        )(instance=self.product.reference_product.most_recent_version)
 
         context["product"] = self.product
         context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
@@ -173,9 +174,5 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_success_url(self):
         return reverse(
             "organisaties:catalogi:producten:detail",
-            kwargs={
-                "pk": self.lokale_overheid.pk,
-                "catalog_pk": self.product.catalogus.pk,
-                "product_pk": self.product.pk,
-            },
+            kwargs=build_url_kwargs(self.product),
         )

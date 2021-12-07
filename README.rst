@@ -7,7 +7,7 @@ SDG invoervoorziening
 :Keywords: vng, sdg, pdc
 :PythonVersion: 3.8
 
-|build-status| |docker| |black| |python-versions|
+|build-status| |coverage| |docker| |black| |python-versions|
 
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
 (SDG).
@@ -85,6 +85,10 @@ Licensed under the `EUPL`_.
 .. |build-status| image:: https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml/badge.svg
     :alt: Build status
     :target: https://github.com/maykinmedia/sdg-invoervoorziening/actions/workflows/ci.yml
+
+.. |coverage| image:: https://codecov.io/github/maykinmedia/sdg-invoervoorziening/branch/master/graphs/badge.svg?branch=master
+    :alt: Coverage
+    :target: https://app.codecov.io/gh/maykinmedia/sdg-invoervoorziening
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :alt: Code style

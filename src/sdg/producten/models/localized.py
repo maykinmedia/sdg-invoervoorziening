@@ -220,7 +220,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     def referentie_informatie(self):
         reference_product = self.product_versie.product.referentie_product
         if reference_product:
-            return reference_product.laatste_versie.vertalingen.get(taal=self.taal)
+            return reference_product.most_recent_version.vertalingen.get(taal=self.taal)
         else:
             return None
 
@@ -238,11 +238,11 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         if product.is_referentie_product:
             LocalizedProduct.objects.bulk_localize(
                 instances=(
-                    last_version
+                    most_recent_version
                     for p in product.specifieke_producten.all().prefetch_related(
                         "versies"
                     )
-                    if (last_version := p.laatste_versie)
+                    if (most_recent_version := p.most_recent_version)
                 ),
                 languages=[self.taal],
             )

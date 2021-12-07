@@ -2,9 +2,13 @@
 
 {% load i18n utils producten %}
 
-{% block inner %}
-    {{ block.super }}
-    <div class="tabs tabs--inline">
+{% block inner_content %}
+    {% with most_recent_version=product.most_recent_version latest_active_version=product.laatste_actieve_versie %}
+        <div class="notifications">
+            {% include "core/_notifications.html" %}
+            {% include 'producten/_include/detail_warnings.html' %}
+        </div>
+        <div class="tabs tabs--inline">
         <div class="tabs__tabs">
             {% for key, value in product.beschikbare_talen.items %}
                 <a href="#{{ value }}" data-id="{{ value }}"
@@ -15,116 +19,103 @@
         </div>
 
         <div class="tabs__tab-contents">
-            <div class="notifications">
-                {% include "core/_notifications.html" %}
-                {% with reference_product=product.referentie_product %}
-                    {% if reference_product and not reference_product.product_aanwezig %}
-                        {% include 'producten/_include/beschikbaar_warning.html' %}
-                    {% endif %}
-                    {% if reference_product and not reference_product.generiek_product %}
-                        {% include 'producten/_include/generiek_warning.html' %}
-                    {% endif %}
-                {% endwith %}
-            </div>
+        {% include "producten/_include/product_status.html" %}
+        <table class="tabs__table">
+            <thead>
+            <tr>
+                <th class="tabs__table-header" width="25%">Product gegevens</th>
+                <th class="tabs__table-header">Huidige informatie</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for field in product.get_fields|exclude:"id,generiek_product,referentie_product,catalogus" %}
+                {% table_row field %}
+            {% endfor %}
+            </tbody>
+        </table>
+        {% for info in latest_active_version.vertalingen.all %}
+            <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
+                 id="{{ info.taal }}">
+                {% if info.generiek_informatie %}
+                    <hr class="divider">
+                    <table class="tabs__table">
+                        <thead>
+                        <tr>
+                            <th class="tabs__table-header" width="25%">Generieke gegevens</th>
+                            <th class="tabs__table-header">Huidige informatie</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product" %}
+                            {% table_row field %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
 
-            {% with latest_version=product.laatste_versie latest_active_version=product.laatste_actieve_versie %}
-                {% include "producten/_include/product_status.html" %}
+                {% endif %}
+                <hr class="divider">
                 <table class="tabs__table">
                     <thead>
                     <tr>
-                        <th class="tabs__table-header" width="25%">Product gegevens</th>
+                        <th class="tabs__table-header" width="25%">Specifieke gegevens</th>
                         <th class="tabs__table-header">Huidige informatie</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for field in product.get_fields|exclude:"id,generiek_product,referentie_product,catalogus" %}
+                    {% for field in info.get_fields|exclude:"id,taal,product_versie" %}
                         {% table_row field %}
                     {% endfor %}
                     </tbody>
                 </table>
-                <hr class="divider">
-                {% for info in latest_active_version.vertalingen.all %}
-                    <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
-                         id="{{ info.taal }}">
-                        {% if info.generiek_informatie %}
-                            <table class="tabs__table">
-                                <thead>
-                                <tr>
-                                    <th class="tabs__table-header" width="25%">Generieke gegevens</th>
-                                    <th class="tabs__table-header">Huidige informatie</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,generiek_product" %}
-                                    {% table_row field %}
+
+                <div class="tabs__footer">
+                    {% if product.lokaties %}
+                        <div class="tabs__footer-left">
+                            <h3 class="tabs__footer-title">Locaties met dit product</h3>
+                            <ul class="tabs__footer-list">
+                                {% for lokatie in product.get_municipality_locations %}
+                                    <li class="tabs__footer-list-item">
+                                        <div class="pretty p-default p-curve">
+                                            <input type="checkbox" class="form__checkbox"
+                                                   {% if lokatie.is_product_location %}checked{% endif %}
+                                                   value="{{ lokatie.pk }}"
+                                                   disabled>
+                                            <div class="state">
+                                                <label class="checkbox">
+                                                    {{ lokatie.naam }}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </li>
                                 {% endfor %}
-                                </tbody>
-                            </table>
-
-                            <hr class="divider">
-                        {% endif %}
-                        <table class="tabs__table">
-                            <thead>
-                            <tr>
-                                <th class="tabs__table-header" width="25%">Specifieke gegevens</th>
-                                <th class="tabs__table-header">Huidige informatie</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for field in info.get_fields|exclude:"id,taal,product_versie" %}
-                                {% table_row field %}
-                            {% endfor %}
-                            </tbody>
-                        </table>
-
-                        <div class="tabs__footer">
-                            {% if product.lokaties %}
-                                <div class="tabs__footer-left">
-                                    <h3 class="tabs__footer-title">Locaties met dit product</h3>
-                                    <ul class="tabs__footer-list">
-                                        {% for lokatie in product.get_municipality_locations %}
-                                            <li class="tabs__footer-list-item">
-                                                <div class="pretty p-default p-curve">
-                                                    <input type="checkbox" class="form__checkbox"
-                                                           {% if lokatie.is_product_location %}checked{% endif %}
-                                                           value="{{ lokatie.pk }}"
-                                                           disabled>
-                                                    <div class="state">
-                                                        <label class="checkbox">
-                                                            {{ lokatie.naam }}
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            {% endif %}
-                            <div class="tabs__footer-right">
-                                <h3 class="tabs__footer-title">Revisies</h3>
-                                {% for product_version in product.get_latest_versions %}
-                                    <ul class="revision-list">
-                                        <li class="revision-list__item">
-                                            <i class="fas fa-user"></i>
-                                            {% blocktrans with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.versie|default:_("concept") %}
-                                                Gebruiker <strong>{{ user }}</strong> heeft op
-                                                <strong>{{ last_modified }}</strong> product versie
-                                                <strong>{{ version }}</strong> gewijzigd.
-                                            {% endblocktrans %}
-
-                                            {% if product_version.publicatie_datum %}
-                                                {% blocktrans with publication_date=product_version.publicatie_datum %}
-                                                    Gepubliceerd op <strong>{{ publication_date }}</strong>.
-                                                {% endblocktrans %}
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                {% endfor %}
-                            </div>
+                            </ul>
                         </div>
+                    {% endif %}
+                    <div class="tabs__footer-right">
+                        <h3 class="tabs__footer-title">Revisies</h3>
+                        {% for product_version in product.get_latest_versions %}
+                            <ul class="revision-list">
+                                <li class="revision-list__item">
+                                    <i class="fas fa-user"></i>
+                                    {% blocktrans with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.versie|default:_("concept") %}
+                                        Gebruiker <strong>{{ user }}</strong> heeft op
+                                        <strong>{{ last_modified }}</strong> product versie
+                                        <strong>{{ version }}</strong> gewijzigd.
+                                    {% endblocktrans %}
+
+                                    {% if product_version.publicatie_datum %}
+                                        {% blocktrans with publication_date=product_version.publicatie_datum %}
+                                            Gepubliceerd op <strong>{{ publication_date }}</strong>.
+                                        {% endblocktrans %}
+                                    {% endif %}
+                                </li>
+                            </ul>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            {% endwith %}
-        </div>
-    </div>
-{% endblock inner %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endwith %}
+</div>
+</div>
+{% endblock inner_content %}
