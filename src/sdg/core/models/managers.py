@@ -40,7 +40,10 @@ class ProductenCatalogusQuerySet(models.QuerySet):
                 versie=catalog.versie,
                 naam=f"{municipality} ({catalog.naam})",
             )
-            for catalog in self.model.objects.filter(is_referentie_catalogus=True)
+            for catalog in self.model.objects.filter(
+                is_referentie_catalogus=True,
+                automatisch_catalogus_aanmaken=True,
+            )
         ]
         self.bulk_create(catalog_list, ignore_conflicts=True)
 
