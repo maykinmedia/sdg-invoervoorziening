@@ -95,10 +95,25 @@ class OverheidExpirationMixin(BaseOverheidMixin):
         return True
 
 
-class OverheidMixin(OverheidExpirationMixin, OverheidRoleRequiredMixin):
+class OverheidContextMixin(BaseOverheidMixin):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        if "lokaleoverheid" not in context:
+            context["lokaleoverheid"] = self._get_lokale_overheid()
+
+        return context
+
+
+class OverheidMixin(
+    OverheidContextMixin,
+    OverheidExpirationMixin,
+    OverheidRoleRequiredMixin,
+):
     """
     The standard mixin for all municipality views.
 
     - Denies access if a municipality end date is expired.
     - Ensures a user has the appropriate role to access the municipality.
+    - Add municipality to context if it doesn't already exist.
     """
