@@ -50,16 +50,7 @@ class FormWithReference {
                     icon.classList.add("fa-chevron-down");
 
                     const referenceField = this.referenceForm.content.getElementById(formInput.id);
-                    const currentVersionData = {
-                        "title": this.referenceForm.dataset.title,
-                        "text": referenceField.value
-                    };
-
                     const previousReferenceField = this.previousReferenceForm.content.getElementById(formInput.id);
-                    const previousVersionData = {
-                        "title": this.previousReferenceForm.dataset.title,
-                        "text": previousReferenceField.value
-                    };
 
                     if (referenceField.value) {
 
@@ -72,8 +63,14 @@ class FormWithReference {
                         new DiffButton(
                             template.querySelector(".diff"),
                             templateDisplay.innerHTML,
-                            previousVersionData,
-                            currentVersionData,
+                            {
+                                "title": this.previousReferenceForm.dataset.title,
+                                "text": previousReferenceField.value
+                            },
+                            {
+                                "title": this.referenceForm.dataset.title,
+                                "text": referenceField.value
+                            }
                         );
 
                     }

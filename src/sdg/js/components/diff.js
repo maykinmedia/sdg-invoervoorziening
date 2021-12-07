@@ -1,7 +1,5 @@
 const Diff = require("text-diff");
 
-const diffButtons = document.querySelectorAll(".diff");
-
 class DiffButton {
 
     displayDiff() {
@@ -52,7 +50,5 @@ class DiffButton {
         this.setUpDiffButton(node);
     }
 }
-
-[...diffButtons].forEach(diffButton => new DiffButton(diffButton));
 
 export {DiffButton}

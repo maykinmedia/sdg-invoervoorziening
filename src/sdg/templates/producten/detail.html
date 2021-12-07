@@ -72,7 +72,7 @@
                             </thead>
                             <tbody>
                             {% for field in info.get_fields|exclude:"id,taal,product_versie" %}
-                                {% table_row field has_diff=True %}
+                                {% table_row field %}
                             {% endfor %}
                             </tbody>
                         </table>
