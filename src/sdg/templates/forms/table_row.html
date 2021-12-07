@@ -4,24 +4,28 @@
 
 <tr>
     <td class="tabs__table-cell">{{ field.verbose_name|capfirst }}<i
-        class="fas fa-info-circle fa-xs"
+        class="fas fa-info-circle fa-xs dark"
         title="{{ field.help_text }}"></i>
     </td>
     <td class="tabs__table-cell">
-        {% if field.is_markdown %}
-            {{ field.value|markdownify }}
-        {% elif field.is_list %}
-            <ul>
-                {% for item in field.value %}
-                    <li>{{ item }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            {{ field.value }}
-        {% endif %}
         {% if field.is_reference %}
-            <i class="fa fa-asterisk fa-xs primary"
-               title="{% trans 'Dit veld gebruikt standaardtekst.' %}"></i>
+            <span>
+                    <i class="fa fa-asterisk fa-xs dark"
+                       title="{% trans 'Dit veld gebruikt standaardtekst.' %}"></i>
+                </span>
         {% endif %}
+        <span class="tabs__table-cell--value">
+            {% if field.is_markdown %}
+                {{ field.value|markdownify }}
+            {% elif field.is_list %}
+                <ul>
+                    {% for item in field.value %}
+                        <li>{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                {{ field.value }}
+            {% endif %}
+        </span>
     </td>
 </tr>

@@ -112,6 +112,13 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         new_version.save()
         return new_version, created
 
+    def _generate_version_formset(self, version: ProductVersie):
+        formset = inlineformset_factory(
+            ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=1
+        )(instance=version)
+        formset.title = f"v{version.versie} ({version.publicatie_datum})"
+        return formset
+
     def get_lokale_overheid(self):
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
@@ -122,14 +129,16 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
 
-        reference_formset = inlineformset_factory(
-            ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=1
-        )(instance=self.product.reference_product.most_recent_version)
-
         context["product"] = self.product
         context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
 
-        context["reference_forms"] = reference_formset.forms
+        context["reference_formset"] = self._generate_version_formset(
+            version=self.product.reference_product.most_recent_version
+        )
+        context["previous_reference_formset"] = self._generate_version_formset(
+            self.product.reference_product.get_latest_versions(2)[0]  # TODO: optimize
+        )
+
         context["informatie_forms"] = zip_longest(
             generic_information, context["form"].forms
         )
@@ -139,6 +148,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context["version_form"] = kwargs.get("version_form") or ProductVersionForm(
             instance=self.object
         )
+
         return context
 
     def get(self, request, *args, **kwargs):
