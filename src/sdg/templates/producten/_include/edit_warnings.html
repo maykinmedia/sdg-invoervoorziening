@@ -1,0 +1,32 @@
+{% load i18n %}
+
+{% if product.product_aanwezig %}
+{% elif product.product_aanwezig == False %}
+    <div class="notifications__notification notification__info">
+        <i class="fas fa-info-circle"></i>
+        <span>{% trans "U heeft aangegeven dat u dit product niet aanbiedt." %}</span>
+        <span></span>
+    </div>
+{% elif product.product_aanwezig == None %}
+    <div class="notifications__notification notification__accent">
+        <i class="fas fa-info-circle"></i>
+        <span>{% trans "U heeft nog niet aangegeven of u dit product aanbiedt." %}</span>
+        <span></span>
+    </div>
+{% endif %}
+
+{% with publised_status=object.get_published_status %}
+    <div class="notifications__notification notification__info">
+        <i class="fas fa-info-circle"></i>
+        {% if publised_status == "now" %}
+            <span>{% trans "U bewerkt een reeds gepubliceerde product tekst. Als u deze opslaat wordt een nieuwe versie aangemaakt." %}</span>
+        {% elif publised_status == "concept" %}
+            <span>{% trans "U bewerkt een concept product tekst." %}</span>
+        {% elif publised_status == "later" %}
+            {% blocktrans %}
+                <span>U bewerkt een product tekst die ingepland staat om gepubliceerd te worden op {{ object.publicatie_datum }}.</span>
+            {% endblocktrans %}
+        {% endif %}
+        <span></span>
+    </div>
+{% endwith %}

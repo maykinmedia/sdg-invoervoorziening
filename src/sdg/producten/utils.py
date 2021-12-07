@@ -19,3 +19,12 @@ def duplicate_localized_products(form, new_version):
         product.pk = None
         localized_products.append(product)
     return LocalizedProduct.objects.bulk_create(localized_products)
+
+
+def build_url_kwargs(product) -> dict:
+    """Return url kwargs for product."""
+    return {
+        "pk": product.catalogus.lokale_overheid.pk,
+        "catalog_pk": product.catalogus.pk,
+        "product_pk": product.pk,
+    }
