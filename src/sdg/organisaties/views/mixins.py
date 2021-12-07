@@ -30,6 +30,6 @@ class DisallowOwnRoleMixin:
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
         if self.role_belongs_to_user():
-            raise PermissionDenied()
+            raise PermissionDenied
         else:
             return response

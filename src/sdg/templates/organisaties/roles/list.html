@@ -54,9 +54,12 @@
                             </tbody>
                         </table>
                         <div class="roles__control">
-                            <a class="button" href="{% url 'organisaties:invitation_create' pk=lokaleoverheid.pk %}">
-                                <i class="far fa-envelope"></i>
-                                {% trans "Nieuwe gebruiker toevoegen" %}</a>
+                            {% if lokaleoverheid_beheerder %}
+                                <a class="button"
+                                   href="{% url 'organisaties:invitation_create' pk=lokaleoverheid.pk %}">
+                                    <i class="far fa-envelope"></i>
+                                    {% trans "Nieuwe gebruiker toevoegen" %}</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
