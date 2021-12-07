@@ -1,4 +1,5 @@
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import mixins, viewsets
 from rest_framework.viewsets import GenericViewSet
 
@@ -37,7 +38,12 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @extend_schema_view(
-    list=extend_schema(description="Lijst van alle productversies van een product."),
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter("product_uuid", OpenApiTypes.UUID, OpenApiParameter.PATH),
+        ],
+        description="Lijst van alle productversies van een product.",
+    ),
 )
 class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
     """Viewset for the version history of a product."""
