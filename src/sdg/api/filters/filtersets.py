@@ -1,11 +1,12 @@
-from django.db.models import Q
+from django.db import models
+from django.db.models import Q, Value
 from django.utils.translation import ugettext_lazy as _
 
 from django_filters.rest_framework import FilterSet, filters
 from djangorestframework_camel_case.util import camel_to_underscore
 
 from sdg.api.filters import ProductAanwezigChoices
-from sdg.core.constants import DoelgroepChoices
+from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid, Lokatie
 from sdg.producten.models import Product
@@ -53,6 +54,11 @@ class ProductFilterSet(FilterSet):
             "Toont producten met een publicatiedatum groter dan of gelijk aan de opgegeven datum."
         ),
     )
+    taal = filters.ChoiceFilter(
+        choices=TaalChoices.choices,
+        help_text=_("Toont producten die overeenkomen met de opgegeven taal."),
+        method="filter_taal",
+    )
     upnLabel = filters.CharFilter(
         method="filter_upn", help_text=_("Toont producten met een UPN label")
     )
@@ -62,14 +68,19 @@ class ProductFilterSet(FilterSet):
 
     def filter_product_aanwezig(self, queryset, name, value):
         """:returns: filtered queryset based on `product_aanwezig`'s boolean value."""
-        value = value.lower()
         return queryset.all().filter(
             product_aanwezig=ProductAanwezigChoices.get_choice(value).boolean
         )
 
     def filter_publicatie_datum(self, queryset, name, value):
-        """:returns: filtered queryset of products having versions greater than or equal to provided date."""
+        """:returns: products having versions greater than or equal to provided date."""
         return queryset.all().filter(versies__publicatie_datum__gte=value)
+
+    def filter_taal(self, queryset, name, value):
+        """:returns: all products for this queryset, annotate the filter value for the inner serializer."""
+        return queryset.annotate(
+            _filter_taal=Value(value, output_field=models.CharField())
+        )
 
     def filter_upn(self, queryset, name, value):
         """:returns: filtered queryset for the given product's UPN."""

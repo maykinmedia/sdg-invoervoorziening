@@ -3,13 +3,16 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
+from sdg.core.constants import TaalChoices
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
     LokatieFactory,
 )
 from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
+from sdg.producten.tests.factories.localized import LocalizedProductFactory
 from sdg.producten.tests.factories.product import (
+    ProductVersieFactory,
     ReferentieProductFactory,
     ReferentieProductVersieFactory,
 )
@@ -154,6 +157,53 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.json()["results"]
         self.assertEqual(1, len(data))
+
+    @freeze_time(NOW_DATE)
+    def test_filter_taal(self):
+        catalog = ProductenCatalogusFactory.create(
+            is_referentie_catalogus=True,
+        )
+
+        product1, product2, *_ = ReferentieProductFactory.create_batch(
+            5, catalogus=catalog
+        )
+
+        product1_version = ProductVersieFactory.create(
+            product=product1, publicatie_datum=PAST_DATE
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=product1_version)
+
+        product2_version = ProductVersieFactory.create(
+            product=product2, publicatie_datum=PAST_DATE
+        )
+        LocalizedProductFactory.create(
+            taal=TaalChoices.en, product_versie=product2_version
+        )
+
+        response = self.client.get(self.url, {"taal": "en"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["results"]
+        self.assertEqual(5, len(data))
+
+        first_result, second_result, *_ = data
+
+        self.assertEqual(1, len(first_result["vertalingen"]))
+        self.assertEqual(1, len(second_result["vertalingen"]))
+
+        self.assertEqual("en", first_result["vertalingen"][0]["taal"])
+        self.assertEqual("en", second_result["vertalingen"][0]["taal"])
+
+        response = self.client.get(self.url, {"taal": "nl"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()["results"]
+        self.assertEqual(5, len(data))
+
+        first_result, second_result, *_ = data
+
+        self.assertEqual(1, len(first_result["vertalingen"]))
+        self.assertEqual(0, len(second_result["vertalingen"]))
+
+        self.assertEqual("nl", first_result["vertalingen"][0]["taal"])
 
 
 class LokatieFilterTests(APITestCase):

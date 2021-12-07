@@ -210,12 +210,6 @@ class Product(ProductFieldMixin, models.Model):
             return {}
 
     @cached_property
-    def laatste_actieve_versie(self):
-        """:returns: Latest active version for this product."""
-        latest_version = self.get_latest_versions(1, active=True)
-        return latest_version[0] if latest_version else None
-
-    @cached_property
     def generic_product(self):
         """:returns: The generic product of this product."""
 
@@ -233,7 +227,7 @@ class Product(ProductFieldMixin, models.Model):
     @property
     def name(self):
         """
-        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
+        Check if annotated cache is available from the manager. If there's no annotation, retrieve it.
         :returns: The generic product's upn label.
         """
         _cached = getattr(self, "_name", None)
@@ -261,12 +255,29 @@ class Product(ProductFieldMixin, models.Model):
         except IndexError:
             return None  # no recent versions
 
+    @property
+    def active_version(self):
+        """
+        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
+        :returns: The most recent **active** `ProductVersie`.
+        """
+        _cached = getattr(self, "_active_versions", None)
+
+        if _cached is None:
+            this = self.__class__.objects.active().get(pk=self.pk)
+            return this.active_version
+
+        try:
+            return _cached[0]
+        except IndexError:
+            return None  # no active versions
+
     def get_active_field(self, field_name, default=None):
         """
         Get specific field value from `active_versions`.
         Validate that `active_versions` equals 1.
         """
-        active_versions = getattr(self, "active_versions", None)
+        active_versions = getattr(self, "_active_versions", None)
 
         if not active_versions:
             return default

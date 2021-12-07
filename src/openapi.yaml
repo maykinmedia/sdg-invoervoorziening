@@ -226,6 +226,14 @@ paths:
         description: Toont producten met een publicatiedatum groter dan of gelijk
           aan de opgegeven datum.
       - in: query
+        name: taal
+        schema:
+          type: string
+          enum:
+          - en
+          - nl
+        description: Toont producten die overeenkomen met de opgegeven taal.
+      - in: query
         name: upnLabel
         schema:
           type: string

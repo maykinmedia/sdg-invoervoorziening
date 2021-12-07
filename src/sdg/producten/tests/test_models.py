@@ -3,7 +3,7 @@ from django.test import TestCase
 
 from freezegun import freeze_time
 
-from sdg.producten.tests.constants import NOW_DATE
+from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE
 from sdg.producten.tests.factories.localized import LocalizedReferentieProductFactory
 from sdg.producten.tests.factories.product import (
     ProductVersieFactory,
@@ -31,10 +31,27 @@ class ProductTests(TestCase):
 
     @freeze_time(NOW_DATE)
     def test_most_recent_version_with_multiple_products(self):
-        v1, v2, v3 = SpecifiekProductVersieFactory.create_batch(3)
-        self.assertEqual(v1.product.most_recent_version, v1)
-        self.assertEqual(v2.product.most_recent_version, v2)
-        self.assertEqual(v3.product.most_recent_version, v3)
+        p1, p2, p3 = SpecifiekProductVersieFactory.create_batch(3)
+        self.assertEqual(p1.product.most_recent_version, p1)
+        self.assertEqual(p2.product.most_recent_version, p2)
+        self.assertEqual(p3.product.most_recent_version, p3)
+
+    @freeze_time(NOW_DATE)
+    def test_active_version(self):
+        product = SpecifiekProductFactory.create()
+        ProductVersieFactory.create(product=product, publicatie_datum=None)
+        active = ProductVersieFactory.create(product=product, publicatie_datum=NOW_DATE)
+        ProductVersieFactory.create(product=product, publicatie_datum=FUTURE_DATE)
+        self.assertEqual(product.active_version, active)
+
+    @freeze_time(NOW_DATE)
+    def test_active_version_with_multiple_products(self):
+        p1, p2, p3 = SpecifiekProductVersieFactory.create_batch(
+            3, publicatie_datum=NOW_DATE
+        )
+        self.assertEqual(p1.product.active_version, p1)
+        self.assertEqual(p2.product.active_version, p2)
+        self.assertEqual(p3.product.active_version, p3)
 
 
 class LabeledURLTests(TestCase):

@@ -413,7 +413,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 1)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -441,7 +441,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 1)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -474,7 +474,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 1)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -503,7 +503,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -536,7 +536,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -569,7 +569,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -608,7 +608,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -651,7 +651,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -690,7 +690,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -729,7 +729,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -768,7 +768,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
@@ -807,7 +807,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 2)
 
-        latest_active_version = self.product.laatste_actieve_versie
+        latest_active_version = self.product.active_version
         latest_version = self.product.most_recent_version
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
