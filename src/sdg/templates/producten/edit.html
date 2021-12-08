@@ -13,10 +13,10 @@
 
     <div class="tabs tabs--inline">
         <div class="tabs__tabs">
-            {% for key, value in product.beschikbare_talen.items %}
-                <a href="#{{ value }}" data-id="{{ value }}"
+            {% for language in product.beschikbare_talen %}
+                <a href="#{{ language.code }}" data-id="{{ language.code }}"
                    class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ key }}
+                    {{ language.name }}
                 </a>
             {% endfor %}
         </div>

@@ -24,6 +24,7 @@ from sdg.producten.models import (
     ProductFieldMixin,
 )
 from sdg.producten.models.managers import ProductQuerySet, ProductVersieQuerySet
+from sdg.producten.types import Language
 from sdg.producten.utils import build_url_kwargs, is_past_date
 
 User = get_user_model()
@@ -197,18 +198,22 @@ class Product(ProductFieldMixin, models.Model):
         )
 
     @cached_property
-    def beschikbare_talen(self) -> dict:
+    def beschikbare_talen(self) -> List[Language]:
         """
-        :returns: A dictionary {display: value} of available languages for this product.
+        :returns: A list of available languages for this product.
         """
         most_recent_version = self.most_recent_version
-        if most_recent_version:
-            return {
-                i.get_taal_display(): i.taal
-                for i in most_recent_version.vertalingen.all()
-            }
-        else:
-            return {}
+        if not most_recent_version:
+            return []
+
+        return [
+            Language(
+                name=t.get_taal_display,
+                code=t.taal,
+                checked=getattr(t.generiek_informatie, "datum_check", None) is not None,
+            )
+            for t in most_recent_version.vertalingen.all()
+        ]
 
     @cached_property
     def generic_product(self):

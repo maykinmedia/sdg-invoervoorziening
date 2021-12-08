@@ -29,9 +29,15 @@
                         {% product_icon product %}
                     </div>
                     <div>
-                        <div class="products__item-title">{{ product.name }}</div>
-                        <div
-                            class="products__item-help">{{ product.beschikbare_talen|join:", " }}</div>
+                        <div class="products__item-title">
+                            {{ product.name|title }}
+                            {% for language in product.beschikbare_talen %}
+                                {% flag language %}
+                            {% endfor %}
+                        </div>
+                        <div class="products__item-help">
+                            {{ product.doelgroep|join:", "|capfirst }}
+                        </div>
                     </div>
                     <div class="products__item-icon">
                         <i class="fas fa-angle-right"></i>
