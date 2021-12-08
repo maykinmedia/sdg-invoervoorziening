@@ -25,7 +25,6 @@ module.exports = {
 
         'admin_overrides': `${__dirname}/${paths.scssSrcDir}/admin/admin_overrides.scss`,
         'fontawesome': `./node_modules/@fortawesome/fontawesome-free/js/all.js`,
-        'flatpickr': `flatpickr/dist/flatpickr.css`,
     },
 
     // (Output) bundle locations.
