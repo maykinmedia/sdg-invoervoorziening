@@ -3,6 +3,7 @@ from typing import Optional
 
 from django import forms
 
+from ..core.constants import DoelgroepChoices
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import CheckboxSelectMultiple, ProductRadioSelect
@@ -31,10 +32,18 @@ class LocalizedProductForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     product_aanwezig = forms.NullBooleanField(required=False)
     product_aanwezig_toelichting = forms.CharField(
-        required=False, widget=forms.Textarea
+        required=False,
+        widget=forms.Textarea,
     )
     lokaties = forms.ModelMultipleChoiceField(
-        queryset=None, required=False, widget=CheckboxSelectMultiple()
+        queryset=None,
+        required=False,
+        widget=CheckboxSelectMultiple(),
+    )
+    doelgroep = forms.MultipleChoiceField(
+        choices=DoelgroepChoices.choices,
+        required=False,
+        widget=CheckboxSelectMultiple(),
     )
 
     class Meta:
@@ -43,6 +52,7 @@ class ProductForm(forms.ModelForm):
             "product_aanwezig",
             "product_aanwezig_toelichting",
             "lokaties",
+            "doelgroep",
         )
 
     def __init__(self, *args, **kwargs):
