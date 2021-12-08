@@ -3,7 +3,7 @@ from typing import Any
 
 
 @dataclass
-class ProductField:
+class ProductInfo:
     name: str
     verbose_name: str
     value: Any
