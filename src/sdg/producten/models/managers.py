@@ -35,7 +35,7 @@ class ProductQuerySet(models.QuerySet):
         return self.prefetch_related(
             Prefetch(
                 "versies",
-                to_attr="_active_versions",
+                to_attr="_active_version",
                 queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
                     "vertalingen"
                 ),

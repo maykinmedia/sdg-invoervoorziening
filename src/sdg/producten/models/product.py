@@ -16,6 +16,7 @@ from django.utils.translation import ugettext_lazy as _
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
+from sdg.core.utils import get_from_cache
 from sdg.producten.constants import PublishChoices
 from sdg.producten.models import (
     LocalizedGeneriekProduct,
@@ -226,66 +227,20 @@ class Product(ProductFieldMixin, models.Model):
 
     @property
     def name(self):
-        """
-        Check if annotated cache is available from the manager. If there's no annotation, retrieve it.
-        :returns: The generic product's upn label.
-        """
-        _cached = getattr(self, "_name", None)
-
-        if _cached is None:
-            this = self.__class__.objects.annotate_name().get(pk=self.pk)
-            return this.name
-
-        return _cached
+        """:returns: The generic product's upn label."""
+        return get_from_cache(self, "name", manager_methods=["annotate_name"])
 
     @property
     def most_recent_version(self):
-        """
-        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
-        :returns: The most recent `ProductVersie`.
-        """
-        _cached = getattr(self, "_most_recent_version", None)
-
-        if _cached is None:
-            this = self.__class__.objects.most_recent().get(pk=self.pk)
-            return this.most_recent_version
-
-        try:
-            return _cached[0]
-        except IndexError:
-            return None  # no recent versions
+        """:returns: The most recent `ProductVersie`."""
+        return get_from_cache(
+            self, "most_recent_version", manager_methods=["most_recent"]
+        )
 
     @property
     def active_version(self):
-        """
-        Check if prefetch cache is available from the manager. If there's no prefetched version, retrieve it.
-        :returns: The most recent **active** `ProductVersie`.
-        """
-        _cached = getattr(self, "_active_versions", None)
-
-        if _cached is None:
-            this = self.__class__.objects.active().get(pk=self.pk)
-            return this.active_version
-
-        try:
-            return _cached[0]
-        except IndexError:
-            return None  # no active versions
-
-    def get_active_field(self, field_name, default=None):
-        """
-        Get specific field value from `active_versions`.
-        Validate that `active_versions` equals 1.
-        """
-        active_versions = getattr(self, "_active_versions", None)
-
-        if not active_versions:
-            return default
-
-        if len(active_versions) != 1:
-            raise FieldError("Active version must be equal to 1")
-
-        return getattr(active_versions[0], field_name)
+        """:returns: The most recent active `ProductVersie`."""
+        return get_from_cache(self, "active_version", manager_methods=["active"])
 
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""

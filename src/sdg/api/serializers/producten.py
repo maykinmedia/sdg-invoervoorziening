@@ -107,8 +107,14 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
 
+    @staticmethod
+    def _get_active_field(product: Product, field_name, default=None):
+        """Get the value of a field from the product's active version."""
+        active_version = getattr(product, "active_version", None)
+        return getattr(active_version, field_name) if active_version else default
+
     def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
-        translations = obj.get_active_field("vertalingen", default=[])
+        translations = self._get_active_field(obj, "vertalingen", default=[])
 
         if translations and getattr(obj, "_filter_taal", None):
             translations = [i for i in translations.all() if i.taal == obj._filter_taal]
@@ -116,7 +122,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
         return LocalizedProductSerializer(translations, many=True).data
 
     def get_versie(self, obj: Product) -> int:
-        return obj.get_active_field("versie", default=0)
+        return self._get_active_field(obj, "versie", default=0)
 
     def get_publicatie_datum(self, obj: Product) -> date:
-        return obj.get_active_field("publicatie_datum")
+        return self._get_active_field(obj, "publicatie_datum")
