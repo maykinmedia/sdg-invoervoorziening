@@ -18,8 +18,8 @@ class ProductFieldMixin:
         """
         value = field.value_from_object(self)
 
-        if not value and getattr(self, "referentie_informatie", None):
-            return getattr(self.referentie_informatie, field.name, None), True
+        if not value and hasattr(self, "referentie_informatie"):
+            return getattr(self.referentie_informatie, field.name, ""), True
 
         return value, False
 
