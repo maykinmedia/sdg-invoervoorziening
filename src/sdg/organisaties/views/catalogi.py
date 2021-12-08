@@ -46,15 +46,9 @@ class CatalogListView(OverheidMixin, ListView):
 
             products = Product.objects.filter(catalogus=catalog)
             reference_products = Product.objects.filter(catalogus=reference_catalog)
-            for queryset in (products, reference_products):
-                (
-                    queryset.most_recent()
-                    .annotate_name()
-                    .annotate_area()
-                    .select_generic()
-                    .select_related("catalogus__lokale_overheid")
-                    .exclude(area__isnull=True)
-                )
+            products, reference_products = (
+                _apply_filters(queryset) for queryset in (products, reference_products)
+            )
 
             intersected_products = products | reference_products.exclude(
                 specifieke_producten__in=products
@@ -70,3 +64,15 @@ class CatalogListView(OverheidMixin, ListView):
 
         context["catalogs"] = catalogs
         return context
+
+
+def _apply_filters(queryset):
+    """Apply common filter/annotations/selects to queryset of products."""
+    return (
+        queryset.most_recent()
+        .annotate_name()
+        .annotate_area()
+        .select_generic()
+        .select_related("catalogus__lokale_overheid")
+        .exclude(area__isnull=True)
+    )
