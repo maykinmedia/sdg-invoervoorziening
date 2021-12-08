@@ -219,7 +219,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     @cached_property
     def referentie_informatie(self):  # TODO: optimize
         reference_product = self.product_versie.product.referentie_product
-        if reference_product:
+        if not reference_product:
             return None
         try:
             return reference_product.most_recent_version.vertalingen.get(taal=self.taal)
