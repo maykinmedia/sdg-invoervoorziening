@@ -65,25 +65,6 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
 
     objects = LokaleOverheidManager()
 
-    def create_specific_catalogs(self) -> List[ProductenCatalogus]:
-        """Create a specific catalog (if it doesn't exist) for each reference catalog."""
-
-        catalogus_list = []
-        for catalog in ProductenCatalogus.objects.filter(is_referentie_catalogus=True):
-            catalogus_list.append(
-                ProductenCatalogus(
-                    referentie_catalogus=catalog,
-                    lokale_overheid=self,
-                    is_referentie_catalogus=False,
-                    domein=catalog.domein,
-                    versie=catalog.versie,
-                    naam=f"{str(self)} ({catalog.naam})",
-                )
-            )
-        return ProductenCatalogus.objects.bulk_create(
-            catalogus_list, ignore_conflicts=True
-        )
-
     def user_has_manager_role(self, user: User) -> bool:
         """:returns: Boolean indicating if the provided user has manager role for this municipality."""
         return self.roles.filter(

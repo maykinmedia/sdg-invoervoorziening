@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from django.views.generic import DetailView
+from django.views.generic import ListView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus, Thema
@@ -8,22 +8,29 @@ from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
 
 
-class CatalogListView(OverheidMixin, DetailView):
+class CatalogListView(OverheidMixin, ListView):
     template_name = "organisaties/catalogi/list.html"
-    model = LokaleOverheid
+    model = ProductenCatalogus
     required_roles = ["is_redacteur"]
 
     def get_lokale_overheid(self):
-        self.object = self.get_object()
-        return self.object
+        self.lokale_overheid = LokaleOverheid.objects.get(pk=self.kwargs["pk"])
+        self.object_list = (
+            self.get_queryset()
+            .select_related("lokale_overheid")
+            .filter(
+                lokale_overheid=self.lokale_overheid,
+            )
+        )
+        return self.lokale_overheid
 
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data(object=self.object)
+        context = self.get_context_data()
         return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
-        self.object.create_specific_catalogs()
+        self.object_list.create_specific_catalogs(municipality=self.lokale_overheid)
 
         themes = (
             Thema.objects.all()
@@ -32,32 +39,19 @@ class CatalogListView(OverheidMixin, DetailView):
         )
         areas_template = {t.informatiegebied.informatiegebied: set() for t in themes}
 
-        catalogs = ProductenCatalogus.objects.specific_catalogs(
-            municipality=self.object
-        )
+        catalogs = self.object_list.specific_catalogs()
         for catalog in catalogs:
             reference_catalog = catalog.referentie_catalogus
             catalog.areas = deepcopy(areas_template)
 
-            products = (
-                Product.objects.filter(catalogus=catalog)
-                .most_recent()
-                .annotate_name()
-                .annotate_area()
-                .select_generic()
-                .exclude(area__isnull=True)
-            )
-            reference_products = (
-                Product.objects.filter(catalogus=reference_catalog)
-                .most_recent()
-                .annotate_name()
-                .annotate_area()
-                .select_generic()
-                .exclude(area__isnull=True)
+            products = Product.objects.filter(catalogus=catalog)
+            reference_products = Product.objects.filter(catalogus=reference_catalog)
+            products, reference_products = (
+                _apply_filters(queryset) for queryset in (products, reference_products)
             )
 
-            intersected_products = list(
-                products | reference_products.exclude(specifieke_producten__in=products)
+            intersected_products = products | reference_products.exclude(
+                specifieke_producten__in=products
             )
 
             for product in intersected_products:
@@ -71,6 +65,14 @@ class CatalogListView(OverheidMixin, DetailView):
         context["catalogs"] = catalogs
         return context
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.prefetch_related("lokaties", "organisatie", "catalogi")
+
+def _apply_filters(queryset):
+    """Apply common filter/annotations/selects to queryset of products."""
+    return (
+        queryset.most_recent()
+        .annotate_name()
+        .annotate_area()
+        .select_generic()
+        .select_related("catalogus__lokale_overheid")
+        .exclude(area__isnull=True)
+    )

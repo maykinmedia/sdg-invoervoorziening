@@ -32,7 +32,7 @@ class InformatiegebiedFactory(DjangoModelFactory):
 class ThemaFactory(DjangoModelFactory):
     informatiegebied = factory.SubFactory(InformatiegebiedFactory)
     thema = factory.Faker("word")
-    thema_uri = factory.Faker("url")
+    thema_uri = factory.Sequence(lambda n: f"http://thema-uri{n}.org")
 
     class Meta:
         model = Thema
