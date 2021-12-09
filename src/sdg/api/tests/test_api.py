@@ -3,7 +3,6 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from sdg.api.serializers import ProductSerializer
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
@@ -39,21 +38,7 @@ class CatalogiTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(
-            {
-                "url": f"http://testserver{reverse('api:productencatalogus-detail', args=[catalog.uuid])}",
-                "uuid": str(catalog.uuid),
-                "domein": catalog.domein,
-                "naam": catalog.naam,
-                "organisatie": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[catalog.lokale_overheid.uuid])}",
-                "producten": ProductSerializer(catalog.producten, many=True).data,
-                "isReferentieCatalogus": catalog.is_referentie_catalogus,
-                "referentieCatalogus": catalog.referentie_catalogus,
-                "toelichting": catalog.toelichting,
-                "versie": catalog.versie,
-            },
-            data,
-        )
+        self.assertEqual(str(catalog.uuid), data["uuid"])
 
 
 class ProductenTests(APITestCase):
@@ -88,10 +73,6 @@ class ProductenTests(APITestCase):
         self.assertEqual(f"{product.upn.upn_label}", data["upnLabel"])
         self.assertEqual(f"{product.upn.upn_uri}", data["upnUri"])
         self.assertEqual(1, data["versie"])
-        self.assertEqual(
-            f"http://testserver{reverse('api:lokaleoverheid-detail', args=[product.catalogus.lokale_overheid.uuid])}",
-            data["organisatie"],
-        )
         self.assertEqual(
             f"http://testserver{reverse('api:productencatalogus-detail', args=[product.catalogus.uuid])}",
             data["catalogus"],
@@ -224,26 +205,4 @@ class LocatiesTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(
-            {
-                "url": f"http://testserver{reverse('api:lokatie-detail', args=[lokatie.uuid])}",
-                "uuid": str(lokatie.uuid),
-                "nummer": int(lokatie.nummer),
-                "land": lokatie.land,
-                "naam": lokatie.naam,
-                "plaats": lokatie.plaats,
-                "postcode": lokatie.postcode,
-                "straat": lokatie.straat,
-                "openingstijden": {
-                    "maandag": lokatie.maandag,
-                    "dinsdag": lokatie.dinsdag,
-                    "woensdag": lokatie.woensdag,
-                    "donderdag": lokatie.donderdag,
-                    "vrijdag": lokatie.vrijdag,
-                    "zaterdag": lokatie.zaterdag,
-                    "zondag": lokatie.zondag,
-                },
-                "organisatie": f"http://testserver{reverse('api:lokaleoverheid-detail', args=[lokatie.lokale_overheid.uuid])}",
-            },
-            data,
-        )
+        self.assertEqual(str(lokatie.uuid), data["uuid"])

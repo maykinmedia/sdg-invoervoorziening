@@ -1,10 +1,15 @@
 from rest_framework import serializers
 
+from sdg.api.serializers.organisaties import OrganisatieBaseSerializer
+from sdg.api.serializers.producten import ProductBaseSerializer
 from sdg.core.models import ProductenCatalogus
 
 
 class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for ProductenCatalogus details, including organizations and products."""
+
+    organisatie = OrganisatieBaseSerializer(source="lokale_overheid")
+    producten = ProductBaseSerializer(many=True)
 
     class Meta:
         model = ProductenCatalogus
@@ -29,10 +34,4 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
                 "lookup_field": "uuid",
                 "view_name": "api:productencatalogus-detail",
             },
-            "organisatie": {
-                "source": "lokale_overheid",
-                "lookup_field": "uuid",
-                "view_name": "api:lokaleoverheid-detail",
-            },
-            "producten": {"lookup_field": "uuid", "view_name": "api:product-detail"},
         }

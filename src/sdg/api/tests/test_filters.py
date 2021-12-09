@@ -9,6 +9,7 @@ from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
     LokatieFactory,
 )
+from sdg.producten.models import Product
 from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.localized import LocalizedProductFactory
 from sdg.producten.tests.factories.product import (
@@ -26,6 +27,40 @@ class ProductenCatalogusFilterTests(APITestCase):
 
         response = self.client.get(
             self.url, {"organisatie": f"{catalog.lokale_overheid.uuid}"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(catalog.uuid), data[0]["uuid"])
+
+    def test_filter_organisatie_owms_identifier(self):
+        catalog, *_ = ProductenCatalogusFactory.create_batch(5)
+
+        response = self.client.get(
+            self.url,
+            {
+                "organisatieOwmsIdentifier": f"{catalog.lokale_overheid.organisatie.owms_identifier}"
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(catalog.uuid), data[0]["uuid"])
+
+    def test_filter_organisatie_owms_pref_label(self):
+        catalog, *_ = ProductenCatalogusFactory.create_batch(5)
+
+        response = self.client.get(
+            self.url,
+            {
+                "organisatieOwmsPrefLabel": f"{catalog.lokale_overheid.organisatie.owms_pref_label}"
+            },
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -205,6 +240,54 @@ class ProductFilterTests(APITestCase):
 
         self.assertEqual("nl", first_result["vertalingen"][0]["taal"])
 
+    def test_filter_organisatie_owms_identifier(self):
+        catalog1, catalog2 = ProductenCatalogusFactory.create_batch(
+            2,
+            is_referentie_catalogus=True,
+        )
+        product1, *_ = ReferentieProductFactory.create_batch(2, catalogus=catalog1)
+        ReferentieProductFactory.create_batch(3, catalogus=catalog2)
+
+        self.assertEqual(5, Product.objects.count())
+
+        response = self.client.get(
+            self.url,
+            {
+                "organisatieOwmsIdentifier": catalog1.lokale_overheid.organisatie.owms_identifier
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(2, len(data))
+        self.assertEqual(str(product1.uuid), data[0]["uuid"])
+
+    def test_filter_organisatie_owms_pref_label(self):
+        catalog1, catalog2 = ProductenCatalogusFactory.create_batch(
+            2,
+            is_referentie_catalogus=True,
+        )
+        product1, *_ = ReferentieProductFactory.create_batch(2, catalogus=catalog1)
+        ReferentieProductFactory.create_batch(3, catalogus=catalog2)
+
+        self.assertEqual(5, Product.objects.count())
+
+        response = self.client.get(
+            self.url,
+            {
+                "organisatieOwmsPrefLabel": catalog1.lokale_overheid.organisatie.owms_pref_label
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(2, len(data))
+        self.assertEqual(str(product1.uuid), data[0]["uuid"])
+
 
 class LokatieFilterTests(APITestCase):
     url = reverse("api:lokatie-list")
@@ -214,6 +297,40 @@ class LokatieFilterTests(APITestCase):
 
         response = self.client.get(
             self.url, {"organisatie": f"{location.lokale_overheid.uuid}"}
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(location.uuid), data[0]["uuid"])
+
+    def test_filter_organisatie_owms_identifier(self):
+        location, *_ = LokatieFactory.create_batch(5)
+
+        response = self.client.get(
+            self.url,
+            {
+                "organisatieOwmsIdentifier": f"{location.lokale_overheid.organisatie.owms_identifier}"
+            },
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+
+        self.assertEqual(1, len(data))
+        self.assertEqual(str(location.uuid), data[0]["uuid"])
+
+    def test_filter_organisatie_owms_pref_label(self):
+        location, *_ = LokatieFactory.create_batch(5)
+
+        response = self.client.get(
+            self.url,
+            {
+                "organisatieOwmsPrefLabel": f"{location.lokale_overheid.organisatie.owms_pref_label}"
+            },
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

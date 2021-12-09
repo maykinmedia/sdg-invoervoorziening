@@ -148,7 +148,7 @@ jobs:
 
   oas-up-to-date:
     needs: tests
-    name:  Check for unexepected OAS changes
+    name:  Check for unexpected OAS changes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

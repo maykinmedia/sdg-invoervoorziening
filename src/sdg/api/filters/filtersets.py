@@ -17,7 +17,19 @@ class ProductenCatalogusFilterSet(FilterSet):
 
     organisatie = filters.UUIDFilter(
         field_name="lokale_overheid__uuid",
-        help_text=_("Toont catalogi die bij de opgegeven organisatie horen."),
+        help_text=_("Toont catalogi die bij de opgegeven organisatie UUID horen."),
+    )
+    organisatieOwmsIdentifier = filters.CharFilter(
+        field_name="lokale_overheid__organisatie__owms_identifier",
+        help_text=_(
+            "Toont catalogi die bij de opgegeven organisatie OWMS identifier horen."
+        ),
+    )
+    organisatieOwmsPrefLabel = filters.CharFilter(
+        field_name="lokale_overheid__organisatie__owms_pref_label",
+        help_text=_(
+            "Toont catalogi die bij de opgegeven organisatie OWMS pref label horen."
+        ),
     )
 
     class Meta:
@@ -65,6 +77,18 @@ class ProductFilterSet(FilterSet):
     upnUri = filters.CharFilter(
         method="filter_upn", help_text=_("Toont producten met een UPN URI")
     )
+    organisatieOwmsIdentifier = filters.CharFilter(
+        field_name="catalogus__lokale_overheid__organisatie__owms_identifier",
+        help_text=_(
+            "Toont producten die bij de opgegeven organisatie OWMS identifier horen."
+        ),
+    )
+    organisatieOwmsPrefLabel = filters.CharFilter(
+        field_name="catalogus__lokale_overheid__organisatie__owms_pref_label",
+        help_text=_(
+            "Toont producten die bij de opgegeven organisatie OWMS pref label horen."
+        ),
+    )
 
     def filter_product_aanwezig(self, queryset, name, value):
         """:returns: filtered queryset based on `product_aanwezig`'s boolean value."""
@@ -108,6 +132,18 @@ class LokatieFilterSet(FilterSet):
     organisatie = filters.UUIDFilter(
         field_name="lokale_overheid__uuid",
         help_text=_("Toont locaties die bij de opgegeven organisatie horen."),
+    )
+    organisatieOwmsIdentifier = filters.CharFilter(
+        field_name="lokale_overheid__organisatie__owms_identifier",
+        help_text=_(
+            "Toont locaties die bij de opgegeven organisatie OWMS identifier horen."
+        ),
+    )
+    organisatieOwmsPrefLabel = filters.CharFilter(
+        field_name="lokale_overheid__organisatie__owms_pref_label",
+        help_text=_(
+            "Toont locaties die bij de opgegeven organisatie OWMS pref label horen."
+        ),
     )
 
     class Meta:

@@ -13,7 +13,19 @@ paths:
         schema:
           type: string
           format: uuid
-        description: Toont catalogi die bij de opgegeven organisatie horen.
+        description: Toont catalogi die bij de opgegeven organisatie UUID horen.
+      - in: query
+        name: organisatieOwmsIdentifier
+        schema:
+          type: string
+        description: Toont catalogi die bij de opgegeven organisatie OWMS identifier
+          horen.
+      - in: query
+        name: organisatieOwmsPrefLabel
+        schema:
+          type: string
+        description: Toont catalogi die bij de opgegeven organisatie OWMS pref label
+          horen.
       - name: page
         required: false
         in: query
@@ -69,6 +81,18 @@ paths:
           type: string
           format: uuid
         description: Toont locaties die bij de opgegeven organisatie horen.
+      - in: query
+        name: organisatieOwmsIdentifier
+        schema:
+          type: string
+        description: Toont locaties die bij de opgegeven organisatie OWMS identifier
+          horen.
+      - in: query
+        name: organisatieOwmsPrefLabel
+        schema:
+          type: string
+        description: Toont locaties die bij de opgegeven organisatie OWMS pref label
+          horen.
       - name: page
         required: false
         in: query
@@ -203,6 +227,18 @@ paths:
           type: string
           format: uuid
         description: Toont producten die bij de opgegeven organisatie horen.
+      - in: query
+        name: organisatieOwmsIdentifier
+        schema:
+          type: string
+        description: Toont producten die bij de opgegeven organisatie OWMS identifier
+          horen.
+      - in: query
+        name: organisatieOwmsPrefLabel
+        schema:
+          type: string
+        description: Toont producten die bij de opgegeven organisatie OWMS pref label
+          horen.
       - name: page
         required: false
         in: query
@@ -504,8 +540,7 @@ components:
           - $ref: '#/components/schemas/Openingstijden'
           readOnly: true
         organisatie:
-          type: string
-          format: uri
+          $ref: '#/components/schemas/OrganisatieBase'
       required:
       - land
       - naam
@@ -519,6 +554,7 @@ components:
       - uuid
     Openingstijden:
       type: object
+      description: Serializer for location based opening times.
       properties:
         maandag:
           type: array
@@ -555,6 +591,27 @@ components:
           items:
             type: string
             maxLength: 32
+    OrganisatieBase:
+      type: object
+      description: |-
+        Serializer that exposes a small subset of the fields for a Organisatie, used in references to a organisation.
+        - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        owmsIdentifier:
+          type: string
+          format: uri
+          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
+        owmsPrefLabel:
+          type: string
+          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+      required:
+      - owmsIdentifier
+      - owmsPrefLabel
+      - url
     Overheidsorganisatie:
       type: object
       description: Serializer for Overheidsorganisatie, including identifier, label
@@ -707,8 +764,7 @@ components:
           format: date
           readOnly: true
         organisatie:
-          type: string
-          format: uri
+          $ref: '#/components/schemas/OrganisatieBase'
         productAanwezig:
           type: boolean
           nullable: true
@@ -742,13 +798,10 @@ components:
         gerelateerdeProducten:
           type: array
           items:
-            type: string
-            format: uri
-            title: Gerelateerd aan
-          title: Gerelateerd aan
-          description: Een verwijzing naar een gerelateerd product.
+            $ref: '#/components/schemas/ProductBase'
       required:
       - catalogus
+      - gerelateerdeProducten
       - organisatie
       - publicatieDatum
       - upnLabel
@@ -757,6 +810,25 @@ components:
       - uuid
       - versie
       - vertalingen
+    ProductBase:
+      type: object
+      description: |-
+        Serializer that exposes a small subset of the fields for a Product, used in references to a product.
+        Fields: `url`, `upnUri`, `upnLabel`
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        upnUri:
+          type: string
+          format: uri
+        upnLabel:
+          type: string
+      required:
+      - upnLabel
+      - upnUri
+      - url
     ProductVersie:
       type: object
       description: Serializer for the version of a product.
@@ -813,9 +885,7 @@ components:
           description: De naam van de producten catalogus.
           maxLength: 120
         organisatie:
-          type: string
-          format: uri
-          description: De lokale overheid die bij deze catalogus hoort.
+          $ref: '#/components/schemas/OrganisatieBase'
         isReferentieCatalogus:
           type: boolean
           description: Geeft aan of dit een referentiecatalogus is.
@@ -835,8 +905,7 @@ components:
         producten:
           type: array
           items:
-            type: string
-            format: uri
+            $ref: '#/components/schemas/ProductBase'
       required:
       - domein
       - naam
