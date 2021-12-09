@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 
 from sdg.core.constants import TaalChoices
-from sdg.producten.types import ProductField
+from sdg.producten.types import ProductInfo
 
 
 class ProductFieldMixin:
@@ -18,17 +18,17 @@ class ProductFieldMixin:
         """
         value = field.value_from_object(self)
 
-        if not value and getattr(self, "referentie_informatie", None):
-            return getattr(self.referentie_informatie, field.name, None), True
+        if not value and hasattr(self, "referentie_informatie"):
+            return getattr(self.referentie_informatie, field.name, ""), True
 
         return value, False
 
-    def _get_field(self, field) -> ProductField:
+    def _get_field(self, field) -> ProductInfo:
         """Gets field specific information for products."""
         if isinstance(field, str):
             field = self.__class__._meta.get_field(field)
         value, is_reference = self._get_field_value(field)
-        return ProductField(
+        return ProductInfo(
             name=field.name,
             verbose_name=field.verbose_name,
             value=value,
@@ -38,12 +38,12 @@ class ProductFieldMixin:
             is_list=isinstance(field, ArrayField),
         )
 
-    def get_fields(self) -> List[ProductField]:
+    def get_fields(self) -> List[ProductInfo]:
         """Returns data for each field as a list of Field objects."""
         all_fields = self.__class__._meta.fields
         return [self._get_field(field) for field in all_fields]
 
-    def get_field(self, field) -> ProductField:
+    def get_field(self, field) -> ProductInfo:
         """Returns data for a single field."""
         return self._get_field(field)
 

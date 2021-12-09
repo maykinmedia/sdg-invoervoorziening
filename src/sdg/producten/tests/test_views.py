@@ -246,14 +246,14 @@ class ProductDetailViewTests(WebTest):
 
         response = self.app.get(product_version.product.get_absolute_url())
 
-        text_nl = response.pyquery(TAB_NL).text()
-        text_en = response.pyquery(TAB_EN).text()
+        text_nl = response.pyquery(TAB_NL).text().lower()
+        text_en = response.pyquery(TAB_EN).text().lower()
 
-        self.assertIn(specific_nl.product_titel_decentraal, text_nl)
-        self.assertIn(reference_nl.specifieke_tekst, text_nl)
+        self.assertIn(specific_nl.product_titel_decentraal.lower(), text_nl)
+        self.assertIn(reference_nl.specifieke_tekst.lower(), text_nl)
 
-        self.assertIn(specific_en.product_titel_decentraal, text_en)
-        self.assertIn(reference_en.specifieke_tekst, text_en)
+        self.assertIn(specific_en.product_titel_decentraal.lower(), text_en)
+        self.assertIn(reference_en.specifieke_tekst.lower(), text_en)
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_shows_active_data_with_schedule_notification(self):

@@ -199,7 +199,7 @@ class LokaleOverheidDetailViewTests(WebTest):
 
         response = self.app.get(specific_lokale_overheid.get_absolute_url())
 
-        response_text = response.text
+        response_text = response.text.lower()
 
         self.assertEqual(response.pyquery(CATALOG_SELECTOR).length, 1)
         self.assertEqual(response.pyquery(PRODUCT_SELECTOR).length, 3)
@@ -245,7 +245,7 @@ class LokaleOverheidDetailViewTests(WebTest):
 
         response = self.app.get(reference_lokale_overheid.get_absolute_url())
 
-        response_text = response.text
+        response_text = response.text.lower()
 
         self.assertEqual(response.pyquery(CATALOG_SELECTOR).length, 2)
         self.assertEqual(response.pyquery(PRODUCT_SELECTOR).length, 6)

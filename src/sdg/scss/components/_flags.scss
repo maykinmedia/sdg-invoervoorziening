@@ -1,0 +1,17 @@
+@import "~flag-icon-css/sass/flag-icons";
+
+.flag-icon {
+  font-size: 12px;
+  border-radius: 2px;
+  margin-left: 2px;
+
+  &--disabled {
+    filter: grayscale(100%);
+    opacity: 0.3;
+  }
+
+  &:before {
+    content: '\00a0';
+  }
+}
+

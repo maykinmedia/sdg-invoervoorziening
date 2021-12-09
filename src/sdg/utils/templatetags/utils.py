@@ -2,6 +2,8 @@ from django import template
 from django.conf import settings
 from django.utils.html import format_html
 
+from sdg.producten.types import Language
+
 register = template.Library()
 
 
@@ -123,3 +125,8 @@ def status_icon(status, **kwargs):
 @register.inclusion_tag("producten/_include/product_icon.html")
 def product_icon(product, **kwargs):
     return {**kwargs, "product": product}
+
+
+@register.inclusion_tag("core/_include/flag.html")
+def flag(language: Language, **kwargs):
+    return {**kwargs, "language": language}

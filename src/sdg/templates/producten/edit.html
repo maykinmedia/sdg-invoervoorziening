@@ -13,10 +13,10 @@
 
     <div class="tabs tabs--inline">
         <div class="tabs__tabs">
-            {% for key, value in product.beschikbare_talen.items %}
-                <a href="#{{ value }}" data-id="{{ value }}"
+            {% for language in product.beschikbare_talen %}
+                <a href="#{{ language.code }}" data-id="{{ language.code }}"
                    class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ key }}
+                    {{ language.name }}
                 </a>
             {% endfor %}
         </div>
@@ -64,16 +64,20 @@
                 <tr>
                 </tr>
                 <tr>
-                    <td class="tabs__table-cell" width="25%">{% trans "Product aanwezig" %}</td>
+                    <td class="tabs__table-cell" width="25%">{% trans "Aanwezig" %}</td>
                     <td class="tabs__table-cell">{% select product_form.product_aanwezig %}</td>
                 </tr>
                 <tr>
-                    <td class="tabs__table-cell" width="25%">{% trans "Product aanwezig toelichting" %}</td>
+                    <td class="tabs__table-cell" width="25%">{% trans "Aanwezig toelichting" %}</td>
                     <td class="tabs__table-cell">{{ product_form.product_aanwezig_toelichting|addclass:"form__input" }}</td>
                 </tr>
                 <tr>
-                    <td class="tabs__table-cell">{% trans "Product lokaties" %}</td>
+                    <td class="tabs__table-cell">{% trans "Lokaties" %}</td>
                     <td class="tabs__table-cell">{{ product_form.lokaties }}</td>
+                </tr>
+                <tr>
+                    <td class="tabs__table-cell">{% trans "Doelgroep" %}</td>
+                    <td class="tabs__table-cell">{{ product_form.doelgroep }}</td>
                 </tr>
                 </tbody>
             </table>

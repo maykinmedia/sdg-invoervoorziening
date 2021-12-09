@@ -21,4 +21,17 @@
         <input type="text" class="filter__input" placeholder="Filter">
         <span class="expand"><i class="fas fa-expand-alt"></i></span>
     </div>
+    <div class="filter__group">
+        {% for choice, label in group_choices %}
+            <div class="pretty p-default p-default p-thick p-smooth">
+                <input type="checkbox" id="{{ choice }}" name="{{ choice }}" class="filter__group--checkbox"
+                       value="{{ choice }}">
+                <div class="state p-primary">
+                    <label for="{{ choice }}" class="checkbox">
+                        {{ label }}
+                    </label>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 </div>

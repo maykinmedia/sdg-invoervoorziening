@@ -217,18 +217,20 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     objects = LocalizedManager()
 
     @cached_property
-    def referentie_informatie(self):
+    def referentie_informatie(self):  # TODO: optimize
         reference_product = self.product_versie.product.referentie_product
-        if reference_product:
+        if not reference_product:
+            return None
+        try:
             return reference_product.most_recent_version.vertalingen.get(taal=self.taal)
-        else:
+        except LocalizedProduct.DoesNotExist:
             return None
 
     @cached_property
     def generiek_informatie(self):
-        return self.product_versie.product.generic_product.vertalingen.get(
-            taal=self.taal
-        )
+        for pv in self.product_versie.product.generic_product.vertalingen.all():
+            if pv.taal == self.taal:
+                return pv
 
     def localize_specific_products(self):
         """

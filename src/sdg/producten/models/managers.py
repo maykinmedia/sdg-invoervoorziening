@@ -66,7 +66,9 @@ class ProductQuerySet(models.QuerySet):
                 "versies",
                 to_attr="_most_recent_version",
                 queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
-                    "vertalingen"
+                    "vertalingen",
+                    "product__generiek_product__vertalingen",
+                    "product__referentie_product__generiek_product__vertalingen",
                 ),
             )
         )

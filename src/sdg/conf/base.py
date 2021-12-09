@@ -188,6 +188,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # Additional locations of static files
 STATICFILES_DIRS = [
     os.path.join(DJANGO_PROJECT_DIR, "static"),
+    os.path.join(BASE_DIR, "node_modules", "flag-icon-css"),
 ]
 
 # List of finder classes that know how to find static files in

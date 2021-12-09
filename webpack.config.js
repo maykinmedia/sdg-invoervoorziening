@@ -24,8 +24,7 @@ module.exports = {
         [`${paths.package.name}-js`]: `${__dirname}/${paths.jsEntry}`,
 
         'admin_overrides': `${__dirname}/${paths.scssSrcDir}/admin/admin_overrides.scss`,
-        'fontawesome': `./node_modules/@fortawesome/fontawesome-free/js/all.js`,
-        'flatpickr': `flatpickr/dist/flatpickr.css`,
+        'fontawesome': `${__dirname}/node_modules/@fortawesome/fontawesome-free/js/all.js`,
     },
 
     // (Output) bundle locations.
@@ -84,7 +83,7 @@ module.exports = {
             },
             // .scss
             {
-                test: /(?:src|flatpickr)\/.*\.(sa|sc|c)ss$/,
+                test: /(?:src)\/.*\.(sa|sc|c)ss$/,
                 use: [
                     // Writes css files.
                     MiniCssExtractPlugin.loader,

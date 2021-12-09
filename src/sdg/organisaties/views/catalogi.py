@@ -3,6 +3,7 @@ from copy import deepcopy
 from django.views.generic import ListView
 
 from sdg.accounts.mixins import OverheidMixin
+from sdg.core.constants import DoelgroepChoices
 from sdg.core.models import ProductenCatalogus, Thema
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
@@ -65,6 +66,7 @@ class CatalogListView(OverheidMixin, ListView):
                     reference_catalog.areas[product.area].add(product)
 
         context["catalogs"] = catalogs
+        context["group_choices"] = DoelgroepChoices.choices
         return context
 
 
