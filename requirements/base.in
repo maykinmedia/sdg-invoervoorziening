@@ -21,6 +21,7 @@ django-markdownx
 django-markdownify
 django-celery-beat
 django-filter
+django-timeline-logger
 celery
 maykin-django-two-factor-auth[phonenumbers]
 
