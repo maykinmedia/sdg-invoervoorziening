@@ -62,6 +62,13 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
             "De identificatie die binnen deze API gebruikt wordt voor de resource."
         ),
     )
+    automatisch_catalogus_aanmaken = models.BooleanField(
+        _("Automatisch catalogus aanmaken"),
+        default=True,
+        help_text=_(
+            "Indien aangevinkt wordt een specifieke catalogus aangemaakt voor deze lokale overheid."
+        ),
+    )
 
     objects = LokaleOverheidManager()
 
