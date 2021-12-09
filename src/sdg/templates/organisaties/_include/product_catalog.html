@@ -31,12 +31,15 @@
                     <div>
                         <div class="products__item-title">
                             {{ product.name|title }}
+                        </div>
+                        <div class="products__item-help">
                             {% for language in product.beschikbare_talen %}
                                 {% flag language %}
                             {% endfor %}
-                        </div>
-                        <div class="products__item-help">
-                            {{ product.doelgroep|join:", "|capfirst }}
+                            {% if product.doelgroep %}
+                                -
+                                {{ product.doelgroep|join:", "|capfirst }}
+                            {% endif %}
                         </div>
                     </div>
                     <div class="products__item-icon">
