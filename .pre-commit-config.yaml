@@ -24,4 +24,4 @@ repos:
     rev: v1.3
     hooks:
       - id: giticket
-        args: [ '--regex=^[A-Za-z]+\/([0-9]+)', '--format={commit_msg} -- #{ticket}', '--mode=regex_match' ]
+        args: [ '--regex=^[A-Za-z]+\/([0-9]+)', '--format={commit_msg} — #{ticket}', '--mode=regex_match' ]

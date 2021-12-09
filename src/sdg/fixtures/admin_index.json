@@ -105,6 +105,10 @@
             [
                 "axes",
                 "accesslog"
+            ],
+            [
+                "timeline_logger",
+                "timelinelog"
             ]
         ]
     }
@@ -153,6 +157,17 @@
                 "token"
             ]
         ]
+    }
+},
+{
+    "model": "admin_index.applink",
+    "fields": {
+        "order": 0,
+        "app_group": [
+            "logs"
+        ],
+        "name": "Audit Logs",
+        "link": "/admin/timeline_logger/timelinelog/auditlog/"
     }
 }
 ]
