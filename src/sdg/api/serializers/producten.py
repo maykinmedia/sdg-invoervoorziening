@@ -2,10 +2,9 @@ from datetime import date
 
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from rest_framework.relations import HyperlinkedRelatedField
 
 from sdg.api.serializers.fields import LabeledUrlListField
-from sdg.organisaties.models import LokaleOverheid
+from sdg.api.serializers.organisaties import OrganisatieBaseSerializer
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
 
@@ -50,20 +49,33 @@ class ProductVersieSerializer(serializers.ModelSerializer):
         )
 
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer for a product, including UPN, availability, locations and latest version translations."""
+class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
+    """Serializer that exposes a small subset of the fields for a Product, used in references to a product.
+    Fields: `url`, `upnUri`, `upnLabel`
+    """
 
     upn_label = serializers.CharField(source="generic_product.upn_label")
     upn_uri = serializers.URLField(source="generic_product.upn_uri")
-    organisatie = HyperlinkedRelatedField(
-        source="catalogus.lokale_overheid",
-        lookup_field="uuid",
-        view_name="api:lokaleoverheid-detail",
-        queryset=LokaleOverheid.objects.all(),
-    )
+
+    class Meta:
+        model = Product
+        fields = ("url", "upn_uri", "upn_label")
+        extra_kwargs = {
+            "url": {
+                "view_name": "api:product-detail",
+                "lookup_field": "uuid",
+            }
+        }
+
+
+class ProductSerializer(ProductBaseSerializer):
+    """Serializer for a product, including UPN, availability, locations and latest version translations."""
+
+    organisatie = OrganisatieBaseSerializer(source="catalogus.lokale_overheid")
     publicatie_datum = SerializerMethodField(method_name="get_publicatie_datum")
     vertalingen = SerializerMethodField(method_name="get_vertalingen")
     versie = SerializerMethodField(method_name="get_versie")
+    gerelateerde_producten = ProductBaseSerializer(many=True)
 
     class Meta:
         model = Product
@@ -93,10 +105,6 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
                 "view_name": "api:productencatalogus-detail",
             },
             "referentie_product": {
-                "lookup_field": "uuid",
-                "view_name": "api:product-detail",
-            },
-            "gerelateerde_producten": {
                 "lookup_field": "uuid",
                 "view_name": "api:product-detail",
             },
