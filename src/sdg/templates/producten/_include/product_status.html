@@ -4,12 +4,12 @@
     <div class="tabs__status">
         <span class="tabs__status-label">{% trans "Status" %}:</span>
         {% with status=latest_active_version.current_status %}
-            {% if status == "now" %}
+            {% if status == product.status.PUBLISHED %}
                 <div class="tabs__status-published">
                     <i class="fas fa-calendar-check"></i>
                     <span class="tabs__status-label--result">{% trans "gepubliceerd" %}</span>
                 </div>
-            {% elif status == "concept" %}
+            {% elif status == product.status.CONCEPT %}
                 <div class="tabs__status-concept">
                     <i class="fas fa-calendar-minus"></i>
                     <span class="tabs__status-label--result">{% trans "concept" %}</span>
