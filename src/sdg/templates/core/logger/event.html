@@ -1,0 +1,34 @@
+{% load i18n %}
+
+{% with timestamp=log.timestamp|date:'DATETIME_FORMAT' user=log.user|default:_('Anonymous user') object=log.content_object event=log.extra_data %}
+    <h1>{{ timestamp }} - {{ user }} event on {{ object }}.</h1>
+
+    <div>
+        <span>Name:</span> {{ event.name }}
+    </div>
+    <div>
+        <span>Action:</span> {{ event.action }}
+    </div>
+    <div>
+        <span>Headers:</span>
+        <pre>{{ event.headers }}</pre>
+    </div>
+    <div>
+        <span>Params:</span>
+        <pre>{{ event.params }}</pre>
+    </div>
+    <div>
+        <span>Payload:</span>
+        <pre>{{ event.payload }}</pre>
+    </div>
+    <div>
+        <span>View:</span>
+        <pre>{{ event.view }}</pre>
+    </div>
+    {% if event.error %}
+        <div>
+            <span>Error:</span>
+            <pre>{{ event.error }}</pre>
+        </div>
+    {% endif %}
+{% endwith %}
