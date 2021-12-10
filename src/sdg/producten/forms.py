@@ -33,7 +33,7 @@ class ProductForm(forms.ModelForm):
     product_aanwezig = forms.NullBooleanField(required=False)
     product_aanwezig_toelichting = forms.CharField(
         required=False,
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={"rows": "6", "disabled": True}),
     )
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None,
@@ -93,6 +93,8 @@ class ProductVersionForm(forms.ModelForm):
         _instance = kwargs.get("instance", None)
         kwargs["instance"] = self._get_version_instance(_instance)
         super().__init__(*args, **kwargs)
+        if _instance.publicatie_datum:
+            self.fields["date"].initial = _instance.publicatie_datum.isoformat()
 
     def clean(self):
         cleaned_data = super().clean()

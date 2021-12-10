@@ -9,6 +9,10 @@
   }
 
   .form-actions__options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     label {
       margin-right: 20px;
 

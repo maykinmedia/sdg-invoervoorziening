@@ -5,58 +5,50 @@
 {% load i18n %}
 {% load producten %}
 
+{% block templates %}
+    {% for reference_form in reference_formset.forms %}
+        <template class="form__reference-{{ reference_form.initial.taal }}"
+                  data-title="{{ reference_formset.title }}">
+            {{ reference_form.as_p }}
+        </template>
+    {% endfor %}
+    {% for reference_form in previous_reference_formset.forms %}
+        <template class="form__previousreference-{{ reference_form.initial.taal }}"
+                  data-title="{{ previous_reference_formset.title }}">
+            {{ reference_form.as_p }}
+        </template>
+    {% endfor %}
+
+    <template class="form__reference--display-template">
+        <div class="reference__display form__input form__input--disabled">
+            <div class="reference__display--topbar">
+                <a href="#" class="diff"
+                   title="{% trans 'Toon het verschil tussen de vorige versie van deze informatie.' %}">
+                    <i class="fa fa-eye"></i>
+                </a>
+                <div class="reference__display--versions">
+                </div>
+            </div>
+            <div class="reference__display--content"></div>
+        </div>
+    </template>
+{% endblock %}
+
 {% block inner_content %}
     <div class="notifications">
         {% include "core/_notifications.html" %}
         {% include 'producten/_include/edit_warnings.html' %}
     </div>
 
-    <div class="tabs tabs--inline">
-        <div class="tabs__tabs">
-            {% for language in product.beschikbare_talen %}
-                <a href="#{{ language.code }}" data-id="{{ language.code }}"
-                   class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ language.name }}
-                </a>
-            {% endfor %}
-        </div>
-
-        {% for reference_form in reference_formset.forms %}
-            <template class="form__reference-{{ reference_form.initial.taal }}"
-                      data-title="{{ reference_formset.title }}">
-                {{ reference_form.as_p }}
-            </template>
-        {% endfor %}
-        {% for reference_form in previous_reference_formset.forms %}
-            <template class="form__previousreference-{{ reference_form.initial.taal }}"
-                      data-title="{{ previous_reference_formset.title }}">
-                {{ reference_form.as_p }}
-            </template>
-        {% endfor %}
-
-        <template class="form__reference--display-template">
-            <div class="reference__display form__input form__input--disabled">
-                <div class="reference__display--topbar">
-                    <a href="#" class="diff"
-                       title="{% trans 'Toon het verschil tussen de vorige versie van deze informatie.' %}">
-                        <i class="fa fa-eye"></i>
-                    </a>
-                    <div class="reference__display--versions">
-                    </div>
-                </div>
-                <div class="reference__display--content"></div>
-            </div>
-        </template>
-
-        <form action="." method="POST" class="form tabs__tab-contents">
-            {% csrf_token %}
-            {{ form.management_form }}
-            {{ product_form.non_field_errors }}
-
-            <table class="tabs__table">
+    <form action="." method="POST" class="form">
+        {% csrf_token %}
+        {{ form.management_form }}
+        {{ product_form.non_field_errors }}
+        <div class="tabs tabs--inline-outer">
+            <table class="tabs__table form__general">
                 <thead>
                 <tr>
-                    <th class="tabs__table-header" width="25%">{% trans "Product Gegevens" %}</th>
+                    <th class="tabs__table-header" width="25%">{% trans "Algemene Gegevens" %}</th>
                     <th class="tabs__table-header">{% trans "Huidige Informatie" %}</th>
                 </tr>
                 </thead>
@@ -81,90 +73,109 @@
                 </tr>
                 </tbody>
             </table>
+        </div>
 
-            <hr class="divider">
+        <div class="tabs tabs--inline">
+            <div class="tabs__tabs">
+                {% for language in product.beschikbare_talen %}
+                    <a href="#{{ language.code }}" data-id="{{ language.code }}"
+                       class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
+                        {% flag language %} {{ language.name }}
+                    </a>
+                {% endfor %}
+            </div>
 
-            {% for generic_information, form in informatie_forms %}
-                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
-                     id="{{ form.taal.value }}">
 
-                    {% if generic_information %}
-                        <table class="tabs__table">
+            <div class="tabs__tab-contents">
+                {% for generic_information, form in informatie_forms %}
+                    <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
+                         id="{{ form.taal.value }}">
+
+                        {% if generic_information %}
+                            <table class="tabs__table">
+                                <thead>
+                                <tr>
+                                    <th class="tabs__table-header" width="25%">Generieke gegevens</th>
+                                    <th class="tabs__table-header">Huidige informatie</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product" %}
+                                    {% table_row field %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <hr class="divider">
+                        {% endif %}
+
+                        <table class="tabs__table form__has-reference"
+                               data-reference=".form__reference-{{ form.taal.value }}"
+                               data-previousreference=".form__previousreference-{{ form.taal.value }}"
+                        >
                             <thead>
                             <tr>
-                                <th class="tabs__table-header" width="25%">Generieke gegevens</th>
+                                <th class="tabs__table-header" width="26%">Specifieke gegevens</th>
                                 <th class="tabs__table-header">Huidige informatie</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product" %}
-                                {% table_row field %}
-                            {% endfor %}
+                            <tr>
+                                <td></td>
+                                <td>
+                                    {{ form.non_field_errors }}
+                                    {{ form.id }}
+                                    {{ form.taal.as_hidden }}
+                                </td>
+                            </tr>
+                            {% with reference=product.is_referentie_product %}
+                                {% table_field form.product_titel_decentraal is_reference=reference %}
+                                {% table_field form.specifieke_tekst is_reference=reference %}
+                                {% table_field form.verwijzing_links is_reference=True %}
+                                {% table_field form.decentrale_link is_reference=True %}
+                                {% table_field form.procedure_beschrijving is_reference=reference %}
+                                {% table_field form.vereisten is_reference=reference %}
+                                {% table_field form.bewijs is_reference=reference %}
+                                {% table_field form.bezwaar_en_beroep is_reference=reference %}
+                                {% table_field form.kosten_en_betaalmethoden is_reference=reference %}
+                                {% table_field form.uiterste_termijn is_reference=reference %}
+                                {% table_field form.wtd_bij_geen_reactie is_reference=reference %}
+                                {% table_field form.decentrale_procedure_link is_reference=reference %}
+                            {% endwith %}
                             </tbody>
                         </table>
-                        <hr class="divider">
-                    {% endif %}
-
-                    <table class="tabs__table form__has-reference"
-                           data-reference=".form__reference-{{ form.taal.value }}"
-                           data-previousreference=".form__previousreference-{{ form.taal.value }}"
-                    >
-                        <thead>
-                        <tr>
-                            <th class="tabs__table-header" width="25%">Specifieke gegevens</th>
-                            <th class="tabs__table-header">Huidige informatie</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td></td>
-                            <td>
-                                {{ form.non_field_errors }}
-                                {{ form.id }}
-                                {{ form.taal.as_hidden }}
-                            </td>
-                        </tr>
-                        {% with reference=product.is_referentie_product %}
-                            {% table_field form.product_titel_decentraal is_reference=reference %}
-                            {% table_field form.specifieke_tekst is_reference=reference %}
-                            {% table_field form.verwijzing_links is_reference=True %}
-                            {% table_field form.decentrale_link is_reference=True %}
-                            {% table_field form.procedure_beschrijving is_reference=reference %}
-                            {% table_field form.vereisten is_reference=reference %}
-                            {% table_field form.bewijs is_reference=reference %}
-                            {% table_field form.bezwaar_en_beroep is_reference=reference %}
-                            {% table_field form.kosten_en_betaalmethoden is_reference=reference %}
-                            {% table_field form.uiterste_termijn is_reference=reference %}
-                            {% table_field form.wtd_bij_geen_reactie is_reference=reference %}
-                            {% table_field form.decentrale_procedure_link is_reference=reference %}
-                        {% endwith %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-
-
-            <div class="form-actions">
-                <div class="notifications">
-                    {% if product_versie.get_published_status == "later" %}
-                        {% include 'producten/_include/schedule_to_concept_warning.html' %}
-                    {% endif %}
-                </div>
-                <div>
-                    <div class="form-actions__options">
-                        {{ version_form.non_field_errors }}
-                        {{ version_form.publish }}
-                        <div class="calendar-container closed">
-                            <input name="date" type="date" class="calendar form__input">
-                        </div>
                     </div>
-                    <input class="button tabs__form-button" type="submit" value="Opslaan">
-                    <a href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
-                        <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
-                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <div class="notifications">
+                {% if product_versie.get_published_status == "later" %}
+                    {% include 'producten/_include/schedule_to_concept_warning.html' %}
+                {% endif %}
+            </div>
+            <div>
+                <div class="form-actions__options">
+                    {{ version_form.non_field_errors }}
+                    <div class="calendar-container">
+                        <label for="date">{% trans "Publicatie datum" %}</label>
+                        <input name="date" type="date" class="calendar form__input"
+                               value="{{ version_form.date.initial }}">
+                    </div>
+                    <div>
+                        <button class="button tabs__form-button" type="submit">
+                            <i class="fa fa-calendar-alt"></i> Opslaan en publiceren
+                        </button>
+                        <button class="button tabs__form-button button--light" type="submit">
+                            <i class="fa fa-paperclip"></i> Opslaan als concept
+                        </button>
+                        <a href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
+                            <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                        </a>
+                    </div>
                 </div>
             </div>
+        </div>
 
-        </form>
-    </div>
+    </form>
 {% endblock inner_content %}

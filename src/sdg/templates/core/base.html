@@ -27,7 +27,7 @@
                 <a href="{% url 'core:home' %}">{% trans 'Home' %}</a>
                 {% with kwargs=request.resolver_match.kwargs %}
                     {% if kwargs.pk %}
-                        <a href="{% url 'organisaties:edit' pk=kwargs.pk %}">{{ lokaleoverheid }}</a>
+                        <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{{ lokaleoverheid }}</a>
                     {% endif %}
                     {% if kwargs.catalog_pk %}
                         <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{% trans 'Catalogi' %}</a>
@@ -42,7 +42,7 @@
                 {% endif %}
             </div>
         </div>
-        <h2 class="products__title primary">SDG {{ namespace|title }}</h2>
+        <h2 class="products__title primary">{{ object|title|default:namespace|title }}</h2>
         <hr class="divider">
         {% block inner_content %}
         {% endblock inner_content %}

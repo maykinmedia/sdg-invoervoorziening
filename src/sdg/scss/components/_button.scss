@@ -17,7 +17,7 @@
 
   .svg-inline--fa {
     color: $color_accent_darkest;
-    margin-left: 4px;
+    margin: 0 4px;
   }
 
   &:hover {
@@ -41,8 +41,19 @@
     }
   }
 
+  &.button--primary {
+    --main-color: #396a88;
+    --shadow-color: #23485C;
+    color: #fff;
+  }
+
   &.button--light {
     --main-color: #e0e3ea;
     --shadow-color: #b5b6bb;
+
+    .svg-inline--fa {
+      color: $color_grey_darker;
+    }
+
   }
 }

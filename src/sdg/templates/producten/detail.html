@@ -8,36 +8,37 @@
             {% include "core/_notifications.html" %}
             {% include 'producten/_include/detail_warnings.html' %}
         </div>
+        <div class="tabs tabs--inline-outer">
+            <table class="tabs__table">
+                <thead>
+                <tr>
+                    <th class="tabs__table-header" width="25%">Algemene gegevens</th>
+                    <th class="tabs__table-header">Huidige informatie</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for field in product.get_fields|exclude:"id,generiek_product,referentie_product,catalogus" %}
+                    {% table_row field %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <div class="tabs tabs--inline">
         <div class="tabs__tabs">
             {% for language in product.beschikbare_talen %}
                 <a href="#{{ language.code }}" data-id="{{ language.code }}"
                    class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ language.name }}
+                    {% flag language %} {{ language.name }}
                 </a>
             {% endfor %}
         </div>
 
         <div class="tabs__tab-contents">
         {% include "producten/_include/product_status.html" %}
-        <table class="tabs__table">
-            <thead>
-            <tr>
-                <th class="tabs__table-header" width="25%">Product gegevens</th>
-                <th class="tabs__table-header">Huidige informatie</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for field in product.get_fields|exclude:"id,generiek_product,referentie_product,catalogus" %}
-                {% table_row field %}
-            {% endfor %}
-            </tbody>
-        </table>
         {% for info in latest_active_version.vertalingen.all %}
             <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                  id="{{ info.taal }}">
                 {% if info.generiek_informatie %}
-                    <hr class="divider">
                     <table class="tabs__table">
                         <thead>
                         <tr>
