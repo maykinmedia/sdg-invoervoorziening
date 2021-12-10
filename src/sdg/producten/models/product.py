@@ -13,11 +13,12 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
+from djchoices import ChoiceItem, DjangoChoices
+
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.core.utils import get_from_cache
-from sdg.producten.constants import PublishChoices
 from sdg.producten.models import (
     LocalizedGeneriekProduct,
     LocalizedProduct,
@@ -94,6 +95,13 @@ class Product(ProductFieldMixin, models.Model):
     Container for localized products holding only the properties that are the
     same for every localized product.
     """
+
+    class status(DjangoChoices):
+        """The publication status of a product."""
+
+        PUBLISHED = ChoiceItem("published", label=_("Gepubliceerd"))
+        SCHEDULED = ChoiceItem("scheduled", label=_("Gepland"))
+        CONCEPT = ChoiceItem("concept", label=_("Concept"))
 
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
@@ -435,14 +443,15 @@ class ProductVersie(models.Model):
 
     objects = ProductVersieQuerySet.as_manager()
 
-    def get_published_status(self) -> Any[PublishChoices.choices]:
-        """:returns: The current published status for this product version."""
+    @property
+    def current_status(self) -> Any[Product.status]:
+        """:returns: The current publishing status for this product version."""
         if not self.publicatie_datum:
-            return PublishChoices.concept
+            return Product.status.CONCEPT
         elif self.publicatie_datum <= date.today():
-            return PublishChoices.now
+            return Product.status.PUBLISHED
         else:
-            return PublishChoices.later
+            return Product.status.SCHEDULED
 
     def generate_localized_information(self, language, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""

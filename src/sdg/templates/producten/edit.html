@@ -150,7 +150,7 @@
 
         <div class="form-actions">
             <div class="notifications">
-                {% if product_versie.get_published_status == "later" %}
+                {% if product_versie.current_status == product.status.SCHEDULED %}
                     {% include 'producten/_include/schedule_to_concept_warning.html' %}
                 {% endif %}
             </div>
@@ -163,10 +163,10 @@
                                value="{{ version_form.date.initial }}">
                     </div>
                     <div>
-                        <button class="button tabs__form-button" type="submit">
+                        <button class="button tabs__form-button" type="submit" name="publish" value="date">
                             <i class="fa fa-calendar-alt"></i> Opslaan en publiceren
                         </button>
-                        <button class="button tabs__form-button button--light" type="submit">
+                        <button class="button tabs__form-button button--light" name="publish" value="concept" type="submit">
                             <i class="fa fa-paperclip"></i> Opslaan als concept
                         </button>
                         <a href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">

@@ -6,8 +6,7 @@ from freezegun import freeze_time
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.tests.utils import hard_refresh_from_db
 from sdg.organisaties.tests.factories.overheid import LokatieFactory
-from sdg.producten.constants import PublishChoices
-from sdg.producten.models import LocalizedProduct
+from sdg.producten.models import LocalizedProduct, Product
 from sdg.producten.tests.constants import (
     DUMMY_TITLE,
     FUTURE_DATE,
@@ -356,11 +355,11 @@ class SpecifiekProductUpdateViewTests(WebTest):
             is_redacteur=True,
         )
 
-    def _change_product_status(self, publish_choice: PublishChoices.choices):
+    def _change_product_status(self, publish_choice: Product.status):
         dates = {
-            PublishChoices.now: NOW_DATE,
-            PublishChoices.concept: None,
-            PublishChoices.later: FUTURE_DATE,
+            Product.status.PUBLISHED: NOW_DATE,
+            Product.status.CONCEPT: None,
+            Product.status.SCHEDULED: FUTURE_DATE,
         }
         most_recent_version = self.product.most_recent_version
         most_recent_version.publicatie_datum = dates.get(publish_choice)
@@ -368,23 +367,25 @@ class SpecifiekProductUpdateViewTests(WebTest):
         most_recent_version.refresh_from_db()
         self.product = hard_refresh_from_db(self.product)
 
-    def _fill_product_form(self, form, publish_choice: PublishChoices.choices):
+    def _submit_product_form(self, form, publish_choice: Product.status):
         form_data = {
-            PublishChoices.now: {
-                "publish": "now",
+            Product.status.PUBLISHED: {
+                "publish": "date",
+                "date": NOW_DATE,
             },
-            PublishChoices.concept: {
+            Product.status.CONCEPT: {
                 "publish": "concept",
+                "date": None,
             },
-            PublishChoices.later: {
-                "publish": "later",
+            Product.status.SCHEDULED: {
+                "publish": "date",
                 "date": FUTURE_DATE,
             },
         }
         data = form_data[publish_choice]
-        form["vertalingen-0-product_titel_decentraal"] = data.get("title", DUMMY_TITLE)
-        form["date"] = data.get("date", None)
-        form["publish"].value = data["publish"]
+        form["vertalingen-0-product_titel_decentraal"] = DUMMY_TITLE
+        form["date"] = data["date"]
+        return form.submit(name="publish", value=data["publish"])
 
     @freeze_time(NOW_DATE)
     def test_unavailable_reference_product_displays_warning(self):
@@ -398,7 +399,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
     @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
-        self._change_product_status(PublishChoices.concept)
+        self._change_product_status(Product.status.CONCEPT)
 
         response = self.app.get(
             reverse(
@@ -407,8 +408,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.concept)
-        response.form.submit()
+        self._submit_product_form(response.form, Product.status.CONCEPT)
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 1)
@@ -420,12 +420,12 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_active_version, None)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.concept)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
         self.assertEqual(latest_version.versie, 1)
 
     @freeze_time(NOW_DATE)
     def test_concept_save_now(self):
-        self._change_product_status(PublishChoices.concept)
+        self._change_product_status(Product.status.CONCEPT)
 
         response = self.app.get(
             reverse(
@@ -434,9 +434,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.now)
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
 
-        response.form.submit()
         self.product_version.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 1)
@@ -446,19 +445,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 1)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.now)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_version.versie, 1)
 
     @freeze_time(NOW_DATE)
     def test_concept_save_later(self):
-        self._change_product_status(PublishChoices.concept)
+        self._change_product_status(Product.status.CONCEPT)
 
         response = self.app.get(
             reverse(
@@ -467,9 +464,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.later)
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
 
-        response.form.submit()
         self.product_version.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 1)
@@ -482,12 +478,12 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
         self.assertEqual(latest_version.versie, 1)
 
     @freeze_time(NOW_DATE)
     def test_published_save_concept(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
 
         response = self.app.get(
             reverse(
@@ -496,9 +492,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.concept)
+        self._submit_product_form(response.form, Product.status.CONCEPT)
 
-        response.form.submit()
         self.product_version.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -508,19 +503,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 1)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, None)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.concept)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_published_save_now(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
 
         response = self.app.get(
             reverse(
@@ -529,9 +522,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.now)
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
 
-        response.form.submit()
         self.product_version.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -541,19 +533,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 2)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.now)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_published_save_later(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
 
         response = self.app.get(
             reverse(
@@ -562,9 +552,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.later)
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
 
-        response.form.submit()
         self.product_version.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -574,19 +563,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 1)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_concept(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
         future_product_version = ProductVersieFactory.create(
             product=self.product,
             publicatie_datum=FUTURE_DATE,
@@ -601,9 +588,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.concept)
+        self._submit_product_form(response.form, Product.status.CONCEPT)
 
-        response.form.submit()
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -613,14 +599,12 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 1)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, None)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.concept)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
         self.assertEqual(latest_version.versie, 2)
         self.assertIn(
             'Indien u kiest voor "Opslaan als concept" dan wordt de publicatie datum verwijderd',
@@ -629,7 +613,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_now(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
         future_product_version = ProductVersieFactory.create(
             product=self.product,
             publicatie_datum=FUTURE_DATE,
@@ -644,9 +628,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.now)
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
 
-        response.form.submit()
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -656,19 +639,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 2)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.now)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_later(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
         future_product_version = ProductVersieFactory.create(
             product=self.product,
             publicatie_datum=FUTURE_DATE,
@@ -683,9 +664,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.later)
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
 
-        response.form.submit()
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -695,19 +675,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 1)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_published_and_concept_save_concept(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
         future_product_version = ProductVersieFactory.create(
             product=self.product,
             publicatie_datum=None,
@@ -722,9 +700,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.concept)
+        self._submit_product_form(response.form, Product.status.CONCEPT)
 
-        response.form.submit()
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -734,19 +711,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 1)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, None)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.concept)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_published_and_concept_save_now(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
         future_product_version = ProductVersieFactory.create(
             product=self.product,
             publicatie_datum=None,
@@ -761,9 +736,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.now)
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
 
-        response.form.submit()
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -773,19 +747,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 2)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.now)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_published_and_concept_save_later(self):
-        self._change_product_status(PublishChoices.now)
+        self._change_product_status(Product.status.PUBLISHED)
         future_product_version = ProductVersieFactory.create(
             product=self.product,
             publicatie_datum=None,
@@ -800,9 +772,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
             )
         )
 
-        self._fill_product_form(response.form, PublishChoices.later)
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
 
-        response.form.submit()
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 2)
@@ -812,19 +783,17 @@ class SpecifiekProductUpdateViewTests(WebTest):
         latest_nl = latest_version.vertalingen.get(taal="nl")
 
         self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
-        self.assertEqual(
-            latest_active_version.get_published_status(), PublishChoices.now
-        )
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_active_version.versie, 1)
 
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
-        self.assertEqual(latest_version.get_published_status(), PublishChoices.later)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
         self.assertEqual(latest_version.versie, 2)
 
     @freeze_time(NOW_DATE)
     def test_can_update_product_information(self):
-        self._change_product_status(PublishChoices.concept)
+        self._change_product_status(Product.status.CONCEPT)
         LokatieFactory.create_batch(
             3, lokale_overheid=self.product.catalogus.lokale_overheid
         )
@@ -840,10 +809,9 @@ class SpecifiekProductUpdateViewTests(WebTest):
             ),
         )
 
-        self._fill_product_form(response.form, PublishChoices.concept)
         response.form.fields["product_aanwezig"] = False
         response.form.fields["lokaties"][0].checked = True
-        response.form.submit()
+        self._submit_product_form(response.form, Product.status.CONCEPT)
         self.product.refresh_from_db()
 
         locations = list(self.product.get_municipality_locations())

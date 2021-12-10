@@ -17,7 +17,7 @@
     {% endif %}
 {% endif %}
 
-{% with publised_status=most_recent_version.get_published_status %}
+{% with status=most_recent_version.current_status %}
     {% if latest_active_version == most_recent_version %}
     {% elif not most_recent_version %}
         <div class="notifications__notification notification__accent">
@@ -25,13 +25,13 @@
             <span>{% trans "Er is nog geen product tekst gepubliceerd." %}</span>
             <span></span>
         </div>
-    {% elif publised_status == "concept" %}
+    {% elif status == product.status.CONCEPT %}
         <div class="notifications__notification notification__info">
             <i class="fas fa-info-circle"></i>
             <span>{% trans "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig." %}</span>
             <span></span>
         </div>
-    {% elif publised_status == "later" %}
+    {% elif status == product.status.SCHEDULED %}
         <div class="notifications__notification notification__info">
             <i class="fas fa-info-circle"></i>
             {% blocktrans %}
