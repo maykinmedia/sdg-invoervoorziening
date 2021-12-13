@@ -270,6 +270,13 @@ paths:
           - nl
         description: Toont producten die overeenkomen met de opgegeven taal.
       - in: query
+        name: publicatieDatum__gte
+        schema:
+          type: string
+          format: date
+        description: Toont producten met een publicatiedatum groter dan of gelijk
+          aan de opgegeven datum.
+      - in: query
         name: upnLabel
         schema:
           type: string
