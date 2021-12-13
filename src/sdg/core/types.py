@@ -17,39 +17,32 @@ class LoadCommand:
         call_command(self.name, self.source.value)
 
 
-class Event:
+class EventMeta(type):
+    def __getattr__(self, item):
+        if hasattr(self.action, item):
+            return getattr(self.action, item)
+        return getattr(self, item)
+
+
+class Event(metaclass=EventMeta):
     """A default event used to provide information about actions happening throughout the application."""
 
-    class _action(Enum):
-        """An enum representing the different actions that can be performed."""
+    class result(Enum):
+        """An enum representing all the possible event results."""
 
         START = "start"
         SKIP = "skip"
         SUCCESS = "success"
         FAILURE = "failure"
 
-    START, SKIP, SUCCESS, FAILURE = (
-        _action.START,
-        _action.SKIP,
-        _action.SUCCESS,
-        _action.FAILURE,
-    )
-
-    name: str
-    method: str
-    view: dict
-    params: dict
-    payload: dict
-    headers: dict
-
     _template = "core/logger/event.html"
 
-    def __init__(self, request, instance: Model, action: _action):
+    def __init__(self, request, instance: Model, result: result):
         self._request = request
         self._instance = instance
 
-        self.name = self.__class__.__name__
-        self.action = action.value
+        self.name = instance.__class__.__name__
+        self.result = result.value
         self.method = request.method
         self.params = dict(request.GET)
         self.payload = dict(request.POST)
@@ -64,8 +57,8 @@ class Event:
         return {k: v for k, v in self.__dict__.items() if not k.startswith("_")}
 
     @classmethod
-    def create_and_log(cls, request, instance: Model, action: _action, error=None):
-        event = cls(request, instance, action)
+    def create_and_log(cls, request, instance: Model, result: result, error=None):
+        event = cls(request, instance, result)
         return event.log(error=error)
 
     def log(self, error: Exception = None):

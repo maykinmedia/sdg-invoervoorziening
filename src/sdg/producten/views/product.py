@@ -12,6 +12,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
+from sdg.core.types import Event
 from sdg.producten.forms import LocalizedProductForm, ProductForm, ProductVersionForm
 from sdg.producten.models import (
     GeneriekProduct,
@@ -155,6 +156,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
+        Event.create_and_log(request, self.object, Event.START)
         version_form = ProductVersionForm(request.POST, instance=self.object)
         product_form = ProductForm(request.POST, instance=self.product)
         form = self.form_class(request.POST, instance=self.object)
@@ -172,9 +174,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
                 duplicate_localized_products(form, new_version)
             else:
                 form.save()
+            Event.create_and_log(self.request, self.object, Event.SUCCESS)
             return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, version_form, product_form):
+        Event.create_and_log(self.request, self.object, Event.FAILURE)
         return self.render_to_response(
             self.get_context_data(
                 form=form, version_form=version_form, product_form=product_form
