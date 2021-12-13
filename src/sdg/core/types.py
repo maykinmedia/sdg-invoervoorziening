@@ -19,8 +19,8 @@ class LoadCommand:
 
 class EventMeta(type):
     def __getattr__(self, item):
-        if hasattr(self.action, item):
-            return getattr(self.action, item)
+        if hasattr(self.result, item):
+            return getattr(self.result, item)
         return getattr(self, item)
 
 
