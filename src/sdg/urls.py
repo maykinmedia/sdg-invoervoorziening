@@ -50,7 +50,9 @@ urlpatterns = [
     path("sdg/api/", include("sdg.api.urls", namespace="api")),
     path("sdg/accounts/", include("allauth.urls")),
     path("sdg/accounts/", include("sdg.accounts.urls", namespace="accounts")),
-    path("sdg/organizations/", include("sdg.organisaties.urls", namespace="organisaties")),
+    path(
+        "sdg/organizations/", include("sdg.organisaties.urls", namespace="organisaties")
+    ),
     path("sdg/", include("sdg.core.urls", namespace="core")),
     path("sdg/", include(tf_urls)),
 ]
@@ -58,7 +60,7 @@ urlpatterns = [
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
 # folder and the media folder are only served via Django if DEBUG = True.
 urlpatterns += staticfiles_urlpatterns() + static(
-    "sdg"+settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
+    "sdg" + settings.MEDIA_URL, document_root=settings.MEDIA_ROOT
 )
 
 if settings.DEBUG and apps.is_installed("debug_toolbar"):
