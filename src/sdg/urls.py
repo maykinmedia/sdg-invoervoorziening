@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from two_factor.urls import urlpatterns as tf_urls
 
+from sdg.accounts.views.auth import LoginView
 from sdg.accounts.views.password_reset import PasswordResetView
 from sdg.organisaties.views import InvitationAcceptView
 
@@ -52,6 +53,11 @@ urlpatterns = [
     path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
     path("organizations/", include("sdg.organisaties.urls", namespace="organisaties")),
     path("", include("sdg.core.urls", namespace="core")),
+]
+
+# two_factor
+urlpatterns += [
+    path("two_factor/login/", LoginView.as_view(), name="login"),  # custom
     path("", include(tf_urls)),
 ]
 
