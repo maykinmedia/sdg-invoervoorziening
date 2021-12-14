@@ -73,12 +73,6 @@
 
     a {
       text-decoration: none;
-      filter: grayscale(1);
-      transition: all .4s ease;
-    }
-
-    a:hover {
-      filter: grayscale(0)
     }
 
     &--logo {
