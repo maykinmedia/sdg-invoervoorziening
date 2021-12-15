@@ -59,4 +59,26 @@
     }
 
   }
+
+  .divider {
+    margin: 48px 0;
+  }
+
+  .login__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-around;
+    margin-top: -24px;
+
+    a {
+      text-decoration: none;
+    }
+
+    &--logo {
+      height: 42px;
+      margin-top: 16px;
+    }
+
+  }
 }
