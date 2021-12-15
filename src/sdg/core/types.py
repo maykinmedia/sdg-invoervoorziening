@@ -30,12 +30,12 @@ class Event(metaclass=EventMeta):
     class result(Enum):
         """An enum representing all the possible event results."""
 
-        START = "start"
-        SKIP = "skip"
-        SUCCESS = "success"
-        FAILURE = "failure"
+        CREATE = "create"
+        READ = "read"
+        UPDATE = "update"
+        DELETE = "delete"
 
-    _template = "core/logger/event.html"
+    _template = "admin/core/logger/event.html"
 
     def __init__(self, request, instance: Model, result: result):
         self._request = request

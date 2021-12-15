@@ -1,8 +1,6 @@
 from django.contrib import admin
-from django.urls import path
 
 from timeline_logger.models import TimelineLog
-from timeline_logger.views import TimelineLogListView
 
 admin.site.unregister(TimelineLog)
 
@@ -18,6 +16,7 @@ class TimelineLogAdmin(admin.ModelAdmin):
         "extra_data",
         "object_id",
     )
+    list_display = ("event",)
     date_hierarchy = "timestamp"
 
     def _get_message(self, obj):
@@ -25,14 +24,22 @@ class TimelineLogAdmin(admin.ModelAdmin):
 
     _get_message.short_description = "Event information"
 
-    def get_urls(self):
-        return [
-            path(
-                "auditlog/",
-                self.admin_site.admin_view(TimelineLogListView.as_view()),
-                name="audit-log",
-            ),
-        ] + super().get_urls()
+    def _format_payload(self, payload: dict) -> str:
+        if publish := payload.get("publish"):
+            publish = publish[0]
+            if publish == "date":
+                return f" gepubliceerd op datum {payload['date'][0]}"
+            else:
+                return f" opgeslagen als {publish}"
+        return ""
+
+    def event(self, obj):
+        title = f"Gebruiker {obj.user} heeft {obj.content_type}"
+        result = obj.extra_data["result"]
+        payload = obj.extra_data["payload"]
+
+        title += self._format_payload(payload)
+        return f"[{obj.timestamp}] {title} ({obj.content_object}) - {result}."
 
     def has_add_permission(self, request):
         return False
