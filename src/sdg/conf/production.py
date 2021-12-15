@@ -65,3 +65,7 @@ MIDDLEWARE = ["elasticapm.contrib.django.middleware.TracingMiddleware"] + MIDDLE
 INSTALLED_APPS = INSTALLED_APPS + [
     "elasticapm.contrib.django",
 ]
+
+if SUBPATH and SUBPATH != "/":
+    STATIC_URL = f"{SUBPATH}{STATIC_URL}"
+    MEDIA_URL = f"{SUBPATH}{MEDIA_URL}"
