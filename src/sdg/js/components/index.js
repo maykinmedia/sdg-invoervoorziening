@@ -14,3 +14,4 @@ import "./filter";
 import "./expand";
 import "./diff";
 import "./general";
+import "./form";

@@ -384,7 +384,8 @@ class SpecifiekProductUpdateViewTests(WebTest):
         }
         data = form_data[publish_choice]
         form["vertalingen-0-product_titel_decentraal"] = DUMMY_TITLE
-        form["date"] = data["date"]
+        for date_field in form.fields["date"]:
+            date_field.value = data["date"]
         return form.submit(name="publish", value=data["publish"])
 
     @freeze_time(NOW_DATE)

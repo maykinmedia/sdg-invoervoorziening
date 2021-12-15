@@ -140,6 +140,18 @@
                                 {% table_field form.uiterste_termijn is_reference=reference %}
                                 {% table_field form.wtd_bij_geen_reactie is_reference=reference %}
                                 {% table_field form.decentrale_procedure_link is_reference=reference %}
+                                <tr>
+                                    <td class="tabs__table-cell tabs__table-cell--edit">
+                                        {% trans "Publicatie datum" %}
+                                        <i class="fas fa-info-circle fa-xs dark"></i>
+                                    </td>
+                                    <td class="tabs__table-cell">
+                                        <div class="calendar-container">
+                                            <input name="date" type="date" class="calendar form__input"
+                                                   value="{{ version_form.date.initial }}">
+                                        </div>
+                                    </td>
+                                </tr>
                             {% endwith %}
                             </tbody>
                         </table>
@@ -157,17 +169,12 @@
             <div>
                 <div class="form-actions__options">
                     {{ version_form.non_field_errors }}
-                    <div class="calendar-container">
-                        <label for="date">{% trans "Publicatie datum" %}</label>
-                        <input name="date" type="date" class="calendar form__input"
-                               value="{{ version_form.date.initial }}">
-                    </div>
                     <div>
                         <button class="button tabs__form-button" type="submit" name="publish" value="date">
-                            <i class="fa fa-calendar-alt"></i> Opslaan en publiceren
+                            Opslaan en publiceren
                         </button>
                         <button class="button tabs__form-button button--light" name="publish" value="concept" type="submit">
-                            <i class="fa fa-paperclip"></i> Opslaan als concept
+                             Opslaan als concept
                         </button>
                         <a href="{% url 'organisaties:catalogi:producten:detail' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
                             <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>

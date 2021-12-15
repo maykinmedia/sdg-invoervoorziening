@@ -1,6 +1,6 @@
 const generalForms = document.querySelectorAll(".form__general");
 
-class Form {
+class GeneralForm {
 
     setUpDynamicTextarea() {
         const input = this.node.querySelector("[name=product_aanwezig]");
@@ -17,4 +17,4 @@ class Form {
     }
 }
 
-[...generalForms].forEach(form => new Form(form));
+[...generalForms].forEach(form => new GeneralForm(form));

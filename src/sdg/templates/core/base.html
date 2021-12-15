@@ -38,7 +38,7 @@
                 {% elif namespace == "organisaties" %}
                     <span>{% trans "Locaties" %}</span>
                 {% else %}
-                    <span>{{ namespace|title }}</span>
+                    <span>{{ object|title|default:namespace|title }}</span>
                 {% endif %}
             </div>
         </div>

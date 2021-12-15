@@ -22,16 +22,5 @@
             {% endif %}
         {% endwith %}
     </div>
-    <div>
-        <a class="button"
-           href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
-            {% trans "Wijzigen" %}
-            {% if product.product_aanwezig %}
-                <i class="fa fa-sm fa-check text-accent" title="Dit product is beschikbaar."></i>
-            {% else %}
-                <i class="fa fa-sm fa-times text-accent" title="Dit product is niet beschikbaar."></i>
-            {% endif %}
-        </a>
-    </div>
 </div>
 <hr class="divider">
