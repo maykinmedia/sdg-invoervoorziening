@@ -59,16 +59,14 @@ class ProductDetailView(OverheidMixin, DetailView):
     template_name = "producten/detail.html"
     context_object_name = "product"
     pk_url_kwarg = "product_pk"
-    queryset = Product.objects.select_related(
-        "catalogus__lokale_overheid"
-    ).prefetch_related(
-        "lokaties",
-        "versies__vertalingen",
-        "referentie_product__versies__vertalingen",
-        Prefetch(
-            "referentie_product__generiek_product",
-            queryset=GeneriekProduct.objects.prefetch_related("vertalingen"),
-        ),
+    queryset = (
+        Product.objects.select_related("catalogus__lokale_overheid")
+        .prefetch_related(
+            "lokaties",
+            Prefetch("referentie_product", queryset=Product.objects.most_recent()),
+        )
+        .most_recent()
+        .active()
     )
     required_roles = ["is_redacteur"]
 

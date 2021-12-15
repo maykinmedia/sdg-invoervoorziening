@@ -15,14 +15,14 @@
     </div>
 {% endif %}
 
-{% with publised_status=object.get_published_status %}
+{% with status=object.current_status %}
     <div class="notifications__notification notification__info">
         <i class="fas fa-info-circle"></i>
-        {% if publised_status == "now" %}
+        {% if status == product.status.PUBLISHED %}
             <span>{% trans "U bewerkt een reeds gepubliceerde product tekst. Als u deze opslaat wordt een nieuwe versie aangemaakt." %}</span>
-        {% elif publised_status == "concept" %}
+        {% elif status == product.status.CONCEPT %}
             <span>{% trans "U bewerkt een concept product tekst." %}</span>
-        {% elif publised_status == "later" %}
+        {% elif status == product.status.SCHEDULED %}
             {% blocktrans %}
                 <span>U bewerkt een product tekst die ingepland staat om gepubliceerd te worden op {{ object.publicatie_datum }}.</span>
             {% endblocktrans %}

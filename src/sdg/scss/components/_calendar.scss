@@ -2,8 +2,8 @@
 @import "colors";
 
 .calendar-container {
-  margin-top: 16px;
-  width: 400px;
+  width: 476px;
+  float: right;
 
   &.closed {
     display: none;

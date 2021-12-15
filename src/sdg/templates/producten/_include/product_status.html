@@ -3,13 +3,13 @@
 <div class="tabs__tab-header">
     <div class="tabs__status">
         <span class="tabs__status-label">{% trans "Status" %}:</span>
-        {% with status=latest_active_version.get_published_status %}
-            {% if status == "now" %}
+        {% with status=latest_active_version.current_status %}
+            {% if status == product.status.PUBLISHED %}
                 <div class="tabs__status-published">
                     <i class="fas fa-calendar-check"></i>
                     <span class="tabs__status-label--result">{% trans "gepubliceerd" %}</span>
                 </div>
-            {% elif status == "concept" %}
+            {% elif status == product.status.CONCEPT %}
                 <div class="tabs__status-concept">
                     <i class="fas fa-calendar-minus"></i>
                     <span class="tabs__status-label--result">{% trans "concept" %}</span>
@@ -22,31 +22,5 @@
             {% endif %}
         {% endwith %}
     </div>
-    <div>
-        <a class="button"
-           href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
-            {% trans "Wijzigen" %}
-            {% if product.product_aanwezig %}
-                <i class="fa fa-sm fa-check text-accent" title="Dit product is beschikbaar."></i>
-            {% else %}
-                <i class="fa fa-sm fa-times text-accent" title="Dit product is niet beschikbaar."></i>
-            {% endif %}
-        </a>
-    </div>
 </div>
 <hr class="divider">
-<div class="notifications notifications--inline">
-    {% with status=most_recent_version.get_published_status %}
-        {% if status != "now" %}
-            <div class="notifications__notification notification__info">
-                <i class="fas fa-info-circle"></i>
-                {% if most_recent_version.publicatie_datum %}
-                    <span>{% trans "Ingeplande wijzigingen op" %} {{ latest_version.publicatie_datum }}</span>
-                {% else %}
-                    <span>{% trans "Er is een bestaand concept voor dit product." %}</span>
-                {% endif %}
-                <span></span>
-            </div>
-        {% endif %}
-    {% endwith %}
-</div>

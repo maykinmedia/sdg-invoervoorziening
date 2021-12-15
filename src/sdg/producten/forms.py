@@ -1,4 +1,3 @@
-from datetime import date
 from typing import Optional
 
 from django import forms
@@ -6,7 +5,7 @@ from django import forms
 from ..core.constants import DoelgroepChoices
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
-from .widgets import CheckboxSelectMultiple, ProductRadioSelect
+from .widgets import CheckboxSelectMultiple
 
 
 class LocalizedProductForm(forms.ModelForm):
@@ -33,7 +32,7 @@ class ProductForm(forms.ModelForm):
     product_aanwezig = forms.NullBooleanField(required=False)
     product_aanwezig_toelichting = forms.CharField(
         required=False,
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={"rows": "6", "disabled": True}),
     )
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None,
@@ -63,9 +62,7 @@ class ProductForm(forms.ModelForm):
 
 
 class ProductVersionForm(forms.ModelForm):
-    publish = forms.ChoiceField(
-        choices=PublishChoices.choices, widget=ProductRadioSelect
-    )
+    publish = forms.ChoiceField(choices=PublishChoices.choices)
     date = forms.DateTimeField(required=False)
 
     @staticmethod
@@ -76,7 +73,7 @@ class ProductVersionForm(forms.ModelForm):
         - Version is a concept: update the existing instance.
         - Version is in the future: update the existing instance.
         """
-        if instance and instance.get_published_status() == PublishChoices.now:
+        if instance and instance.current_status == Product.status.PUBLISHED:
             return None
         return instance
 
@@ -93,13 +90,15 @@ class ProductVersionForm(forms.ModelForm):
         _instance = kwargs.get("instance", None)
         kwargs["instance"] = self._get_version_instance(_instance)
         super().__init__(*args, **kwargs)
+        if _instance.publicatie_datum:
+            self.fields["date"].initial = _instance.publicatie_datum.isoformat()
 
     def clean(self):
         cleaned_data = super().clean()
 
-        if cleaned_data["publish"] == PublishChoices.now:
-            cleaned_data["publicatie_datum"] = date.today()
+        if cleaned_data["publish"] == PublishChoices.date:
+            cleaned_data["publicatie_datum"] = cleaned_data["date"]
         else:
-            cleaned_data["publicatie_datum"] = cleaned_data.get("date", None)
+            cleaned_data["publicatie_datum"] = None
 
         return cleaned_data

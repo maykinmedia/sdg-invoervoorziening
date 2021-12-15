@@ -24,7 +24,11 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                {{ field.value }}
+                {% if field.value %}
+                    {{ field.value }}
+                {% else %}
+                    {{ default_value }}
+                {% endif %}
             {% endif %}
         </span>
     </td>
