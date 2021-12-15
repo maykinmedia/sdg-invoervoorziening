@@ -2,6 +2,9 @@ from django.views.generic import TemplateView
 
 from allauth.account.utils import get_next_redirect_url
 from allauth.account.views import RedirectAuthenticatedUserMixin
+from two_factor.views import LoginView as _LoginView
+
+from sdg.accounts.forms import AuthenticationForm
 
 
 class LoginDashboardView(RedirectAuthenticatedUserMixin, TemplateView):
@@ -21,3 +24,9 @@ class LoginDashboardView(RedirectAuthenticatedUserMixin, TemplateView):
             or self.success_url
         )
         return ret
+
+
+class LoginView(_LoginView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.form_list["auth"] = AuthenticationForm
