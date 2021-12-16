@@ -511,4 +511,4 @@ SPECTACULAR_SETTINGS = {
 
 SUBPATH = config("SUBPATH", None)
 if SUBPATH and not SUBPATH.startswith("/"):
-    SUBPATH = f"/{SUBPATH}"
+    SUBPATH = f"/{SUBPATH.strip('/')}"
