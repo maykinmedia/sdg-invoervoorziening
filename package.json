@@ -49,6 +49,7 @@
         "@ckeditor/ckeditor5-markdown-gfm": "^30.0.0",
         "@ckeditor/ckeditor5-paragraph": "^30.0.0",
         "@ckeditor/ckeditor5-theme-lark": "^30.0.0",
+        "@ckeditor/ckeditor5-table": "^30.0.0",
         "arrayify": "^1.0.0",
         "autoprefixer": "^9.0.0",
         "babel-loader": "latest",
