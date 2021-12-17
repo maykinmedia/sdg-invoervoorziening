@@ -508,3 +508,7 @@ SPECTACULAR_SETTINGS = {
         "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
     ],
 }
+
+SUBPATH = config("SUBPATH", None)
+if SUBPATH and not SUBPATH.startswith("/"):
+    SUBPATH = f"/{SUBPATH.strip('/')}"
