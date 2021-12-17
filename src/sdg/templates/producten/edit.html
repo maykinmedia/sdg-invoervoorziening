@@ -6,18 +6,37 @@
 {% load producten %}
 
 {% block templates %}
-    {% for reference_form in reference_formset.forms %}
-        <template class="form__reference-{{ reference_form.initial.taal }}"
-                  data-title="{{ reference_formset.title }}">
-            {{ reference_form.as_p }}
-        </template>
-    {% endfor %}
-    {% for reference_form in previous_reference_formset.forms %}
-        <template class="form__previousreference-{{ reference_form.initial.taal }}"
-                  data-title="{{ previous_reference_formset.title }}">
-            {{ reference_form.as_p }}
-        </template>
-    {% endfor %}
+    <div class="notifications">
+        {% include "core/_notifications.html" %}
+        {% include 'producten/_include/edit_warnings.html' %}
+    </div>
+
+    <div class="tabs tabs--inline">
+        <div class="tabs__tabs">
+            {% for language in product.beschikbare_talen %}
+                <a href="#{{ language.code }}" data-id="{{ language.code }}"
+                   class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
+                    {{ language.name }}
+                </a>
+            {% endfor %}
+        </div>
+
+        {% for reference_form in reference_formset.forms %}
+            <template class="form__reference-{{ reference_form.initial.taal }}"
+                      data-title="{{ reference_formset.title }}">
+                <div class="reference">
+                    {{ reference_form.as_p }}
+                </div>
+            </template>
+        {% endfor %}
+        {% for reference_form in previous_reference_formset.forms %}
+            <template class="form__previousreference-{{ reference_form.initial.taal }}"
+                      data-title="{{ previous_reference_formset.title }}">
+                <div class="reference">
+                    {{ reference_form.as_p }}
+                </div>
+            </template>
+        {% endfor %}
 
     <template class="form__reference--display-template">
         <div class="reference__display form__input form__input--disabled">
