@@ -34,6 +34,9 @@ class CatalogListView(OverheidMixin, ListView):
 
         if self.lokale_overheid.automatisch_catalogus_aanmaken:
             self.object_list.create_specific_catalogs(municipality=self.lokale_overheid)
+            catalogs = self.object_list.specific_catalogs()
+        else:
+            catalogs = self.object_list
 
         themes = (
             Thema.objects.all()
@@ -42,7 +45,6 @@ class CatalogListView(OverheidMixin, ListView):
         )
         areas_template = {t.informatiegebied.informatiegebied: set() for t in themes}
 
-        catalogs = self.object_list.specific_catalogs()
         for catalog in catalogs:
             reference_catalog = catalog.referentie_catalogus
             catalog.areas = deepcopy(areas_template)
@@ -60,7 +62,7 @@ class CatalogListView(OverheidMixin, ListView):
             for product in intersected_products:
                 catalog.areas[product.area].add(product)
 
-            if catalog.municipality_owns_reference:
+            if getattr(catalog, "municipality_owns_reference", False):
                 reference_catalog.areas = deepcopy(areas_template)
                 for product in reference_products:
                     reference_catalog.areas[product.area].add(product)
