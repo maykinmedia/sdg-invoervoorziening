@@ -20,3 +20,6 @@ migrations:
 
 migrate:
 	venv/bin/python src/manage.py migrate
+
+graph:
+	venv/bin/python src/manage.py graph_models -o data/models.png

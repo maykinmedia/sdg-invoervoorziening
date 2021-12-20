@@ -1,5 +1,7 @@
+import string
 from typing import Any, Dict, List
 
+from sdg.core.constants import TaalChoices
 from sdg.core.models import (
     Informatiegebied,
     Overheidsorganisatie,
@@ -8,6 +10,7 @@ from sdg.core.models import (
 )
 from sdg.core.utils import string_to_date
 from sdg.organisaties.models import LokaleOverheid
+from sdg.producten.models import GeneriekProduct, LocalizedGeneriekProduct
 
 
 def load_gemeenten(data: List[Dict[str, Any]]) -> int:
@@ -93,6 +96,12 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
     count = 0
 
     for obj in data:
+        sdg_list = sdg.split(";") if (sdg := obj.get("SDG")) else []
+
+        # TODO: This is a bit of a hack. We should probably use a
+        #       ManyToManyField.
+        theme = Thema.objects.filter(informatiegebied__code__in=sdg_list).first()
+
         upn, created = UniformeProductnaam.objects.update_or_create(
             upn_uri=obj.get("URI"),
             defaults={
@@ -108,7 +117,7 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
                 # versioning) from boolean to the relevant SDG code(s). For us,
                 # it's just important we know that this UPN concerns the SDG
                 # and we will obtain the SDG codes via another way.
-                "sdg": bool(obj.get("SDG")),
+                "sdg": sdg_list,
                 "autonomie": bool(obj.get("Autonomie")),
                 "medebewind": bool(obj.get("Medebewind")),
                 "aanvraag": bool(obj.get("Aanvraag")),
@@ -119,33 +128,36 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
                 # We leave out the "grondslagen" (legal basis) data because
                 # there can be more than 1 for a UPN. We don't use them at the
                 # moment so they are ignored.
+                "thema": theme,
             },
         )
+
+        groups = [doelgroep for i in sdg_list if (doelgroep := _get_group(i))]
+        # Create generic product (and localize) for each target group
+        for group in groups:
+            generic, g_created = GeneriekProduct.objects.get_or_create(
+                upn=upn,
+                doelgroep=group,
+            )
+            if g_created:
+                LocalizedGeneriekProduct.objects.localize(
+                    instance=generic,
+                    languages=TaalChoices.get_available_languages(),
+                )
+
         if created:
             count += 1
 
     return count
 
 
-def load_upn_informatiegebieden(data: List[Dict[str, Any]]) -> int:
+def _get_group(sdg_code: str) -> str:
+    """Get the target group from a given SDG code.
+    - The range A-I equals "burger".
+    - The range J+ equals "bedrijf".
     """
-    Link existing UPNs and information areas together.
-
-    :return: The total count of updated objects.
-    """
-
-    count = 0
-
-    for obj in data:
-        try:
-            thema = Thema.objects.get(
-                thema=obj.get("SDG_Thema"), informatiegebied__code=obj.get("SDG_Code")
-            )
-        except Thema.DoesNotExist:
-            continue
-
-        count += UniformeProductnaam.objects.filter(
-            upn_label=obj.get("UniformeProductnaam")
-        ).update(thema=thema)
-
-    return count
+    letter = sdg_code[0]
+    if letter in string.ascii_uppercase[:9]:
+        return "eu-burger"
+    elif letter in string.ascii_uppercase[9:]:
+        return "eu-bedrijf"

@@ -61,6 +61,16 @@ class GeneriekProduct(models.Model):
         ),
         default=False,
     )
+    doelgroep = models.CharField(
+        max_length=32,
+        choices=DoelgroepChoices.choices,
+        help_text=_(
+            "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
+            "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
+            "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
+        ),
+        blank=True,
+    )
 
     @property
     def upn_uri(self):
@@ -83,6 +93,12 @@ class GeneriekProduct(models.Model):
     class Meta:
         verbose_name = _("generiek product")
         verbose_name_plural = _("generieke producten")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["upn", "doelgroep"],
+                name="unique_generic_product_upn_doelgroep",
+            )
+        ]
 
     def __str__(self):
         return f"{self.upn.upn_label}"

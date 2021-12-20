@@ -13,5 +13,5 @@ class TaalChoices(DjangoChoices):
 
 
 class DoelgroepChoices(DjangoChoices):
-    burgers = ChoiceItem("burgers", _("Burgers"))
-    bedrijven = ChoiceItem("bedrijven", _("Bedrijven"))
+    burger = ChoiceItem("eu-burger", _("EU Burger"))
+    bedrijf = ChoiceItem("eu-bedrijf", _("EU Bedrijf"))
