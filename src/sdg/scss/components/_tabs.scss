@@ -100,14 +100,41 @@
     line-height: 1.5;
     color: #212121;
 
+    &--field {
+      .form__input {
+        transition: all 0.3s ease-in-out;
+      }
+    }
+
+    &.form__cell--disabled {
+      .tabs__table-cell--field {
+        .form__input,
+        .ck-editor__main {
+          border: 1px solid $color_grey !important;
+          background-color: #ebebeb !important;
+        }
+      }
+    }
+
     &--versions {
       float: right;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 6px;
+
+      ins, del {
+        padding: 3px 10px;
+        border-radius: 16px;
+        text-align: center;
+        text-decoration: none;
+      }
     }
 
     &--tools {
       display: flex;
       justify-content: flex-end;
       padding-bottom: 12px;
+      margin-top: 14px;
 
       a {
         margin-left: 18px;
