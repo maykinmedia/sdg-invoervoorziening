@@ -3,8 +3,9 @@ import ClassicEditor from "./ckeditor";
 
 const Diff = require("text-diff");
 
-export function getValue(input) {
-    if (availableEditors.hasOwnProperty(input.id)) {
+export function getValue(input, getValue) {
+    debugger;
+    if (getValue && availableEditors.hasOwnProperty(input.id)) {
         return availableEditors[input.id].getData();
     }
     return input.value;
@@ -29,7 +30,7 @@ class DiffButton {
         // Return the diff between the two versions.
         this.button.classList.add("form__diff-btn--enabled");
         const previousValue = this.previousVersionData.input.value;
-        const currentValue = getValue(this.currentVersionData.input);
+        const currentValue = getValue(this.currentVersionData.input, this.getValue);
         const textDiff = this.diff.main(previousValue, currentValue);
         this.cellValueElement.innerHTML = this.diff.prettyHtml(textDiff).replace(/\\/g, "");
         this.versionsPanel.append(this.previousVersionTopElement);
@@ -74,7 +75,6 @@ class DiffButton {
     setUpDiffButton(node) {
         node.addEventListener("click", event => {
             event.preventDefault();
-            debugger;
             // Check if the diff is already displayed.
             if (this.cellValueElement.isEqualNode(this.default)) {
                 this.displayDiff();
@@ -89,6 +89,7 @@ class DiffButton {
         "previousVersionData": {},
         "currentVersionData": {},
         "versionsPanel": null,
+        "getValue": true,
     }) {
         this.button = button;
 
@@ -96,6 +97,8 @@ class DiffButton {
         this.previousVersionData = config.previousVersionData;
         this.currentVersionData = config.currentVersionData;
         this.versionsPanel = config.versionsPanel;
+
+        this.getValue = config.getValue != null ? config.getValue : true;
 
         this.default = this.cellValueElement.cloneNode(true);
 

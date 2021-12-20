@@ -81,6 +81,7 @@ class FormWithReference {
                                     "input": referenceField,
                                 },
                                 "versionsPanel": cell.parentElement.parentElement.querySelector(".reference__display--versions"),
+                                "getValue": false,
                             }
                         );
                     }
