@@ -4,7 +4,6 @@ import ClassicEditor from "./ckeditor";
 const Diff = require("text-diff");
 
 export function getValue(input, getValue) {
-    debugger;
     if (getValue && availableEditors.hasOwnProperty(input.id)) {
         return availableEditors[input.id].getData();
     }
