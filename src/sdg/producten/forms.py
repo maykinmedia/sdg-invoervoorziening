@@ -2,7 +2,6 @@ from typing import Optional
 
 from django import forms
 
-from ..core.constants import DoelgroepChoices
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import CheckboxSelectMultiple
@@ -43,11 +42,6 @@ class ProductForm(forms.ModelForm):
     )
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None,
-        required=False,
-        widget=CheckboxSelectMultiple(),
-    )
-    doelgroep = forms.MultipleChoiceField(
-        choices=DoelgroepChoices.choices,
         required=False,
         widget=CheckboxSelectMultiple(),
     )

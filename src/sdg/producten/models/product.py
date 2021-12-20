@@ -16,7 +16,6 @@ from django.utils.translation import ugettext_lazy as _
 from djchoices import ChoiceItem, DjangoChoices
 
 from sdg.core.constants import DoelgroepChoices
-from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.core.utils import get_from_cache
 from sdg.producten.models import (
@@ -337,9 +336,6 @@ class Product(ProductFieldMixin, models.Model):
                 specific_product, created = Product.objects.get_or_create(
                     referentie_product=self,
                     catalogus=specific_catalog,
-                    defaults={
-                        "doelgroep": self.doelgroep,
-                    },
                 )
 
                 lokaties = list(
