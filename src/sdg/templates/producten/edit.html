@@ -127,57 +127,44 @@
                             <hr class="divider">
                         {% endif %}
 
-                        <table class="tabs__table form__has-reference"
-                               data-reference=".form__reference-{{ form.taal.value }}"
-                               data-previousreference=".form__previousreference-{{ form.taal.value }}"
-                        >
-                            <thead>
-                            <tr>
-                                <th class="tabs__table-header" width="26%">Specifieke gegevens</th>
-                                <th class="tabs__table-header">Huidige informatie</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    {{ form.non_field_errors }}
-                                    {{ form.id }}
-                                    {{ form.taal.as_hidden }}
-                                </td>
-                            </tr>
-                            {% with reference=product.is_referentie_product %}
-                                {% table_field form.product_titel_decentraal is_reference=reference %}
-                                {% table_field form.specifieke_tekst is_reference=reference %}
-                                {% table_field form.verwijzing_links is_reference=True %}
-                                {% table_field form.decentrale_link is_reference=True %}
-                                {% table_field form.procedure_beschrijving is_reference=reference %}
-                                {% table_field form.vereisten is_reference=reference %}
-                                {% table_field form.bewijs is_reference=reference %}
-                                {% table_field form.bezwaar_en_beroep is_reference=reference %}
-                                {% table_field form.kosten_en_betaalmethoden is_reference=reference %}
-                                {% table_field form.uiterste_termijn is_reference=reference %}
-                                {% table_field form.wtd_bij_geen_reactie is_reference=reference %}
-                                {% table_field form.decentrale_procedure_link is_reference=reference %}
-                                <tr>
-                                    <td class="tabs__table-cell tabs__table-cell--edit">
-                                        {% trans "Publicatie datum" %}
-                                        <i class="fas fa-info-circle fa-xs dark"></i>
-                                    </td>
-                                    <td class="tabs__table-cell">
-                                        <div class="calendar-container">
-                                            <input name="date" type="date" class="calendar form__input"
-                                                   value="{{ version_form.date.initial }}">
-                                        </div>
-                                    </td>
-                                </tr>
-                            {% endwith %}
-                            </tbody>
-                        </table>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+                    <table class="tabs__table form__has-reference"
+                           data-reference=".form__reference-{{ form.taal.value }}"
+                           data-previousreference=".form__previousreference-{{ form.taal.value }}"
+                    >
+                        <thead>
+                        <tr>
+                            <th class="tabs__table-header" width="26%">Specifieke gegevens</th>
+                            <th class="tabs__table-header">Huidige informatie</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td>
+                                {{ form.non_field_errors }}
+                                {{ form.id }}
+                                {{ form.taal.as_hidden }}
+                            </td>
+                        </tr>
+                        {% with reference=product.is_referentie_product %}
+                            {% table_field form.product_titel_decentraal is_reference=reference %}
+                            {% table_field form.specifieke_tekst is_reference=reference %}
+                            {% table_field form.verwijzing_links is_reference=True %}
+                            {% table_field form.decentrale_link is_reference=True %}
+                            {% table_field form.procedure_beschrijving is_reference=reference %}
+                            {% table_field form.vereisten is_reference=reference %}
+                            {% table_field form.bewijs is_reference=reference %}
+                            {% table_field form.bezwaar_en_beroep is_reference=reference %}
+                            {% table_field form.kosten_en_betaalmethoden is_reference=reference %}
+                            {% table_field form.uiterste_termijn is_reference=reference %}
+                            {% table_field form.wtd_bij_geen_reactie is_reference=reference %}
+                            {% table_field form.decentrale_procedure_link is_reference=reference %}
+                        {% endwith %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+
 
         <div class="form-actions">
             <div class="notifications">
