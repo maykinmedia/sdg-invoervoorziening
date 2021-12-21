@@ -6,7 +6,8 @@ class Notification {
         this.close = node.querySelector(".notifications__close");
 
         if (this.close) {
-            this.close.addEventListener("click", () => {
+            this.close.addEventListener("click", (event) => {
+                event.preventDefault();
                 this.node.remove()
             });
         }
