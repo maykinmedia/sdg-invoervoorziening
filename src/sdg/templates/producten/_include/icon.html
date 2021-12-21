@@ -1,0 +1,14 @@
+{% load i18n %}
+
+{% if name == "times" %}
+    <i class="fas fa-times red"
+       title="{% trans "Product niet gepubliceerd, u voldoet niet aan de SDG verordening." %}"></i>
+{% elif name == "exclamation" %}
+    <i class="fas fa-exclamation accent"
+       title="{% trans "De standaardtekst is gewijzigd, controleer uw specifieke tekst." %}"></i>
+{% elif name == "minus" %}
+    <i class="fas fa-minus green" title="{% trans "Mijn gemeente voert dit product niet." %}"></i>
+{% elif name == "check" %}
+    <i class="fas fa-check green" title="{% trans "Mijn gemeente heeft dit product beschikbaar." %}"></i>
+{% endif %}
+

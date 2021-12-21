@@ -354,7 +354,7 @@ class Product(ProductFieldMixin, models.Model):
         else:
             return self
 
-    def get_create_redirect_url(self, catalog):
+    def get_create_redirect_url(self, catalog=None):
         return reverse(
             "organisaties:catalogi:producten:redirect",
             kwargs=build_url_kwargs(self, catalog=catalog),
