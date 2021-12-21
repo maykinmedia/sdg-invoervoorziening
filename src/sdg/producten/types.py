@@ -3,14 +3,18 @@ from typing import Any
 
 
 @dataclass
-class ProductInfo:
+class ProductFieldInfo:
     name: str
     verbose_name: str
     value: Any
     help_text: str
-    is_markdown: bool
     is_reference: bool
-    is_list: bool
+    type: str
+
+    def __getattr__(self, name):
+        """Allow using is_<x> syntax for field type checking."""
+        if name.startswith("is_"):
+            return name[3:].lower() in self.type.lower()
 
 
 @dataclass

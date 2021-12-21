@@ -1,13 +1,10 @@
 from typing import Any, List, Tuple
 
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from markdownx.models import MarkdownxField
-
 from sdg.core.constants import TaalChoices
-from sdg.producten.types import ProductInfo
+from sdg.producten.types import ProductFieldInfo
 
 
 class ProductFieldMixin:
@@ -23,27 +20,26 @@ class ProductFieldMixin:
 
         return value, False
 
-    def _get_field(self, field) -> ProductInfo:
+    def _get_field(self, field) -> ProductFieldInfo:
         """Gets field specific information for products."""
         if isinstance(field, str):
             field = self.__class__._meta.get_field(field)
         value, is_reference = self._get_field_value(field)
-        return ProductInfo(
+        return ProductFieldInfo(
             name=field.name,
             verbose_name=field.verbose_name,
             value=value,
             help_text=field.help_text,
             is_reference=is_reference,
-            is_markdown=isinstance(field, MarkdownxField),
-            is_list=isinstance(field, ArrayField),
+            type=field.get_internal_type(),
         )
 
-    def get_fields(self) -> List[ProductInfo]:
+    def get_fields(self) -> List[ProductFieldInfo]:
         """Returns data for each field as a list of Field objects."""
         all_fields = self.__class__._meta.fields
         return [self._get_field(field) for field in all_fields]
 
-    def get_field(self, field) -> ProductInfo:
+    def get_field(self, field) -> ProductFieldInfo:
         """Returns data for a single field."""
         return self._get_field(field)
 

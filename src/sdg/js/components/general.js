@@ -6,6 +6,9 @@ class GeneralForm {
         const input = this.node.querySelector("[name=product_aanwezig]");
         const textarea = this.node.querySelector("[name=product_aanwezig_toelichting]")
 
+        // initialize
+        input.value === "false" ? textarea.disabled = false : textarea.disabled = true;
+
         input.addEventListener("change", (event) => {
             event.target.value === "false" ? textarea.disabled = false : textarea.disabled = true;
         });
