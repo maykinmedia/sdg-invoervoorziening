@@ -80,7 +80,7 @@ class FormWithReference {
                                     "title": this.referenceForm.dataset.title,
                                     "input": referenceField,
                                 },
-                                "versionsPanel": cell.parentElement.parentElement.querySelector(".reference__display--versions"),
+                                "versionsPanel": cell.parentElement.querySelector(".reference__display--versions"),
                                 "getValue": false,
                             }
                         );
