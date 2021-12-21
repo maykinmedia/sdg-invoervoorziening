@@ -38,7 +38,7 @@ class GeneriekProductAdmin(admin.ModelAdmin):
     )
     inlines = (LocalizedGeneriekProductInline,)
     autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
-    search_fields = ("upn_label",)
+    search_fields = ("upn__upn_label",)
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).select_related("upn")
