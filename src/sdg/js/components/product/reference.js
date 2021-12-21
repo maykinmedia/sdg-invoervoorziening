@@ -1,29 +1,37 @@
-import {DiffButton} from "./diff";
+import * as diff from "../diff";
 
-const {availableEditors} = require("./markdown");
+const {availableEditors} = require("../markdown");
 import showdown from 'showdown';
 
 const converter = new showdown.Converter();
 const specificForms = document.querySelectorAll(".form__has-reference");
 
 class FormWithReference {
+
+    setValue(formInput, referenceValue) {
+        if (availableEditors.hasOwnProperty(formInput.id)) {
+            availableEditors[formInput.id].setData(referenceValue);
+        } else {
+            formInput.value = referenceValue;
+        }
+    }
+
     setupReferenceButton(cell) {
         // Setup a button that writes the reference to the cell input.
 
         const formReferenceBtn = cell.querySelector(".form__reference-btn");
-        const formInput = cell.querySelector(".form__input");
 
         if (formReferenceBtn) {
             formReferenceBtn.addEventListener("click", (event) => {
                 event.preventDefault();
 
+                const formInput = cell.querySelector(".form__input");
                 const referenceValue = this.referenceForm.content.getElementById(formInput.id).value;
                 if (referenceValue) {
-                    if (availableEditors.hasOwnProperty(formInput.id)) {
-                        availableEditors[formInput.id].setData(referenceValue);
-                    } else {
-                        formInput.value = referenceValue;
-                    }
+                    this.setValue(formInput, referenceValue);
+                    // Trigger a change event on the field
+                    const event = new Event('change');
+                    formInput.dispatchEvent(event);
                 }
             });
         }
@@ -60,23 +68,57 @@ class FormWithReference {
                         cell.appendChild(template);
 
                         // enable diff button
-                        new DiffButton(
+                        new diff.DiffButton(
                             template.querySelector(".diff"),
-                            templateDisplay.innerHTML,
                             {
-                                "title": this.previousReferenceForm.dataset.title,
-                                "text": previousReferenceField.value
-                            },
-                            {
-                                "title": this.referenceForm.dataset.title,
-                                "text": referenceField.value
+                                "cellValueElement": templateDisplay,
+                                "previousVersionData": {
+                                    "title": this.previousReferenceForm.dataset.title,
+                                    "input": previousReferenceField,
+                                },
+                                "currentVersionData": {
+                                    "title": this.referenceForm.dataset.title,
+                                    "input": referenceField,
+                                },
+                                "versionsPanel": cell.parentElement.querySelector(".reference__display--versions"),
+                                "getValue": false,
                             }
                         );
-
                     }
                 }
 
             });
+        }
+    }
+
+    setupDiffButton(cell) {
+        /*
+        Setup a button that displays a diff between the current value and the reference text in the cell.
+         */
+
+        const formDiffBtn = cell.querySelector(".form__diff-btn");
+        const formInput = cell.querySelector(".form__input");
+
+        if (this.referenceForm && formDiffBtn && formInput) {
+            const referenceInput = this.referenceForm.content.getElementById(formInput.id);
+            const field = cell.querySelector(".tabs__table-cell--field");
+
+            formInput.differ = new diff.DiffButton(
+                formDiffBtn,
+                {
+                    "cellValueElement": field,
+                    "previousVersionData": {
+                        "title": this.referenceForm.dataset.title,
+                        "input": referenceInput,
+                    },
+                    "currentVersionData": {
+                        "title": "Huidige",
+                        "input": formInput,
+                    },
+                    "versionsPanel": cell.querySelector(".tabs__table-cell--versions"),
+                }
+            );
+            diff.addChangeListener(formInput);
         }
     }
 
@@ -92,8 +134,12 @@ class FormWithReference {
         [...this.formCells].forEach(cell => {
             this.setupReferenceButton(cell);
             this.setupDisplayButton(cell);
+            this.setupDiffButton(cell);
         });
     }
 }
 
-[...specificForms].forEach(form => new FormWithReference(form));
+// TODO: find a better way to do this (e.g. listener after ckeditor is fully loaded)
+setTimeout(() => {
+    [...specificForms].forEach(form => new FormWithReference(form));
+}, 2000);

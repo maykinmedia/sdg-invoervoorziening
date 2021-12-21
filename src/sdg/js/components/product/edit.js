@@ -1,4 +1,4 @@
-const {availableEditors} = require("./markdown");
+const {availableEditors} = require("../markdown");
 
 const disabledCellClass = "form__cell--disabled";
 
@@ -13,7 +13,6 @@ function changeReadOnly(cell, readOnly) {
 
     cell.querySelectorAll('input, textarea').forEach(element => {
         element.readOnly = readOnly;
-        element.disabled = readOnly;
     });
 
     const formInput = cell.querySelector(".form__input");
@@ -21,6 +20,9 @@ function changeReadOnly(cell, readOnly) {
         availableEditors[formInput.id].isReadOnly = readOnly;
     }
 
+    // Trigger a change event on the regular field
+    const event = new Event('change');
+    formInput.dispatchEvent(event);
 }
 
 class FormWithEditToggle {

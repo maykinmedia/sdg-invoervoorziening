@@ -11,7 +11,23 @@
       margin: 1em 1em;
     }
 
+    .form__diff-btn {
+      &--enabled + .form__edit-btn,
+      &--enabled + .form__edit-btn svg,
+      {
+        pointer-events: none;
+        color: $color_grey;
+      }
+    }
+
     &--disabled {
+
+      .form__diff-btn,
+      .form__diff-btn .svg-inline--fa {
+        color: $color_primary;
+        pointer-events: all;
+      }
+
       .ck-editor__top {
         display: none;
       }
@@ -169,6 +185,23 @@
       margin-left: 16px;
     }
 
+  }
+
+  .form__edit-btn,
+  .form__diff-btn,
+  .form__display-btn,
+  .form__reference-btn,
+  .form__edit-btn .svg-inline--fa,
+  .form__diff-btn .svg-inline--fa,
+  .form__display-btn .svg-inline--fa,
+  .form__reference-btn .svg-inline--fa {
+    transition: .25s color ease;
+  }
+
+  .form__diff-btn,
+  .form__diff-btn .svg-inline--fa {
+    color: $color_grey;
+    pointer-events: none;
   }
 
   .errorlist {
