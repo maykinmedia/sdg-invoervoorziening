@@ -21,10 +21,12 @@ def duplicate_localized_products(form, new_version):
     return LocalizedProduct.objects.bulk_create(localized_products)
 
 
-def build_url_kwargs(product) -> dict:
+def build_url_kwargs(product, catalog=None) -> dict:
     """Return url kwargs for product."""
+    pk = catalog.lokale_overheid.pk if catalog else product.catalogus.lokale_overheid.pk
+    catalog_pk = catalog.pk if catalog else product.catalogus.pk
     return {
-        "pk": product.catalogus.lokale_overheid.pk,
-        "catalog_pk": product.catalogus.pk,
+        "pk": pk,
+        "catalog_pk": catalog_pk,
         "product_pk": product.pk,
     }

@@ -36,22 +36,22 @@ class ProductCreateRedirectView(OverheidMixin, SingleObjectMixin, RedirectView):
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
-        return self.object.catalogus.lokale_overheid
+        self.catalog = ProductenCatalogus.objects.select_related(
+            "lokale_overheid",
+        ).get(pk=self.kwargs["catalog_pk"])
+        return self.catalog.lokale_overheid
 
     def get(self, request, *args, **kwargs):
-        kwargs["product"] = self.object
-        if kwargs.get("catalog_pk"):
-            catalog = get_object_or_404(ProductenCatalogus, pk=kwargs["catalog_pk"])
-            object = self.object.get_or_create_specific_product(
-                specific_catalog=catalog
-            )
-            kwargs["product"] = object
+        product = self.object.get_or_create_specific_product(
+            specific_catalog=self.catalog
+        )
+        kwargs["product"] = product
         return super().get(request, *args, **kwargs)
 
     def get_redirect_url(self, *args, **kwargs):
         return reverse(
             "organisaties:catalogi:producten:detail",
-            kwargs=build_url_kwargs(kwargs["product"]),
+            kwargs=build_url_kwargs(kwargs["product"], catalog=self.catalog),
         )
 
 

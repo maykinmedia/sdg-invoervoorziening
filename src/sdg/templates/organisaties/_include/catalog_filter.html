@@ -1,20 +1,18 @@
-{% load i18n %}
+{% load producten %}
+
 <div class="filter">
     <div class="filter__status">
-        <div class="filter__button filter__button--off"
-             title="{% trans "Product niet gepubliceerd, u voldoet niet aan de SDG verordening." %}">
-            <i class="fas fa-times red"></i>
+        <div class="filter__button filter__button--off">
+            {% icon "times" %}
         </div>
-        <div class="filter__button filter__button--off"
-             title="{% trans "De standaardtekst is gewijzigd, controleer uw specifieke tekst." %}">
-            <i class="fas fa-exclamation accent"></i>
+        <div class="filter__button filter__button--off">
+            {% icon "exclamation" %}
         </div>
-        <div class="filter__button filter__button--off" title="{% trans "Mijn gemeente voert dit product niet." %}">
-            <i class="fas fa-minus green"></i>
+        <div class="filter__button filter__button--off">
+            {% icon "minus" %}
         </div>
-        <div class="filter__button filter__button--off"
-             title="{% trans "Mijn gemeente heeft dit product beschikbaar." %}">
-            <i class="fas fa-check green"></i>
+        <div class="filter__button filter__button--off">
+            {% icon "check" %}
         </div>
     </div>
     <div class="filter__text">
