@@ -64,6 +64,7 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
             "plaats",
             "land",
             "openingstijden",
+            "openingstijden_opmerking",
             "organisatie",
         )
         extra_kwargs = {
