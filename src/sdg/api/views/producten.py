@@ -40,7 +40,12 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 @extend_schema_view(
     list=extend_schema(
         parameters=[
-            OpenApiParameter("product_uuid", OpenApiTypes.UUID, OpenApiParameter.PATH),
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="UUID van het product waarvoor de versies worden opgevraagd.",
+            ),
         ],
         description="Lijst van alle productversies van een product.",
     ),
@@ -48,13 +53,39 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
     """Viewset for the version history of a product."""
 
-    lookup_field = "uuid"
-    queryset = ProductVersie.objects.all()
     serializer_class = ProductVersieSerializer
+    queryset = ProductVersie.objects.none()
 
     def get_queryset(self):
         return (
             ProductVersie.objects.published()
+            .filter(product__uuid=self.kwargs["product_uuid"])
+            .prefetch_related("vertalingen")
+        )
+
+
+@extend_schema_view(
+    list=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="UUID van het product waarvoor de versie is opgevraagd.",
+            ),
+        ],
+        description="Lijst van concept-productversies voor dit product.",
+    ),
+)
+class ProductConceptViewSet(mixins.ListModelMixin, GenericViewSet):
+    """Viewset for the concept version of a product."""
+
+    serializer_class = ProductVersieSerializer
+    queryset = ProductVersie.objects.none()
+
+    def get_queryset(self):
+        return (
+            ProductVersie.objects.filter(publicatie_datum=None)
             .filter(product__uuid=self.kwargs["product_uuid"])
             .prefetch_related("vertalingen")
         )

@@ -12,6 +12,7 @@ from sdg.api.views import (
     CatalogusViewSet,
     LokaleOverheidViewSet,
     LokatieViewSet,
+    ProductConceptViewSet,
     ProductHistoryViewSet,
     ProductViewSet,
 )
@@ -28,7 +29,12 @@ router.register(
             "historie",
             ProductHistoryViewSet,
             basename="product-history",
-        )
+        ),
+        routers.nested(
+            "concept",
+            ProductConceptViewSet,
+            basename="product-concept",
+        ),
     ],
 )
 router.register("organisaties", LokaleOverheidViewSet)
