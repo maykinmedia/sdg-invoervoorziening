@@ -110,18 +110,21 @@ class Lokatie(models.Model):
     straat = models.CharField(
         _("straat"),
         max_length=256,
+        help_text=_("De straatnaam van de lokatie."),
     )
     nummer = models.PositiveIntegerField(
         _("nummer"),
+        help_text=_("Het huisnummer van de lokatie."),
+    )
+    plaats = models.CharField(
+        _("plaats"),
+        max_length=256,
+        help_text=_("De plaatsnaam van de lokatie."),
     )
     postcode = models.CharField(
         _("postcode"),
         validators=[validate_postcode],
         max_length=6,
-    )
-    plaats = models.CharField(
-        _("plaats"),
-        max_length=256,
     )
     land = models.CharField(
         _("land"),
@@ -184,6 +187,13 @@ class Lokatie(models.Model):
         blank=True,
         default=list,
     )
+    openingstijden_opmerking = models.CharField(
+        _("openingstijden opmerking"),
+        blank=True,
+        help_text=_("Opmerking over de openingstijden."),
+        max_length=255,
+    )
+
     uuid = models.UUIDField(
         _("UUID"),
         unique=True,
