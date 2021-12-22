@@ -127,6 +127,26 @@ class ProductenTests(APITestCase):
         data = response.json()["results"]
         self.assertEqual(3, len(data))
 
+    @freeze_time(NOW_DATE)
+    def test_list_product_concept(self):
+        product = ReferentieProductFactory.create()
+        ReferentieProductVersieFactory.create_batch(
+            3, publicatie_datum=PAST_DATE, product=product
+        )
+        concept = ReferentieProductVersieFactory.create(
+            publicatie_datum=None, product=product
+        )
+
+        response = self.client.get(
+            reverse("api:product-concept-list", args=[product.uuid])
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+        self.assertEqual(1, len(data))
+        self.assertEqual(concept.versie, data[0]["versie"])
+
 
 class OrganisatiesTests(APITestCase):
     def test_list_organizations(self):
