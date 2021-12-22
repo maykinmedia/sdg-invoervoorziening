@@ -89,12 +89,12 @@
     font-weight: bold;
     text-align: left;
     border-bottom: 1px solid #BDBDBD;
-    padding: 12px;
+    padding: 12px 12px 12px 0;
     text-transform: uppercase;
   }
 
   .tabs__table-cell {
-    padding: 12px;
+    padding: 12px 12px 12px 0;
     border-bottom: 1px solid #BDBDBD;
     vertical-align: top;
     line-height: 1.5;
@@ -161,7 +161,8 @@
     }
 
     ul,
-    ol {
+    ol,
+    li {
       list-style-type: none;
       margin: 8px 0;
 
@@ -231,13 +232,14 @@
 
   .tabs__footer {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-gap: 16px;
     margin-top: 64px;
   }
 
   .tabs__footer-title {
     font-size: 24px;
+    margin-bottom: 24px;
   }
 
   .tabs__footer-list {

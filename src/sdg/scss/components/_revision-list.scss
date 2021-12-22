@@ -1,12 +1,16 @@
+@import 'colors';
+
 .revision-list {
   list-style-type: none;
+  margin: 0.4em 0;
 
   .revision-list__item {
     align-items: center;
-    padding-bottom: 16px;
+    padding: 6px 0;
+    display: flex;
 
-    &:last-child {
-      padding-bottom: 0;
+    & > div {
+      margin-right: -20px;
     }
 
     .svg-inline--fa {
@@ -17,8 +21,23 @@
       color: #9d9b9e;
       padding-top: 4px;
       overflow: hidden;
-      margin-right: 8px;
+      margin-right: 11px;
       float: left;
+      position: relative;
+      border: 2px solid $color_primary;
+      z-index: 2;
     }
+
+    &--user {
+      background-color: $color_primary;
+      color: #fff;
+      border-radius: 20px;
+      padding: 4px 24px;
+      position: relative;
+      right: 26px;
+      z-index: 1;
+      top: 11px;
+    }
+
   }
 }

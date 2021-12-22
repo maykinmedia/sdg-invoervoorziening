@@ -29,10 +29,17 @@ class LocalizedProductForm(forms.ModelForm):
 
 
 class ProductForm(forms.ModelForm):
-    product_aanwezig = forms.NullBooleanField(required=False)
+    product_aanwezig = forms.NullBooleanField(
+        required=False,
+    )
     product_aanwezig_toelichting = forms.CharField(
         required=False,
         widget=forms.Textarea(attrs={"rows": "6", "disabled": True}),
+    )
+    doelgroep = forms.MultipleChoiceField(
+        choices=DoelgroepChoices.choices,
+        required=False,
+        widget=CheckboxSelectMultiple(),
     )
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None,
@@ -50,8 +57,8 @@ class ProductForm(forms.ModelForm):
         fields = (
             "product_aanwezig",
             "product_aanwezig_toelichting",
-            "lokaties",
             "doelgroep",
+            "lokaties",
         )
 
     def __init__(self, *args, **kwargs):
@@ -59,6 +66,11 @@ class ProductForm(forms.ModelForm):
         locations = self.instance.get_municipality_locations()
         self.fields["lokaties"].queryset = locations
         self.fields["lokaties"].initial = locations.filter(is_product_location=True)
+        self.fields["doelgroep"].disabled = True
+
+        _model_meta = self._meta.model._meta
+        for field in self.fields:
+            self.fields[field].help_text = _model_meta.get_field(field).help_text
 
 
 class ProductVersionForm(forms.ModelForm):
