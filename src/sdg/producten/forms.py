@@ -39,11 +39,6 @@ class ProductForm(forms.ModelForm):
         required=False,
         widget=CheckboxSelectMultiple(),
     )
-    doelgroep = forms.MultipleChoiceField(
-        choices=DoelgroepChoices.choices,
-        required=False,
-        widget=CheckboxSelectMultiple(),
-    )
 
     class Meta:
         model = Product
