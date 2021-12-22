@@ -81,7 +81,6 @@ CACHES = {
     },
 }
 
-
 #
 # APPLICATIONS enabled for this project
 #
@@ -315,7 +314,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
 # Allow logging in with both username+password and email+password
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesBackend",
@@ -466,6 +464,17 @@ INVITATION_TEMPLATE = "core/email/invitation.html"
 INVITATION_SUBJECT = "Toegang tot de SDG invoervoorziening"
 
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
+
+# Markdown
+MARKDOWNIFY_WHITELIST_TAGS = [
+    "table",
+    "thead",
+    "tbody",
+    "th",
+    "tr",
+    "td",
+]
+MARKDOWNIFY_MARKDOWN_EXTENSIONS = ["markdown.extensions.extra"]
 
 # Celery
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/4")
