@@ -1,5 +1,7 @@
 from django import template
 
+from sdg.producten.types import Language
+
 register = template.Library()
 
 
@@ -34,3 +36,23 @@ def exclude(field_list: list, excluded_fields: str) -> list:
         )
 
     return result
+
+
+@register.simple_tag
+def create_redirect_url(product, catalog=None):
+    return product.get_create_redirect_url(catalog=catalog)
+
+
+@register.inclusion_tag("producten/_include/icon.html")
+def icon(name: str):
+    return {"name": name}
+
+
+@register.inclusion_tag("producten/_include/product_icon.html")
+def product_icon(product, **kwargs):
+    return {**kwargs, "product": product}
+
+
+@register.inclusion_tag("producten/_include/flag.html")
+def flag(language: Language, **kwargs):
+    return {**kwargs, "language": language}

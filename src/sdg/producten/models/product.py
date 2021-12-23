@@ -5,7 +5,7 @@ from datetime import date
 from typing import Any, List
 
 from django.contrib.auth import get_user_model
-from django.core.exceptions import FieldError, ValidationError
+from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.db.models import BooleanField, Case, Model, Q, Value, When
 from django.shortcuts import get_object_or_404
@@ -354,10 +354,10 @@ class Product(ProductFieldMixin, models.Model):
         else:
             return self
 
-    def get_create_redirect_url(self):
+    def get_create_redirect_url(self, catalog=None):
         return reverse(
             "organisaties:catalogi:producten:redirect",
-            kwargs=build_url_kwargs(self),
+            kwargs=build_url_kwargs(self, catalog=catalog),
         )
 
     class Meta:

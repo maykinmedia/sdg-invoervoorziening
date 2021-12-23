@@ -120,13 +120,3 @@ def checkbox(field, **kwargs):
 @register.inclusion_tag("forms/status_icon.html")
 def status_icon(status, **kwargs):
     return {**kwargs, "status": status}
-
-
-@register.inclusion_tag("producten/_include/product_icon.html")
-def product_icon(product, **kwargs):
-    return {**kwargs, "product": product}
-
-
-@register.inclusion_tag("core/_include/flag.html")
-def flag(language: Language, **kwargs):
-    return {**kwargs, "language": language}

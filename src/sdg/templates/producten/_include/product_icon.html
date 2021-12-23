@@ -1,9 +1,11 @@
+{% load i18n producten %}
+
 {% if product.is_referentie_product %}
-    <i class="fas fa-times red"></i>
+    {% icon "times" %}
 {% elif product.has_expired %}
-    <i class="fas fa-exclamation accent"></i>
+    {% icon "exclamation" %}
 {% elif not product.product_aanwezig %}
-    <i class="fas fa-minus green"></i>
+    {% icon "minus" %}
 {% else %}
-    <i class="fas fa-check green"></i>
+    {% icon "check" %}
 {% endif %}
