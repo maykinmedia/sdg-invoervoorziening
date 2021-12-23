@@ -1,10 +1,7 @@
 from secrets import compare_digest
 
 from django import forms
-from django.contrib.auth.forms import (
-    AuthenticationForm as _AuthenticationForm,
-    UsernameField,
-)
+from django.contrib.auth.forms import AuthenticationForm as _AuthenticationForm
 from django.forms import inlineformset_factory
 from django.utils.translation import ugettext_lazy as _
 
@@ -46,17 +43,12 @@ class InvitationAcceptForm(forms.Form):
 
 
 class AuthenticationForm(_AuthenticationForm):
-    username = UsernameField(
-        widget=forms.TextInput(attrs={"autofocus": True}), required=False
-    )
-    password = forms.CharField(
-        label=_("Password"),
-        strip=False,
-        widget=forms.PasswordInput,
-        required=False,
-    )
+    """
+    Override the default AuthenticationForm to use a custom error message.
+    """
 
-    error_messages = {
-        "invalid_login": "Voer een juist e-mailadres en wachtwoord in.",
-        "inactive": _("This account is inactive."),
-    }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.error_messages[
+            "invalid_login"
+        ] = "Voer een juist e-mailadres en wachtwoord in."
