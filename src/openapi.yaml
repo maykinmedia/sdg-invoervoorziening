@@ -530,6 +530,7 @@ components:
           description: Het huisnummer van de lokatie.
         postcode:
           type: string
+          description: De postcode van de lokatie.
           maxLength: 6
         plaats:
           type: string
@@ -537,6 +538,7 @@ components:
           maxLength: 256
         land:
           type: string
+          description: Het land van de lokatie.
           maxLength: 128
         openingstijden:
           allOf:

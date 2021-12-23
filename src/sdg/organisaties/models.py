@@ -120,6 +120,7 @@ class Lokatie(models.Model):
         _("postcode"),
         validators=[validate_postcode],
         max_length=6,
+        help_text=_("De postcode van de lokatie."),
     )
     plaats = models.CharField(
         _("plaats"),
