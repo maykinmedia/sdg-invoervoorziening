@@ -208,6 +208,9 @@
           @extend .dynamic__container__button;
           background-color: transparent;
           height: 49px;
+          position: relative;
+          right: 34px;
+          margin-right: -34px;
         }
 
         &--low {

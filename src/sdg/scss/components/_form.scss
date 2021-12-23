@@ -21,6 +21,10 @@
 
     &--disabled {
 
+      button {
+        pointer-events: none;
+      }
+
       .form__diff-btn,
       .form__diff-btn .svg-inline--fa {
         color: $color_primary;
