@@ -8,18 +8,22 @@
 {% block notifications %}{% endblock %}
 
 {% block inner %}
-    {% blocktrans %}
-        <div>
-            <p class="heading">Nieuwe gebruiker toevoegen.</p>
-            <p class="subheading">U nodigt hiermee een nieuwe of bestaande gebruiker uit voor {{ lokaleoverheid }}. Een
-                gebruiker in de rol van redacteur kan
-                producten in uw catalogi aanpassen. Een beheerder kan alleen gebruikers beheren voor uw organisatie,
-                binnen deze applicatie. Een gebruiker mag ook beide rollen vervullen.</p>
-        </div>
-    {% endblocktrans %}
-
     <form method="post" class="form">
         {% csrf_token %}
+
+        {% blocktrans %}
+            <div>
+                <p class="heading">Nieuwe gebruiker toevoegen.</p>
+                <p class="subheading">U nodigt hiermee een nieuwe of bestaande gebruiker uit voor {{ lokaleoverheid }}.
+                    Een
+                    gebruiker in de rol van redacteur kan
+                    producten in uw catalogi aanpassen. Een beheerder kan alleen gebruikers beheren voor uw organisatie,
+                    binnen deze applicatie. Een gebruiker mag ook beide rollen vervullen.</p>
+            </div>
+        {% endblocktrans %}
+
+        {{ formset.management_form }}
+        {{ formset.non_form_errors }}
         {{ form.non_field_errors }}
 
         <div class="form__block">
@@ -27,7 +31,6 @@
             {% field form.first_name %}
             {% field form.last_name %}
             <div class="form__block-inline">
-                {{ formset.management_form }}
                 {% for subform in formset %}
                     {% checkbox subform.is_beheerder %}
                     {% checkbox subform.is_redacteur %}
@@ -41,6 +44,5 @@
                 </a>
             </div>
         </div>
-
     </form>
 {% endblock inner %}

@@ -17,9 +17,21 @@ class RoleForm(forms.ModelForm):
         )
 
 
-RoleInlineFormSet = inlineformset_factory(
-    User, Role, form=RoleForm, extra=1, max_num=1, can_delete=False
-)
+class RoleInlineFormSet(
+    inlineformset_factory(
+        User, Role, form=RoleForm, extra=1, max_num=1, can_delete=False
+    )
+):
+    def clean(self):
+        super().clean()
+
+        errors = [
+            _("U moet ten minste één rol selecteren.")
+            for form in self.forms
+            if not form.cleaned_data
+        ]
+        if errors:
+            raise forms.ValidationError(errors)
 
 
 class InvitationAcceptForm(forms.Form):

@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.views.generic import DeleteView, ListView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
 from sdg.organisaties.views.mixins import DisallowOwnRoleMixin, RoleBaseMixin
+
+User = get_user_model()
 
 
 class RoleListView(RoleBaseMixin, OverheidMixin, ListView):
@@ -17,6 +20,7 @@ class RoleListView(RoleBaseMixin, OverheidMixin, ListView):
         context[
             "lokaleoverheid_beheerder"
         ] = self.lokale_overheid.user_has_manager_role(self.request.user)
+        context["users_without_role"] = User.objects.filter(roles__isnull=True)
         return context
 
 

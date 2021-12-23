@@ -1,0 +1,24 @@
+{% load i18n producten utils %}
+
+<tr>
+    <td class="tabs__table-cell">{{ user.get_full_name|default:user.email }}
+        {% if user.invitatie and not user.invitatie.accepted %}
+            <i class="fa fa-envelope fa-xs dark"
+               title="{% trans 'Uitnodiging verstuurd' %}"></i>
+        {% endif %}
+    </td>
+    <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
+    <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
+    <td class="tabs__table-cell">
+    {% if role %}
+        {% if lokaleoverheid_beheerder and user != request.user %}
+            <a class="button--small button--light"
+               href="
+                   {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
+            <a class="button--small button--light"
+               href="
+                   {% url 'organisaties:roles:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+        {% endif %}
+    {% endif %}
+    </td>
+</tr>
