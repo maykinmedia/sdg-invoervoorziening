@@ -97,8 +97,12 @@ class ProductFilterSet(FilterSet):
         )
 
     def filter_publicatie_datum(self, queryset, name, value):
-        """:returns: products having versions greater than or equal to provided date."""
-        return queryset.all().filter(versies__publicatie_datum__gte=value)
+        """:returns: filtered queryset of products having versions greater than or equal to provided date."""
+        if "__" in name:
+            _, op = name.split("__")
+            return queryset.filter(Q(**{f"versies__publicatie_datum__{op}": value}))
+
+        return queryset.filter(versies__publicatie_datum=value)
 
     def filter_taal(self, queryset, name, value):
         """:returns: all products for this queryset, annotate the filter value for the inner serializer."""
@@ -124,6 +128,19 @@ class ProductFilterSet(FilterSet):
             "upnLabel",
             "upnUri",
         )
+
+    @classmethod
+    def get_filters(cls):
+        filters = super().get_filters()
+        new_filters = filters.copy()
+
+        for name, filter_ in filters.items():
+            if name == "publicatieDatum":
+                for op in {"gte"}:
+                    filter_.field_name = f"{filter_.field_name}__{op}"
+                    new_filters[f"{name}__{op}"] = filter_
+
+        return new_filters
 
 
 class LokatieFilterSet(FilterSet):
