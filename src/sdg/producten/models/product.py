@@ -138,23 +138,14 @@ class Product(ProductFieldMixin, models.Model):
         verbose_name=_("gerelateerd aan"),
         help_text=_("Een verwijzing naar een gerelateerd product."),
     )
-    doelgroep = ChoiceArrayField(
-        base_field=models.CharField(max_length=32, choices=DoelgroepChoices.choices),
-        help_text=_(
-            "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
-            "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
-            "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
-        ),
-        default=list,
-    )
     product_aanwezig = models.BooleanField(
-        _("product aanwezig"),
+        _("aanwezig"),
         help_text=_("Voert u dit product?"),
         blank=True,
         null=True,
     )
     product_aanwezig_toelichting = models.TextField(
-        _("product aanwezig toelichting"),
+        _("aanwezig toelichting"),
         help_text=_("Toelichting"),
         blank=True,
         default="",
@@ -167,6 +158,15 @@ class Product(ProductFieldMixin, models.Model):
             "De locaties die zijn toegewezen aan de product.",
         ),
         blank=True,
+    )
+    doelgroep = ChoiceArrayField(
+        base_field=models.CharField(max_length=32, choices=DoelgroepChoices.choices),
+        help_text=_(
+            "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
+            "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
+            "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
+        ),
+        default=list,
     )
     uuid = models.UUIDField(
         _("UUID"),

@@ -775,9 +775,11 @@ components:
         productAanwezig:
           type: boolean
           nullable: true
+          title: Aanwezig
           description: Voert u dit product?
         productAanwezigToelichting:
           type: string
+          title: Aanwezig toelichting
           description: Toelichting
         catalogus:
           type: string

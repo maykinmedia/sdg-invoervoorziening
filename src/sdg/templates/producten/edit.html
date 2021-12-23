@@ -56,15 +56,26 @@
                 <tr>
                 </tr>
                 <tr>
-                    <td class="tabs__table-cell" width="25%">{% trans "Aanwezig" %}</td>
+                    <td class="tabs__table-cell" width="25%">{{ product_form.product_aanwezig.label }}<i
+                        class="fas fa-info-circle fa-xs dark" title="{{ product_form.product_aanwezig.help_text }}"></i>
+                    </td>
                     <td class="tabs__table-cell">{% select product_form.product_aanwezig %}</td>
                 </tr>
                 <tr>
-                    <td class="tabs__table-cell" width="25%">{% trans "Aanwezig toelichting" %}</td>
+                    <td class="tabs__table-cell" width="25%">{{ product_form.product_aanwezig_toelichting.label }}<i
+                        class="fas fa-info-circle fa-xs dark"
+                        title="{{ product_form.product_aanwezig_toelichting.help_text }}"></i></td>
                     <td class="tabs__table-cell">{{ product_form.product_aanwezig_toelichting|addclass:"form__input" }}</td>
                 </tr>
                 <tr>
-                    <td class="tabs__table-cell">{% trans "Lokaties" %}</td>
+                    <td class="tabs__table-cell" width="25%">{{ product_form.doelgroep.label }}<i
+                        class="fas fa-info-circle fa-xs dark"
+                        title="{{ product_form.doelgroep.help_text }}"></i></td>
+                    <td class="tabs__table-cell">{{ product_form.doelgroep|addclass:"form__input" }}</td>
+                </tr>
+                <tr>
+                    <td class="tabs__table-cell" width="25%">{{ product_form.lokaties.label }} <i
+                        class="fas fa-info-circle fa-xs dark" title="{{ product_form.lokaties.help_text }}"></i></td>
                     <td class="tabs__table-cell">{{ product_form.lokaties }}</td>
                 </tr>
                 <tr>
