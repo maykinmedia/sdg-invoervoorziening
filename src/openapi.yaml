@@ -298,6 +298,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
           description: ''
+  /api/v1/producten/{productUuid}/concept:
+    get:
+      operationId: productenConceptList
+      description: Lijst van concept-productversies voor dit product.
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: UUID van het product waarvoor de versie is opgevraagd.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductVersieList'
+          description: ''
   /api/v1/producten/{productUuid}/historie:
     get:
       operationId: productenHistorieList
@@ -314,6 +344,7 @@ paths:
         schema:
           type: string
           format: uuid
+        description: UUID van het product waarvoor de versies worden opgevraagd.
         required: true
       tags:
       - producten
