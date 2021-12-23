@@ -15,11 +15,12 @@
             {% field formset.empty_form.naam %}
             {% field formset.empty_form.straat %}
             {% field formset.empty_form.nummer %}
-            {% field formset.empty_form.plaats %}
             <div class="form__table form__special-group">
                 {% field formset.empty_form.postcode %}
-                {% field formset.empty_form.land %}
+                {% field formset.empty_form.plaats %}
             </div>
+            {% field formset.empty_form.land %}
+            {% field formset.empty_form.openingstijden_opmerking %}
         </div>
         <div class="form__table">
             <div class="form__table-header">Dag</div>
