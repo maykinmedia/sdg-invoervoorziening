@@ -6,6 +6,7 @@
     color: #fff;
     background-color: $color_primary;
     padding: 24px;
+    border-top: 4px solid $color_secondary_dark;
   }
 
   .products__catalog:not(:first-child) {
@@ -86,6 +87,7 @@
     cursor: pointer;
     text-decoration: none;
     color: $color_grey_darkest;
+    transition: box-shadow 0.15s ease-in-out;
 
     .svg-inline--fa {
       color: #9fa2a7;
@@ -93,6 +95,10 @@
 
     &:active {
       transform: translateY(1px);
+    }
+
+    &:hover {
+      box-shadow: 0px 4px 5px 0px hsl(0deg 0% 0% / 6%);
     }
   }
 

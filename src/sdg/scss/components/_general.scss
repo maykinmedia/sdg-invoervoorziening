@@ -19,3 +19,11 @@
 .readonly {
   pointer-events: none;
 }
+
+a[href="https://vng.nl/"] {
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    filter: brightness(1.3);
+  }
+}

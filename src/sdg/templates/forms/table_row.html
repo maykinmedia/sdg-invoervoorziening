@@ -15,20 +15,24 @@
                 </span>
         {% endif %}
         <span class="tabs__table-cell--value">
-            {% if field.is_markdown %}
+            {% if field.is_text %}
                 {{ field.value|markdownify }}
-            {% elif field.is_list %}
+            {% elif field.is_boolean %}
+                {{ field.value|yesno:"Ja,Nee,Onbekend" }}
+            {% elif field.is_dynamicarray %}
+                <ul>
+                    {% for item in field.value %}
+                        <li>{{ item.1 }}<span class="tabs__table-cell--label">{{ item.0 }}</span></li>
+                    {% endfor %}
+                </ul>
+            {% elif field.is_array %}
                 <ul>
                     {% for item in field.value %}
                         <li>{{ item }}</li>
                     {% endfor %}
                 </ul>
             {% else %}
-                {% if field.value %}
-                    {{ field.value }}
-                {% else %}
-                    {{ default_value }}
-                {% endif %}
+                {{ field.value }}
             {% endif %}
         </span>
     </td>

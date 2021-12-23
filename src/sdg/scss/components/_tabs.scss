@@ -23,7 +23,7 @@
     text-decoration: none;
 
     &:hover {
-      background-color: rgba(255, 255, 255, .5);
+      background-color: hsl(0deg 0% 100% / 20%);
     }
 
     &.tabs__tab--selected {
@@ -145,6 +145,16 @@
       br {
         display: none;
       }
+    }
+
+    &--label {
+      background-color: $color_primary_lightest;
+      color: $color_primary_dark;
+      border: 1px solid #9dbbcd;
+      border-radius: 14px;
+      margin: 0 10px;
+      padding: 2px 14px;
+      font-size: 14px;
     }
 
     &--edit {
