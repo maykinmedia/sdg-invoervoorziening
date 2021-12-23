@@ -123,6 +123,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "django_filters",
+    "timeline_logger",
     # SDG applications
     "sdg.api",
     "sdg.core",

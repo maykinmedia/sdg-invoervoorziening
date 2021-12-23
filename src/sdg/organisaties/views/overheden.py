@@ -2,6 +2,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
+from sdg.core.types import Event
 from sdg.organisaties.forms import LokaleOverheidForm, LokatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 
@@ -42,6 +43,7 @@ class LokaleOverheidUpdateView(OverheidMixin, UpdateView):
         self.object = form.save()
         if formset:
             formset.save()
+        Event.create_and_log(self.request, self.object, Event.UPDATE)
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, formset=None):

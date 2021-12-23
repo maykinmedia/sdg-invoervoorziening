@@ -105,6 +105,10 @@
             [
                 "axes",
                 "accesslog"
+            ],
+            [
+                "timeline_logger",
+                "timelinelog"
             ]
         ]
     }

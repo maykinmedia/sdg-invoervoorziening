@@ -89,6 +89,7 @@ django==2.2.24
     #   -r requirements/base.txt
     #   ddt-api-calls
     #   django-allauth
+    #   django-appconf
     #   django-axes
     #   django-celery-beat
     #   django-choices
@@ -106,6 +107,7 @@ django==2.2.24
     #   django-rest-framework-condition
     #   django-rosetta
     #   django-sniplates
+    #   django-timeline-logger
     #   django-timezone-field
     #   djangorestframework
     #   drf-nested-routers
@@ -121,6 +123,11 @@ django-allauth==0.45.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
+django-appconf==1.0.5
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
+    #   django-timeline-logger
 django-axes==5.20.0
     # via
     #   -c requirements/base.txt
@@ -214,6 +221,10 @@ django-solo==1.2.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   vng-api-common
+django-timeline-logger==1.1.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 django-timezone-field==3.1
     # via
     #   -c requirements/base.txt
