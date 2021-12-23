@@ -109,6 +109,13 @@
     grid-template-columns: 95px 1fr;
     grid-gap: 8px;
     align-items: center;
+
+    &.form__special-group {
+      .form__help-text {
+        display: none;
+      }
+    }
+
   }
 
   .form__table-header {

@@ -116,19 +116,20 @@ class Lokatie(models.Model):
         _("nummer"),
         help_text=_("Het huisnummer van de lokatie."),
     )
-    plaats = models.CharField(
-        _("plaats"),
-        max_length=256,
-        help_text=_("De plaatsnaam van de lokatie."),
-    )
     postcode = models.CharField(
         _("postcode"),
         validators=[validate_postcode],
         max_length=6,
     )
+    plaats = models.CharField(
+        _("plaats"),
+        max_length=256,
+        help_text=_("De plaatsnaam van de lokatie."),
+    )
     land = models.CharField(
         _("land"),
         max_length=128,
+        help_text=_("Het land van de lokatie."),
     )
 
     maandag = DynamicArrayField(
