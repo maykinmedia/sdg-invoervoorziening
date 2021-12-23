@@ -5,8 +5,6 @@
   grid-template-columns: 1fr;
   grid-gap: 16px;
   width: 100%;
-  margin-bottom: 16px;
-  margin-top: 8px;
 
   &.notifications--inline {
     width: 60%;
@@ -17,6 +15,11 @@
     padding: 16px;
     display: flex;
     justify-content: space-between;
+    transition: all 0.3s ease;
+
+    &:last-child {
+      margin-bottom: 32px;
+    }
 
     .fas, a {
       font-weight: bold;
