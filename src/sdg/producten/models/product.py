@@ -174,15 +174,6 @@ class Product(ProductFieldMixin, models.Model):
         ),
         blank=True,
     )
-    doelgroep = ChoiceArrayField(
-        base_field=models.CharField(max_length=32, choices=DoelgroepChoices.choices),
-        help_text=_(
-            "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
-            "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
-            "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
-        ),
-        default=list,
-    )
     uuid = models.UUIDField(
         _("UUID"),
         unique=True,

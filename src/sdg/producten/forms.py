@@ -2,6 +2,7 @@ from typing import Optional
 
 from django import forms
 
+from ..core.constants import DoelgroepChoices
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import CheckboxSelectMultiple
