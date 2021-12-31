@@ -2,9 +2,20 @@
 
 {% autoescape off %}
     {% blocktrans %}
-        <div>Hallo {{ user_full_name }},</div>
-        <div>Je bent uitgenodigd om lid te worden van SDG.</div>
-        <div>Als je mee wilt doen, ga dan naar <a href="{{ invite_url }}">{{ invite_url }}</a></div>
+        <p>Hallo {{ user_full_name }},</p>
+
+        <p>U heeft zojuist toegang gekregen tot de SDG invoervoorziening.</p>
+
+        <p>Klik op de link om uw account in te stellen en volg de instructies op de website: <a href="{{ invite_url }}">{{ invite_url }}</a></p>
+
+        <p>Mocht u hulp nodig hebben, neem dan contact met ons op.</p>
+
+        <p>Met vriendelijke groet,</p>
+
+        <p>
+            VNG<br>
+            Team SDG invoervoorziening
+        </p>
     {% endblocktrans %}
 {% endautoescape %}
 

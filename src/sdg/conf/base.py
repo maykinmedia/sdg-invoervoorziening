@@ -463,7 +463,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 # SDG Invitations
 INVITATION_TEMPLATE = "core/email/invitation.html"
-INVITATION_SUBJECT = "SDG Invoervoorziening Invitatie"
+INVITATION_SUBJECT = "Toegang tot de SDG invoervoorziening"
 
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
 
