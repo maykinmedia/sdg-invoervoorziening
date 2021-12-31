@@ -208,6 +208,9 @@
           @extend .dynamic__container__button;
           background-color: transparent;
           height: 49px;
+          position: relative;
+          right: 34px;
+          margin-right: -34px;
         }
 
         &--low {
@@ -324,6 +327,8 @@
       border: 1px solid $color_grey_light;
       margin-top: 0;
       padding: 32px 64px;
+      border-bottom-left-radius: 13px;
+      border-bottom-right-radius: 13px;
     }
   }
 }

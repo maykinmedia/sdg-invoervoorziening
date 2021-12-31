@@ -1,13 +1,22 @@
 @import 'colors';
 
 .revision-list {
+  strong {
+    color: #1c3a4a;
+  }
+
   list-style-type: none;
   margin: 0.4em 0;
+  border-bottom: 1px solid $color_grey_light;
+
+  &:last-child {
+    border-bottom: none;
+  }
 
   .revision-list__item {
     align-items: center;
-    padding: 6px 0;
     display: flex;
+    padding: 8px 0;
 
     & > div {
       margin-right: -20px;
@@ -18,23 +27,23 @@
       width: 40px;
       border-radius: 50%;
       background-color: #e2ebf2;
-      color: #9d9b9e;
+      color: #2a576f;
       padding-top: 4px;
       overflow: hidden;
       margin-right: 11px;
       float: left;
       position: relative;
-      border: 2px solid $color_primary;
+      border: 5px solid #d5e2ea;
       z-index: 2;
     }
 
     &--user {
-      background-color: $color_primary;
-      color: #fff;
       border-radius: 20px;
+      background-color: #d5e2ea;
+      color: #2a576f;
       padding: 4px 24px;
       position: relative;
-      right: 26px;
+      right: 29px;
       z-index: 1;
       top: 11px;
     }

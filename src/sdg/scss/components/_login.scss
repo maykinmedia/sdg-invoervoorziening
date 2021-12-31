@@ -37,6 +37,14 @@
 
   .login__container {
     width: 425px;
+
+    form {
+      padding: 32px 0;
+
+      .button-row {
+        margin-top: -16px;
+      }
+    }
   }
 
   .login__container-title {

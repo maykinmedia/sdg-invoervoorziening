@@ -8,7 +8,10 @@ class Notification {
         if (this.close) {
             this.close.addEventListener("click", (event) => {
                 event.preventDefault();
-                this.node.remove()
+                this.node.style.opacity = 0;
+                setTimeout(() => {
+                    this.node.remove();
+                }, 300);
             });
         }
     }

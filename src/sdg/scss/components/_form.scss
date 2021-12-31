@@ -1,7 +1,6 @@
 @import 'colors';
 
 .form {
-  padding: 28px 0;
 
   .form__cell {
 
@@ -21,6 +20,10 @@
     }
 
     &--disabled {
+
+      button {
+        pointer-events: none;
+      }
 
       .form__diff-btn,
       .form__diff-btn .svg-inline--fa {
