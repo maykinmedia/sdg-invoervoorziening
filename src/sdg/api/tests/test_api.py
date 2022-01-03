@@ -87,7 +87,7 @@ class ProductenTests(APITestCase):
             data["vertalingen"][0]["verwijzingLinks"],
         )
         self.assertEqual(0, len(data["locaties"]))
-        self.assertEqual(0, len(data["doelgroep"]))
+        self.assertEqual("", data["doelgroep"])
         self.assertEqual(0, len(data["gerelateerdeProducten"]))
 
     @freeze_time(NOW_DATE)

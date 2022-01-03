@@ -36,10 +36,9 @@
                             {% for language in product.beschikbare_talen %}
                                 {% flag language %}
                             {% endfor %}
-                            {% if product.doelgroep %}
-                                -
-                                {{ product.doelgroep|join:", "|capfirst }}
-                            {% endif %}
+                            <span class="products__item-help--group" data-value="{{ product.generic_product.doelgroep }}">
+                                {{ product.generic_product.get_doelgroep_display }}
+                            </span>
                         </div>
                     </div>
                     <div class="products__item-icon">

@@ -8,7 +8,6 @@ management_commands = [
     LoadCommand("load_gemeenten", PublicData.GEMEENTE),
     LoadCommand("load_upn", PublicData.UPN),
     LoadCommand("load_informatiegebieden", PublicData.INFORMATIEGEBIED),
-    LoadCommand("load_upn_informatiegebieden", PublicData.UPN_INFORMATIEGEBIED),
 ]
 
 

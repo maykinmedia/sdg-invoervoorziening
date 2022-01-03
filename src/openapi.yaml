@@ -211,15 +211,10 @@ paths:
       - in: query
         name: doelgroep
         schema:
-          type: array
-          items:
-            enum:
-            - burgers
-            - bedrijven
-            type: string
+          type: string
           enum:
-          - bedrijven
-          - burgers
+          - eu-bedrijf
+          - eu-burger
         description: Toont producten die overeenkomen met de opgegeven doelgroepen.
       - in: query
         name: organisatie
@@ -385,11 +380,6 @@ paths:
           description: ''
 components:
   schemas:
-    DoelgroepEnum:
-      enum:
-      - burgers
-      - bedrijven
-      type: string
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -823,13 +813,8 @@ components:
             format: uri
           description: De locaties die zijn toegewezen aan de product.
         doelgroep:
-          type: array
-          items:
-            $ref: '#/components/schemas/DoelgroepEnum'
-          description: 'Geeft aan voor welke doelgroep het product is bedoeld: burgers,
-            bedrijven of burgers en bedrijven. Wordt gebruikt wanneer een portaal
-            informatie over het product ophaalt uit de invoervoorziening. Zo krijgen
-            de ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. '
+          type: string
+          readOnly: true
         vertalingen:
           type: array
           items:
@@ -841,6 +826,7 @@ components:
             $ref: '#/components/schemas/ProductBase'
       required:
       - catalogus
+      - doelgroep
       - gerelateerdeProducten
       - organisatie
       - publicatieDatum

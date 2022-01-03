@@ -16,7 +16,6 @@ from django.utils.translation import ugettext_lazy as _
 from djchoices import ChoiceItem, DjangoChoices
 
 from sdg.core.constants import DoelgroepChoices
-from sdg.core.db.fields import ChoiceArrayField
 from sdg.core.models import ProductenCatalogus
 from sdg.core.utils import get_from_cache
 from sdg.producten.models import (
@@ -61,6 +60,16 @@ class GeneriekProduct(models.Model):
         ),
         default=False,
     )
+    doelgroep = models.CharField(
+        max_length=32,
+        choices=DoelgroepChoices.choices,
+        help_text=_(
+            "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
+            "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
+            "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
+        ),
+        blank=True,
+    )
 
     @property
     def upn_uri(self):
@@ -83,6 +92,12 @@ class GeneriekProduct(models.Model):
     class Meta:
         verbose_name = _("generiek product")
         verbose_name_plural = _("generieke producten")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["upn", "doelgroep"],
+                name="unique_generic_product_upn_doelgroep",
+            )
+        ]
 
     def __str__(self):
         return f"{self.upn.upn_label}"
@@ -159,15 +174,6 @@ class Product(ProductFieldMixin, models.Model):
         ),
         blank=True,
     )
-    doelgroep = ChoiceArrayField(
-        base_field=models.CharField(max_length=32, choices=DoelgroepChoices.choices),
-        help_text=_(
-            "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
-            "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
-            "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
-        ),
-        default=list,
-    )
     uuid = models.UUIDField(
         _("UUID"),
         unique=True,
@@ -241,19 +247,23 @@ class Product(ProductFieldMixin, models.Model):
     @property
     def name(self):
         """:returns: The generic product's upn label."""
-        return get_from_cache(self, "name", manager_methods=["annotate_name"])
+        return get_from_cache(
+            self, "name", manager_methods=[ProductQuerySet.annotate_name]
+        )
 
     @property
     def most_recent_version(self):
         """:returns: The most recent `ProductVersie`."""
         return get_from_cache(
-            self, "most_recent_version", manager_methods=["most_recent"]
+            self, "most_recent_version", manager_methods=[ProductQuerySet.most_recent]
         )
 
     @property
     def active_version(self):
         """:returns: The most recent active `ProductVersie`."""
-        return get_from_cache(self, "active_version", manager_methods=["active"])
+        return get_from_cache(
+            self, "active_version", manager_methods=[ProductQuerySet.active]
+        )
 
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
@@ -321,9 +331,6 @@ class Product(ProductFieldMixin, models.Model):
                 specific_product, created = Product.objects.get_or_create(
                     referentie_product=self,
                     catalogus=specific_catalog,
-                    defaults={
-                        "doelgroep": self.doelgroep,
-                    },
                 )
 
                 lokaties = list(

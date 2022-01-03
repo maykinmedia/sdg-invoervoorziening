@@ -75,6 +75,7 @@ class ProductSerializer(ProductBaseSerializer):
     publicatie_datum = SerializerMethodField(method_name="get_publicatie_datum")
     vertalingen = SerializerMethodField(method_name="get_vertalingen")
     versie = SerializerMethodField(method_name="get_versie")
+    doelgroep = SerializerMethodField(method_name="get_doelgroep")
     gerelateerde_producten = ProductBaseSerializer(many=True)
 
     class Meta:
@@ -134,3 +135,6 @@ class ProductSerializer(ProductBaseSerializer):
 
     def get_publicatie_datum(self, obj: Product) -> date:
         return self._get_active_field(obj, "publicatie_datum")
+
+    def get_doelgroep(self, obj: Product) -> str:
+        return obj.generic_product.doelgroep

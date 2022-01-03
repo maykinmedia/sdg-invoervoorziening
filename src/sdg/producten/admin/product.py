@@ -100,7 +100,7 @@ class ProductAdmin(admin.ModelAdmin):
         "lokale_overheid",
         "catalogus",
         "referentie_product",
-        "generiek_product",
+        "generic_product",
     )
     list_filter = (
         "catalogus__lokale_overheid",

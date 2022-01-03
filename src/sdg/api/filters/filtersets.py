@@ -45,6 +45,7 @@ class ProductFilterSet(FilterSet):
         help_text=_("Toont producten die bij de opgegeven organisatie horen."),
     )
     doelgroep = filters.ChoiceFilter(
+        method="filter_doelgroep",
         choices=DoelgroepChoices.choices,
         help_text=_("Toont producten die overeenkomen met de opgegeven doelgroepen."),
         lookup_expr="icontains",
@@ -111,11 +112,18 @@ class ProductFilterSet(FilterSet):
         )
 
     def filter_upn(self, queryset, name, value):
-        """:returns: filtered queryset for the given product's UPN."""
+        """:returns: filtered upn for the given product's UPN."""
         parameter = camel_to_underscore(name)
         return queryset.all().filter(
             Q(**{f"generiek_product__upn__{parameter}": value})
             | Q(**{f"referentie_product__generiek_product__upn__{parameter}": value})
+        )
+
+    def filter_doelgroep(self, queryset, name, value):
+        """:returns: filtered doelgroep for the given product's generic product."""
+        return queryset.all().filter(
+            Q(**{f"generiek_product__{name}": value})
+            | Q(**{f"referentie_product__generiek_product__{name}": value})
         )
 
     class Meta:
