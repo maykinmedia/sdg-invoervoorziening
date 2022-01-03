@@ -35,5 +35,5 @@ class RoleUpdateView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, UpdateV
     queryset = Role.objects.all()
     template_name = "organisaties/roles/update.html"
     pk_url_kwarg = "role_pk"
-    required_roles = ["is_beheerder"]
     fields = ["is_beheerder", "is_redacteur"]
+    required_roles = ["is_beheerder"]

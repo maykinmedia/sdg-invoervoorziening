@@ -12,7 +12,7 @@ from sdg.producten.models import Product
 class CatalogListView(OverheidMixin, ListView):
     template_name = "organisaties/catalogi/list.html"
     model = ProductenCatalogus
-    required_roles = ["is_redacteur"]
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
         self.lokale_overheid = LokaleOverheid.objects.get(pk=self.kwargs["pk"])
