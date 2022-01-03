@@ -15,9 +15,7 @@ User = get_user_model()
 class RoleInline(admin.TabularInline):
     model = Role
     extra = 1
-    autocomplete_fields = (
-        "lokale_overheid",
-    )
+    autocomplete_fields = ("lokale_overheid",)
 
     def get_role_user(self, obj):
         return obj.user.email
