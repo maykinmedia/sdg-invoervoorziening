@@ -156,6 +156,14 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
         auto_now=True,
     )
+    datum_check = models.DateTimeField(
+        _("datum check"),
+        help_text=_(
+            "Datum waarop de informatie voor deze versie van het product is gecontroleerd. "
+        ),
+        blank=True,
+        null=True,
+    )
 
     # See: UML: Product (specifiek aanvraag)
 

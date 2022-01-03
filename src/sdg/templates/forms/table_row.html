@@ -32,7 +32,7 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                {{ field.value }}
+                {{ field.value|default:"—" }}
             {% endif %}
         </span>
     </td>

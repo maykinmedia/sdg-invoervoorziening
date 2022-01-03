@@ -129,6 +129,7 @@
                                 </td>
                             </tr>
                             {% with reference=product.is_referentie_product %}
+                                {% table_field form.datum_check is_reference=True %}
                                 {% table_field form.product_titel_decentraal is_reference=reference %}
                                 {% table_field form.specifieke_tekst is_reference=reference %}
                                 {% table_field form.verwijzing_links is_reference=True %}

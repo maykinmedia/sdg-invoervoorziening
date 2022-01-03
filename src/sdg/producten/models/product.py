@@ -224,7 +224,7 @@ class Product(ProductFieldMixin, models.Model):
             Language(
                 name=t.get_taal_display,
                 code=t.taal,
-                checked=getattr(t.generiek_informatie, "datum_check", None) is not None,
+                checked=t.datum_check is not None,
             )
             for t in most_recent_version.vertalingen.all()
         ]

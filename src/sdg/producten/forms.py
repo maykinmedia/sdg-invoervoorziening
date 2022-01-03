@@ -7,11 +7,28 @@ from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import CheckboxSelectMultiple
 
 
-class LocalizedProductForm(forms.ModelForm):
+class HelptextMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        _model_meta = self._meta.model._meta
+        for field in self.fields:
+            self.fields[field].help_text = _model_meta.get_field(field).help_text
+
+
+class LocalizedProductForm(HelptextMixin, forms.ModelForm):
+
+    datum_check = forms.DateTimeField(
+        label="Datum check",
+        required=False,
+        input_formats=["%Y-%m-%dT%H:%M"],
+        widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
+    )
+
     class Meta:
         model = LocalizedProduct
         fields = (
             "taal",
+            "datum_check",
             "product_titel_decentraal",
             "specifieke_tekst",
             "verwijzing_links",
@@ -27,7 +44,7 @@ class LocalizedProductForm(forms.ModelForm):
         )
 
 
-class ProductForm(forms.ModelForm):
+class ProductForm(HelptextMixin, forms.ModelForm):
     product_aanwezig = forms.NullBooleanField(
         required=False,
     )
@@ -54,10 +71,6 @@ class ProductForm(forms.ModelForm):
         locations = self.instance.get_municipality_locations()
         self.fields["lokaties"].queryset = locations
         self.fields["lokaties"].initial = locations.filter(is_product_location=True)
-
-        _model_meta = self._meta.model._meta
-        for field in self.fields:
-            self.fields[field].help_text = _model_meta.get_field(field).help_text
 
 
 class VersionForm(forms.ModelForm):
