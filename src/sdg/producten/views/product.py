@@ -13,7 +13,7 @@ from django.views.generic.detail import SingleObjectMixin
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
 from sdg.core.types import Event
-from sdg.producten.forms import LocalizedProductForm, ProductForm, ProductVersionForm
+from sdg.producten.forms import LocalizedProductForm, ProductForm, VersionForm
 from sdg.producten.models import (
     GeneriekProduct,
     LocalizedProduct,
@@ -141,27 +141,28 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context["informatie_forms"] = zip_longest(
             generic_information, context["form"].forms
         )
-        context["product_form"] = kwargs.get("product_form") or ProductForm(
-            instance=self.product
-        )
-        context["version_form"] = kwargs.get("version_form") or ProductVersionForm(
-            instance=self.object
-        )
 
+        context["version_form"] = kwargs.get(
+            "version_form", VersionForm(instance=self.object)
+        )
+        context["product_form"] = kwargs.get(
+            "product_form", ProductForm(instance=self.product)
+        )
         return context
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        version_form = ProductVersionForm(request.POST, instance=self.object)
-        product_form = ProductForm(request.POST, instance=self.product)
         form = self.form_class(request.POST, instance=self.object)
+        version_form = VersionForm(request.POST, instance=self.object)
+        product_form = ProductForm(request.POST, instance=self.product)
 
-        if form.is_valid() and version_form.is_valid() and product_form.is_valid():
-            return self.form_valid(form, version_form, product_form)
+        forms = [form, version_form, product_form]
+        if all(f.is_valid() for f in forms):
+            return self.form_valid(*forms)
         else:
-            return self.form_invalid(form, version_form, product_form)
+            return self.form_invalid(*forms)
 
     def form_valid(self, form, version_form, product_form):
         with transaction.atomic():
