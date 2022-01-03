@@ -30,7 +30,7 @@
                     </div>
                     <div>
                         <div class="products__item-title">
-                            {{ product.name|title }}
+                            {{ product.name|capfirst }}
                         </div>
                         <div class="products__item-help">
                             {% for language in product.beschikbare_talen %}
