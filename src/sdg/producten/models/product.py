@@ -247,19 +247,23 @@ class Product(ProductFieldMixin, models.Model):
     @property
     def name(self):
         """:returns: The generic product's upn label."""
-        return get_from_cache(self, "name", manager_methods=["annotate_name"])
+        return get_from_cache(
+            self, "name", manager_methods=[ProductQuerySet.annotate_name]
+        )
 
     @property
     def most_recent_version(self):
         """:returns: The most recent `ProductVersie`."""
         return get_from_cache(
-            self, "most_recent_version", manager_methods=["most_recent"]
+            self, "most_recent_version", manager_methods=[ProductQuerySet.most_recent]
         )
 
     @property
     def active_version(self):
         """:returns: The most recent active `ProductVersie`."""
-        return get_from_cache(self, "active_version", manager_methods=["active"])
+        return get_from_cache(
+            self, "active_version", manager_methods=[ProductQuerySet.active]
+        )
 
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""

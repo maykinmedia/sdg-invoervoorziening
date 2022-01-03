@@ -43,7 +43,7 @@ def get_from_cache(model, name, manager_methods: List = None):
         queryset = model.__class__.objects.all()
 
         for method in manager_methods:
-            queryset = getattr(queryset, method)()
+            queryset = method(queryset)
 
         instance = queryset.get(pk=model.pk)
 
