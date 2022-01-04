@@ -161,10 +161,8 @@ class UniformeProductnaam(models.Model):
     verplichting = models.BooleanField(_("verplichting"), default=False)
     digi_d_macht = models.BooleanField(_("digi_d_macht"), default=False)
     sdg = ArrayField(
-        base_field=models.CharField(
-            max_length=4,
-        ),
         verbose_name=_("sdg"),
+        base_field=models.CharField(max_length=4),
         blank=True,
         default=list,
     )
@@ -172,15 +170,12 @@ class UniformeProductnaam(models.Model):
     def get_active_fields(self) -> Set[str]:
         """:returns: A set of active boolean field names for this UPN."""
 
-        def _is_active_boolean_field(field):
-            return isinstance(field, models.BooleanField) and getattr(
-                self, field.name, False
-            )
+        def _is_active_field(field):
+            if isinstance(field, models.BooleanField) or field.name == "sdg":
+                return getattr(self, field.name, False)
 
         return {
-            field.name
-            for field in self._meta.get_fields()
-            if _is_active_boolean_field(field)
+            field.name for field in self._meta.get_fields() if _is_active_field(field)
         }
 
     class Meta:
