@@ -473,8 +473,15 @@ class ProductVersie(models.Model):
         verbose_name_plural = _("product versies")
         ordering = ("-versie",)
 
+    def get_pretty_version(self):
+        concept = "(concept)" if not self.publicatie_datum else ""
+        return f"{self.versie} {concept}".strip()
+
+    def get_pretty_name(self):
+        return f"{self.product} (versie {self.get_pretty_version()})"
+
     def __str__(self):
-        return f"{self.product} - {self.versie}"
+        return self.get_pretty_name()
 
     def clean(self):
         super().clean()
