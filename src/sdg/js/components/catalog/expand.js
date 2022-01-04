@@ -7,6 +7,7 @@ class Expand {
         this.expand = true;
 
         this.node.addEventListener("click", (event) => {
+            this.expand ? this.node.classList.add("accent") : this.node.classList.remove("accent");
             this.productsContainer.querySelectorAll(".products__accordeon-item").forEach(item => {
                 if (this.expand) {
                     item.classList.add("products__accordeon-item--open");
