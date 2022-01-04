@@ -5,7 +5,6 @@ from django.db import transaction
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import DetailView, RedirectView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
@@ -14,12 +13,7 @@ from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
 from sdg.core.types import Event
 from sdg.producten.forms import LocalizedProductForm, ProductForm, VersionForm
-from sdg.producten.models import (
-    GeneriekProduct,
-    LocalizedProduct,
-    Product,
-    ProductVersie,
-)
+from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.utils import build_url_kwargs, duplicate_localized_products
 
 
@@ -69,7 +63,7 @@ class ProductDetailView(OverheidMixin, DetailView):
         .most_recent()
         .active()
     )
-    required_roles = ["is_redacteur"]
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
@@ -95,7 +89,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         form=LocalizedProductForm,
         extra=0,
     )
-    required_roles = ["is_redacteur"]
+    required_roles = ["is_beheerder", "is_redacteur"]
 
     def _save_version_form(self, version_form) -> Tuple[ProductVersie, bool]:
         """Save the version form.
