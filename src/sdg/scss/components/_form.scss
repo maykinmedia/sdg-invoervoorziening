@@ -98,13 +98,16 @@
   }
 
   .form__block-group {
-    background-color: $color_secondary;
+    border: 1px solid $color_secondary;
+    background-color: $color_secondary_lightest;
     border-radius: 15px;
-    padding: 32px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-gap: 16px;
     margin-bottom: 24px;
+
+    & > div {
+      padding: 24px;
+    }
   }
 
   .form__table {
@@ -112,6 +115,17 @@
     grid-template-columns: 95px 1fr;
     grid-gap: 8px;
     align-items: center;
+
+    &:not(.form__special-group) {
+      border-left: 1px solid $color_secondary;
+    }
+
+    &.form__special-group {
+      .form__help-text {
+        display: none;
+      }
+    }
+
   }
 
   .form__table-header {
@@ -134,7 +148,7 @@
 
   .form__forms {
     width: 62%;
-    padding-bottom: 48px;
+    padding: 8px 0;
   }
 
   .form__subforms {
@@ -163,8 +177,10 @@
 
   .form__add-subform {
     color: #0B71A1;
-    margin: 16px 0;
     cursor: pointer;
+    margin-bottom: 42px;
+    margin-top: -16px;
+    margin-left: 16px;
   }
 
   .form__actions {

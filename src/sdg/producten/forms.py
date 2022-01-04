@@ -2,7 +2,6 @@ from typing import Optional
 
 from django import forms
 
-from ..core.constants import DoelgroepChoices
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import CheckboxSelectMultiple
@@ -36,18 +35,8 @@ class ProductForm(forms.ModelForm):
         required=False,
         widget=forms.Textarea(attrs={"rows": "6", "disabled": True}),
     )
-    doelgroep = forms.MultipleChoiceField(
-        choices=DoelgroepChoices.choices,
-        required=False,
-        widget=CheckboxSelectMultiple(),
-    )
     lokaties = forms.ModelMultipleChoiceField(
         queryset=None,
-        required=False,
-        widget=CheckboxSelectMultiple(),
-    )
-    doelgroep = forms.MultipleChoiceField(
-        choices=DoelgroepChoices.choices,
         required=False,
         widget=CheckboxSelectMultiple(),
     )
@@ -57,7 +46,6 @@ class ProductForm(forms.ModelForm):
         fields = (
             "product_aanwezig",
             "product_aanwezig_toelichting",
-            "doelgroep",
             "lokaties",
         )
 
@@ -66,14 +54,13 @@ class ProductForm(forms.ModelForm):
         locations = self.instance.get_municipality_locations()
         self.fields["lokaties"].queryset = locations
         self.fields["lokaties"].initial = locations.filter(is_product_location=True)
-        self.fields["doelgroep"].disabled = True
 
         _model_meta = self._meta.model._meta
         for field in self.fields:
             self.fields[field].help_text = _model_meta.get_field(field).help_text
 
 
-class ProductVersionForm(forms.ModelForm):
+class VersionForm(forms.ModelForm):
     publish = forms.ChoiceField(choices=PublishChoices.choices)
     date = forms.DateTimeField(required=False)
 

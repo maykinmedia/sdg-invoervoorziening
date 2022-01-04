@@ -110,22 +110,27 @@ class Lokatie(models.Model):
     straat = models.CharField(
         _("straat"),
         max_length=256,
+        help_text=_("De straatnaam van de lokatie."),
     )
     nummer = models.PositiveIntegerField(
         _("nummer"),
+        help_text=_("Het huisnummer van de lokatie."),
     )
     postcode = models.CharField(
         _("postcode"),
         validators=[validate_postcode],
         max_length=6,
+        help_text=_("De postcode van de lokatie."),
     )
     plaats = models.CharField(
         _("plaats"),
         max_length=256,
+        help_text=_("De plaatsnaam van de lokatie."),
     )
     land = models.CharField(
         _("land"),
         max_length=128,
+        help_text=_("Het land van de lokatie."),
     )
 
     maandag = DynamicArrayField(
@@ -184,6 +189,13 @@ class Lokatie(models.Model):
         blank=True,
         default=list,
     )
+    openingstijden_opmerking = models.CharField(
+        _("openingstijden opmerking"),
+        blank=True,
+        help_text=_("Opmerking over de openingstijden."),
+        max_length=255,
+    )
+
     uuid = models.UUIDField(
         _("UUID"),
         unique=True,

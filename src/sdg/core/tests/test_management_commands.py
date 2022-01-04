@@ -7,11 +7,11 @@ from django.test import TestCase
 
 import requests_mock
 
-from sdg.core.constants import PublicData
+from sdg.core.constants import PublicData, TaalChoices
 from sdg.core.models import Informatiegebied, Overheidsorganisatie, UniformeProductnaam
 from sdg.core.tests.data import binary
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
-from sdg.core.tests.factories.logius import UniformeProductnaamFactory
+from sdg.core.tests.factories.logius import ThemaFactory, UniformeProductnaamFactory
 from sdg.producten.tests.factories.product import GeneriekProductFactory
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -67,6 +67,8 @@ class TestImportData(CommandTestCase):
         )
 
     def test_load_upn(self):
+        thema_1 = ThemaFactory.create(informatiegebied__code="A1")
+        ThemaFactory.create(informatiegebied__code="L2")
         out = self.call_command(
             "load_upn", os.path.join(TESTS_DIR, "data/UPL-actueel.csv")
         )
@@ -84,34 +86,17 @@ class TestImportData(CommandTestCase):
         self.assertEqual(False, upn.rijk)
         self.assertEqual(True, upn.burger)
 
-    def test_load_upn_informatiegebieden(self):
-        self.call_command("load_upn", os.path.join(TESTS_DIR, "data/UPL-actueel.csv"))
-        self.call_command(
-            "load_informatiegebieden",
-            os.path.join(TESTS_DIR, "data/SDG-Informatiegebieden.csv"),
-        )
-        out = self.call_command(
-            "load_upn_informatiegebieden",
-            os.path.join(TESTS_DIR, "data/UPL-SDG-Informatiegebied.csv"),
-        )
-
-        self.assertIn("Successfully imported", out)
-        self.assertIn("(3 objects)", out)
-
+        # ensure themes are correct
         upn = UniformeProductnaam.objects.get(upn_label="adoptie")
-        self.assertEqual(
-            str(upn.thema.informatiegebied), "Burger- en familierechten [G1]"
-        )
+        self.assertEqual(thema_1, upn.thema)
+        self.assertEqual("A1", upn.thema.code)
 
-        upn = UniformeProductnaam.objects.get(
-            upn_label="aanpassing zelfgebouwd vliegtuig melding"
-        )
-        self.assertEqual(str(upn.thema.informatiegebied), "Voertuigen in de Unie [C5]")
-
-        upn = UniformeProductnaam.objects.get(upn_label="adoptie aangifte")
-        self.assertEqual(
-            str(upn.thema.informatiegebied), "Burger- en familierechten [G1]"
-        )
+        # ensure target groups are correct
+        self.assertEqual(2, upn.generieke_producten.count())
+        first_generic = upn.generieke_producten.first()
+        self.assertEqual("eu-burger", first_generic.doelgroep)
+        self.assertEqual("eu-bedrijf", upn.generieke_producten.last().doelgroep)
+        self.assertEqual(len(TaalChoices), first_generic.vertalingen.count())
 
     @requests_mock.Mocker()
     def test_load_gemeenten_from_url(self, m):

@@ -277,7 +277,7 @@ class ProductDetailViewTests(WebTest):
             is_redacteur=True,
         )
 
-        response = self.app.get(product_version.product.get_absolute_url())
+        response = self.app.get(product.get_absolute_url())
 
         text_nl = response.pyquery(TAB_NL).text()
 

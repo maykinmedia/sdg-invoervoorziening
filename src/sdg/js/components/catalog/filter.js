@@ -107,8 +107,8 @@ class Filter {
                 });
 
                 this.accordeon.querySelectorAll(".products__item").forEach(element => {
-                    const itemGroups = element.querySelector(".products__item-help").innerText.toLowerCase();
-                    if (checkboxValues.every(value => itemGroups.includes(value))) {
+                    const itemGroup = element.querySelector(".products__item-help--group").dataset.value;
+                    if (checkboxValues.some(value => value === itemGroup)) {
                         element.classList.remove("hidden");
                         this.openItemAccordeon(element);
                     } else {

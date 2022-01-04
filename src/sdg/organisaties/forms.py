@@ -36,6 +36,7 @@ class LokaleOverheidForm(forms.ModelForm):
 class LokatieForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["land"].initial = "Nederland"
         for field_name, field in self.fields.items():
             if isinstance(field, DynamicArrayField):
                 field.error_messages.update(opening_times_error_messages)
@@ -56,6 +57,7 @@ class LokatieForm(forms.ModelForm):
             "vrijdag",
             "zaterdag",
             "zondag",
+            "openingstijden_opmerking",
         )
 
 

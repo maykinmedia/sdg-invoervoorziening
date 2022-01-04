@@ -59,6 +59,12 @@
       color: $color_accent;
       margin-left: 8px;
     }
+
+    a:hover svg {
+      color: $color_accent_dark;
+      transition: all 0.3s ease-in-out;
+    }
+
   }
 
   .header__subtitle {

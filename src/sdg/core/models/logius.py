@@ -1,5 +1,6 @@
 from typing import Set
 
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -145,7 +146,6 @@ class UniformeProductnaam(models.Model):
     # the UPN URI and UPN label, we don't need these fields at the moment nor
     # their differences for each layer of government. The boolean fields below
     # already reflect that they can be used by several layers of government.
-
     rijk = models.BooleanField(_("rijk"), default=False)
     provincie = models.BooleanField(_("provincie"), default=False)
     waterschap = models.BooleanField(_("waterschap"), default=False)
@@ -153,7 +153,6 @@ class UniformeProductnaam(models.Model):
     burger = models.BooleanField(_("burger"), default=False)
     bedrijf = models.BooleanField(_("bedrijf"), default=False)
     dienstenwet = models.BooleanField(_("dienstenwet"), default=False)
-    sdg = models.BooleanField(_("sdg"), default=False)
     autonomie = models.BooleanField(_("autonomie"), default=False)
     medebewind = models.BooleanField(_("medebewind"), default=False)
     aanvraag = models.BooleanField(_("aanvraag"), default=False)
@@ -161,6 +160,14 @@ class UniformeProductnaam(models.Model):
     melding = models.BooleanField(_("melding"), default=False)
     verplichting = models.BooleanField(_("verplichting"), default=False)
     digi_d_macht = models.BooleanField(_("digi_d_macht"), default=False)
+    sdg = ArrayField(
+        base_field=models.CharField(
+            max_length=4,
+        ),
+        verbose_name=_("sdg"),
+        blank=True,
+        default=list,
+    )
 
     def get_active_fields(self) -> Set[str]:
         """:returns: A set of active boolean field names for this UPN."""
