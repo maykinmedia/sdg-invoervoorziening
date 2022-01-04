@@ -1,11 +1,23 @@
 {% load i18n producten %}
 
-{% if product.is_referentie_product %}
-    {% icon "times" %}
-{% elif product.has_expired %}
-    {% icon "exclamation" %}
-{% elif not product.product_aanwezig %}
-    {% icon "minus" %}
+{% if is_reference_catalog %}
+
+    {% if not product.product_aanwezig %}
+        {% icon "minus" %}
+    {% else %}
+        {% icon "check" %}
+    {% endif %}
+
 {% else %}
-    {% icon "check" %}
+
+    {% if product.is_referentie_product %}
+        {% icon "times" %}
+    {% elif product.has_expired %}
+        {% icon "exclamation" %}
+    {% elif not product.product_aanwezig %}
+        {% icon "minus" %}
+    {% else %}
+        {% icon "check" %}
+    {% endif %}
+
 {% endif %}
