@@ -112,7 +112,7 @@ class FormWithReference {
                         "input": referenceInput,
                     },
                     "currentVersionData": {
-                        "title": "Huidige",
+                        "title": "Uw tekst",
                         "input": formInput,
                     },
                     "versionsPanel": cell.querySelector(".tabs__table-cell--versions"),
