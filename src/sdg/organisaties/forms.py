@@ -56,6 +56,7 @@ class LokatieForm(forms.ModelForm):
             "vrijdag",
             "zaterdag",
             "zondag",
+            "openingstijden_opmerking",
         )
 
 

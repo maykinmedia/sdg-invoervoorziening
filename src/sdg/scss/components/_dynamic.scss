@@ -19,14 +19,16 @@
 
     .dynamic__container__button {
       border: none;
-      color: #fff;
+      color: $color_secondary_lightest;
       padding: 6px;
       cursor: pointer;
 
       &--side {
         @extend .dynamic__container__button;
-        background-color: $color_secondary_darker;
-        height: 42px;
+        background-color: transparent;
+        position: relative;
+        right: 24px;
+        color: $color_secondary_darkest;
       }
 
       &--low {

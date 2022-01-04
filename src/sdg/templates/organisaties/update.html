@@ -15,7 +15,7 @@
             {% field form.contact_telefoonnummer %}
             {% field form.contact_emailadres %}
         </div>
-
+        <hr class="divider">
         <div class="form__subforms formset">
             <div>
                 {{ formset.management_form }}
@@ -40,11 +40,12 @@
                                 {% field subform.naam %}
                                 {% field subform.straat %}
                                 {% field subform.nummer %}
-                                {% field subform.plaats %}
                                 <div class="form__table form__special-group">
                                     {% field subform.postcode %}
-                                    {% field subform.land %}
+                                    {% field subform.plaats %}
                                 </div>
+                                {% field subform.land %}
+                                {% field subform.openingstijden_opmerking %}
                             </div>
                             <div class="form__table">
                                 <div class="form__table-header">Dag</div>
@@ -62,11 +63,11 @@
                 {% endfor %}
             </div>
         </div>
-
         <div class="formset__add form__add-subform" data-formset-prefix="{{ lokatie_formset.prefix }}">
             <i class="fas fa-plus"></i>
             {% trans "Nog een locatie toevoegen" %}
         </div>
+        <hr class="divider">
         <input type="submit" value="Opslaan" class="primaryAction login_button button">
         <a href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}">
             <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
@@ -76,8 +77,4 @@
     <template class="formset__template">
         {% include "organisaties/_prefix/lokatie_formset.html" %}
     </template>
-
-    <div class="form__actions">
-        <p class="form__action-help">Wijzigingen worden direct gepubliceerd</p>
-    </div>
 {% endblock inner_content %}

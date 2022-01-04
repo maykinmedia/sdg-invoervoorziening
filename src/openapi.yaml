@@ -549,24 +549,33 @@ components:
           maxLength: 40
         straat:
           type: string
+          description: De straatnaam van de lokatie.
           maxLength: 256
         nummer:
           type: integer
           maximum: 2147483647
           minimum: 0
+          description: Het huisnummer van de lokatie.
         postcode:
           type: string
+          description: De postcode van de lokatie.
           maxLength: 6
         plaats:
           type: string
+          description: De plaatsnaam van de lokatie.
           maxLength: 256
         land:
           type: string
+          description: Het land van de lokatie.
           maxLength: 128
         openingstijden:
           allOf:
           - $ref: '#/components/schemas/Openingstijden'
           readOnly: true
+        openingstijdenOpmerking:
+          type: string
+          description: Opmerking over de openingstijden.
+          maxLength: 255
         organisatie:
           $ref: '#/components/schemas/OrganisatieBase'
       required:
