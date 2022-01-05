@@ -20,7 +20,6 @@ class RoleListView(RoleBaseMixin, OverheidMixin, ListView):
         context[
             "lokaleoverheid_beheerder"
         ] = self.lokale_overheid.user_has_manager_role(self.request.user)
-        context["users_without_role"] = User.objects.filter(roles__isnull=True)
         return context
 
 
