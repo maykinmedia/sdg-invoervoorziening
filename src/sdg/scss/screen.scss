@@ -8,6 +8,10 @@ body {
   overflow-x: hidden;
 }
 
+html, body {
+  scrollbar-gutter: stable;
+}
+
 input, textarea {
   color: #212121;
   font-family: 'Source Sans Pro', sans-serif;
@@ -15,6 +19,34 @@ input, textarea {
 
 a {
   color: #0B71A1;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.d-none {
+  display: none;
+}
+
+.readonly {
+  pointer-events: none;
+}
+
+a[href="https://vng.nl/"] {
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    filter: brightness(1.3);
+  }
 }
 
 @import 'settings';
