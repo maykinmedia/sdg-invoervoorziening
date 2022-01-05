@@ -26,7 +26,7 @@
                             <a class="products__item" href="{% create_redirect_url product catalog=catalog %}">
                         {% endif %}
                     <div class="products__item-icon products__status">
-                        {% product_icon product %}
+                        {% product_icon product is_reference_catalog=catalog.is_referentie_catalogus %}
                     </div>
                     <div>
                         <div class="products__item-title">
@@ -36,7 +36,8 @@
                             {% for language in product.beschikbare_talen %}
                                 {% flag language %}
                             {% endfor %}
-                            <span class="products__item-help--group" data-value="{{ product.generic_product.doelgroep }}">
+                            <span class="products__item-help--group"
+                                  data-value="{{ product.generic_product.doelgroep }}">
                                 {{ product.generic_product.get_doelgroep_display }}
                             </span>
                         </div>
