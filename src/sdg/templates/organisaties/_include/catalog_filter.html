@@ -1,18 +1,18 @@
-{% load producten %}
+{% load i18n producten %}
 
 <div class="filter">
     <div class="filter__status">
         <div class="filter__button filter__button--off">
-            {% icon "times" %}
+            {% icon "times" %} {%  trans "Niet gepubliceerd" %}
         </div>
         <div class="filter__button filter__button--off">
-            {% icon "exclamation" %}
+            {% icon "exclamation" %} {% trans "Controle nodig" %}
         </div>
         <div class="filter__button filter__button--off">
-            {% icon "minus" %}
+            {% icon "minus" %} {% trans "Niet aanwezig" %}
         </div>
         <div class="filter__button filter__button--off">
-            {% icon "check" %}
+            {% icon "check" %} {% trans "Aanwezig" %}
         </div>
     </div>
     <div class="filter__text">
