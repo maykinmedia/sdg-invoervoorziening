@@ -108,7 +108,7 @@ class Filter {
 
                 this.accordeon.querySelectorAll(".products__item").forEach(element => {
                     const itemGroup = element.querySelector(".products__item-help--group").dataset.value;
-                    if (checkboxValues.some(value => value === itemGroup)) {
+                    if (!checkboxValues.length || checkboxValues.some(value => value === itemGroup)) {
                         element.classList.remove("hidden");
                         this.openItemAccordeon(element);
                     } else {
