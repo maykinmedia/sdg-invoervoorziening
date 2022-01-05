@@ -1,0 +1,41 @@
+@font-face {
+  font-family: 'RijksOverheidSans';
+  font-style: normal;
+  font-weight: normal;
+  font-display: swap;
+  src: local('RijksOverheidSans'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsanstext-regular_3_0-webfont.woff2) format('woff2'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsanstext-regular_3_0-webfont.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'RijksOverheidSans';
+  font-style: italic;
+  font-weight: normal;
+  font-display: swap;
+  src: local('RijksOverheidSans'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsanstext-italic_3_0-webfont.woff2) format('woff2'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsanstext-italic_3_0-webfont.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'RijksOverheidSans';
+  font-style: normal;
+  font-weight: bold;
+  font-display: swap;
+  src: local('RijksOverheidSans'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsansheading-bold_3_0-webfont.woff2) format('woff2'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsansheading-bold_3_0-webfont.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'RijksOverheidSans';
+  font-style: italic;
+  font-weight: bold;
+  font-display: swap;
+  src: local('RijksOverheidSans'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsansheading-bold_3_0-webfont.woff2) format('woff2'),
+  url(https://statisch.ondernemersplein.kvk.nl/includes/fonts/rijksoverheidsansheading-bold_3_0-webfont.woff) format('woff');
+}
+
+@import 'kvk';

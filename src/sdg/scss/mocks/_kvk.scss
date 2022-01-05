@@ -1,0 +1,173 @@
+$kvk_primary_light: #006AC2;
+$kvk_primary: #00619D;
+$kvk_primary_dark: #002955;
+
+$kvk_secondary_light: #F2F9F7;
+$kvk_secondary: #dfeef5;
+
+$kvk_grey_light: #f5f5f5;
+$kvk_grey: #999999;
+
+#kvk {
+  background-color: #fff;
+  font-family: "RijksOverheidSans", sans-serif;
+  line-height: 1.6;
+  font-size: 16px;
+  letter-spacing: .03rem;
+
+  h1 {
+    color: $kvk_primary_light;
+    font-size: 44px;
+  }
+
+  h2 {
+    color: $kvk_primary_dark;
+    margin-bottom: 12px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  .rainbow-line {
+    height: 8px;
+    background-image: linear-gradient(
+        90deg, rgb(170, 65, 140) 0%, rgb(255, 147, 0) 50%, rgb(170, 65, 140) 100%);
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+  }
+
+  .text {
+    font-size: 20px;
+    margin: 48px 0;
+  }
+
+  .navbar {
+
+    &__line {
+      background-color: $kvk_primary;
+      min-height: 55px;
+    }
+
+    &__subline {
+      background-color: $kvk_secondary_light;
+      min-height: 43px;
+    }
+
+  }
+
+  .content {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0 84px;
+
+    .left {
+      width: 62%;
+    }
+
+    .subtitle {
+      padding-top: 0.5rem;
+      border-top: 2px solid rgb(229, 229, 229);
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgb(229, 229, 229);
+      color: $kvk_grey;
+
+      &__info {
+        display: inline-block;
+        margin-top: 4px;
+
+        &:first-child {
+          margin-right: 16px;
+        }
+
+        svg {
+          fill: rgb(105, 105, 105);
+          position: relative;
+          top: 3px;
+        }
+      }
+    }
+
+    .intro {
+      font-style: italic;
+      font-size: 24px;
+      display: block;
+      clear: both;
+      color: #033054;
+      margin: 24px 0;
+    }
+
+    .toc {
+      h2 {
+        color: $kvk_primary_dark;
+        font-size: 22px;
+        margin-left: 20px;
+      }
+
+      a {
+        font-size: 20px;
+      }
+
+      svg {
+        fill: $kvk_primary_dark;
+        height: 24px;
+        width: 24px;
+        flex: 0 0 auto;
+        margin-right: 0.9em;
+        position: relative;
+        top: 6px;
+      }
+
+      background-color: $kvk_secondary;
+      padding: 20px 0;
+      position: relative;
+
+      ul {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        li {
+          break-inside: avoid;
+          margin-left: 1rem;
+          margin-right: 1rem;
+          list-style-type: none;
+          counter-increment: li;
+          position: relative;
+        }
+      }
+
+      &::before {
+        background: $kvk_secondary;
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 100%;
+        width: 9999px;
+        width: 100vw;
+      }
+    }
+
+    .endblock {
+      color: $kvk_grey;
+      font-style: italic;
+      padding-top: 0.75rem;
+      border-top-width: 3px;
+      border-top-style: solid;
+
+      svg {
+        margin: 24px;
+      }
+    }
+  }
+
+  .footer {
+    height: 256px;
+    background-color: $kvk_grey_light;
+    border-top: 3px solid $kvk_primary;
+    margin-top: 48px;
+  }
+
+}
