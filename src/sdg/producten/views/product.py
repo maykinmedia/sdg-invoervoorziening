@@ -109,7 +109,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=1
         )(instance=version)
-        formset.title = f"v{version.versie} ({version.publicatie_datum})"
+        formset.title = f"Standaardtekst v{version.versie} ({version.publicatie_datum if version.publicatie_datum else 'concept'})"
         return formset
 
     def get_lokale_overheid(self):

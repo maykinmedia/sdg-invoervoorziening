@@ -123,10 +123,12 @@
       grid-gap: 6px;
 
       ins, del {
-        padding: 3px 10px;
+        padding: 4px 16px;
         border-radius: 16px;
         text-align: center;
         text-decoration: none;
+        font-size: 12px;
+        font-weight: bold;
       }
     }
 

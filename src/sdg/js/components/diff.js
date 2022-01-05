@@ -46,22 +46,21 @@ class DiffButton {
         const input = this.cellValueElement.querySelector(".form__input");
 
         // Check if available editors includes element id
-        if (availableEditors.hasOwnProperty(input.id)) {
-            const initial = availableEditors[input.id].getData();
-            // Replace available editor element with new element
-            this.cellValueElement.querySelector(".ck-editor").remove();
-            ClassicEditor.create(input).then(editor => {
-                availableEditors[input.id].destroy();
-                availableEditors[input.id] = editor;
-                editor.setData(initial);
-                editor.isReadOnly = true;
-                // Trigger a change event on the field
-                const event = new Event('change');
-                input.dispatchEvent(event);
-            });
-        }
-
         if (input) {
+            if (availableEditors.hasOwnProperty(input.id)) {
+                const initial = availableEditors[input.id].getData();
+                // Replace available editor element with new element
+                this.cellValueElement.querySelector(".ck-editor").remove();
+                ClassicEditor.create(input).then(editor => {
+                    availableEditors[input.id].destroy();
+                    availableEditors[input.id] = editor;
+                    editor.setData(initial);
+                    editor.isReadOnly = true;
+                    // Trigger a change event on the field
+                    const event = new Event('change');
+                    input.dispatchEvent(event);
+                });
+            }
             input.differ = this;
             addChangeListener(input);
         }
