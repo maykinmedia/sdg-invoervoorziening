@@ -230,7 +230,7 @@
 
     li {
       color: $color_red;
-      background-color: #ffd6d6;
+      background-color: lighten($color_red, 36%);
       padding: 14px;
       list-style: none;
     }
