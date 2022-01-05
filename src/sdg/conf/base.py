@@ -510,6 +510,7 @@ SPECTACULAR_SETTINGS = {
     ],
 }
 
-SUBPATH = config("SUBPATH", None)
-if SUBPATH and not SUBPATH.startswith("/"):
+# Subpath (optional)
+# This environment variable can be configured during deployment.
+if SUBPATH := config("SUBPATH", None):
     SUBPATH = f"/{SUBPATH.strip('/')}"
