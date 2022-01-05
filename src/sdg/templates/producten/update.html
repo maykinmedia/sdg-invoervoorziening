@@ -72,6 +72,11 @@
                         class="fas fa-info-circle fa-xs dark" title="{{ product_form.lokaties.help_text }}"></i></td>
                     <td class="tabs__table-cell">{{ product_form.lokaties }}</td>
                 </tr>
+                <tr>
+                    <td class="tabs__table-cell" width="25%">{{ version_form.publicatie_datum.label }} <i
+                        class="fas fa-info-circle fa-xs dark" title="{{ version_form.publicatie_datum.help_text }}"></i></td>
+                    <td class="tabs__table-cell">{{ version_form.date.initial|default_if_none:"Concept" }}</td>
+                </tr>
                 </tbody>
             </table>
         </div>

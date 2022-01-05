@@ -46,6 +46,16 @@
                         {% endif %}
                     </td>
                 </tr>
+                <tr>
+                    <td class="tabs__table-cell">{% trans "Publicatie datum" %}<i
+                        class="fas fa-info-circle fa-xs dark"
+                        title="Publicatiedatum van de productversie"></i></td>
+                    <td class="tabs__table-cell">
+                        <span class="tabs__table-cell--value">
+                            {{ latest_active_version.publicatie_datum }}
+                        </span>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
