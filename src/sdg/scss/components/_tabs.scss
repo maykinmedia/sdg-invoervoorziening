@@ -337,6 +337,11 @@
       padding: 32px 64px;
       border-bottom-left-radius: 13px;
       border-bottom-right-radius: 13px;
+
+      .preview {
+        text-decoration: none;
+        font-weight: bold;
+      }
     }
   }
 }

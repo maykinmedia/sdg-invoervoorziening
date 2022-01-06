@@ -1,8 +1,8 @@
 $kvk_primary_light: #006AC2;
-$kvk_primary: #00619D;
+$kvk_primary: #01689b;
 $kvk_primary_dark: #002955;
 
-$kvk_secondary_light: #F2F9F7;
+$kvk_secondary_light: #f3f8f7;
 $kvk_secondary: #dfeef5;
 
 $kvk_grey_light: #f5f5f5;
@@ -18,11 +18,17 @@ $kvk_grey: #999999;
   h1 {
     color: $kvk_primary_light;
     font-size: 44px;
+    margin-bottom: 0;
   }
 
   h2 {
     color: $kvk_primary_dark;
     margin-bottom: 12px;
+  }
+
+  h3 {
+    font-size: 22px;
+    margin: 8px 0 16px 0;
   }
 
   a {
@@ -47,24 +53,61 @@ $kvk_grey: #999999;
     &__line {
       background-color: $kvk_primary;
       min-height: 55px;
+      color: #fff;
+      font-size: 25px;
+      padding: 8px 84px;
+
+      svg {
+        height: 32px;
+        fill: #fff;
+        position: relative;
+        top: 8px;
+      }
     }
 
     &__subline {
       background-color: $kvk_secondary_light;
       min-height: 43px;
+      color: #333;
+      font-size: 20px;
+      padding: 8px 84px;
     }
 
   }
 
   .content {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-gap: 64px;
     padding: 0 84px;
 
-    .left {
-      width: 62%;
+    .right {
+      margin: 32px 0;
+
+      &__block {
+        border-top: 3px solid $kvk_primary;
+        font-size: 20px;
+
+        svg {
+          fill: $kvk_primary;
+          height: 24px;
+          width: 24px;
+        }
+
+        &--link {
+          display: flex;
+          align-items: center;
+          padding: 8px 0;
+
+          svg.externalLinkIcon {
+            height: 18px;
+            width: 18px;
+            position: relative;
+            bottom: 8px;
+            left: 4px;
+          }
+        }
+      }
     }
 
     .subtitle {

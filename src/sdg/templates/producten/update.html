@@ -96,6 +96,13 @@
                 {% for generic_information, form in informatie_forms %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ form.taal.value }}">
+                        <a
+                            href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ form.taal.value }}"
+                            class="preview"
+                            target="_blank">
+                            <i class="fa fa-vector-square"></i> {% trans "Preview" %}
+                        </a>
+                        <hr class="divider">
 
                         {% if generic_information %}
                             <table class="tabs__table">
