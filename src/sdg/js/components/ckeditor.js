@@ -12,8 +12,6 @@ import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import MarkdownPlugin from '@ckeditor/ckeditor5-markdown-gfm/src/markdown';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
-import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
-import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperties';
 
 export default class ClassicEditor extends ClassicEditorBase {
 }
@@ -32,8 +30,6 @@ ClassicEditor.builtinPlugins = [
     ParagraphPlugin,
     Table,
     TableToolbar,
-    TableProperties,
-    TableCellProperties,
 ];
 
 ClassicEditor.defaultConfig = {
@@ -53,10 +49,8 @@ ClassicEditor.defaultConfig = {
         ]
     },
     table: {
-        contentToolbar: [
-            'tableColumn', 'tableRow', 'mergeTableCells',
-            'tableProperties', 'tableCellProperties'
-        ],
+        contentToolbar: ['tableColumn', 'tableRow'],
+        defaultHeadings: {rows: 1},
     },
     language: 'nl',
 };

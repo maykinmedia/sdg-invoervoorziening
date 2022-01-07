@@ -3,11 +3,10 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
-from markdownx.models import MarkdownxField
-
 from sdg.core.db.fields import DynamicArrayField
 from sdg.core.forms import LabeledURLWidget
 from sdg.core.models.validators import validate_labeled_url
+from sdg.producten.models.fields import MarkdownxField
 from sdg.producten.models.managers import LocalizedManager
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
