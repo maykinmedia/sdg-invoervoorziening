@@ -41,9 +41,19 @@
                                         </div>
                                     </div>
                                 </li>
-                                </span>
                             {% endfor %}
+                            </span>
                         {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tabs__table-cell">{% trans "Publicatie datum" %}<i
+                        class="fas fa-info-circle fa-xs dark"
+                        title="Publicatiedatum van de productversie"></i></td>
+                    <td class="tabs__table-cell">
+                        <span class="tabs__table-cell--value">
+                            {{ latest_active_version.publicatie_datum }}
+                        </span>
                     </td>
                 </tr>
                 </tbody>
@@ -60,7 +70,6 @@
         </div>
 
         <div class="tabs__tab-contents">
-            {% include "producten/_include/product_status.html" %}
             {% for info in latest_active_version.vertalingen.all %}
                 <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                      id="{{ info.taal }}">
@@ -125,6 +134,8 @@
                 </ul>
             {% endfor %}
         </div>
+
+        <hr class="divider">
 
         <div class="form-actions">
             <div>

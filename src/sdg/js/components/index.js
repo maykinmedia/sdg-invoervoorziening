@@ -9,5 +9,4 @@ import "./dynamic_array";
 import "./catalog";
 import "./diff";
 import "./general";
-import "./form";
 import "./product";

@@ -12,7 +12,7 @@
         {% csrf_token %}
 
         {% blocktrans %}
-            <div>
+            <div class="mt-m">
                 <p class="heading">Nieuwe gebruiker toevoegen.</p>
                 <p class="subheading">U nodigt hiermee een nieuwe of bestaande gebruiker uit voor {{ lokaleoverheid }}.
                     Een
@@ -21,6 +21,8 @@
                     binnen deze applicatie. Een gebruiker mag ook beide rollen vervullen.</p>
             </div>
         {% endblocktrans %}
+
+        <hr class="divider">
 
         {{ formset.management_form }}
         {{ formset.non_form_errors }}
@@ -36,6 +38,9 @@
                     {% checkbox subform.is_redacteur %}
                 {% endfor %}
             </div>
+        </div>
+        <hr class="divider">
+        <div class="form-actions">
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
             <div class="form__buttons">
                 <input type="submit" class="button" value="{% trans 'Opslaan' %}">

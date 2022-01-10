@@ -77,7 +77,7 @@ class ProductDetailView(OverheidMixin, DetailView):
 
 
 class ProductUpdateView(OverheidMixin, UpdateView):
-    template_name = "producten/edit.html"
+    template_name = "producten/update.html"
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"
     queryset = Product.objects.most_recent().select_related(
