@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import ugettext_lazy as _
@@ -103,4 +103,17 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
         if not change:  # new user
-            post_event("save_user", user=form.instance, request=request)
+            errors = post_event("save_user", user=form.instance, request=request)
+
+            if not errors:
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    _("Een uitnodiging is succesvol naar de gebruiker verzonden."),
+                )
+                return
+
+            for function, exception in errors.items():
+                messages.add_message(
+                    request, messages.ERROR, f"{function}: {exception}"
+                )
