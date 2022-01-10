@@ -22,20 +22,21 @@
     {% elif not most_recent_version %}
         <div class="notifications__notification notification__accent">
             <i class="fas fa-info-circle"></i>
-            <span>{% trans "Er is nog geen product tekst gepubliceerd." %}</span>
+            <span>{% trans "Er is nog geen producttekst gepubliceerd." %}</span>
             <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
         </div>
     {% elif status == product.status.CONCEPT %}
         <div class="notifications__notification notification__info notifications__close">
             <i class="fas fa-info-circle"></i>
-            <span>{% trans "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig." %}</span>
+            <span>{% trans "Er is nog geen producttekst gepubliceerd. Er is wel een concept producttekst aanwezig." %}</span>
             <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
         </div>
     {% elif status == product.status.SCHEDULED %}
         <div class="notifications__notification notification__info">
             <i class="fas fa-info-circle"></i>
-            {% blocktrans %}
-                <span>Er staat een nieuwe product tekst klaar om gepubliceerd te worden op {{ most_recent_version.publicatie_datum }}. Hieronder ziet u de huidige product tekst.</span>
+            *******{{ most_recent_version }}**********
+            {% blocktrans with pubdate=most_recent_version.publicatie_datum %}
+                <span>Er staat een toekomstige producttekst klaar om gepubliceerd te worden op {{ pubdate }}. Hieronder ziet u de huidige producttekst.</span>
             {% endblocktrans %}
             <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
         </div>

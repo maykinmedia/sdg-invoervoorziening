@@ -1,3 +1,4 @@
+from django.template import Context, Template
 from django.urls import reverse
 
 from django_webtest import WebTest
@@ -70,7 +71,7 @@ class ProductDetailViewTests(WebTest):
         response = self.app.get(product_version.product.get_absolute_url())
 
         self.assertIn(
-            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            "Er is nog geen producttekst gepubliceerd. Er is wel een concept producttekst aanwezig.",
             response.text,
         )
 
@@ -93,7 +94,7 @@ class ProductDetailViewTests(WebTest):
         response = self.app.get(product_version.product.get_absolute_url())
 
         self.assertIn(
-            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            "Er is nog geen producttekst gepubliceerd. Er is wel een concept producttekst aanwezig.",
             response.text,
         )
 
@@ -287,7 +288,9 @@ class ProductDetailViewTests(WebTest):
             "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
         )
         self.assertIn(
-            "Er staat een nieuwe product tekst klaar om gepubliceerd te worden op . Hieronder ziet u de huidige product tekst.",
+            Template(
+                "Er staat een toekomstige producttekst klaar om gepubliceerd te worden op {{ pubdate }}. Hieronder ziet u de huidige producttekst."
+            ).render(context=Context({"pubdate": FUTURE_DATE})),
             response.text,
         )
 
@@ -324,7 +327,7 @@ class ProductDetailViewTests(WebTest):
             "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
         )
         self.assertIn(
-            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            "Er is nog geen producttekst gepubliceerd. Er is wel een concept producttekst aanwezig.",
             response.text,
         )
 
@@ -394,7 +397,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.product.referentie_product.save()
         response = self.app.get(self.product.get_absolute_url())
         self.assertIn(
-            "Er is nog geen product tekst gepubliceerd. Er is een concept tekst aanwezig.",
+            "Er is nog geen producttekst gepubliceerd. Er is wel een concept producttekst aanwezig.",
             response.text,
         )
 
@@ -608,7 +611,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
         self.assertEqual(latest_version.versie, 2)
         self.assertIn(
-            'Indien u kiest voor "Opslaan als concept" dan wordt de publicatie datum verwijderd',
+            'Als u kies voor "Opslaan en publiceren", vervalt de reeds ingeplande publicatie. Indien u kiest voor "Opslaan als concept" dan wordt de publicatiedatum verwijderd van de ingeplande publicatie.',
             response.text,
         )
 
