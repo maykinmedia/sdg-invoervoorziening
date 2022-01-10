@@ -483,7 +483,7 @@ class ProductVersie(models.Model):
         return f"{self.versie} {concept}".strip()
 
     def get_pretty_name(self):
-        return f"{self.product} (versie {self.get_pretty_version()})"
+        return f"{self.product} — versie {self.get_pretty_version()}"
 
     def __str__(self):
         return self.get_pretty_name()
