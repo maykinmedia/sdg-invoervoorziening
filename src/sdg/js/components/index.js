@@ -10,3 +10,4 @@ import "./catalog";
 import "./diff";
 import "./general";
 import "./product";
+import "./tooltip";
