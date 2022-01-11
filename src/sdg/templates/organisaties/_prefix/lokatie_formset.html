@@ -3,15 +3,15 @@
 
 <div class="form__subforms">
     <h3 class="form__subtitle">
-                    <span class="formset__title">Lokatie __prefix__</span>
+                    <span class="formset__title">{% trans "Locatie" %} __prefix__</span>
                     <a class="formset__remove" href="#">
                         <i class="far fa-trash-alt"></i>
-                        {% trans "Lokatie verwijderen" %}
+                        {% trans "Locatie verwijderen" %}
                     </a>
                 </h3>
     <div class="form__block-group">
         <div>
-            <div class="form__table-header-left">Lokatie</div>
+            <div class="form__table-header-left">{% trans "Locatie" %}</div>
             {% field formset.empty_form.naam %}
             {% field formset.empty_form.straat %}
             {% field formset.empty_form.nummer %}

@@ -168,7 +168,7 @@ class Product(ProductFieldMixin, models.Model):
     )
     lokaties = models.ManyToManyField(
         "organisaties.Lokatie",
-        verbose_name=_("lokaties"),
+        verbose_name=_("locaties"),
         related_name="producten",
         help_text=_(
             "De locaties die zijn toegewezen aan de product.",

@@ -543,7 +543,7 @@ components:
             resource.
         naam:
           type: string
-          description: De naam van de lokatie.
+          description: De naam van de locatie.
           maxLength: 40
         straat:
           type: string
