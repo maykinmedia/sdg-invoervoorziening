@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import date
+from functools import partialmethod
 from typing import Any, List
 
 from django.contrib.auth import get_user_model
@@ -277,8 +278,11 @@ class Product(ProductFieldMixin, models.Model):
             ),
         )
 
-    def get_latest_versions(self, quantity=5, active=False, exclude_concept=False):
+    def get_latest_versions(
+        self, quantity=5, active=False, exclude_concept=False, reverse_order=True
+    ):
         """:returns: The latest N versions for this product."""
+        step_slice = 1 if reverse_order else 1
         queryset = self.versies.all().order_by("-versie")
 
         if active:
@@ -286,7 +290,9 @@ class Product(ProductFieldMixin, models.Model):
         if exclude_concept:
             queryset = queryset.exclude(publicatie_datum=None)
 
-        return queryset[:quantity:-1]
+        return queryset[:quantity:step_slice]
+
+    get_revision_list = partialmethod(get_latest_versions, reverse_order=False)
 
     def create_version_from_reference(self) -> ProductVersie:
         """Create fist version for this product based on latest reference version."""
