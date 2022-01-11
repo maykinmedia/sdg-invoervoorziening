@@ -1,0 +1,12 @@
+@import 'tippy.js/dist/tippy.css';
+@import 'tippy.js/animations/scale.css';
+@import 'colors';
+
+
+.tippy-box {
+  background-color: $color_primary_darker;
+}
+
+.tippy-arrow {
+  color: $color_primary_darker;
+}
