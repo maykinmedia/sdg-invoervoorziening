@@ -21,6 +21,7 @@
     "homepage": "https://maykinmedia.nl",
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.4",
+        "@fortawesome/fontawesome-svg-core": "^1.2.36",
         "ckeditor5": "^30.0.0",
         "flag-icon-css": "^4.1.6",
         "flatpickr": "^4.6.9",
