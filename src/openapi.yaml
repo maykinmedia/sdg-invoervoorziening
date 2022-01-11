@@ -483,9 +483,7 @@ components:
         locaties:
           type: array
           items:
-            type: string
-            format: uri
-          description: Lijst van locaties die bij deze organisatie horen.
+            $ref: '#/components/schemas/Lokatie'
         catalogi:
           type: array
           items:
@@ -818,9 +816,7 @@ components:
         locaties:
           type: array
           items:
-            type: string
-            format: uri
-          description: De locaties die zijn toegewezen aan de product.
+            $ref: '#/components/schemas/Lokatie'
         doelgroep:
           type: string
           readOnly: true
@@ -837,6 +833,7 @@ components:
       - catalogus
       - doelgroep
       - gerelateerdeProducten
+      - locaties
       - organisatie
       - publicatieDatum
       - upnLabel

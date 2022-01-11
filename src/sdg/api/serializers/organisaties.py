@@ -89,6 +89,7 @@ class LokaleOverheidSerializer(OrganisatieBaseSerializer):
     bevoegde_organisatie = OverheidsorganisatieSerializer()
     ondersteunings_organisatie = OverheidsorganisatieSerializer()
     verantwoordelijke_organisatie = OverheidsorganisatieSerializer()
+    locaties = LokatieSerializer(source="lokaties", many=True)
 
     class Meta:
         model = LokaleOverheid
@@ -117,11 +118,5 @@ class LokaleOverheidSerializer(OrganisatieBaseSerializer):
                 "lookup_field": "uuid",
                 "view_name": "api:productencatalogus-detail",
                 "help_text": "Lijst van catalogi die deze organisatie gebruikt.",
-            },
-            "locaties": {
-                "source": "lokaties",
-                "lookup_field": "uuid",
-                "view_name": "api:lokatie-detail",
-                "help_text": "Lijst van locaties die bij deze organisatie horen.",
             },
         }

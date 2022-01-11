@@ -4,7 +4,10 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 from sdg.api.serializers.fields import LabeledUrlListField
-from sdg.api.serializers.organisaties import OrganisatieBaseSerializer
+from sdg.api.serializers.organisaties import (
+    LokatieSerializer,
+    OrganisatieBaseSerializer,
+)
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
 
@@ -77,6 +80,7 @@ class ProductSerializer(ProductBaseSerializer):
     versie = SerializerMethodField(method_name="get_versie")
     doelgroep = SerializerMethodField(method_name="get_doelgroep")
     gerelateerde_producten = ProductBaseSerializer(many=True)
+    locaties = LokatieSerializer(source="lokaties", many=True)
 
     class Meta:
         model = Product
@@ -108,11 +112,6 @@ class ProductSerializer(ProductBaseSerializer):
             "referentie_product": {
                 "lookup_field": "uuid",
                 "view_name": "api:product-detail",
-            },
-            "locaties": {
-                "source": "lokaties",
-                "lookup_field": "uuid",
-                "view_name": "api:lokatie-detail",
             },
         }
 
