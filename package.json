@@ -28,7 +28,8 @@
         "pretty-checkbox": "^3.0.3",
         "reseter.css": "^2.0.0",
         "showdown": "^1.9.1",
-        "text-diff": "^1.0.1"
+        "text-diff": "^1.0.1",
+        "tippy.js": "^6.3.7"
     },
     "devDependencies": {
         "@babel/core": "latest",
@@ -48,8 +49,8 @@
         "@ckeditor/ckeditor5-list": "^30.0.0",
         "@ckeditor/ckeditor5-markdown-gfm": "^30.0.0",
         "@ckeditor/ckeditor5-paragraph": "^30.0.0",
-        "@ckeditor/ckeditor5-theme-lark": "^30.0.0",
         "@ckeditor/ckeditor5-table": "^30.0.0",
+        "@ckeditor/ckeditor5-theme-lark": "^30.0.0",
         "arrayify": "^1.0.0",
         "autoprefixer": "^9.0.0",
         "babel-loader": "latest",
