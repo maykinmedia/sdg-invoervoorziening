@@ -1,10 +1,22 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator, _lazy_re_compile
 from django.utils.translation import ugettext_lazy as _
 
-from sdg.producten.models import Product
+no_html_validator = RegexValidator(
+    _lazy_re_compile(r"<(.*)>.*?|<(.*) \>"),
+    message=_(
+        "Het veld mag geen HTML-tags bevatten. Zorg ervoor dat de tabel een header rij heeft."
+    ),
+    code="invalid",
+    inverse_match=True,
+)
 
 
-def validate_product(product: Product):
+def validate_no_html(value):
+    return no_html_validator(value)
+
+
+def validate_product(product):
     """Validate a product (specific / reference).
     - If `product_aanwezig` is False, the product must declare `product_aanwezig_toelichting`.
     """
@@ -16,7 +28,7 @@ def validate_product(product: Product):
         )
 
 
-def validate_specific_product(product: Product):
+def validate_specific_product(product):
     """Validate a specific product.
     - The product must have a reference product.
     - The product's catalog cannot be a referentie catalogus
@@ -41,7 +53,7 @@ def validate_specific_product(product: Product):
         )
 
 
-def validate_reference_product(product: Product):
+def validate_reference_product(product):
     """Validate a reference product.
     - The product's catalog must be a referentie catalogus.
     - The product must have a generic product.

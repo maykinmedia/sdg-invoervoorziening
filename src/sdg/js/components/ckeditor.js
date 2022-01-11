@@ -11,8 +11,10 @@ import ListPlugin from '@ckeditor/ckeditor5-list/src/list';
 import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import MarkdownPlugin from '@ckeditor/ckeditor5-markdown-gfm/src/markdown';
 import Table from '@ckeditor/ckeditor5-table/src/table';
+import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 
-export default class ClassicEditor extends ClassicEditorBase {}
+export default class ClassicEditor extends ClassicEditorBase {
+}
 
 ClassicEditor.builtinPlugins = [
     MarkdownPlugin,
@@ -26,7 +28,8 @@ ClassicEditor.builtinPlugins = [
     LinkPlugin,
     ListPlugin,
     ParagraphPlugin,
-    Table
+    Table,
+    TableToolbar,
 ];
 
 ClassicEditor.defaultConfig = {
@@ -44,6 +47,10 @@ ClassicEditor.defaultConfig = {
             'undo',
             'redo',
         ]
+    },
+    table: {
+        contentToolbar: ['tableColumn', 'tableRow'],
+        defaultHeadings: {rows: 1},
     },
     language: 'nl',
 };
