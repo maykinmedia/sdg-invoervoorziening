@@ -111,7 +111,7 @@
         <h3 class="tabs__footer-title">Revisies</h3>
 
         <div class="revision">
-            {% for product_version in product.get_latest_versions %}
+            {% for product_version in product.get_revision_list %}
                 <ul class="revision-list">
                     <li class="revision-list__item">
                         <div>

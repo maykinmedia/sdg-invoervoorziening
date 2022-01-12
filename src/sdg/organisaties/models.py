@@ -1,5 +1,4 @@
 import uuid
-from typing import List
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -105,7 +104,7 @@ class Lokatie(models.Model):
     naam = models.CharField(
         _("naam"),
         max_length=40,
-        help_text=_("De naam van de lokatie."),
+        help_text=_("De naam van de locatie."),
     )
     straat = models.CharField(
         _("straat"),
@@ -210,8 +209,8 @@ class Lokatie(models.Model):
         return f"{self.naam}\n{self.straat} {self.nummer}\n{self.postcode} {self.plaats}\n{self.land}"
 
     class Meta:
-        verbose_name = _("lokatie")
-        verbose_name_plural = _("lokaties")
+        verbose_name = _("locatie")
+        verbose_name_plural = _("locaties")
 
     def __str__(self):
         return self.naam
