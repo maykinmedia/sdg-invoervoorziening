@@ -15,7 +15,13 @@
                 </span>
         {% endif %}
         <span class="tabs__table-cell--value">
-            {% field_info field %}
+            {% if url %}
+                <a href="{{ url }}" target="_blank">
+                    {% field_info field %}
+                </a>
+            {% else %}
+                {% field_info field %}
+            {% endif %}
         </span>
     </td>
 </tr>
