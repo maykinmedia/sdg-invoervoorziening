@@ -542,3 +542,6 @@ SPECTACULAR_SETTINGS = {
 # This environment variable can be configured during deployment.
 if SUBPATH := config("SUBPATH", None):
     SUBPATH = f"/{SUBPATH.strip('/')}"
+
+# django-solo
+SOLO_CACHE = "default"

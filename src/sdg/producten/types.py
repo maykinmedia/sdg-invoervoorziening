@@ -10,6 +10,7 @@ class ProductFieldInfo:
     help_text: str
     is_reference: bool
     type: str
+    configuration: list[str]
 
     def __str__(self):
         return self.value

@@ -2,14 +2,21 @@
 {% load utils %}
 {% load producten %}
 
-<tr>
-    <td class="tabs__table-cell">{{ field.verbose_name|capfirst }}<i
-        class="fas fa-info-circle fa-xs dark"
-        title="{{ field.help_text }}"></i>
-    </td>
-    <td class="tabs__table-cell">
-        {% if field.is_reference %}
-            <span>
+{% with configuration=field.configuration.0 %}
+    <tr>
+        {% if configuration %}
+            <td class="tabs__table-cell">{{ configuration.0|capfirst }}<i
+                class="fas fa-info-circle fa-xs dark"
+                title="{{ configuration.1 }}"></i>
+        {% else %}
+            <td class="tabs__table-cell">{{ field.verbose_name|capfirst }}<i
+            class="fas fa-info-circle fa-xs dark"
+            title="{{ field.help_text }}"></i>
+        {% endif %}
+        </td>
+        <td class="tabs__table-cell">
+            {% if field.is_reference %}
+                <span>
                     <i class="fa fa-asterisk fa-xs dark"
                        title="{% trans 'Dit veld gebruikt standaardtekst.' %}"></i>
                 </span>
@@ -25,3 +32,4 @@
         </span>
     </td>
 </tr>
+{% endwith %}

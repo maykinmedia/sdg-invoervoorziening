@@ -2,11 +2,11 @@
 {% load i18n %}
 
 {% spaceless %}
-    <input type="text" name="{{ widget.name }}" class="form__input form__input--left" placeholder="Label"
+    <input type="text" name="{{ widget.name }}" class="form__input form__input--left" placeholder="Label text"
         {% if widget.label_value != None %} value="{{ widget.label_value|stringformat:'s' }}"{% endif %}
         {% include "django/forms/widgets/attrs.html" %}
     >
-    <input type="url" name="{{ widget.name }}" class="form__input form__input--right" placeholder="URL"
+    <input type="text" name="{{ widget.name }}" class="form__input form__input--right" placeholder="Tooltip text"
         {% if widget.field_value != None %} value="{{ widget.field_value|stringformat:'s' }}"{% endif %}
         {% include "django/forms/widgets/attrs.html" %}
     >
