@@ -27,21 +27,19 @@
                     <td class="tabs__table-cell">
                         {% if product.lokaties %}
                             <span class="tabs__table-cell--value">
-                            {% for lokatie in product.get_municipality_locations %}
-                                <li>
+                                {% for lokatie in product.get_municipality_locations %}
                                     <div class="pretty p-default p-curve">
-                                        <input type="checkbox" class="form__checkbox"
-                                               {% if lokatie.is_product_location %}checked{% endif %}
-                                               value="{{ lokatie.pk }}"
-                                               disabled>
-                                        <div class="state">
-                                            <label class="checkbox">
-                                                {{ lokatie.naam }}
-                                            </label>
+                                            <input type="checkbox" class="form__checkbox"
+                                                   {% if lokatie.is_product_location %}checked{% endif %}
+                                                   value="{{ lokatie.pk }}"
+                                                   disabled>
+                                            <div class="state">
+                                                <label class="checkbox">
+                                                    {{ lokatie.naam }}
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                </li>
-                            {% endfor %}
+                                {% endfor %}
                             </span>
                         {% endif %}
                     </td>

@@ -153,6 +153,10 @@
         border-collapse: collapse;
         padding: 6px;
       }
+
+      th {
+        background: #0000000d;
+      }
     }
 
     &--label {
@@ -178,20 +182,22 @@
       color: $color_primary_darker;
     }
 
-    ul,
-    ol,
-    li {
-      list-style-type: none;
-      margin: 8px 0;
+    ol {
+      li {
+        margin-left: 16px;
+      }
+    }
+
+    ul {
 
       li {
-        line-height: 1.5;
+        list-style-type: none;
       }
 
       li:before {
         content: "—";
-        margin-right: 8px;
       }
+
     }
 
     .form__input {
