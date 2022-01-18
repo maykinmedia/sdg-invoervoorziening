@@ -473,7 +473,26 @@ MARKDOWNIFY_WHITELIST_TAGS = [
     "th",
     "tr",
     "td",
+    "a",
+    "abbr",
+    "acronym",
+    "b",
+    "blockquote",
+    "em",
+    "i",
+    "li",
+    "ol",
+    "p",
+    "strong",
+    "ul",
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "code",
 ]
+
 MARKDOWNIFY_MARKDOWN_EXTENSIONS = ["markdown.extensions.extra"]
 
 # Celery
