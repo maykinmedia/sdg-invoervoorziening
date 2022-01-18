@@ -76,6 +76,17 @@ class ProductDetailView(OverheidMixin, DetailView):
         return self.render_to_response(context)
 
 
+class ProductPreviewView(ProductDetailView):
+    template_name = "mocks/kvk.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["translation"] = self.object.active_version.vertalingen.get(
+            taal=self.request.GET["taal"]
+        )
+        return context
+
+
 class ProductUpdateView(OverheidMixin, UpdateView):
     template_name = "producten/update.html"
     context_object_name = "product_versie"

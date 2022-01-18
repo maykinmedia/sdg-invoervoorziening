@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load utils %}
-{% load markdownify %}
+{% load producten %}
 
 <tr>
     <td class="tabs__table-cell">{{ field.verbose_name|capfirst }}<i
@@ -15,29 +15,13 @@
                 </span>
         {% endif %}
         <span class="tabs__table-cell--value">
-            {% if url %}<a href="{{ url }}" target="_blank">{% endif %}
-                {% if field.is_text %}
-                    {{ field.value|markdownify }}
-                {% elif field.is_boolean %}
-                    {{ field.value|yesno:"Ja,Nee,Onbekend" }}
-                {% elif field.is_dynamicarray %}
-                    <ul>
-                        {% for item in field.value %}
-                            <li>
-                                <a href="{{ item.1 }}" target="_blank">{{ item.0 }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% elif field.is_array %}
-                    <ul>
-                        {% for item in field.value %}
-                            <li>{{ item }}</li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    {{ field.value }}
-                {% endif %}
-            {% if url %}</a>{% endif %}
+            {% if url %}
+                <a href="{{ url }}" target="_blank">
+                    {% field_info field %}
+                </a>
+            {% else %}
+                {% field_info field %}
+            {% endif %}
         </span>
     </td>
 </tr>

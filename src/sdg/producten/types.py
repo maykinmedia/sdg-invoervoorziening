@@ -11,6 +11,9 @@ class ProductFieldInfo:
     is_reference: bool
     type: str
 
+    def __str__(self):
+        return self.value
+
     def __getattr__(self, name):
         """Allow using is_<x> syntax for field type checking."""
         if name.startswith("is_"):
