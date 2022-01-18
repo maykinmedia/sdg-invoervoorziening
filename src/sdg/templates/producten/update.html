@@ -106,7 +106,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for field in generic_information.get_fields|exclude:"id,taal,generiek_product" %}
+                                {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
+                                    {% table_row title url=url.value %}
+                                {% endwith %}
+                                {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link" %}
                                     {% table_row field %}
                                 {% endfor %}
                                 </tbody>
