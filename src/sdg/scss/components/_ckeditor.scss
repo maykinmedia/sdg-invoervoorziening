@@ -1,0 +1,9 @@
+.ck-content {
+  .table {
+    margin: 16px 0 !important;
+  }
+
+  & > * {
+    margin-bottom: 16px;
+  }
+}
