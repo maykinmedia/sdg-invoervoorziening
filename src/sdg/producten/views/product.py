@@ -182,11 +182,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, version_form, product_form):
-        return self.render_to_response(
-            self.get_context_data(
-                form=form, version_form=version_form, product_form=product_form
-            )
+        context = self.get_context_data(
+            form=form, version_form=version_form, product_form=product_form
         )
+        context["form_invalid"] = True
+        return self.render_to_response(context)
 
     def get_success_url(self):
         return reverse(

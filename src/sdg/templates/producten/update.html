@@ -36,6 +36,13 @@
 
 {% block inner_content %}
     <div class="notifications">
+        {% if form_invalid %}
+            <div class="notifications__notification notification__accent">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span>{% trans "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten." %}</span>
+                <span></span>
+            </div>
+        {% endif %}
         {% include "core/_notifications.html" %}
         {% include 'producten/_include/edit_warnings.html' %}
     </div>
