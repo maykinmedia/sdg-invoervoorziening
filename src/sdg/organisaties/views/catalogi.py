@@ -1,5 +1,6 @@
 from copy import deepcopy
 
+from django.utils.datastructures import OrderedSet
 from django.views.generic import ListView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -39,11 +40,14 @@ class CatalogListView(OverheidMixin, ListView):
             catalogs = self.object_list
 
         themes = (
-            Thema.objects.all()
+            Thema.objects.order_by("informatiegebied__informatiegebied")
+            .all()
             .select_related("informatiegebied")
             .prefetch_related("upn")
         )
-        areas_template = {t.informatiegebied.informatiegebied: set() for t in themes}
+        areas_template = {
+            t.informatiegebied.informatiegebied: OrderedSet() for t in themes
+        }
 
         for catalog in catalogs:
             reference_catalog = catalog.referentie_catalogus
@@ -59,12 +63,12 @@ class CatalogListView(OverheidMixin, ListView):
                 specifieke_producten__in=products
             )
 
-            for product in intersected_products:
+            for product in intersected_products.order_by("_name"):
                 catalog.areas[product.area].add(product)
 
             if getattr(catalog, "municipality_owns_reference", False):
                 reference_catalog.areas = deepcopy(areas_template)
-                for product in reference_products:
+                for product in reference_products.order_by("_name"):
                     reference_catalog.areas[product.area].add(product)
 
         context["catalogs"] = catalogs
