@@ -15,7 +15,6 @@ class LocalizedProductForm(forms.ModelForm):
             "product_titel_decentraal",
             "specifieke_tekst",
             "verwijzing_links",
-            "decentrale_link",
             "procedure_beschrijving",
             "vereisten",
             "bewijs",

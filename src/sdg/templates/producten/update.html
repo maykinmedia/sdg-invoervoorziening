@@ -116,7 +116,7 @@
                                 {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
                                     {% table_row title url=url.value %}
                                 {% endwith %}
-                                {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link" %}
+                                {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
                                     {% table_row field %}
                                 {% endfor %}
                                 </tbody>
@@ -147,7 +147,6 @@
                                 {% table_field form.product_titel_decentraal is_reference=reference %}
                                 {% table_field form.specifieke_tekst is_reference=reference %}
                                 {% table_field form.verwijzing_links is_reference=True no_diff=True %}
-                                {% table_field form.decentrale_link is_reference=True no_diff=True %}
                                 {% table_field form.procedure_beschrijving is_reference=reference %}
                                 {% table_field form.vereisten is_reference=reference %}
                                 {% table_field form.bewijs is_reference=reference %}

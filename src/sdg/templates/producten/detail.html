@@ -90,7 +90,7 @@
                             {% with title=info.generiek_informatie|get_field:"product_titel" url=info.generiek_informatie|get_field:"landelijke_link" %}
                                 {% table_row title url=url.value %}
                             {% endwith %}
-                            {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link" %}
+                            {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
                                 {% table_row field %}
                             {% endfor %}
                             </tbody>

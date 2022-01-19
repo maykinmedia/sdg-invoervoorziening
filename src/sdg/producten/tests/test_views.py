@@ -122,11 +122,9 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(generic_nl.product_titel, text_nl)
         self.assertIn(generic_nl.generieke_tekst, text_nl)
-        self.assertIn(generic_nl.korte_omschrijving, text_nl)
 
         self.assertIn(generic_en.product_titel, text_en)
         self.assertIn(generic_en.generieke_tekst, text_en)
-        self.assertIn(generic_en.korte_omschrijving, text_en)
 
     @freeze_time(NOW_DATE)
     def test_reference_product_details_are_displayed(self):
