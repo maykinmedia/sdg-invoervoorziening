@@ -1,0 +1,147 @@
+{
+	"info": {
+		"_postman_id": "78762ab8-d20b-4527-a36f-5151621c766b",
+		"name": "SDG testscripts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "organisaties",
+			"item": [
+				{
+					"name": "producten",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root_url}}/api/v1/producten",
+							"host": [
+								"{{root_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"producten"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "producten (historie)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root_url}}/api/v1/producten/{{product_uuid}}/historie",
+							"host": [
+								"{{root_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"producten",
+								"{{product_uuid}}",
+								"historie"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "producten (concept)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root_url}}/api/v1/producten/{{product_uuid}}/concept",
+							"host": [
+								"{{root_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"producten",
+								"{{product_uuid}}",
+								"concept"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "producten",
+			"item": [
+				{
+					"name": "organisaties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root_url}}/api/v1/organisaties",
+							"host": [
+								"{{root_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"organisaties"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "locaties",
+			"item": [
+				{
+					"name": "locaties",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root_url}}/api/v1/locaties",
+							"host": [
+								"{{root_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"locaties"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "catalogi",
+			"item": [
+				{
+					"name": "catalogi",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{root_url}}/api/v1/catalogi",
+							"host": [
+								"{{root_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"catalogi"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
