@@ -7,7 +7,9 @@
 {% elif field.is_dynamicarray %}
     <ul>
         {% for item in field.value %}
-            <li>{{ item.1 }}<span class="tabs__table-cell--label">{{ item.0 }}</span></li>
+            <li>
+                <a href="{{ item.1 }}" target="_blank">{{ item.0 }}</a>
+            </li>
         {% endfor %}
     </ul>
 {% elif field.is_array %}
