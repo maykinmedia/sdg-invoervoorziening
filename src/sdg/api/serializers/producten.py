@@ -20,7 +20,6 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
         model = LocalizedProduct
         fields = (
             "taal",
-            "decentrale_link",
             "specifieke_tekst",
             "bewijs",
             "bezwaar_en_beroep",

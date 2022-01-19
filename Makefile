@@ -23,3 +23,6 @@ migrate:
 
 graph:
 	venv/bin/python src/manage.py graph_models -o data/models.png
+
+clean:
+	find ./log -name '*.log*' -exec rm -rf {} \;

@@ -351,7 +351,6 @@ class Product(ProductFieldMixin, models.Model):
                     version,
                     field_names=[
                         "bezwaar_en_beroep",
-                        "decentrale_link",
                         "decentrale_procedure_link",
                         "kosten_en_betaalmethoden",
                         "procedure_beschrijving",

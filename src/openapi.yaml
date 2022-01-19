@@ -401,11 +401,6 @@ components:
           - $ref: '#/components/schemas/TaalEnum'
           description: De taal waarin de betreffende tekst is geschreven.ISO 639-1
             (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-        decentraleLink:
-          type: string
-          format: uri
-          description: Link naar decentrale productpagina voor burgers en / of bedrijven.
-          maxLength: 200
         specifiekeTekst:
           type: string
           description: Decentrale omschrijving.

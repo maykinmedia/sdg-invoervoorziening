@@ -27,7 +27,7 @@
     </div>
 </div>
 <div class="content">
-    {% with section_fields=translation.get_fields|exclude:"id,taal,product_versie,specifieke_tekst,product_titel_decentraal,verwijzing_links,decentrale_link,datum_wijziging,decentrale_procedure_link" %}
+    {% with section_fields=translation.get_fields|exclude:"id,taal,product_versie,specifieke_tekst,product_titel_decentraal,verwijzing_links,datum_wijziging,decentrale_procedure_link" %}
         <div class="left">
             <h1>{{ product|capfirst }}</h1>
             <div class="subtitle">

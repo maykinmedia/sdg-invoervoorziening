@@ -140,13 +140,6 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
         default=list,
     )
-    decentrale_link = models.URLField(
-        _("decentrale link"),
-        help_text=_(
-            "Link naar decentrale productpagina voor burgers en / of bedrijven."
-        ),
-        blank=True,
-    )
     datum_wijziging = models.DateTimeField(
         _("datum wijziging"),
         help_text=_(
