@@ -45,6 +45,7 @@ class Filter {
         const filterButtons = this.node.querySelectorAll(".filter__button");
         filterButtons.forEach(item => {
             item.addEventListener("click", (event) => {
+                this.expand.expander.enable();
                 const isOff = item.classList.contains("filter__button--off");
                 this.clearAllFilters();
                 // Remove off class if exists, otherwise add it
@@ -54,10 +55,11 @@ class Filter {
                     this.accordeon.querySelectorAll(".products__item").forEach(element => {
                         // If element does not include status icon, make it invisible.
                         if (!element.querySelector(".products__status")) {
-                            element.classList.remove("hidden");
+                            element.classList.add("hidden");
                         } else {
                             // If element includes status icon, check if it matches the clicked button.
                             if (element.querySelector(".products__status svg").classList.contains(statusIconClass)) {
+                                this.openItemAccordeon(element);
                                 element.classList.remove("hidden");
                             } else {
                                 element.classList.add("hidden");
