@@ -45,6 +45,7 @@ class Filter {
         const filterButtons = this.node.querySelectorAll(".filter__button");
         filterButtons.forEach(item => {
             item.addEventListener("click", (event) => {
+                this.expand.expander.enable();
                 const isOff = item.classList.contains("filter__button--off");
                 this.clearAllFilters();
                 // Remove off class if exists, otherwise add it
@@ -54,10 +55,11 @@ class Filter {
                     this.accordeon.querySelectorAll(".products__item").forEach(element => {
                         // If element does not include status icon, make it invisible.
                         if (!element.querySelector(".products__status")) {
-                            element.classList.remove("hidden");
+                            element.classList.add("hidden");
                         } else {
                             // If element includes status icon, check if it matches the clicked button.
                             if (element.querySelector(".products__status svg").classList.contains(statusIconClass)) {
+                                this.openItemAccordeon(element);
                                 element.classList.remove("hidden");
                             } else {
                                 element.classList.add("hidden");
@@ -75,6 +77,7 @@ class Filter {
         const filterInputs = this.node.querySelectorAll(".filter__input");
         filterInputs.forEach(item => {
             item.addEventListener("keyup", (event) => {
+                this.expand.expander.enable();
                 const text = event.target.value;
                 this.clearAllFilters();
                 event.target.value = text;
@@ -97,6 +100,7 @@ class Filter {
 
         filterCheckboxes.forEach(checkbox => {
             checkbox.addEventListener("change", (event) => {
+                this.expand.expander.enable();
                 const checkedBoxes = this.node.querySelectorAll(".filter__group--checkbox:checked");
                 this.clearAllFilters();
 
@@ -108,7 +112,7 @@ class Filter {
 
                 this.accordeon.querySelectorAll(".products__item").forEach(element => {
                     const itemGroup = element.querySelector(".products__item-help--group").dataset.value;
-                    if (!checkboxValues.length || checkboxValues.some(value => value === itemGroup)) {
+                    if (!checkboxValues.length || checkboxValues.every(value => value === itemGroup)) {
                         element.classList.remove("hidden");
                         this.openItemAccordeon(element);
                     } else {
@@ -122,6 +126,7 @@ class Filter {
     constructor(node) {
         this.node = node;
         this.accordeon = node.parentElement.nextElementSibling;
+        this.expand = node.querySelector(".expand");
         this.setUpStatusFilter();
         this.setUpTextFilter();
         this.setUpGroupFilter();
