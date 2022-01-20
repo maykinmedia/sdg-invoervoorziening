@@ -28,7 +28,7 @@
     {% elif status == product.status.CONCEPT %}
         <div class="notifications__notification notification__info notifications__close">
             <i class="fas fa-info-circle"></i>
-            <span>{% trans "Er is wel een concept producttekst aanwezig." %}</span>
+            <span>{% trans "Er is een concept producttekst aanwezig. Klik op wijzigen om deze te bewerken. Hieronder ziet u de huidige gepubliceerde producttekst, indien aanwezig." %}</span>
             <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
         </div>
     {% elif status == product.status.SCHEDULED %}
