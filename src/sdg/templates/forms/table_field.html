@@ -13,7 +13,7 @@
             </div>
             {{ field.errors }}
             <div class="tabs__table-cell--tools">
-                {% if not no_diff %}
+                {% if not is_reference and not no_diff %}
                     <a href="#" class="tabs__table-help form__diff-btn"><i class="fa fa-eye fa-xs"></i>Vergelijken</a>
                 {% endif %}
                 <a href="#" class="tabs__table-help form__edit-btn"><i class="fa fa-pen fa-xs"></i> Aanpassen</a>
