@@ -71,7 +71,7 @@ class ProductDetailViewTests(WebTest):
         response = self.app.get(product_version.product.get_absolute_url())
 
         self.assertIn(
-            "Er is wel een concept producttekst aanwezig.",
+            "Er is een concept producttekst aanwezig.",
             response.text,
         )
 
@@ -94,7 +94,7 @@ class ProductDetailViewTests(WebTest):
         response = self.app.get(product_version.product.get_absolute_url())
 
         self.assertIn(
-            "Er is wel een concept producttekst aanwezig.",
+            "Er is een concept producttekst aanwezig.",
             response.text,
         )
 
@@ -327,7 +327,7 @@ class ProductDetailViewTests(WebTest):
             "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
         )
         self.assertIn(
-            "Er is wel een concept producttekst aanwezig.",
+            "Er is een concept producttekst aanwezig.",
             response.text,
         )
 
@@ -397,7 +397,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.product.referentie_product.save()
         response = self.app.get(self.product.get_absolute_url())
         self.assertIn(
-            "Er is wel een concept producttekst aanwezig.",
+            "Er is een concept producttekst aanwezig.",
             response.text,
         )
 
