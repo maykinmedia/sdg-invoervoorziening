@@ -6,6 +6,7 @@
     {% with most_recent_version=product.most_recent_version latest_active_version=product.active_version %}
         <div class="notifications">
             {% include "core/_notifications.html" %}
+            {% include 'producten/_include/availability_warnings.html' %}
             {% include 'producten/_include/detail_warnings.html' %}
         </div>
         <div class="tabs tabs--inline-outer">

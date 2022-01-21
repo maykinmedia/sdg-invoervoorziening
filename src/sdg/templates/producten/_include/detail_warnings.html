@@ -1,20 +1,5 @@
 {% load i18n %}
 
-{% if product.product_aanwezig is True %}
-{% elif product.product_aanwezig is False %}
-    <div class="notifications__notification notification__info">
-        <i class="fas fa-info-circle"></i>
-        <span>{% trans "U heeft aangegeven dat u dit product niet aanbiedt." %}</span>
-        <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
-    </div>
-{% elif product.product_aanwezig is None %}
-    <div class="notifications__notification notification__accent">
-        <i class="fas fa-info-circle"></i>
-        <span>{% trans "U heeft nog niet aangegeven of u dit product aanbiedt." %}</span>
-        <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
-    </div>
-{% endif %}
-
 {% with status=most_recent_version.current_status %}
     {% if latest_active_version == most_recent_version %}
     {% elif not most_recent_version %}
