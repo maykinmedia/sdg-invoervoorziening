@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 
 @dataclass
@@ -10,7 +10,7 @@ class ProductFieldInfo:
     help_text: str
     is_reference: bool
     type: str
-    configuration: Optional[list[str]] = None
+    configuration: Optional[List[str]] = None
 
     def __str__(self):
         return self.value
