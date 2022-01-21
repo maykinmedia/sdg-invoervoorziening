@@ -2,17 +2,10 @@
 
 {% with configuration=field.configuration.0 %}
     <tr>
-        {% if configuration %}
-            <td class="tabs__table-cell tabs__table-cell--edit">
-                {{ configuration.0|capfirst }}
-                <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1 }}"></i>
-            </td>
-        {% else %}
-            <td class="tabs__table-cell tabs__table-cell--edit">
-                {{ field.label|capfirst }}
-                <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-            </td>
-        {% endif %}
+        <td class="tabs__table-cell tabs__table-cell--edit">
+            {{ configuration.0|default:field.label|capfirst }}
+            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>
+        </td>
         <td class="tabs__table-cell {% if not is_reference %}form__cell{% endif %} form__cell--disabled">
             {% if field %}
                 <div class="tabs__table-cell--versions"></div>

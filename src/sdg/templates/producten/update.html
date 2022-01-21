@@ -55,28 +55,55 @@
                 <tbody>
                 <tr>
                 </tr>
-                <tr>
-                    <td class="tabs__table-cell" width="25%">{{ product_form.product_aanwezig.label }}<i
-                        class="fas fa-info-circle fa-xs dark" title="{{ product_form.product_aanwezig.help_text }}"></i>
-                    </td>
-                    <td class="tabs__table-cell">{% select product_form.product_aanwezig %}</td>
-                </tr>
-                <tr>
-                    <td class="tabs__table-cell" width="25%">{{ product_form.product_aanwezig_toelichting.label }}<i
-                        class="fas fa-info-circle fa-xs dark"
-                        title="{{ product_form.product_aanwezig_toelichting.help_text }}"></i></td>
-                    <td class="tabs__table-cell">{{ product_form.product_aanwezig_toelichting|addclass:"form__input" }}</td>
-                </tr>
-                <tr>
-                    <td class="tabs__table-cell" width="25%">{{ product_form.lokaties.label }} <i
-                        class="fas fa-info-circle fa-xs dark" title="{{ product_form.lokaties.help_text }}"></i></td>
-                    <td class="tabs__table-cell">{{ product_form.lokaties }}</td>
-                </tr>
-                <tr>
-                    <td class="tabs__table-cell" width="25%">{{ version_form.publicatie_datum.label }} <i
-                        class="fas fa-info-circle fa-xs dark" title="{{ version_form.publicatie_datum.help_text }}"></i></td>
-                    <td class="tabs__table-cell">{{ version_form.date.initial|default_if_none:"Concept" }}</td>
-                </tr>
+
+                {% with field=product_form.product_aanwezig %}
+                    {% with configuration=field.configuration.0 %}
+                        <tr>
+                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }}<i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:product_form.product_aanwezig.help_text }}"></i>
+                            </td>
+                            <td class="tabs__table-cell">{% select product_form.product_aanwezig %}</td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
+
+                {% with field=product_form.product_aanwezig_toelichting %}
+                    {% with configuration=field.configuration.0 %}
+                        <tr>
+                            <td class="tabs__table-cell"
+                                width="25%">{{ configuration.0|default:field.label|capfirst }}<i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">{{ field|addclass:"form__input" }}</td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
+
+                {% with field=product_form.lokaties %}
+                    {% with configuration=field.configuration.0 %}
+                        <tr>
+                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:field.help_text }}"></i>
+                            </td>
+                            <td class="tabs__table-cell">{{ field }}</td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
+
+                {% with field=product_form.lokaties %}
+                    {% with configuration=field.configuration.0 %}
+                        <tr>
+                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.0|default:field.help_text }}"></i>
+                            </td>
+                            <td class="tabs__table-cell">{{ version_form.date.initial|default_if_none:"Concept" }}</td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
+
                 </tbody>
             </table>
         </div>
@@ -144,7 +171,6 @@
                                 </td>
                             </tr>
                             {% with reference=product.is_referentie_product %}
-                                {% table_field form.product_titel_decentraal is_reference=reference %}
                                 {% table_field form.specifieke_tekst is_reference=reference %}
                                 {% table_field form.verwijzing_links is_reference=True no_diff=True %}
                                 {% table_field form.procedure_beschrijving is_reference=reference %}

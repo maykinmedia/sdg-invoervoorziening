@@ -4,15 +4,9 @@
 
 {% with configuration=field.configuration.0 %}
     <tr>
-        {% if configuration %}
-            <td class="tabs__table-cell">{{ configuration.0|capfirst }}<i
-                class="fas fa-info-circle fa-xs dark"
-                title="{{ configuration.1 }}"></i>
-        {% else %}
-            <td class="tabs__table-cell">{{ field.verbose_name|capfirst }}<i
+        <td class="tabs__table-cell">{{ configuration.0|default:field.verbose_name|capfirst }}<i
             class="fas fa-info-circle fa-xs dark"
-            title="{{ field.help_text }}"></i>
-        {% endif %}
+            title="{{ configuration.1|default:field.help_text }}"></i>
         </td>
         <td class="tabs__table-cell">
             {% if field.is_reference %}

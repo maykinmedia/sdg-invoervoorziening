@@ -405,7 +405,7 @@ class Product(ProductFieldMixin, models.Model):
             validate_specific_product(self)
 
 
-class ProductVersie(models.Model):
+class ProductVersie(ProductFieldMixin, models.Model):
     """
     Product Version
 

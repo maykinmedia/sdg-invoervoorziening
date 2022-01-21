@@ -2,12 +2,13 @@ from typing import Optional
 
 from django import forms
 
+from ..core.models.mixins import FieldConfigurationMixin
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import CheckboxSelectMultiple
 
 
-class LocalizedProductForm(forms.ModelForm):
+class LocalizedProductForm(FieldConfigurationMixin, forms.ModelForm):
     class Meta:
         model = LocalizedProduct
         fields = (
@@ -26,7 +27,7 @@ class LocalizedProductForm(forms.ModelForm):
         )
 
 
-class ProductForm(forms.ModelForm):
+class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     product_aanwezig = forms.NullBooleanField(
         required=False,
     )

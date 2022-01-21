@@ -32,7 +32,7 @@ class ProductFieldConfiguration(SingletonModel):
     product_product_aanwezig_toelichting = LabeledTooltipField(
         verbose_name=_("Algemene aanwezigheid toelichting"),
     )
-    product_locaties = LabeledTooltipField(
+    product_lokaties = LabeledTooltipField(
         verbose_name=_("Algemene locaties"),
     )
     productversie_publicatie_datum = LabeledTooltipField(
@@ -98,7 +98,7 @@ class ProductFieldConfiguration(SingletonModel):
         verbose_name=_("Specifieke decentrale procedure link"),
     )
 
-    def get_field(self, prefix, name):
+    def for_field(self, prefix, name):
         return getattr(self, "{}_{}".format(prefix, name), None)
 
     def __str__(self):
