@@ -61,7 +61,7 @@
                                 title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
                             </td>
                             <td class="tabs__table-cell">
-                                <span class="tabs__table-cell--value">{{ publication_date.value }}</span>
+                                <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
                             </td>
                         </tr>
                     {% endwith %}

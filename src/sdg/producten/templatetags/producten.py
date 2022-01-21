@@ -7,6 +7,9 @@ register = template.Library()
 
 @register.filter
 def get_field(instance, field_name):
+    if not instance:
+        return None
+
     return instance.get_field(field_name)
 
 
