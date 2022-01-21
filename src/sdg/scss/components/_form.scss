@@ -233,6 +233,10 @@
       background-color: lighten($color_red, 36%);
       padding: 14px;
       list-style: none;
+
+      &::before {
+        content: "" !important;
+      }
     }
   }
 }
