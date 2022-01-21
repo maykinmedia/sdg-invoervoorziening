@@ -37,8 +37,8 @@
 {% block inner_content %}
     <div class="notifications">
         {% if form_invalid %}
-            <div class="notifications__notification notification__accent">
-                <i class="fas fa-exclamation-triangle"></i>
+            <div class="notifications__notification notification__error">
+                <i class="fas fa-times-circle"></i>
                 <span>{% trans "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten." %}</span>
                 <span></span>
             </div>
