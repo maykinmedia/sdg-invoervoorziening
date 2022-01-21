@@ -101,6 +101,7 @@
     color: #212121;
 
     &--field {
+      min-height: 24px;
       .form__input {
         transition: all 0.3s ease-in-out;
       }
@@ -123,12 +124,14 @@
       grid-gap: 6px;
 
       ins, del {
-        padding: 4px 16px;
+        padding: 4px;
         border-radius: 16px;
         text-align: center;
         text-decoration: none;
         font-size: 12px;
         font-weight: bold;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
       }
     }
 

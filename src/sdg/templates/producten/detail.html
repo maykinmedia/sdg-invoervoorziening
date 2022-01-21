@@ -57,63 +57,66 @@
                 </tbody>
             </table>
         </div>
-        <div class="tabs tabs--inline">
-        <div class="tabs__tabs">
-            {% for language in product.beschikbare_talen %}
-                <a href="#{{ language.code }}" data-id="{{ language.code }}"
-                   class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                    {{ language.name }}
-                </a>
-            {% endfor %}
-        </div>
 
-        <div class="tabs__tab-contents">
-            {% for info in latest_active_version.vertalingen.all %}
-                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
-                     id="{{ info.taal }}">
-                    <a
-                        href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ info.taal }}"
-                        class="preview"
-                        target="_blank">
-                        <i class="fa fa-vector-square"></i> {% trans "Preview" %}
+        {% if latest_active_version %}
+            <div class="tabs tabs--inline">
+            <div class="tabs__tabs">
+                {% for language in product.beschikbare_talen %}
+                    <a href="#{{ language.code }}" data-id="{{ language.code }}"
+                       class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
+                        {{ language.name }}
                     </a>
-                    <hr class="divider">
-                    {% if info.generiek_informatie %}
+                {% endfor %}
+            </div>
+
+            <div class="tabs__tab-contents">
+                {% for info in latest_active_version.vertalingen.all %}
+                    <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
+                         id="{{ info.taal }}">
+                        <a
+                            href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ info.taal }}"
+                            class="preview"
+                            target="_blank">
+                            <i class="fa fa-vector-square"></i> {% trans "Preview" %}
+                        </a>
+                        <hr class="divider">
+                        {% if info.generiek_informatie %}
+                            <table class="tabs__table">
+                                <thead>
+                                <tr>
+                                    <th class="tabs__table-header" width="25%">Generieke gegevens</th>
+                                    <th class="tabs__table-header">Huidige informatie</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% with title=info.generiek_informatie|get_field:"product_titel" url=info.generiek_informatie|get_field:"landelijke_link" %}
+                                    {% table_row title url=url.value %}
+                                {% endwith %}
+                                {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link" %}
+                                    {% table_row field %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                        {% endif %}
+                        <hr class="divider">
                         <table class="tabs__table">
                             <thead>
                             <tr>
-                                <th class="tabs__table-header" width="25%">Generieke gegevens</th>
+                                <th class="tabs__table-header" width="25%">Specifieke gegevens</th>
                                 <th class="tabs__table-header">Huidige informatie</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {% with title=info.generiek_informatie|get_field:"product_titel" url=info.generiek_informatie|get_field:"landelijke_link" %}
-                                {% table_row title url=url.value %}
-                            {% endwith %}
-                            {% for field in info.generiek_informatie.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
+                            {% for field in info.get_fields|exclude:"id,taal,product_versie" %}
                                 {% table_row field %}
                             {% endfor %}
                             </tbody>
                         </table>
-
-                    {% endif %}
-                    <hr class="divider">
-                    <table class="tabs__table">
-                        <thead>
-                        <tr>
-                            <th class="tabs__table-header" width="25%">Specifieke gegevens</th>
-                            <th class="tabs__table-header">Huidige informatie</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for field in info.get_fields|exclude:"id,taal,product_versie" %}
-                            {% table_row field %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            {% endfor %}
-        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         <hr class="divider">
         <h3 class="tabs__footer-title">Revisies</h3>
@@ -124,13 +127,13 @@
                     <li class="revision-list__item">
                         <div>
                             <i class="fas fa-user"></i>
-                            {% blocktrans with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.get_pretty_version %}
-                                <strong class="revision-list__item--user">{{ user }}</strong>
+                            {% with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.get_pretty_version %}
+                                <strong class="revision-list__item--user">{{ user|default:"Onbekend" }}</strong>
                                 </div>
                                 <div>
                                 <strong>{{ last_modified }}</strong> product versie
                                 <strong>{{ version }}</strong> gewijzigd.
-                            {% endblocktrans %}
+                            {% endwith %}
 
                             {% if product_version.publicatie_datum %}
                                 {% blocktrans with publication_date=product_version.publicatie_datum %}

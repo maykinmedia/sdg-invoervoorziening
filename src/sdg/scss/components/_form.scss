@@ -78,6 +78,7 @@
     outline: none;
     font-size: 16px;
     width: 100%;
+    min-height: 57px;
 
     &--disabled {
       background-color: $color_grey_light;
