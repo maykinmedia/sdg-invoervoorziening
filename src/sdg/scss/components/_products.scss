@@ -111,9 +111,21 @@
     font-weight: bold;
   }
 
+  .products__item-subtitle {
+    color: darken($color_secondary_lightest, 50%);
+  }
+
   .products__item-help {
     color: $color_secondary_darkest;
     font-size: 85%;
-    margin: 2px 0;
+
+    &--group-item {
+      background-color: darken($color_secondary_lightest, 6%);
+      border-radius: 50px;
+      padding: 2px 12px;
+      position: relative;
+      top: 6px;
+    }
+
   }
 }

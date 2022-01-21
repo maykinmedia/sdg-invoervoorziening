@@ -223,7 +223,7 @@ class Product(ProductFieldMixin, models.Model):
 
         return [
             Language(
-                name=t.get_taal_display,
+                name=t.get_taal_display(),
                 code=t.taal,
                 checked=getattr(t.generiek_informatie, "datum_check", None) is not None,
             )
@@ -473,17 +473,17 @@ class ProductVersie(models.Model):
             **kwargs,
         )
 
-    class Meta:
-        verbose_name = _("product versie")
-        verbose_name_plural = _("product versies")
-        ordering = ("-versie",)
-
     def get_pretty_version(self):
         concept = "(concept)" if not self.publicatie_datum else ""
         return f"{self.versie} {concept}".strip()
 
     def get_pretty_name(self):
         return f"{self.product} — versie {self.get_pretty_version()}"
+
+    class Meta:
+        verbose_name = _("product versie")
+        verbose_name_plural = _("product versies")
+        ordering = ("-versie",)
 
     def __str__(self):
         return self.get_pretty_name()

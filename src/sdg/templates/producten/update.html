@@ -86,7 +86,7 @@
                 {% for language in product.beschikbare_talen %}
                     <a href="#{{ language.code }}" data-id="{{ language.code }}"
                        class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                        {% flag language %} {{ language.name }}
+                        {{ language.name }}
                     </a>
                 {% endfor %}
             </div>

@@ -31,3 +31,8 @@ class Language:
 
     def __post_init__(self):
         self.flag = self._code_to_flag.get(self.code, self.code)
+
+    def __str__(self):
+        return self.name
+
+    __repr__ = __str__

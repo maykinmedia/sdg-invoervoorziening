@@ -32,13 +32,17 @@
                         <div class="products__item-title">
                             {{ product.name|capfirst }}
                         </div>
+                        <div class="products__item-subtitle">
+                            {{ product.beschikbare_talen|join:", " }}
+                        </div>
                         <div class="products__item-help">
-                            {% for language in product.beschikbare_talen %}
-                                {% flag language %}
-                            {% endfor %}
                             <span class="products__item-help--group"
                                   data-value="{{ product.generic_product.doelgroep }}">
-                                {{ product.generic_product.get_doelgroep_display }}
+                                {% if product.generic_product.doelgroep %}
+                                    <span class="products__item-help--group-item">
+                                    {{ product.generic_product.get_doelgroep_display }}
+                                    </span>
+                                {% endif %}
                             </span>
                         </div>
                     </div>
