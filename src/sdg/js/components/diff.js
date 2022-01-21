@@ -31,7 +31,12 @@ class DiffButton {
         const previousValue = this.previousVersionData.input.value;
         const currentValue = getValue(this.currentVersionData.input, this.getValue);
         const textDiff = this.diff.main(previousValue, currentValue);
-        this.cellValueElement.innerHTML = this.diff.prettyHtml(textDiff).replace(/\\/g, "");
+
+        const diffElement = document.createElement("div");
+        diffElement.classList.add("form__input");
+        diffElement.innerHTML = this.diff.prettyHtml(textDiff).replace(/\\/g, "");
+        this.cellValueElement.innerHTML = diffElement.outerHTML;
+
         this.versionsPanel.append(this.previousVersionTopElement);
         this.versionsPanel.append(this.currentVersionTopElement);
     }
