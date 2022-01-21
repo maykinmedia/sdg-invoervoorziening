@@ -283,9 +283,6 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
         self.assertIn(
-            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
-        )
-        self.assertIn(
             Template(
                 "Er staat een toekomstige producttekst klaar om gepubliceerd te worden op {{ pubdate }}. Hieronder ziet u de huidige producttekst."
             ).render(context=Context({"pubdate": FUTURE_DATE})),
@@ -321,9 +318,6 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn(
-            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
-        )
         self.assertIn(
             "Er is een concept producttekst aanwezig.",
             response.text,
