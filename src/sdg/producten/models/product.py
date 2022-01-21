@@ -302,7 +302,6 @@ class Product(ProductFieldMixin, models.Model):
             )
         return ProductVersie.objects.create(
             product=self,
-            gemaakt_door=self.referentie_product.most_recent_version.gemaakt_door,
             publicatie_datum=None,
         )
 

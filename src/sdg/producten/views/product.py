@@ -140,7 +140,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             version=self.product.reference_product.most_recent_version
         )
         context["previous_reference_formset"] = self._generate_version_formset(
-            self.product.reference_product.get_latest_versions(2)[0]  # TODO: optimize
+            self.product.reference_product.get_latest_versions(2)[-1]  # TODO: optimize
         )
 
         context["informatie_forms"] = zip_longest(
