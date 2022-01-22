@@ -2,19 +2,15 @@
 Installation
 ============
 
-The project is developed in Python using the `Django framework`_. There are 3
-sections below, focussing on developers, running the project using Docker and
-hints for running the project in production.
+This installation is meant for developers of the "SDG invoervoorziening". If 
+you are looking to install the application to try it out, or to run it in 
+production, please consult the documentation.
 
-.. _Django framework: https://www.djangoproject.com/
-
-
-Development
-===========
+The project is developed in `Python`_ using the `Django framework`_.
 
 
 Prerequisites
--------------
+=============
 
 You need the following libraries and/or programs:
 
@@ -25,6 +21,7 @@ You need the following libraries and/or programs:
 * `npm`_
 
 .. _Python: https://www.python.org/
+.. _Django framework: https://www.djangoproject.com/
 .. _Virtualenv: https://virtualenv.pypa.io/en/stable/
 .. _Pip: https://packaging.python.org/tutorials/installing-packages/#ensure-pip-setuptools-and-wheel-are-up-to-date
 .. _PostgreSQL: https://www.postgresql.org
@@ -33,7 +30,7 @@ You need the following libraries and/or programs:
 
 
 Getting started
----------------
+===============
 
 Developers can follow the following steps to set up the project on their local
 development machine.
@@ -45,12 +42,9 @@ development machine.
    .. code-block:: bash
 
        $ git clone git@github.com:maykinmedia/sdg-invoervoorziening.git
-       $ cd sdg
+       $ cd sdg-invoervoorziening
 
-3. Install all required (backend) libraries.
-   **Tip:** You can use the ``bootstrap.py`` script to install the requiments
-   and set the proper settings in ``manage.py``. Or, perform the steps
-   manually:
+3. Install all required libraries.
 
    .. code-block:: bash
 
@@ -58,18 +52,17 @@ development machine.
        $ source env/bin/activate
        $ pip install -r requirements/dev.txt
 
-4. Install all required (frontend) libraries and build static files.
+4. Install and build the frontend libraries:
 
    .. code-block:: bash
 
-       $ npm install
+       $ npm ci
        $ npm run build
 
 5. Activate your virtual environment and create the statics and database:
 
    .. code-block:: bash
 
-       $ source env/bin/activate
        $ python src/manage.py collectstatic --link
        $ python src/manage.py migrate
 
@@ -95,9 +88,15 @@ development machine.
 ``src/sdg/conf/local.py``. You can base this file on the
 example file included in the same directory.
 
+**Note:** You can run watch-tasks to compile `Sass`_ to CSS and `ECMA`_ to JS
+using ``npm run watch``.
+
+.. _ECMA: https://ecma-international.org/
+.. _Sass: https://sass-lang.com/
+
 
 Update installation
--------------------
+===================
 
 When updating an existing installation:
 
@@ -105,7 +104,7 @@ When updating an existing installation:
 
    .. code-block:: bash
 
-       $ cd sdg
+       $ cd sdg-invoervoorziening
        $ source env/bin/activate
 
 2. Update the code and libraries:
@@ -126,7 +125,7 @@ When updating an existing installation:
 
 
 Testsuite
----------
+=========
 
 To run the test suite:
 
@@ -135,7 +134,7 @@ To run the test suite:
     $ python src/manage.py test sdg
 
 Configuration via environment variables
----------------------------------------
+=======================================
 
 A number of common settings/configurations can be modified by setting
 environment variables. You can persist these in your ``local.py`` settings
@@ -152,91 +151,6 @@ file or as part of the ``(post)activate`` of your virtualenv.
 * ``SENTRY_DSN``: the DSN of the project in Sentry. If set, enabled Sentry SDK as
   logger and will send errors/logging to Sentry. If unset, Sentry SDK will be
   disabled.
-
-Docker
-======
-
-The easiest way to get the project started is by using `Docker Compose`_.
-
-1. Clone or download the code from `Github`_ in a folder like
-   ``sdg``:
-
-   .. code-block:: bash
-
-       $ git clone git@github.com:maykinmedia/sdg-invoervoorziening
-       Cloning into 'sdg'...
-       ...
-
-       $ cd sdg
-
-2. Start the database and web services:
-
-   .. code-block:: bash
-
-       $ docker-compose up -d
-       Starting sdg_db_1 ... done
-       Starting sdg_web_1 ... done
-
-   It can take a while before everything is done. Even after starting the web
-   container, the database might still be migrating. You can always check the
-   status with:
-
-   .. code-block:: bash
-
-       $ docker logs -f sdg_web_1
-
-3. Create an admin user and load initial data. If different container names
-   are shown above, use the container name ending with ``_web_1``:
-
-   .. code-block:: bash
-
-       $ docker exec -it sdg_web_1 /app/src/manage.py createsuperuser
-       Username: admin
-       ...
-       Superuser created successfully.
-
-4. Point your browser to ``http://localhost:8000/`` to access the project's
-   management interface with the credentials used in step 3.
-
-   If you are using ``Docker Machine``, you need to point your browser to the
-   Docker VM IP address. You can get the IP address by doing
-   ``docker-machine ls`` and point your browser to
-   ``http://<ip>:8000/`` instead (where the ``<ip>`` is shown below the URL
-   column):
-
-   .. code-block:: bash
-
-       $ docker-machine ls
-       NAME      ACTIVE   DRIVER       STATE     URL
-       default   *        virtualbox   Running   tcp://<ip>:<port>
-
-5. To shutdown the services, use ``docker-compose down`` and to clean up your
-   system you can run ``docker system prune``.
-
-.. _Docker Compose: https://docs.docker.com/compose/install/
-.. _Github: https://github.com/maykinmedia/sdg/
-
-
-More Docker
------------
-
-If you just want to run the project as a Docker container and connect to an
-external database, you can build and run the ``Dockerfile`` and pass several
-environment variables. See ``src/sdg/conf/docker.py`` for
-all settings.
-
-.. code-block:: bash
-
-    $ docker build -t sdg
-    $ docker run \
-        -p 8000:8000 \
-        -e DATABASE_USERNAME=... \
-        -e DATABASE_PASSWORD=... \
-        -e DATABASE_HOST=... \
-        --name sdg \
-        sdg
-
-    $ docker exec -it sdg /app/src/manage.py createsuperuser
 
 
 Settings
