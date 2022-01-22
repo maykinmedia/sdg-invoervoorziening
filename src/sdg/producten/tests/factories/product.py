@@ -7,7 +7,7 @@ from sdg.core.tests.factories.logius import (
     OverheidsorganisatieFactory,
     UniformeProductnaamFactory,
 )
-from sdg.organisaties.tests.factories.overheid import LokatieFactory
+from sdg.organisaties.tests.factories.overheid import LocatieFactory
 from sdg.producten.models import GeneriekProduct, Product, ProductVersie
 
 
@@ -22,7 +22,7 @@ class GeneriekProductFactory(DjangoModelFactory):
 
 class ProductFactory(DjangoModelFactory):
     product_aanwezig = True
-    lokaties = factory.RelatedFactoryList(LokatieFactory, size=3)
+    locaties = factory.RelatedFactoryList(LocatieFactory, size=3)
 
     class Meta:
         model = Product

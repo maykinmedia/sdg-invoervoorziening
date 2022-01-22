@@ -26,17 +26,17 @@
                         class="fas fa-info-circle fa-xs dark"
                         title="Locaties met dit product."></i></td>
                     <td class="tabs__table-cell">
-                        {% if product.lokaties %}
+                        {% if product.locaties %}
                             <span class="tabs__table-cell--value">
-                                {% for lokatie in product.get_municipality_locations %}
+                                {% for locatie in product.get_municipality_locations %}
                                     <div class="pretty p-default p-curve">
                                             <input type="checkbox" class="form__checkbox"
-                                                   {% if lokatie.is_product_location %}checked{% endif %}
-                                                   value="{{ lokatie.pk }}"
+                                                   {% if locatie.is_product_location %}checked{% endif %}
+                                                   value="{{ locatie.pk }}"
                                                    disabled>
                                             <div class="state">
                                                 <label class="checkbox">
-                                                    {{ lokatie.naam }}
+                                                    {{ locatie.naam }}
                                                 </label>
                                             </div>
                                         </div>

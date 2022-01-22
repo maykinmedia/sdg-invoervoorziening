@@ -166,7 +166,7 @@ class Product(ProductFieldMixin, models.Model):
         blank=True,
         default="",
     )
-    lokaties = models.ManyToManyField(
+    locaties = models.ManyToManyField(
         "organisaties.Lokatie",
         verbose_name=_("locaties"),
         related_name="producten",
@@ -268,10 +268,10 @@ class Product(ProductFieldMixin, models.Model):
 
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
-        return self.catalogus.lokale_overheid.lokaties.annotate(
+        return self.catalogus.lokale_overheid.locaties.annotate(
             is_product_location=Case(
                 When(
-                    Q(pk__in=self.lokaties.all().values_list("pk")),
+                    Q(pk__in=self.locaties.all().values_list("pk")),
                     then=Value(True),
                 ),
                 output_field=BooleanField(default=False),
@@ -338,11 +338,11 @@ class Product(ProductFieldMixin, models.Model):
                     catalogus=specific_catalog,
                 )
 
-                lokaties = list(
-                    specific_catalog.lokale_overheid.lokaties.all()
+                locaties = list(
+                    specific_catalog.lokale_overheid.locaties.all()
                 )  # extra query, could be removed
-                if len(lokaties) == 1:
-                    specific_product.lokaties.add(lokaties[0])
+                if len(locaties) == 1:
+                    specific_product.locaties.add(locaties[0])
                     specific_product.save()
 
                 version = specific_product.create_version_from_reference()

@@ -6,8 +6,8 @@ from rest_framework.test import APITestCase
 from sdg.core.constants import TaalChoices
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.factories.overheid import (
+    LocatieFactory,
     LokaleOverheidFactory,
-    LokatieFactory,
 )
 from sdg.producten.models import Product
 from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
@@ -291,11 +291,11 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(str(product1.uuid), data[0]["uuid"])
 
 
-class LokatieFilterTests(APITestCase):
-    url = reverse("api:lokatie-list")
+class LocatieFilterTests(APITestCase):
+    url = reverse("api:locatie-list")
 
     def test_filter_organisatie(self):
-        location, *_ = LokatieFactory.create_batch(5)
+        location, *_ = LocatieFactory.create_batch(5)
 
         response = self.client.get(
             self.url, {"organisatie": f"{location.lokale_overheid.uuid}"}
@@ -309,7 +309,7 @@ class LokatieFilterTests(APITestCase):
         self.assertEqual(str(location.uuid), data[0]["uuid"])
 
     def test_filter_organisatie_owms_identifier(self):
-        location, *_ = LokatieFactory.create_batch(5)
+        location, *_ = LocatieFactory.create_batch(5)
 
         response = self.client.get(
             self.url,
@@ -326,7 +326,7 @@ class LokatieFilterTests(APITestCase):
         self.assertEqual(str(location.uuid), data[0]["uuid"])
 
     def test_filter_organisatie_owms_pref_label(self):
-        location, *_ = LokatieFactory.create_batch(5)
+        location, *_ = LocatieFactory.create_batch(5)
 
         response = self.client.get(
             self.url,

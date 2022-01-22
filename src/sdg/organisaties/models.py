@@ -98,7 +98,7 @@ class Lokatie(models.Model):
         "LokaleOverheid",
         on_delete=models.CASCADE,
         verbose_name=_("lokale overheid"),
-        related_name="lokaties",
+        related_name="locaties",
     )
 
     naam = models.CharField(
@@ -109,27 +109,27 @@ class Lokatie(models.Model):
     straat = models.CharField(
         _("straat"),
         max_length=256,
-        help_text=_("De straatnaam van de lokatie."),
+        help_text=_("De straatnaam van de locatie."),
     )
     nummer = models.PositiveIntegerField(
         _("nummer"),
-        help_text=_("Het huisnummer van de lokatie."),
+        help_text=_("Het huisnummer van de locatie."),
     )
     postcode = models.CharField(
         _("postcode"),
         validators=[validate_postcode],
         max_length=6,
-        help_text=_("De postcode van de lokatie."),
+        help_text=_("De postcode van de locatie."),
     )
     plaats = models.CharField(
         _("plaats"),
         max_length=256,
-        help_text=_("De plaatsnaam van de lokatie."),
+        help_text=_("De plaatsnaam van de locatie."),
     )
     land = models.CharField(
         _("land"),
         max_length=128,
-        help_text=_("Het land van de lokatie."),
+        help_text=_("Het land van de locatie."),
     )
 
     maandag = DynamicArrayField(

@@ -153,7 +153,7 @@ Controles na opslaan:
 3. Klik op **Tweestapsauthenticatie instellen** en volg de aanwijzingen
 4. Klik uiteindelijk op **Naar de homepage**
 5. Je ziet 2 organisaties: **Zwolle** en **Aalsmeer**. Klik op **Aalsmeer**.
-6. Je ziet nu de tabjes "Catalogi", "Lokaties" en "Gebruikers".
+6. Je ziet nu de tabjes "Catalogi", "Locaties" en "Gebruikers".
 7. Log uit
 
 #### 3. Nogmaals inloggen als gemeentelijke beheerder
@@ -196,14 +196,14 @@ Controles na opslaan:
 3. Bij **Acties** klik je op **Verwijderen**
 4. Klik op **Verwijderen**
 
-#### 7. Lokatie informatie invoeren
+#### 7. Locatie informatie invoeren
 
 1. Ga naar de gemeente *Aalsmeer*
 2. Klik op het tabje **Loaties**
 3. Vul alle velden in 
 4. Klik op **Opslaan**
 
-#### 8. Lokatie toevoegen
+#### 8. Locatie toevoegen
 
 1. Ga naar de gemeente *Aalsmeer*
 2. Klik op het tabje **Locaties**
@@ -212,7 +212,7 @@ Controles na opslaan:
 5. Vul alle velden in 
 6. Klik op **Opslaan**
 
-#### 9. Lokatie bewerken
+#### 9. Locatie bewerken
 
 1. Ga naar de gemeente *Aalsmeer*
 2. Klik op het tabje **Locaties**
@@ -221,15 +221,15 @@ Controles na opslaan:
 5. Pas de gegevens aan die je wenst aan te passen
 6. Klik op **Opslaan**
 
-#### 10. Lokatie verwijderen
+#### 10. Locatie verwijderen
 
 1. Ga naar de gemeente *Aalsmeer*
 2. Klik op het tabje **Locaties**
 3. Scroll naar beneden
 4. Ga naar **Locatie 1**
-5. Klik op **Locatie verwijderen** (de lokatie is hiermee nog niet definitief 
+5. Klik op **Locatie verwijderen** (de locatie is hiermee nog niet definitief 
    verwijderd)
-6. Klik op **Opslaan** (nu is de lokatie echt verwijderd)
+6. Klik op **Opslaan** (nu is de locatie echt verwijderd)
 
 ### GR: Gemeentelijke redacteur
 

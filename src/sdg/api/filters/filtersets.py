@@ -8,7 +8,7 @@ from djangorestframework_camel_case.util import camel_to_underscore
 from sdg.api.filters import ProductAanwezigChoices
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models import ProductenCatalogus
-from sdg.organisaties.models import LokaleOverheid, Lokatie
+from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 from sdg.producten.models import Product
 
 
@@ -151,7 +151,7 @@ class ProductFilterSet(FilterSet):
         return new_filters
 
 
-class LokatieFilterSet(FilterSet):
+class LocatieFilterSet(FilterSet):
     """Filter for locations. Allows filtering by municipality."""
 
     organisatie = filters.UUIDFilter(
@@ -172,7 +172,7 @@ class LokatieFilterSet(FilterSet):
     )
 
     class Meta:
-        model = Lokatie
+        model = Locatie
         fields = ("organisatie",)
 
 

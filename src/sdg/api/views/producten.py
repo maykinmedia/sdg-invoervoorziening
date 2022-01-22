@@ -28,7 +28,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         )
         .prefetch_related(
             "gerelateerde_producten",
-            "lokaties",
+            "locaties",
         )
         .active()
         .order_by("generiek_product__upn__upn_label")

@@ -2,9 +2,9 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import viewsets
 
-from sdg.api.filters import LokaleOverheidFilterSet, LokatieFilterSet
-from sdg.api.serializers import LokaleOverheidSerializer, LokatieSerializer
-from sdg.organisaties.models import LokaleOverheid, Lokatie
+from sdg.api.filters import LocatieFilterSet, LokaleOverheidFilterSet
+from sdg.api.serializers import LocatieSerializer, LokaleOverheidSerializer
+from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 
 @extend_schema_view(
@@ -37,7 +37,7 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
         "bevoegde_organisatie",
         "organisatie",
     ).prefetch_related(
-        "lokaties",
+        "locaties",
         "catalogi",
     )
     filterset_class = LokaleOverheidFilterSet
@@ -52,10 +52,10 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
         description="Locatie waar de bijbehorende organisatie 1 of meer producten aanbiedt."
     ),
 )
-class LokatieViewSet(viewsets.ReadOnlyModelViewSet):
+class LocatieViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a location, retrieved by uuid"""
 
     lookup_field = "uuid"
-    queryset = Lokatie.objects.select_related("lokale_overheid")
-    filterset_class = LokatieFilterSet
-    serializer_class = LokatieSerializer
+    queryset = Locatie.objects.select_related("lokale_overheid")
+    filterset_class = LocatieFilterSet
+    serializer_class = LocatieSerializer
