@@ -13,20 +13,20 @@ class Overheidsorganisatie(models.Model):
     """
 
     owms_identifier = models.URLField(
-        _("OWMS identifier"),
+        _("OWMS identificatie"),
         help_text=_(
             "De metadatastandaard voor informatie van de nederlandse overheid op internet."
         ),
         unique=True,
     )
     owms_pref_label = models.CharField(
-        _("OWMS pref label"),
+        _("OWMS label"),
         max_length=200,
         help_text=_("De wettelijk erkende naam van de organisatie."),
     )
     owms_end_date = models.DateTimeField(
-        _("end date"),
-        help_text=_("De endDate, zoals gevonden in het OWMS-model."),
+        _("einddatum"),
+        help_text=_("De einddatum, zoals gevonden in het OWMS-model."),
         blank=True,
         null=True,
     )
@@ -58,7 +58,7 @@ class Informatiegebied(models.Model):
         help_text=_("Het bij de gegevens behorende informatiegebied."),
     )
     informatiegebied_uri = models.URLField(
-        _("informatiegebied uri"),
+        _("informatiegebied URI"),
         help_text=_(
             "Informatiegebied URI van landelijk product",
         ),

@@ -3,7 +3,7 @@ from django.forms import inlineformset_factory
 
 from sdg.core.forms import DynamicArrayField
 from sdg.organisaties.constants import opening_times_error_messages
-from sdg.organisaties.models import LokaleOverheid, Lokatie
+from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 
 class LokaleOverheidForm(forms.ModelForm):
@@ -33,7 +33,7 @@ class LokaleOverheidForm(forms.ModelForm):
         return cleaned_data
 
 
-class LokatieForm(forms.ModelForm):
+class LocatieForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field_name, field in self.fields.items():
@@ -41,7 +41,7 @@ class LokatieForm(forms.ModelForm):
                 field.error_messages.update(opening_times_error_messages)
 
     class Meta:
-        model = Lokatie
+        model = Locatie
         fields = (
             "naam",
             "straat",
@@ -60,6 +60,6 @@ class LokatieForm(forms.ModelForm):
         )
 
 
-LokatieInlineFormSet = inlineformset_factory(
-    LokaleOverheid, Lokatie, form=LokatieForm, extra=0
+LocatieInlineFormSet = inlineformset_factory(
+    LokaleOverheid, Locatie, form=LocatieForm, extra=0
 )

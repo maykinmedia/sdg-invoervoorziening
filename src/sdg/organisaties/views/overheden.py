@@ -3,7 +3,7 @@ from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.types import Event
-from sdg.organisaties.forms import LokaleOverheidForm, LokatieInlineFormSet
+from sdg.organisaties.forms import LocatieInlineFormSet, LokaleOverheidForm
 from sdg.organisaties.models import LokaleOverheid
 
 
@@ -20,7 +20,7 @@ class LokaleOverheidUpdateView(OverheidMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["formset"] = kwargs.get("formset") or LokatieInlineFormSet(
+        context["formset"] = kwargs.get("formset") or LocatieInlineFormSet(
             instance=self.object, prefix="form"
         )
         return context
@@ -30,7 +30,7 @@ class LokaleOverheidUpdateView(OverheidMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST, instance=self.object)
-        formset = LokatieInlineFormSet(
+        formset = LocatieInlineFormSet(
             request.POST, instance=self.object, prefix="form"
         )
 

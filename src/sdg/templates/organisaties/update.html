@@ -63,7 +63,7 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="formset__add form__add-subform" data-formset-prefix="{{ lokatie_formset.prefix }}">
+        <div class="formset__add form__add-subform" data-formset-prefix="{{ locatie_formset.prefix }}">
             <i class="fas fa-plus"></i>
             {% trans "Nog een locatie toevoegen" %}
         </div>
@@ -79,6 +79,6 @@
     </form>
 
     <template class="formset__template">
-        {% include "organisaties/_prefix/lokatie_formset.html" %}
+        {% include "organisaties/_prefix/locatie_formset.html" %}
     </template>
 {% endblock inner_content %}

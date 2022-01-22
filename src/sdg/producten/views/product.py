@@ -57,7 +57,7 @@ class ProductDetailView(OverheidMixin, DetailView):
     queryset = (
         Product.objects.select_related("catalogus__lokale_overheid")
         .prefetch_related(
-            "lokaties",
+            "locaties",
             Prefetch("referentie_product", queryset=Product.objects.most_recent()),
         )
         .most_recent()

@@ -34,7 +34,7 @@ class ProductForm(forms.ModelForm):
         required=False,
         widget=forms.Textarea(attrs={"rows": "6", "disabled": True}),
     )
-    lokaties = forms.ModelMultipleChoiceField(
+    locaties = forms.ModelMultipleChoiceField(
         queryset=None,
         required=False,
         widget=CheckboxSelectMultiple(),
@@ -45,14 +45,14 @@ class ProductForm(forms.ModelForm):
         fields = (
             "product_aanwezig",
             "product_aanwezig_toelichting",
-            "lokaties",
+            "locaties",
         )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         locations = self.instance.get_municipality_locations()
-        self.fields["lokaties"].queryset = locations
-        self.fields["lokaties"].initial = locations.filter(is_product_location=True)
+        self.fields["locaties"].queryset = locations
+        self.fields["locaties"].initial = locations.filter(is_product_location=True)
 
         _model_meta = self._meta.model._meta
         for field in self.fields:

@@ -5,7 +5,7 @@ import factory
 from factory.django import DjangoModelFactory
 
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
-from sdg.organisaties.models import LokaleOverheid, Lokatie
+from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 
 class LokaleOverheidFactory(DjangoModelFactory):
@@ -22,7 +22,7 @@ class LokaleOverheidFactory(DjangoModelFactory):
         model = LokaleOverheid
 
 
-class LokatieFactory(DjangoModelFactory):
+class LocatieFactory(DjangoModelFactory):
     lokale_overheid = factory.SubFactory(LokaleOverheidFactory)
     naam = factory.Faker("color_name")
     straat = factory.Faker("street_name")
@@ -40,4 +40,4 @@ class LokatieFactory(DjangoModelFactory):
     vrijdag = ["09:00 - 17:00"]
 
     class Meta:
-        model = Lokatie
+        model = Locatie
