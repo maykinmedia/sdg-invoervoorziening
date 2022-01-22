@@ -2,6 +2,7 @@
 
 * [Introductie](./introductie.md)
 * [Definities](./definities.md)
+* [Handleiding](./testplan.md) (dit testplan dient als basale handleiding)
 
 ## Voor ontwikkelaars
 
