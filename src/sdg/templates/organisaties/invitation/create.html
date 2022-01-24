@@ -1,13 +1,14 @@
-{% extends 'organisaties/base.html' %}
+{% extends 'organisaties/invitation/base.html' %}
 
 {% load i18n %}
 {% load producten %}
 {% load utils %}
 {% load humanize %}
 
+{% block title %}SDG | {% trans "Gebruikers" %}{% endblock %}
 {% block notifications %}{% endblock %}
 
-{% block inner %}
+{% block inner_content %}
     <form method="post" class="form">
         {% csrf_token %}
 
@@ -50,4 +51,4 @@
             </div>
         </div>
     </form>
-{% endblock inner %}
+{% endblock inner_content %}

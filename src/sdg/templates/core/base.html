@@ -42,7 +42,9 @@
                 {% endif %}
             </div>
         </div>
-        <h2 class="products__title primary">{{ object|capfirst|default:namespace|capfirst }}</h2>
+        <h2 class="products__title primary">
+            {{ object|capfirst|default:namespace|capfirst }}
+        </h2>
         <hr class="divider">
         {% block inner_content %}
         {% endblock inner_content %}
