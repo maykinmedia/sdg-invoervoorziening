@@ -32,7 +32,7 @@ class ProductFieldConfiguration(SingletonModel):
     product_product_aanwezig_toelichting = LabeledTooltipField(
         verbose_name=_("Algemene aanwezigheid toelichting"),
     )
-    product_lokaties = LabeledTooltipField(
+    product_locaties = LabeledTooltipField(
         verbose_name=_("Algemene locaties"),
     )
     productversie_publicatie_datum = LabeledTooltipField(

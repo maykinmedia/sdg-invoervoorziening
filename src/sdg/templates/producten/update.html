@@ -100,14 +100,16 @@
                     {% endwith %}
                 {% endwith %}
 
-                {% with field=product_form.publicatie_datum %}
-                    {% with configuration=field.configuration.0 %}
+                {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
+                    {% with configuration=publication_date.configuration.0 %}
                         <tr>
-                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i
+                            <td class="tabs__table-cell">{{ configuration.0|default:_("Publicatie datum")|capfirst }}<i
                                 class="fas fa-info-circle fa-xs dark"
-                                title="{{ configuration.0|default:field.help_text }}"></i>
+                                title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
                             </td>
-                            <td class="tabs__table-cell">{{ version_form.date.initial|default_if_none:"Concept" }}</td>
+                            <td class="tabs__table-cell">
+                                <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
+                            </td>
                         </tr>
                     {% endwith %}
                 {% endwith %}

@@ -15,7 +15,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                 "fields": [
                     "product_product_aanwezig",
                     "product_product_aanwezig_toelichting",
-                    "product_lokaties",
+                    "product_locaties",
                     "productversie_publicatie_datum",
                 ],
             },

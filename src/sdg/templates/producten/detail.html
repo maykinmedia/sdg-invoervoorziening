@@ -23,7 +23,7 @@
                     {% table_row field %}
                 {% endfor %}
 
-                {% with locations=product|get_field:"lokaties" %}
+                {% with locations=product|get_field:"locaties" %}
                     {% with configuration=locations.configuration.0 %}
                         <tr>
                             <td class="tabs__table-cell">{{ configuration.0|default:_("Locaties")|capfirst }}<i
@@ -32,16 +32,16 @@
                             <td class="tabs__table-cell">
                                 {% if locations %}
                                     <span class="tabs__table-cell--value">
-                                {% for lokatie in product.get_municipality_locations %}
+                                {% for location in product.get_municipality_locations %}
                                     <li>
                                         <div class="pretty p-default p-curve">
                                             <input type="checkbox" class="form__checkbox"
-                                                   {% if locatie.is_product_location %}checked{% endif %}
-                                                   value="{{ locatie.pk }}"
+                                                   {% if location.is_product_location %}checked{% endif %}
+                                                   value="{{ location.pk }}"
                                                    disabled>
                                             <div class="state">
                                                 <label class="checkbox">
-                                                    {{ locatie.naam }}
+                                                    {{ location.naam }}
                                                 </label>
                                             </div>
                                         </div>
