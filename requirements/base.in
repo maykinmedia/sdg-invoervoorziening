@@ -1,13 +1,13 @@
 # Core python libraries
-Pillow  # handle images
+Pillow>=9.0.0 # handle images
 psycopg2 < 2.9 # database driver
 pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
-lxml
+lxml>=4.6.5
 
 # Framework libraries
-django < 3.0
+django==2.2.25
 django-admin-index
 django-axes
 django-choices
@@ -19,10 +19,10 @@ django-sniplates
 django-allauth
 django-markdownx
 django-markdownify
-django-celery-beat
 django-filter
 django-timeline-logger
-celery
+celery==5.2.3
+django-celery-beat==2.2.1
 maykin-django-two-factor-auth[phonenumbers]
 
 # API libraries

@@ -9,11 +9,11 @@ QUEUE=${1:-${CELERY_WORKER_QUEUE:=celery}}
 WORKER_NAME=${2:-${CELERY_WORKER_NAME:="${QUEUE}"@%n}}
 
 echo "Starting celery worker $WORKER_NAME with queue $QUEUE"
+cd src
 exec python -m celery -A sdg worker \
     -Q $QUEUE \
     -n $WORKER_NAME \
     -l $LOGLEVEL \
     -O fair \
-    --workdir src \
-    -c $CONCURRENCY
+    -c $CONCURRENCY \
 

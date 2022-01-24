@@ -12,8 +12,8 @@ while python src/manage.py showmigrations | grep '\[ \]'  &> /dev/null; do
 done
 
 echo "Starting celery beat"
+cd src
 exec python -m celery -A sdg beat \
     --scheduler django_celery_beat.schedulers:DatabaseScheduler \
-    --workdir src \
     -l $LOGLEVEL \
     -s ../celerybeat/beat
