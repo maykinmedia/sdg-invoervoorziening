@@ -57,7 +57,7 @@ class ProductDetailView(OverheidMixin, DetailView):
     queryset = (
         Product.objects.select_related("catalogus__lokale_overheid")
         .prefetch_related(
-            "lokaties",
+            "locaties",
             Prefetch("referentie_product", queryset=Product.objects.most_recent()),
         )
         .most_recent()
@@ -140,7 +140,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             version=self.product.reference_product.most_recent_version
         )
         context["previous_reference_formset"] = self._generate_version_formset(
-            self.product.reference_product.get_latest_versions(2)[0]  # TODO: optimize
+            self.product.reference_product.get_latest_versions(2)[-1]  # TODO: optimize
         )
 
         context["informatie_forms"] = zip_longest(
@@ -182,11 +182,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form, version_form, product_form):
-        return self.render_to_response(
-            self.get_context_data(
-                form=form, version_form=version_form, product_form=product_form
-            )
+        context = self.get_context_data(
+            form=form, version_form=version_form, product_form=product_form
         )
+        context["form_invalid"] = True
+        return self.render_to_response(context)
 
     def get_success_url(self):
         return reverse(

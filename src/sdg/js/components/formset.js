@@ -1,14 +1,17 @@
 import toArray from 'arrayify';
 import BEM from 'bem.js';
+import {initializeDynamicWidget} from './dynamic_array';
 
 
 const BLOCK_FORMSET = 'formset';
+const DYNAMIC = 'dynamic';
 
 const ELEMENT_BODY = 'body';
 const ELEMENT_TEMPLATE = 'template';
 const ELEMENT_ADD = 'add';
 const ELEMENT_REMOVE = 'remove';
 const ELEMENT_TITLE = 'title';
+const ELEMENT_CONTAINER = 'container';
 
 const FORMSET = BEM.getBEMNode(BLOCK_FORMSET);
 const FORMSET_BODY = BEM.getBEMNode(BLOCK_FORMSET, ELEMENT_BODY);
@@ -74,6 +77,7 @@ class Formset {
     addForm() {
         // Creates a new form based on TEMPLATE
         let template = document.importNode(TEMPLATE.content, true);
+
         FORMSET_BODY.appendChild(template);
         let form = FORMSET_BODY.children[FORMSET_BODY.children.length - 1];
 
@@ -87,6 +91,13 @@ class Formset {
         let index = FORMSET_BODY.children.length;
         FORMSET.querySelector('[name="form-TOTAL_FORMS"]').value = index;
         this.setUpRemoveFormForElement(form);
+
+        const dynamicElements = BEM.getChildBEMNodes(form, DYNAMIC, ELEMENT_CONTAINER);
+        if (dynamicElements) {
+            [...dynamicElements].forEach(element => {
+                initializeDynamicWidget(element)
+            });
+        }
     }
 
     getFormIndex(form) {

@@ -10,8 +10,8 @@ from vng_api_common import routers
 
 from sdg.api.views import (
     CatalogusViewSet,
+    LocatieViewSet,
     LokaleOverheidViewSet,
-    LokatieViewSet,
     ProductConceptViewSet,
     ProductHistoryViewSet,
     ProductViewSet,
@@ -38,7 +38,7 @@ router.register(
     ],
 )
 router.register("organisaties", LokaleOverheidViewSet)
-router.register("locaties", LokatieViewSet)
+router.register("locaties", LocatieViewSet, basename="locatie")
 
 urlpatterns = [
     path("v1/", include(router.urls)),

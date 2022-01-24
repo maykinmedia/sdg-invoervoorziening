@@ -53,16 +53,19 @@ toegevoegd aan de VNG organisatie.
 
 #### 2. Standaard producttekst opslaan als concept
 
-1. Zoek het product **Parkeervergunning** onder *Diensten*.
+1. Klik op het tabje **Catalogi** (als u daar nog niet was)
+2. Zoek het product **Parkeervergunning** onder *Diensten*.
 3. Klik op het product, en daarna onderaan op **Wijzigen**
-4. Vul overal iets in, bij zowel **NL** als **EN** tabjes
+4. Vul overal iets in, bij zowel **NL** als **EN** tabjes (dit kan door bij het 
+   kolom huidige informatie te klikken op **Aanpassen**)
 5. Klik onderaan op **Opslaan als concept**
 
 Controles na opslaan:
 
 * Detailpagina:
   * Concept producttekst is niet zichtbaar
-  * Er wordt een **Melding** getoond dat dit een **concept** producttekst betreft
+  * Er wordt een **Melding** getoond dat dit een **concept** producttekst 
+  * betreft
   * Bij **Revisies** staat nu dat **versie 1** een **concept** is
 * Wijzigen pagina:
   * Concept producttekst is zichtbaar
@@ -71,11 +74,13 @@ Controles na opslaan:
 
 #### 3. Standaard producttekst publiceren als versie 1
 
-1. Klik op tabje **Catalogi**
+1. Klik op het tabje **Catalogi**
 2. Zoek het product **Parkeervergunning** onder *Diensten*.
 3. Klik op het product, en daarna onderaan op **Wijzigen**
 4. Vul overal iets in, bij zowel **NL** als **EN** tabjes
-5. Klik onderaan op **Opslaan als concept**
+5. Zorg dat **Product aanwezig** op **Ja** staat
+6. Vul een **publicatiedatum** in
+7. Klik onderaan op **Opslaan en publiceren**
 
 Controles na opslaan:
 
@@ -90,11 +95,12 @@ Controles na opslaan:
   
 #### 4. Standaard producttekst publiceren als versie 2
 
-1. Klik op tabje **Catalogi**
+1. Klik op het tabje **Catalogi**
 2. Zoek het product **Parkeervergunning** onder *Diensten*.
 3. Klik op het product, en daarna onderaan op **Wijzigen**
-4. Vul overal iets in, bij zowel **NL** als **EN** tabjes
-5. Klik onderaan op **Opslaan als concept**
+4. Maak enkele wijzigingen, bij zowel **NL** als **EN** tabjes
+5. Vul een **publicatiedatum** in
+6. Klik onderaan op **Opslaan en publiceren**
 
 Controles na opslaan:
 
@@ -122,9 +128,10 @@ Controles na opslaan:
    Kies een e-mailadres dat je zelf kan raadplegen.
 3. Selecteer bij **Lokale Overheid** de gemeente **Aalsmeer**
    vink daarachter **redacteur** en **beheerder** aan.
-4. Selecteer bij **Lokale Overheid** de gemeente **Zwolle**
-   vink daarachter **redacteur** aan.
-5. Klik op **Opslaan**.
+4. Om een tweede gemeente te selecteren, klik op **Nog een Role toevoegen**.
+5. Selecteer bij deze tweede gemeente, bij **Lokale Overheid**, de gemeente 
+   **Zwolle** en vink daarachter **redacteur** aan.
+6. Klik op **Opslaan**.
 
 ### GB: Gemeentelijke beheerder
 
@@ -146,7 +153,7 @@ Controles na opslaan:
 3. Klik op **Tweestapsauthenticatie instellen** en volg de aanwijzingen
 4. Klik uiteindelijk op **Naar de homepage**
 5. Je ziet 2 organisaties: **Zwolle** en **Aalsmeer**. Klik op **Aalsmeer**.
-6. Je ziet nu de tabjes "Catalogi", "Lokaties" en "Gebruikers".
+6. Je ziet nu de tabjes "Catalogi", "Locaties" en "Gebruikers".
 7. Log uit
 
 #### 3. Nogmaals inloggen als gemeentelijke beheerder
@@ -158,36 +165,71 @@ Controles na opslaan:
 
 #### 4. Wachtwoord vergeten
 
-TODO
+1. Ga naar het inlog scherm op ``/``.
+2. Klik op **Wachtwoord vergeten**? 
+3. Vul je **E-mail** in en klik op **Wachtwoord resetten**
 
-Check mail, kan resetten, etc.
+Controles na wachtwoord resetten:
+
+* Er is een e-mail verstuurd naar het opgegeven e-mailadres
+* De link in de e-mail komt op de wachtwoord reset pagina terecht
 
 #### 5. Redacteur uitnodigen
 
-TODO
+* Zorg dat je bent ingelogd als 
 
-Bij tabje "Gebruikers" iemand uitnodigen (niet in de admin dus) voor gemeente
-alleen gemeente Zwolle.
+1. Ga naar de gemeente *Aalsmeer*
+2. Klik op het tabje **Gebruikers**
+3. Klik op **Nieuwe gebruiker toevoegen**
+4. Vul alle gegevens en vink **Redacteur** aan
+5. Klik op **Opslaan**
+
+Controles na opslaan:
+
+* Er is een e-mail verstuurd naar het opgegeven e-mailadres
+* De link in de e-mail komt op de pagina om een wachtwoord in te stellen uit
 
 #### 6. Redacteur verwijderen
 
-TODO
+1. Ga naar de gemeente *Aalsmeer*
+2. Klik op het tabje **Gebruikers**
+3. Bij **Acties** klik je op **Verwijderen**
+4. Klik op **Verwijderen**
 
-#### 7. Lokatie informatie invoeren
+#### 7. Locatie informatie invoeren
 
-TODO
+1. Ga naar de gemeente *Aalsmeer*
+2. Klik op het tabje **Loaties**
+3. Vul alle velden in 
+4. Klik op **Opslaan**
 
-#### 8. Lokatie toevoegen
+#### 8. Locatie toevoegen
 
-TODO
+1. Ga naar de gemeente *Aalsmeer*
+2. Klik op het tabje **Locaties**
+3. Scroll naar beneden
+4. Klik op **+ nog een locatie toevoegen**
+5. Vul alle velden in 
+6. Klik op **Opslaan**
 
-#### 9. Lokatie bewerken
+#### 9. Locatie bewerken
 
-TODO
+1. Ga naar de gemeente *Aalsmeer*
+2. Klik op het tabje **Locaties**
+3. Scroll naar beneden
+4. Klik op **+ nog een locatie toevoegen**
+5. Pas de gegevens aan die je wenst aan te passen
+6. Klik op **Opslaan**
 
-#### 10. Lokatie verwijderen
+#### 10. Locatie verwijderen
 
-TODO
+1. Ga naar de gemeente *Aalsmeer*
+2. Klik op het tabje **Locaties**
+3. Scroll naar beneden
+4. Ga naar **Locatie 1**
+5. Klik op **Locatie verwijderen** (de locatie is hiermee nog niet definitief 
+   verwijderd)
+6. Klik op **Opslaan** (nu is de locatie echt verwijderd)
 
 ### GR: Gemeentelijke redacteur
 
@@ -196,15 +238,18 @@ TODO
 
 #### 1. Inloggen
 
-TODO: Zelfde als FB-2 maar met:
-
-5. Je ziet direct de gemeente die bij je account hoort en kan niet kiezen 
+1. Ga naar ``/`` en login als redacteur die in stap **GB-5** hebt aangemaakt.
+2. Je ziet direct de gemeente die bij je account hoort en kan niet kiezen 
    tussen verschillende gemeenten.
-
 
 #### 2. Producttekst opslaan als concept
 
-TODO
+1. Klik op het tabje **Catalogi** (als u daar nog niet was)
+2. Zoek het product **Parkeervergunning** onder *Diensten*.
+3. Klik op het product, en daarna onderaan op **Wijzigen**
+4. Vul overal iets in, bij zowel **NL** als **EN** tabjes (dit kan door bij het 
+   kolom huidige informatie te klikken op **Aanpassen**)
+5. Klik onderaan op **Opslaan als concept**
 
 Controles na opslaan:
 
@@ -223,17 +268,54 @@ Controles na opslaan:
 
 #### 3. Producttekst nu publiceren
 
-TODO
+1. Klik op het tabje **Catalogi**
+2. Zoek het product **Parkeervergunning** onder *Diensten*.
+3. Klik op het product, en daarna onderaan op **Wijzigen**
+4. Vul overal iets in, bij zowel **NL** als **EN** tabjes
+5. Zorg dat **Product aanwezig** op **Ja** staat
+6. Vul een **publicatiedatum** in
+7. Klik onderaan op **Opslaan en publiceren**
+
+Controles na opslaan:
+
+* Detailpagina:
+  * Gepubliceerde producttekst is zichtbaar
+  * Er wordt **geen melding** getoond dat dit een concept producttekst betreft
+  * Bij **Revisies** staat nu dat **versie 1** gepubliceerd is
+* Wijzigen pagina:
+  * Gepubliceerde producttekst is zichtbaar
+  * Er wordt **geen melding** getoond dat dit een concept producttekst betreft
+  * Er is geen mogelijkheid om de teksten te vergelijken met standaardteksten
 
 #### 3. Producttekst later publiceren
 
-TODO
+1. Klik op het tabje **Catalogi**
+2. Zoek het product **Parkeervergunning** onder *Diensten*.
+3. Klik op het product, en daarna onderaan op **Wijzigen**
+4. Maak enkele wijzigingen, bij zowel **NL** als **EN** tabjes
+6. Vul een **publicatiedatum** in, in de toekomst
+7. Klik onderaan op **Opslaan en publiceren**
+
+Controles na opslaan:
+
+* Detailpagina:
+  * Gepubliceerde producttekst **versie 1** is zichtbaar
+  * Er wordt **geen melding** getoond dat dit een concept producttekst betreft
+  * Bij **Revisies** staat nu dat **versie 2** gepubliceerd wordt in de toekomst
+* Wijzigen pagina:
+  * Gepubliceerde producttekst **versie 2** is zichtbaar
+  * Er wordt **geen melding** getoond dat dit een concept producttekst betreft
+  * Er is geen mogelijkheid om de teksten te vergelijken met standaardteksten
 
 #### 4. Productteksten vergelijken
 
-TODO
-
-#### 5. Historie controleren
-
-TODO
-
+1. Klik op het tabje **Catalogi**
+2. Zoek het product **Parkeervergunning** onder *Diensten*.
+3. Klik op het product, en daarna onderaan op Wijzigen
+3. Om de productteksten te vergelijken ga je naar bijvoorbeeld **Kosten**
+4. Klik op **Vergelijken**
+5. Het verschil tussen uw tekst (versie 2, groen) en de standaardtekst 
+   (versie 2, rood) wordt getoond.
+6. Klik op **Toon standaardtekst**, en klik op het **oog-icoon**
+5. Het verschil tussen standaard tekst versie 1 (rood) en 2 (groen) wordt
+   getoond.

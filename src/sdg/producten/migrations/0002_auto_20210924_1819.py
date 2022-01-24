@@ -54,12 +54,6 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AddConstraint(
-            model_name="localizedproduct",
-            constraint=models.UniqueConstraint(
-                fields=("product", "taal"), name="unique_language_per_product"
-            ),
-        ),
-        migrations.AddConstraint(
             model_name="localizedproductuitvoering",
             constraint=models.UniqueConstraint(
                 fields=("productuitvoering", "taal"),

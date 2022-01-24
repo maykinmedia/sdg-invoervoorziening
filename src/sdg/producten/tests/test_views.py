@@ -6,7 +6,7 @@ from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.tests.utils import hard_refresh_from_db
-from sdg.organisaties.tests.factories.overheid import LokatieFactory
+from sdg.organisaties.tests.factories.overheid import LocatieFactory
 from sdg.producten.models import LocalizedProduct, Product
 from sdg.producten.tests.constants import (
     DUMMY_TITLE,
@@ -189,7 +189,7 @@ class ProductDetailViewTests(WebTest):
         LocalizedProductFactory.create_batch(2, product_versie=product_version)
         product = product_version.product
         lokale_overheid = product.catalogus.lokale_overheid
-        lokaties = LokatieFactory.create_batch(3, lokale_overheid=lokale_overheid)
+        locaties = LocatieFactory.create_batch(3, lokale_overheid=lokale_overheid)
 
         RoleFactory.create(
             user=self.user,
@@ -197,13 +197,13 @@ class ProductDetailViewTests(WebTest):
             is_redacteur=True,
         )
 
-        product.lokaties.set(lokaties[:2])
+        product.locaties.set(locaties[:2])
         product.save()
 
         response = self.app.get(product_version.product.get_absolute_url())
 
         checkboxes = response.pyquery("input[type=checkbox]")
-        actual_loc_ids = set(product.lokaties.values_list("pk", flat=True))
+        actual_loc_ids = set(product.locaties.values_list("pk", flat=True))
         display_loc_ids = {
             int(checkbox.value) for checkbox in checkboxes if checkbox.value is not None
         }
@@ -283,9 +283,6 @@ class ProductDetailViewTests(WebTest):
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
         self.assertIn(
-            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
-        )
-        self.assertIn(
             Template(
                 "Er staat een toekomstige producttekst klaar om gepubliceerd te worden op {{ pubdate }}. Hieronder ziet u de huidige producttekst."
             ).render(context=Context({"pubdate": FUTURE_DATE})),
@@ -321,9 +318,6 @@ class ProductDetailViewTests(WebTest):
 
         self.assertIn(specific_nl.product_titel_decentraal, text_nl)
         self.assertIn(specific_nl.specifieke_tekst, text_nl)
-        self.assertIn(
-            "U heeft nog niet aangegeven of u dit product aanbiedt.", response.text
-        )
         self.assertIn(
             "Er is een concept producttekst aanwezig.",
             response.text,
@@ -796,7 +790,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
     @freeze_time(NOW_DATE)
     def test_can_update_product_information(self):
         self._change_product_status(Product.status.CONCEPT)
-        LokatieFactory.create_batch(
+        LocatieFactory.create_batch(
             3, lokale_overheid=self.product.catalogus.lokale_overheid
         )
         locations = list(self.product.get_municipality_locations())
@@ -812,7 +806,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
 
         response.form.fields["product_aanwezig"] = False
-        response.form.fields["lokaties"][0].checked = True
+        response.form.fields["locaties"][0].checked = True
         self._submit_product_form(response.form, Product.status.CONCEPT)
         self.product.refresh_from_db()
 

@@ -156,7 +156,7 @@ class ProductAdmin(admin.ModelAdmin):
         """Ensure that only locations belonging to a product's municipality can be selected."""
 
         object_id = request.resolver_match.kwargs.get("object_id", None)
-        if db_field.name == "lokaties" and object_id:
+        if db_field.name == "locaties" and object_id:
             kwargs["queryset"] = Product.objects.get(
                 pk=object_id
             ).get_municipality_locations()

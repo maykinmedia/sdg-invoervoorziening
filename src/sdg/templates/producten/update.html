@@ -36,7 +36,15 @@
 
 {% block inner_content %}
     <div class="notifications">
+        {% if form_invalid %}
+            <div class="notifications__notification notification__error">
+                <i class="fas fa-times-circle"></i>
+                <span>{% trans "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten." %}</span>
+                <span></span>
+            </div>
+        {% endif %}
         {% include "core/_notifications.html" %}
+        {% include 'producten/_include/availability_warnings.html' %}
         {% include 'producten/_include/edit_warnings.html' %}
     </div>
 
@@ -80,7 +88,7 @@
                     {% endwith %}
                 {% endwith %}
 
-                {% with field=product_form.lokaties %}
+                {% with field=product_form.locaties %}
                     {% with configuration=field.configuration.0 %}
                         <tr>
                             <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i
@@ -92,7 +100,7 @@
                     {% endwith %}
                 {% endwith %}
 
-                {% with field=product_form.lokaties %}
+                {% with field=product_form.publicatie_datum %}
                     {% with configuration=field.configuration.0 %}
                         <tr>
                             <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i

@@ -10,7 +10,7 @@ function addRemoveEventListener(widgetElement) {
     });
 }
 
-function initializeWidget(widgetElement) {
+function initializeDynamicWidget(widgetElement) {
     const initialElement = widgetElement.querySelector('.dynamic__container-item');
     const elementTemplate = initialElement.cloneNode(true);
     const parentElement = initialElement.parentElement;
@@ -36,5 +36,7 @@ function initializeWidget(widgetElement) {
 }
 
 [...arrayWidgets].forEach(element => {
-    initializeWidget(element)
+    initializeDynamicWidget(element)
 });
+
+export {initializeDynamicWidget};

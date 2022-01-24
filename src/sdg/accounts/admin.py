@@ -20,7 +20,7 @@ class RoleInline(admin.TabularInline):
     def get_role_user(self, obj):
         return obj.user.email
 
-    get_role_user.short_description = _("Gebruik")
+    get_role_user.short_description = _("Gebruiker")
 
     def get_role_organization(self, obj):
         return obj.lokale_overheid.organisatie.owms_pref_label
@@ -57,7 +57,7 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
-            _("Personal info"),
+            _("Persoonlijke informatie"),
             {
                 "fields": (
                     "first_name",
@@ -66,7 +66,7 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
             },
         ),
         (
-            _("Permissions"),
+            _("Rechten"),
             {
                 "fields": (
                     "is_active",
@@ -77,7 +77,7 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
                 ),
             },
         ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+        (_("Overige"), {"fields": ("last_login", "date_joined")}),
     )
     add_fieldsets = (
         (

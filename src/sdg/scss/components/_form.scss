@@ -180,7 +180,6 @@
     color: #0B71A1;
     cursor: pointer;
     margin-bottom: 42px;
-    margin-top: -16px;
     margin-left: 16px;
   }
 
@@ -233,6 +232,10 @@
       background-color: lighten($color_red, 36%);
       padding: 14px;
       list-style: none;
+
+      &::before {
+        content: "" !important;
+      }
     }
   }
 }

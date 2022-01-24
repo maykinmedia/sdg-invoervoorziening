@@ -66,16 +66,16 @@ class UserInvitation(models.Model):
         "User",
         on_delete=models.CASCADE,
         related_name="invitatie",
-        verbose_name=_("user"),
+        verbose_name=_("gebruiker"),
     )
 
     key = models.CharField(
         verbose_name=_("key"), max_length=64, unique=True, default=get_random_string
     )
-    accepted = models.BooleanField(verbose_name=_("accepted"), default=False)
+    accepted = models.BooleanField(verbose_name=_("geaccepteerd"), default=False)
 
-    created = models.DateTimeField(verbose_name=_("created"), default=timezone.now)
-    sent = models.DateTimeField(verbose_name=_("sent"), null=True)
+    created = models.DateTimeField(verbose_name=_("aangemaakt"), default=timezone.now)
+    sent = models.DateTimeField(verbose_name=_("verzonden"), null=True)
 
     inviter = models.ForeignKey("User", null=True, blank=True, on_delete=models.CASCADE)
 
@@ -134,8 +134,8 @@ class UserInvitation(models.Model):
         )
 
     class Meta:
-        verbose_name = _("user invitation")
-        verbose_name_plural = _("user invitations")
+        verbose_name = _("uitnodiging")
+        verbose_name_plural = _("uitnodigingen")
 
     def __str__(self):
         return f"Invitation {self.user.email}"
@@ -181,8 +181,8 @@ class Role(models.Model):
         ]
 
     class Meta:
-        verbose_name = _("role")
-        verbose_name_plural = _("roles")
+        verbose_name = _("rol")
+        verbose_name_plural = _("rollen")
         constraints = [
             models.UniqueConstraint(
                 fields=["user", "lokale_overheid"],

@@ -5,8 +5,8 @@ from rest_framework.test import APITestCase
 
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.factories.overheid import (
+    LocatieFactory,
     LokaleOverheidFactory,
-    LokatieFactory,
 )
 from sdg.producten.tests.constants import NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.localized import LocalizedProductFactory
@@ -205,8 +205,8 @@ class OrganisatiesTests(APITestCase):
 
 class LocatiesTests(APITestCase):
     def test_list_locations(self):
-        LokatieFactory.create_batch(2)
-        list_url = reverse("api:lokatie-list")
+        LocatieFactory.create_batch(2)
+        list_url = reverse("api:locatie-list")
 
         response = self.client.get(list_url)
 
@@ -216,8 +216,8 @@ class LocatiesTests(APITestCase):
         self.assertEqual(2, len(data))
 
     def test_retrieve_location_by_uuid(self):
-        lokatie = LokatieFactory.create()
-        detail_url = reverse("api:lokatie-detail", args=[lokatie.uuid])
+        locatie = LocatieFactory.create()
+        detail_url = reverse("api:locatie-detail", args=[locatie.uuid])
 
         response = self.client.get(detail_url)
 
@@ -225,4 +225,4 @@ class LocatiesTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(str(lokatie.uuid), data["uuid"])
+        self.assertEqual(str(locatie.uuid), data["uuid"])

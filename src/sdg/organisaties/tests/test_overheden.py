@@ -10,8 +10,8 @@ from sdg.core.models import ProductenCatalogus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.organisaties.tests.constants import ORGANIZATION_EDIT_URL
 from sdg.organisaties.tests.factories.overheid import (
+    LocatieFactory,
     LokaleOverheidFactory,
-    LokatieFactory,
 )
 from sdg.producten.tests.factories.localized import (
     LocalizedReferentieProductFactory,
@@ -309,7 +309,7 @@ class LokaleOverheidUpdateViewTests(WebTest):
         )
 
     def test_can_update_municipality_location(self):
-        LokatieFactory.create(lokale_overheid=self.lokale_overheid)
+        LocatieFactory.create(lokale_overheid=self.lokale_overheid)
 
         response = self.app.get(
             reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
@@ -324,7 +324,7 @@ class LokaleOverheidUpdateViewTests(WebTest):
         response.form.submit()
 
         self.lokale_overheid.refresh_from_db()
-        location = self.lokale_overheid.lokaties.get()
+        location = self.lokale_overheid.locaties.get()
         self.assertEqual(location.naam, "Name")
         self.assertEqual(location.straat, "Street")
         self.assertEqual(location.nummer, 91)

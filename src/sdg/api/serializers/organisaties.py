@@ -2,14 +2,14 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 from sdg.api.serializers.logius import OverheidsorganisatieSerializer
-from sdg.organisaties.models import LokaleOverheid, Lokatie
+from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 
 class OpeningstijdenSerializer(serializers.ModelSerializer):
     """Serializer for location based opening times."""
 
     class Meta:
-        model = Lokatie
+        model = Locatie
         fields = (
             "maandag",
             "dinsdag",
@@ -46,14 +46,14 @@ class OrganisatieBaseSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
-class LokatieSerializer(serializers.HyperlinkedModelSerializer):
+class LocatieSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for location details, including contact details, address and opening times."""
 
     openingstijden = SerializerMethodField(method_name="get_openingstijden")
     organisatie = OrganisatieBaseSerializer(source="lokale_overheid")
 
     class Meta:
-        model = Lokatie
+        model = Locatie
         fields = (
             "url",
             "uuid",
@@ -69,12 +69,12 @@ class LokatieSerializer(serializers.HyperlinkedModelSerializer):
         )
         extra_kwargs = {
             "url": {
-                "view_name": "api:lokatie-detail",
+                "view_name": "api:locatie-detail",
                 "lookup_field": "uuid",
             },
         }
 
-    def get_openingstijden(self, obj: Lokatie) -> OpeningstijdenSerializer:
+    def get_openingstijden(self, obj: Locatie) -> OpeningstijdenSerializer:
         return OpeningstijdenSerializer(obj).data
 
 
@@ -89,7 +89,7 @@ class LokaleOverheidSerializer(OrganisatieBaseSerializer):
     bevoegde_organisatie = OverheidsorganisatieSerializer()
     ondersteunings_organisatie = OverheidsorganisatieSerializer()
     verantwoordelijke_organisatie = OverheidsorganisatieSerializer()
-    locaties = LokatieSerializer(source="lokaties", many=True)
+    locaties = LocatieSerializer(many=True)
 
     class Meta:
         model = LokaleOverheid
