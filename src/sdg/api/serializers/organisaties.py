@@ -22,7 +22,7 @@ class OpeningstijdenSerializer(serializers.ModelSerializer):
 
 
 class OrganisatieBaseSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer that exposes a small subset of the fields for a Organisatie, used in references to a organisation.
+    """Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
     - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
     """
 
@@ -46,11 +46,10 @@ class OrganisatieBaseSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
-class LocatieSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer for location details, including contact details, address and opening times."""
+class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
+    """Serializer that exposes a subset of the fields for a location, used in references to a location."""
 
     openingstijden = SerializerMethodField(method_name="get_openingstijden")
-    organisatie = OrganisatieBaseSerializer(source="lokale_overheid")
 
     class Meta:
         model = Locatie
@@ -65,7 +64,6 @@ class LocatieSerializer(serializers.HyperlinkedModelSerializer):
             "land",
             "openingstijden",
             "openingstijden_opmerking",
-            "organisatie",
         )
         extra_kwargs = {
             "url": {
@@ -76,6 +74,15 @@ class LocatieSerializer(serializers.HyperlinkedModelSerializer):
 
     def get_openingstijden(self, obj: Locatie) -> OpeningstijdenSerializer:
         return OpeningstijdenSerializer(obj).data
+
+
+class LocatieSerializer(LocatieBaseSerializer):
+    """Serializer for location details, including contact details, address and opening times."""
+
+    organisatie = OrganisatieBaseSerializer(source="lokale_overheid")
+
+    class Meta(LocatieBaseSerializer.Meta):
+        fields = LocatieBaseSerializer.Meta.fields + ("organisatie",)
 
 
 class LokaleOverheidSerializer(OrganisatieBaseSerializer):
@@ -89,7 +96,7 @@ class LokaleOverheidSerializer(OrganisatieBaseSerializer):
     bevoegde_organisatie = OverheidsorganisatieSerializer()
     ondersteunings_organisatie = OverheidsorganisatieSerializer()
     verantwoordelijke_organisatie = OverheidsorganisatieSerializer()
-    locaties = LocatieSerializer(many=True)
+    locaties = LocatieBaseSerializer(many=True)
 
     class Meta:
         model = LokaleOverheid
