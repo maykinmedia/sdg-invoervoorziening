@@ -544,5 +544,12 @@ SPECTACULAR_SETTINGS = {
 if SUBPATH := config("SUBPATH", None):
     SUBPATH = f"/{SUBPATH.strip('/')}"
 
+    if SUBPATH != "/":
+        STATIC_URL = f"{SUBPATH}{STATIC_URL}"
+        MEDIA_URL = f"{SUBPATH}{MEDIA_URL}"
+
+        MARKDOWNX_URLS_PATH = f"{SUBPATH}/markdownx/markdownify/"
+        MARKDOWNX_UPLOAD_URLS_PATH = f"{SUBPATH}/markdownx/upload/"
+
 # django-solo
 SOLO_CACHE = "default"
