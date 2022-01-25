@@ -9,7 +9,7 @@ root_url = partial(urljoin, base="https://standaarden.overheid.nl")
 class PublicData(Enum):
     """External data source URLs, used to load in application data."""
 
-    GEMEENTE = "owms/terms/Gemeente.xml"
+    GEMEENTE = "owms/terms/Overheidsorganisatie.xml"
     UPN = "owms/oquery/UPL-actueel.csv"
     INFORMATIEGEBIED = "owms/oquery/SDG-Informatiegebieden.csv"
     UPN_INFORMATIEGEBIED = "owms/oquery/UPL-SDG-Informatiegebied.csv"
