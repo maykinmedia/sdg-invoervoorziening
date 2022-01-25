@@ -54,16 +54,18 @@ class ProductDetailView(OverheidMixin, DetailView):
     template_name = "producten/detail.html"
     context_object_name = "product"
     pk_url_kwarg = "product_pk"
-    queryset = (
-        Product.objects.select_related("catalogus__lokale_overheid")
-        .prefetch_related(
-            "locaties",
-            Prefetch("referentie_product", queryset=Product.objects.most_recent()),
-        )
-        .most_recent()
-        .active()
-    )
     required_roles = ["is_beheerder", "is_redacteur"]
+
+    def get_queryset(self):
+        return (
+            Product.objects.select_related("catalogus__lokale_overheid")
+            .prefetch_related(
+                "locaties",
+                Prefetch("referentie_product", queryset=Product.objects.most_recent()),
+            )
+            .most_recent()
+            .active()
+        )
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
@@ -90,11 +92,6 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     template_name = "producten/update.html"
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"
-    queryset = (
-        Product.objects.most_recent()
-        .active()
-        .select_related("catalogus__lokale_overheid")
-    )
     form_class = inlineformset_factory(
         ProductVersie,
         LocalizedProduct,
@@ -102,6 +99,13 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         extra=0,
     )
     required_roles = ["is_beheerder", "is_redacteur"]
+
+    def get_queryset(self):
+        return (
+            Product.objects.most_recent()
+            .active()
+            .select_related("catalogus__lokale_overheid")
+        )
 
     def _save_version_form(self, version_form) -> Tuple[ProductVersie, bool]:
         """Save the version form.
