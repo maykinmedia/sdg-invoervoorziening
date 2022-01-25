@@ -17,7 +17,6 @@
     {% elif status == product.status.SCHEDULED %}
         <div class="notifications__notification notification__info">
             <i class="fas fa-info-circle"></i>
-            *******{{ most_recent_version }}**********
             {% blocktrans with pubdate=most_recent_version.publicatie_datum %}
                 <span>Er staat een toekomstige producttekst klaar om gepubliceerd te worden op {{ pubdate }}. Hieronder ziet u de huidige producttekst.</span>
             {% endblocktrans %}
