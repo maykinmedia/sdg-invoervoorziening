@@ -123,6 +123,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_filters",
     "timeline_logger",
+    "solo",
     # SDG applications
     "sdg.api",
     "sdg.core",
@@ -542,3 +543,6 @@ SPECTACULAR_SETTINGS = {
 # This environment variable can be configured during deployment.
 if SUBPATH := config("SUBPATH", None):
     SUBPATH = f"/{SUBPATH.strip('/')}"
+
+# django-solo
+SOLO_CACHE = "default"

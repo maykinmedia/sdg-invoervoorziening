@@ -127,6 +127,10 @@
             [
                 "admin_index",
                 "applink"
+            ],
+            [
+                "core",
+                "productfieldconfiguration"
             ]
         ]
     }

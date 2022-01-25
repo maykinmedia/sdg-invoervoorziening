@@ -4,11 +4,32 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.constants import TaalChoices
+from sdg.core.models.mixins import FieldConfigurationMixin
 from sdg.producten.types import ProductFieldInfo
 
 
-class ProductFieldMixin:
-    def _get_field_value(self, field) -> Tuple[Any, bool]:
+class ProductFieldMixin(FieldConfigurationMixin):
+    def _get_field(self, field) -> ProductFieldInfo:
+        """Gets field specific information for products."""
+        if isinstance(field, str):
+            field = self._meta.get_field(field)
+
+        value, is_reference = self.get_field_value(field)
+
+        return ProductFieldInfo(
+            name=field.name,
+            verbose_name=field.verbose_name,
+            value=value,
+            help_text=field.help_text,
+            is_reference=is_reference,
+            type=field.get_internal_type(),
+            configuration=self.configuration.for_field(
+                prefix=self._meta.model_name,
+                name=field.name,
+            ),
+        )
+
+    def get_field_value(self, field) -> Tuple[Any, bool]:
         """Get the value of a field. If empty, retrieve from standard.
 
         :return: The field value, whether it is standard or not.
@@ -19,20 +40,6 @@ class ProductFieldMixin:
             return getattr(self.referentie_informatie, field.name, ""), True
 
         return value, False
-
-    def _get_field(self, field) -> ProductFieldInfo:
-        """Gets field specific information for products."""
-        if isinstance(field, str):
-            field = self.__class__._meta.get_field(field)
-        value, is_reference = self._get_field_value(field)
-        return ProductFieldInfo(
-            name=field.name,
-            verbose_name=field.verbose_name,
-            value=value,
-            help_text=field.help_text,
-            is_reference=is_reference,
-            type=field.get_internal_type(),
-        )
 
     def get_fields(self) -> List[ProductFieldInfo]:
         """Returns data for each field as a list of Field objects."""

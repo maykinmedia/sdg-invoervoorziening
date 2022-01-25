@@ -10,13 +10,17 @@
                         {% with widget=subwidget %}
                             {% include widget.template_name %}
                         {% endwith %}
-                        <button type="button" class="dynamic__container__button--side dynamic__container-remove">
-                            <i class="fa fa-xs fa-times"></i>
-                        </button>
+                        {% if not widget.single %}
+                            <button type="button" class="dynamic__container__button--side dynamic__container-remove">
+                                <i class="fa fa-xs fa-times"></i>
+                            </button>
+                        {% endif %}
                     </div>
                 {% endfor %}
             </div>
-            <div><input type="button" class="dynamic__container__button--low dynamic__container-add" value="{% trans "Toevoegen" %}"></div>
+            {% if not widget.single %}
+                <div><input type="button" class="dynamic__container__button--low dynamic__container-add" value="{% trans "Toevoegen" %}"></div>
+            {% endif %}
         </div>
     </div>
 {% endspaceless %}

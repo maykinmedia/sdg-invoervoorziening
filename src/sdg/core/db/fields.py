@@ -18,6 +18,7 @@ class ChoiceArrayField(ArrayField):
 class DynamicArrayField(ArrayField):
     def __init__(self, base_field, size=None, **kwargs):
         self.subwidget_form = kwargs.pop("subwidget_form", None)
+        self.single = kwargs.pop("single", False)
         super().__init__(base_field, size, **kwargs)
 
     def formfield(self, **kwargs):

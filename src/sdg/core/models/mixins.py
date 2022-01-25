@@ -1,6 +1,27 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from sdg.core.models import ProductFieldConfiguration
+
+
+class FieldConfigurationMixin:
+    _configuration: ProductFieldConfiguration = None
+
+    @property
+    def configuration(self):
+        if self._configuration is None:
+            self._configuration = ProductFieldConfiguration.get_solo()
+        return self._configuration
+
+    def __getitem__(self, name):
+        item = super().__getitem__(name)
+        if not getattr(item, "configuration", None):
+            item.configuration = self.configuration.for_field(
+                prefix=self._meta.model._meta.model_name,
+                name=name,
+            )
+        return item
+
 
 class ContactgegevensMixin(models.Model):
     contact_naam = models.CharField(

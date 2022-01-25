@@ -18,43 +18,56 @@
                 </tr>
                 </thead>
                 <tbody>
+
                 {% for field in product.get_fields|exclude:"id,generiek_product,referentie_product,catalogus,uuid" %}
                     {% table_row field %}
                 {% endfor %}
-                <tr>
-                    <td class="tabs__table-cell">{% trans "Locaties" %}<i
-                        class="fas fa-info-circle fa-xs dark"
-                        title="Locaties met dit product."></i></td>
-                    <td class="tabs__table-cell">
-                        {% if product.locaties %}
-                            <span class="tabs__table-cell--value">
-                                {% for locatie in product.get_municipality_locations %}
-                                    <div class="pretty p-default p-curve">
+
+                {% with locations=product|get_field:"locaties" %}
+                    {% with configuration=locations.configuration.0 %}
+                        <tr>
+                            <td class="tabs__table-cell">{{ configuration.0|default:_("Locaties")|capfirst }}<i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:_('Locaties met dit product') }}"></i></td>
+                            <td class="tabs__table-cell">
+                                {% if locations %}
+                                    <span class="tabs__table-cell--value">
+                                {% for location in product.get_municipality_locations %}
+                                    <li>
+                                        <div class="pretty p-default p-curve">
                                             <input type="checkbox" class="form__checkbox"
-                                                   {% if locatie.is_product_location %}checked{% endif %}
-                                                   value="{{ locatie.pk }}"
+                                                   {% if location.is_product_location %}checked{% endif %}
+                                                   value="{{ location.pk }}"
                                                    disabled>
                                             <div class="state">
                                                 <label class="checkbox">
-                                                    {{ locatie.naam }}
+                                                    {{ location.naam }}
                                                 </label>
                                             </div>
                                         </div>
+                                    </li>
                                 {% endfor %}
-                            </span>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="tabs__table-cell">{% trans "Publicatie datum" %}<i
-                        class="fas fa-info-circle fa-xs dark"
-                        title="Publicatiedatum van de productversie"></i></td>
-                    <td class="tabs__table-cell">
-                        <span class="tabs__table-cell--value">
-                            {{ latest_active_version.publicatie_datum }}
-                        </span>
-                    </td>
-                </tr>
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
+
+                {% with publication_date=latest_active_version|get_field:"publicatie_datum" %}
+                    {% with configuration=publication_date.configuration.0 %}
+                        <tr>
+                            <td class="tabs__table-cell">{{ configuration.0|default:_("Publicatie datum")|capfirst }}<i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
+                            </td>
+                            <td class="tabs__table-cell">
+                                <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
+
                 </tbody>
             </table>
         </div>

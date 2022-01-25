@@ -30,6 +30,7 @@ class DynamicArrayWidget(forms.TextInput):
             if id_:
                 widget_attrs["id"] = "{id_}_{index}".format(id_=id_, index=index)
             widget = self.subwidget_form()
+            context["widget"]["single"] = getattr(widget, "single", False)
             widget.is_required = self.is_required
             subwidgets.append(widget.get_context(name, item, widget_attrs)["widget"])
 
@@ -50,9 +51,8 @@ class DynamicArrayWidget(forms.TextInput):
         return value or []
 
 
-class LabeledURLWidget(forms.TextInput):
-
-    template_name = "forms/widgets/labeled_url_field.html"
+class LabeledWidget(forms.TextInput):
+    template_name = None
 
     @staticmethod
     def chunk(input_list, chunk_size: int):
@@ -73,7 +73,7 @@ class LabeledURLWidget(forms.TextInput):
             context_value = value
         context = super().get_context(name, context_value, attrs)
         context["widget"]["label_value"] = context_value[0]
-        context["widget"]["url_value"] = context_value[1]
+        context["widget"]["field_value"] = context_value[1]
 
         return context
 
@@ -89,3 +89,12 @@ class LabeledURLWidget(forms.TextInput):
 
     def format_value(self, value):
         return value or []
+
+
+class LabeledURLWidget(LabeledWidget):
+    template_name = "forms/widgets/labeled_url_field.html"
+
+
+class LabeledTooltipWidget(LabeledWidget):
+    template_name = "forms/widgets/labeled_tooltip_field.html"
+    single = True
