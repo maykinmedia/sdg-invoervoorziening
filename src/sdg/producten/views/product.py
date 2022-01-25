@@ -81,9 +81,8 @@ class ProductPreviewView(ProductDetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["translation"] = self.object.active_version.vertalingen.get(
-            taal=self.request.GET["taal"]
-        )
+        taal = self.request.GET.get("taal", "nl")
+        context["translation"] = self.object.active_version.vertalingen.get(taal=taal)
         return context
 
 
