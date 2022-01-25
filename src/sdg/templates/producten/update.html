@@ -183,7 +183,7 @@
                             {% with reference=product.is_referentie_product %}
                                 {% table_field form.product_titel_decentraal is_reference=reference %}
                                 {% table_field form.specifieke_tekst is_reference=reference %}
-                                {% table_field form.verwijzing_links is_reference=True no_diff=True %}
+                                {% table_field form.verwijzing_links is_reference=True %}
                                 {% table_field form.procedure_beschrijving is_reference=reference %}
                                 {% table_field form.vereisten is_reference=reference %}
                                 {% table_field form.bewijs is_reference=reference %}
@@ -191,7 +191,7 @@
                                 {% table_field form.kosten_en_betaalmethoden is_reference=reference %}
                                 {% table_field form.uiterste_termijn is_reference=reference %}
                                 {% table_field form.wtd_bij_geen_reactie is_reference=reference %}
-                                {% table_field form.decentrale_procedure_link is_reference=reference no_diff=True %}
+                                {% table_field form.decentrale_procedure_link is_reference=True %}
                             {% endwith %}
                             </tbody>
                         </table>
