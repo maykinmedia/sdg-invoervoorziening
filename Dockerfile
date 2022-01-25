@@ -87,13 +87,20 @@ RUN chown -R maykin /app
 USER maykin
 
 ARG COMMIT_HASH
+ARG RELEASE
 ENV GIT_SHA=${COMMIT_HASH}
+ENV RELEASE=${RELEASE}
 ENV DJANGO_SETTINGS_MODULE=sdg.conf.docker
 
 ARG SECRET_KEY=dummy
 
 # Run collectstatic, so the result is already included in the image
 RUN python src/manage.py collectstatic --noinput
+
+LABEL org.label-schema.vcs-ref=$COMMIT_HASH \
+      org.label-schema.vcs-url="https://github.com/maykinmedia/sdg-invoervoorziening" \
+      org.label-schema.version=$RELEASE \
+      org.label-schema.name="Single Digital Gateway Invoervoorziening"
 
 EXPOSE 8000
 CMD ["/start.sh"]

@@ -1,5 +1,8 @@
 @import 'reseter.css/css/reseter.css';
-
+@import 'settings';
+@import 'components';
+@import 'views';
+@import 'mocks';
 // General styling:
 body {
   color: #212121;
@@ -59,7 +62,25 @@ a[href="https://vng.nl/"] {
   }
 }
 
-@import 'settings';
-@import 'components';
-@import 'views';
-@import 'mocks';
+.text-small {
+  font-size: 12px;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.heading {
+  font-size: 20px;
+}
+
+.subheading {
+  font-size: 16px;
+  color: $color_grey_darker;
+  margin: 16px 0;
+}
+
+.version {
+  font-size: 12px;
+  color: $color_grey_darker;
+}

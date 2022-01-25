@@ -3,6 +3,7 @@ import sys
 
 from django.urls import reverse_lazy
 
+import git
 import sentry_sdk
 
 from .utils import config, get_current_version, get_sentry_integrations
@@ -550,6 +551,18 @@ if SUBPATH := config("SUBPATH", None):
 
         MARKDOWNX_URLS_PATH = f"{SUBPATH}/markdownx/markdownify/"
         MARKDOWNX_UPLOAD_URLS_PATH = f"{SUBPATH}/markdownx/upload/"
+
+# Project tversion
+if "GIT_SHA" in os.environ:
+    GIT_SHA = config("GIT_SHA", "")
+# in docker (build) context, there is no .git directory
+elif os.path.exists(os.path.join(BASE_DIR, ".git")):
+    repo = git.Repo(search_parent_directories=True)
+    GIT_SHA = repo.head.object.hexsha
+else:
+    GIT_SHA = None
+
+GIT_SHA = config("GIT_SHA", GIT_SHA)
 
 # django-solo
 SOLO_CACHE = "default"
