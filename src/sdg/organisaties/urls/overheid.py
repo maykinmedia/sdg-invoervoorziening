@@ -8,9 +8,4 @@ urlpatterns = [
         LokaleOverheidUpdateView.as_view(),
         name="edit",
     ),
-    url(
-        r"^(?P<pk>[\d]+)/invite/$",
-        InvitationCreateView.as_view(),
-        name="invitation_create",
-    ),
 ]

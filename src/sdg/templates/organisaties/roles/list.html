@@ -7,8 +7,7 @@
 
 {% block notifications %}{% endblock %}
 
-{% block inner %}
-    {{ block.super }}
+{% block inner_content %}
     <div class="roles">
         {% with role_list.all as roles %}
             <div class="tabs">
@@ -36,10 +35,11 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                        <hr class="divider">
                         <div class="roles__control">
                             {% if lokaleoverheid_beheerder %}
                                 <a class="button"
-                                   href="{% url 'organisaties:invitation_create' pk=lokaleoverheid.pk %}">
+                                   href="{% url 'organisaties:roles:invitation_create' pk=lokaleoverheid.pk %}">
                                     <i class="far fa-envelope"></i>
                                     {% trans "Nieuwe gebruiker toevoegen" %}</a>
                             {% endif %}
@@ -49,4 +49,4 @@
             </div>
         {% endwith %}
     </div>
-{% endblock inner %}
+{% endblock inner_content %}

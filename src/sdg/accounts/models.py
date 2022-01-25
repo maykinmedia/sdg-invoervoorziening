@@ -60,6 +60,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Returns the short name for the user."""
         return self.first_name
 
+    def __str__(self):
+        return self.get_full_name() or self.email
+
 
 class UserInvitation(models.Model):
     user = models.OneToOneField(
@@ -191,10 +194,7 @@ class Role(models.Model):
         ]
 
     def __str__(self):
-        allowed_roles = [
-            str(r.verbose_name) for r in self.get_roles() if getattr(self, r.name)
-        ]
-        return f"{self.user} @ {self.lokale_overheid.organisatie.owms_pref_label}: {', '.join(allowed_roles)}"
+        return f"{self.user} — {self.lokale_overheid.organisatie.owms_pref_label}"
 
     def get_absolute_url(self):
         return reverse(

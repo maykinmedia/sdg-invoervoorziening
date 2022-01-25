@@ -1,7 +1,7 @@
 {% load i18n producten utils %}
 
 <tr>
-    <td class="tabs__table-cell">{{ user.get_full_name|default:user.email }}
+    <td class="tabs__table-cell">{{ user }}
         {% if user.invitatie and not user.invitatie.accepted %}
             <i class="fa fa-envelope fa-xs dark"
                title="{% trans 'Uitnodiging verstuurd' %}"></i>

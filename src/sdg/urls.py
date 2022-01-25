@@ -44,7 +44,7 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     url(
-        r"^accept-invitation/(?P<key>\w+)/?$",
+        r"^invitation/(?P<key>\w+)/?$",
         InvitationAcceptView.as_view(),
         name="invitation_accept",
     ),

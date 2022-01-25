@@ -141,7 +141,7 @@
                     <li class="revision-list__item">
                         <div>
                             <i class="fas fa-user"></i>
-                            {% with user=product_version.gemaakt_door.get_full_name last_modified=product_version.gewijzigd_op version=product_version.get_pretty_version %}
+                            {% with user=product_version.gemaakt_door last_modified=product_version.gewijzigd_op version=product_version.get_pretty_version %}
                                 <strong class="revision-list__item--user">{{ user|default:"Systeem" }}</strong>
                                 </div>
                                 <div>

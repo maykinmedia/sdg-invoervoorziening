@@ -9,7 +9,7 @@ from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
-INVITATION_URL = "organisaties:invitation_create"
+INVITATION_URL = "organisaties:roles:invitation_create"
 INVITATION_ACCEPT_URL = "invitation_accept"
 
 User = get_user_model()
