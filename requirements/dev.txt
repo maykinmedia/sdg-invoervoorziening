@@ -336,6 +336,15 @@ gemma-zds-client==1.0.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   vng-api-common
+gitdb==4.0.9
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   gitpython
+gitpython==3.1.26
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 identify==2.2.13
     # via pre-commit
 idna==3.2
@@ -628,6 +637,11 @@ six==1.16.0
     #   requests-mock
     #   virtualenv
     #   webtest
+smmap==5.0.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   gitdb
 snowballstemmer==2.1.0
     # via sphinx
 soupsieve==2.2.1

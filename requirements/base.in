@@ -38,3 +38,6 @@ vng-api-common
 uwsgi
 sentry-sdk  # error monitoring
 elastic-apm  # Elastic APM integration
+
+# Version control
+GitPython
