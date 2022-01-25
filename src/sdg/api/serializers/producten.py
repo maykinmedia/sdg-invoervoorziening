@@ -5,7 +5,7 @@ from rest_framework.fields import SerializerMethodField
 
 from sdg.api.serializers.fields import LabeledUrlListField
 from sdg.api.serializers.organisaties import (
-    LocatieSerializer,
+    LocatieBaseSerializer,
     OrganisatieBaseSerializer,
 )
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
@@ -79,7 +79,7 @@ class ProductSerializer(ProductBaseSerializer):
     versie = SerializerMethodField(method_name="get_versie")
     doelgroep = SerializerMethodField(method_name="get_doelgroep")
     gerelateerde_producten = ProductBaseSerializer(many=True)
-    locaties = LocatieSerializer(many=True)
+    locaties = LocatieBaseSerializer(many=True)
 
     class Meta:
         model = Product
