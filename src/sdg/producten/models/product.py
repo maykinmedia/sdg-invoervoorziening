@@ -69,7 +69,6 @@ class GeneriekProduct(models.Model):
             "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
             "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
         ),
-        blank=True,
     )
 
     @property
