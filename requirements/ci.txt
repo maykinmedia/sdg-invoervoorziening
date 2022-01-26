@@ -281,15 +281,6 @@ gemma-zds-client==1.0.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   vng-api-common
-gitdb==4.0.9
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   gitpython
-gitpython==3.1.26
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
 idna==3.2
     # via
     #   -c requirements/base.txt
@@ -532,11 +523,6 @@ six==1.16.0
     #   qrcode
     #   requests-mock
     #   webtest
-smmap==5.0.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   gitdb
 soupsieve==2.2.1
     # via beautifulsoup4
 sqlparse==0.4.2

@@ -183,6 +183,9 @@ div.breadcrumbs {
 
 .version {
   font-size: $typography-font-size-text-small;
+  color: lighten($color_dark, 50%);
+  text-align: center;
+  padding: 16px;
 }
 
 .markdownx-preview {
