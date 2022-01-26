@@ -8,7 +8,6 @@ class ProductFieldInfo:
     verbose_name: str
     value: Any
     help_text: str
-    is_reference: bool
     type: str
     configuration: Optional[List[str]] = None
 

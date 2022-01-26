@@ -210,50 +210,6 @@ class ProductDetailViewTests(WebTest):
         self.assertSetEqual(actual_loc_ids, display_loc_ids)
 
     @freeze_time(NOW_DATE)
-    def test_reference_product_fills_missing_specific_fields(self):
-        product_version = SpecifiekProductVersieFactory.create(
-            publicatie_datum=NOW_DATE
-        )
-        reference_product = product_version.product.referentie_product
-
-        reference_product_version = ProductVersieFactory.create(
-            product=reference_product
-        )
-
-        LocalizedProductFactory.create_batch(
-            2,
-            product_versie=product_version,
-            specifieke_tekst="",
-        )
-        LocalizedProductFactory.create_batch(
-            2, product_versie=reference_product_version
-        )
-
-        specific_nl, specific_en = LocalizedProduct.objects.filter(
-            product_versie=product_version
-        )
-        reference_nl, reference_en = LocalizedProduct.objects.filter(
-            product_versie=reference_product_version
-        )
-
-        RoleFactory.create(
-            user=self.user,
-            lokale_overheid=product_version.product.catalogus.lokale_overheid,
-            is_redacteur=True,
-        )
-
-        response = self.app.get(product_version.product.get_absolute_url())
-
-        text_nl = response.pyquery(TAB_NL).text().lower()
-        text_en = response.pyquery(TAB_EN).text().lower()
-
-        self.assertIn(specific_nl.product_titel_decentraal.lower(), text_nl)
-        self.assertIn(reference_nl.specifieke_tekst.lower(), text_nl)
-
-        self.assertIn(specific_en.product_titel_decentraal.lower(), text_en)
-        self.assertIn(reference_en.specifieke_tekst.lower(), text_en)
-
-    @freeze_time(NOW_DATE)
     def test_published_and_scheduled_shows_active_data_with_schedule_notification(self):
         product_version = SpecifiekProductVersieFactory.create(
             versie=1, publicatie_datum=NOW_DATE

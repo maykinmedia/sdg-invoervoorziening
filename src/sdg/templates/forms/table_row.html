@@ -9,12 +9,6 @@
             title="{{ configuration.1|default:field.help_text }}"></i>
         </td>
         <td class="tabs__table-cell">
-            {% if field.is_reference %}
-                <span>
-                    <i class="fa fa-asterisk fa-xs dark"
-                       title="{% trans 'Dit veld gebruikt standaardtekst.' %}"></i>
-                </span>
-        {% endif %}
         <span class="tabs__table-cell--value">
             {% if url %}
                 <a href="{{ url }}" target="_blank">
@@ -24,6 +18,6 @@
                 {% field_info field %}
             {% endif %}
         </span>
-    </td>
-</tr>
+        </td>
+    </tr>
 {% endwith %}
