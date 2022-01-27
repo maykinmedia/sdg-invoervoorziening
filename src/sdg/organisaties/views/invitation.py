@@ -67,7 +67,16 @@ class InvitationCreateView(OverheidMixin, CreateView):
                 self.object = form.instance  # do not update existing user
             else:
                 self.object = form.save()
-                post_event("save_user", user=self.object, request=self.request)
+                errors = post_event("save_user", user=self.object, request=self.request)
+                if errors:
+                    for function in errors:
+                        messages.add_message(
+                            self.request,
+                            messages.ERROR,
+                            function.get_message("default"),
+                        )
+                    self.object.delete()
+                    return self.form_invalid(form, formset=formset)
 
             if formset:
                 formset.instance = self.object
@@ -82,6 +91,7 @@ class InvitationCreateView(OverheidMixin, CreateView):
                             "Er bestaat al een gebruiker met dit e-mailadres binnen deze organisatie."
                         ),
                     )
+                    return self.form_invalid(form, formset=formset)
 
             return HttpResponseRedirect(self.get_success_url())
 

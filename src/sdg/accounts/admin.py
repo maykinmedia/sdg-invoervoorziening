@@ -113,7 +113,7 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
                 )
                 return
 
-            for function, exception in errors.items():
+            for function in errors:
                 messages.add_message(
-                    request, messages.ERROR, f"{function}: {exception}"
+                    request, messages.ERROR, function.get_message("admin")
                 )
