@@ -69,12 +69,7 @@ class InvitationCreateView(OverheidMixin, CreateView):
                 self.object = form.save()
                 errors = post_event("save_user", user=self.object, request=self.request)
                 if errors:
-                    for function in errors:
-                        messages.add_message(
-                            self.request,
-                            messages.ERROR,
-                            function.get_message("default"),
-                        )
+                    errors.add_messages(self.request)
                     self.object.delete()
                     return self.form_invalid(form, formset=formset)
 

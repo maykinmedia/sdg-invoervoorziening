@@ -113,7 +113,4 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
                 )
                 return
 
-            for function in errors:
-                messages.add_message(
-                    request, messages.ERROR, function.get_message("admin")
-                )
+            errors.add_messages(request, "admin")
