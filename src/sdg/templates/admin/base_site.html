@@ -22,12 +22,6 @@
     <h1 id="site-name">
         <a href="{% url 'admin:index' %}">
             {{ site_header|default:_('Administratie') }}
-
-            {% if build %}
-                <span class="version">
-                    ({{ build }})
-                </span>
-            {% endif %}
         </a>
     </h1>
 {% endblock %}
@@ -54,4 +48,11 @@
 {% block messages %}
     {% hijack_notification %}
     {{ block.super }}
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    <div class="version">
+        {{ settings.RELEASE }}
+    </div>
 {% endblock %}
