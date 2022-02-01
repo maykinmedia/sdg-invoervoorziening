@@ -1,6 +1,8 @@
 {% load markdownify %}
 
-{% if field.is_text %}
+{% if not field.value %}
+    <span class="dark">—</span>
+{% elif field.is_text %}
     {{ field.value|markdownify }}
 {% elif field.is_boolean %}
     {{ field.value|yesno:"Ja,Nee,Onbekend" }}

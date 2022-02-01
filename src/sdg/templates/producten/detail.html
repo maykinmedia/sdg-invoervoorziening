@@ -30,7 +30,6 @@
                                 class="fas fa-info-circle fa-xs dark"
                                 title="{{ configuration.1|default:_('Locaties met dit product') }}"></i></td>
                             <td class="tabs__table-cell">
-                                {% if locations %}
                                     <span class="tabs__table-cell--value">
                                 {% for location in product.get_municipality_locations %}
                                     <li>
@@ -46,9 +45,10 @@
                                             </div>
                                         </div>
                                     </li>
+                                {% empty %}
+                                    <span class="dark">—</span>
                                 {% endfor %}
                                 </span>
-                                {% endif %}
                             </td>
                         </tr>
                     {% endwith %}

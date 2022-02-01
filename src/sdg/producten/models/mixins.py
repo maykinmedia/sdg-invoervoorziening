@@ -14,32 +14,17 @@ class ProductFieldMixin(FieldConfigurationMixin):
         if isinstance(field, str):
             field = self._meta.get_field(field)
 
-        value, is_reference = self.get_field_value(field)
-
         return ProductFieldInfo(
             name=field.name,
             verbose_name=field.verbose_name,
-            value=value,
+            value=field.value_from_object(self),
             help_text=field.help_text,
-            is_reference=is_reference,
             type=field.get_internal_type(),
             configuration=self.configuration.for_field(
                 prefix=self._meta.model_name,
                 name=field.name,
             ),
         )
-
-    def get_field_value(self, field) -> Tuple[Any, bool]:
-        """Get the value of a field. If empty, retrieve from standard.
-
-        :return: The field value, whether it is standard or not.
-        """
-        value = field.value_from_object(self)
-
-        if not value and hasattr(self, "referentie_informatie"):
-            return getattr(self.referentie_informatie, field.name, ""), True
-
-        return value, False
 
     def get_fields(self) -> List[ProductFieldInfo]:
         """Returns data for each field as a list of Field objects."""
