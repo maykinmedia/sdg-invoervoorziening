@@ -26,6 +26,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         help_text=_("organisatie voor ondersteuning."),
         related_name="ondersteunings",
         blank=True,
+        null=True,
     )
     verantwoordelijke_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
@@ -34,6 +35,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         help_text=_("Organisatie verantwoordelijk voor de decentrale informatie."),
         related_name="verantwoordelijke",
         blank=True,
+        null=True,
     )
     bevoegde_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
@@ -42,6 +44,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         help_text=_("Bevoegd gezag verantwoordelijk voor de procedure."),
         related_name="bevoegde",
         blank=True,
+        null=True,
     )
     organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
@@ -49,7 +52,6 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         verbose_name=_("organisatie"),
         help_text=_("De organisatie van de lokale overheid."),
         related_name="organisatie",
-        blank=True,
     )
     users = models.ManyToManyField(User, through="accounts.Role")
     uuid = models.UUIDField(
