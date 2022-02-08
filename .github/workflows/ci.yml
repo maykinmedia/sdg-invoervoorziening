@@ -67,7 +67,7 @@ jobs:
           DB_PASSWORD: ''
 
       - name: Publish coverage report
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v2
 
       - name: Generate OAS
         run: |
@@ -79,6 +79,7 @@ jobs:
           name: sdg-oas
           path: openapi.yaml
           retention-days: 1
+
 
   # docs:
   #   name: Build and check documentation
@@ -285,4 +286,4 @@ jobs:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
           curl -XPOST -u "${{ secrets.SDG_DEPLOYMENT_REPO_ACCESS_TOKEN }}" -H "Accept:application/vnd.github" -H "Content-Type:application/json" ${{ secrets.SDG_DEPLOYMENT_REPO_URL }} --data "{\"ref\": \"main\", \"inputs\": {\"version\": \"$RELEASE_VERSION\"}}"
-        if: ${{ steps.regex-match.outputs.match != '' }}          
+        if: ${{ steps.regex-match.outputs.match != '' }}
