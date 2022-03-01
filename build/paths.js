@@ -1,3 +1,4 @@
+const child_process = require('child_process');
 const fs = require('fs');
 
 
@@ -10,6 +11,16 @@ const sourcesRoot = 'src/' + pkg.name + '/';
 /** "Main" static dir */
 const staticRoot = sourcesRoot + 'static/';
 
+// Find site packages (for includePaths).
+const env = process.env.VIRTUAL_ENV || 'env';
+let sitePackages;
+
+try {
+    python = child_process.execSync(`ls ${env}/lib`).toString().replace('\n', '');
+    sitePackages = `${env}/lib/${python}/site-packages`;
+} catch (e) {
+    throw new Error('Please set VIRTUAL_ENV (or activate your environment).');
+}
 
 /**
  * Application path configuration for use in frontend scripts
@@ -44,4 +55,6 @@ module.exports = {
 
     // Path to js code coverage directory
     coverageDir: 'reports/jstests/',
+
+    sitePackages: sitePackages,
 };

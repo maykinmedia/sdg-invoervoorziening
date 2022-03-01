@@ -7,10 +7,11 @@
         "doc": "doc"
     },
     "scripts": {
-        "build": "npm run bundle",
+        "collect": "./bin/collect.sh",
+        "build": "npm run collect && npm run bundle",
         "bundle": "webpack",
         "test": "karma start",
-        "watch": "webpack -w"
+        "watch": "npm run collect && webpack -w"
     },
     "repository": {
         "type": "git",

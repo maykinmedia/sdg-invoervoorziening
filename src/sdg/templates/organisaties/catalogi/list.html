@@ -1,4 +1,5 @@
 {% extends 'organisaties/catalogi/base.html' %}
+{% load rijkshuisstijl_datagrid static %}
 
 {% load i18n %}
 {% load producten %}
@@ -8,14 +9,6 @@
 
 {% block inner_content %}
     {{ block.super }}
-    <div class="products">
-        {% for catalog in catalogs %}
-            {% include "organisaties/_include/product_catalog.html" %}
-            {% with catalog=catalog.referentie_catalogus %}
-                {% if catalog.areas %}
-                    {% include "organisaties/_include/product_catalog.html" %}
-                {% endif %}
-            {% endwith %}
-        {% endfor %}
-    </div>
+    {% datagrid config=datagrid_config %}
+    <script src="{% static 'rijkshuisstijl/bundles/rh-js.js' %}" defer></script>
 {% endblock inner_content %}

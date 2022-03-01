@@ -1,88 +1,51 @@
-from copy import deepcopy
-
-from django.utils.datastructures import OrderedSet
-from django.views.generic import ListView
-
+from django.utils.translation import gettext as _
+from rijkshuisstijl.views.generic import ListView as RHListView
 from sdg.accounts.mixins import OverheidMixin
-from sdg.core.constants import DoelgroepChoices
-from sdg.core.models import ProductenCatalogus, Thema
+from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
 
 
-class CatalogListView(OverheidMixin, ListView):
-    template_name = "organisaties/catalogi/list.html"
-    model = ProductenCatalogus
+class CatalogListView(OverheidMixin, RHListView):
+    fields = [
+        {'label': _('Naam'), 'key': 'name'},
+        {'label': _('Informatiegebied'), 'key': 'referentie_product__generiek_product__upn__thema__informatiegebied'},
+        {'label': _('Aanwezig'), 'key': 'product_aanwezig'},
+        {'label': _('Publicatie datum'), 'key': 'active_version__publicatie_datum'},
+    ]
+    model = Product
     required_roles = ["is_beheerder", "is_redacteur"]
+    template_name = "organisaties/catalogi/list.html"
+    paginate_by = 100
+
+    def get_datagrid_config(self):
+        config = {
+            **super().get_datagrid_config(),
+            "dom_filter": True,
+        }
+        return config
 
     def get_lokale_overheid(self):
+        """
+        Returns the LokaleOverheid object for local municipality.
+        """
         self.lokale_overheid = LokaleOverheid.objects.get(pk=self.kwargs["pk"])
-        self.object_list = (
-            self.get_queryset()
-            .select_related("lokale_overheid")
-            .filter(
-                lokale_overheid=self.lokale_overheid,
-            )
-        )
         return self.lokale_overheid
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data()
-        return self.render_to_response(context)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
+    def get_queryset(self):
+        """
+        Returns ProductenCatalogus objects for local municipality.
+        """
+        queryset = ProductenCatalogus.objects.select_related("lokale_overheid").filter(
+            lokale_overheid=self.lokale_overheid)
 
         if self.lokale_overheid.automatisch_catalogus_aanmaken:
-            self.object_list.create_specific_catalogs(municipality=self.lokale_overheid)
-            catalogs = self.object_list.specific_catalogs()
-        else:
-            catalogs = self.object_list
+            queryset.create_specific_catalogs(municipality=self.lokale_overheid)
+            queryset = queryset.specific_catalogs()
 
-        themes = (
-            Thema.objects.order_by("informatiegebied__informatiegebied")
-            .all()
-            .select_related("informatiegebied")
-            .prefetch_related("upn")
-        )
-        areas_template = {
-            t.informatiegebied.informatiegebied: OrderedSet() for t in themes
-        }
-
-        for catalog in catalogs:
-            reference_catalog = catalog.referentie_catalogus
-            catalog.areas = deepcopy(areas_template)
-
-            products = Product.objects.filter(catalogus=catalog)
-            reference_products = Product.objects.filter(catalogus=reference_catalog)
-            products, reference_products = (
-                _apply_filters(queryset) for queryset in (products, reference_products)
-            )
-
-            intersected_products = products | reference_products.exclude(
-                specifieke_producten__in=products
-            )
-
-            for product in intersected_products.order_by("_name"):
-                catalog.areas[product.area].add(product)
-
-            if getattr(catalog, "municipality_owns_reference", False):
-                reference_catalog.areas = deepcopy(areas_template)
-                for product in reference_products.order_by("_name"):
-                    reference_catalog.areas[product.area].add(product)
-
-        context["catalogs"] = catalogs
-        context["group_choices"] = DoelgroepChoices.choices
-        return context
-
-
-def _apply_filters(queryset):
-    """Apply common filter/annotations/selects to queryset of products."""
-    return (
-        queryset.most_recent()
-        .annotate_name()
-        .annotate_area()
-        .select_generic()
-        .select_related("catalogus__lokale_overheid")
-        .exclude(area__isnull=True)
-    )
+        return super().get_queryset() \
+            .filter(catalogus__in=queryset) \
+            .active() \
+            .annotate_name() \
+            .select_related('catalogus__lokale_overheid') \
+            .select_related('referentie_product__generiek_product__upn__thema__informatiegebied')

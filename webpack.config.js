@@ -1,13 +1,11 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const argv = require('yargs').argv;
-const paths = require('./build/paths');
 const CKEditorWebpackPlugin = require( '@ckeditor/ckeditor5-dev-webpack-plugin' );
 const { styles } = require( '@ckeditor/ckeditor5-dev-utils' );
-
+const paths = require('./build/paths');
 
 
 // Set isProduction based on environment or argv.
-
 let isProduction = process.env.NODE_ENV === 'production';
 if (argv.production) {
     isProduction = true;
@@ -107,7 +105,8 @@ module.exports = {
                         options: {
                             sassOptions: {
                                 comments: false,
-                                style: 'compressed'
+                                style: 'compressed',
+                                includePaths: [paths.sitePackages],
                             },
                             sourceMap: argv.sourcemap
                         },
@@ -123,3 +122,4 @@ module.exports = {
     // Use --sourcemap to generate sourcemap.
     devtool: argv.sourcemap ? 'sourcemap' : false,
 };
+
