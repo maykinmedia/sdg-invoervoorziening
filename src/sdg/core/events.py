@@ -1,41 +1,39 @@
 import abc
 from collections import UserDict, defaultdict
+from typing import Callable
 
 from django.contrib import messages
 
-events = defaultdict(list)
+event_register = defaultdict(list)
 
 
-class EventFunction(abc.ABC):
-    exception_messages = {}
+class CustomMessageEvent(abc.ABC):
+    default_message: str = None
+    admin_message: str = None
 
     @abc.abstractmethod
     def __call__(self, user, request):
         raise NotImplementedError
 
-    def get_message(self, message_type, default=None):
-        return self.exception_messages.get(message_type, default)
-
 
 class ErrorDict(UserDict):
     def add_messages(self, request, message_type="default"):
         for function, exception in self.items():
-            messages.add_message(
-                request, messages.ERROR, function.get_message(message_type, exception)
-            )
+            message = getattr(function, f"{message_type}_message", exception)
+            messages.add_message(request, messages.ERROR, message)
 
 
 def post_event(event_name: str, **kwargs) -> ErrorDict:
     errors = ErrorDict()
 
-    for fn in events[event_name]:
+    for function in event_register[event_name]:
         try:
-            fn(**kwargs)
+            function(**kwargs)
         except Exception as e:
-            errors[fn] = e
+            errors[function] = e
 
     return errors
 
 
-def add_event(event_name: str, function: EventFunction):
-    events[event_name].append(function)
+def add_event(event_name: str, function: Callable):
+    event_register[event_name].append(function)
