@@ -113,4 +113,4 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
                 )
                 return
 
-            errors.add_messages(request, "admin")
+            errors.add_messages(request, errors.ADMIN)

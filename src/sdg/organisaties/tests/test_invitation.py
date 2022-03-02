@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
@@ -7,6 +9,8 @@ from django_webtest import WebTest
 
 from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.core.events import event_register
+from sdg.core.tests.utils import patch_event_register
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 INVITATION_URL = "organisaties:roles:invitation_create"
@@ -142,3 +146,19 @@ class InvitationTests(WebTest):
             reverse(INVITATION_ACCEPT_URL, kwargs={"key": "random1234"}),
             status=404,
         )
+
+    def test_custom_invitation_error_message_cms(self):
+        with patch_event_register():
+            mock_function = Mock()
+            mock_function.side_effect = Exception("Boom")
+            mock_function.default_message = "Custom CMS message"
+            event_register["save_user"] = [mock_function]
+
+            response = self.app.get(
+                reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            )
+            self._fill_invitation_form(response.form)
+            response = response.form.submit()
+
+            self.assertIn("Custom CMS message", response)
+            self.assertEqual(0, len(mail.outbox))

@@ -17,7 +17,10 @@ class CustomMessageEvent(abc.ABC):
 
 
 class ErrorDict(UserDict):
-    def add_messages(self, request, message_type="default"):
+    DEFAULT = "default"
+    ADMIN = "admin"
+
+    def add_messages(self, request, message_type=DEFAULT):
         for function, exception in self.items():
             message = getattr(function, f"{message_type}_message", exception)
             messages.add_message(request, messages.ERROR, message)
