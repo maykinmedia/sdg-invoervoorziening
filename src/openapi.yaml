@@ -445,6 +445,9 @@ components:
           readOnly: true
           description: 'Decentrale overheden geven een wijzigingsdatum mee voor hun
             informatie. Deze datum wordt op het portaal getoond. '
+        productValtOnderToelichting:
+          type: string
+          description: Toelichting over het product valt onder.
       required:
       - datumWijziging
       - taal
@@ -880,10 +883,21 @@ components:
           items:
             $ref: '#/components/schemas/LocalizedProduct'
           readOnly: true
+        referentieProduct:
+          type: string
+          format: uri
+          nullable: true
+          description: Een referentie naar een product. Het toewijzen van een referentieproduct
+            veronderstelt automatisch dat dit product specifiek is.
         gerelateerdeProducten:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
+        productValtOnder:
+          type: string
+          format: uri
+          nullable: true
+          description: Een verwijzing naar een product waarvan dit product valt onder.
       required:
       - catalogus
       - doelgroep

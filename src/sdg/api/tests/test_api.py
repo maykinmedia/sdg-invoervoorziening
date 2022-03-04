@@ -72,6 +72,7 @@ class ProductenTests(APITestCase):
         self.assertEqual(f"{product.uuid}", data["uuid"])
         self.assertEqual(f"{product.upn.upn_label}", data["upnLabel"])
         self.assertEqual(f"{product.upn.upn_uri}", data["upnUri"])
+        self.assertEqual(product.product_valt_onder, data["productValtOnder"])
         self.assertEqual(1, data["versie"])
         self.assertEqual(
             f"http://testserver{reverse('api:productencatalogus-detail', args=[product.catalogus.uuid])}",
