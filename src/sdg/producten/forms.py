@@ -35,6 +35,12 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         required=False,
         widget=forms.Textarea(attrs={"rows": "6", "disabled": True}),
     )
+    product_valt_onder = forms.ModelChoiceField(
+        queryset=Product.objects.filter(
+            referentie_product__isnull=False,
+        ).annotate_name(),
+        required=False,
+    )
     locaties = forms.ModelMultipleChoiceField(
         queryset=None,
         required=False,
@@ -46,6 +52,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         fields = (
             "product_aanwezig",
             "product_aanwezig_toelichting",
+            "product_valt_onder",
             "locaties",
         )
 
@@ -54,6 +61,11 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         locations = self.instance.get_municipality_locations()
         self.fields["locaties"].queryset = locations
         self.fields["locaties"].initial = locations.filter(is_product_location=True)
+        self.fields["product_valt_onder"].queryset = (
+            self.fields["product_valt_onder"]
+            .queryset.filter(catalogus=self.instance.catalogus)
+            .exclude(pk=self.instance.pk)
+        )
 
         _model_meta = self._meta.model._meta
         for field in self.fields:
