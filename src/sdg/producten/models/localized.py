@@ -206,6 +206,14 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
     )
 
+    product_valt_onder_toelichting = models.TextField(
+        _("product valt onder toelichting"),
+        help_text=_(
+            "Toelichting over het product valt onder.",
+        ),
+        blank=True,
+    )
+
     objects = LocalizedManager()
 
     @cached_property

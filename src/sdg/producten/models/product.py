@@ -165,6 +165,14 @@ class Product(ProductFieldMixin, models.Model):
         blank=True,
         default="",
     )
+    product_valt_onder = models.ForeignKey(
+        "self",
+        on_delete=models.SET_NULL,
+        verbose_name=_("product valt onder"),
+        help_text=_("Een verwijzing naar een product waarvan dit product valt onder."),
+        blank=True,
+        null=True,
+    )
     locaties = models.ManyToManyField(
         "organisaties.Lokatie",
         verbose_name=_("locaties"),
