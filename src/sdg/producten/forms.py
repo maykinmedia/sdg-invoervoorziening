@@ -71,6 +71,16 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         for field in self.fields:
             self.fields[field].help_text = _model_meta.get_field(field).help_text
 
+    def clean(self):
+        cleaned_data = super().clean()
+        product_aanwezig = cleaned_data.get("product_aanwezig")
+        product_aanwezig_toelichting = cleaned_data.get("product_aanwezig_toelichting")
+
+        if product_aanwezig is False and not product_aanwezig_toelichting:
+            self.add_error("product_aanwezig_toelichting", "Dit veld is verplicht.")
+
+        return cleaned_data
+
 
 class VersionForm(forms.ModelForm):
     publish = forms.ChoiceField(choices=PublishChoices.choices)

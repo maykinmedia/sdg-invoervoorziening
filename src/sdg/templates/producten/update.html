@@ -60,12 +60,14 @@
                 {% with field=product_form.product_aanwezig %}
                     {% with configuration=field.configuration.0 %}
                         <tr>
-                            <td class="tabs__table-cell" width="25%">
-                                {{ configuration.0|default:field.label|capfirst }}<i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:product_form.product_aanwezig.help_text }}"></i>
+                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }}<i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:field.help_text }}"></i>
                             </td>
-                            <td class="tabs__table-cell">{% select product_form.product_aanwezig %}</td>
+                            <td class="tabs__table-cell">
+                                {% select field %}
+                                {{ field.errors }}
+                            </td>
                         </tr>
                     {% endwith %}
                 {% endwith %}
@@ -75,9 +77,12 @@
                         <tr>
                             <td class="tabs__table-cell"
                                 width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:field.help_text }}"></i></td>
-                            <td class="tabs__table-cell">{{ field|addclass:"form__input" }}</td>
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">
+                                {{ field|addclass:"form__input" }}
+                                {{ field.errors }}
+                            </td>
                         </tr>
                     {% endwith %}
                 {% endwith %}
@@ -89,7 +94,10 @@
                                 width="25%">{{ configuration.0|default:field.label|capfirst }}<i
                                 class="fas fa-info-circle fa-xs dark"
                                 title="{{ configuration.1|default:field.help_text }}"></i></td>
-                            <td class="tabs__table-cell">{{ field|addclass:"form__input" }}</td>
+                            <td class="tabs__table-cell">
+                                {% select field %}
+                                {{ field.errors }}
+                            </td>
                         </tr>
                     {% endwith %}
                 {% endwith %}
@@ -97,12 +105,14 @@
                 {% with field=product_form.locaties %}
                     {% with configuration=field.configuration.0 %}
                         <tr>
-                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }}
-                                <i
-                                        class="fas fa-info-circle fa-xs dark"
-                                        title="{{ configuration.1|default:field.help_text }}"></i>
+                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:field.help_text }}"></i>
                             </td>
-                            <td class="tabs__table-cell">{{ field }}</td>
+                            <td class="tabs__table-cell">
+                                {{ field }}
+                                {{ field.errors }}
+                            </td>
                         </tr>
                     {% endwith %}
                 {% endwith %}
@@ -111,8 +121,8 @@
                     {% with configuration=publication_date.configuration.0 %}
                         <tr>
                             <td class="tabs__table-cell">{{ configuration.0|default:_("Publicatie datum")|capfirst }}<i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
+                                class="fas fa-info-circle fa-xs dark"
+                                title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
                             </td>
                             <td class="tabs__table-cell">
                                 <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
@@ -178,7 +188,7 @@
                         >
                             <thead>
                             <tr>
-                                <th class="tabs__table-header" width="26%">Specifieke gegevens</th>
+                                <th class="tabs__table-header" width="28%">Specifieke gegevens</th>
                                 <th class="tabs__table-header">Huidige informatie</th>
                             </tr>
                             </thead>
