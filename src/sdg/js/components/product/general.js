@@ -2,21 +2,39 @@ const generalForms = document.querySelectorAll(".form__general");
 
 class GeneralForm {
 
-    setUpDynamicTextarea() {
+    setUpDynamicProductAanwezig() {
         const input = this.node.querySelector("[name=product_aanwezig]");
-        const textarea = this.node.querySelector("[name=product_aanwezig_toelichting]")
+        const dependency = this.node.querySelector("[name=product_aanwezig_toelichting]")
 
-        // initialize
-        input.value === "false" ? textarea.disabled = false : textarea.disabled = true;
+        const displayFunc = (input, dependency) => {
+            input.value === "false" ? dependency.disabled = false : dependency.disabled = true;
+        };
 
+        displayFunc(input, dependency);
         input.addEventListener("change", (event) => {
-            event.target.value === "false" ? textarea.disabled = false : textarea.disabled = true;
+            displayFunc(event.target, dependency);
+        });
+    }
+
+    setUpDynamicProductValtOnder() {
+        const select = document.querySelector("#id_product_valt_onder");
+        const dependencies = [...document.querySelectorAll('[id$="product_valt_onder_toelichting"]')]
+            .map(e => e.parentElement.parentElement.parentElement);
+
+        const displayFunc = (select, dependencies) => {
+            select.selectedIndex > 0 ? dependencies.forEach(e => e.style.display = "table-row") : dependencies.forEach(e => e.style.display = "none");
+        };
+
+        displayFunc(select, dependencies);
+        select.addEventListener("change", (event) => {
+            displayFunc(event.target, dependencies);
         });
     }
 
     constructor(node) {
         this.node = node;
-        this.setUpDynamicTextarea();
+        this.setUpDynamicProductAanwezig();
+        this.setUpDynamicProductValtOnder();
     }
 }
 
