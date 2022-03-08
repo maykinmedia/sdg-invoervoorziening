@@ -8,10 +8,13 @@ from sdg.producten.models import Product
 
 class CatalogListView(OverheidMixin, RHListView):
     fields = [
-        {'label': _('Naam'), 'key': 'name'},
-        {'label': _('Informatiegebied'), 'key': 'referentie_product__generiek_product__upn__thema__informatiegebied'},
-        {'label': _('Aanwezig'), 'key': 'product_aanwezig'},
-        {'label': _('Publicatie datum'), 'key': 'active_version__publicatie_datum'},
+        {"label": _("Naam"), "key": "name"},
+        {
+            "label": _("Informatiegebied"),
+            "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
+        },
+        {"label": _("Aanwezig"), "key": "product_aanwezig"},
+        {"label": _("Publicatie datum"), "key": "active_version__publicatie_datum"},
     ]
     model = Product
     required_roles = ["is_beheerder", "is_redacteur"]
@@ -37,15 +40,21 @@ class CatalogListView(OverheidMixin, RHListView):
         Returns ProductenCatalogus objects for local municipality.
         """
         queryset = ProductenCatalogus.objects.select_related("lokale_overheid").filter(
-            lokale_overheid=self.lokale_overheid)
+            lokale_overheid=self.lokale_overheid
+        )
 
         if self.lokale_overheid.automatisch_catalogus_aanmaken:
             queryset.create_specific_catalogs(municipality=self.lokale_overheid)
             queryset = queryset.specific_catalogs()
 
-        return super().get_queryset() \
-            .filter(catalogus__in=queryset) \
-            .active() \
-            .annotate_name() \
-            .select_related('catalogus__lokale_overheid') \
-            .select_related('referentie_product__generiek_product__upn__thema__informatiegebied')
+        return (
+            super()
+            .get_queryset()
+            .filter(catalogus__in=queryset)
+            .active()
+            .annotate_name()
+            .select_related("catalogus__lokale_overheid")
+            .select_related(
+                "referentie_product__generiek_product__upn__thema__informatiegebied"
+            )
+        )
