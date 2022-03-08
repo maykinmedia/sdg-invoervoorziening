@@ -16,7 +16,8 @@
                     <div class="toolbar">
                         <div class="button-group">
                             {% if not is_reference %}
-                            <button class="button button--light button--small form__diff-btn" type="button">
+                            <button class="button button--light button--small form__diff-btn" type="button"
+                                    title="Toon wijzigingen in standaard tekst t.o.v. vorige versie">
                                 <i class="fa fa-eye fa-xs"></i>
                                 Vergelijken
                             </button>
@@ -32,7 +33,7 @@
                             </button>
                             {% endif %}
                         </div>
-                        {% toggle _('Aanpassen') hide_label=True icon_before='lock' icon_after='lock-open' %}
+                        {% toggle _('Bewerken') hide_label=True icon_before='lock' icon_after='lock-open' %}
                     </div>
             {% endif %}
         </td>

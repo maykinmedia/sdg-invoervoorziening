@@ -32,13 +32,13 @@ class ContactgegevensMixin(models.Model):
     contact_website = models.URLField(
         _("contact website"),
         blank=True,
-        help_text=_("De website van de verantwoordelijke contactpersoon."),
+        help_text=_("Website van de gemeente."),
     )
     contact_telefoonnummer = models.CharField(
         _("contact telefoonnummer"),
         max_length=20,
         blank=True,
-        help_text=_("Het telefoonnummer van de verantwoordelijke contactpersoon."),
+        help_text=_("Het telefoonnummer van de gemeente."),
     )
     contact_emailadres = models.EmailField(
         _("contact emailadres"),
