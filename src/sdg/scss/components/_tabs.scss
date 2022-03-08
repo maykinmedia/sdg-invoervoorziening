@@ -103,6 +103,32 @@
     line-height: 1.5;
     color: #212121;
 
+    &--warning {
+      background: repeating-linear-gradient(
+        -45deg,
+        $color_accent_notification-bg,
+        $color_accent_notification-bg 5px,
+        darken($color_accent_notification-bg, 10%) 5px,
+        darken($color_accent_notification-bg, 10%) 10px
+      );
+      border: 1px solid darken($color_accent_notification-bg, 10%);
+      color: $color_accent_darkest;
+      height: 22px;
+      font-size: 10px;
+      padding: 4px 8px;
+      text-align: end;
+      position: relative;
+      top: -1px;
+      filter: opacity(0.8);
+      transition: all 0.3s ease-in-out;
+      svg {
+        color: $color_accent_darkest !important;
+      }
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
     &--field {
       min-height: 24px;
       .form__input {

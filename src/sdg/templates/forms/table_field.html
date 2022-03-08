@@ -9,6 +9,10 @@
         <td class="tabs__table-cell form__cell">
             {% if field %}
                 <div class="tabs__table-cell--versions"></div>
+                <div class="tabs__table-cell--warning invisible" onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' })">
+                     U dient uw wijzigingen nog op te slaan als concept of te publiceren, onderaan deze pagina.
+                    <i class="fas fa-arrow-down"></i>
+                </div>
                 <div class="tabs__table-cell--field">
                     {{ field|addclass:"form__input" }}
                 </div>
