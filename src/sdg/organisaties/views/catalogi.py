@@ -1,5 +1,7 @@
 from django.utils.translation import gettext as _
+
 from rijkshuisstijl.views.generic import ListView as RHListView
+
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid
