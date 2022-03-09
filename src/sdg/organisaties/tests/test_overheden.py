@@ -23,9 +23,7 @@ CATALOG_SELECTOR = ".products__catalog"
 PRODUCT_SELECTOR = ".products__item"
 
 
-class LokaleOverheidDetailViewTests(WebTest):
-    # TODO: Add tests for product icons
-
+class CatalogListViewTests(WebTest):
     def setUp(self):
         super().setUp()
 
