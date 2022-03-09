@@ -158,6 +158,6 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def get_success_url(self):
         return reverse(
-            "organisaties:catalogi:producten:detail",
+            "organisaties:catalogi:producten:edit",
             kwargs=build_url_kwargs(self.product),
         )

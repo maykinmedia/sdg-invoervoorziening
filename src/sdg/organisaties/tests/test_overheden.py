@@ -79,6 +79,7 @@ class CatalogListViewTests(WebTest):
             user=self.user, lokale_overheid=reference_lokale_overheid, is_redacteur=True
         )
 
+        self.app.get(reference_lokale_overheid.get_absolute_url())
         self.assertEqual(ProductenCatalogus.objects.count(), 2)
 
     def test_specific_catalog_is_not_automatically_generated_if_disabled(self):
