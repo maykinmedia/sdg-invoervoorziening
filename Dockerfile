@@ -14,6 +14,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 RUN mkdir /app/src
 
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 # Ensure we use the latest version of pip
 RUN pip install pip -U
 COPY ./requirements /app/requirements
@@ -29,6 +33,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
+
+# setup needed for rijkshuisstijl
+COPY ./bin/collect.sh /app/bin/collect.sh
+COPY --from=backend-build /opt/venv/ /app/venv/
+ENV VIRTUAL_ENV=/app/venv
 
 # copy configuration/build files
 COPY ./build /app/build/
@@ -69,8 +78,8 @@ RUN mkdir /app/log
 RUN mkdir /app/media
 
 # copy backend build deps
-COPY --from=backend-build /usr/local/lib/python3.8 /usr/local/lib/python3.8
-COPY --from=backend-build /usr/local/bin/uwsgi /usr/local/bin/uwsgi
+COPY --from=backend-build /opt/venv/lib/python3.8 /usr/local/lib/python3.8
+COPY --from=backend-build /opt/venv/bin/uwsgi /usr/local/bin/uwsgi
 COPY --from=backend-build /app/src/ /app/src/
 
 # copy frontend build statics
