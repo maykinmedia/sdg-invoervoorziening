@@ -3,14 +3,6 @@
 
 {% block inner %}
     {% with namespace=request.resolver_match.namespaces|last pk=lokaleoverheid.pk %}
-        <div class="tabs">
-            <div class="tabs__tabs">
-                <a href="{% url 'organisaties:catalogi:list' pk=pk %}"
-                   class="tabs__tab tabs__tab{% if namespace in "catalogi,producten" %}--selected{% endif %}">
-                    {% trans "Catalogi" %}
-                </a>
-            </div>
-        </div>
         <div class="notifications">
             {% include "core/_notifications.html" %}
         </div>
