@@ -9,14 +9,6 @@
                    class="tabs__tab tabs__tab{% if namespace in "catalogi,producten" %}--selected{% endif %}">
                     {% trans "Catalogi" %}
                 </a>
-                <a href="{% url 'organisaties:edit' pk=pk %}"
-                   class="tabs__tab tabs__tab{% if namespace == "organisaties" %}--selected{% endif %}">
-                    {% trans "Locaties" %}
-                </a>
-                <a href="{% url 'organisaties:roles:list' pk=pk %}"
-                   class="tabs__tab tabs__tab{% if namespace == "roles" %}--selected{% endif %}">
-                    {% trans "Gebruikers" %}
-                </a>
             </div>
         </div>
         <div class="notifications">
