@@ -1,4 +1,4 @@
-{% load utils %}
+{% load toggle utils %}
 
 {% with configuration=field.configuration.0 %}
     <tr>
@@ -6,25 +6,35 @@
             {{ configuration.0|default:field.label|capfirst }}
             <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>
         </td>
-        <td class="tabs__table-cell {% if not is_reference %}form__cell{% endif %} form__cell--disabled">
+        <td class="tabs__table-cell form__cell">
             {% if field %}
                 <div class="tabs__table-cell--versions"></div>
                 <div class="tabs__table-cell--field">
                     {{ field|addclass:"form__input" }}
                 </div>
                 {{ field.errors }}
-                <div class="tabs__table-cell--tools">
-                    {% if not is_reference %}
-                        <a href="#" class="tabs__table-help form__diff-btn"><i
-                            class="fa fa-eye fa-xs"></i>Vergelijken</a>
-                        <a href="#" class="tabs__table-help form__display-btn"><i class="fa fa-chevron-down"></i> Toon
-                            standaardtekst</a>
-                        <a href="#" class="tabs__table-help form__reference-btn"><i class="fa fa-undo fa-xs"></i>
-                            Gebruik
-                            standaardtekst</a>
-                    {% endif %}
-                    <a href="#" class="tabs__table-help form__edit-btn"><i class="fa fa-pen fa-xs"></i> Aanpassen</a>
-                </div>
+                {% if not is_reference %}
+                    <div class="toolbar">
+                        <div class="button-group">
+                            <button class="button button--light button--small form__diff-btn" type="button">
+                                <i class="fa fa-eye fa-xs"></i>
+                                Vergelijken
+                            </button>
+
+                            <button class="button button--light button--small form__display-btn" type="button">
+                                <i class="fa fa-chevron-right"></i>
+                                Toon standaardtekst
+                            </button>
+
+                            <button class="button button--light button--small form__reference-btn" type="button">
+                                <i class="fa fa-undo fa-xs"></i>
+                                Gebruik standaardtekst
+                            </button>
+
+                        </div>
+                        {% toggle _('Aanpassen') hide_label=True icon_before='lock' icon_after='lock-open' %}
+                    </div>
+                {% endif %}
             {% endif %}
         </td>
     </tr>

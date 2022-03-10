@@ -1,4 +1,12 @@
+@import 'colors';
+
 .ck-content {
+  transition: background-color .3s ease-in-out;
+
+  &.ck-read-only {
+    background-color: $color_grey_lightest!important;
+  }
+
   .table {
     margin: 16px 0 !important;
   }

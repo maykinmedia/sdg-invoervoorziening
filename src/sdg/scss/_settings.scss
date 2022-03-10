@@ -238,7 +238,7 @@ $typography-margin-property-h4: $typography-margin-property-h !default;
 $typography-margin-property-h5: $typography-margin-property-h !default;
 $typography-margin-property-h6: $typography-margin-property-h !default;
 $typography-padding-table: $grid-margin-1 0 !default;
-$typography-size-border: 1px !default;
+$typography-size-border: 1px;
 $typography-style-border: solid !default;
 
 $util-shadow-default-color: rgba($color-black, 0.15) !default;

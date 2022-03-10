@@ -1,11 +1,13 @@
 @import "colors";
 
 .button {
-  --main-color: #FFBC2C;
-  --shadow-color: #c79529;
+  --main-color: #{$color_accent};
+  --shadow-color: #{$color_accent_dark};
+  --text-color: #{$color_grey_darkest};
   --shadow-size: 4px;
+
   background-color: var(--main-color);
-  color: #000;
+  color: var(--text-color);
   padding: 20px;
   box-shadow: 0 var(--shadow-size) 0 var(--shadow-color);
   display: inline-block;
@@ -15,9 +17,9 @@
   border: 0;
   cursor: pointer;
 
-  .svg-inline--fa {
-    color: $color_accent_darkest;
-    margin: 0 4px;
+  &[disabled] {
+    --text-color: #{$color_grey_dark};
+    pointer-events: none;
   }
 
   &:hover {
@@ -30,30 +32,37 @@
     box-shadow: none;
   }
 
+  &--active {
+    font-weight: bold;
+  }
+
   &--small {
-    @extend .button;
     padding: 2px 20px;
     margin-top: 0px;
-    --shadow-size: 2px;
+    --shadow-size: 1px;
+
+    &:active {
+      transform: translateY(1px);
+    }
 
     &:hover {
-      --shadow-size: 3px;
+      --shadow-size: 2px;
     }
   }
 
-  &.button--primary {
+  &.button--secondary {
     --main-color: #396a88;
     --shadow-color: #23485C;
     color: #fff;
   }
 
   &.button--light {
-    --main-color: #e0e3ea;
-    --shadow-color: #b5b6bb;
+    --main-color: #{$color_secondary_light};
+    --shadow-color: #{$color_secondary-dark};
+  }
 
-    .svg-inline--fa {
-      color: $color_grey_darker;
-    }
-
+  .svg-inline--fa {
+    color: var(--text-color);
+    margin: 0 4px;
   }
 }

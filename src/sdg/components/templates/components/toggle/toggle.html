@@ -1,0 +1,21 @@
+<div class="toggle">
+    {% if not hide_label %}
+        <label class="toggle__label" for="{{ id }}">{{ label }}</label>
+    {% endif %}
+
+    {% if icon_before %}
+        <label class="toggle__label" for="{{ id }}">
+            <i class="fa fa-{{ icon_before }} fa-xs" aria-hidden="true"></i>
+        </label>
+    {% endif %}
+
+    <input class="toggle__checkbox" id="{{ id }}" name="{{ name }}" type="checkbox"{% if checked %} checked{% endif %}
+           aria-label="{{ label }}"/>
+    <label class="toggle__handle" for="{{ id }}" title="{{ label }}"></label>
+
+    {% if icon_after %}
+        <label class="toggle__label" for="{{ id }}">
+            <i class="fa fa-{{ icon_after }} fa-xs" aria-hidden="true"></i>
+        </label>
+    {% endif %}
+</div>
