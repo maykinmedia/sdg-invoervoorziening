@@ -16,7 +16,8 @@ const env = process.env.VIRTUAL_ENV || 'env';
 let sitePackages;
 
 try {
-    python = child_process.execSync(`ls ${env}/lib`).toString().replace('\n', '');
+    python = child_process.execSync(`find ${env}/lib -maxdepth 1 -name 'python3*' -exec basename {} \\;`)
+        .toString().replace('\n', '');
     sitePackages = `${env}/lib/${python}/site-packages`;
 } catch (e) {
     throw new Error('Please set VIRTUAL_ENV (or activate your environment).');

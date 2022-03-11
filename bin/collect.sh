@@ -2,8 +2,8 @@
 
 ENV=${VIRTUAL_ENV:-env}
 LIB=$ENV/lib
-PYTHON=`ls $LIB`
-SITE_PACKAGES=$LIB/$PYTHON/site-packages/
+PYTHON=`find $LIB -maxdepth 1 -name 'python3*' -exec basename {} \;`
+SITE_PACKAGES=$LIB/$PYTHON/site-packages
 
 SOURCES=(
     "$SITE_PACKAGES/rijkshuisstijl/static/rijkshuisstijl/components"

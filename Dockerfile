@@ -34,7 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# setup needed for rijkshuisstijl
+# setup for rijkshuisstijl
 COPY ./bin/collect.sh /app/bin/collect.sh
 COPY --from=backend-build /opt/venv/ /app/venv/
 ENV VIRTUAL_ENV=/app/venv
