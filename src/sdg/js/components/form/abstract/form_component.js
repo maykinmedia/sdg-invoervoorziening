@@ -104,7 +104,7 @@ export class FormComponent extends Component {
         const currentReferenceInput = currentReferenceForm.content.querySelector(`#${inputOrTextarea.id}`);
 
         return {
-            'title': currentReferenceForm.dataset.title,
+            'title': 'Uw tekst',
             'input': currentReferenceInput,
         };
     }
