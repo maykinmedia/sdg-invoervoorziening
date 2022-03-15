@@ -4,7 +4,7 @@ import uuid
 register = template.Library()
 
 
-@register.inclusion_tag('components/toggle/toggle.html')
+@register.inclusion_tag("components/toggle/toggle.html")
 def toggle(label: str, checked: bool = False, **kwargs) -> dict:
     """
     A checkbox like toggle component, internally uses a checkbox.
