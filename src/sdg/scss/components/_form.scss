@@ -42,7 +42,7 @@
     min-height: 57px;
 
     &[disabled],
-    &[readonly],
+    &[readonly]:not(.flatpickr-input),
     &--disabled {
       background-color: $color_grey_lightest;
     }
