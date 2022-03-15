@@ -132,6 +132,7 @@ INSTALLED_APPS = [
     "sdg.core",
     "sdg.utils",
     "sdg.accounts",
+    "sdg.services",
     "sdg.producten",
     "sdg.organisaties",
 ]
