@@ -1,0 +1,871 @@
+{
+  "count": 74,
+  "next": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten?page=2",
+  "results": [
+    {
+      "titel": "Certificate of conduct for individuals (VOG NP)",
+      "tekst": "In the Netherlands, a [Certificate of conduct](https://www.justis.nl/en/products/certificate-of-conduct) (Verklaring omtrent het gedrag, VOG) indicates that the recipient has not committed any criminal offences. For some jobs, like teaching, childminding or driving a taxi, a VOG is compulsory. In other cases, employers are free to decide whether they want to ask their employee for a VOG, which is sometimes referred to as a Declaration of (good) conduct. There is also a [VOG for legal entities](https://business.gov.nl/regulation/vogrp/).\r\n\r\n## Who needs a VOG?\r\n\r\nA certificate of conduct for individuals (VOG NP) is legally required for some professions, for instance:\r\n\r\n*   everyone who works in education (primary and secondary education, secondary vocational education and special-needs education)\r\n*   [everyone who works in childcare](https://business.gov.nl/regulation/register-for-persons-active-in-the-childcare-sector/)\r\n*   [taxi drivers](https://business.gov.nl/regulation/permit-operate-taxi-service/)\r\n*   driving instructors and driving school owners\r\n\r\nIt is also mandatory for employees and volunteers who work:\r\n\r\n*   with confidential information (such as doctors or lawyers)\r\n*   with vulnerable people (for instance in healthcare)\r\n*   with money or valuable goods (such as accountants or mortgage advisors)\r\n*   for the government\r\n\r\nIn all other instances the collective labour agreement (cao) in your company or sector, determines if you ask an employee or volunteer for a VOG.\r\n\r\n## VOG application procedure\r\n\r\nEmployees and self-employed professionals (zzp'ers) who are registered in the Municipal Personal Records Database (BRP) can obtain a VOG from their local municipality. Companies can also [apply for a VOG online](https://mijn.justis.nl/vog/vogorganisatie/inloggen.htm) (in Dutch) using [eHerkenning](https://business.gov.nl/regulation/applying-for-a-permit-or-subsidy-with-eherkenning/) level 2 or higher. Companies prepare the application for their employee, who then receives an email and completes the application with their DigiD. Freelancers/self-employed professionals may authorise their client to apply for a VOG on their behalf.\r\n\r\nIf the applicant is not registered in the Municipal Personal Records Database, they can [submit the application form to the Central Agency for Certificates of Good Conduct (COVOG)](https://www.justis.nl/en/products/certificate-of-conduct#applying-for-a-certificate-of-conduct) of the judiciary service Justis (Ministry of Justice and Security).\r\n\r\n## Checking a VOG\r\n\r\nYou can only [check if a VOG is genuine](https://www.rijksoverheid.nl/documenten/publicaties/2020/11/30/voorbeeld-vog-np-per-1-december-2020-tcm34-471545) (in Dutch) if you have the original paper version. You can check the document for the following characteristics:\r\n\r\n*   the paper has a grid and features the blue government logo\r\n*   the paper features a watermark\r\n*   in UV light the paper remains dark and the graphic mark on the lower right is luminous\r\n*   in UV light, on a VOG NP you can see a luminous rectangle surrounding the blue N-number\r\n*   you can see a hologram in the paper\r\n\r\n## VOG denial\r\n\r\nA request for a VOG may be denied if the applicant has received a relevant criminal conviction in a specific timeframe prior to the application. This denial could either be based on police data about the applicant or based on data registered in the Dutch Judicial Documentation System (JDS). You can [contact Justis](https://www.justis.nl/en/service-contact/how-to-contact-justis) to express your view or object to the decision.\r\n\r\n## VOG for childcare workers\r\n\r\nOwners, employees and office personnel working in the childcare sector must have a VOG. Persons of 18 years of age or older who share accommodation with a registered childminder, must also apply for a VOG. Trainees, temporary employees, volunteers and parents working in your establishment must request a new VOG every 2 years. If a trainee or temporary employee changes trainee posts or working locations, the existing VOG will suffice. This does not apply to volunteers; they must request a new one.\r\n\r\nThere are two screening profiles available for persons active in the childcare sector: Screening profile 84 (caring for minors) or 86 (working in the childcare sector).\r\n\r\n### Application forms VOG childcare\r\n\r\nThere are different application forms for VOGs for childcare:\r\n\r\n*   [Application form for VOG for individual owner of childcare centre](https://www.rijksoverheid.nl/documenten-en-publicaties/formulieren/2013/02/26/aanvraagformulier-vog-voor-houders-organisatie.html) (in Dutch)\r\n*   [Application form for VOG for individual childcare workers and those living on the childcare premises](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2015/12/18/vog-np-niet-houders) (in Dutch)\r\n*   [Application form for VOG for individuals who are structurally present during direct or indirect care for children](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2018/02/27/aanvraagformulier-structureel-aanwezige-indirecte-zorg-kinderen) (in Dutch)\r\n\r\nA copy of the VOG must be retained in your (personnel) files and the member of staff must register in the [register for persons active in the childcare sector](https://business.gov.nl/regulation/register-for-persons-active-in-the-childcare-sector/). These certificates and registration records must be presented during GGD inspections.\r\n\r\n### Continuous screening\r\n\r\nChildcare workers are screened for criminal offences on a continuous basis. The supervisory body will notify you in the event of a criminal offence. Your employee will then have to apply for a new VOG. Failure to obtain this new certificate is grounds for dismissal. Continuous screening also applies to trainees, temporary personnel, volunteers and parents working in your establishment.\r\n\r\n## Online application procedure via Message Box\r\n\r\nIf you require a VOG for a [procedure that is subject to the Services Act](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/procedures-covered-by-message-box/), you can also request this document online via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you to exchange messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Certificate of conduct (Justis)",
+          "url": "https://www.justis.nl/en/products/certificate-of-conduct",
+          "categorie": "extern"
+        },
+        {
+          "label": "VOG check tool (Justis, in Dutch)",
+          "url": "https://vogcheck.justis.nl/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Frequently asked questions certificate of conduct (Justis)",
+          "url": "https://www.justis.nl/en/service-contact/frequently-asked-questions/certificate-of-conduct",
+          "categorie": "extern"
+        },
+        {
+          "label": "Certificate of conduct for legal entities (VOG RP)",
+          "url": "https://business.gov.nl/regulation/vogrp/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a permit or subsidy with eHerkenning",
+          "url": "https://business.gov.nl/regulation/applying-for-a-permit-or-subsidy-with-eherkenning/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Register for persons active in the childcare sector",
+          "url": "https://business.gov.nl/regulation/register-for-persons-active-in-the-childcare-sector/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Refusing certificate of conduct (VOG) based on police data",
+          "url": "https://business.gov.nl/amendment/refusing-certificate-conduct-vog-based-police-data/",
+          "categorie": "wetswijziging"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-02-15T03:30:05",
+      "laatstGecheckt": "2021-07-28T16:27:02",
+      "url": "https://business.gov.nl/regulation/vog/",
+      "upnLabel": "verklaring omtrent gedrag (vog)",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-447113-16",
+      "id": "tcm:114-447113-16"
+    },
+    {
+      "titel": "Tourist tax",
+      "tekst": "Do you operate a tourist accommodation (e.g. hotel, bed and breakfast, holiday park, camp site or marina) in the Netherlands? You have to pay the municipal tourist tax for providing accommodation to guests from outside your municipality. You can pass on the tourist tax to your guests.\r\n\r\n## Declaring tourist tax\r\n\r\nYou have to declare the tourist tax each year, for the previous year, to the municipal authorities. Your municipality can ask you to submit the information from your [visitor register](https://business.gov.nl/regulation/visitor-register/) with your tourist tax return.\r\n\r\n## Types of tourist tax\r\n\r\nThere are two types of tourist tax:\r\n\r\n*   land tourist tax (for accommodation in hotels, bed and breakfasts, holiday cottages, caravans, tents, etc.)\r\n*   water tourist tax (for accommodation on board vessels)\r\n\r\n## Cost\r\n\r\nThe costs differ from one municipality to another. Land tourist tax is normally calculated per night, and water tourist tax per 24-hour period. Vessels smaller than 4 metres are exempt from water tourist tax.\r\n\r\n## Exemptions\r\n\r\nIn some instances you do not have to pay tourist tax for your guests. Exemptions vary per municipality. Exemptions may apply to:\r\n\r\n*   people that already pay [commuter tax](https://vng.nl/artikelen/forensenbelasting) (*forensenbelasting*, in Dutch)\r\n*   people that moor their houseboat and therefore already pay mooring fees\r\n*   people that reside in a hospital or care home",
+      "links": [
+        {
+          "label": "Visitor register",
+          "url": "https://business.gov.nl/regulation/visitor-register/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Checklist for starting a bed and breakfast",
+          "url": "https://business.gov.nl/starting-your-business/checklists-for-starting-a-business/checklist-for-starting-a-bed-and-breakfast/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:51:09",
+      "laatstGecheckt": "2021-07-19T16:47:03",
+      "url": "https://business.gov.nl/regulation/tourist-tax/",
+      "upnLabel": "toeristenbelasting",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444818-16",
+      "id": "tcm:114-444818-16"
+    },
+    {
+      "titel": "Rules for dumping sites",
+      "tekst": "Do you operate a dumping site (landfill site) in the Netherlands? You must be aware that certain waste categories cannot be dumped, but must be incinerated or processed instead. The [Dumping Locations and Waste Substances (Dumping Ban) Decree](https://www.afvalcirculair.nl/onderwerpen/afvalregelgeving/afval-storten/bssa/) (*Besluit stortplaatsen en stortverboden van afvalstoffen, BSSA*, in Dutch) describes which waste categories this applies to.\r\n\r\n## Soil protection\r\n\r\nYou are only allowed to store waste products you cannot process (recycle) or incinerate. You must make sure you isolate this waste in such a way it cannot contaminate the soil or the environment. The criteria for the sealing and management of waste substances are laid down in the [Soil Protection for Disposal to Dumping Sites Decree](https://www.bodemplus.nl/@132149/richtlijnen-uitvoeringsregeling-stortbesluit/) (*Stortbesluit Bodembescherming*, in Dutch). You are, for instance, required to install an upper and bottom sealing mechanism. Depending on the permit requirements, you must have inspections and tests carried out.\r\n\r\n## Exemption from the dumping ban\r\n\r\nIf there are no possibilities for processing waste temporarily or permanently in accordance with the Decree on [Soil Protection](https://rwsenvironment.eu/subjects/soil/legislation-and/soil-protection/) for Disposal to Dumping Sites, you can apply to the [provincial authorities](https://almanak.overheid.nl/Provincies/) (in Dutch) for an exemption from the dumping ban.\r\n\r\n## Non-cleanability statement\r\n\r\nIf you are unable to clean or immobilise contaminated soil, you may dump the soil if you have a [non-cleanability statement for contaminated soil](http://www.bodemplus.nl/aanvragen/verklaring/) (*Verklaring van niet-reinigbaarheid voor verontreinigde grond*, in Dutch). You can apply for this certificate to the [Soil+ Department of Rijkswaterstaat Environment](https://rwsenvironment.eu/subjects/soil/).\r\n\r\n## Exemption for activities on a former dumping site\r\n\r\nDo you want to perform activities on a former dumping site in the Netherlands? You need to apply for exemption to the provincial authorities.\r\n\r\n## Online application procedure via Message Box\r\n\r\nUsing [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/), you can apply for the non-cleanability statement for contaminated soil at Rijkswaterstaat Environment. In the province of Noord-Brabant you can use Message Box for applying an exemption to carry out activities on or in a former landfill. Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Soil+ (Rijkswaterstaat Environment)",
+          "url": "https://rwsenvironment.eu/subjects/soil/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Non-cleanability statement for contaminated soil (Soil+ Rijkswaterstaat Environment, in Dutch)",
+          "url": "http://www.bodemplus.nl/aanvragen/verklaring/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Landfill tax (waste disposal tax)",
+          "url": "https://business.gov.nl/regulation/landfill-tax/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-02-14T23:26:20",
+      "laatstGecheckt": "2021-08-30T19:26:52",
+      "url": "https://business.gov.nl/regulation/dumping-sites/",
+      "upnLabel": "afvalstortontheffing",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444782-16",
+      "id": "tcm:114-444782-16"
+    },
+    {
+      "titel": "Street performers",
+      "tekst": "Are you a street performer? Do you, for example, want to play music, perform magic or draw portraits in the streets? You usually need a permit or exemption as a street performer, street photographer, pavement artist, film operator or guide from the municipality you want to perform in. To perform in some municipalities a notification will suffice. Consult the [municipal authority](https://almanak.overheid.nl/gemeenten) (in Dutch) of the municipality you want to perform in for more information.\r\n\r\nWhether you need a permit often depends on:\r\n\r\n*   the location you want to perform\r\n*   with how many people you intend to perform\r\n*   the time and duration of the performance\r\n*   the amount of noise you will produce\r\n\r\nMunicipalities may designate areas where you are not allowed to perform at all.\r\n\r\n### Corona: additional conditions\r\n\r\nSome municipalities have set additional conditions for a permit or exemption due to corona, to avoid large gatherings of people. Consult the [municipal authority](https://almanak.overheid.nl/gemeenten) (in Dutch) of the municipality you want to perform in about any possible additional conditions.\r\n\r\n## Costs for a permit or exemption\r\n\r\nWhen you apply for a permit or exemption you may have to pay [municipal administrative charges](https://business.gov.nl/regulation/administrative-charges/) (*leges*). This depends on the municipality. Consult the municipal authority for the costs to obtain a street performers permit or exemption.\r\n\r\n## Online application procedure via Message Box\r\n\r\nYou can apply for a dispensation for street performers also via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Overview of municipal authorities (Overheid.nl, in Dutch)",
+          "url": "https://almanak.overheid.nl/gemeenten",
+          "categorie": "extern"
+        },
+        {
+          "label": "Applying for a street trader's licence",
+          "url": "https://business.gov.nl/regulation/applying-street-traders-licence/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a market permit",
+          "url": "https://business.gov.nl/regulation/applying-market-permit/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for an event licence",
+          "url": "https://business.gov.nl/regulation/event-licence/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:49:51",
+      "laatstGecheckt": "2021-08-04T13:30:08",
+      "url": "https://business.gov.nl/regulation/street-performers/",
+      "upnLabel": "straatartiestoptreden ontheffing",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444781-16",
+      "id": "tcm:114-444781-16"
+    },
+    {
+      "titel": "Sex business permit",
+      "tekst": "If you operate a sex business in the Netherlands, you may need a permit from your local municipality. This permit is subject to conditions. Sex businesses include, but are not limited to:\r\n\r\n*   sex cinemas\r\n*   brothels\r\n*   escort businesses\r\n*   erotic massage parlours\r\n\r\n## New obligation for permits for sexwork in the future\r\n\r\nAll prostitutes and owners of sex businesses will be obliged to [apply for a permit in the future](https://business.gov.nl/amendment/permit-required-sex-work/). Working as a prostitute without a permit will be an offence. This will also apply to self-employed prostitutes (working at home), the escort sector, brothels and all forms of commercial sexual services.\r\n\r\n## Online application procedure via Message Box\r\n\r\nYou can apply for a sex business permit also via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Everything about sex work in the Netherlands (Prostitutie.nl)",
+          "url": "https://www.prostitutie.nl/en/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Government information about prostitution",
+          "url": "https://www.government.nl/topics/prostitution",
+          "categorie": "extern"
+        },
+        {
+          "label": "Permit to be required for sex work",
+          "url": "https://business.gov.nl/amendment/permit-required-sex-work/",
+          "categorie": "wetswijziging"
+        },
+        {
+          "label": "Clients of involuntary sex worker punishable by law",
+          "url": "https://business.gov.nl/amendment/clients-involuntary-sex-workers-punishable/",
+          "categorie": "wetswijziging"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:49:00",
+      "laatstGecheckt": "2021-07-06T14:06:44",
+      "url": "https://business.gov.nl/regulation/sex-business-permit/",
+      "upnLabel": "seksbedrijf exploitatievergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444778-16",
+      "id": "tcm:114-444778-16"
+    },
+    {
+      "titel": "Advertising tax",
+      "tekst": "Do you advertise in a way that is visible from the public road, for instance with billboards or illuminated signs? The municipal authority may impose advertising tax (*reclamebelasting*). It is irrelevant whether the advertising is above private or public land.\r\n\r\n## Conditions for advertising\r\n\r\nYou will normally need an [environmental permit](https://business.gov.nl/regulation/all-in-one-permit-advertising/) to advertise. Additionally, you will usually have to pay a [municipal tax on encroachment on or above public land](https://business.gov.nl/regulation/municipal-tax-encroachments-public-land/) (*precariobelasting*) if you advertise on or above public land. This tax on encroachments on or above public land is often combined with the advertising tax in 1 tax assessment.\r\n\r\nThe rules around this tax and about what constitutes advertising may vary in different municipalities. To find out if you have to pay advertising tax and the amount, [contact your municipality](https://almanak.overheid.nl/Gemeenten/) (in Dutch).",
+      "links": [
+        {
+          "label": "Municipal tax on encroachments on or above public land (precario)",
+          "url": "https://business.gov.nl/regulation/municipal-tax-encroachments-public-land/",
+          "categorie": "intern"
+        },
+        {
+          "label": "All-in-one permit for advertising on a business premises",
+          "url": "https://business.gov.nl/regulation/all-in-one-permit-advertising/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Using a loudspeaker van or advertising vehicle",
+          "url": "https://business.gov.nl/regulation/loudspeaker-van-advertising-vehicle/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Distributing advertising material",
+          "url": "https://business.gov.nl/regulation/distributing-advertising-material/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Advertising and information for financial products",
+          "url": "https://business.gov.nl/regulation/advertising-leaflet-financial-products/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:02:09",
+      "laatstGecheckt": "2021-09-02T12:27:46",
+      "url": "https://business.gov.nl/regulation/advertising-tax/",
+      "upnLabel": "reclamebelasting",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444673-16",
+      "id": "tcm:114-444673-16"
+    },
+    {
+      "titel": "Waste collection charge",
+      "tekst": "In the Netherlands you are responsible for sorting out and taking away your [industrial waste](https://business.gov.nl/regulation/surrendering-industrial-waste/). If your local municipality does this job for you, you will have to pay a waste collection charge (*reinigingsrecht*).\r\n\r\n## How much is the waste collection charge?\r\n\r\nIn some municipalities, the waste colection charge is a fixed amount for a limited quantity. Other municipalities determine the amount on the basis of the sector in which you operate and your number of employees.\r\n\r\n## Waste collection services\r\n\r\nNot all municipalities provide industrial waste collection services. Where no such service is available, you must take out a contract with a [certified waste collector](https://www.niwo.nl/pagina/246/search-companies/vihb-list-waste.html). You are responsible for [separating and disposing of your company’s waste](https://business.gov.nl/regulation/waste-separation/).\r\n\r\n## Waste collection charge in case of multiple use\r\n\r\nPrivate households pay a waste collection charge for the collection and processing of household waste. If they let out rooms in their home, these premises are being used for multiple purposes. The owner or landlord of the premises must then pay the waste collection charge to the municipal authorities. They may recover this charge from their lodgers.",
+      "links": [
+        {
+          "label": "Find certified waste collection companies (National and International Road Transport Organisation, NIWO)",
+          "url": "https://www.niwo.nl/pagina/246/search-companies/vihb-list-waste.html",
+          "categorie": "extern"
+        },
+        {
+          "label": "Waste separation",
+          "url": "https://business.gov.nl/regulation/waste-separation/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Surrendering industrial waste",
+          "url": "https://business.gov.nl/regulation/surrendering-industrial-waste/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Checklist for separating company waste",
+          "url": "https://business.gov.nl/running-your-business/environmental-impact/waste/checklist-for-separating-company-waste/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:53:26",
+      "laatstGecheckt": "2021-07-06T10:51:00",
+      "url": "https://business.gov.nl/regulation/waste-collection-charge/",
+      "upnLabel": "reinigingsrecht",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444672-16",
+      "id": "tcm:114-444672-16"
+    },
+    {
+      "titel": "Property tax (OZB)",
+      "tekst": "Do you own or use commercial property in the Netherlands? You must pay property tax (*onroerendezaakbelasting, OZB*). OZB consists of 2 types of taxes:\r\n\r\n*   owner's tax\r\n*   user's tax\r\n\r\nThe party that owns or uses the property on 1 January of each year has to pay the tax. Are you both the owner and the user of a business property, a shop or office building? Then you have to pay owner’s OZB and usually also user’s OZB. Owners of residential properties only have to pay owner’s tax.\r\n\r\n## Property tax rate\r\n\r\nThe amount of tax owed depends on the value of the property. The municipal authority appraises the property in order to determine its value under the Valuation of Immovable Property Act (*Wet Waardering Onroerende Zaken, WOZ*), which is known as the '[WOZ value](https://www.government.nl/topics/valuation-of-immovable-property)' (*WOZ-waarde*). The municipal authority determines the WOZ-percentage annually. This percentage of your commercial property's value determines how much OZB you will have to pay. You will receive the OZB assessment automatically. You can check the WOZ value through the Dutch-language [WOZ value counter](https://www.wozwaardeloket.nl/) (*WOZ-waardeloket*).\r\n\r\nIf you disagree with the OZB assessment, you have to [appeal the WOZ-value](https://www.rijksoverheid.nl/onderwerpen/waardering-onroerende-zaken-woz/vraag-en-antwoord/bezwaar-woz-beschikking) within 6 weeks with your municipal authority (in Dutch).",
+      "links": [
+        {
+          "label": "Valuation of immovable property (Government of the Netherlands)",
+          "url": "https://www.government.nl/topics/valuation-of-immovable-property",
+          "categorie": "extern"
+        },
+        {
+          "label": "Sewerage charge",
+          "url": "https://business.gov.nl/regulation/sewerage-tax/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Regional Water Authority tax",
+          "url": "https://business.gov.nl/regulation/water-authority-tax/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Municipal tax on encroachments on or above public land (precario)",
+          "url": "https://business.gov.nl/regulation/municipal-tax-encroachments-public-land/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Remission of municipal and water authority taxes",
+          "url": "https://business.gov.nl/subsidy/remission-municipal-taxes/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:34:54",
+      "laatstGecheckt": "2021-07-06T08:55:55",
+      "url": "https://business.gov.nl/regulation/ozb/",
+      "upnLabel": "onroerendezaakbelasting (ozb)",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444670-16",
+      "id": "tcm:114-444670-16"
+    },
+    {
+      "titel": "Municipal tax on encroachments on or above public land (precario)",
+      "tekst": "Do you use land that belongs to the municipality? In most cases a municipal tax is owed for the use of public land. Officially, this is a tax on 'encroachments on or above public land' (precariobelasting).\r\n\r\nAnyone who uses a plot of municipal land, for instance by installing an object on it, suspending an object above it or anchoring an object in the ground, has to pay this tax. This includes [outdoor terraces](https://business.gov.nl/regulation/terrace-permit/), projecting roofs, [billboards](https://business.gov.nl/regulation/advertising-tax/), scaffolding or containers. The tax also applies if you install [cables, pipelines](https://business.gov.nl/regulation/permit-lay-cables-and-pipelines/), or tanks in municipal land. The amount owed depends on how the land is used.\r\n\r\n## Demurrage\r\n\r\nIn some municipalities you also need to pay this tax for commercial vessels or houseboats with fixed mooring. You then make use of a public waterway. This tax is called demurrage (liggeld).\r\n\r\n## Exemptions\r\n\r\nIf you rent this land from the municipality, you do not have to pay the tax. For objects that are placed in, on, or above municipal land on the basis of a legal or contract requirement, such as telecom cables, this tax is also not levied.\r\n\r\n## Displaying items for sale on the street\r\n\r\nIn some municipalities, you also have to pay municipal tax on encroachments on or above public land if you display items for sale on the street. The amount depends on how the public space is used. You can find out if and how much you should pay from [your municipality](https://almanak.overheid.nl/gemeenten) (in Dutch). In some cases, you will also need a [display permit](https://business.gov.nl/regulation/stalls-displays-kiddie-rides/) (uitstallingsvergunning). Some municipalities include the encroachment tax in the cost of the permit.\r\n\r\n## What you must do\r\n\r\nYou will normally need a permit to use public space (for example an [All-in-one Permit for Physical Aspects](https://business.gov.nl/regulation/applying-for-all-in-one-permit-physical-aspects/)), for which you have to pay a fee. In some municipalities, the tax on encroachments on or above public land is included in the cost of the permit. Also, you will usually have to include information about the size and location of the object with your application to the municipal authority.",
+      "links": [
+        {
+          "label": "Applying for an all-in-one permit for physical aspects (omgevingsvergunning)",
+          "url": "https://business.gov.nl/regulation/applying-for-all-in-one-permit-physical-aspects/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Stalls, displays or installation of children's rides",
+          "url": "https://business.gov.nl/regulation/stalls-displays-kiddie-rides/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Advertising tax",
+          "url": "https://business.gov.nl/regulation/advertising-tax/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Terrace permit and rules for your terrace",
+          "url": "https://business.gov.nl/regulation/terrace-permit/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:28:05",
+      "laatstGecheckt": "2021-11-08T14:12:40",
+      "url": "https://business.gov.nl/regulation/municipal-tax-encroachments-public-land/",
+      "upnLabel": "precariobelasting",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444669-16",
+      "id": "tcm:114-444669-16"
+    },
+    {
+      "titel": "Applying for a water permit",
+      "tekst": "In the Netherlands, if you perform activities in surface water or use groundwater, you are often required to submit a notification. In some cases you will need a water permit (*watervergunning*), including when:\r\n\r\n*   discharging waste water directly into surface water\r\n*   extracting groundwater\r\n*   conducting activities near civil engineering structures (e.g. motorway, viaduct, tunnel, bridge, inland waterway, dike)\r\n*   constructing water storage facilities\r\n*   filling in waterways\r\n\r\n## Water permit application\r\n\r\nYou can apply for a water permit or submit the notification both online and written. You can apply directly via the ['Service Counter All-in-one permit for physical aspects'](https://www.omgevingsloket.nl/Zakelijk/zakelijk/home?init=true#) (*Omgevingsloket Online, OLO*, in Dutch). You need to [eHerkenning](https://business.gov.nl/regulation/applying-for-a-permit-or-subsidy-with-eherkenning/) level 2 to apply.\r\n\r\nFor non-resident foreign companiesthe online procedure is slightly different, since they cannot obtain the necessary Dutch e-Herkenning key. They must first [apply for a special account](https://www.infomil.nl/contactformulier/account-bedrijven/) at InfoMil (in Dutch). Generally you will then receive your username and password within 2 working days, with which you can apply for a water permit (or an All-in-One Permit for Physical Aspects) at the [OLO website](https://www.omgevingsloket.nl/Zakelijk/zakelijk/home?init=true#).\r\n\r\nIf you apply for the water permit via the OLO website, you can have your application processed digitally via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/) by stating your Message Box name with your application. In the province of Noord-Brabant you can also apply digitally for compensation via Message Box.\r\n\r\n## Claiming compensation\r\n\r\nHas there been a change or (partial or complete) withdrawal of your permit to extract groundwater or infiltrate water change? And di you suffer damages because of this? You can apply for compensation to the provincial authorities.\r\n\r\nDo you own or use land or a house that suffered damages as a result of the extraction or infiltration of (ground)water? You can apply for compensation to the provincial authorities only if the party responsible cannot be identified.\r\n\r\n## Dispensation for filling in a roadside ditch\r\n\r\nIf you intend to fill in a ditch, you may need to apply for dispensation. You must apply to:\r\n\r\n*   the municipality with respect to the [zoning plan](https://business.gov.nl/regulation/zoning-plan/)\r\n*   the province with respect to the Road Regulations or the Water Management Plan\r\n*   the water board with respect to a [water board by-law](https://business.gov.nl/regulation/water-board-by-law/)\r\n\r\nThe application for dispensation regarding filling in a roadside ditch can also be made online using [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/).",
+      "links": [
+        {
+          "label": "Legislation (Water Help Desk)",
+          "url": "https://www.helpdeskwater.nl/secundaire-navigatie/english/legislation/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Dutch Water act (Water Help Desk)",
+          "url": "https://www.helpdeskwater.nl/secundaire-navigatie/english/legislation/@176675/dutch-water-act/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Service counter all-in-one permit for physical aspects (Omgevingsloket online (OLO), in Dutch)",
+          "url": "https://www.omgevingsloket.nl/Zakelijk/zakelijk/home?init=true",
+          "categorie": "extern"
+        },
+        {
+          "label": "Applying for an all-in-one permit for physical aspects (omgevingsvergunning)",
+          "url": "https://business.gov.nl/regulation/applying-for-all-in-one-permit-physical-aspects/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a permit or subsidy with eHerkenning",
+          "url": "https://business.gov.nl/regulation/applying-for-a-permit-or-subsidy-with-eherkenning/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Regional water authority by-law",
+          "url": "https://business.gov.nl/regulation/water-board-by-law/",
+          "categorie": "intern"
+        },
+        {
+          "label": "IPPC installations",
+          "url": "https://business.gov.nl/regulation/ippc-installations/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Permit and authorisation for provincial waterway structures",
+          "url": "https://business.gov.nl/regulation/permit-dispensation-provincial-waterway-structures/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Introduction of the Environmental and Planning Act (Omgevingswet)",
+          "url": "https://business.gov.nl/amendment/introduction-environmental-and-planning-act-omgevingswet/",
+          "categorie": "wetswijziging"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-17T23:21:44",
+      "laatstGecheckt": "2021-08-02T19:33:57",
+      "url": "https://business.gov.nl/regulation/water-permit/",
+      "upnLabel": "watervergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444644-16",
+      "id": "tcm:114-444644-16"
+    },
+    {
+      "titel": "Permit to lay cables and pipelines",
+      "tekst": "Do you want to lay cables and pipelines (and the equipment that goes with it) in public land within a Dutch municipality? Then you should:\r\n\r\n*   have a permit from the municipality\r\n*   [notify (*KLIC-melding*) the Netherlands’ Cadastre, Land Registry and Mapping Agency](https://www.kadaster.nl/zakelijk/producten/graafwerk/klic-melding) (*Kadaster*, in Dutch) at least 3 working days and at most working 20 days before you start the excavation work.\r\n\r\nYou can apply for a permit to your local municipal authority. With your permit application, you must enclose land registry details and details about the pipelines or cables.\r\n\r\n## Laying cables and pipelines in a provincial road or waterway\r\n\r\nIf you want to lay cables and pipelines in, around, or under a provincial road or waterway, you may need an [authorisation or permit from the provincial authorities](https://business.gov.nl/regulation/permit-dispensation-provincial-waterway-structures/). For more information, please contact your [provincial authorities](https://almanak.overheid.nl/Provincies/) (in Dutch).\r\n\r\n## Duty to report changes\r\n\r\nDoes your work result in changes in or to a pipeline, such as leakage, damage, or transport changes? Or does youyr work result in the taking out of service of a pipeline? You must report these changes to the [Human Environment and Transport Inspectorate](https://english.ilent.nl/contact) (*Inspectie Leefomgeving en Transport*, ILT). Any unusual incidents that urgently need to be attended, must be reported to ILT by telephone straight away, to number +31 88 489 00 00.\r\n\r\n## Compensation for rerouting\r\n\r\nAre you the cable and pipe manager and do you suffer damage because of cables and pipes being rerouted by the government? You may be entitled to [compensation](https://business.gov.nl/regulation/compensation-loss-government-acts/). This applies to rerouting because of changes in the infrastructure in the management area of the Minister of Infrastructure and the Environment.\r\n\r\n## Online application procedure via Message Box\r\n\r\nYou can apply for a permit or dispensation to the municipal or provincial authorities using [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.\r\n\r\n**Please note:** if there is a specific municipal or provincial regulation on laying telecommunications cables, you cannot use Message Box to apply for the permit.",
+      "links": [
+        {
+          "label": "Human Environment and Transport Inspectorate (ILT)",
+          "url": "https://english.ilent.nl/",
+          "categorie": "extern"
+        },
+        {
+          "label": "About the The Netherlands’ Cadastre, Land Registry and Mapping Agency (Kadaster)",
+          "url": "https://www.kadaster.nl/about-us",
+          "categorie": "extern"
+        },
+        {
+          "label": "Notification of digging (Excavation Regulation)",
+          "url": "https://business.gov.nl/regulation/notification-digging-excavating/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for an earth removal permit",
+          "url": "https://business.gov.nl/regulation/earth-removal-permit/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:41:52",
+      "laatstGecheckt": "2021-09-03T11:42:56",
+      "url": "https://business.gov.nl/regulation/permit-lay-cables-and-pipelines/",
+      "upnLabel": "kabels- en leidingenvergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444633-16",
+      "id": "tcm:114-444633-16"
+    },
+    {
+      "titel": "Applying for a street trader's licence",
+      "tekst": "Do you want to sell goods or offer your services in the street or door-to-door in the Netherlands? In some municipalities you need a street trader's licence (*ventvergunning*). Other municipalities will accept a simple notification.\r\n\r\nThe conditions attached to a street trader's licence or notification differ per municipality. The application period, costs involved and period of validity can also differ, depending on the municipality. To find out if you need a licence and how to get one, [contact the local authorities](https://almanak.overheid.nl/gemeenten) (in Dutch).\r\n\r\n**Please note:** If you sell a product or offer a service worth more than €50, you must comply with the rules on [door-to-door selling and street trade](https://business.gov.nl/regulation/door-door-selling/).\r\n\r\n## Online application or notification procedure via Message Box\r\n\r\nYou can also apply for a street trader's licence or file the notification via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Applying for a market permit",
+          "url": "https://business.gov.nl/regulation/applying-market-permit/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a market trader's licence",
+          "url": "https://business.gov.nl/regulation/applying-market-traders-licence/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Door-to-door selling and street trade",
+          "url": "https://business.gov.nl/regulation/door-door-selling/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Cancellation period in case of a sale",
+          "url": "https://business.gov.nl/regulation/cancellation-period-sale/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:20:39",
+      "laatstGecheckt": "2021-07-20T10:34:28",
+      "url": "https://business.gov.nl/regulation/applying-street-traders-licence/",
+      "upnLabel": "ventvergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444631-16",
+      "id": "tcm:114-444631-16"
+    },
+    {
+      "titel": "Terrace permit and rules for your terrace",
+      "tekst": "Do you want to add a terrace to your pub or restaurant in the Netherlands? Or do you want to extend your existing outdoor terrace? In most municipalities you need a terrace permit (*terrasvergunning*). This applies to terraces placed on public property as well as on private property. You apply for a terrace permit to the municipal authorities.\r\n\r\n## Is a terrace permit mandatory?\r\n\r\nIt depends on your municipality if you need a terrace permit. In some municipalities you may add a terrace without a permit if you meet specific criteria, such as predetermined size limits or location-based conditions. Other municipalities allow you to change or extend your existing [licence under the Alcohol Act](https://business.gov.nl/regulation/serving-alcohol-under-licencing-and-catering-act/) or [All-in-one Permit for Physical Aspects](https://business.gov.nl/regulation/scope-permit-physical-aspects/). In these cases, you do not need a separate terrace permit. Consult your municipality for the requirements if you want to add a terrace.\r\n\r\n## Applying for a terrace permit\r\n\r\nYou apply for a permit to your municipality. You can apply digitally using [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies. If you are applying for a licence under the Licensing and Catering Act or an [operating permit for a catering establishment](https://business.gov.nl/regulation/operating-permit-catering-establishment/), state on your application that you have a terrace.\r\n\r\n## Rules for your terrace\r\n\r\nThe rules or conditions for a terrace vary from one municipality to another. Consult your municipality for more information. However, some rules apply throughout the Netherlands:\r\n\r\n*   A terrace is only allowed outside an existing catering establishment.\r\n*   A terrace may not cause any damage to the road\r\n*   A terrace may not pose a danger to road users\r\n*   A terrace may not form an obstacle to road management and maintenance\r\n\r\n### Monitoring and enforcement\r\n\r\nYour municipality will monitor if you follow the rules. For example if you comply with [local noise regulations](https://www.infomil.nl/onderwerpen/integrale/activiteitenbesluit/activiteiten/sport-recreatie/terrassen-0/geluidsvoorschriften/) (in Dutch). Local authorities may impose sanctions if you violate the rules. They can for instance temporarily close your terrace or revoke your terrace permit.\r\n\r\n## Terrace season\r\n\r\nSome municipalities have a terrace season. In that case, you receive a permit for the duration of the season. The terrace permit states the period for which it has been issued. If your municipality does not have a terrace season, you can have a terrace throughout the entire year.\r\n\r\n## Cost of a terrace permit\r\n\r\nIn most municipalities you will have to pay [municipal administrative charges](https://business.gov.nl/regulation/administrative-charges/) (*leges*) for a terrace permit. The amount of those charges is specified in the municipal administrative charges by-law (*legesverordening*). If your terrace is located on land of the municipality, then you must pay a [municipal tax on encroachments on or above public land](https://business.gov.nl/regulation/municipal-tax-encroachments-public-land/) (*precariobelasting*).",
+      "links": [
+        {
+          "label": "Terrace regulations (Infomil.nl, in Dutch)",
+          "url": "https://www.infomil.nl/onderwerpen/integrale/activiteitenbesluit/activiteiten/sport-recreatie/terrassen-0/geluidsvoorschriften/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Operating permit for a catering establishment",
+          "url": "https://business.gov.nl/regulation/operating-permit-catering-establishment/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Serving alcohol (on-licence)",
+          "url": "https://business.gov.nl/regulation/serving-alcohol-under-licencing-and-catering-act/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for an all-in-one permit for physical aspects (omgevingsvergunning)",
+          "url": "https://business.gov.nl/regulation/applying-for-all-in-one-permit-physical-aspects/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Municipal tax on encroachments on or above public land (precario)",
+          "url": "https://business.gov.nl/regulation/municipal-tax-encroachments-public-land/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Municipal or provincial administrative charges",
+          "url": "https://business.gov.nl/regulation/administrative-charges/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:50:21",
+      "laatstGecheckt": "2021-09-23T15:08:41",
+      "url": "https://business.gov.nl/regulation/terrace-permit/",
+      "upnLabel": "terrasvergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444622-16",
+      "id": "tcm:114-444622-16"
+    },
+    {
+      "titel": "Applying for a market trader's licence",
+      "tekst": "Are you planning to trade from a stall or a van, on or along a (public) road or public space? If you run a foodstall, flower stand or the like, you need a market trader's licence (*standplaatsvergunning*).\r\n\r\nYou can obtain this licence from the municipal authorities. Each municipality may have different rules regarding:\r\n\r\n*   Permanent marketplaces\r\n*   Temporary marketplaces\r\n*   Seasonal marketplaces (ice-cream, fruit or Christmas tree stalls)\r\n\r\nDo you want to sell products from a stall without a fixed place? In some municipalities you need a [street trader’s licence](https://business.gov.nl/regulation/applying-street-traders-licence/) (*ventvergunning*).\r\n\r\n## Costs for a market trader’s licence\r\n\r\nWhen you apply for a market trader’s license in most municipalities  you have to pay [municipal administrative charges](https://business.gov.nl/regulation/administrative-charges/) (*leges*). The amount depends on:\r\n\r\n*   the municipality\r\n*   the type of marketplace (permanent, temporary or seasonal)\r\n*   the location within the municipality, certain areas might have higher rates\r\n\r\nConsult your municipal authority for the costs to obtain a market trader’s licence.\r\n\r\n## Municipal tax on encroachments on or above public land (precario)\r\n\r\nIf your stall or van is located on public land the municipal authority may charge an [additional tax](https://business.gov.nl/regulation/municipal-tax-encroachments-public-land/) (*precariobelasting*) for this. Some municipal authorities include this tax in their market trader’s licence costs.",
+      "links": [
+        {
+          "label": "Applying for a market permit",
+          "url": "https://business.gov.nl/regulation/applying-market-permit/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a street trader's licence",
+          "url": "https://business.gov.nl/regulation/applying-street-traders-licence/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:19:44",
+      "laatstGecheckt": "2020-09-22T16:04:52",
+      "url": "https://business.gov.nl/regulation/applying-market-traders-licence/",
+      "upnLabel": "standplaatsvergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444619-16",
+      "id": "tcm:114-444619-16"
+    },
+    {
+      "titel": "Property merger or division permit",
+      "tekst": "Do you own a building in the Netherlands? And do you want to have your property converted into several flats, which you can then let individually? Or do you want to merge several adjacent flats into one property? You may need a permit from your municipal authorities.\r\n\r\n## Property division\r\n\r\nIf you wish to divide a property into several apartments you may require a property division permit from the municipality. The conditions differ according to municipality and are laid down in the local Housing Regulations (*Huisvestingsverordening*). The division into separate units must be specified in a notarial deed.\r\n\r\n## Property merger\r\n\r\nDo you own 2 adjacent houses, or a house divided into an upper and a lower apartment, and do you want to merge these homes into 1 home? It depends on the municipality if you require a property merger permit and what the conditions are.\r\n\r\n## Online application procedure via Message Box\r\n\r\nYou can apply for a property merger or division permit also via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Cadastral registration of property",
+          "url": "https://business.gov.nl/regulation/cadastral-registration-property/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a conversion permit for letting accommodation",
+          "url": "https://business.gov.nl/regulation/applying-conversion-permit-letting-accommodation/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T12:33:59",
+      "laatstGecheckt": "2021-07-06T17:07:59",
+      "url": "https://business.gov.nl/regulation/property-merger-division-permit/",
+      "upnLabel": "woonruimte splitsingsvergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444618-16",
+      "id": "tcm:114-444618-16"
+    },
+    {
+      "titel": "Parking",
+      "tekst": "If you run a company in the Netherlands and you want to park your car near your business premises, you sometimes need a business parking permit or a dispensation from your municipality. The criteria for obtaining a parking permit may differ according to municipality.\r\n\r\n## Use of the roadside\r\n\r\nIn many municipalities, you are banned from using the roadside as a place to park or as a [location for your stall or van](https://business.gov.nl/regulation/applying-market-traders-licence/). However, you can apply for exemption from this ban to [your municipality](https://almanak.overheid.nl/gemeenten) (in Dutch).\r\n\r\n## Parking on a provincial road\r\n\r\nIf you want to park your vehicle on a provincial road, you may need to apply for dispensation from the [provincial authorities](https://almanak.overheid.nl/provincies) (in Dutch).\r\n\r\n## Online application procedure via Message Box\r\n\r\nYou can apply for dispensation to park on a provincial road also via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Message Box: the fastest way to communicate with the Dutch government",
+          "url": "https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:36:41",
+      "laatstGecheckt": "2021-08-04T10:21:21",
+      "url": "https://business.gov.nl/regulation/parking/",
+      "upnLabel": "parkeervergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444602-16",
+      "id": "tcm:114-444602-16"
+    },
+    {
+      "titel": "Applying for excavation permits and filing discovery reports",
+      "tekst": "The term 'excavation' here means archaeological investigations, exploratory boreholes and the removal or relocation of objects that belong to Dutch cultural heritage.\r\n\r\n## Excavation permit\r\n\r\nIn the Netherlands, it is prohibited to perform an archaeological excavation without a certificate. If your [company has a certificate](https://www.cultureelerfgoed.nl/onderwerpen/certificeringen-in-de-archeologie/certificerende-instellingen) (in Dutch), it means you work according to the standards and guidelines of the [Dutch Archaeology Quality Standard (KNA)](https://www.sikb.nl/over-sikb/about-sikb/kna-2-1-arcaelogy).\r\n\r\nYou can apply for a certificate at a [certifying body](https://www.cultureelerfgoed.nl/onderwerpen/certificeringen-in-de-archeologie/certificerende-instellingen) (CI’s, in Dutch). Costs involved depend on the protocols you must comply with. Costs and application periods may differ between CI’s.\r\n\r\nA certificate is valid for 4 years, as long as you pass the yearly audit.\r\n\r\n## Excavation by a foreign company\r\n\r\nDo you own a foreign company? You do not need a Dutch certificate for excavations in the Netherlands if:\r\n\r\n*   you only excavate in the Netherlands occasionally;\r\n*   you have a valid permit or similar document from another EU country. You must comply with the same rules as companies with a Dutch certificate;\r\n*   you [submit your report about your research to Archis](https://archis.cultureelerfgoed.nl/#/login) (in Dutch) within 2 years after the excavation has taken place. Archis is the Dutch national system in which monuments, reports of archaeological discoveries, and excavation reports can be found, together with their geographical location. You can write your report in Dutch, English or German.\r\n\r\n## Reporting a discovery\r\n\r\nHave you made an archaeological discovery? You must [report this to the Dutch Cultural Heritage Agency](https://www.cultureelerfgoed.nl/onderwerpen/archeologische-vondsten-melden) (in Dutch). The discovery will be reported in Archis, a national system that contains Dutch archaeological data, such as information on archaeological discoveries.",
+      "links": [
+        {
+          "label": "Dutch Cultural Heritage Agency",
+          "url": "https://english.cultureelerfgoed.nl/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Dutch heritage act (Information and Heritage Inspectorate)",
+          "url": "https://english.inspectie-oe.nl/publications/publication/2016/9/14/heritage-act",
+          "categorie": "extern"
+        },
+        {
+          "label": "Notification of digging (Excavation Regulation)",
+          "url": "https://business.gov.nl/regulation/notification-digging-excavating/",
+          "categorie": "intern"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-20T12:29:48",
+      "laatstGecheckt": "2021-11-02T11:26:03",
+      "url": "https://business.gov.nl/regulation/excavation-permit-discovery-report/",
+      "upnLabel": "opgravingscertificaat",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444599-16",
+      "id": "tcm:114-444599-16"
+    },
+    {
+      "titel": "Applying for an all-in-one permit for physical aspects (omgevingsvergunning)",
+      "tekst": "In the Netherlands, for most activities with regard to building, renovation, demolishing, construction, living, monuments, environment, nature and open space, you need a permit. This is the so-called '[all-in-one permit for physical aspects](https://rwsenvironment.eu/subjects/general-provisions-0/all-one-permit/)' (Omgevingsvergunning).\r\n\r\nThis permit [can be used instead of applying for several individual permits](https://business.gov.nl/regulation/scope-permit-physical-aspects/). Under the [WABO Act](https://rwsenvironment.eu/subjects/general-provisions-0/) (Wet Algemene Bepalingen Omgevingswet) it is possible to apply for permits via the same procedure. Do the online [permit check](https://www.omgevingsloket.nl/Zakelijk/zakelijk/home/checken?init=true=true) (in Dutch) to assess the exact type of all-in-one permit you need for your specific activity.\r\n\r\n## How to apply for an all-in-one permit\r\n\r\nYou apply to your municipality. Or you apply at the '[Service counter all-in-one permit for physical aspects](https://www.omgevingsloket.nl/Zakelijk/zakelijk/home?init=true#)' (Omgevingsloket Online, OLO). You can apply digitally or in writing. You can also authorise somebody else to apply for you. Please note that the online application service OLO is in Dutch only.\r\n\r\nThere are different options to apply:\r\n\r\n### Digital application for companies listed in the Dutch Business Register (Handelsregister)\r\n\r\nYou apply digitally through your municipality's website. Or you apply directly through the [OLO website](https://www.omgevingsloket.nl/Zakelijk/zakelijk/home?init=true#) (in Dutch). You will have to identify yourself with [eHerkenning (eRecognition)](https://business.gov.nl/regulation/applying-for-a-permit-or-subsidy-with-eherkenning/) with assurance level 2 or higher. If you have applied for the permit online via OLO, you can have the handling of your application proceeded through [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). For this you fill in your Message Box name with the application.\r\n\r\n### Digital application for non-resident foreign companies and non-resident foreign private persons\r\n\r\nNon-resident foreign companies and non-resident foreign private persons cannot use eHerkenning. So, the procedure is slightly different for them. If you belong to one of these categories, you must first apply for a special account at InfoMil. There are 2 options to apply for a special account:\r\n\r\n*   [Online application non-resident foreign company account (InfoMil, in Dutch)](https://www.infomil.nl/contactformulier/account-bedrijven/)\r\n*   [Online application for non-resident private person account (InfoMil, in Dutch)](https://www.infomil.nl/contactformulier/account-particulier/)\r\n\r\nGenerally, you will receive your username and password within 2 days. You can use these to apply for a permit for physical aspects at the [OLO website](https://www.omgevingsloket.nl/Zakelijk/zakelijk/home?init=true).\r\n\r\n### Written applications\r\n\r\nFor written applications there is 1 uniform form. This form is available at your municipality, which will send it to you at your request. You can also fill in the (Dutch-language) [paper application form](https://www.omgevingsloket.nl/Zakelijk/zakelijk/home/papierenformulier?init=true) online on the OLO website, then print and send it.\r\n\r\n## Consult municipality prior to applying\r\n\r\nWould you like to know in advance whether an application is promising or not? You can mention this during your online application. The municipal authority will then check this with you. Please note that this service is not available in every municipality.\r\n\r\n## Decision on your application\r\n\r\nUsually, the municipal authorities decide within 8 weeks whether you will be granted an all-in-one permit. More complex applications may take up to 6 months.\r\n\r\n## Objection and appeal\r\n\r\nHas you application been denied? You can object in writing to your municipality. You must state clearly why you disagree with the decision.\r\n\r\nIs your objection (partially) rejected by the municipal authorities? You can [appeal to the court](https://www.rechtspraak.nl/Onderwerpen/Omgevingsvergunning/Paginas/procedure.aspx) (in Dutch). You can do so up until 6 weeks after the municipality's decision. It may take a year before the judge rules on your appeal. After this procedure either you or the other party can appeal this ruling.\r\n\r\n## Temporary exemption order\r\n\r\nAre you unable to meet the requirements concerning the environment and planning laws? Then you can apply for a temporary exemption order. You apply for the order, if you meet certain conditions, to [a competent authority](https://rwsenvironment.eu/subjects/general-provisions-0/all-one-permit/).\r\n\r\nTemporary exemption orders make it possible to carry out an activity in exceptional circumstances. For instance, when you do not have the time to go through the normal procedures due to force majeure or because you are in a transitional situation.\r\n\r\n## Online application procedure via Message Box\r\n\r\nIn the province of Noord-Brabant you can apply for this temporary exemption order via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies. You can send attachments with your application. Please check the name that you give to the file(s).",
+      "links": [
+        {
+          "label": "Service counter all-in-one permit for physical aspects (Omgevingsloket online (OLO), in Dutch)",
+          "url": "https://www.omgevingsloket.nl/Zakelijk/zakelijk/home?init=true",
+          "categorie": "extern"
+        },
+        {
+          "label": "Permit check all-in-one permit for physical aspects (Omgevingsloket online, OLO, in Dutch)",
+          "url": "https://www.omgevingsloket.nl/Zakelijk/zakelijk/home/checken?init=true%3Dtrue",
+          "categorie": "extern"
+        },
+        {
+          "label": "All-in-one permit (Ministry of Infrastructure and Water Managment)",
+          "url": "https://rwsenvironment.eu/subjects/general-provisions-0/all-one-permit/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Draft text of Building Decree 2012 in English (European Commission)",
+          "url": "http://ec.europa.eu/growth/tools-databases/tris/en/search/?trisaction=search.detail&year=2011&num=212",
+          "categorie": "extern"
+        },
+        {
+          "label": "All-in-one permit for physical aspects: specific permits",
+          "url": "https://business.gov.nl/regulation/scope-permit-physical-aspects/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a water permit",
+          "url": "https://business.gov.nl/regulation/water-permit/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Environmental impact assessment (MER)",
+          "url": "https://business.gov.nl/regulation/environmental-impact-assessment-mer/",
+          "categorie": "intern"
+        },
+        {
+          "label": "All-in-one permit for environmental regulations for businesses",
+          "url": "https://business.gov.nl/regulation/all-in-one-permit-environmental-regulations-businesses/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Objecting to and appealing against a government decision",
+          "url": "https://business.gov.nl/regulation/objecting-and-appealing-against-government-decision/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Applying for a permit or subsidy with eHerkenning",
+          "url": "https://business.gov.nl/regulation/applying-for-a-permit-or-subsidy-with-eherkenning/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Introduction of the Environmental and Planning Act (Omgevingswet)",
+          "url": "https://business.gov.nl/amendment/introduction-environmental-and-planning-act-omgevingswet/",
+          "categorie": "wetswijziging"
+        },
+        {
+          "label": "Measures to improve quality in the construction sector",
+          "url": "https://business.gov.nl/amendment/measures-improve-quality-construction-sector/",
+          "categorie": "wetswijziging"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-25T10:23:40",
+      "laatstGecheckt": "2021-07-27T11:37:23",
+      "url": "https://business.gov.nl/regulation/applying-for-all-in-one-permit-physical-aspects/",
+      "upnLabel": "omgevingsvergunning",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444593-16",
+      "id": "tcm:114-444593-16"
+    },
+    {
+      "titel": "Visitor register",
+      "tekst": "Do you provide overnight accommodation in the Netherlands? For instance in a hotel, bed & breakfast or marina? You must maintain an ongoing visitor register. This way you can provide information on who is staying in your accommodation in case of for instance calamities such as a fire. You must supply the information to your municipality upon request.\r\n\r\n## Which information should you enter in the visitor register?\r\n\r\nThe information entered in the visitor register should include:\r\n\r\n*   the guest’s name and place of residence\r\n*   the date of arrival and departure\r\n*   the type of identity document (ID) presented by the guest. **Please note**: you are not allowed to (temporarily) keep or make a copy of the ID.\r\n\r\nYou are not required to note the names and other information of spouses, minor children and travelling parties in the visitor register.\r\n\r\n## Copy of ID\r\n\r\nYou may not temporarily keep or make copies of your guests' IDs. You are also not allowed to make note of your guests' [Citizen Service Number](https://business.gov.nl/regulation/citizen-service-number/) (*BSN*). In the entire European Union the [General Data Protection Regulation](https://eur-lex.europa.eu/eli/reg/2016/679/oj) (GDPR or *AVG*) is in force. This privacy regulation states that you may only keep a copy of a person's ID on good grounds (i.e. legal obligation).\r\n\r\n## Applying for a visitor register\r\n\r\nThe requirement to maintain a visitor register is laid down in the Criminal Code (*Wetboek van Strafrecht*). Furthermore, a visitor register is often required by the [General Municipal By-Law](https://business.gov.nl/regulation/public-order-and-safety/) (*Algemene Plaatselijke Verordening*). You can apply for a visitor register to some municipal authorities or you can download the register from their website. The municipal authority may ask you to provide the information from your visitor register, for example, when you file your [tourist tax](https://business.gov.nl/regulation/tourist-tax/) return.\r\n\r\n## Online data provision via Message Box\r\n\r\nYou can apply for a visitor register or submit the information from your visitor register also via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure email system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "Tourist tax",
+          "url": "https://business.gov.nl/regulation/tourist-tax/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Public order and safety (General Municipal By-law)",
+          "url": "https://business.gov.nl/regulation/public-order-and-safety/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Notifying local council about running a leisure facility",
+          "url": "https://business.gov.nl/regulation/notification-operation-leisure-facility/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Serving alcohol (on-licence)",
+          "url": "https://business.gov.nl/regulation/serving-alcohol-under-licencing-and-catering-act/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Checklist for starting a bed and breakfast",
+          "url": "https://business.gov.nl/starting-your-business/checklists-for-starting-a-business/checklist-for-starting-a-bed-and-breakfast/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Notifying local council about running a leisure facility",
+          "url": "https://business.gov.nl/regulation/notification-operation-leisure-facility/",
+          "categorie": "wetswijziging"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-01-11T11:51:54",
+      "laatstGecheckt": "2021-07-20T10:55:02",
+      "url": "https://business.gov.nl/regulation/visitor-register/",
+      "upnLabel": "nachtregisterplicht",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444590-16",
+      "id": "tcm:114-444590-16"
+    },
+    {
+      "titel": "Registration in National Childcare Register (LRK)",
+      "tekst": "Do you want to set up a childcare organisationin the Netherlands? You must register your organisation with the [National Childcare Register](https://www.landelijkregisterkinderopvang.nl/pp/#/) (Landelijk Register Kinderopvang, LRK, in Dutch). You must submit an application for this registration to your local municipality at least 10 weeks before opening your business.\r\n\r\n## What is the register for?\r\n\r\nThe [National Childcare Register LRK lists childcare facilities](https://www.landelijkregisterkinderopvang.nl/pp/#/) (in Dutch) that have been [checked and approved](https://business.gov.nl/regulation/municipal-health-service-inspection-childcare-facilities/) by the municipalities and municipal health services (GGD). It includes the following types of facilities:\r\n\r\n*   childcare centres\r\n*   out-of-school care centres (BSO)\r\n*   childminding agencies\r\n*   childminders\r\n*   parent participation childcare centres (ouderparticipatiecrèches, opc)\r\n\r\nThe [register is open to the public](https://www.government.nl/topics/childcare/accessing-the-national-childcare-register-landelijk-register-kinderopvang-lrk). It contains information about the location of the childcare facility, the number of places available, inspection reports and any warnings or penalties it has received. Information about childcare facilities that have closed will remain in the register for a certain amount of time.\r\n\r\nEvery facility in the register will receive its own unique code (LRK-code). Parents need this code in order to apply for [childcare benefit](https://www.belastingdienst.nl/wps/wcm/connect/bldcontenten/belastingdienst/individuals/benefits/moving_to_the_netherlands/my_child_goes_to_a_childcare_centre/).\r\n\r\n## How to register?\r\n\r\nYou need to apply for permission to open your childcare facility with your local municipality 10 weeks before you intend to start. You should send the application form together with other necessary documents to the municipality where you want to start your facility. This includes:\r\n\r\n*   [the pedagogical policy plan](https://business.gov.nl/regulation/pedagogical-policy-plan/)\r\n*   [the safety and health risk inventory](https://business.gov.nl/regulation/childcare-health-and-safety-policy/) of the facility (for each location)\r\n*   [Certificate of Conduct](https://business.gov.nl/regulation/vog/) (VOG) with screening profile 84 (caring for minors) or 86 (working in the childcare sector)\r\n*   [your registration in the Business Register](/regulation/registering-foreign-business-netherlands)\r\n\r\nIf you start a childminding agency, you must not only register your agency, but also your [childminders](https://business.gov.nl/regulation/childminders/), substitute childminders, as well as their locations. Your staff also need a certificate of conduct. Separate forms are available for different types of childcare facilities (see below). New childminders and/or locations must always be registered by your agency.\r\n\r\n## Registration forms\r\n\r\nFor registration, please select the appropriate form below to suit your type of childcare organisation and apply at least 10 weeks prior to opening your childcare facility. **Please note:** All forms are in Dutch.\r\n\r\n*   \r\n\r\n### Childcare centre, out-of-school care centre and parent participation centre\r\n\r\n    *   [Application registration](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2015/12/18/ko-aanvraag-exploitatie-kinderdagverblijf-of-buitenschoolse-opvang)\r\n    *   [Changing your registration](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2015/12/18/wijziging-kinderdagverblijf-of-buitenschoolse-opvang)\r\n*   \r\n\r\n### Childminding agency\r\n\r\n    *   [Application registration](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2015/12/18/aanvraag-exploitatie-gastouderbureau)\r\n    *   [Changing your registration](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2015/12/18/wijziging-gastouderbureau)\r\n*   \r\n\r\n### Childminders\r\n\r\n    *   [Application registration](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2015/12/18/aanvraag-exploitatie-gastouderopvang)\r\n    *   [Changing your registration](https://www.rijksoverheid.nl/onderwerpen/kinderopvang/documenten/formulieren/2015/12/18/wijziging-gastouderopvang)\r\n\r\n## After your application\r\n\r\nA [Municipal Health Authority (GGD) inspector](https://business.gov.nl/regulation/municipal-health-service-inspection-childcare-facilities/) (in Dutch) will assess whether your organisation meets all the requirements. Strict rules apply to childcare facilities. You must notify the municipal authority immediately of any changes of information and details regarding your registration.\r\n\r\n## Multiple branches, change of location or franchising\r\n\r\nIf you have multiple branches, you must register each branch in the LRK. If you change your location, you submit a new registration for this new location. In the event of a franchise, the franchisee must register as the owner. The franchisor is not included in the LRK.\r\n\r\nDo you run a childminding agency with several facilities? You must register them all. You submit a new application for each (new) childcare facility.\r\n\r\n## Foreign childcare register\r\n\r\nThe [foreign childcare register](https://duo.nl/particulier/register-buitenlandse-kinderopvang.jsp) (in Dutch) lists foreign organisations that meet the Dutch rules around childcare. Do you run a childcare facility in an EU Member State, Norway, Iceland, Liechtenstein or Switzerland? And do you care for Dutch children? The parents may be [entitled to childcare benefit](https://www.belastingdienst.nl/wps/wcm/connect/bldcontenten/belastingdienst/individuals/benefits/moving_to_the_netherlands/my_child_goes_to_a_childcare_centre/my_child_goes_to_a_childcare_centre) from the Netherlands. This is only the case if your organisation meets the official standards and is registered in the foreign childcare register.\r\n\r\n## Online application procedure via Message Box\r\n\r\nYou can submit the application to register your childcare organisation also online via [Message Box](https://business.gov.nl/starting-your-business/communicating-with-the-dutch-government/message-box-the-fastest-way-to-communicate-with-the-dutch-government/). Message Box is a secure e-mail system that enables you as an entrepreneur to exchange digital messages with Dutch government agencies.",
+      "links": [
+        {
+          "label": "National Childcare Register (LRK, in Dutch)",
+          "url": "https://www.landelijkregisterkinderopvang.nl/pp/#/",
+          "categorie": "extern"
+        },
+        {
+          "label": "Accessing the National Childcare Register (Dutch Government)",
+          "url": "https://www.government.nl/topics/childcare/accessing-the-national-childcare-register-landelijk-register-kinderopvang-lrk",
+          "categorie": "extern"
+        },
+        {
+          "label": "Municipal health service (GGD) inspection of childcare facilities",
+          "url": "https://business.gov.nl/regulation/municipal-health-service-inspection-childcare-facilities/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Checklist for starting a childcare centre",
+          "url": "https://business.gov.nl/starting-your-business/checklists-for-starting-a-business/checklist-for-starting-a-childcare-centre/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Checklist for starting a childminding agency",
+          "url": "https://business.gov.nl/starting-your-business/checklists-for-starting-a-business/checklist-for-starting-a-childminding-agency/",
+          "categorie": "intern"
+        },
+        {
+          "label": "Registration in National Childcare Register (LRK)",
+          "url": "https://business.gov.nl/regulation/registration-childcare/",
+          "categorie": "wetswijziging"
+        }
+      ],
+      "organisaties": [
+        {
+          "rol": "Ondersteuningsorganisatie",
+          "owmsPrefLabel": "Rijksdienst voor Ondernemend Nederland",
+          "owmsUri": "http://standaarden.overheid.nl/owms/terms/RVO"
+        }
+      ],
+      "laatstGewijzigd": "2022-02-21T09:09:59",
+      "laatstGecheckt": "2021-07-06T10:23:45",
+      "url": "https://business.gov.nl/regulation/registration-childcare/",
+      "upnLabel": "register kinderopvang inschrijving",
+      "taal": "en",
+      "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/tcm:114-444586-16",
+      "id": "tcm:114-444586-16"
+    }
+  ]
+}
