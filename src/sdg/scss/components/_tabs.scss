@@ -45,6 +45,10 @@
     }
   }
 
+  .tabs__tab-content > .toolbar {
+    z-index: 1000
+  }
+
   .tabs__tab-header {
     padding: 0 12px;
     display: flex;
