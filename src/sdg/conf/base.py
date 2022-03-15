@@ -125,6 +125,7 @@ INSTALLED_APPS = [
     "django_filters",
     "timeline_logger",
     "solo",
+    "zgw_consumers",
     # SDG applications
     "sdg.api",
     "sdg.components",

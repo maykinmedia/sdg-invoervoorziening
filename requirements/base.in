@@ -40,3 +40,4 @@ sentry-sdk  # error monitoring
 elastic-apm  # Elastic APM integration
 
 git+https://github.com/maykinmedia/django-rijkshuisstijl.git
+zgw-consumers
