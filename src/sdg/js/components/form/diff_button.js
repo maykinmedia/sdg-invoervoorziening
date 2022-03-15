@@ -16,7 +16,7 @@ class DiffButton extends FormComponent {
      */
     onClick(event) {
         event.preventDefault();
-        this.setState({active: !this.state.active});
+        this.setState({active: !this.state.active, diffHTML: this.getDiffHTML()});
     }
 
     /**
@@ -65,41 +65,55 @@ class DiffButton extends FormComponent {
 
     /**
      * Updates the diff.
+     * @return {string} HTML string containing diff.
      */
-    updateDiff() {
-        const currentVersionData = this.getCurrentVersionData();
+    getDiffHTML() {
         const previousVersionData = this.getPreviousVersionData();
-        const fieldContainer = this.getFieldContainer();
-        const currentDiffElement = fieldContainer.querySelector('.diff');
-        const versionsContainer = this.getVersionsContainer();
         const previousValue = previousVersionData.input.value;
         const currentValue = this.getValue();
 
         const diff = new Diff();
         const textDiff = diff.main(previousValue, currentValue);
-        const diffElement = document.createElement('div');
 
-        diffElement.classList.add('form__input', 'diff');
-        diffElement.innerHTML = diff.prettyHtml(textDiff).replace(/\\/g, '');
+        return diff.prettyHtml(textDiff).replace(/\\/g, '');
+    }
 
-        if (currentDiffElement) {
-            fieldContainer.removeChild(currentDiffElement);
+    /**
+     * Renders the diff element.
+     * @param {Object} state Read only state.
+     */
+    renderDiffElement(state) {
+        const {diffHTML} = state;
+
+        if (!this.diffElement) {
+            const fieldContainer = this.getFieldContainer();
+            this.diffElement = document.createElement('div');
+            this.diffElement.classList.add('form__input', 'diff');
+            fieldContainer.append(this.diffElement);
         }
 
-        fieldContainer.append(diffElement);
+        this.diffElement.innerHTML = diffHTML;
+    }
 
-        const previousVersionTopElement = document.createElement('del');
-        const currentVersionTopElement = document.createElement('ins');
+    /**
+     * Renders the diff element.
+     */
+    renderVersionContainer() {
+        const versionsContainer = this.getVersionsContainer();
 
-        while (versionsContainer.firstChild) {
-            versionsContainer.removeChild(versionsContainer.firstChild);
+        if (!versionsContainer.children.length) {
+            const previousVersionData = this.getPreviousVersionData();
+            const currentVersionData = this.getCurrentVersionData();
+
+            const previousVersionTopElement = document.createElement('del');
+            const currentVersionTopElement = document.createElement('ins');
+
+            previousVersionTopElement.innerText = previousVersionData.title;
+            currentVersionTopElement.innerText = currentVersionData.title;
+
+            versionsContainer.append(previousVersionTopElement);
+            versionsContainer.append(currentVersionTopElement);
         }
-
-        previousVersionTopElement.innerText = previousVersionData.title;
-        currentVersionTopElement.innerText = currentVersionData.title;
-
-        versionsContainer.append(previousVersionTopElement);
-        versionsContainer.append(currentVersionTopElement);
     }
 
     /**
@@ -108,9 +122,13 @@ class DiffButton extends FormComponent {
      * Use this to persist (read only) state to DOM.
      * @param {Object} state Read only state.
      */
-    render({active}) {
+    render(state) {
+        const {active} = state;
+
         this.node.classList.toggle('button--active', Boolean(active));
-        this.updateDiff();
+
+        this.renderDiffElement(state);
+        this.renderVersionContainer();
 
         if (active) {
             this.hideInputOrTextarea();
