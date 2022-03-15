@@ -382,7 +382,7 @@ class Product(ProductFieldMixin, models.Model):
 
     def get_absolute_url(self):
         return reverse(
-            "organisaties:catalogi:producten:detail",
+            "organisaties:catalogi:producten:edit",
             kwargs=build_url_kwargs(self),
         )
 

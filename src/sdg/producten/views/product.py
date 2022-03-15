@@ -17,41 +17,8 @@ from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.utils import build_url_kwargs, duplicate_localized_products
 
 
-class ProductCreateRedirectView(OverheidMixin, SingleObjectMixin, RedirectView):
-    """
-    Get or create (children) specific product if this is a reference product.
-    Redirect to product detail view.
-    """
-
-    context_object_name = "product"
-    pk_url_kwarg = "product_pk"
-    queryset = Product.objects.select_related(
-        "catalogus__lokale_overheid",
-    )
-
-    def get_lokale_overheid(self):
-        self.object = self.get_object()
-        self.catalog = ProductenCatalogus.objects.select_related(
-            "lokale_overheid",
-        ).get(pk=self.kwargs["catalog_pk"])
-        return self.catalog.lokale_overheid
-
-    def get(self, request, *args, **kwargs):
-        product = self.object.get_or_create_specific_product(
-            specific_catalog=self.catalog
-        )
-        kwargs["product"] = product
-        return super().get(request, *args, **kwargs)
-
-    def get_redirect_url(self, *args, **kwargs):
-        return reverse(
-            "organisaties:catalogi:producten:detail",
-            kwargs=build_url_kwargs(kwargs["product"], catalog=self.catalog),
-        )
-
-
-class ProductDetailView(OverheidMixin, DetailView):
-    template_name = "producten/detail.html"
+class ProductPreviewView(OverheidMixin, DetailView):
+    template_name = "mocks/kvk.html"
     context_object_name = "product"
     pk_url_kwarg = "product_pk"
     required_roles = ["is_beheerder", "is_redacteur"]
@@ -76,10 +43,6 @@ class ProductDetailView(OverheidMixin, DetailView):
         context = self.get_context_data(object=self.object)
         context["lokaleoverheid"] = self.lokale_overheid
         return self.render_to_response(context)
-
-
-class ProductPreviewView(ProductDetailView):
-    template_name = "mocks/kvk.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -195,6 +158,6 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def get_success_url(self):
         return reverse(
-            "organisaties:catalogi:producten:detail",
+            "organisaties:catalogi:producten:edit",
             kwargs=build_url_kwargs(self.product),
         )

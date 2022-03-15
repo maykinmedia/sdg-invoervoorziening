@@ -1,8 +1,5 @@
 from django.utils.datetime_safe import datetime
 
-PRODUCT_EDIT_URL = "organisaties:catalogi:producten:edit"
-PRODUCT_DETAIL_URL = "organisaties:catalogi:producten:detail"
-
 TAB_NL = ".tabs #nl"
 TAB_EN = ".tabs #en"
 

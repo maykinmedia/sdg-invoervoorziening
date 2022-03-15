@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     "django_otp",
     "django_otp.plugins.otp_static",
     "django_otp.plugins.otp_totp",
+    "rijkshuisstijl",
     "two_factor",
     # Optional applications.
     "ordered_model",
@@ -197,6 +198,7 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 ]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

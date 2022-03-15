@@ -19,7 +19,7 @@
                 {% endwith %}
                 {% if namespace == "roles" %}
                     <span>{% trans "Gebruikers" %}</span>
-                {% elif namespace == "organisaties" %}
+                    {% elif namespace == "organisaties" %}
                     <span>{% trans "Locaties" %}</span>
                 {% else %}
                     <span>{{ object|capfirst|default:namespace|capfirst }}</span>
@@ -27,7 +27,9 @@
             </div>
         </div>
         <h2 class="products__title primary">
-            {{ object|capfirst|default:namespace|capfirst }}
+            {% block page_title %}
+                {{ object|capfirst|default:namespace|capfirst }}
+            {% endblock %}
         </h2>
         <hr class="divider">
         {% block inner_content %}

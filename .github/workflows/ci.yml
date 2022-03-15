@@ -53,8 +53,11 @@ jobs:
 
       - name: Build frontend
         run: |
+          cp -r /opt/hostedtoolcache/Python/3.8.12/x64 venv
           npm ci
           npm run build
+        env:
+          VIRTUAL_ENV: venv # rijkshuisstijl
 
       - name: Run tests
         run: |
@@ -285,4 +288,4 @@ jobs:
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
         run: |
           curl -XPOST -u "${{ secrets.SDG_DEPLOYMENT_REPO_ACCESS_TOKEN }}" -H "Accept:application/vnd.github" -H "Content-Type:application/json" ${{ secrets.SDG_DEPLOYMENT_REPO_URL }} --data "{\"ref\": \"main\", \"inputs\": {\"version\": \"$RELEASE_VERSION\"}}"
-        if: ${{ steps.regex-match.outputs.match != '' }}          
+        if: ${{ steps.regex-match.outputs.match != '' }}

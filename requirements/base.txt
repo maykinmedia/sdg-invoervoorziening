@@ -64,6 +64,7 @@ django==2.2.25
     #   django-phonenumber-field
     #   django-redis
     #   django-rest-framework-condition
+    #   django-rijkshuisstijl
     #   django-rosetta
     #   django-sniplates
     #   django-timeline-logger
@@ -118,8 +119,12 @@ django-redis==5.0.0
     # via -r requirements/base.in
 django-rest-framework-condition==0.1.1
     # via vng-api-common
+git+https://github.com/maykinmedia/django-rijkshuisstijl.git
+    # via -r requirements/base.in
 django-rosetta==0.9.6
     # via -r requirements/base.in
+django-sitetree==1.17.1
+    # via django-rijkshuisstijl
 django-sniplates==0.7.0
     # via -r requirements/base.in
 django-solo==1.2.0
@@ -274,7 +279,7 @@ urllib3==1.26.6
     #   elastic-apm
     #   requests
     #   sentry-sdk
-uwsgi==2.0.19.1
+uwsgi==2.0.20
     # via -r requirements/base.in
 vine==5.0.0
     # via
