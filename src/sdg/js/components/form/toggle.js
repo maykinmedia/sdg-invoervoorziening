@@ -79,7 +79,7 @@ class FormToggle extends FormComponent {
 
         // Set disabled.
         [...elementScope.querySelectorAll(
-            'button'
+            '.form__cell .button-group .button'
         )].forEach((button) => button.disabled = !editable);
 
     }
