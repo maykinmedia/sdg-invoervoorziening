@@ -24,6 +24,8 @@ class LokaleOverheidForm(forms.ModelForm):
         for field_name, field in self.fields.items():
             if field_name in self.readonly_fields:
                 field.widget.attrs["readonly"] = True
+            if field.label.startswith("Contact"):
+                field.label = field.label.replace("Contact ", "").title()
 
     def clean(self):
         cleaned_data = super().clean()

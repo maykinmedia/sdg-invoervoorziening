@@ -1,4 +1,4 @@
-{% load toggle utils %}
+{% load toggle utils i18n %}
 
 {% with configuration=field.configuration.0 %}
     <tr>
@@ -16,23 +16,24 @@
                     <div class="toolbar">
                         <div class="button-group">
                             {% if not is_reference %}
-                            <button class="button button--light button--small form__diff-btn" type="button">
+                            <button class="button button--light button--small form__diff-btn" type="button"
+                                    title="{% trans "Toon wijzigingen in standaard tekst t.o.v. vorige versie" %}">
                                 <i class="fa fa-eye fa-xs"></i>
-                                Vergelijken
+                                {% trans "Vergelijken" %}
                             </button>
 
                             <button class="button button--light button--small form__display-btn" type="button">
                                 <i class="fa fa-chevron-right"></i>
-                                Toon standaardtekst
+                                {% trans "Toon standaardtekst" %}
                             </button>
 
                             <button class="button button--light button--small form__reference-btn" type="button">
                                 <i class="fa fa-undo fa-xs"></i>
-                                Gebruik standaardtekst
+                                {% trans "Gebruik standaardtekst" %}
                             </button>
                             {% endif %}
                         </div>
-                        {% toggle _('Aanpassen') hide_label=True icon_before='lock' icon_after='lock-open' %}
+                        {% toggle _('Bewerken') hide_label=True icon_before='lock' icon_after='lock-open' %}
                     </div>
             {% endif %}
         </td>

@@ -614,7 +614,7 @@ components:
         contactWebsite:
           type: string
           format: uri
-          description: De website van de verantwoordelijke contactpersoon.
+          description: Website van de gemeente.
           maxLength: 200
         contactEmailadres:
           type: string
@@ -623,7 +623,7 @@ components:
           maxLength: 254
         contactTelefoonnummer:
           type: string
-          description: Het telefoonnummer van de verantwoordelijke contactpersoon.
+          description: Het telefoonnummer van de gemeente.
           maxLength: 20
         bevoegdeOrganisatie:
           $ref: '#/components/schemas/Overheidsorganisatie'
