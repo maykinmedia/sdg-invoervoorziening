@@ -4,6 +4,7 @@
 {% load static %}
 {% load i18n %}
 {% load producten %}
+{% load toggle %}
 
 {% block templates %}
     {% for reference_form in reference_formset.forms %}
@@ -21,14 +22,6 @@
 
     <template class="form__reference--display-template">
         <div class="reference__display form__input form__input--disabled">
-            <div class="reference__display--topbar">
-                <a href="#" class="diff"
-                   title="{% trans 'Toon het verschil tussen de vorige versie van deze informatie.' %}">
-                    <i class="fa fa-eye"></i>
-                </a>
-                <div class="reference__display--versions">
-                </div>
-            </div>
             <div class="reference__display--content"></div>
         </div>
     </template>
@@ -67,9 +60,10 @@
                 {% with field=product_form.product_aanwezig %}
                     {% with configuration=field.configuration.0 %}
                         <tr>
-                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                                class="fas fa-info-circle fa-xs dark"
-                                title="{{ configuration.1|default:product_form.product_aanwezig.help_text }}"></i>
+                            <td class="tabs__table-cell" width="25%">
+                                {{ configuration.0|default:field.label|capfirst }}<i
+                                    class="fas fa-info-circle fa-xs dark"
+                                    title="{{ configuration.1|default:product_form.product_aanwezig.help_text }}"></i>
                             </td>
                             <td class="tabs__table-cell">{% select product_form.product_aanwezig %}</td>
                         </tr>
@@ -81,8 +75,8 @@
                         <tr>
                             <td class="tabs__table-cell"
                                 width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                                class="fas fa-info-circle fa-xs dark"
-                                title="{{ configuration.1|default:field.help_text }}"></i></td>
+                                    class="fas fa-info-circle fa-xs dark"
+                                    title="{{ configuration.1|default:field.help_text }}"></i></td>
                             <td class="tabs__table-cell">{{ field|addclass:"form__input" }}</td>
                         </tr>
                     {% endwith %}
@@ -91,9 +85,10 @@
                 {% with field=product_form.locaties %}
                     {% with configuration=field.configuration.0 %}
                         <tr>
-                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i
-                                class="fas fa-info-circle fa-xs dark"
-                                title="{{ configuration.1|default:field.help_text }}"></i>
+                            <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }}
+                                <i
+                                        class="fas fa-info-circle fa-xs dark"
+                                        title="{{ configuration.1|default:field.help_text }}"></i>
                             </td>
                             <td class="tabs__table-cell">{{ field }}</td>
                         </tr>
@@ -104,8 +99,8 @@
                     {% with configuration=publication_date.configuration.0 %}
                         <tr>
                             <td class="tabs__table-cell">{{ configuration.0|default:_("Publicatie datum")|capfirst }}<i
-                                class="fas fa-info-circle fa-xs dark"
-                                title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
+                                    class="fas fa-info-circle fa-xs dark"
+                                    title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
                             </td>
                             <td class="tabs__table-cell">
                                 <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
@@ -117,6 +112,7 @@
                 </tbody>
             </table>
         </div>
+
 
         <div class="tabs tabs--inline">
             <div class="tabs__tabs">
@@ -133,12 +129,15 @@
                 {% for generic_information, form in informatie_forms %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ form.taal.value }}">
-                        <a
-                            href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ form.taal.value }}"
-                            class="preview"
-                            target="_blank">
-                            <i class="fa fa-vector-square"></i> {% trans "Preview" %}
-                        </a>
+
+                        <div class="toolbar">
+                            <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ form.taal.value }}"
+                               class="preview"
+                               target="_blank">
+                                <i class="fa fa-vector-square"></i> {% trans "Preview" %}
+                            </a>
+                            {% toggle _('Aanpassen') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
+                        </div>
                         <hr class="divider">
 
                         {% if generic_information %}

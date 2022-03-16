@@ -9,45 +9,6 @@
     li {
       margin: 1em 1em;
     }
-
-    .form__diff-btn {
-      &--enabled + .form__edit-btn,
-      &--enabled + .form__edit-btn svg,
-      {
-        pointer-events: none;
-        color: $color_grey;
-      }
-    }
-
-    &--disabled {
-
-      button {
-        pointer-events: none;
-      }
-
-      .form__diff-btn,
-      .form__diff-btn .svg-inline--fa {
-        color: $color_primary;
-        pointer-events: all;
-      }
-
-      .ck-editor__top {
-        display: none;
-      }
-
-      .ck-read-only,
-      textarea,
-      input {
-        background-color: transparent !important;
-        border-color: transparent !important;
-      }
-
-      .dynamic__container__button,
-      .dynamic__container__button svg,
-      {
-        color: transparent !important;
-      }
-    }
   }
 
   .form__group {
@@ -80,11 +41,14 @@
     width: 100%;
     min-height: 57px;
 
+    &[disabled],
+    &[readonly]:not(.flatpickr-input),
     &--disabled {
-      background-color: $color_grey_light;
+      background-color: $color_grey_lightest;
     }
 
-    &[disabled]::placeholder {
+    &[disabled]::placeholder,
+    &[readonly]::placeholder {
       color: transparent;
     }
   }
@@ -202,24 +166,6 @@
     &-link {
       margin-left: 16px;
     }
-
-  }
-
-  .form__edit-btn,
-  .form__diff-btn,
-  .form__display-btn,
-  .form__reference-btn,
-  .form__edit-btn .svg-inline--fa,
-  .form__diff-btn .svg-inline--fa,
-  .form__display-btn .svg-inline--fa,
-  .form__reference-btn .svg-inline--fa {
-    transition: .25s color ease;
-  }
-
-  .form__diff-btn,
-  .form__diff-btn .svg-inline--fa {
-    color: $color_grey;
-    pointer-events: none;
   }
 
   .errorlist {

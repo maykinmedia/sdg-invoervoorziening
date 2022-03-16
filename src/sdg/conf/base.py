@@ -127,6 +127,7 @@ INSTALLED_APPS = [
     "solo",
     # SDG applications
     "sdg.api",
+    "sdg.components",
     "sdg.core",
     "sdg.utils",
     "sdg.accounts",

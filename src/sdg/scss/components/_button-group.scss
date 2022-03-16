@@ -1,0 +1,12 @@
+.button-group {
+  display: flex;
+
+  .button {
+    border: 1px solid var(--shadow-color);
+    border-bottom: none;
+  }
+
+  .button + .button {
+    border-left: none;
+  }
+}

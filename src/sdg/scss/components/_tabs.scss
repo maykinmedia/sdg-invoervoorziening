@@ -45,6 +45,10 @@
     }
   }
 
+  .tabs__tab-content > .toolbar {
+    z-index: 1000
+  }
+
   .tabs__tab-header {
     padding: 0 12px;
     display: flex;
@@ -106,16 +110,6 @@
       }
     }
 
-    &.form__cell--disabled {
-      .tabs__table-cell--field {
-        .form__input,
-        .ck-editor__main {
-          border: 1px solid $color_grey !important;
-          background-color: #ebebeb !important;
-        }
-      }
-    }
-
     &--versions {
       float: right;
       display: grid;
@@ -131,17 +125,6 @@
         font-weight: bold;
         border-top-left-radius: 0px;
         border-top-right-radius: 0px;
-      }
-    }
-
-    &--tools {
-      display: flex;
-      justify-content: flex-end;
-      padding-bottom: 12px;
-      margin-top: 14px;
-
-      a {
-        margin-left: 18px;
       }
     }
 
@@ -185,11 +168,6 @@
 
     &.required {
       color: #333333;
-    }
-
-    .svg-inline--fa {
-      margin: 0 4px;
-      color: $color_primary_darker;
     }
 
     ol {
@@ -289,15 +267,6 @@
     &:last-child {
       padding-bottom: 0;
     }
-  }
-
-  .tabs__table-help {
-    margin-top: 8px;
-    display: block;
-    text-align: right;
-    color: #396a88;
-    font-weight: bold;
-    text-decoration: none;
   }
 
   .markdownx textarea {
