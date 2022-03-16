@@ -8,5 +8,5 @@ import './calendar';
 import './markdown';
 import './dynamic_array';
 import './catalog';
-import './general';
+import './generic';
 import './tooltip';

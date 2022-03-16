@@ -24,7 +24,7 @@ class DiffButton extends FormComponent {
      */
     showInputOrTextarea() {
         const visibleInputOrTextarea = this.getVisibleInputOrTextarea();
-        visibleInputOrTextarea.style.removeProperty('display');
+        visibleInputOrTextarea?.style.removeProperty('display');
     }
 
     /**
@@ -32,7 +32,8 @@ class DiffButton extends FormComponent {
      */
     hideInputOrTextarea() {
         const visibleInputOrTextarea = this.getVisibleInputOrTextarea();
-        visibleInputOrTextarea.style.display = 'none';
+        if (visibleInputOrTextarea)
+            visibleInputOrTextarea.style.display = 'none';
     }
 
     /**

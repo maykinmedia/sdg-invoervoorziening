@@ -1,6 +1,6 @@
-const generalForms = document.querySelectorAll(".form__general");
+const form = document.querySelector(".form__general");
 
-class GeneralForm {
+class GenericForm {
 
     setUpDynamicProductAanwezig() {
         const input = this.node.querySelector("[name=product_aanwezig]");
@@ -36,6 +36,7 @@ class GeneralForm {
         this.setUpDynamicProductAanwezig();
         this.setUpDynamicProductValtOnder();
     }
+
 }
 
-[...generalForms].forEach(form => new GeneralForm(form));
+new GenericForm(form);
