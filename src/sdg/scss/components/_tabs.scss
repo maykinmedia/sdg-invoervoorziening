@@ -192,6 +192,10 @@
       padding-top: 24px;
     }
 
+    &--invisible {
+      opacity: 0;
+    }
+
     &.required {
       color: #333333;
     }
