@@ -13,9 +13,9 @@
                     {{ field|addclass:"form__input" }}
                 </div>
                 {{ field.errors }}
-                {% if not is_reference %}
                     <div class="toolbar">
                         <div class="button-group">
+                            {% if not is_reference %}
                             <button class="button button--light button--small form__diff-btn" type="button">
                                 <i class="fa fa-eye fa-xs"></i>
                                 Vergelijken
@@ -30,11 +30,10 @@
                                 <i class="fa fa-undo fa-xs"></i>
                                 Gebruik standaardtekst
                             </button>
-
+                            {% endif %}
                         </div>
                         {% toggle _('Aanpassen') hide_label=True icon_before='lock' icon_after='lock-open' %}
                     </div>
-                {% endif %}
             {% endif %}
         </td>
     </tr>
