@@ -37,13 +37,13 @@ class FormToggle extends FormComponent {
      * Returns an HTMLElement representing the scope of the toggle.
      * For an "edit all" toggle the form is considered to be the scope, for an "edit control" toggle the form control is
      * considered to be the element scope.
-     * @return {(HTMLElement|HTMLFormElement)}
+     * @return {([HTMLElement]|[HTMLFormElement])}
      */
     getElementScope() {
         try {
-            return this.getFormControl();
+            return [this.getFormControl()];
         } catch (e) {
-            return this.node.form;
+            return this.node.form.querySelectorAll('.form__cell');
         }
     }
 
@@ -53,35 +53,11 @@ class FormToggle extends FormComponent {
      * Use this to persist (read only) state to DOM.
      * @param {Object} state Read only state.
      */
-    render({editable}) {
+    render(state) {
+        const {editable} = state;
         const elementScope = this.getElementScope();
 
-        // Update the current element.
-        this.node.checked = editable;
-
-        // Update synced elements.
-        try {
-            this.getFormControl();  // Use as indicator whether toggle is bound to form control, raises error if not.
-        } catch (e) {
-            [...this.node.form.querySelectorAll('.toggle input')].forEach((toggle) => toggle.checked = editable);
-        }
-
-        // Set readonly.
-        [...elementScope.querySelectorAll(`
-            .form__cell input,
-            .form__cell select,
-            .form__cell textarea
-        `)].forEach((field) => {
-            const formControl = this.getFormControl(field);
-            formControl.classList.toggle('form__cell--disabled', !editable);
-            field.readOnly = !editable;
-        });
-
-        // Set disabled.
-        [...elementScope.querySelectorAll(
-            '.form__cell .button-group .button'
-        )].forEach((button) => button.disabled = !editable);
-
+        [...elementScope].forEach((formControl) => this.setFormControlDisabled(!editable, formControl));
     }
 }
 

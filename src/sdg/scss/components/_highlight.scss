@@ -1,0 +1,21 @@
+@import '../settings';
+@import './colors';
+
+.highlight {
+  --border-color: #{$color_grey_light};
+  --border-size: #{$typography-size-border};
+  --main-color: #{$color_white};
+  --spacing: #{$grid-margin-1};
+  background-color: var(--main-color);
+  border: var(--border-size) solid var(--border-color);
+  padding: var(--spacing);
+
+  &[aria-hidden=true] {
+    display: none;
+    visibility: hidden;
+  }
+
+  &:empty {
+    display: none;
+  }
+}

@@ -1,5 +1,9 @@
 @import 'colors';
 
+.ck {
+  --ck-color-toolbar-background: $color_grey_lightest;
+}
+
 .ck-content {
   transition: background-color .3s ease-in-out;
 

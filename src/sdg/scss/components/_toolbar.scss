@@ -1,5 +1,23 @@
 .toolbar {
+  --border-color: transparent;
+  --border-size: #{$typography-size-border};
+  --main-color: transparent;
+  --spacing: #{$grid-margin-1} 0;
+
+  background-color: var(--main-color);
+  border: var(--border-size) solid var(--border-color);
   display: flex;
   justify-content: space-between;
-  margin: 12px 0;
+  padding: var(--spacing);
+
+  &[aria-hidden=true] {
+    display: none;
+    visibility: hidden;
+  }
+
+  &--dark {
+      --border-color: #{$color_grey_light};
+      --main-color: #{$color_grey_lightest};
+      --spacing: #{$grid-margin-1};
+  }
 }

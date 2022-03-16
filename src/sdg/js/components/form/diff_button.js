@@ -1,15 +1,14 @@
 import Diff from 'text-diff';
-import {FormComponent} from './abstract/form_component';
+import {ReferenceTextComponent} from './abstract/reference_text_component';
 
 
 /** @type {NodeListOf<HTMLAnchorElement>} */
 const DIFF_BUTTONS = document.querySelectorAll('.form__diff-btn');
 
-
 /**
  * Button showing diffs between user and stored value of an input.
  */
-class DiffButton extends FormComponent {
+class DiffButton extends ReferenceTextComponent {
     /**
      * Gets called when this.node gets clicked.
      * @param {MouseEvent} event
@@ -124,9 +123,9 @@ class DiffButton extends FormComponent {
      * @param {Object} state Read only state.
      */
     render(state) {
-        const {active} = state;
+        super.render(state);
 
-        this.node.classList.toggle('button--active', Boolean(active));
+        const {active} = state;
 
         this.renderDiffElement(state);
         this.renderVersionContainer();

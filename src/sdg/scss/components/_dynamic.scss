@@ -19,7 +19,6 @@
 
     .dynamic__container__button {
       border: none;
-      color: $color_secondary_lightest;
       padding: 6px;
       cursor: pointer;
 
@@ -30,17 +29,6 @@
         right: 24px;
         color: $color_secondary_darkest;
       }
-
-      &--low {
-        @extend .dynamic__container__button;
-        background-color: transparent;
-        color: $color_secondary_darkest;
-        font-weight: bold;
-        margin-right: 10px;
-        margin-top: 3px;
-        width: 98%;
-      }
-
     }
 
   }
