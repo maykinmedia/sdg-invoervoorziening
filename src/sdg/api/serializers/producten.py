@@ -32,6 +32,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "verwijzing_links",
             "wtd_bij_geen_reactie",
             "datum_wijziging",
+            "product_valt_onder_toelichting",
         )
 
 
@@ -97,7 +98,9 @@ class ProductSerializer(ProductBaseSerializer):
             "locaties",
             "doelgroep",
             "vertalingen",
+            "referentie_product",
             "gerelateerde_producten",
+            "product_valt_onder",
         )
         extra_kwargs = {
             "url": {
@@ -109,6 +112,10 @@ class ProductSerializer(ProductBaseSerializer):
                 "view_name": "api:productencatalogus-detail",
             },
             "referentie_product": {
+                "lookup_field": "uuid",
+                "view_name": "api:product-detail",
+            },
+            "product_valt_onder": {
                 "lookup_field": "uuid",
                 "view_name": "api:product-detail",
             },

@@ -12,7 +12,12 @@ from django.views.generic.detail import SingleObjectMixin
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.models import ProductenCatalogus
 from sdg.core.types import Event
-from sdg.producten.forms import LocalizedProductForm, ProductForm, VersionForm
+from sdg.producten.forms import (
+    LocalizedProductForm,
+    LocalizedProductFormSet,
+    ProductForm,
+    VersionForm,
+)
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.utils import build_url_kwargs, duplicate_localized_products
 
@@ -55,12 +60,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     template_name = "producten/update.html"
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"
-    form_class = inlineformset_factory(
-        ProductVersie,
-        LocalizedProduct,
-        form=LocalizedProductForm,
-        extra=0,
-    )
+    form_class = LocalizedProductFormSet
     required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_queryset(self):
@@ -127,17 +127,20 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         return self.render_to_response(self.get_context_data())
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST, instance=self.object)
-        version_form = VersionForm(request.POST, instance=self.object)
         product_form = ProductForm(request.POST, instance=self.product)
+        version_form = VersionForm(request.POST, instance=self.object)
+        form = self.form_class(
+            request.POST, instance=self.object, product_form=product_form
+        )
 
-        forms = [form, version_form, product_form]
-        if all(f.is_valid() for f in forms):
-            return self.form_valid(*forms)
-        else:
+        forms = (product_form, version_form, form)
+        forms_valid = [f.is_valid() for f in forms]
+        if not all(forms_valid):
             return self.form_invalid(*forms)
 
-    def form_valid(self, form, version_form, product_form):
+        return self.form_valid(*forms)
+
+    def form_valid(self, product_form, version_form, form):
         with transaction.atomic():
             product_form.save()
             new_version, created = self._save_version_form(version_form)
@@ -149,7 +152,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
                 form.save()
             return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, form, version_form, product_form):
+    def form_invalid(self, product_form, version_form, form):
         context = self.get_context_data(
             form=form, version_form=version_form, product_form=product_form
         )
