@@ -11,7 +11,7 @@
     <div class="login__container">
         <h3 class="login__container-title">Inloggen</h3>
         {% if wizard.steps.current == 'auth' %}
-            <p>Voer je inloggegevens in.</p>
+            <p>{% trans "Voer je inloggegevens in." %}</p>
         {% elif wizard.steps.current == 'token' %}
             {% if device.method == 'call' %}
                 <p>{% blocktrans trimmed %}We are calling your phone right now, please enter the
