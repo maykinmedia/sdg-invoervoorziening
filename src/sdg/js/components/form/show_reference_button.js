@@ -1,5 +1,4 @@
-import showdown from 'showdown';
-import {FormComponent} from './abstract/form_component';
+import {ReferenceTextComponent} from './abstract/reference_text_component';
 
 
 /** @type {NodeListOf<HTMLAnchorElement>} */
@@ -9,19 +8,14 @@ const SHOW_REFERENCE_BUTTONS = document.querySelectorAll('.form__display-btn');
 /**
  * Button allow the user to use the reference text.
  */
-class ShowReferenceButton extends FormComponent {
+class ShowReferenceButton extends ReferenceTextComponent {
     /**
      * Gets called when this.node gets clicked.
      * @param {MouseEvent} event
      */
     onClick(event) {
         event.preventDefault();
-        const inputOrTextarea = this.getInputOrTextarea();
-        const referenceForm = this.getCurrentReferenceForm();
-        const referenceField = referenceForm.content.getElementById(inputOrTextarea.id);
-        const referenceHTML = new showdown.Converter().makeHtml(referenceField.value);
-
-        this.setState({active: !this.state.active, referenceHTML: referenceHTML});
+        this.setState({active: !this.state.active, referenceHTML: this.getReferenceHTML()});
     }
 
     /**
@@ -33,41 +27,19 @@ class ShowReferenceButton extends FormComponent {
     }
 
     /**
-     * Sets the active icon.
-     */
-    setActiveIcon() {
-        const icon = this.getIcon();
-        icon.classList.remove('fa-chevron-right');
-        icon.classList.add('fa-chevron-down');
-    }
-
-    /**
-     * Sets the inactive icon.
-     */
-    setInActiveIcon() {
-        const icon = this.getIcon();
-        icon.classList.remove('fa-chevron-down');
-        icon.classList.add('fa-chevron-right');
-    }
-
-    /**
      * Shows the reference text.
      */
     showReferenceText() {
-        if (!this.referenceTextContainer) {
-            return;
-        }
-        this.referenceTextContainer.style.removeProperty('display');
+        this.getReferenceTextContainer().removeAttribute('aria-hidden');
+        this.getReferenceTextToolbar().removeAttribute('aria-hidden');
     }
 
     /**
      * Hide the refence text.
      */
     hideReferenceText() {
-        if (!this.referenceTextContainer) {
-            return;
-        }
-        this.referenceTextContainer.style.setProperty('display', 'none');
+        this.getReferenceTextContainer().setAttribute('aria-hidden', true);
+        this.getReferenceTextToolbar().setAttribute('aria-hidden', true);
     }
 
     /**
@@ -76,23 +48,18 @@ class ShowReferenceButton extends FormComponent {
      * Use this to persist (read only) state to DOM.
      * @param {Object} state Read only state.
      */
-    render({active, referenceHTML}) {
-        this.node.classList.toggle('button--active', Boolean(active));
+    render(state) {
+        super.render(state);
 
-        if (!this.referenceTextContainer) {
-            const referenceTemplate = this.getReferenceTemplate();
-            this.referenceTextContainer = document.importNode(referenceTemplate.content.children[0], true);
-            this.getFormControl().appendChild(this.referenceTextContainer);
-        }
+        const {active, referenceHTML} = state;
+        const iconRotation = (active) ? 90 : 0;
 
-        const referenceHTMLWrapper = this.referenceTextContainer.querySelector('.reference__display--content');
-        referenceHTMLWrapper.innerHTML = referenceHTML;
+        this.getIcon().style.transform = `rotate(${iconRotation}deg)`;
 
         if (active) {
-            this.setActiveIcon();
+            this.getReferenceTextContainer().innerHTML = referenceHTML;
             this.showReferenceText();
         } else {
-            this.setInActiveIcon();
             this.hideReferenceText();
         }
     }

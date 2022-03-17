@@ -2,6 +2,10 @@ import {Component} from '../../abstract/component';
 import {availableEditors} from '../../markdown';
 
 
+/**
+ * Base class for implementing components within the update form.
+ * @abstract
+ */
 export class FormComponent extends Component {
     /**
      * Binds events to callbacks.
@@ -19,20 +23,47 @@ export class FormComponent extends Component {
     }
 
     /**
-     * Returns the reference text template.
-     * @return {HTMLTemplateElement}
-     */
-    getReferenceTemplate() {
-        return document.querySelector(".form__reference--display-template");
-    }
-
-    /**
      * Returns the form control (table cell) containing this button.
      * @param {HTMLElement} [child]
      * @return {HTMLElement}
      */
     getFormControl(child) {
         return this._getParent('form__cell', child);
+    }
+
+    /**
+     * Returns whether the form control is disabled.
+     * @return {boolean}
+     */
+    getFormControlDisabled() {
+        return this.getFormControl().classList.contains('form__cell--disabled');
+    }
+
+    /**
+     * Sets the disabled state of the form control.
+     * @param {boolean} disabled
+     * @param {HTMLElement} [formControl]
+     */
+    setFormControlDisabled(disabled, formControl = this.getFormControl()) {
+        formControl.classList.toggle('form__cell--disabled', disabled);
+        const toggleInput = formControl.querySelector('.toolbar .toggle input ');
+
+        // Update toggle.
+        if(toggleInput) {
+            toggleInput.checked = !disabled;
+        }
+
+        // Update input/select/textarea.
+        [...formControl.querySelectorAll(`
+            .form__cell input,
+            .form__cell select,
+            .form__cell textarea
+        `)].forEach((field) => {
+            field.readOnly = disabled;
+        });
+
+        // Update reference button.
+        formControl.querySelector('.form__cell .form__reference-btn')?.toggleAttribute('disabled', disabled);
     }
 
     /**
@@ -69,59 +100,11 @@ export class FormComponent extends Component {
     }
 
     /**
-     * Returen the reference form.
-     * @return {HTMLTemplateElement}
-     */
-    getCurrentReferenceForm() {
-        const referenceFormSelector = this.getTable().dataset.reference;
-        return document.querySelector(referenceFormSelector);
-    }
-
-    /**
-     * Returen the previous reference form.
-     * @return {HTMLTemplateElement}
-     */
-    getPreviousReferenceForm() {
-        const previousReferenceFormSelector = this.getTable().dataset.previousreference;
-        return document.querySelector(previousReferenceFormSelector);
-    }
-
-    /**
      * Returns the HTMLElement containing the version labels.
      * @return {HTMLElement}
      */
     getVersionsContainer() {
         return this.getFormControl().querySelector('.tabs__table-cell--versions');
-    }
-
-    /**
-     * Returns the current version data.
-     * @return {{input: (HTMLInputElement|HTMLTextAreaElement), title: string}}
-     */
-    getCurrentVersionData() {
-        const inputOrTextarea = this.getInputOrTextarea();
-        const currentReferenceForm = this.getCurrentReferenceForm();
-        const currentReferenceInput = currentReferenceForm.content.querySelector(`#${inputOrTextarea.id}`);
-
-        return {
-            'title': 'Uw tekst',
-            'input': currentReferenceInput,
-        };
-    }
-
-    /**
-     * Returns the previous version data.
-     * @return {{input: (HTMLInputElement|HTMLTextAreaElement), title: string}}
-     */
-    getPreviousVersionData() {
-        const inputOrTextarea = this.getInputOrTextarea();
-        const previousReferenceForm = this.getPreviousReferenceForm();
-        const previousReferenceInput = previousReferenceForm.content.querySelector(`#${inputOrTextarea.id}`);
-
-        return {
-            'title': previousReferenceForm.dataset.title,
-            'input': previousReferenceInput,
-        };
     }
 
     /**
@@ -141,7 +124,7 @@ export class FormComponent extends Component {
         const inputOrTextarea = this.getInputOrTextarea();
         const editor = availableEditors[inputOrTextarea.id];
 
-        if(editor) {
+        if (editor) {
             editor.setValue(value);
             return;
         }
@@ -156,7 +139,7 @@ export class FormComponent extends Component {
      * @return {HTMLElement}
      * @private
      */
-    _getParent(className, child=this.node) {
+    _getParent(className, child = this.node) {
         let iteratedNode = child.parentElement;
         let i = 1;
 

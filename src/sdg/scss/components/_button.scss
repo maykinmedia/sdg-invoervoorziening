@@ -1,4 +1,5 @@
 @import "colors";
+@import '~microscope-sass/lib/animation';
 
 .button {
   --main-color: #{$color_accent};
@@ -62,6 +63,7 @@
   }
 
   .svg-inline--fa {
+    @include animate;
     color: var(--text-color);
     margin: 0 4px;
   }
