@@ -16,17 +16,12 @@ class ServiceConfiguration(models.Model):
         help_text=_("De doelgroep waarvoor deze service is geconfigureerd. "),
     )
 
-    @property
-    def url(self):
-        return f"{self.service.api_root}producten/"
-
     def retrieve_products(self) -> List[Dict]:
         """
         Fetch products according to the configured API.
         """
         client = self.service.build_client()
-        response = client.retrieve("producten", self.url)
-        return response["results"]
+        return client.retrieve_products()
 
     class Meta:
         verbose_name = _("Serviceconfiguratie")

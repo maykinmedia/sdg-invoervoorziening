@@ -498,7 +498,6 @@ MARKDOWNIFY_WHITELIST_TAGS = [
     "h5",
     "code",
 ]
-
 MARKDOWNIFY_MARKDOWN_EXTENSIONS = ["markdown.extensions.extra"]
 
 # Celery
@@ -555,3 +554,6 @@ if SUBPATH := config("SUBPATH", None):
 
 # django-solo
 SOLO_CACHE = "default"
+
+# zgw_consumers
+ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
