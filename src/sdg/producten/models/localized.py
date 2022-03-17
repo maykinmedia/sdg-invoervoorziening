@@ -28,7 +28,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     product_titel = models.CharField(
         _("product titel"),
-        max_length=50,
+        max_length=80,
         help_text=_(
             "De titel van het decentrale product, die immers kan afwijken van de landelijke titel."
         ),
@@ -119,7 +119,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     product_titel_decentraal = models.CharField(
         _("product titel decentraal"),
-        max_length=50,
+        max_length=80,
         help_text=_(
             "De titel van het decentrale product, die immers kan afwijken van de landelijke titel."
         ),
@@ -288,7 +288,7 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
 
     product_titel_uitvoering = models.CharField(
         _("product titel uitvoering"),
-        max_length=50,
+        max_length=80,
         help_text=_("De titel van de uitvoering van het product."),
     )
 
