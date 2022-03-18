@@ -15,6 +15,9 @@ schema:
 admin:
 	./bin/generate_admin_index_fixture.sh
 
+beat:
+	./bin/generate_celery_beat_fixture.sh
+
 migrations:
 	venv/bin/python src/manage.py makemigrations
 
