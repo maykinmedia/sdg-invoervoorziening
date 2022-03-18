@@ -77,8 +77,15 @@ export class Component {
     }
 
     /**
+     * Gets called before the first render cycle.
+     * Use this to sync state with DOM before first render.
+     */
+    beforeMount() {
+    }
+
+    /**
      * Gets called after the first render cycle.
-     * Use this to sync state with DOM on initial mount.
+     * Use this to sync state with DOM after first render.
      */
     onMount() {
     }
@@ -258,6 +265,10 @@ export class Component {
     _render(state) {
         if (this._options.observe) {
             this.disconnectObserver();
+        }
+
+        if (!this._isMounted && this.node.isConnected) {
+            this.beforeMount();
         }
 
         this.render(state);

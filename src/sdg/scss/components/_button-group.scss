@@ -1,12 +1,25 @@
 .button-group {
   display: flex;
 
-  .button {
+  .button:not(.button--transparent) {
     border: 1px solid var(--shadow-color);
     border-bottom: none;
   }
 
-  .button + .button {
+  .button:not(.button--transparent) + .button {
     border-left: none;
+  }
+
+  .button--transparent:not(:first-child) {
+    margin-left: 4px;
+  }
+  .button--transparent:not(:last-child) {
+    margin-right: 4px;
+  }
+  .button--transparent:not(:last-child):after {
+    content: '';
+    border-right: 1px solid var(--shadow-color);
+    left: 5px;
+    position: relative;
   }
 }

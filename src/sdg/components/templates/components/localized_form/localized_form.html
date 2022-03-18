@@ -1,0 +1,93 @@
+{% load i18n toggle utils %}
+
+{% if include_form %}
+<form class="form form--localized"
+      action="{{ action|default:'.' }}"
+      method="{{ method|default:'post' }}"
+      enctype="{{ enctype|default:'multipart/form-data' }}">
+    {# Meta. #}
+    {% csrf_token %}
+    {{ formset.management_form }}
+{% endif %}
+
+    {# Each object is a dict with bound_fields and field (name). #}
+    {% for object in object_list %}
+
+        <div class="form__language-wrapper" lang="{{ languages.0 }}">
+            {# Form control for each locale. #}
+            {% for field in object.bound_fields %}
+                <div class="form__control"{% if not forloop.first %} aria-hidden="true"{% endif %}
+                     lang="{{ field.language }}">
+
+                    {# Form control header. #}
+                    <header class="form__control-header">
+                        {# Label with icon. #}
+                        <label class="form__label">
+                            {{ field.label }}
+                            <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                        </label>
+
+                        {# Language selectors. #}
+                        <div class="button-group">
+                            {% for language in languages %}
+                                <button class="button button--extra-small button--transparent{% if forloop.first %} button--active{% endif %} form__language-switch"
+                                        lang="{{ language }}"
+                                        type="button">
+                                    {{ language|upper }}
+                                    <i class="fas fa-info-circle fa-xs dark" title="{% trans 'De waarde voor deze taal is aangepast.' %}" aria-hidden="true" ></i>
+                                </button>
+                            {% endfor %}
+                        </div>
+                    </header>
+
+                    {#  Form control body. #}
+                    <div class="form__control-body" lang="{{ field.language }}">
+                        {# Versions #}
+                        {# Too specific for generic localized form, but here for pragmatic reasons. #}
+                        <div class="tabs__table-cell--versions"></div>
+
+                        {# Field. #}
+                        {{ field|addclass:"form__input" }}
+                        {{ field.errors }}
+                    </div>
+
+                    {# Form control footer. #}
+                    {# Reference text actions. #}
+                    {# Too specific for generic localized form, but here for pragmatic reasons. #}
+                    {% if 'dynamic_array' not in field.field.widget.template_name %}
+                        <footer class="form__control-footer">
+                            <aside class="toolbar">
+                                <button class="button button--light button--small form__display-btn" type="button">
+                                    <i class="fa fa-chevron-right"></i>
+                                    {% trans 'Toon standaardtekst' %}
+                                </button>
+                                {% toggle _('Aanpassen') hide_label=True icon_before='lock' icon_after='lock-open' %}
+                            </aside>
+
+                            <div class="highlight form__reference"></div>
+
+                            <aside class="toolbar toolbar--dark" aria-hidden="true">
+                                <div class="button-group">
+                                    <button class="button button--light button--small form__diff-btn"
+                                            type="button"
+                                            title="{% trans "Toon wijzigingen in standaard tekst t.o.v. vorige versie" %}">
+                                        <i class="fa fa-eye fa-xs"></i>
+                                        {% trans 'Vergelijken' %}
+                                    </button>
+
+                                    <button class="button button--light button--small form__reference-btn"
+                                            type="button">
+                                        <i class="fa fa-undo fa-xs"></i>
+                                        {% trans 'Gebruik standaardtekst' %}
+                                    </button>
+                                </div>
+                            </aside>
+                        </footer>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% if include_form %}
+</form>
+{% endif %}

@@ -51,6 +51,10 @@ class MarkdownEditor extends Component {
                         return false;
                     }
                 });
+                editor.model.document.on('change:data', (e) => {
+                    const event = new CustomEvent('change', e)
+                    this.node.dispatchEvent(event);
+                })
                 this.editor = editor;
                 return editor;
             });
