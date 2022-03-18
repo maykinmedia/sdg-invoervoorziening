@@ -47,7 +47,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2021-12-01T12:02:28.338"
+        "last_update": "2022-03-18T16:03:23.886"
     }
 },
 {
@@ -132,6 +132,34 @@
         "total_run_count": 1,
         "date_changed": "2021-12-01T12:02:28.351",
         "description": "Used for automatically generating generic and reference products."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 4,
+    "fields": {
+        "name": "Services (API data-loading)",
+        "task": "sdg.services.tasks.import_data_from_services",
+        "interval": null,
+        "crontab": 1,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2022-03-18T16:03:23.942",
+        "description": "This task will update existing localized generic product with data from the configured external API using 'upnLabel' to match. Unreachable APIs will be ignored."
     }
 }
 ]

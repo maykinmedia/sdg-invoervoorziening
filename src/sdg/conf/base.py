@@ -125,12 +125,14 @@ INSTALLED_APPS = [
     "django_filters",
     "timeline_logger",
     "solo",
+    "zgw_consumers",
     # SDG applications
     "sdg.api",
     "sdg.components",
     "sdg.core",
     "sdg.utils",
     "sdg.accounts",
+    "sdg.services",
     "sdg.producten",
     "sdg.organisaties",
 ]
@@ -496,7 +498,6 @@ MARKDOWNIFY_WHITELIST_TAGS = [
     "h5",
     "code",
 ]
-
 MARKDOWNIFY_MARKDOWN_EXTENSIONS = ["markdown.extensions.extra"]
 
 # Celery
@@ -553,3 +554,6 @@ if SUBPATH := config("SUBPATH", None):
 
 # django-solo
 SOLO_CACHE = "default"
+
+# zgw_consumers
+ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
