@@ -14,7 +14,7 @@
                         <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{{ lokaleoverheid }}</a>
                     {% endif %}
                     {% if kwargs.catalog_pk %}
-                        <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{% trans 'Catalogi' %}</a>
+                        <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{% trans 'Productenlijst' %}</a>
                     {% endif %}
                 {% endwith %}
                 {% if namespace == "roles" %}
