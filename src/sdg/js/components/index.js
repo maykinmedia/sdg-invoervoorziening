@@ -2,6 +2,7 @@
 import './form';
 import './selection';
 import './tabs';
+import './toggle';
 import './notifications';
 import './formset';
 import './calendar';
