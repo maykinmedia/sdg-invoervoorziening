@@ -31,12 +31,12 @@ class ProductPreviewView(OverheidMixin, DetailView):
     def get_queryset(self):
         return (
             Product.objects.select_related("catalogus__lokale_overheid")
-                .prefetch_related(
+            .prefetch_related(
                 "locaties",
                 Prefetch("referentie_product", queryset=Product.objects.most_recent()),
             )
-                .most_recent()
-                .active()
+            .most_recent()
+            .active()
         )
 
     def get_lokale_overheid(self):
@@ -66,8 +66,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_queryset(self):
         return (
             Product.objects.most_recent()
-                .active()
-                .select_related("catalogus__lokale_overheid")
+            .active()
+            .select_related("catalogus__lokale_overheid")
         )
 
     def _save_version_form(self, version_form) -> Tuple[ProductVersie, bool]:
@@ -125,18 +125,18 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
         # FIXME: Optimize?
         context["localized_form_fields"] = [
-            'product_titel_decentraal',
-            'specifieke_tekst',
-            'verwijzing_links',
-            'procedure_beschrijving',
-            'vereisten',
-            'bewijs',
-            'bezwaar_en_beroep',
-            'kosten_en_betaalmethoden',
-            'uiterste_termijn',
-            'wtd_bij_geen_reactie',
-            'decentrale_procedure_link',
-            'product_valt_onder_toelichting',
+            "product_titel_decentraal",
+            "specifieke_tekst",
+            "verwijzing_links",
+            "procedure_beschrijving",
+            "vereisten",
+            "bewijs",
+            "bezwaar_en_beroep",
+            "kosten_en_betaalmethoden",
+            "uiterste_termijn",
+            "wtd_bij_geen_reactie",
+            "decentrale_procedure_link",
+            "product_valt_onder_toelichting",
         ]
         return context
 

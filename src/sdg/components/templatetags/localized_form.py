@@ -4,7 +4,9 @@ from django.forms import BaseFormSet
 register = template.Library()
 
 
-@register.inclusion_tag('components/localized_form/localized_form.html', takes_context=True)
+@register.inclusion_tag(
+    "components/localized_form/localized_form.html", takes_context=True
+)
 def localized_form(context, formset: BaseFormSet, **kwargs) -> dict:
     """
     Localized form, built for update view.
@@ -30,9 +32,8 @@ def localized_form(context, formset: BaseFormSet, **kwargs) -> dict:
             return [field for field in base_form_fields if field in fields]
         return base_form_fields
 
-
     def get_languages() -> list:
-        languages = [form.initial['taal'] for form in formset.forms]
+        languages = [form.initial["taal"] for form in formset.forms]
         return languages
 
     def get_object_list(formset: BaseFormSet, fields: list) -> list:
