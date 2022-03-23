@@ -64,7 +64,7 @@ class ProductFieldConfiguration(SingletonModel):
     localizedproduct_product_titel_decentraal = LabeledTooltipField(
         verbose_name=_("Specifieke product titel decentraal"),
     )
-    localizedproduct_tekst = LabeledTooltipField(
+    localizedproduct_specifieke_tekst = LabeledTooltipField(
         verbose_name=_("Specifieke tekst"),
     )
     localizedproduct_verwijzing_links = LabeledTooltipField(

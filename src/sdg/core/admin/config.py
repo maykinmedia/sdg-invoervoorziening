@@ -17,6 +17,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                     "product_product_aanwezig_toelichting",
                     "product_locaties",
                     "productversie_publicatie_datum",
+                    "product_product_valt_onder",
                 ],
             },
         ),
@@ -38,7 +39,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
             {
                 "fields": [
                     "localizedproduct_product_titel_decentraal",
-                    "localizedproduct_tekst",
+                    "localizedproduct_specifieke_tekst",
                     "localizedproduct_verwijzing_links",
                     "localizedproduct_decentrale_link",
                     "localizedproduct_datum_wijziging",
@@ -50,6 +51,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                     "localizedproduct_uiterste_termijn",
                     "localizedproduct_wtd_bij_geen_reactie",
                     "localizedproduct_decentrale_procedure_link",
+                    "localizedproduct_product_valt_onder_toelichting",
                 ],
             },
         ),
