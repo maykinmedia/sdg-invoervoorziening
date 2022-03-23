@@ -5,8 +5,8 @@ app_name = "organisaties"
 urlpatterns = [
     path("", include("sdg.organisaties.urls.overheid")),
     url(
-        r"^(?P<pk>[\d]+)/catalogs/",
-        include("sdg.organisaties.urls.catalog", namespace="catalogi"),
+        r"^(?P<pk>[\d]+)/productenlijst/",
+        include("sdg.organisaties.urls.catalog", namespace="productenlijst"),
     ),
     url(
         r"^(?P<pk>[\d]+)/roles/",
