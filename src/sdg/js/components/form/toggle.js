@@ -43,7 +43,7 @@ class FormToggle extends FormComponent {
         try {
             return [this.getFormControl()];
         } catch (e) {
-            return this.node.form.querySelectorAll('.form__cell');
+            return this.node.form.querySelectorAll('.form__control');
         }
     }
 
@@ -56,7 +56,6 @@ class FormToggle extends FormComponent {
     render(state) {
         const {editable} = state;
         const elementScope = this.getElementScope();
-
         [...elementScope].forEach((formControl) => this.setFormControlDisabled(!editable, formControl));
     }
 }

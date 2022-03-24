@@ -2,35 +2,42 @@
 @import '~microscope-sass/lib/animation';
 
 .button {
+  --icon-spacing: 4px;
+  --3d-active: 4px;
+  --3d-hover: -1px;
+  --label-color: #{$color_grey_darkest};;
   --main-color: #{$color_accent};
   --shadow-color: #{$color_accent_dark};
-  --text-color: #{$color_grey_darkest};
   --shadow-size: 4px;
+  --shadow-size-hover: 5px;
+  --spacing: 10px;
+  --padding-h: 20px;
+  --padding-v: 20px;
 
   background-color: var(--main-color);
-  color: var(--text-color);
-  padding: 20px;
+  color: var(--label-color);
+  padding: var(--padding-h) var(--padding-v);
   box-shadow: 0 var(--shadow-size) 0 var(--shadow-color);
   display: inline-block;
-  margin-top: 10px;
+  margin-top: var(--spacing);
   text-decoration: none;
   transition: transform 150ms, box-shadow 100ms;
   border: 0;
   cursor: pointer;
 
   &[disabled] {
-    --text-color: #{$color_grey_dark};
+    --label-color: #{$color_grey_dark};
     pointer-events: none;
   }
 
   &:hover {
-    transform: translateY(-1px);
-    --shadow-size: 5px;
+    --shadow-size: var(--shadow-size-hover)!important;
+    transform: translateY(var(--3d-hover));
   }
 
   &:active {
-    transform: translateY(4px);
-    box-shadow: none;
+    --shadow-size: 0;
+    transform: translateY(var(--3d-active));
   }
 
   &--active {
@@ -38,23 +45,21 @@
   }
 
   &--small {
-    padding: 2px 20px;
-    margin-top: 0px;
+    --3d-active: 1px;
+    --padding-h: 2px;
     --shadow-size: 1px;
-
-    &:active {
-      transform: translateY(1px);
-    }
-
-    &:hover {
-      --shadow-size: 2px;
-    }
+    --shadow-size-hover: 2px;
+    --spacing: 0;
   }
 
-  &.button--secondary {
-    --main-color: #396a88;
-    --shadow-color: #23485C;
-    color: #fff;
+  &--extra-small {
+    --3d-active: 1px;
+    --icon-spacing: 0;
+    --padding-h: 2px;
+    --padding-v: 2px;
+    --shadow-size: 1px;
+    --shadow-size-hover: 2px;
+    --spacing: 0;
   }
 
   &.button--light {
@@ -62,9 +67,24 @@
     --shadow-color: #{$color_secondary-dark};
   }
 
+
+  &.button--secondary {
+    --main-color: #396a88;
+    --shadow-color: #23485C;
+    --label-color: #{$color_secondary_lightest};
+  }
+
+  &.button--transparent {
+    --main-color: transparent;
+    --shadow-color: #{$color_grey};
+    --shadow-size: 0;
+    --shadow-size-hover: 1px;
+  }
+
   .svg-inline--fa {
     @include animate;
-    color: var(--text-color);
-    margin: 0 4px;
+    color: var(--label-color);
+    margin: 0 var(--icon-spacing);
   }
+
 }

@@ -25,10 +25,11 @@ export class FormComponent extends Component {
     /**
      * Returns the form control (table cell) containing this button.
      * @param {HTMLElement} [child]
+     * @param {string} [language]
      * @return {HTMLElement}
      */
-    getFormControl(child) {
-        return this._getParent('form__cell', child);
+    getFormControl(child = undefined) {
+        return this._getParent('form__control', child);
     }
 
     /**
@@ -36,7 +37,7 @@ export class FormComponent extends Component {
      * @return {boolean}
      */
     getFormControlDisabled() {
-        return this.getFormControl().classList.contains('form__cell--disabled');
+        return this.getFormControl().classList.contains('form__control--disabled');
     }
 
     /**
@@ -45,25 +46,25 @@ export class FormComponent extends Component {
      * @param {HTMLElement} [formControl]
      */
     setFormControlDisabled(disabled, formControl = this.getFormControl()) {
-        formControl.classList.toggle('form__cell--disabled', disabled);
+        formControl.classList.toggle('form__control--disabled', disabled);
         const toggleInput = formControl.querySelector('.toolbar .toggle input ');
 
         // Update toggle.
-        if(toggleInput) {
+        if (toggleInput) {
             toggleInput.checked = !disabled;
         }
 
         // Update input/select/textarea.
         [...formControl.querySelectorAll(`
-            .form__cell input,
-            .form__cell select,
-            .form__cell textarea
+            .form__control input,
+            .form__control select,
+            .form__control textarea
         `)].forEach((field) => {
             field.readOnly = disabled;
         });
 
         // Update reference button.
-        formControl.querySelector('.form__cell .form__reference-btn')?.toggleAttribute('disabled', disabled);
+        formControl.querySelector('.form__control .form__reference-btn')?.toggleAttribute('disabled', disabled);
     }
 
     /**
@@ -71,7 +72,7 @@ export class FormComponent extends Component {
      * @return {HTMLElement}
      */
     getFieldContainer() {
-        return this.getFormControl().querySelector('.tabs__table-cell--field');
+        return this.getFormControl().querySelector(`.form__control-body`);
     }
 
     /**
@@ -79,7 +80,7 @@ export class FormComponent extends Component {
      * @return {(HTMLInputElement|HTMLTextAreaElement)}
      */
     getInputOrTextarea() {
-        return this.getFormControl().querySelector('input, textarea');
+        return this.getFieldContainer().querySelector('input, textarea');
     }
 
     /**
@@ -88,6 +89,48 @@ export class FormComponent extends Component {
     getVisibleInputOrTextarea() {
         const fieldContainer = this.getFieldContainer();
         return fieldContainer.querySelector('input, .markdownx');
+    }
+
+    /**
+     *
+     * @param child
+     * @return {HTMLElement}
+     */
+    getLanguageWrapper(child) {
+        return this._getParent('form__language-wrapper', child);
+    }
+
+    /**
+     * Returns the language of the field container containing `this.node`.
+     * @return {string}
+     */
+    getLanguage() {
+        return this.getFieldContainer().lang;
+    }
+
+    /**
+     * Returns the active language.
+     * @return {string}
+     */
+    getActiveLanguage() {
+        return this.getLanguageWrapper().lang;
+    }
+
+    /**
+     * Set the languages.
+     * @param language
+     */
+    setActiveLanguage(language) {
+        const languageWrapper = this.getLanguageWrapper();
+        languageWrapper.lang = language;
+
+        [...languageWrapper.querySelectorAll('.form__control')].forEach((formControl) => {
+            if (formControl.lang === language) {
+                formControl.removeAttribute('aria-hidden');
+            } else {
+                formControl.setAttribute('aria-hidden', true);
+            }
+        });
     }
 
     /**
@@ -113,7 +156,7 @@ export class FormComponent extends Component {
      */
     getValue() {
         const inputOrTextarea = this.getInputOrTextarea();
-        return availableEditors[inputOrTextarea.id]?.getValue() || inputOrTextarea.value;
+        return availableEditors[inputOrTextarea.id]?.getValue() || inputOrTextarea.value
     }
 
     /**
@@ -147,8 +190,8 @@ export class FormComponent extends Component {
             iteratedNode = iteratedNode.parentElement;
             i++;
 
-            if (!iteratedNode || i > 10) {
-                throw new Error(`Maximum recursion depth exceeded while localizing form control for ${child}.`);
+            if (!iteratedNode || i > 100) {
+                throw new Error(`Maximum recursion depth exceeded while localizing parent with className ${className} for ${child}.`);
             }
         }
 

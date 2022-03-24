@@ -9,6 +9,13 @@ const SHOW_REFERENCE_BUTTONS = document.querySelectorAll('.form__display-btn');
  * Button allow the user to use the reference text.
  */
 class ShowReferenceButton extends ReferenceTextComponent {
+    onMount() {
+        super.onMount();
+        if(this.getInputOrTextarea()?.id === 'id_vertalingen-0-specifieke_tekst') {
+            window.showref=this;
+        }
+    }
+
     /**
      * Gets called when this.node gets clicked.
      * @param {MouseEvent} event

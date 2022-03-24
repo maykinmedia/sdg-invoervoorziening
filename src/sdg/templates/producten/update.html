@@ -5,6 +5,7 @@
 {% load i18n %}
 {% load producten %}
 {% load toggle %}
+{% load localized_form %}
 
 {% block templates %}
     {% for reference_form in reference_formset.forms %}
@@ -53,63 +54,56 @@
 
                 {% if not product.is_referentie_product %}
                     {% with field=product_form.product_aanwezig %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }}<i
+                        <tr>
+                            <td class="tabs__table-cell" width="25%">
+                                {{ field.label|capfirst }} <i
                                     class="fas fa-info-circle fa-xs dark"
                                     title="{{ configuration.1|default:field.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {% select field %}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                            </td>
+                            <td class="tabs__table-cell">
+                                {% select field %}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
 
                     {% with field=product_form.product_aanwezig_toelichting %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell"
-                                    width="25%">{{ configuration.0|default:field.label|capfirst }}<i
+                        <tr>
+                            <td class="tabs__table-cell"
+                                width="25%">{{ field.label|capfirst }}<i
                                     class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:field.help_text }}"></i></td>
-                                <td class="tabs__table-cell">
-                                    {{ field|addclass:"form__input" }}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                                    title="{{ field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">
+                                {{ field|addclass:"form__input" }}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
 
                     {% with field=product_form.product_valt_onder %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell"
-                                    width="25%">{{ configuration.0|default:field.label|capfirst }}<i
+                        <tr>
+                            <td class="tabs__table-cell"
+                                width="25%">{{ field.label|capfirst }}<i
                                     class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:field.help_text }}"></i></td>
-                                <td class="tabs__table-cell">
-                                    {% select field %}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                                    title="{{ field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">
+                                {% select field %}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
 
                     {% with field=product_form.locaties %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }} <i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:field.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ field }}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                        <tr>
+                            <td class="tabs__table-cell" width="25%">
+                                {{ field.label|capfirst }}
+                                <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                            </td>
+                            <td class="tabs__table-cell">
+                                {{ field }}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
                 {% endif %}
 
@@ -117,8 +111,8 @@
                     {% with configuration=publication_date.configuration.0 %}
                         <tr>
                             <td class="tabs__table-cell">{{ configuration.0|default:_("Publicatie datum")|capfirst }}<i
-                                class="fas fa-info-circle fa-xs dark"
-                                title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
+                                    class="fas fa-info-circle fa-xs dark"
+                                    title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
                             </td>
                             <td class="tabs__table-cell">
                                 <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
@@ -133,16 +127,6 @@
 
 
         <div class="tabs tabs--inline">
-            <div class="tabs__tabs">
-                {% for language in product.beschikbare_talen %}
-                    <a href="#{{ language.code }}" data-id="{{ language.code }}"
-                       class="tabs__tab tabs__tab{% if forloop.first %}--selected{% endif %}">
-                        {{ language.name }}
-                    </a>
-                {% endfor %}
-            </div>
-
-
             <div class="tabs__tab-contents">
                 {% for generic_information, form in informatie_forms %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
@@ -178,43 +162,16 @@
                             <hr class="divider">
                         {% endif %}
 
-                        <table class="tabs__table form__has-reference"
-                               data-reference=".form__reference-{{ form.taal.value }}"
-                               data-previousreference=".form__previousreference-{{ form.taal.value }}"
-                        >
-                            <thead>
-                            <tr>
-                                <th class="tabs__table-header" width="28%">Specifieke gegevens</th>
-                                <th class="tabs__table-header">Huidige informatie</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    {{ form.non_field_errors }}
-                                    {{ form.id }}
-                                    {{ form.taal.as_hidden }}
-                                </td>
-                            </tr>
-                            {% with reference=product.is_referentie_product %}
-                                {% table_field form.product_titel_decentraal is_reference=reference %}
-                                {% table_field form.specifieke_tekst is_reference=reference %}
-                                {% table_field form.verwijzing_links is_reference=True %}
-                                {% table_field form.procedure_beschrijving is_reference=reference %}
-                                {% table_field form.vereisten is_reference=reference %}
-                                {% table_field form.bewijs is_reference=reference %}
-                                {% table_field form.bezwaar_en_beroep is_reference=reference %}
-                                {% table_field form.kosten_en_betaalmethoden is_reference=reference %}
-                                {% table_field form.uiterste_termijn is_reference=reference %}
-                                {% table_field form.wtd_bij_geen_reactie is_reference=reference %}
-                                {% table_field form.decentrale_procedure_link is_reference=True %}
-                                {% table_field form.product_valt_onder_toelichting is_reference=reference %}
-                            {% endwith %}
-                            </tbody>
-                        </table>
                     </div>
                 {% endfor %}
+                        <div class="tabs__table form__has-reference"
+                             data-reference=".form__reference-{{ form.taal.value }}"
+                             data-previousreference=".form__previousreference-{{ form.taal.value }}">
+                            {{ form.non_field_errors }}
+                            {{ form.id }}
+                            {{ form.taal.as_hidden }}
+                            {% localized_form formset include_form=False fields=localized_form_fields %}
+                        </div>
             </div>
         </div>
 

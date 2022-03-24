@@ -85,7 +85,7 @@ export class ReferenceTextComponent extends FormComponent {
     getCurrentVersionData() {
         const inputOrTextarea = this.getInputOrTextarea();
         const currentReferenceForm = this.getCurrentReferenceForm();
-        const currentReferenceInput = currentReferenceForm.content.querySelector(`#${inputOrTextarea.id}`);
+        const currentReferenceInput = currentReferenceForm.content.querySelector(`#${inputOrTextarea?.id}`);
 
         return {
             'title': 'Uw tekst',
@@ -100,7 +100,7 @@ export class ReferenceTextComponent extends FormComponent {
     getPreviousVersionData() {
         const inputOrTextarea = this.getInputOrTextarea();
         const previousReferenceForm = this.getPreviousReferenceForm();
-        const previousReferenceInput = previousReferenceForm.content.querySelector(`#${inputOrTextarea.id}`);
+        const previousReferenceInput = previousReferenceForm.content.querySelector(`#${inputOrTextarea?.id}`);
 
         return {
             'title': previousReferenceForm.dataset.title,
@@ -113,8 +113,7 @@ export class ReferenceTextComponent extends FormComponent {
      * @return {HTMLTemplateElement}
      */
     getCurrentReferenceForm() {
-        const referenceFormSelector = this.getTable().dataset.reference;
-        return document.querySelector(referenceFormSelector);
+        return document.querySelector(`.form__reference-${this.getLanguage()}`);
     }
 
     /**
@@ -122,8 +121,7 @@ export class ReferenceTextComponent extends FormComponent {
      * @return {HTMLTemplateElement}
      */
     getPreviousReferenceForm() {
-        const previousReferenceFormSelector = this.getTable().dataset.previousreference;
-        return document.querySelector(previousReferenceFormSelector);
+        return document.querySelector(`.form__previousreference-${this.getLanguage()}`);
     }
 
     /**
@@ -157,8 +155,8 @@ export class ReferenceTextComponent extends FormComponent {
     getReferenceHTML() {
         const inputOrTextarea = this.getInputOrTextarea();
         const referenceForm = this.getCurrentReferenceForm();
-        const referenceField = referenceForm.content.getElementById(inputOrTextarea.id);
-        return new showdown.Converter().makeHtml(referenceField.value);
+        const referenceField = referenceForm.content.getElementById(inputOrTextarea?.id);
+        return new showdown.Converter().makeHtml(referenceField?.value);
     }
 
     /**

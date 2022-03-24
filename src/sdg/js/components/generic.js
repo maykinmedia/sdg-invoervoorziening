@@ -22,7 +22,7 @@ class GenericForm {
             .map(e => e.parentElement.parentElement.parentElement);
 
         const displayFunc = (select, dependencies) => {
-            select.selectedIndex > 0 ? dependencies.forEach(e => e.style.display = "table-row") : dependencies.forEach(e => e.style.display = "none");
+            select.selectedIndex > 0 ? dependencies.forEach(e => e.style.display = "block") : dependencies.forEach(e => e.style.display = "none");
         };
 
         displayFunc(select, dependencies);
@@ -39,4 +39,6 @@ class GenericForm {
 
 }
 
-new GenericForm(form);
+if (form) {
+    new GenericForm(form);
+}

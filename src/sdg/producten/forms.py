@@ -28,6 +28,10 @@ class LocalizedProductForm(FieldConfigurationMixin, forms.ModelForm):
             "product_valt_onder_toelichting",
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.configure_field_text()
+
 
 class LocalizedProductFormSet(
     inlineformset_factory(
@@ -93,10 +97,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             .queryset.filter(catalogus=self.instance.catalogus)
             .exclude(pk=self.instance.pk)
         )
-
-        _model_meta = self._meta.model._meta
-        for field in self.fields:
-            self.fields[field].help_text = _model_meta.get_field(field).help_text
+        self.configure_field_text()
 
     def clean(self):
         cleaned_data = super().clean()
