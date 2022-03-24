@@ -4,7 +4,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from sdg.accounts.models import Role
 from sdg.core.admin.mixins import BaseProductFilter
-from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
+from sdg.organisaties.models import (
+    BevoegdeOrganisatie,
+    LokaleOverheid,
+    Lokatie as Locatie,
+)
 
 
 class LocatieInline(admin.StackedInline):
@@ -18,10 +22,13 @@ class HasManagerProductFilter(BaseProductFilter):
     filter_field = "_has_manager"
 
 
+@admin.register(BevoegdeOrganisatie)
+class BevoegdeOrganisatieAdmin(admin.ModelAdmin):
+    search_fields = ("naam",)
+
+
 @admin.register(LokaleOverheid)
 class LokaleOverheidAdmin(admin.ModelAdmin):
-    model = LokaleOverheid
-
     list_display = ("organisatie", "has_manager", "contact_website", "contact_naam")
     list_filter = (HasManagerProductFilter,)
     ordering = ("organisatie__owms_pref_label",)
@@ -35,8 +42,6 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
     autocomplete_fields = (
         "organisatie",
         "ondersteunings_organisatie",
-        "verantwoordelijke_organisatie",
-        "bevoegde_organisatie",
     )
 
     def get_queryset(self, request):

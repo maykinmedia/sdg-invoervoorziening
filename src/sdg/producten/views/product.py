@@ -6,11 +6,9 @@ from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.views.generic import DetailView, RedirectView, UpdateView
-from django.views.generic.detail import SingleObjectMixin
+from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
-from sdg.core.models import ProductenCatalogus
 from sdg.core.types import Event
 from sdg.producten.forms import (
     LocalizedProductForm,

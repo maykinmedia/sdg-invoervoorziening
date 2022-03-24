@@ -11,3 +11,4 @@ import './dynamic_array';
 import './catalog';
 import './generic';
 import './tooltip';
+import './choices';

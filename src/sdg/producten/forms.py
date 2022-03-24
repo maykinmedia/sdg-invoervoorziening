@@ -4,6 +4,7 @@ from django import forms
 from django.forms import inlineformset_factory
 
 from ..core.models.mixins import FieldConfigurationMixin
+from ..organisaties.models import BevoegdeOrganisatie
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .widgets import CheckboxSelectMultiple
@@ -72,6 +73,10 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         ).annotate_name(),
         required=False,
     )
+    bevoegde_organisatie = forms.ModelChoiceField(
+        queryset=BevoegdeOrganisatie.objects.all(),
+        required=False,
+    )
     locaties = forms.ModelMultipleChoiceField(
         queryset=None,
         required=False,
@@ -84,6 +89,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "product_aanwezig",
             "product_aanwezig_toelichting",
             "product_valt_onder",
+            "bevoegde_organisatie",
             "locaties",
         )
 
@@ -97,6 +103,9 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             .queryset.filter(catalogus=self.instance.catalogus)
             .exclude(pk=self.instance.pk)
         )
+        self.fields["bevoegde_organisatie"].queryset = self.fields[
+            "bevoegde_organisatie"
+        ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
         self.configure_field_text()
 
     def clean(self):

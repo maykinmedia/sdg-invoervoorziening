@@ -1,0 +1,19 @@
+{% load utils %}
+{% load i18n %}
+
+<div class="form__subforms">
+    <h3 class="form__subtitle">
+                    <span class="formset__title">{% trans "Organisatie" %} __prefix__</span>
+                    <a class="formset__remove" href="#">
+                        <i class="far fa-trash-alt"></i>
+                        {% trans "Organisatie verwijderen" %}
+                    </a>
+                </h3>
+    <div class="form__block-group">
+        <div>
+            <div class="form__table-header-left">{% trans "Organisatie" %}</div>
+            {% field form.empty_form.naam %}
+            {{ form.empty_form.organisatie|addclass:"choices" }}
+        </div>
+    </div>
+</div>

@@ -5,13 +5,15 @@ import factory
 from factory.django import DjangoModelFactory
 
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
-from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
+from sdg.organisaties.models import (
+    BevoegdeOrganisatie,
+    LokaleOverheid,
+    Lokatie as Locatie,
+)
 
 
 class LokaleOverheidFactory(DjangoModelFactory):
     ondersteunings_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
-    verantwoordelijke_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
-    bevoegde_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
     organisatie = factory.SubFactory(OverheidsorganisatieFactory)
     contact_naam = factory.Faker("name")
     contact_website = factory.Faker("url")
@@ -41,3 +43,11 @@ class LocatieFactory(DjangoModelFactory):
 
     class Meta:
         model = Locatie
+
+
+class BevoegdeOrganisatieFactory(DjangoModelFactory):
+    naam = factory.Faker("company")
+    organisatie = factory.SubFactory(OverheidsorganisatieFactory)
+
+    class Meta:
+        model = BevoegdeOrganisatie

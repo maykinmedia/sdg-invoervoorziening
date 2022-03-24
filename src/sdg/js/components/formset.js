@@ -1,6 +1,8 @@
 import toArray from 'arrayify';
 import BEM from 'bem.js';
 import {initializeDynamicWidget} from './dynamic_array';
+import Choices from 'choices.js'
+import {CHOICES_CONFIG} from './choices';
 
 
 const BLOCK_FORMSET = 'formset';
@@ -98,6 +100,9 @@ class Formset {
                 initializeDynamicWidget(element)
             });
         }
+
+        const choiceElements = form.querySelectorAll('.choices');
+        [...choiceElements].forEach(element => { new Choices(element, CHOICES_CONFIG)});
     }
 
     getFormIndex(form) {

@@ -87,6 +87,10 @@
         opacity: 1;
       }
     }
+
+    .divider {
+      border-bottom: 4px dotted darken($color_primary_darker, 5%);
+    }
   }
 
   .header__dropdown-list {
@@ -99,6 +103,7 @@
     opacity: 0;
     border-radius: 10px;
     transition: all 0.3s ease-in-out;
+    z-index: 20;
 
     a {
       color: $color_primary_lighter;
@@ -124,6 +129,10 @@
 
     &:hover {
       text-decoration: underline;
+    }
+
+    svg {
+      color: lighten($color_primary, 5%);
     }
   }
 }
