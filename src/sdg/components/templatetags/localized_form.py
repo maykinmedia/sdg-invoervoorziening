@@ -38,12 +38,13 @@ def localized_form(context, formset: BaseFormSet, **kwargs) -> dict:
 
     def get_object_list(formset: BaseFormSet, fields: list) -> list:
         object_list = []
+        languages = get_languages()
         for field in fields:
             obj = {
                 "bound_fields": [form[field] for form in formset.forms],
                 "field": field,
             }
-            for index, language in enumerate(get_languages()):
+            for index, language in enumerate(languages):
                 obj["bound_fields"][index].language = language
             object_list.append(obj)
         return object_list

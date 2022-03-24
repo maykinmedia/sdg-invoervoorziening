@@ -23,7 +23,7 @@
                     <header class="form__control-header">
                         {# Label with icon. #}
                         <label class="form__label">
-                            {{ field.label }}
+                            {{ field.label|capfirst }}
                             <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                         </label>
 

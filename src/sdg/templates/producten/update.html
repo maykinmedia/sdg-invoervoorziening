@@ -54,65 +54,56 @@
 
                 {% if not product.is_referentie_product %}
                     {% with field=product_form.product_aanwezig %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell" width="25%">
-                                    {{ configuration.0|default:field.label|capfirst }}<i
-                                        class="fas fa-info-circle fa-xs dark"
-                                        title="{{ configuration.1|default:field.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {% select field %}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                        <tr>
+                            <td class="tabs__table-cell" width="25%">
+                                {{ field.label|capfirst }} <i
+                                    class="fas fa-info-circle fa-xs dark"
+                                    title="{{ configuration.1|default:field.help_text }}"></i>
+                            </td>
+                            <td class="tabs__table-cell">
+                                {% select field %}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
 
                     {% with field=product_form.product_aanwezig_toelichting %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell"
-                                    width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                                        class="fas fa-info-circle fa-xs dark"
-                                        title="{{ configuration.1|default:field.help_text }}"></i></td>
-                                <td class="tabs__table-cell">
-                                    {{ field|addclass:"form__input" }}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                        <tr>
+                            <td class="tabs__table-cell"
+                                width="25%">{{ field.label|capfirst }}<i
+                                    class="fas fa-info-circle fa-xs dark"
+                                    title="{{ field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">
+                                {{ field|addclass:"form__input" }}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
 
                     {% with field=product_form.product_valt_onder %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell"
-                                    width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                                        class="fas fa-info-circle fa-xs dark"
-                                        title="{{ configuration.1|default:field.help_text }}"></i></td>
-                                <td class="tabs__table-cell">
-                                    {% select field %}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                        <tr>
+                            <td class="tabs__table-cell"
+                                width="25%">{{ field.label|capfirst }}<i
+                                    class="fas fa-info-circle fa-xs dark"
+                                    title="{{ field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">
+                                {% select field %}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
 
                     {% with field=product_form.locaties %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td class="tabs__table-cell" width="25%">
-                                    {{ configuration.0|default:field.label|capfirst }} <i
-                                        class="fas fa-info-circle fa-xs dark"
-                                        title="{{ configuration.1|default:field.help_text }}"></i>
-                                </td>
-                                <td class="tabs__table-cell">
-                                    {{ field }}
-                                    {{ field.errors }}
-                                </td>
-                            </tr>
-                        {% endwith %}
+                        <tr>
+                            <td class="tabs__table-cell" width="25%">
+                                {{ field.label|capfirst }}
+                                <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                            </td>
+                            <td class="tabs__table-cell">
+                                {{ field }}
+                                {{ field.errors }}
+                            </td>
+                        </tr>
                     {% endwith %}
                 {% endif %}
 
