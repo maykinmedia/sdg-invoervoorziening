@@ -4,10 +4,16 @@ class GenericForm {
 
     setUpDynamicProductAanwezig() {
         const input = this.node.querySelector("[name=product_aanwezig]");
-        const dependency = this.node.querySelector("[name=product_aanwezig_toelichting]")
+        const dependency = this.node.querySelector("[name=product_aanwezig_toelichting]");
 
         const displayFunc = (input, dependency) => {
-            input.value === "false" ? dependency.disabled = false : dependency.disabled = true;
+            if (input.value === "false") {
+                dependency.disabled = false;
+                if (!dependency.value)
+                    dependency.value = dependency.parentElement.dataset.defaultText;
+            } else {
+                dependency.disabled = true;
+            }
         };
 
         displayFunc(input, dependency);
@@ -18,16 +24,29 @@ class GenericForm {
 
     setUpDynamicProductValtOnder() {
         const select = document.querySelector("#id_product_valt_onder");
-        const dependencies = [...document.querySelectorAll('[id$="product_valt_onder_toelichting"]')]
-            .map(e => e.parentElement.parentElement.parentElement);
+        const dependency = document.querySelector('[id$="product_valt_onder_toelichting"]').closest(".form__language-wrapper");
 
-        const displayFunc = (select, dependencies) => {
-            select.selectedIndex > 0 ? dependencies.forEach(e => e.style.display = "block") : dependencies.forEach(e => e.style.display = "none");
+        const displayFunc = (select, dependency) => {
+            if (select.selectedIndex > 0) {
+                dependency.style.display = "block";
+                const controls = dependency.querySelectorAll(".form__control");
+                controls.forEach(element => {
+                    const textarea = element.querySelector("textarea");
+                    if (!textarea.value) {
+                        const defaultExplanation = document.querySelector(`.form__reference-${element.lang}`).dataset.defaultToelichting;
+                        const explanation = defaultExplanation.replace(/\[product\]/g, select.options[select.selectedIndex].text);
+                        textarea.value = explanation;
+                    }
+                });
+            } else {
+                dependency.style.display = "none";
+            }
+            ;
         };
 
-        displayFunc(select, dependencies);
+        displayFunc(select, dependency);
         select.addEventListener("change", (event) => {
-            displayFunc(event.target, dependencies);
+            displayFunc(event.target, dependency);
         });
     }
 
