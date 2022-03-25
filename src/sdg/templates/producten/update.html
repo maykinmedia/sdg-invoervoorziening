@@ -42,13 +42,16 @@
         {{ product_form.non_field_errors }}
         <div class="tabs tabs--inline-outer">
             <table class="tabs__table form__general">
-                <thead>
+                <thead class="bem-toggle" data-toggle-target=".form__general" data-toggle-modifier="hidden">
                 <tr>
-                    <th class="tabs__table-header" width="25%">{% trans "Algemene Gegevens" %}</th>
+                    <th class="tabs__table-header" width="25%">
+                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
+                        {% trans "Algemene Gegevens" %}
+                    </th>
                     <th class="tabs__table-header">{% trans "Huidige Informatie" %}</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody class="tabs__table-body">
                 <tr>
                 </tr>
 
@@ -143,14 +146,19 @@
                         <hr class="divider">
 
                         {% if generic_information %}
-                            <table class="tabs__table">
-                                <thead>
+                            <table class="tabs__table form__generic">
+                                <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
                                 <tr>
-                                    <th class="tabs__table-header" width="25%">Generieke gegevens</th>
-                                    <th class="tabs__table-header">Huidige informatie</th>
+                                    <th class="tabs__table-header" width="25%">
+                                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
+                                        {% trans 'Generieke gegevens' %}
+                                    </th>
+                                    <th class="tabs__table-header">
+                                        {% trans 'Huidige informatie' %}
+                                    </th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="tabs__table-body">
                                 {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
                                     {% table_row title url=url.value %}
                                 {% endwith %}

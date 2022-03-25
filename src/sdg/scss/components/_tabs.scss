@@ -1,4 +1,6 @@
 @import "colors";
+@import '~microscope-sass/lib/animation';
+@import '~microscope-sass/lib/transform';
 
 .tabs {
 
@@ -96,6 +98,28 @@
     text-transform: uppercase;
   }
 
+  .bem-toggle {
+    cursor: pointer;
+    margin: 0 4px;
+  }
+
+  .bem-toggle__icon {
+    @include animate;
+    @include rotate(90);
+    display: inline-block!important; // FIXME
+    margin: 0 4px;
+    visibility: visible!important; // FIXME
+  }
+
+  .tabs__table--hidden .bem-toggle__icon {
+    @include rotate(0);
+  }
+
+  .tabs__table--hidden .tabs__table-body {
+    display: none;
+    visibility: hidden;
+  }
+
   .tabs__table-cell {
     padding: 12px 0;
     border-bottom: 1px solid #BDBDBD;
@@ -105,6 +129,7 @@
 
     &--field {
       min-height: 24px;
+
       .form__input {
         transition: all 0.3s ease-in-out;
       }
