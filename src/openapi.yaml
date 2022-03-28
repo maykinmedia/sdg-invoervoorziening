@@ -380,6 +380,16 @@ paths:
           description: ''
 components:
   schemas:
+    BevoegdeOrganisatie:
+      type: object
+      properties:
+        owmsIdentifier:
+          type: string
+          format: uri
+        owmsPrefLabel:
+          type: string
+      required:
+      - owmsPrefLabel
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -501,7 +511,7 @@ components:
           description: Opmerking over de openingstijden.
           maxLength: 255
         organisatie:
-          $ref: '#/components/schemas/OrganisatieBase'
+          $ref: '#/components/schemas/LokaleOverheidBase'
       required:
       - land
       - naam
@@ -625,14 +635,14 @@ components:
           type: string
           description: Het telefoonnummer van de gemeente.
           maxLength: 20
-        bevoegdeOrganisatie:
-          $ref: '#/components/schemas/Overheidsorganisatie'
+        bevoegdeOrganisaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/BevoegdeOrganisatie'
         ondersteuningsOrganisatie:
           $ref: '#/components/schemas/Overheidsorganisatie'
-        verantwoordelijkeOrganisatie:
-          $ref: '#/components/schemas/Overheidsorganisatie'
       required:
-      - bevoegdeOrganisatie
+      - bevoegdeOrganisaties
       - catalogi
       - contactNaam
       - locaties
@@ -642,7 +652,27 @@ components:
       - owmsPrefLabel
       - url
       - uuid
-      - verantwoordelijkeOrganisatie
+    LokaleOverheidBase:
+      type: object
+      description: |-
+        Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+        - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        owmsIdentifier:
+          type: string
+          format: uri
+          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
+        owmsPrefLabel:
+          type: string
+          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+      required:
+      - owmsIdentifier
+      - owmsPrefLabel
+      - url
     Openingstijden:
       type: object
       description: Serializer for location based opening times.
@@ -682,27 +712,6 @@ components:
           items:
             type: string
             maxLength: 32
-    OrganisatieBase:
-      type: object
-      description: |-
-        Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
-        - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
-      properties:
-        url:
-          type: string
-          format: uri
-          readOnly: true
-        owmsIdentifier:
-          type: string
-          format: uri
-          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
-        owmsPrefLabel:
-          type: string
-          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
-      required:
-      - owmsIdentifier
-      - owmsPrefLabel
-      - url
     Overheidsorganisatie:
       type: object
       description: Serializer for Overheidsorganisatie, including identifier, label
@@ -856,8 +865,8 @@ components:
           type: string
           format: date
           readOnly: true
-        organisatie:
-          $ref: '#/components/schemas/OrganisatieBase'
+        verantwoordelijkeOrganisatie:
+          $ref: '#/components/schemas/LokaleOverheidBase'
         productAanwezig:
           type: boolean
           nullable: true
@@ -898,17 +907,20 @@ components:
           format: uri
           nullable: true
           description: Een verwijzing naar een product waarvan dit product valt onder.
+        bevoegdeOrganisatie:
+          $ref: '#/components/schemas/BevoegdeOrganisatie'
       required:
+      - bevoegdeOrganisatie
       - catalogus
       - doelgroep
       - gerelateerdeProducten
       - locaties
-      - organisatie
       - publicatieDatum
       - upnLabel
       - upnUri
       - url
       - uuid
+      - verantwoordelijkeOrganisatie
       - versie
       - vertalingen
     ProductBase:
@@ -986,7 +998,7 @@ components:
           description: De naam van de producten catalogus.
           maxLength: 120
         organisatie:
-          $ref: '#/components/schemas/OrganisatieBase'
+          $ref: '#/components/schemas/LokaleOverheidBase'
         isReferentieCatalogus:
           type: boolean
           description: Geeft aan of dit een referentiecatalogus is.
