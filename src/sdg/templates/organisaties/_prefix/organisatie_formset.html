@@ -12,8 +12,12 @@
     <div class="form__block-group">
         <div>
             <div class="form__table-header-left">{% trans "Organisatie" %}</div>
-            {% field form.empty_form.naam %}
-            {{ form.empty_form.organisatie|addclass:"choices" }}
+            {% choices_field form.empty_form.organisatie %}
+            {% checkbox form.empty_form.staat_niet_in_de_lijst %}
+        </div>
+        <div>
+            <div class="form__table-header-left"></div>
+            {% field form.empty_form.naam hidden=True %}
         </div>
     </div>
 </div>

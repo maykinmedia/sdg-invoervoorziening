@@ -2,6 +2,11 @@
 @import '~choices.js/src/styles/choices.scss';
 
 .choices {
+  margin-bottom: 0;
+
+  .choices__list {
+    z-index: 5;
+  }
 
   .choices__inner {
     font-size: 16px;

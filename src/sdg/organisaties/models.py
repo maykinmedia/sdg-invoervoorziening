@@ -75,9 +75,7 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
 
 class BevoegdeOrganisatie(models.Model):
     """
-    Competent organization
-
-    An organization has a unique name, it can (optionally) be associated with a single organization.
+    Authorized organization
     """
 
     uuid = models.UUIDField(
@@ -89,12 +87,16 @@ class BevoegdeOrganisatie(models.Model):
             "De identificatie die binnen deze API gebruikt wordt voor de resource."
         ),
     )
-    naam = models.CharField(_("naam"), max_length=255)
+    naam = models.CharField(
+        _("naam"),
+        max_length=255,
+        help_text=_("De naam van de bevoegde organisatie."),
+    )
     lokale_overheid = models.ForeignKey(
         LokaleOverheid,
         on_delete=models.CASCADE,
         verbose_name=_("lokale overheid"),
-        help_text=_("De lokale overheid waartoe deze bevoegde organisatie behoort."),
+        help_text=_("De bij de overheid bekende naam van de bevoegde organisatie."),
         related_name="bevoegde_organisaties",
     )
     organisatie = models.ForeignKey(
@@ -102,6 +104,7 @@ class BevoegdeOrganisatie(models.Model):
         on_delete=models.SET_NULL,
         verbose_name=_("organisatie"),
         related_name="bevoegde_organisaties",
+        help_text=_("De organisatie van de bevoegde organisatie."),
         blank=True,
         null=True,
     )

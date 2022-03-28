@@ -3,6 +3,7 @@ import BEM from 'bem.js';
 import {initializeDynamicWidget} from './dynamic_array';
 import Choices from 'choices.js'
 import {CHOICES_CONFIG} from './choices';
+import {BevoegdeOrganisatiesForm} from "./bevoegde_organisaties";
 
 
 const BLOCK_FORMSET = 'formset';
@@ -94,6 +95,7 @@ class Formset {
         FORMSET.querySelector('[name="form-TOTAL_FORMS"]').value = index;
         this.setUpRemoveFormForElement(form);
 
+        // TODO: Refactor below this line (re-adding listeners to any dynamic elements)
         const dynamicElements = BEM.getChildBEMNodes(form, DYNAMIC, ELEMENT_CONTAINER);
         if (dynamicElements) {
             [...dynamicElements].forEach(element => {
@@ -103,6 +105,10 @@ class Formset {
 
         const choiceElements = form.querySelectorAll('.choices');
         [...choiceElements].forEach(element => { new Choices(element, CHOICES_CONFIG)});
+
+        if (form.closest('#bevoegde_organisaties_form')) {
+            new BevoegdeOrganisatiesForm(form);
+        }
     }
 
     getFormIndex(form) {

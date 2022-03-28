@@ -6,7 +6,8 @@
 {% block page_title %}{% trans "Bevoegde Organisaties" %}{% endblock %}
 
 {% block inner_content %}
-    <form action="{% url "organisaties:bevoegde_organisaties" pk=lokaleoverheid.pk %}" method="post" class="form" id="bevoegde_organisaties_form">
+    <form action="{% url "organisaties:bevoegde_organisaties" pk=lokaleoverheid.pk %}" method="post" class="form"
+          id="bevoegde_organisaties_form">
         {% csrf_token %}
         <div class="form__subforms formset">
             <div>
@@ -29,8 +30,12 @@
                         <div class="form__block-group">
                             <div>
                                 <div class="form__table-header-left">{% trans "Organisatie" %}</div>
-                                {% field subform.naam %}
-                                {{ subform.organisatie|addclass:"choices" }}
+                                {% choices_field subform.organisatie %}
+                                {% checkbox subform.staat_niet_in_de_lijst %}
+                            </div>
+                            <div>
+                                <div class="form__table-header-left"></div>
+                                {% field subform.naam hidden=True %}
                             </div>
                         </div>
                     </div>
