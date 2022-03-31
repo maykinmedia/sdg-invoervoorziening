@@ -136,11 +136,6 @@
                          id="{{ form.taal.value }}">
 
                         <div class="toolbar">
-                            <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ form.taal.value }}"
-                               class="preview"
-                               target="_blank">
-                                <i class="fa fa-vector-square"></i> {% trans "Preview" %}
-                            </a>
                             {% toggle _('Bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
                         </div>
                         <hr class="divider">
