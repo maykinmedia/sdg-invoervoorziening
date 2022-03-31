@@ -194,8 +194,10 @@
                              data-reference=".form__reference-{{ form.taal.value }}"
                              data-previousreference=".form__previousreference-{{ form.taal.value }}">
                             {{ form.non_field_errors }}
-                            {{ form.id }}
-                            {{ form.taal.as_hidden }}
+                            {% for field in form.forms %}
+                                {{field.id.as_hidden}}
+                                {{field.taal.as_hidden}}
+                            {% endfor %}
                             {% localized_form formset include_form=False fields=localized_form_fields %}
                         </div>
             </div>
