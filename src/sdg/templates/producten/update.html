@@ -185,16 +185,31 @@
 
                     </div>
                 {% endfor %}
-                        <div class="tabs__table form__has-reference"
-                             data-reference=".form__reference-{{ form.taal.value }}"
-                             data-previousreference=".form__previousreference-{{ form.taal.value }}">
-                            {{ form.non_field_errors }}
-                            {% for field in form.forms %}
-                                {{field.id.as_hidden}}
-                                {{field.taal.as_hidden}}
-                            {% endfor %}
-                            {% localized_form formset include_form=False fields=localized_form_fields %}
-                        </div>
+
+                <table class="tabs__table form__specific">
+                    <thead class="bem-toggle" data-toggle-target=".form__specific" data-toggle-modifier="hidden">
+                    <tr>
+                        <th class="tabs__table-header" width="25%">
+                            <i class="fa fa-chevron-right bem-toggle__icon"></i>
+                            {% trans 'Specifieke gegevens' %}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="tabs__table-body">
+                        <td>
+                            <div class="form__has-reference"
+                                data-reference=".form__reference-{{ form.taal.value }}"
+                                data-previousreference=".form__previousreference-{{ form.taal.value }}">
+                                {% for form in form.forms %}
+                                    {{ form.non_field_errors }}
+                                    {{ form.id.as_hidden }}
+                                    {{ form.taal.as_hidden }}
+                                {% endfor %}
+                                {% localized_form formset include_form=False fields=localized_form_fields %}
+                            </div>
+                        </td>
+                    </tbody>
+                </table>
             </div>
         </div>
 
