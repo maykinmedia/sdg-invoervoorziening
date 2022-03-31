@@ -1,0 +1,510 @@
+from django.urls import reverse
+
+from django_webtest import WebTest
+from freezegun import freeze_time
+
+from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.core.tests.utils import hard_refresh_from_db
+from sdg.organisaties.tests.factories.overheid import LocatieFactory
+from sdg.producten.models import Product
+from sdg.producten.tests.constants import (
+    DUMMY_TITLE,
+    FUTURE_DATE,
+    NOW_DATE,
+    PRODUCT_EDIT_URL,
+)
+from sdg.producten.tests.factories.localized import LocalizedProductFactory
+from sdg.producten.tests.factories.product import (
+    ProductVersieFactory,
+    ReferentieProductVersieFactory,
+    SpecifiekProductVersieFactory,
+)
+from sdg.producten.utils import build_url_kwargs
+
+
+class SpecifiekProductUpdateViewTests(WebTest):
+    def setUp(self):
+        super().setUp()
+
+        self.user = UserFactory.create()
+        self.app.set_user(self.user)
+
+        self.product_version = SpecifiekProductVersieFactory.create(versie=1)
+        self.product = self.product_version.product
+
+        self.reference_product = self.product_version.product.referentie_product
+        self.reference_product_version = ProductVersieFactory.create(
+            product=self.reference_product, versie=1
+        )
+
+        self.test = ReferentieProductVersieFactory.create(
+            versie=1, publicatie_datum=NOW_DATE
+        )
+
+        LocalizedProductFactory.create_batch(2, product_versie=self.product_version)
+
+        LocalizedProductFactory.create_batch(2, product_versie=self.test)
+        LocalizedProductFactory.create_batch(
+            2, product_versie=self.reference_product_version
+        )
+
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=self.product_version.product.catalogus.lokale_overheid,
+            is_redacteur=True,
+        )
+
+    def _change_product_status(self, publish_choice: Product.status):
+        dates = {
+            Product.status.PUBLISHED: NOW_DATE,
+            Product.status.CONCEPT: None,
+            Product.status.SCHEDULED: FUTURE_DATE,
+        }
+        most_recent_version = self.product.most_recent_version
+        most_recent_version.publicatie_datum = dates.get(publish_choice)
+        most_recent_version.save()
+        most_recent_version.refresh_from_db()
+        self.product = hard_refresh_from_db(self.product)
+
+    def _submit_product_form(self, form, publish_choice: Product.status):
+        form_data = {
+            Product.status.PUBLISHED: {
+                "publish": "date",
+                "date": NOW_DATE,
+            },
+            Product.status.CONCEPT: {
+                "publish": "concept",
+                "date": None,
+            },
+            Product.status.SCHEDULED: {
+                "publish": "date",
+                "date": FUTURE_DATE,
+            },
+        }
+        data = form_data[publish_choice]
+        form["vertalingen-0-product_titel_decentraal"] = DUMMY_TITLE
+        for date_field in form.fields["date"]:
+            date_field.value = data["date"]
+        return form.submit(name="publish", value="date")
+
+    @freeze_time(NOW_DATE)
+    def test_concept_save_concept(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.product.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 1)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version, None)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
+        self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
+    def test_concept_save_now(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 1)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
+    def test_concept_save_later(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 1)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version, None)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
+        self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
+    def test_published_save_concept(self):
+        self._change_product_status(Product.status.PUBLISHED)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.CONCEPT)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, None)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_save_now(self):
+        self._change_product_status(Product.status.PUBLISHED)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 2)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_save_later(self):
+        self._change_product_status(Product.status.PUBLISHED)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_and_scheduled_save_concept(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        future_product_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=FUTURE_DATE,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.CONCEPT)
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, None)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
+        self.assertEqual(latest_version.versie, 2)
+        self.assertIn(
+            'Als u kies voor "Opslaan en publiceren", vervalt de reeds ingeplande publicatie. Indien u kiest voor "Opslaan als concept" dan wordt de publicatiedatum verwijderd van de ingeplande publicatie.',
+            response.text,
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_published_and_scheduled_save_now(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        future_product_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=FUTURE_DATE,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 2)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_and_scheduled_save_later(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        future_product_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=FUTURE_DATE,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_and_concept_save_concept(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        future_product_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=None,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.CONCEPT)
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, None)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_and_concept_save_now(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        future_product_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=None,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.PUBLISHED)
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 2)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_and_concept_save_later(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        future_product_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=None,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=future_product_version)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self._submit_product_form(response.form, Product.status.SCHEDULED)
+
+        self.product.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
+        self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_can_update_product_information(self):
+        self._change_product_status(Product.status.CONCEPT)
+        LocatieFactory.create_batch(
+            3, lokale_overheid=self.product.catalogus.lokale_overheid
+        )
+        locations = list(self.product.get_municipality_locations())
+        self.assertEqual(len(locations), 3)
+        for location in locations:
+            self.assertFalse(location.is_product_location)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            ),
+        )
+
+        response.form.fields["product_aanwezig"] = False
+        response.form.fields["locaties"][0].checked = True
+        self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.product.refresh_from_db()
+
+        locations = list(self.product.get_municipality_locations())
+        self.assertTrue(locations[0].is_product_location)
+        self.assertFalse(locations[1].is_product_location)
+        self.assertFalse(locations[2].is_product_location)
