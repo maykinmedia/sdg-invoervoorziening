@@ -1,0 +1,31 @@
+@import 'colors';
+@import '~choices.js/src/styles/choices.scss';
+
+.choices {
+  margin-bottom: 0;
+
+  .choices__list {
+    z-index: 5;
+  }
+
+  .choices__inner {
+    font-size: 16px;
+    padding: 12px;
+    min-height: 57px;
+
+    .choices__list--multiple {
+
+      .choices__item {
+        background-color: $color_primary;
+        border-color: $color_primary_dark;
+
+        &.is-highlighted {
+          background-color: $color_primary_dark;
+          border-color: $color_primary_dark;
+        }
+      }
+    }
+
+  }
+
+}

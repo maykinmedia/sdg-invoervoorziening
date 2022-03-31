@@ -35,6 +35,9 @@ class ProductFieldConfiguration(SingletonModel):
     product_product_valt_onder = LabeledTooltipField(
         verbose_name=_("Algemene valt onder"),
     )
+    product_bevoegde_organisatie = LabeledTooltipField(
+        verbose_name=_("Algemene bevoegde organisatie"),
+    )
     product_locaties = LabeledTooltipField(
         verbose_name=_("Algemene locaties"),
     )

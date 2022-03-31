@@ -76,15 +76,6 @@ class ProductenCatalogus(models.Model):
 
     objects = ProductenCatalogusQuerySet.as_manager()
 
-    @property
-    def verantwoordelijke_organisatie(self):
-        """
-        The department that is responsible (co-management products), e.g. BZK for passport; "municipalities" for
-        autonomous products (e.g. terrace permit)
-        """
-
-        return self.lokale_overheid.verantwoordelijke_organisatie
-
     def has_reference_catalog(self) -> bool:
         """Returns whether this catalog has a reference catalog."""
         return bool(self.referentie_catalogus)

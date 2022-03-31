@@ -9,7 +9,7 @@ from sdg.core.models import (
     UniformeProductnaam,
 )
 from sdg.core.utils import string_to_date
-from sdg.organisaties.models import LokaleOverheid
+from sdg.organisaties.models import BevoegdeOrganisatie, LokaleOverheid
 from sdg.producten.models import GeneriekProduct, LocalizedGeneriekProduct
 
 
@@ -36,14 +36,18 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
             },
         )
         if _is_municipality(resource_id):
-            LokaleOverheid.objects.get_or_create(
+            municipality, created = LokaleOverheid.objects.get_or_create(
                 organisatie=organisatie,
                 defaults={
-                    "bevoegde_organisatie": organisatie,
                     "ondersteunings_organisatie": organisatie,
-                    "verantwoordelijke_organisatie": organisatie,
                 },
             )
+            if created:
+                BevoegdeOrganisatie.objects.create(
+                    organisatie=organisatie,
+                    lokale_overheid=municipality,
+                    naam=organisatie.owms_pref_label,
+                )
         if created:
             count += 1
 

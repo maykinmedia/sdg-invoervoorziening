@@ -32,11 +32,18 @@
                         <a class="header__dropdown-action" href="{% url 'organisaties:edit' pk=pk %}">
                             <i class="fas fa-building"></i> {% trans "Organisatie instellingen" %}
                         </a>
-
+                        <hr class="divider">
                         <a class="header__dropdown-action" href="{% url 'organisaties:roles:list' pk=pk %}">
                             <i class="fas fa-users"></i> {% trans "Gebruikersbeheer" %}
                         </a>
+                        <hr class="divider">
+                        <a class="header__dropdown-action" href="{% url 'organisaties:locaties' pk=pk %}">
+                            <i class="fas fa-compass"></i> {% trans "Locaties" %}
 
+                        </a>
+                        <a class="header__dropdown-action" href="{% url 'organisaties:bevoegde_organisaties' pk=pk %}">
+                            <i class="fas fa-handshake"></i> {% trans "Bevoegde organisaties" %}
+                        </a>
                         <hr class="divider">
                     {% endif %}
 

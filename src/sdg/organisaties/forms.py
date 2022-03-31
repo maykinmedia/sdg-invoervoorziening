@@ -1,9 +1,15 @@
 from django import forms
 from django.forms import inlineformset_factory
+from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.forms import DynamicArrayField
 from sdg.organisaties.constants import opening_times_error_messages
-from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
+from sdg.organisaties.models import (
+    BevoegdeOrganisatie,
+    LokaleOverheid,
+    Lokatie as Locatie,
+)
+from sdg.producten.widgets import PrettyCheckboxInput
 
 
 class LokaleOverheidForm(forms.ModelForm):
@@ -64,4 +70,35 @@ class LocatieForm(forms.ModelForm):
 
 LocatieInlineFormSet = inlineformset_factory(
     LokaleOverheid, Locatie, form=LocatieForm, extra=0
+)
+
+
+class BevoegdeOrganisatieForm(forms.ModelForm):
+
+    staat_niet_in_de_lijst = forms.BooleanField(
+        label=_("Mijn bevoegde organisatie staat niet in de lijst."),
+        required=False,
+    )
+
+    class Meta:
+        model = BevoegdeOrganisatie
+        fields = (
+            "naam",
+            "organisatie",
+            "staat_niet_in_de_lijst",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["naam"].required = False
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not cleaned_data["naam"] and cleaned_data["organisatie"]:
+            cleaned_data["naam"] = cleaned_data["organisatie"].owms_pref_label
+        return cleaned_data
+
+
+BevoegdeOrganisatieInlineFormSet = inlineformset_factory(
+    LokaleOverheid, BevoegdeOrganisatie, form=BevoegdeOrganisatieForm, extra=0
 )

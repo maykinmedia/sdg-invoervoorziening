@@ -33,8 +33,10 @@ class GenericForm {
 
     constructor(node) {
         this.node = node;
-        this.setUpDynamicProductAanwezig();
-        this.setUpDynamicProductValtOnder();
+        if (this.node) {
+            this.setUpDynamicProductAanwezig();
+            this.setUpDynamicProductValtOnder();
+        }
     }
 
 }

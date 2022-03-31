@@ -118,6 +118,15 @@ class Product(ProductFieldMixin, models.Model):
         SCHEDULED = ChoiceItem("scheduled", label=_("Gepland"))
         CONCEPT = ChoiceItem("concept", label=_("Concept"))
 
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
         related_name="producten",
@@ -182,14 +191,14 @@ class Product(ProductFieldMixin, models.Model):
         ),
         blank=True,
     )
-    uuid = models.UUIDField(
-        _("UUID"),
-        unique=True,
-        default=uuid.uuid4,
-        editable=False,
-        help_text=_(
-            "De identificatie die binnen deze API gebruikt wordt voor de resource."
-        ),
+    bevoegde_organisatie = models.ForeignKey(
+        "organisaties.BevoegdeOrganisatie",
+        on_delete=models.SET_NULL,
+        verbose_name=_("bevoegde organisatie"),
+        related_name="producten",
+        help_text=_("De bevoegde organisatie van de producten."),
+        blank=True,
+        null=True,
     )
 
     objects = ProductQuerySet.as_manager()

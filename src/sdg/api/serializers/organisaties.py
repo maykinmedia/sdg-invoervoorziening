@@ -2,7 +2,11 @@ from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
 from sdg.api.serializers.logius import OverheidsorganisatieSerializer
-from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
+from sdg.organisaties.models import (
+    BevoegdeOrganisatie,
+    LokaleOverheid,
+    Lokatie as Locatie,
+)
 
 
 class OpeningstijdenSerializer(serializers.ModelSerializer):
@@ -21,7 +25,22 @@ class OpeningstijdenSerializer(serializers.ModelSerializer):
         )
 
 
-class OrganisatieBaseSerializer(serializers.HyperlinkedModelSerializer):
+class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
+    owms_identifier = serializers.URLField(
+        source="organisatie.owms_identifier",
+        default=None,
+    )
+    owms_pref_label = serializers.CharField(source="naam")
+
+    class Meta:
+        model = BevoegdeOrganisatie
+        fields = (
+            "owms_identifier",
+            "owms_pref_label",
+        )
+
+
+class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
     - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
     """
@@ -79,13 +98,13 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
 class LocatieSerializer(LocatieBaseSerializer):
     """Serializer for location details, including contact details, address and opening times."""
 
-    organisatie = OrganisatieBaseSerializer(source="lokale_overheid")
+    organisatie = LokaleOverheidBaseSerializer(source="lokale_overheid")
 
     class Meta(LocatieBaseSerializer.Meta):
         fields = LocatieBaseSerializer.Meta.fields + ("organisatie",)
 
 
-class LokaleOverheidSerializer(OrganisatieBaseSerializer):
+class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
     """Serializer for municipality details, including organization details, catalogs and locations."""
 
     owms_end_date = serializers.DateTimeField(
@@ -93,9 +112,8 @@ class LokaleOverheidSerializer(OrganisatieBaseSerializer):
         help_text="OWMS einddatum van de hoofdorganisatie van deze lokale overheid.",
     )
 
-    bevoegde_organisatie = OverheidsorganisatieSerializer()
+    bevoegde_organisaties = BevoegdeOrganisatieSerializer(many=True)
     ondersteunings_organisatie = OverheidsorganisatieSerializer()
-    verantwoordelijke_organisatie = OverheidsorganisatieSerializer()
     locaties = LocatieBaseSerializer(many=True)
 
     class Meta:
@@ -112,9 +130,8 @@ class LokaleOverheidSerializer(OrganisatieBaseSerializer):
             "contact_website",
             "contact_emailadres",
             "contact_telefoonnummer",
-            "bevoegde_organisatie",
+            "bevoegde_organisaties",
             "ondersteunings_organisatie",
-            "verantwoordelijke_organisatie",
         )
         extra_kwargs = {
             "url": {

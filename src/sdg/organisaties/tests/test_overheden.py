@@ -9,7 +9,7 @@ from freezegun import freeze_time
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.models import ProductenCatalogus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
-from sdg.organisaties.tests.constants import ORGANIZATION_EDIT_URL
+from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.tests.factories.overheid import (
     LocatieFactory,
     LokaleOverheidFactory,
@@ -243,6 +243,7 @@ class LokaleOverheidUpdateViewTests(WebTest):
     def setUp(self):
         super().setUp()
 
+        self.url = "organisaties:edit"
         self.user = UserFactory.create()
         self.app.set_user(self.user)
 
@@ -255,7 +256,7 @@ class LokaleOverheidUpdateViewTests(WebTest):
 
     def test_can_update_municipality_details(self):
         response = self.app.get(
-            reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(self.url, kwargs={"pk": self.lokale_overheid.pk})
         )
 
         response.form["contact_naam"] = "Municipality Contact Name"
@@ -271,27 +272,40 @@ class LokaleOverheidUpdateViewTests(WebTest):
         self.assertEqual(self.lokale_overheid.contact_telefoonnummer, "0619123123")
 
     def test_municipality_organization_is_readonly(self):
+        org = OverheidsorganisatieFactory.create()
         response = self.app.get(
-            reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(self.url, kwargs={"pk": self.lokale_overheid.pk})
         )
 
         response.form["contact_naam"] = "Municipality Contact Name"
-        response.form[
-            "organisatie"
-        ].value = self.lokale_overheid.bevoegde_organisatie.pk
+        response.form["organisatie"].value = org.pk
         response.form.submit()
 
         self.lokale_overheid.refresh_from_db()
         self.assertEqual(self.lokale_overheid.contact_naam, "Municipality Contact Name")
-        self.assertNotEqual(
-            self.lokale_overheid.organisatie, self.lokale_overheid.bevoegde_organisatie
+        self.assertNotEqual(self.lokale_overheid.organisatie, org.pk)
+
+
+class LocatieUpdateViewTests(WebTest):
+    def setUp(self):
+        super().setUp()
+
+        self.url = "organisaties:locaties"
+        self.user = UserFactory.create()
+        self.app.set_user(self.user)
+
+        self.lokale_overheid = LokaleOverheidFactory.create()
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=self.lokale_overheid,
+            is_redacteur=True,
         )
 
     def test_can_update_municipality_location(self):
         LocatieFactory.create(lokale_overheid=self.lokale_overheid)
 
         response = self.app.get(
-            reverse(ORGANIZATION_EDIT_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(self.url, kwargs={"pk": self.lokale_overheid.pk})
         )
 
         response.form["form-0-naam"] = "Name"

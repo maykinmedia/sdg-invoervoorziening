@@ -19,30 +19,21 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
     Municipality
     """
 
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
     ondersteunings_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
         on_delete=models.CASCADE,
         verbose_name=_("ondersteunings organisatie"),
         help_text=_("organisatie voor ondersteuning."),
         related_name="ondersteunings",
-        blank=True,
-        null=True,
-    )
-    verantwoordelijke_organisatie = models.ForeignKey(
-        "core.Overheidsorganisatie",
-        on_delete=models.CASCADE,
-        verbose_name=_("verantwoordelijke organisatie"),
-        help_text=_("Organisatie verantwoordelijk voor de decentrale informatie."),
-        related_name="verantwoordelijke",
-        blank=True,
-        null=True,
-    )
-    bevoegde_organisatie = models.ForeignKey(
-        "core.Overheidsorganisatie",
-        on_delete=models.CASCADE,
-        verbose_name=_("bevoegde organisatie"),
-        help_text=_("Bevoegd gezag verantwoordelijk voor de procedure."),
-        related_name="bevoegde",
         blank=True,
         null=True,
     )
@@ -54,15 +45,6 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
         related_name="organisatie",
     )
     users = models.ManyToManyField(User, through="accounts.Role")
-    uuid = models.UUIDField(
-        _("UUID"),
-        unique=True,
-        default=uuid.uuid4,
-        editable=False,
-        help_text=_(
-            "De identificatie die binnen deze API gebruikt wordt voor de resource."
-        ),
-    )
     automatisch_catalogus_aanmaken = models.BooleanField(
         _("Automatisch catalogus aanmaken"),
         default=True,
@@ -89,6 +71,50 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
 
     def get_absolute_url(self):
         return reverse("organisaties:catalogi:list", kwargs={"pk": self.pk})
+
+
+class BevoegdeOrganisatie(models.Model):
+    """
+    Authorized organization
+    """
+
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        default=uuid.uuid4,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
+    naam = models.CharField(
+        _("naam"),
+        max_length=255,
+        help_text=_("De naam van de bevoegde organisatie."),
+    )
+    lokale_overheid = models.ForeignKey(
+        LokaleOverheid,
+        on_delete=models.CASCADE,
+        verbose_name=_("lokale overheid"),
+        help_text=_("De bij de overheid bekende naam van de bevoegde organisatie."),
+        related_name="bevoegde_organisaties",
+    )
+    organisatie = models.ForeignKey(
+        "core.Overheidsorganisatie",
+        on_delete=models.SET_NULL,
+        verbose_name=_("organisatie"),
+        related_name="bevoegde_organisaties",
+        help_text=_("De organisatie van de bevoegde organisatie."),
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        verbose_name = _("bevoegde organisatie")
+        verbose_name_plural = _("bevoegde organisaties")
+
+    def __str__(self):
+        return self.naam
 
 
 class Lokatie(models.Model):

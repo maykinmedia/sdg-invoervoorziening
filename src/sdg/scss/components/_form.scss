@@ -63,6 +63,7 @@
     flex-direction: column;
     border: 0;
     margin-bottom: 24px;
+    transition: opacity 0.3s ease;
 
     &--pad {
       border: 0;
@@ -71,6 +72,11 @@
 
     &--nopad {
       border: 0;
+    }
+
+    &--hidden {
+      opacity: 0;
+      pointer-events: none;
     }
 
   }
@@ -149,6 +155,7 @@
     text-transform: uppercase;
     font-weight: bold;
     margin-bottom: 16px;
+    min-height: 18px;
   }
 
   .form__subtitle {
@@ -213,6 +220,15 @@
     &-link {
       margin-left: 16px;
     }
+  }
+
+  .form__checkbox {
+    transition: opacity 400ms;
+
+    &--invisible {
+      opacity: 0;
+    }
+
   }
 
   .errorlist {

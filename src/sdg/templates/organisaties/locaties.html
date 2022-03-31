@@ -1,0 +1,76 @@
+{% extends 'organisaties/base.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load utils %}
+{% block page_title %}{% trans "Locaties" %}{% endblock %}
+
+{% block inner_content %}
+    <form action="{% url "organisaties:locaties" pk=lokaleoverheid.pk %}" method="post" class="form">
+        {% csrf_token %}
+        <div class="form__subforms formset">
+            <div>
+                {{ form.management_form }}
+            </div>
+            <div class="formset__body">
+                {% for subform in form %}
+                    <div class="form__subforms">
+                        {% for hidden in subform.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+                        {{ subform.DELETE|addclass:"hidden" }}
+                        <h3 class="form__subtitle">
+                            <span>{% trans "Locatie" %} {{ forloop.counter }}</span>
+                            <a class="formset__remove" href="#">
+                                <i class="far fa-trash-alt"></i>
+                                {% trans "Locatie verwijderen" %}
+                            </a>
+                        </h3>
+                        <div class="form__block-group">
+                            <div>
+                                <div class="form__table-header-left">{% trans "Locatie" %}</div>
+                                {% field subform.naam %}
+                                {% field subform.straat %}
+                                {% field subform.nummer %}
+                                <div class="form__table form__special-group">
+                                    {% field subform.postcode %}
+                                    {% field subform.plaats %}
+                                </div>
+                                {% field subform.land %}
+                                {% field subform.openingstijden_opmerking %}
+                            </div>
+                            <div class="form__table">
+                                <div class="form__table-header">Dag</div>
+                                <div class="form__table-header">Openingstijden</div>
+                                {% table_grid_field subform.maandag %}
+                                {% table_grid_field subform.dinsdag %}
+                                {% table_grid_field subform.woensdag %}
+                                {% table_grid_field subform.donderdag %}
+                                {% table_grid_field subform.vrijdag %}
+                                {% table_grid_field subform.zaterdag %}
+                                {% table_grid_field subform.zondag %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="formset__add form__add-subform" data-formset-prefix="{{ locatie_formset.prefix }}">
+            <i class="fas fa-plus"></i>
+            {% trans "Nog een locatie toevoegen" %}
+        </div>
+        <hr class="divider">
+        <div class="form-actions">
+            <div class="form__buttons">
+                <input type="submit" value="Opslaan" class="primaryAction login_button button">
+                <a href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}">
+                    <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                </a>
+            </div>
+        </div>
+    </form>
+
+    <template class="formset__template">
+        {% include "organisaties/_prefix/locatie_formset.html" %}
+    </template>
+{% endblock inner_content %}

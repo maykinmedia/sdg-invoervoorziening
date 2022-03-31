@@ -15,6 +15,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                 "fields": [
                     "product_product_aanwezig",
                     "product_product_aanwezig_toelichting",
+                    "product_product_bevoegde_organisatie",
                     "product_locaties",
                     "productversie_publicatie_datum",
                     "product_product_valt_onder",

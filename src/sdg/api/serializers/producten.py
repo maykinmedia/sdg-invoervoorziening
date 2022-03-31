@@ -5,8 +5,9 @@ from rest_framework.fields import SerializerMethodField
 
 from sdg.api.serializers.fields import LabeledUrlListField
 from sdg.api.serializers.organisaties import (
+    BevoegdeOrganisatieSerializer,
     LocatieBaseSerializer,
-    OrganisatieBaseSerializer,
+    LokaleOverheidBaseSerializer,
 )
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
@@ -74,13 +75,16 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
 class ProductSerializer(ProductBaseSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 
-    organisatie = OrganisatieBaseSerializer(source="catalogus.lokale_overheid")
+    verantwoordelijke_organisatie = LokaleOverheidBaseSerializer(
+        source="catalogus.lokale_overheid"
+    )
     publicatie_datum = SerializerMethodField(method_name="get_publicatie_datum")
     vertalingen = SerializerMethodField(method_name="get_vertalingen")
     versie = SerializerMethodField(method_name="get_versie")
     doelgroep = SerializerMethodField(method_name="get_doelgroep")
     gerelateerde_producten = ProductBaseSerializer(many=True)
     locaties = LocatieBaseSerializer(many=True)
+    bevoegde_organisatie = BevoegdeOrganisatieSerializer()
 
     class Meta:
         model = Product
@@ -91,7 +95,7 @@ class ProductSerializer(ProductBaseSerializer):
             "upn_uri",
             "versie",
             "publicatie_datum",
-            "organisatie",
+            "verantwoordelijke_organisatie",
             "product_aanwezig",
             "product_aanwezig_toelichting",
             "catalogus",
@@ -101,6 +105,7 @@ class ProductSerializer(ProductBaseSerializer):
             "referentie_product",
             "gerelateerde_producten",
             "product_valt_onder",
+            "bevoegde_organisatie",
         )
         extra_kwargs = {
             "url": {
