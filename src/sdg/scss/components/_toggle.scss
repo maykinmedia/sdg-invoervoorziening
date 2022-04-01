@@ -77,4 +77,9 @@ $toggle-track-width: $toggle-track-height * 2;
   & &__label {
     color: var(--label-color);
   }
+
+  .svg-inline--fa[aria-hidden="true"] {
+    display: block;
+    visibility: visible;
+  }
 }
