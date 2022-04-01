@@ -34,7 +34,7 @@
             </div>
         {% endif %}
         {% include "core/_notifications.html" %}
-        {% include 'producten/_include/availability_warnings.html' %}
+        {% if not product.is_referentie_product %}{% include 'producten/_include/availability_warnings.html' %}{% endif %}
         {% include 'producten/_include/edit_warnings.html' %}
     </div>
 
@@ -50,7 +50,7 @@
                         <i class="fa fa-chevron-right bem-toggle__icon"></i>
                         {% trans "Algemene Gegevens" %}
                     </th>
-                    <th class="tabs__table-header">{% trans "Huidige Informatie" %}</th>
+                    <th class="tabs__table-header"></th>
                 </tr>
                 </thead>
                 <tbody class="tabs__table-body">
@@ -166,9 +166,7 @@
                                         <i class="fa fa-chevron-right bem-toggle__icon"></i>
                                         {% trans 'Generieke gegevens' %}
                                     </th>
-                                    <th class="tabs__table-header">
-                                        {% trans 'Huidige informatie' %}
-                                    </th>
+                                    <th class="tabs__table-header"></th>
                                 </tr>
                                 </thead>
                                 <tbody class="tabs__table-body">
