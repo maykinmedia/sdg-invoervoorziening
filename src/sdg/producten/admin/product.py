@@ -31,9 +31,14 @@ class LocalizedProductInline(admin.StackedInline):
 
 @admin.register(GeneriekProduct)
 class GeneriekProductAdmin(admin.ModelAdmin):
-    list_display = ("upn_label", "verplicht_product")
-    list_filter = (
+    list_display = (
+        "upn_label",
+        "doelgroep",
+        "verplicht_product",
         "verantwoordelijke_organisatie",
+    )
+    list_filter = (
+        "doelgroep",
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)

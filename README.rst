@@ -2,7 +2,7 @@
 SDG invoervoorziening
 =====================
 
-:Version: 0.1.0
+:Version: 1.0.1
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: vng, sdg, pdc
 :PythonVersion: 3.8
@@ -52,8 +52,8 @@ formaat.
 ==============  ==============  =============================
 Versie          Release date    API specificatie
 ==============  ==============  =============================
-latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
-                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_
+1.0.0           24-01-2022      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.0.0/src/openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.0.0/src/openapi.yaml>`_
 ==============  ==============  =============================
 
 Zie: `Alle versies en wijzigingen <https://github.com/maykinmedia/sdg-invoervoorziening/blob/master/CHANGELOG.rst>`_
