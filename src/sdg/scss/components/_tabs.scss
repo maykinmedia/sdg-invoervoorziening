@@ -48,7 +48,7 @@
   }
 
   .tabs__tab-content > .toolbar {
-    z-index: 1000
+    position: relative;
   }
 
   .tabs__tab-header {
