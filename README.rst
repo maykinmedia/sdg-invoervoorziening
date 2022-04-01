@@ -2,7 +2,7 @@
 SDG invoervoorziening
 =====================
 
-:Version: 1.0.1
+:Version: latest
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: vng, sdg, pdc
 :PythonVersion: 3.8
@@ -50,11 +50,13 @@ De API specificatie is beschikbaar in het Open API Specification (OAS) versie 3
 formaat.
 
 ==============  ==============  =============================
-Versie          Release date    API specificatie
+Versie          Release datum   API specificatie
 ==============  ==============  =============================
-1.0.0           24-01-2022      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.0.0/src/openapi.yaml>`_,
+latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
+                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.0.0..master#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
+1.0.0           2022-01-24      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.0.0/src/openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.0.0/src/openapi.yaml>`_
-==============  ==============  =============================
 
 Zie: `Alle versies en wijzigingen <https://github.com/maykinmedia/sdg-invoervoorziening/blob/master/CHANGELOG.rst>`_
 
