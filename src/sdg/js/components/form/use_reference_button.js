@@ -25,7 +25,7 @@ class UseReferenceButton extends ReferenceTextComponent {
         super.updateLabel();
 
         if(this.getFormControlDisabled()) {
-            this.setState({label: 'Aanpassen uitgeschakeld'});
+            this.setState({label: 'Bewerken uitgeschakeld'});
         } else {
             this.setState({label: this.state.originalLabel});
         }
