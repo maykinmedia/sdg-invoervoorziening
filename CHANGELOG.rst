@@ -3,9 +3,10 @@ Change history
 ==============
 
 
-0.1.0
+1.0.0
 =====
 
-*<month, day year>*
+*January 24, 2022*
 
-* Initial release.
+* Initial release after 6 sprints, covering the mandatory and many optional
+  requirements.
