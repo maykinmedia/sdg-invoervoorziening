@@ -148,7 +148,6 @@
 
 
         <div class="tabs tabs--inline">
-            <div class="tabs__tab-contents">
                 {% for generic_information, form in informatie_forms %}
                     <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
                          id="{{ form.taal.value }}">
@@ -198,7 +197,6 @@
                             {{ form.taal.as_hidden }}
                             {% localized_form formset include_form=False fields=localized_form_fields %}
                         </div>
-            </div>
         </div>
 
         <hr class="divider">
