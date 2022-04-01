@@ -1,4 +1,4 @@
-const form = document.querySelector(".form__general");
+const form = document.querySelector("form[class=form__general]");
 
 class GenericForm {
 
