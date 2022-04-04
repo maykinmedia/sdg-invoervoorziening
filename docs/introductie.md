@@ -1,4 +1,4 @@
-# Introductie
+# Introductie 
 
 De Single Digital Gateway-verordening, kortweg SDG, is in oktober 2018 
 aangenomen door het Europees Parlement. Daarmee heeft Nederland de wettelijke 
@@ -42,3 +42,5 @@ Speerpunten zijn:
   content op haar eigen website en via andere kanalen gebruiken en publiceren, 
   mits ze zelf een API maken die dit mogelijk maakt (dit laatste is buiten 
   scope van het project).
+  
+> Zie ook de VNG productpagina op https://vng.nl/projecten/single-digital-gateway
