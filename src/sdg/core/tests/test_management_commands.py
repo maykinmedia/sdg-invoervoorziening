@@ -5,13 +5,11 @@ from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 
-import requests_mock
-
-from sdg.core.constants import PublicData, TaalChoices
+from sdg.core.constants import TaalChoices
 from sdg.core.models import Informatiegebied, Overheidsorganisatie, UniformeProductnaam
-from sdg.core.tests.data import binary
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import ThemaFactory, UniformeProductnaamFactory
+from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.tests.factories.product import GeneriekProductFactory
 
 TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -31,14 +29,16 @@ class CommandTestCase(TestCase):
 
 
 class TestImportData(CommandTestCase):
-    def test_load_gemeenten(self):
+    def test_load_government_orgs(self):
         out = self.call_command(
-            "load_gemeenten", os.path.join(TESTS_DIR, "data/Gemeente.xml")
+            "load_government_orgs",
+            os.path.join(TESTS_DIR, "data/Overheidsorganisatie.xml"),
         )
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(5 objects)", out)
-        self.assertEqual(5, Overheidsorganisatie.objects.count())
+        self.assertIn("(8 objects)", out)
+        self.assertEqual(8, Overheidsorganisatie.objects.count())
+        self.assertEqual(0, LokaleOverheid.objects.count())
 
         organisatie = Overheidsorganisatie.objects.first()
         self.assertEqual(organisatie.owms_pref_label, "'s-Graveland")
@@ -47,6 +47,37 @@ class TestImportData(CommandTestCase):
             organisatie.owms_identifier,
         )
         self.assertEqual(datetime(2001, 12, 31), organisatie.owms_end_date)
+
+    def test_load_municipalities_before_gov_orgs(self):
+        out = self.call_command(
+            "load_municipalities", os.path.join(TESTS_DIR, "data/Gemeente.xml")
+        )
+
+        self.assertIn("Successfully imported", out)
+        self.assertIn("(0 objects)", out)
+        self.assertEqual(0, Overheidsorganisatie.objects.count())
+
+    def test_load_municipalities_after_gov_orgs(self):
+        self.call_command(
+            "load_government_orgs",
+            os.path.join(TESTS_DIR, "data/Overheidsorganisatie.xml"),
+        )
+
+        out = self.call_command(
+            "load_municipalities", os.path.join(TESTS_DIR, "data/Gemeente.xml")
+        )
+
+        self.assertIn("Successfully imported", out)
+        self.assertIn("(5 objects)", out)
+        self.assertEqual(5, LokaleOverheid.objects.count())
+
+        lokale_overheid = LokaleOverheid.objects.first()
+        self.assertEqual(lokale_overheid.organisatie.owms_pref_label, "'s-Graveland")
+        self.assertEqual(lokale_overheid.bevoegde_organisaties.count(), 1)
+        self.assertEqual(
+            lokale_overheid.bevoegde_organisaties.get().organisatie,
+            lokale_overheid.organisatie,
+        )
 
     def test_load_informatiegebieden(self):
         out = self.call_command(
@@ -97,60 +128,6 @@ class TestImportData(CommandTestCase):
         self.assertEqual("eu-burger", first_generic.doelgroep)
         self.assertEqual("eu-bedrijf", upn.generieke_producten.last().doelgroep)
         self.assertEqual(len(TaalChoices), first_generic.vertalingen.count())
-
-    @requests_mock.Mocker()
-    def test_load_gemeenten_from_url(self, m):
-        m.get(PublicData.GEMEENTE.value, content=binary.GEMEENTE)
-        out = self.call_command("load_gemeenten", PublicData.GEMEENTE.value)
-
-        self.assertIn("Successfully imported", out)
-        self.assertIn("(5 objects)", out)
-        self.assertEqual(5, Overheidsorganisatie.objects.count())
-
-        organisatie = Overheidsorganisatie.objects.first()
-        self.assertEqual("'s-Graveland", organisatie.owms_pref_label)
-        self.assertEqual(
-            "http://standaarden.overheid.nl/owms/terms/'s-Graveland_(gemeente)",
-            organisatie.owms_identifier,
-        )
-        self.assertEqual(datetime(2001, 12, 31), organisatie.owms_end_date)
-
-    @requests_mock.Mocker()
-    def test_load_informatiegebieden_from_url(self, m):
-        m.get(PublicData.INFORMATIEGEBIED.value, content=binary.INFORMATIEGEBIED)
-        out = self.call_command(
-            "load_informatiegebieden", PublicData.INFORMATIEGEBIED.value
-        )
-
-        self.assertIn("Successfully imported", out)
-        self.assertIn("(14 objects)", out)
-        self.assertEqual(14, Informatiegebied.objects.count())
-
-        informatiegebied = Informatiegebied.objects.first()
-        self.assertEqual("A1", informatiegebied.code)
-        self.assertEqual("Reizen binnen de Unie", informatiegebied.informatiegebied)
-        self.assertEqual(
-            "http://standaarden.overheid.nl/owms/terms/sdg_reizUnie",
-            informatiegebied.informatiegebied_uri,
-        )
-
-    @requests_mock.Mocker()
-    def test_load_upn_from_url(self, m):
-        m.get(PublicData.UPN.value, content=binary.UPN)
-        out = self.call_command("load_upn", PublicData.UPN.value)
-
-        self.assertIn("Successfully imported", out)
-        self.assertIn("(16 objects)", out)
-        self.assertEqual(16, UniformeProductnaam.objects.count())
-
-        upn = UniformeProductnaam.objects.first()
-        self.assertEqual(
-            "http://standaarden.overheid.nl/owms/terms/aanleunwoning",
-            upn.upn_uri,
-        )
-        self.assertEqual("aanleunwoning", upn.upn_label)
-        self.assertEqual(False, upn.rijk)
-        self.assertEqual(True, upn.burger)
 
 
 class TestAutofill(CommandTestCase):

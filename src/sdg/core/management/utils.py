@@ -13,16 +13,12 @@ from sdg.organisaties.models import BevoegdeOrganisatie, LokaleOverheid
 from sdg.producten.models import GeneriekProduct, LocalizedGeneriekProduct
 
 
-def load_gemeenten(data: List[Dict[str, Any]]) -> int:
+def load_government_organisations(data: List[Dict[str, Any]]) -> int:
     """
-    Loads municipalities based on a list of dictionaries.
+    Loads government organisations based on a list of dictionaries.
 
     :return: The total count of the created objects.
     """
-
-    def _is_municipality(resource_identifier: str) -> bool:
-        return resource_identifier.endswith("(gemeente)")
-
     count = 0
     for obj in data:
         resource_id = obj.get("resourceIdentifier")
@@ -35,21 +31,40 @@ def load_gemeenten(data: List[Dict[str, Any]]) -> int:
                 else None,
             },
         )
-        if _is_municipality(resource_id):
+        if created:
+            count += 1
+
+    return count
+
+
+def load_municipalities(data: List[Dict[str, Any]]) -> int:
+    """
+    Identifies municipalities in the list of all government organisations. It
+    specifically does not add any municipality if it's not in the list of
+    government organisations.
+
+    WARNING: Depends on `load_government_organisations`.
+
+    :return: The total count of the created objects.
+    """
+    gov_orgs = {obj.owms_identifier: obj for obj in Overheidsorganisatie.objects.all()}
+
+    count = 0
+    for obj in data:
+        gov_org = gov_orgs.get(obj.get("resourceIdentifier"), None)
+        if gov_org is not None:
             municipality, created = LokaleOverheid.objects.get_or_create(
-                organisatie=organisatie,
+                organisatie=gov_org,
                 defaults={
-                    "ondersteunings_organisatie": organisatie,
+                    "ondersteunings_organisatie": gov_org,
                 },
             )
             if created:
                 BevoegdeOrganisatie.objects.create(
-                    organisatie=organisatie,
-                    lokale_overheid=municipality,
-                    naam=organisatie.owms_pref_label,
+                    lokale_overheid=municipality, organisatie=gov_org
                 )
-        if created:
-            count += 1
+            if created:
+                count += 1
 
     return count
 

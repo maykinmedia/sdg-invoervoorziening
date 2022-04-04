@@ -105,7 +105,10 @@ class BevoegdeOrganisatie(models.Model):
     naam = models.CharField(
         _("naam"),
         max_length=255,
-        help_text=_("De naam van de bevoegde organisatie."),
+        blank=True,
+        help_text=_(
+            "De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is."
+        ),
     )
     lokale_overheid = models.ForeignKey(
         LokaleOverheid,
@@ -119,7 +122,9 @@ class BevoegdeOrganisatie(models.Model):
         on_delete=models.SET_NULL,
         verbose_name=_("organisatie"),
         related_name="bevoegde_organisaties",
-        help_text=_("De organisatie van de bevoegde organisatie."),
+        help_text=_(
+            "De bij de Rijksoverheid bekende organisatie die optreed als bevoegde organisatie."
+        ),
         blank=True,
         null=True,
     )
@@ -130,6 +135,11 @@ class BevoegdeOrganisatie(models.Model):
 
     def __str__(self):
         return self.naam
+
+    def save(self, *args, **kwargs):
+        if self.organisatie:
+            self.naam = self.organisatie.owms_pref_label
+        super().save(*args, **kwargs)
 
 
 class Lokatie(models.Model):
