@@ -1,0 +1,36 @@
+[
+{
+    "model": "zgw_consumers.service",
+    "pk": 1,
+    "fields": {
+        "label": "Ondernemersplein",
+        "api_type": "orc",
+        "api_root": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/",
+        "client_id": "",
+        "secret": "",
+        "auth_type": "no_auth",
+        "header_key": "",
+        "header_value": "",
+        "oas": "https://sdgapi.ondernemersplein.kvk.nl/swagger/v1/swagger.yaml",
+        "nlx": "",
+        "user_id": "",
+        "user_representation": ""
+    }
+},
+{
+    "model": "zgw_consumers.nlxconfig",
+    "pk": 1,
+    "fields": {
+        "directory": "",
+        "outway": "/"
+    }
+},
+{
+    "model": "services.serviceconfiguration",
+    "pk": 1,
+    "fields": {
+        "service": 1,
+        "doelgroep": "eu-bedrijf"
+    }
+}
+]
