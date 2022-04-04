@@ -38,6 +38,7 @@
         {% include 'producten/_include/edit_warnings.html' %}
     </div>
 
+
     <form action="." method="POST" class="form">
         {% csrf_token %}
         {{ form.management_form }}
@@ -71,7 +72,8 @@
                                 width="25%">{{ field.label|capfirst }}<i
                                     class="fas fa-info-circle fa-xs dark"
                                     title="{{ field.help_text }}"></i></td>
-                            <td class="tabs__table-cell" data-default-text="De gemeente {{ lokaleoverheid }} biedt het product {{ product }} niet aan.">
+                            <td class="tabs__table-cell"
+                                data-default-text="De gemeente {{ lokaleoverheid }} biedt het product {{ product }} niet aan.">
                                 {{ field|addclass:"form__input" }}
                                 {{ field.errors }}
                             </td>
@@ -91,8 +93,8 @@
                             <tr>
                                 <td class="tabs__table-cell"
                                     width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:field.help_text }}"></i>
+                                        class="fas fa-info-circle fa-xs dark"
+                                        title="{{ configuration.1|default:field.help_text }}"></i>
                                 </td>
                                 <td class="tabs__table-cell">
                                     {% select field %}
@@ -196,38 +198,37 @@
 
         <hr class="divider">
 
-        <div class="form-actions">
-            <div class="notifications">
-                {% if product_versie.current_status == product.status.SCHEDULED %}
-                    {% include 'producten/_include/schedule_to_concept_warning.html' %}
-                {% endif %}
-            </div>
-            <div>
-                <div class="form-actions__options">
+        <div class="notifications">
+            {% if product_versie.current_status == product.status.SCHEDULED %}
+                {% include 'producten/_include/schedule_to_concept_warning.html' %}
+            {% endif %}
+        </div>
+
+
+        <div class="toolbar toolbar--sticky-b">
+            <div class="toolbar__section">
+                <div class="calendar-container">
                     {{ version_form.non_field_errors }}
-                    <tr>
-                        <td class="tabs__table-cell tabs__table-cell--edit">
-                            {% trans "Publicatie datum" %}
-                        </td>
-                        <td class="tabs__table-cell">
-                            <div class="calendar-container">
-                                <input name="date" type="date" class="calendar form__input"
-                                       value="{{ version_form.date.initial }}">
-                            </div>
-                        </td>
-                    </tr>
-                    <div>
-                        <button class="button tabs__form-button" type="submit" name="publish" value="date">
-                            Opslaan en publiceren
-                        </button>
-                        <button class="button tabs__form-button button--light" name="publish" value="concept"
-                                type="submit">
-                            Opslaan als concept
-                        </button>
-                        <a href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
-                            <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
-                        </a>
-                    </div>
+                    {% trans "Publicatie datum" %}
+                    <input name="date" type="date" class="calendar form__input"
+                           value="{{ version_form.date.initial }}">
+                </div>
+            </div>
+
+            <div class="toolbar__section">
+                <div class="button-group">
+                    <a href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
+                        <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                    </a>
+
+                    <button class="button tabs__form-button button--light" name="publish" value="concept"
+                            type="submit">
+                        Opslaan als concept
+                    </button>
+
+                    <button class="button tabs__form-button" type="submit" name="publish" value="date">
+                        Opslaan en publiceren
+                    </button>
                 </div>
             </div>
         </div>

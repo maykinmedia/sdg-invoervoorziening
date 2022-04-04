@@ -36,7 +36,7 @@
   }
 
   &:active {
-    --shadow-size: 0;
+    --shadow-size: 0!important;
     transform: translateY(var(--3d-active));
   }
 
