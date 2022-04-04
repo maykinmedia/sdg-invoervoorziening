@@ -2,8 +2,12 @@
 @import "colors";
 
 .calendar-container {
+  align-items: center;
+  display: flex;
+  gap: 10px;
   width: 441px;
   float: right;
+  white-space: nowrap;
 
   &.closed {
     display: none;

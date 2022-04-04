@@ -1,6 +1,10 @@
 .button-group {
   display: flex;
 
+  .button {
+    --spacing: 0;
+  }
+
   .button:not(.button--transparent) {
     border: 1px solid var(--shadow-color);
     border-bottom: none;

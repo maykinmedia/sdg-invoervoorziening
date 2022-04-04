@@ -38,6 +38,7 @@
         {% include 'producten/_include/edit_warnings.html' %}
     </div>
 
+
     <form action="." method="POST" class="form">
         {% csrf_token %}
         {{ form.management_form }}
@@ -78,7 +79,8 @@
                                 width="25%">{{ field.label|capfirst }}<i
                                     class="fas fa-info-circle fa-xs dark"
                                     title="{{ field.help_text }}"></i></td>
-                            <td class="tabs__table-cell" data-default-text="De gemeente {{ lokaleoverheid }} biedt het product {{ product }} niet aan.">
+                            <td class="tabs__table-cell"
+                                data-default-text="De gemeente {{ lokaleoverheid }} biedt het product {{ product }} niet aan.">
                                 {{ field|addclass:"form__input" }}
                                 {{ field.errors }}
                             </td>
@@ -103,8 +105,8 @@
                             <tr>
                                 <td class="tabs__table-cell"
                                     width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:field.help_text }}"></i>
+                                        class="fas fa-info-circle fa-xs dark"
+                                        title="{{ configuration.1|default:field.help_text }}"></i>
                                 </td>
                                 <td class="tabs__table-cell">
                                     {% select field %}
@@ -148,91 +150,90 @@
 
 
         <div class="tabs tabs--inline">
-                {% for generic_information, form in informatie_forms %}
-                    <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
-                         id="{{ form.taal.value }}">
+            {% for generic_information, form in informatie_forms %}
+                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
+                     id="{{ form.taal.value }}">
 
-                        <div class="toolbar">
-                            <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ form.taal.value }}"
-                               class="preview"
-                               target="_blank">
-                                <i class="fa fa-vector-square"></i> {% trans "Preview" %}
-                            </a>
-                            {% toggle _('Bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
-                        </div>
-                        <hr class="divider">
-
-                        {% if generic_information %}
-                            <table class="tabs__table form__generic">
-                                <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
-                                <tr>
-                                    <th class="tabs__table-header" width="25%">
-                                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                                        {% trans 'Generieke gegevens' %}
-                                    </th>
-                                    <th class="tabs__table-header">
-                                        {% trans 'Huidige informatie' %}
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody class="tabs__table-body">
-                                {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
-                                    {% table_row title url=url.value %}
-                                {% endwith %}
-                                {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
-                                    {% table_row field %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <hr class="divider">
-                        {% endif %}
-
+                    <div class="toolbar">
+                        <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?taal={{ form.taal.value }}"
+                           class="preview"
+                           target="_blank">
+                            <i class="fa fa-vector-square"></i> {% trans "Preview" %}
+                        </a>
+                        {% toggle _('Bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
                     </div>
-                {% endfor %}
-                        <div class="tabs__table form__has-reference"
-                             data-reference=".form__reference-{{ form.taal.value }}"
-                             data-previousreference=".form__previousreference-{{ form.taal.value }}">
-                            {{ form.non_field_errors }}
-                            {{ form.id }}
-                            {{ form.taal.as_hidden }}
-                            {% localized_form formset include_form=False fields=localized_form_fields %}
-                        </div>
+                    <hr class="divider">
+
+                    {% if generic_information %}
+                        <table class="tabs__table form__generic">
+                            <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
+                            <tr>
+                                <th class="tabs__table-header" width="25%">
+                                    <i class="fa fa-chevron-right bem-toggle__icon"></i>
+                                    {% trans 'Generieke gegevens' %}
+                                </th>
+                                <th class="tabs__table-header">
+                                    {% trans 'Huidige informatie' %}
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="tabs__table-body">
+                            {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
+                                {% table_row title url=url.value %}
+                            {% endwith %}
+                            {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
+                                {% table_row field %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <hr class="divider">
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+            <div class="tabs__table form__has-reference"
+                 data-reference=".form__reference-{{ form.taal.value }}"
+                 data-previousreference=".form__previousreference-{{ form.taal.value }}">
+                {{ form.non_field_errors }}
+                {{ form.id }}
+                {{ form.taal.as_hidden }}
+                {% localized_form formset include_form=False fields=localized_form_fields %}
+            </div>
         </div>
 
         <hr class="divider">
 
-        <div class="form-actions">
-            <div class="notifications">
-                {% if product_versie.current_status == product.status.SCHEDULED %}
-                    {% include 'producten/_include/schedule_to_concept_warning.html' %}
-                {% endif %}
-            </div>
-            <div>
-                <div class="form-actions__options">
+        <div class="notifications">
+            {% if product_versie.current_status == product.status.SCHEDULED %}
+                {% include 'producten/_include/schedule_to_concept_warning.html' %}
+            {% endif %}
+        </div>
+
+
+        <div class="toolbar toolbar--sticky-b">
+            <div class="toolbar__section">
+                <div class="calendar-container">
                     {{ version_form.non_field_errors }}
-                    <tr>
-                        <td class="tabs__table-cell tabs__table-cell--edit">
-                            {% trans "Publicatie datum" %}
-                        </td>
-                        <td class="tabs__table-cell">
-                            <div class="calendar-container">
-                                <input name="date" type="date" class="calendar form__input"
-                                       value="{{ version_form.date.initial }}">
-                            </div>
-                        </td>
-                    </tr>
-                    <div>
-                        <button class="button tabs__form-button" type="submit" name="publish" value="date">
-                            Opslaan en publiceren
-                        </button>
-                        <button class="button tabs__form-button button--light" name="publish" value="concept"
-                                type="submit">
-                            Opslaan als concept
-                        </button>
-                        <a href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
-                            <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
-                        </a>
-                    </div>
+                    {% trans "Publicatie datum" %}
+                    <input name="date" type="date" class="calendar form__input"
+                           value="{{ version_form.date.initial }}">
+                </div>
+            </div>
+
+            <div class="toolbar__section">
+                <div class="button-group">
+                    <a href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
+                        <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                    </a>
+
+                    <button class="button tabs__form-button button--light" name="publish" value="concept"
+                            type="submit">
+                        Opslaan als concept
+                    </button>
+
+                    <button class="button tabs__form-button" type="submit" name="publish" value="date">
+                        Opslaan en publiceren
+                    </button>
                 </div>
             </div>
         </div>
