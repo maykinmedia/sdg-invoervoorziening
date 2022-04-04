@@ -63,5 +63,18 @@ $base_with: (
       top: -92px;
       right: 0;
     }
+
+    .datagrid__caption:first-child,
+    .datagrid__filter:first-child,
+    .datagrid__cell:first-child {
+      padding-left: 0!important;
+    }
+
+    .datagrid__header .toolbar:last-child,
+    .datagrid__caption:last-child,
+    .datagrid__filter:last-child,
+    .datagrid__cell:last-child {
+      padding-right: 0!important;
+    }
   }
 }
