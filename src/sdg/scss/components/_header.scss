@@ -82,15 +82,16 @@
       transform: scale(1.05);
     }
 
-    &:hover {
-      .header__dropdown-list {
-        opacity: 1;
-      }
-    }
-
     .divider {
       border-bottom: 4px dotted darken($color_primary_darker, 5%);
     }
+  }
+
+  .header__dropdown *:hover ~ .header__dropdown-list,
+  .header__dropdown-list:hover {
+    opacity: 1;
+    transition-delay: 0s;
+    visibility: visible;
   }
 
   .header__dropdown-list {
@@ -103,6 +104,8 @@
     opacity: 0;
     border-radius: 10px;
     transition: all 0.3s ease-in-out;
+    transition-delay: 0s;
+    visibility: hidden;
     z-index: 20;
 
     a {
