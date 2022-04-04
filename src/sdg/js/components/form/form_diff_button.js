@@ -8,7 +8,7 @@ const DIFF_BUTTONS = document.querySelectorAll('.form__diff-btn');
 /**
  * Button showing diffs between user and stored value of an input.
  */
-class DiffButton extends ReferenceTextComponent {
+class FormDiffButton extends ReferenceTextComponent {
     /**
      * Gets called when this.node gets clicked.
      * @param {MouseEvent} event
@@ -68,12 +68,12 @@ class DiffButton extends ReferenceTextComponent {
      * @return {string} HTML string containing diff.
      */
     getDiffHTML() {
-        const previousVersionData = this.getPreviousVersionData();
-        const previousValue = previousVersionData.input.value;
-        const currentValue = this.getValue();
+        const currentVersionData = this.getCurrentVersionData();
+        const referenceValue = currentVersionData.input.value;
+        const ownValue = this.getValue();
 
         const diff = new Diff();
-        const textDiff = diff.main(previousValue, currentValue);
+        const textDiff = diff.main(referenceValue, ownValue);
 
         return diff.prettyHtml(textDiff).replace(/\\/g, '');
     }
@@ -141,4 +141,4 @@ class DiffButton extends ReferenceTextComponent {
 }
 
 // Start!
-[...DIFF_BUTTONS].forEach((node) => new DiffButton(node));
+[...DIFF_BUTTONS].forEach((node) => new FormDiffButton(node));
