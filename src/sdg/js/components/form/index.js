@@ -1,4 +1,5 @@
-import './diff_button';
+import './form_diff_button';
+import './reference_diff_button';
 import './language_switch';
 import './show_reference_button';
 import './toggle';

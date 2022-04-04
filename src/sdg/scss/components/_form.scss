@@ -36,8 +36,9 @@
 
   &__control-body {
     display: flex;
-    grid-area: bdy;
     flex-direction: column;
+    grid-area: bdy;
+    position: relative;
     width: 100%;
   }
 

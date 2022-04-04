@@ -9,6 +9,7 @@
   background-color: var(--main-color);
   border: var(--border-size) solid var(--border-color);
   padding: var(--spacing);
+  position: relative;
 
   &[aria-hidden=true] {
     display: none;

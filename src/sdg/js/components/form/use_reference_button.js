@@ -15,7 +15,7 @@ class UseReferenceButton extends ReferenceTextComponent {
      */
     onClick(event) {
         event.preventDefault();
-        this.setValue(this.getPreviousVersionData().input.value);
+        this.setValue(this.getCurrentVersionData().input.value);
     }
 
     /**
