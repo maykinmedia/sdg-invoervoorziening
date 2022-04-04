@@ -259,14 +259,12 @@ class LokaleOverheidUpdateViewTests(WebTest):
             reverse(self.url, kwargs={"pk": self.lokale_overheid.pk})
         )
 
-        response.form["contact_naam"] = "Municipality Contact Name"
         response.form["contact_website"] = "https://example.com"
         response.form["contact_emailadres"] = "email@example.com"
         response.form["contact_telefoonnummer"] = "0619123123"
         response.form.submit()
 
         self.lokale_overheid.refresh_from_db()
-        self.assertEqual(self.lokale_overheid.contact_naam, "Municipality Contact Name")
         self.assertEqual(self.lokale_overheid.contact_website, "https://example.com")
         self.assertEqual(self.lokale_overheid.contact_emailadres, "email@example.com")
         self.assertEqual(self.lokale_overheid.contact_telefoonnummer, "0619123123")
@@ -277,12 +275,12 @@ class LokaleOverheidUpdateViewTests(WebTest):
             reverse(self.url, kwargs={"pk": self.lokale_overheid.pk})
         )
 
-        response.form["contact_naam"] = "Municipality Contact Name"
+        response.form["contact_website"] = "https://example.com"
         response.form["organisatie"].value = org.pk
         response.form.submit()
 
         self.lokale_overheid.refresh_from_db()
-        self.assertEqual(self.lokale_overheid.contact_naam, "Municipality Contact Name")
+        self.assertEqual(self.lokale_overheid.contact_website, "https://example.com")
         self.assertNotEqual(self.lokale_overheid.organisatie, org.pk)
 
 

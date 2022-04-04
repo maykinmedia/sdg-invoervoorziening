@@ -617,10 +617,6 @@ components:
             type: string
             format: uri
           description: Lijst van catalogi die deze organisatie gebruikt.
-        contactNaam:
-          type: string
-          description: de naam van de verantwoordelijke contactpersoon.
-          maxLength: 40
         contactWebsite:
           type: string
           format: uri
@@ -644,7 +640,6 @@ components:
       required:
       - bevoegdeOrganisaties
       - catalogi
-      - contactNaam
       - locaties
       - ondersteuningsOrganisatie
       - owmsEndDate

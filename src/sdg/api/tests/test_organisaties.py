@@ -39,7 +39,6 @@ class OrganisatiesTests(APITestCase):
                 "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
                 "locaties": [],
                 "catalogi": [],
-                "contactNaam": municipality.contact_naam,
                 "contactWebsite": municipality.contact_website,
                 "contactEmailadres": municipality.contact_emailadres,
                 "contactTelefoonnummer": municipality.contact_telefoonnummer,

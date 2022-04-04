@@ -57,6 +57,7 @@ class ProductVersieInlineAdmin(admin.StackedInline):
         "gemaakt_op",
         "gewijzigd_op",
     )
+    autocomplete_fields = ("gemaakt_door",)
     model = ProductVersie
     extra = 1
 
@@ -116,6 +117,10 @@ class ProductAdmin(admin.ModelAdmin):
         "generiek_product",
         "referentie_product",
         "catalogus",
+        "gerelateerde_producten",
+        "bevoegde_organisatie",
+        "locaties",
+        "product_valt_onder",
     )
     search_fields = (
         "generiek_product__upn__upn_label",

@@ -6,15 +6,13 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from sdg.core.db.fields import DynamicArrayField
-from sdg.core.models import ProductenCatalogus
-from sdg.core.models.mixins import ContactgegevensMixin
 from sdg.core.models.validators import validate_openingstijden, validate_postcode
 from sdg.organisaties.managers import LokaleOverheidManager
 
 User = get_user_model()
 
 
-class LokaleOverheid(ContactgegevensMixin, models.Model):
+class LokaleOverheid(models.Model):
     """
     Municipality
     """
@@ -28,9 +26,26 @@ class LokaleOverheid(ContactgegevensMixin, models.Model):
             "De identificatie die binnen deze API gebruikt wordt voor de resource."
         ),
     )
+    contact_website = models.URLField(
+        _("contact website"),
+        blank=True,
+        help_text=_("Website van de gemeente."),
+    )
+    contact_telefoonnummer = models.CharField(
+        _("contact telefoonnummer"),
+        max_length=20,
+        blank=True,
+        help_text=_("Het telefoonnummer van de gemeente."),
+    )
+    contact_emailadres = models.EmailField(
+        _("contact emailadres"),
+        max_length=254,
+        blank=True,
+        help_text=_("Het e-mailadres van de verantwoordelijke contactpersoon."),
+    )
     ondersteunings_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         verbose_name=_("ondersteunings organisatie"),
         help_text=_("organisatie voor ondersteuning."),
         related_name="ondersteunings",

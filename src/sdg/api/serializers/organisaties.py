@@ -126,7 +126,6 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
             "owms_end_date",
             "locaties",
             "catalogi",
-            "contact_naam",
             "contact_website",
             "contact_emailadres",
             "contact_telefoonnummer",

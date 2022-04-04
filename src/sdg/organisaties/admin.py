@@ -29,12 +29,15 @@ class BevoegdeOrganisatieAdmin(admin.ModelAdmin):
 
 @admin.register(LokaleOverheid)
 class LokaleOverheidAdmin(admin.ModelAdmin):
-    list_display = ("organisatie", "has_manager", "contact_website", "contact_naam")
+    list_display = (
+        "organisatie",
+        "has_manager",
+        "contact_website",
+    )
     list_filter = (HasManagerProductFilter,)
     ordering = ("organisatie__owms_pref_label",)
     search_fields = (
         "organisatie__owms_pref_label",
-        "contact_naam",
         "contact_emailadres",
         "contact_website",
     )
@@ -66,3 +69,4 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
 class LocatieAdmin(admin.ModelAdmin):
     model = Locatie
     autocomplete_fields = ("lokale_overheid",)
+    search_fields = ("naam",)
