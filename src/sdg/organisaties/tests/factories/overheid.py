@@ -15,7 +15,6 @@ from sdg.organisaties.models import (
 class LokaleOverheidFactory(DjangoModelFactory):
     ondersteunings_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
     organisatie = factory.SubFactory(OverheidsorganisatieFactory)
-    contact_naam = factory.Faker("name")
     contact_website = factory.Faker("url")
     contact_telefoonnummer = factory.Faker("phone_number", locale="nl_NL")
     contact_emailadres = factory.Faker("email")

@@ -25,31 +25,3 @@ class FieldConfigurationMixin:
                 pass
             if configuration := self.configuration.for_field(prefix=model, name=name):
                 field.label, field.help_text = configuration[0]
-
-
-class ContactgegevensMixin(models.Model):
-    contact_naam = models.CharField(
-        _("contact naam"),
-        max_length=40,
-        help_text=_("de naam van de verantwoordelijke contactpersoon."),
-    )
-    contact_website = models.URLField(
-        _("contact website"),
-        blank=True,
-        help_text=_("Website van de gemeente."),
-    )
-    contact_telefoonnummer = models.CharField(
-        _("contact telefoonnummer"),
-        max_length=20,
-        blank=True,
-        help_text=_("Het telefoonnummer van de gemeente."),
-    )
-    contact_emailadres = models.EmailField(
-        _("contact emailadres"),
-        max_length=254,
-        blank=True,
-        help_text=_("Het e-mailadres van de verantwoordelijke contactpersoon."),
-    )
-
-    class Meta:
-        abstract = True

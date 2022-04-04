@@ -17,7 +17,6 @@ class LokaleOverheidForm(forms.ModelForm):
         model = LokaleOverheid
         fields = (
             "organisatie",
-            "contact_naam",
             "contact_website",
             "contact_telefoonnummer",
             "contact_emailadres",
