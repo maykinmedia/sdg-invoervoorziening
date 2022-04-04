@@ -60,15 +60,8 @@
                 {% if not product.is_referentie_product %}
                     {% with field=product_form.product_aanwezig %}
                         <tr>
-                            <td class="tabs__table-cell" width="25%">
-                                {{ field.label|capfirst }} <i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ configuration.1|default:field.help_text }}"></i>
-                            </td>
-                            <td class="tabs__table-cell">
-                                {% select field %}
-                                {{ field.errors }}
-                            </td>
+                            <td class="tabs__table-cell" width="25%"> {{ field.label|capfirst }} <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i> </td>
+                            <td class="tabs__table-cell"> {% select field %} {{ field.errors }} </td>
                         </tr>
                     {% endwith %}
 
@@ -88,13 +81,8 @@
                     {% with field=product_form.product_valt_onder %}
                         <tr>
                             <td class="tabs__table-cell"
-                                width="25%">{{ field.label|capfirst }}<i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ field.help_text }}"></i></td>
-                            <td class="tabs__table-cell">
-                                {% select field %}
-                                {{ field.errors }}
-                            </td>
+                                width="25%">{{ field.label|capfirst }}<i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i></td>
+                            <td class="tabs__table-cell">{% select field %}{{ field.errors }} </td>
                         </tr>
                     {% endwith %}
 
@@ -116,14 +104,10 @@
 
                     {% with field=product_form.locaties %}
                         <tr>
-                            <td class="tabs__table-cell" width="25%">
-                                {{ field.label|capfirst }}
+                            <td class="tabs__table-cell" width="25%"> {{ field.label|capfirst }}
                                 <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                             </td>
-                            <td class="tabs__table-cell">
-                                {{ field }}
-                                {{ field.errors }}
-                            </td>
+                            <td class="tabs__table-cell"> {{ field }} {{ field.errors }} </td>
                         </tr>
                     {% endwith %}
                 {% endif %}

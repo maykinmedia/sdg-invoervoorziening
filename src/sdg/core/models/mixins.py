@@ -14,17 +14,17 @@ class FieldConfigurationMixin:
             self._configuration = ProductFieldConfiguration.get_solo()
         return self._configuration
 
-    def configure_field_text(self):
+    def configure_fields(self):
         model_meta = self._meta.model._meta
         model = model_meta.model_name
 
         for name, field in self.fields.items():
-            if configuration := self.configuration.for_field(prefix=model, name=name):
-                field.label, field.help_text = configuration[0]
             try:
-                self.fields[name].help_text = model_meta.get_field(field).help_text
+                field.help_text = model_meta.get_field(field).help_text
             except FieldDoesNotExist:
                 pass
+            if configuration := self.configuration.for_field(prefix=model, name=name):
+                field.label, field.help_text = configuration[0]
 
 
 class ContactgegevensMixin(models.Model):

@@ -17,21 +17,21 @@ class LocalizedProductForm(FieldConfigurationMixin, forms.ModelForm):
             "taal",
             "product_titel_decentraal",
             "specifieke_tekst",
-            "verwijzing_links",
-            "procedure_beschrijving",
             "vereisten",
             "bewijs",
-            "bezwaar_en_beroep",
+            "procedure_beschrijving",
             "kosten_en_betaalmethoden",
             "uiterste_termijn",
+            "bezwaar_en_beroep",
             "wtd_bij_geen_reactie",
+            "verwijzing_links",
             "decentrale_procedure_link",
             "product_valt_onder_toelichting",
         )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.configure_field_text()
+        self.configure_fields()
 
 
 class LocalizedProductFormSet(
@@ -106,7 +106,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         self.fields["bevoegde_organisatie"].queryset = self.fields[
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
-        self.configure_field_text()
+        self.configure_fields()
 
     def clean(self):
         cleaned_data = super().clean()

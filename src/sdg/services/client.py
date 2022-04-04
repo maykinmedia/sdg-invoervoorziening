@@ -8,8 +8,8 @@ class SDGClient(ZGWClient):
         """
         super().fetch_schema()
         paths = self._schema["paths"]
-        paths["/api/v1/producten"]["get"]["operationId"] = "productenList"
-        paths["/api/v1/producten/{id}"]["get"]["operationId"] = "productenRetrieve"
+        paths[self.products_url]["get"]["operationId"] = "productenList"
+        paths[f"{self.products_url}{{id}}"]["get"]["operationId"] = "productenRetrieve"
 
     @property
     def products_url(self):
