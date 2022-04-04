@@ -53,6 +53,10 @@ $base_with: (
     opacity: 1;
   }
 
+  .datagrid .input--contrast {
+    background-color: $color_grey_light!important;
+  }
+
   @include tablet {
     .datagrid .datagrid__header {
       position: absolute;
