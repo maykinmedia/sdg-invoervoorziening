@@ -47,17 +47,17 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2022-03-18T16:03:23.886"
+        "last_update": "2022-04-04T14:35:43.280"
     }
 },
 {
     "model": "django_celery_beat.periodictask",
     "pk": 1,
     "fields": {
-        "name": "celery.backend_cleanup",
+        "name": "Schonen van taken",
         "task": "celery.backend_cleanup",
-        "interval": null,
-        "crontab": 1,
+        "interval": 1,
+        "crontab": null,
         "solar": null,
         "clocked": null,
         "args": "[]",
@@ -74,7 +74,7 @@
         "enabled": true,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2021-10-29T16:05:37.586",
+        "date_changed": "2022-04-04T14:32:19.071",
         "description": ""
     }
 },
@@ -82,36 +82,8 @@
     "model": "django_celery_beat.periodictask",
     "pk": 2,
     "fields": {
-        "name": "Logius Automatic Workflow",
+        "name": "Standaardlijsten bijwerken",
         "task": "sdg.core.tasks.import_logius_data",
-        "interval": null,
-        "crontab": 3,
-        "solar": null,
-        "clocked": null,
-        "args": "[]",
-        "kwargs": "{}",
-        "queue": null,
-        "exchange": null,
-        "routing_key": null,
-        "headers": "{}",
-        "priority": null,
-        "expires": null,
-        "expire_seconds": null,
-        "one_off": false,
-        "start_time": null,
-        "enabled": true,
-        "last_run_at": "2021-10-29T16:06:37.577",
-        "total_run_count": 1,
-        "date_changed": "2021-12-01T12:02:14.143",
-        "description": "Used for automatically loading data from external sources (csv, xml)."
-    }
-},
-{
-    "model": "django_celery_beat.periodictask",
-    "pk": 3,
-    "fields": {
-        "name": "Autofill",
-        "task": "sdg.producten.tasks.autofill",
         "interval": null,
         "crontab": 2,
         "solar": null,
@@ -130,15 +102,43 @@
         "enabled": true,
         "last_run_at": "2021-10-29T16:06:37.577",
         "total_run_count": 1,
-        "date_changed": "2021-12-01T12:02:28.351",
-        "description": "Used for automatically generating generic and reference products."
+        "date_changed": "2022-04-04T14:31:43.283",
+        "description": "Laad lijsten in van standaarden.overheid.nl, te weten:\r\n\r\n* Overheidsorganisaties (lijst)\r\n* Gemeenten (subset van bovenstaande lijst)\r\n* UPL (lijst)\r\n* Informatiegebieden (lijst)\r\n* UPL-Informatiegebieden (koppeling tussen bovenstaande lijsten)"
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 3,
+    "fields": {
+        "name": "Generieke en referentie-producten aanmaken",
+        "task": "sdg.producten.tasks.autofill",
+        "interval": null,
+        "crontab": 3,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": "2021-10-29T16:06:37.577",
+        "total_run_count": 1,
+        "date_changed": "2022-04-04T14:33:38.570",
+        "description": "Creeer automatisch generieke producten op basis van de UPL en maak referentie-producten aan indien nodig."
     }
 },
 {
     "model": "django_celery_beat.periodictask",
     "pk": 4,
     "fields": {
-        "name": "Services (API data-loading)",
+        "name": "Generieke producten bijwerken",
         "task": "sdg.services.tasks.import_data_from_services",
         "interval": null,
         "crontab": 1,
@@ -158,8 +158,8 @@
         "enabled": true,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2022-03-18T16:03:23.942",
-        "description": "This task will update existing localized generic product with data from the configured external API using 'upnLabel' to match. Unreachable APIs will be ignored."
+        "date_changed": "2022-04-04T14:35:43.336",
+        "description": "Haal generieke productteksten op bij geconfigureerde services en laad deze in de invoervoorziening. Het \"upnLabel\" wordt gebruikt om producten te identificeren. Niet beschikbare services worden genegeerd."
     }
 }
 ]
