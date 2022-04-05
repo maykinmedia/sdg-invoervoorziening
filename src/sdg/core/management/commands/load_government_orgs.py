@@ -1,9 +1,9 @@
 from sdg.core.management.parsers import ParserCommand
-from sdg.core.management.utils import load_gemeenten
+from sdg.core.management.utils import load_government_organisations
 
 
 class Command(ParserCommand):
-    plural_object_name = "gemeenten"
+    plural_object_name = "government organisations"
     xml_column_names = [
         "prefLabel",
         "resourceIdentifier",
@@ -11,4 +11,4 @@ class Command(ParserCommand):
     ]
 
     def handle(self, **options):
-        super().handle(load_gemeenten, **options)
+        super().handle(load_government_organisations, **options)
