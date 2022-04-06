@@ -310,83 +310,6 @@ class Product(ProductFieldMixin, models.Model):
 
     get_revision_list = partialmethod(get_latest_versions, reverse_order=False)
 
-    def create_version_from_reference(self) -> ProductVersie:
-        """Create fist version for this product based on latest reference version."""
-        if self.is_referentie_product:
-            raise ValueError(
-                "create_version_from_reference must be called on a specific product"
-            )
-        return ProductVersie.objects.create(
-            product=self,
-            publicatie_datum=None,
-        )
-
-    def localize_version_from_reference(
-        self, version: ProductVersie, field_names: List[str]
-    ):
-        """Create localized product information for this specific product based on available reference languages."""
-        if self.is_referentie_product:
-            raise ValueError(
-                "localize_from_reference must be called on a specific product"
-            )
-
-        localized_objects = [
-            version.generate_localized_information(
-                language=translation.taal,
-                **{field: getattr(translation, field) for field in field_names},
-            )
-            for translation in self.referentie_product.most_recent_version.vertalingen.all()
-        ]
-        LocalizedProduct.objects.bulk_create(localized_objects, ignore_conflicts=True)
-
-    def get_or_create_specific_product(self, specific_catalog) -> Product:
-        """Create a specific product for a reference product, including localized information."""
-
-        if self.is_referentie_product:
-            with transaction.atomic():
-                if not isinstance(specific_catalog, Model):
-                    specific_catalog = get_object_or_404(
-                        ProductenCatalogus, pk=specific_catalog
-                    )
-
-                specific_product, created = Product.objects.get_or_create(
-                    referentie_product=self,
-                    catalogus=specific_catalog,
-                )
-
-                locaties = list(
-                    specific_catalog.lokale_overheid.locaties.all()
-                )  # extra query, could be removed
-                if len(locaties) == 1:
-                    specific_product.locaties.add(locaties[0])
-                    specific_product.save()
-
-                version = specific_product.create_version_from_reference()
-                specific_product.localize_version_from_reference(
-                    version,
-                    field_names=[
-                        "bezwaar_en_beroep",
-                        "decentrale_procedure_link",
-                        "kosten_en_betaalmethoden",
-                        "procedure_beschrijving",
-                        "product_titel_decentraal",
-                        "specifieke_tekst",
-                        "uiterste_termijn",
-                        "vereisten",
-                        "verwijzing_links",
-                        "wtd_bij_geen_reactie",
-                    ],
-                )
-                return specific_product
-        else:
-            return self
-
-    def get_create_redirect_url(self, catalog=None):
-        return reverse(
-            "organisaties:catalogi:producten:redirect",
-            kwargs=build_url_kwargs(self, catalog=catalog),
-        )
-
     class Meta:
         verbose_name = _("product")
         verbose_name_plural = _("producten")
@@ -487,6 +410,19 @@ class ProductVersie(ProductFieldMixin, models.Model):
             taal=language,
             **kwargs,
         )
+
+    def update_with_reference_texts(self, reference_product_version):
+        lang_rpv = {
+            rpv.taal: rpv for rpv in reference_product_version.vertalingen.all()
+        }
+        for localized_product_version in self.vertalingen.all():
+            localized_reference_product_version = lang_rpv.get(
+                localized_product_version.taal, None
+            )
+            if localized_reference_product_version:
+                localized_product_version.update_with_reference_texts(
+                    localized_reference_product_version
+                )
 
     def get_pretty_version(self):
         concept = "(concept)" if not self.publicatie_datum else ""

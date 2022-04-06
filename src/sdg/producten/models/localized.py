@@ -269,6 +269,27 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         if adding:
             self.localize_specific_products()
 
+    def update_with_reference_texts(self, localized_reference_product_version):
+        field_names = [
+            "bezwaar_en_beroep",
+            "decentrale_procedure_link",
+            "kosten_en_betaalmethoden",
+            "procedure_beschrijving",
+            "product_titel_decentraal",
+            "specifieke_tekst",
+            "uiterste_termijn",
+            "vereisten",
+            "verwijzing_links",
+            "wtd_bij_geen_reactie",
+        ]
+        for field_name in field_names:
+            setattr(
+                self,
+                field_name,
+                getattr(localized_reference_product_version, field_name),
+            )
+        self.save()
+
 
 class LocalizedProductuitvoering(TaalMixin, models.Model):
     """
