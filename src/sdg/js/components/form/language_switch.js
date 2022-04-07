@@ -13,21 +13,40 @@ class LanguageSwitch extends FormComponent {
      */
     bindEvents() {
         super.bindEvents();
+
+        if (this.isGlobal()) {
+            this.node.parentElement.addEventListener('click', this.onButtonGroupClick.bind(this));
+            return;
+        }
+
         const formControl = this.getFormControl();
+
         [...formControl.querySelectorAll('input, textarea')].forEach((inputOrTextarea) => {
             inputOrTextarea.addEventListener('change', this.updateChanged.bind(this));
         });
+
         const observer = new MutationObserver(this.updateActive.bind(this));
         observer.observe(formControl, {attributes: true});
+     }
+
+    /**
+     * Returns whether this language switch is global.
+     */
+    isGlobal() {
+        return !this.getFormControl();  // Detect based on presence of form control, null means global.
     }
 
     /**
      * Returns the active form control.
-     * @return {HTMLElement}
+     * @return {(HTMLElement|null)}
      */
     getFormControl() {
         const language = this.getLanguage();
-        return this._getParent('form__language-wrapper').querySelector(`.form__control[lang=${language}]`);
+        try {
+            return this._getParent('form__language-wrapper').querySelector(`.form__control[lang=${language}]`);
+        } catch (e) {
+            return null;
+        }
     }
 
     /**
@@ -71,8 +90,16 @@ class LanguageSwitch extends FormComponent {
      */
     onClick(event) {
         super.onClick(event);
-        this.setActiveLanguage(this.node.lang);
+        this.setActiveLanguage(this.node.lang, this.isGlobal());
+    }
 
+    /**
+     * Gets called when a global language switch button group is clicked.
+     * @param {MouseEvent} e
+     */
+    onButtonGroupClick(e) {
+        const active = this.node.lang === e.target.lang;
+        this.setState({active: active});
     }
 
     /**

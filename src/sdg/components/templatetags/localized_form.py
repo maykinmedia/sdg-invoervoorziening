@@ -33,8 +33,12 @@ def localized_form(context, formset: BaseFormSet, **kwargs) -> dict:
         return base_form_fields
 
     def get_languages() -> list:
-        languages = [form.initial["taal"] for form in formset.forms]
-        return languages
+        languages = [
+            form.initial.get("taal")
+            for form in formset.forms
+            if form.initial.get("taal")
+        ]
+        return languages or ["nl", "en"]  # FIXME
 
     def get_object_list(formset: BaseFormSet, fields: list) -> list:
         object_list = []

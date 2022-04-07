@@ -92,8 +92,16 @@ export class FormComponent extends Component {
     }
 
     /**
-     *
-     * @param child
+     * Returns all the language wrappers.
+     * @return {HTMLElement}
+     */
+    getLanguageWrappers() {
+        return this._getParent('form').querySelectorAll('.form__language-wrapper');
+    }
+
+    /**
+     * Returns the language wrapper for child.
+     * @param [child]
      * @return {HTMLElement}
      */
     getLanguageWrapper(child) {
@@ -118,19 +126,23 @@ export class FormComponent extends Component {
 
     /**
      * Set the languages.
-     * @param language
+     * @param {string} language
+     * @param {boolean} [global=false] Whether to set all form controls to language.
      */
-    setActiveLanguage(language) {
-        const languageWrapper = this.getLanguageWrapper();
-        languageWrapper.lang = language;
+    setActiveLanguage(language, global = false) {
+        const languageWrappers = (global) ? this.getLanguageWrappers() : [this.getLanguageWrapper()];
 
-        [...languageWrapper.querySelectorAll('.form__control')].forEach((formControl) => {
-            if (formControl.lang === language) {
-                formControl.removeAttribute('aria-hidden');
-            } else {
-                formControl.setAttribute('aria-hidden', true);
-            }
-        });
+        [...languageWrappers].forEach((languageWrapper) => {
+            languageWrapper.lang = language;
+
+            [...languageWrapper.querySelectorAll('.form__control')].forEach((formControl) => {
+                if (formControl.lang === language) {
+                    formControl.removeAttribute('aria-hidden');
+                } else {
+                    formControl.setAttribute('aria-hidden', true);
+                }
+            });
+        })
     }
 
     /**

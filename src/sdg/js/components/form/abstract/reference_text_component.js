@@ -88,7 +88,7 @@ export class ReferenceTextComponent extends FormComponent {
         const currentReferenceInput = currentReferenceForm.content.querySelector(`#${inputOrTextarea?.id}`);
 
         return {
-            'title': 'Uw tekst',
+            'title': currentReferenceForm.dataset.title,
             'input': currentReferenceInput,
         };
     }
@@ -122,6 +122,14 @@ export class ReferenceTextComponent extends FormComponent {
      */
     getPreviousReferenceForm() {
         return document.querySelector(`.form__previousreference-${this.getLanguage()}`);
+    }
+
+    /**
+     * Returns the reference topbar.
+     * @return {HTMLElement}
+     */
+    getReferenceTopbar() {
+        return this.getFormControl().querySelector('.reference__display--topbar');
     }
 
     /**
