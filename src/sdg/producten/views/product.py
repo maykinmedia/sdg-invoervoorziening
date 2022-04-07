@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
+from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
 from sdg.producten.forms import (
     LocalizedProductForm,
@@ -107,7 +108,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
 
-        context["languages"] = ["nl", "en"]
+        context["languages"] = list(TaalChoices.labels.keys())
         context["product"] = self.product
         context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
 
