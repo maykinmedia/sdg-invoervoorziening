@@ -11,14 +11,16 @@
     {% for reference_form in reference_formset.forms %}
         <template class="form__reference-{{ reference_form.initial.taal }}"
                   data-title="{{ reference_formset.title }}"
-                  data-default-toelichting="{{ reference_form.default_toelichting }}">
+                  data-default-toelichting="{{ reference_form.default_toelichting }}"
+                  data-product-aanwezig-toelichting="{{ reference_form.default_product_aanwezig_toelichting }}">
             {{ reference_form.as_p }}
         </template>
     {% endfor %}
     {% for reference_form in previous_reference_formset.forms %}
         <template class="form__previousreference-{{ reference_form.initial.taal }}"
                   data-title="{{ previous_reference_formset.title }}"
-                  data-default-toelichting="{{ reference_form.default_toelichting }}">
+                  data-default-toelichting="{{ reference_form.default_toelichting }}"
+                  data-product-aanwezig-toelichting="{{ reference_form.default_product_aanwezig_toelichting }}">
             {{ reference_form.as_p }}
         </template>
     {% endfor %}
@@ -63,20 +65,6 @@
                         <tr>
                             <td class="tabs__table-cell" width="25%"> {{ field.label|capfirst }} <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i> </td>
                             <td class="tabs__table-cell"> {% select field %} {{ field.errors }} </td>
-                        </tr>
-                    {% endwith %}
-
-                    {% with field=product_form.product_aanwezig_toelichting %}
-                        <tr>
-                            <td class="tabs__table-cell"
-                                width="25%">{{ field.label|capfirst }}<i
-                                    class="fas fa-info-circle fa-xs dark"
-                                    title="{{ field.help_text }}"></i></td>
-                            <td class="tabs__table-cell"
-                                data-default-text="De gemeente {{ lokaleoverheid }} biedt het product {{ product }} niet aan.">
-                                {{ field|addclass:"form__input" }}
-                                {{ field.errors }}
-                            </td>
                         </tr>
                     {% endwith %}
 

@@ -88,6 +88,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "nl": f"In de gemeente {self.lokale_overheid} valt het product {self.product} onder het product [product].",
             "en": f"In the municipality of {self.lokale_overheid}, the product {self.product} falls under the product [product].",
         }
+
+        default_aanwezig_toelichting_explanation_mapping = {
+            "nl": f"De gemeente {self.lokale_overheid} levert het product {self.product} niet omdat...",
+            "en": f"The municipality of {self.lokale_overheid} doesn't offer {self.product} because...",
+        }
         formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(instance=version)
@@ -96,6 +101,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             form.default_toelichting = default_explanation_mapping.get(
                 form.instance.taal
             )
+
+            form.default_product_aanwezig_toelichting = (
+                default_aanwezig_toelichting_explanation_mapping.get(form.instance.taal)
+            )
+
         return formset
 
     def get_lokale_overheid(self):
@@ -118,14 +128,14 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context["previous_reference_formset"] = self._generate_version_formset(
             self.product.reference_product.get_latest_versions(2)[-1]  # TODO: optimize
         )
-
         context["formset"] = context["form"]
         context["informatie_forms"] = zip_longest(
             generic_information, context["form"].forms
         )
 
         context["version_form"] = kwargs.get(
-            "version_form", VersionForm(instance=self.object)
+            "version_form",
+            VersionForm(instance=self.object, product_instance=self.product),
         )
         context["product_form"] = kwargs.get(
             "product_form", ProductForm(instance=self.product)
@@ -145,6 +155,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "wtd_bij_geen_reactie",
             "decentrale_procedure_link",
             "product_valt_onder_toelichting",
+            "product_aanwezig_toelichting",
         ]
         return context
 
@@ -153,9 +164,13 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         product_form = ProductForm(request.POST, instance=self.product)
-        version_form = VersionForm(request.POST, instance=self.object)
+        version_form = VersionForm(
+            request.POST, instance=self.object, product_instance=self.product
+        )
         form = self.form_class(
-            request.POST, instance=self.object, product_form=product_form
+            request.POST,
+            instance=self.object,
+            product_form=product_form,
         )
 
         forms = (product_form, version_form, form)

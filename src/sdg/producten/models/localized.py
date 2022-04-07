@@ -213,6 +213,12 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
         blank=True,
     )
+    product_aanwezig_toelichting = models.TextField(
+        _("aanwezig toelichting"),
+        help_text=_("Toelichting"),
+        blank=True,
+        default="",
+    )
 
     objects = LocalizedManager()
 
@@ -263,6 +269,13 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     def __str__(self):
         return self.product_titel_decentraal
+
+    def clean(self):
+        from sdg.producten.models.validators import validate_product
+
+        super().clean()
+
+        validate_product(self)
 
     def save(self, *args, **kwargs):
         # FIXME: Remove adding logic. Too magical.

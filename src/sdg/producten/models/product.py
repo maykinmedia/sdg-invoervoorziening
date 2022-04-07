@@ -168,12 +168,6 @@ class Product(ProductFieldMixin, models.Model):
         blank=True,
         null=True,
     )
-    product_aanwezig_toelichting = models.TextField(
-        _("aanwezig toelichting"),
-        help_text=_("Toelichting"),
-        blank=True,
-        default="",
-    )
     product_valt_onder = models.ForeignKey(
         "self",
         on_delete=models.SET_NULL,
@@ -328,14 +322,11 @@ class Product(ProductFieldMixin, models.Model):
 
     def clean(self):
         from sdg.producten.models.validators import (
-            validate_product,
             validate_reference_product,
             validate_specific_product,
         )
 
         super().clean()
-
-        validate_product(self)
 
         if self.is_referentie_product:
             validate_reference_product(self)
@@ -350,6 +341,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
     The version of a product.
     """
 
+    # TODO remove blank is true
     product = models.ForeignKey(
         "producten.Product",
         related_name="versies",
@@ -429,7 +421,10 @@ class ProductVersie(ProductFieldMixin, models.Model):
         return f"{self.versie} {concept}".strip()
 
     def get_pretty_name(self):
-        return f"{self.product} — versie {self.get_pretty_version()}"
+        try:
+            return f"{self.product} — versie {self.get_pretty_version()}"
+        except self._meta.model.product.RelatedObjectDoesNotExist:
+            return f"Unknown product - versie {self.get_pretty_version()}"
 
     class Meta:
         verbose_name = _("product versie")

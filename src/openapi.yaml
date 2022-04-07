@@ -458,6 +458,10 @@ components:
         productValtOnderToelichting:
           type: string
           description: Toelichting over het product valt onder.
+        productAanwezigToelichting:
+          type: string
+          title: Aanwezig toelichting
+          description: Toelichting
       required:
       - datumWijziging
       - taal
@@ -867,10 +871,6 @@ components:
           nullable: true
           title: Aanwezig
           description: Voert u dit product?
-        productAanwezigToelichting:
-          type: string
-          title: Aanwezig toelichting
-          description: Toelichting
         catalogus:
           type: string
           format: uri

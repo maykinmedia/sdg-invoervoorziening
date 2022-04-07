@@ -34,6 +34,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "wtd_bij_geen_reactie",
             "datum_wijziging",
             "product_valt_onder_toelichting",
+            "product_aanwezig_toelichting",
         )
 
 
@@ -97,7 +98,6 @@ class ProductSerializer(ProductBaseSerializer):
             "publicatie_datum",
             "verantwoordelijke_organisatie",
             "product_aanwezig",
-            "product_aanwezig_toelichting",
             "catalogus",
             "locaties",
             "doelgroep",
