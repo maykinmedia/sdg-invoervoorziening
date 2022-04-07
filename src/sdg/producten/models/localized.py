@@ -232,6 +232,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
             if version.taal == self.taal:
                 return version
 
+    # FIXME: Remove this block?
     def localize_specific_products(self):
         """
         Localize all specific products related to this localized reference product.
@@ -264,6 +265,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         return self.product_titel_decentraal
 
     def save(self, *args, **kwargs):
+        # FIXME: Remove adding logic. Too magical.
         adding = self._state.adding
         super().save(*args, **kwargs)
         if adding:
