@@ -107,7 +107,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
 
-        context["languages"] = ['nl', 'en']
+        context["languages"] = ["nl", "en"]
         context["product"] = self.product
         context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
 
