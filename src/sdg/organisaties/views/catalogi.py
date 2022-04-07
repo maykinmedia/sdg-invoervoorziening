@@ -10,7 +10,7 @@ from sdg.producten.models import Product
 
 class CatalogListView(OverheidMixin, RHListView):
     fields = [
-        {"label": _("Naam"), "key": "name"},
+        {"label": _("Naam"), "key": "_name"},
         {
             "label": _("Informatiegebied"),
             "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
@@ -18,6 +18,8 @@ class CatalogListView(OverheidMixin, RHListView):
         {"label": _("Aanwezig"), "key": "product_aanwezig"},
         {"label": _("Publicatie datum"), "key": "active_version__publicatie_datum"},
     ]
+    order = "_name"
+
     model = Product
     required_roles = ["is_beheerder", "is_redacteur"]
     template_name = "organisaties/catalogi/list.html"
