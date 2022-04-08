@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  # - name: Meldt een veiligheidsprobleem / Report a security vulnerability
+  #   url: https://github.com/open-formulieren/open-forms/security/policy
+  #   about: Bekijk ons beveiligingsbeleid voor meer informatie / Please review our security policy for more details
+  - name: Gebruikersondersteuning
+    url: https://vng.nl/projecten/single-digital-gateway
+    about: Hulp nodig met het gebruik van de SDG-invoervoorziening? Neem contact op met VNG Realisatie.
