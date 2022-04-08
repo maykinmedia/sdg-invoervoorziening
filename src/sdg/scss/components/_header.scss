@@ -46,11 +46,18 @@
 
   .header__username {
     background-color: $color_primary_darker;
+    border: 1px solid transparent;
     position: relative;
     right: 30px;
     border-radius: 84px;
     padding: 10px 40px;
     text-align: center;
+  }
+
+  &__dropdown:hover &__username {
+    background-color: $color_grey_light;
+    border-color: $color_grey_dark;
+    color: #000;
   }
 
   .header__title {
@@ -92,13 +99,14 @@
     visibility: visible;
   }
 
-.header__dropdown-list {
+  .header__dropdown-list {
+    border: 1px solid $color_grey_dark;
     box-shadow: 1px 1px 4px var(--shadow-color);
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background-color: $color_primary_darker;
+    background-color: $color_grey_light;
     color: #fff;
     opacity: 0;
     border-radius: 10px;
@@ -109,9 +117,8 @@
   }
 
   .header__dropdown-action {
-    border-bottom: 4px dotted darken($color_primary_darker, 5%);
     padding: 12px;
-    color: $color_secondary_dark;
+    color: #000;
     display: block;
     text-align: left;
     text-decoration: none;
@@ -121,15 +128,10 @@
     }
   }
 
-  .header__dropdown-action:last-child {
-    border-bottom: none;
-  }
-
-
   .header__dropdown-action .svg-inline--fa {
-      float: left;
-      margin-top: 2px;
-      margin-right: 8px;
-      width: 1em;
-    }
+    float: left;
+    margin-top: 2px;
+    margin-right: 8px;
+    width: 1em;
+  }
 }
