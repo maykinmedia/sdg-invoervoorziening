@@ -11,22 +11,37 @@ from sdg.producten.models import Product
 
 class CatalogListView(OverheidMixin, RHListView):
     fields = [
-        {"label": _("Naam"), "key": "_name"},
+        {"key": "_name", "label": _("Naam")},
         {
-            "label": _("Informatiegebied"),
             "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
+            "label": _("Informatiegebied"),
+            # "lookup": "referentie_product__generiek_product__upn__thema__informatiegebied",
         },
         {"label": _("Aanwezig"), "key": "product_aanwezig"},
-        {"label": _("Publicatie datum"), "key": "_latest_publication_date"},
+        {
+            # FIXME: The relation `referentie_product__generiek_product__doelgroep`
+            # doesn't work since doelgroep is not a FK?
+            "key": "doelgroep",
+            "label": _("Doelgroep"),
+            "lookup": "doelgroep",
+        },
+        {
+            "key": "_latest_publication_date",
+            "label": _("Publicatie datum"),
+        },
     ]
     filterable_columns = [
         # FIXME: Labels don't seem to override the default labels
-        {"key": "_name", "label": "Zoek op productnaam"},
+        {"key": "_name", "label": _("Zoek op productnaam")},
         {
             "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
-            "label": "Thema",
+            "label": _("Thema"),
         },
-        {"key": "product_aanwezig", "label": "Aanwezig"},
+        {"key": "product_aanwezig", "label": _("Aanwezig")},
+        {
+            "key": "doelgroep",
+            "label": _("Doelgroep"),
+        },
     ]
     # FIXME: Setting orderable columns seems to break ordering entirely.
     # orderable_columns = [
@@ -79,7 +94,10 @@ class CatalogListView(OverheidMixin, RHListView):
             # Instead, we use this line below but it doesn't work for reference
             # products because they don't have reference products themselves.
             .select_related(
-                "referentie_product__generiek_product__upn__thema__informatiegebied"
+                "referentie_product__generiek_product",
+                "referentie_product__generiek_product__upn__thema__informatiegebied",
             )
+            # FIXME: Similar to above. This doesn't work for reference products.
+            .annotate(doelgroep=F("referentie_product__generiek_product__doelgroep"))
             .order_by("_name")
         )
