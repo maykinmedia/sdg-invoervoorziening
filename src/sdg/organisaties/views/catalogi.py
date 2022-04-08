@@ -1,3 +1,4 @@
+from django.db.models import F, Max
 from django.utils.translation import gettext as _
 
 from rijkshuisstijl.views.generic import ListView as RHListView
@@ -16,9 +17,23 @@ class CatalogListView(OverheidMixin, RHListView):
             "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
         },
         {"label": _("Aanwezig"), "key": "product_aanwezig"},
-        {"label": _("Publicatie datum"), "key": "active_version__publicatie_datum"},
+        {"label": _("Publicatie datum"), "key": "_latest_publication_date"},
     ]
-    order = "_name"
+    filterable_columns = [
+        # FIXME: Labels don't seem to override the default labels
+        {"key": "_name", "label": "Zoek op productnaam"},
+        {
+            "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
+            "label": "Thema",
+        },
+        {"key": "product_aanwezig", "label": "Aanwezig"},
+    ]
+    # FIXME: Setting orderable columns seems to break ordering entirely.
+    # orderable_columns = [
+    #     "_name",
+    #     "_area",
+    #     "pub_date",
+    # ]
 
     model = Product
     required_roles = ["is_beheerder", "is_redacteur"]
@@ -51,10 +66,20 @@ class CatalogListView(OverheidMixin, RHListView):
             super()
             .get_queryset()
             .filter(catalogus__in=catalogs)
-            .active()
             .annotate_name()
+            # The `annotate_latest_publication_date` is faster than getting the
+            # entire active version with `.active_version`
+            .annotate_latest_publication_date()
             .select_related("catalogus__lokale_overheid")
+            # FIXME: The proper way is to `.annotate_area` (because it includes)
+            # areas for both reference and non-reference products. Alas, this
+            # doesn't work well with the datagrid component because it cannot
+            # determine that its a FK and list all possible choices.
+            # .annotate_area()
+            # Instead, we use this line below but it doesn't work for reference
+            # products because they don't have reference products themselves.
             .select_related(
                 "referentie_product__generiek_product__upn__thema__informatiegebied"
             )
+            .order_by("_name")
         )

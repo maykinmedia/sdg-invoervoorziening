@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.db import models
-from django.db.models import Case, F, OuterRef, Prefetch, Subquery, When
+from django.db.models import Case, F, Max, OuterRef, Prefetch, Subquery, When
 
 
 class ProductQuerySet(models.QuerySet):
@@ -96,7 +96,7 @@ class ProductQuerySet(models.QuerySet):
         whether `referentie_product` exists.
         """
         return self.annotate(
-            area=Case(
+            _area=Case(
                 When(
                     referentie_product__isnull=False,
                     then=F(
@@ -108,6 +108,9 @@ class ProductQuerySet(models.QuerySet):
                 ),
             ),
         )
+
+    def annotate_latest_publication_date(self):
+        return self.annotate(_latest_publication_date=Max("versies__publicatie_datum"))
 
     def select_generic(self):
         """
