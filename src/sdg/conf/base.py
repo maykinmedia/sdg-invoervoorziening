@@ -534,7 +534,7 @@ REST_FRAMEWORK = {
 }
 SPECTACULAR_SETTINGS = {
     "TITLE": "SDG Invoervoorziening API",
-    "VERSION": "1.0.0",
+    "VERSION": "1.1.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "CAMELIZE_NAMES": True,
     "POSTPROCESSING_HOOKS": [

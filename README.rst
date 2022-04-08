@@ -54,9 +54,13 @@ Versie          Release datum   API specificatie
 ==============  ==============  =============================
 latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
-                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.0.0..master#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
+                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1fe65d2e43c37196bbdee161d4fa8951191f7e3a..master#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
+1.1.0           2022-04-08      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1fe65d2e43c37196bbdee161d4fa8951191f7e3a/src/openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1fe65d2e43c37196bbdee161d4fa8951191f7e3a/src/openapi.yaml>`_,
+                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.0.0..1fe65d2e43c37196bbdee161d4fa8951191f7e3a#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
 1.0.0           2022-01-24      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.0.0/src/openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.0.0/src/openapi.yaml>`_
+==============  ==============  =============================
 
 Zie: `Alle versies en wijzigingen <https://github.com/maykinmedia/sdg-invoervoorziening/blob/master/CHANGELOG.rst>`_
 
