@@ -12,7 +12,7 @@
     "pk": 1,
     "fields": {
         "minute": "0",
-        "hour": "4",
+        "hour": "3",
         "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
@@ -44,10 +44,22 @@
     }
 },
 {
+    "model": "django_celery_beat.crontabschedule",
+    "pk": 4,
+    "fields": {
+        "minute": "*",
+        "hour": "4",
+        "day_of_week": "*",
+        "day_of_month": "*",
+        "month_of_year": "*",
+        "timezone": "UTC"
+    }
+},
+{
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2022-04-04T14:35:43.280"
+        "last_update": "2022-04-08T13:10:42.688"
     }
 },
 {
@@ -158,8 +170,36 @@
         "enabled": true,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2022-04-04T14:35:43.336",
+        "date_changed": "2022-04-08T13:10:29.002",
         "description": "Haal generieke productteksten op bij geconfigureerde services en laad deze in de invoervoorziening. Het \"upnLabel\" wordt gebruikt om producten te identificeren. Niet beschikbare services worden genegeerd."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 5,
+    "fields": {
+        "name": "Catalogi aanmaken, bijwerken en corrigeren",
+        "task": "sdg.producten.tasks.update_catalogs",
+        "interval": null,
+        "crontab": 4,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2022-04-08T13:10:15.808",
+        "description": ""
     }
 }
 ]
