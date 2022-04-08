@@ -435,7 +435,7 @@ components:
           type: string
           description: De titel van het decentrale product, die immers kan afwijken
             van de landelijke titel.
-          maxLength: 80
+          maxLength: 100
         uitersteTermijn:
           type: string
           description: Deadlines.
