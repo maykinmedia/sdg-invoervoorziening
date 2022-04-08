@@ -121,6 +121,11 @@
     }
   }
 
+  .header__dropdown-action:last-child {
+    border-bottom: none;
+  }
+
+
   .header__dropdown-action .svg-inline--fa {
       float: left;
       margin-top: 2px;
