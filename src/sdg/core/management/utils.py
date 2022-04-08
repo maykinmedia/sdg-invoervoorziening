@@ -75,16 +75,14 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
 
     :return: The total count of the created objects.
     """
+    uris = [obj.pop("SDG_IGURI") for obj in data]
+    grouped_data = dict(zip(uris, data))
 
-    codes = [obj.pop("SDG_Code") for obj in data]
-    grouped_data = dict(zip(codes, data))
-
-    for code, obj in grouped_data.items():
+    for uri, obj in grouped_data.items():
         informatiegebied, created = Informatiegebied.objects.update_or_create(
-            code=code,
+            informatiegebied_uri=uri,
             defaults={
                 "informatiegebied": obj.get("SDG_Informatiegebied"),
-                "informatiegebied_uri": obj.get("SDG_IGURI"),
             },
         )
 
@@ -96,6 +94,7 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
         thema, created = Thema.objects.update_or_create(
             thema_uri=obj.get("SDG_ThemaURI"),
             defaults={
+                "code": obj.get("SDG_Code"),
                 "thema": obj.get("SDG_Thema"),
                 "informatiegebied": obj.get("informatiegebied"),
             },
@@ -119,7 +118,7 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
 
         # TODO: This is a bit of a hack. We should probably use a
         #       ManyToManyField.
-        theme = Thema.objects.filter(informatiegebied__code__in=sdg_list).first()
+        theme = Thema.objects.filter(code__in=sdg_list).first()
 
         upn, created = UniformeProductnaam.objects.update_or_create(
             upn_uri=obj.get("URI"),

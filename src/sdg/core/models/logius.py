@@ -46,22 +46,17 @@ class Informatiegebied(models.Model):
     Information area
     """
 
-    code = models.CharField(
-        _("code"),
-        max_length=32,
-        help_text=_("De code van het desbetreffende informatiegebied."),
-        unique=True,
-    )
     informatiegebied = models.CharField(
         _("informatiegebied"),
         max_length=80,
-        help_text=_("Het bij de gegevens behorende informatiegebied."),
+        help_text=_("Het bij de gegevens behorende SDG informatiegebied."),
     )
     informatiegebied_uri = models.URLField(
         _("informatiegebied URI"),
         help_text=_(
-            "Informatiegebied URI van landelijk product",
+            "Informatiegebied SDG URI van landelijk product",
         ),
+        unique=True,
     )
 
     class Meta:
@@ -69,7 +64,7 @@ class Informatiegebied(models.Model):
         verbose_name_plural = _("informatiegebieden")
 
     def __str__(self):
-        return f"{self.informatiegebied} [{self.code}]"
+        return f"{self.informatiegebied}"
 
 
 class Thema(models.Model):
@@ -77,6 +72,12 @@ class Thema(models.Model):
     Theme
     """
 
+    code = models.CharField(
+        _("code"),
+        max_length=32,
+        help_text=_("De SDG code van het desbetreffende informatiegebied."),
+        unique=True,
+    )
     informatiegebied = models.ForeignKey(
         "Informatiegebied",
         on_delete=models.PROTECT,
@@ -87,19 +88,15 @@ class Thema(models.Model):
     thema = models.CharField(
         _("thema"),
         max_length=512,
-        help_text=_("Het thema dat verband houdt met de gegevens."),
+        help_text=_("Het SDG thema dat verband houdt met de gegevens."),
     )
     thema_uri = models.URLField(
         _("thema uri"),
         help_text=_(
-            "Thema URI van landelijk product",
+            "SDG thema URI van landelijk product",
         ),
         unique=True,
     )
-
-    @property
-    def code(self):
-        return self.informatiegebied.code
 
     class Meta:
         verbose_name = _("thema")

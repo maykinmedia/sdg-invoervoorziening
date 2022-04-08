@@ -18,14 +18,14 @@ class OverheidsorganisatieAdmin(admin.ModelAdmin):
 
 @admin.register(Informatiegebied)
 class InformatiegebiedAdmin(admin.ModelAdmin):
-    search_fields = ("code", "informatiegebied")
-    list_display = ("code", "informatiegebied")
+    search_fields = ("informatiegebied",)
+    list_display = ("informatiegebied",)
 
 
 @admin.register(Thema)
 class ThemaAdmin(admin.ModelAdmin):
     search_fields = ("thema",)
-    list_display = ("thema", "informatiegebied")
+    list_display = ("code", "thema", "informatiegebied")
 
 
 @admin.register(UniformeProductnaam)
