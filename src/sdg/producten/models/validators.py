@@ -16,11 +16,15 @@ def validate_no_html(value):
     return no_html_validator(value)
 
 
-def validate_product(product):
+def validate_product(localized):
     """Validate a product (specific / reference).
     - If `product_aanwezig` is False, the product must declare `product_aanwezig_toelichting`.
     """
-    if product.product_aanwezig is False and not product.product_aanwezig_toelichting:
+
+    if (
+        localized.product_versie.product.product_aanwezig is False
+        and not localized.product_aanwezig_toelichting
+    ):
         raise ValidationError(
             _(
                 "Het veld 'product_aanwezig_toelichting' is verplicht als het veld 'product_aanwezig' is uitgeschakeld."

@@ -27,6 +27,7 @@ class LocalizedProductForm(FieldConfigurationMixin, forms.ModelForm):
             "verwijzing_links",
             "decentrale_procedure_link",
             "product_valt_onder_toelichting",
+            "product_aanwezig_toelichting",
         )
 
     def __init__(self, *args, **kwargs):
@@ -56,16 +57,24 @@ class LocalizedProductFormSet(
                         "product_valt_onder_toelichting",
                         "Vul de toelichting in als het product valt onder.",
                     )
+
+        if self._product_form.cleaned_data is not None:
+            for form in self.forms:
+                if self._product_form.cleaned_data.get(
+                    "product_aanwezig"
+                ) is False and not form.cleaned_data.get(
+                    "product_aanwezig_toelichting"
+                ):
+                    form.add_error(
+                        "product_aanwezig_toelichting", "Dit veld is verplicht."
+                    )
+
         return cleaned_data
 
 
 class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     product_aanwezig = forms.NullBooleanField(
         required=False,
-    )
-    product_aanwezig_toelichting = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={"rows": "6", "disabled": True}),
     )
     product_valt_onder = forms.ModelChoiceField(
         queryset=Product.objects.filter(
@@ -87,7 +96,6 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         model = Product
         fields = (
             "product_aanwezig",
-            "product_aanwezig_toelichting",
             "product_valt_onder",
             "bevoegde_organisatie",
             "locaties",
@@ -107,16 +115,6 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
         self.configure_fields()
-
-    def clean(self):
-        cleaned_data = super().clean()
-        product_aanwezig = cleaned_data.get("product_aanwezig")
-        product_aanwezig_toelichting = cleaned_data.get("product_aanwezig_toelichting")
-
-        if product_aanwezig is False and not product_aanwezig_toelichting:
-            self.add_error("product_aanwezig_toelichting", "Dit veld is verplicht.")
-
-        return cleaned_data
 
 
 class VersionForm(forms.ModelForm):
@@ -146,6 +144,7 @@ class VersionForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         _instance = kwargs.get("instance", None)
+        self.product_instance = kwargs.pop("product_instance", None)
         kwargs["instance"] = self._get_version_instance(_instance)
         super().__init__(*args, **kwargs)
         if _instance.publicatie_datum:
@@ -153,6 +152,9 @@ class VersionForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+
+        if not self.cleaned_data["product"] and self.product_instance:
+            self.cleaned_data["product"] = self.product_instance
 
         if cleaned_data["publish"] == PublishChoices.date:
             cleaned_data["publicatie_datum"] = cleaned_data["date"]
