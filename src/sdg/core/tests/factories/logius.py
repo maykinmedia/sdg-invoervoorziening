@@ -21,7 +21,6 @@ class OverheidsorganisatieFactory(DjangoModelFactory):
 
 
 class InformatiegebiedFactory(DjangoModelFactory):
-    code = factory.Sequence(lambda n: n)
     informatiegebied = factory.Faker("word")
     informatiegebied_uri = factory.Faker("url")
 
@@ -30,6 +29,7 @@ class InformatiegebiedFactory(DjangoModelFactory):
 
 
 class ThemaFactory(DjangoModelFactory):
+    code = factory.Sequence(lambda n: n)
     informatiegebied = factory.SubFactory(InformatiegebiedFactory)
     thema = factory.Faker("word")
     thema_uri = factory.Sequence(lambda n: f"http://thema-uri{n}.org")

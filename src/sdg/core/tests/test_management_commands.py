@@ -86,11 +86,10 @@ class TestImportData(CommandTestCase):
         )
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(24 objects)", out)
-        self.assertEqual(24, Informatiegebied.objects.count())
+        self.assertIn("(4 objects)", out)
+        self.assertEqual(4, Informatiegebied.objects.count())
 
         informatiegebied = Informatiegebied.objects.first()
-        self.assertEqual(informatiegebied.code, "A1")
         self.assertEqual(informatiegebied.informatiegebied, "Reizen binnen de Unie")
         self.assertEqual(
             "http://standaarden.overheid.nl/owms/terms/sdg_reizUnie",
@@ -98,8 +97,14 @@ class TestImportData(CommandTestCase):
         )
 
     def test_load_upn(self):
-        thema_1 = ThemaFactory.create(informatiegebied__code="A1")
-        ThemaFactory.create(informatiegebied__code="L2")
+        thema_1 = ThemaFactory.create(
+            code="A1",
+            informatiegebied__informatiegebied_uri="http://standaarden.overheid.nl/owms/terms/sdg_reizUnie",
+        )
+        ThemaFactory.create(
+            code="L2",
+            informatiegebied__informatiegebied_uri="http://standaarden.overheid.nl/owms/terms/sdg_belastingen",
+        )
         out = self.call_command(
             "load_upn", os.path.join(TESTS_DIR, "data/UPL-actueel.csv")
         )

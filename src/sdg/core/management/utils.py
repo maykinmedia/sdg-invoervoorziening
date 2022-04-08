@@ -118,7 +118,7 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
 
         # TODO: This is a bit of a hack. We should probably use a
         #       ManyToManyField.
-        theme = Thema.objects.filter(informatiegebied__code__in=sdg_list).first()
+        theme = Thema.objects.filter(code__in=sdg_list).first()
 
         upn, created = UniformeProductnaam.objects.update_or_create(
             upn_uri=obj.get("URI"),
