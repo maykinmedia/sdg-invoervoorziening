@@ -42,9 +42,8 @@ class ProductenTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()["results"][0]
-        self.assertEqual(
-            bevoegde_organisatie.naam, data["bevoegdeOrganisatie"]["owmsPrefLabel"]
-        )
+        self.assertEqual(bevoegde_organisatie.naam, data["bevoegdeOrganisatie"]["naam"])
+        self.assertIsNone(data["bevoegdeOrganisatie"]["owmsPrefLabel"])
         self.assertIsNone(data["bevoegdeOrganisatie"]["owmsIdentifier"])
 
     @freeze_time(NOW_DATE)

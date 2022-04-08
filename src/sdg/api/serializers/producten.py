@@ -33,8 +33,8 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "verwijzing_links",
             "wtd_bij_geen_reactie",
             "datum_wijziging",
-            "product_valt_onder_toelichting",
             "product_aanwezig_toelichting",
+            "product_valt_onder_toelichting",
         )
 
 
@@ -86,6 +86,7 @@ class ProductSerializer(ProductBaseSerializer):
     gerelateerde_producten = ProductBaseSerializer(many=True)
     locaties = LocatieBaseSerializer(many=True)
     bevoegde_organisatie = BevoegdeOrganisatieSerializer()
+    product_valt_onder = ProductBaseSerializer()
 
     class Meta:
         model = Product
@@ -96,16 +97,15 @@ class ProductSerializer(ProductBaseSerializer):
             "upn_uri",
             "versie",
             "publicatie_datum",
-            "verantwoordelijke_organisatie",
             "product_aanwezig",
+            "product_valt_onder",
+            "verantwoordelijke_organisatie",
+            "bevoegde_organisatie",
             "catalogus",
             "locaties",
             "doelgroep",
             "vertalingen",
-            "referentie_product",
             "gerelateerde_producten",
-            "product_valt_onder",
-            "bevoegde_organisatie",
         )
         extra_kwargs = {
             "url": {

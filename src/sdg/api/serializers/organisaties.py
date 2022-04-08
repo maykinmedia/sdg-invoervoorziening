@@ -28,15 +28,30 @@ class OpeningstijdenSerializer(serializers.ModelSerializer):
 class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
     owms_identifier = serializers.URLField(
         source="organisatie.owms_identifier",
+        help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
         default=None,
     )
-    owms_pref_label = serializers.CharField(source="naam")
+    owms_pref_label = serializers.CharField(
+        source="organisatie.owms_pref_label",
+        help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
+        default=None,
+    )
+    owms_end_date = serializers.DateTimeField(
+        source="organisatie.owms_end_date",
+        help_text="De einddatum, zoals gevonden in het OWMS-model.",
+        default=None,
+    )
+    naam = serializers.CharField(
+        help_text="De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is."
+    )
 
     class Meta:
         model = BevoegdeOrganisatie
         fields = (
+            "naam",
             "owms_identifier",
             "owms_pref_label",
+            "owms_end_date",
         )
 
 
@@ -53,10 +68,14 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
         source="organisatie.owms_pref_label",
         help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
     )
+    owms_end_date = serializers.DateTimeField(
+        source="organisatie.owms_end_date",
+        help_text="De einddatum, zoals gevonden in het OWMS-model.",
+    )
 
     class Meta:
         model = LokaleOverheid
-        fields = ("url", "owms_identifier", "owms_pref_label")
+        fields = ("url", "owms_identifier", "owms_pref_label", "owms_end_date")
         extra_kwargs = {
             "url": {
                 "view_name": "api:lokaleoverheid-detail",

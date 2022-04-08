@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: SDG Invoervoorziening API
-  version: 1.0.0
+  version: 1.1.0
 paths:
   /api/v1/catalogi:
     get:
@@ -383,13 +383,23 @@ components:
     BevoegdeOrganisatie:
       type: object
       properties:
+        naam:
+          type: string
+          description: De naam van de bevoegde organisatie. Deze mag alleen afwijken
+            indien er geen bekende overheidsorganisatie is.
         owmsIdentifier:
           type: string
           format: uri
+          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
         owmsPrefLabel:
           type: string
+          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+        owmsEndDate:
+          type: string
+          format: date-time
+          description: De einddatum, zoals gevonden in het OWMS-model.
       required:
-      - owmsPrefLabel
+      - naam
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -455,13 +465,13 @@ components:
           readOnly: true
           description: 'Decentrale overheden geven een wijzigingsdatum mee voor hun
             informatie. Deze datum wordt op het portaal getoond. '
-        productValtOnderToelichting:
-          type: string
-          description: Toelichting over het product valt onder.
         productAanwezigToelichting:
           type: string
           title: Aanwezig toelichting
           description: Toelichting
+        productValtOnderToelichting:
+          type: string
+          description: Toelichting over het product valt onder.
       required:
       - datumWijziging
       - taal
@@ -668,7 +678,12 @@ components:
         owmsPrefLabel:
           type: string
           description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+        owmsEndDate:
+          type: string
+          format: date-time
+          description: De einddatum, zoals gevonden in het OWMS-model.
       required:
+      - owmsEndDate
       - owmsIdentifier
       - owmsPrefLabel
       - url
@@ -864,13 +879,17 @@ components:
           type: string
           format: date
           readOnly: true
-        verantwoordelijkeOrganisatie:
-          $ref: '#/components/schemas/LokaleOverheidBase'
         productAanwezig:
           type: boolean
           nullable: true
           title: Aanwezig
           description: Voert u dit product?
+        productValtOnder:
+          $ref: '#/components/schemas/ProductBase'
+        verantwoordelijkeOrganisatie:
+          $ref: '#/components/schemas/LokaleOverheidBase'
+        bevoegdeOrganisatie:
+          $ref: '#/components/schemas/BevoegdeOrganisatie'
         catalogus:
           type: string
           format: uri
@@ -887,29 +906,17 @@ components:
           items:
             $ref: '#/components/schemas/LocalizedProduct'
           readOnly: true
-        referentieProduct:
-          type: string
-          format: uri
-          nullable: true
-          description: Een referentie naar een product. Het toewijzen van een referentieproduct
-            veronderstelt automatisch dat dit product specifiek is.
         gerelateerdeProducten:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
-        productValtOnder:
-          type: string
-          format: uri
-          nullable: true
-          description: Een verwijzing naar een product waarvan dit product valt onder.
-        bevoegdeOrganisatie:
-          $ref: '#/components/schemas/BevoegdeOrganisatie'
       required:
       - bevoegdeOrganisatie
       - catalogus
       - doelgroep
       - gerelateerdeProducten
       - locaties
+      - productValtOnder
       - publicatieDatum
       - upnLabel
       - upnUri
