@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -24,3 +26,16 @@ class LocatieUpdateView(OverheidMixin, UpdateView):
         return reverse_lazy(
             "organisaties:locaties", kwargs={"pk": self._lokale_overheid.pk}
         )
+
+    def form_valid(self, form):
+        organisatie = self.object
+        response = super().form_valid(form)
+        messages.success(
+            self.request,
+            _(
+                "De locatie instellingen van de gemeente {organisatie} is succesvol opgeslagen.".format(
+                    organisatie=organisatie
+                )
+            ),
+        )
+        return response

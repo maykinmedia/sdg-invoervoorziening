@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.urls import reverse_lazy
+from django.utils.translation import gettext as _
 from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -25,3 +27,16 @@ class BevoegdeOrganisatieUpdateView(OverheidMixin, UpdateView):
             "organisaties:bevoegde_organisaties",
             kwargs={"pk": self._lokale_overheid.pk},
         )
+
+    def form_valid(self, form):
+        organisatie = self.object
+        response = super().form_valid(form)
+        messages.success(
+            self.request,
+            _(
+                "De bevoegde organisaties van de gemeente {organisatie} is succesvol opgeslagen.".format(
+                    organisatie=organisatie
+                )
+            ),
+        )
+        return response
