@@ -41,11 +41,6 @@ def exclude(field_list: list, excluded_fields: str) -> list:
     return result
 
 
-@register.simple_tag
-def create_redirect_url(product, catalog=None):
-    return product.get_create_redirect_url(catalog=catalog)
-
-
 @register.inclusion_tag("producten/_include/icon.html")
 def icon(name: str):
     return {"name": name}

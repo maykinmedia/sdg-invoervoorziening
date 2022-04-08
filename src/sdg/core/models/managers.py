@@ -29,21 +29,6 @@ class ProductenCatalogusQuerySet(models.QuerySet):
             )
         )
 
-    def create_specific_catalogs(self, municipality):
-        """Create a specific catalog (if it doesn't exist) for each reference catalog."""
-        catalog_list = [
-            self.model(
-                referentie_catalogus=catalog,
-                lokale_overheid=municipality,
-                is_referentie_catalogus=False,
-                domein=catalog.domein,
-                versie=catalog.versie,
-                naam=f"{municipality} ({catalog.naam})",
-            )
-            for catalog in self.model.objects.filter(is_referentie_catalogus=True)
-        ]
-        self.bulk_create(catalog_list, ignore_conflicts=True)
-
 
 class OrganisatieQuerySet(models.QuerySet):
     def active(self):

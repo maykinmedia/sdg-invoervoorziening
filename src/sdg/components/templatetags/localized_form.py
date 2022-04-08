@@ -1,6 +1,8 @@
 from django import template
 from django.forms import BaseFormSet
 
+from sdg.core.constants import TaalChoices
+
 register = template.Library()
 
 
@@ -38,7 +40,7 @@ def localized_form(context, formset: BaseFormSet, **kwargs) -> dict:
             for form in formset.forms
             if form.initial.get("taal")
         ]
-        return languages or ["nl", "en"]  # FIXME
+        return languages or list(TaalChoices.labels.keys())
 
     def get_object_list(formset: BaseFormSet, fields: list) -> list:
         object_list = []

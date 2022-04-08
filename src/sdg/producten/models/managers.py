@@ -141,6 +141,7 @@ class LocalizedManager(models.Manager):
             ignore_conflicts=True,
         )
 
+    # FIXME: Remove?
     def bulk_localize(self, instances, languages, **kwargs):
         """Bulk-localize product instances with the given languages."""
         create_list = []

@@ -41,18 +41,14 @@ class CatalogListView(OverheidMixin, RHListView):
         """
         Returns ProductenCatalogus objects for local municipality.
         """
-        queryset = ProductenCatalogus.objects.select_related("lokale_overheid").filter(
+        catalogs = ProductenCatalogus.objects.filter(
             lokale_overheid=self.lokale_overheid
         )
-
-        if self.lokale_overheid.automatisch_catalogus_aanmaken:
-            queryset.create_specific_catalogs(municipality=self.lokale_overheid)
-            queryset = queryset.specific_catalogs()
 
         return (
             super()
             .get_queryset()
-            .filter(catalogus__in=queryset)
+            .filter(catalogus__in=catalogs)
             .active()
             .annotate_name()
             .select_related("catalogus__lokale_overheid")
