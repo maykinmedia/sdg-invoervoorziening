@@ -7,8 +7,8 @@ from sdg.core.types import LoadCommand
 management_commands = [
     LoadCommand("load_government_orgs", PublicData.GOVERNMENT_ORGANISATION),
     LoadCommand("load_municipalities", PublicData.MUNICIPALITY),
-    LoadCommand("load_upn", PublicData.UPN),
     LoadCommand("load_informatiegebieden", PublicData.INFORMATIEGEBIED),
+    LoadCommand("load_upn", PublicData.UPN),
 ]
 
 
