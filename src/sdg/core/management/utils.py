@@ -76,7 +76,6 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     :return: The total count of the created objects.
     """
     igs = {obj.get("SDG_IGURI"): obj.get("SDG_Informatiegebied") for obj in data}
-    ig_instances = {}
 
     for ig_uri, ig_name in igs.items():
         informatiegebied, created = Informatiegebied.objects.update_or_create(
