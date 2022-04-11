@@ -138,11 +138,7 @@
                                 </button>
                             {% endfor %}
                         </div>
-
-                        {# (Global) edit togggle. #}
-                        {% toggle _('Alles bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
                     </div>
-                    <hr class="divider">
 
                         {% if generic_information %}
                             <table class="tabs__table form__generic">
@@ -164,11 +160,20 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
-                            <hr class="divider">
                         {% endif %}
 
                     </div>
                 {% endfor %}
+
+
+                    <div class="toolbar global-language-switch">
+                        {# (Global) language selectors. #}
+                        <div class="button-group">
+                        </div>
+
+                        {# (Global) edit togggle. #}
+                        {% toggle _('Alles bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
+                    </div>
 
                 <table class="tabs__table form__specific">
                     <thead class="bem-toggle" data-toggle-target=".form__specific" data-toggle-modifier="hidden">
