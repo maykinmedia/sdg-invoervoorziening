@@ -27,12 +27,9 @@
                 <div class="header__dropdown-list">
                     {% with pk=lokaleoverheid.pk %}
 
-                    {% if pk and request.user|is_manager:lokaleoverheid %}
+                    {% if pk %}
                         <a class="header__dropdown-action" href="{% url 'organisaties:edit' pk=pk %}">
                             <i class="fas fa-building"></i> {% trans "Organisatie instellingen" %}
-                        </a>
-                        <a class="header__dropdown-action" href="{% url 'organisaties:roles:list' pk=pk %}">
-                            <i class="fas fa-users"></i> {% trans "Gebruikersbeheer" %}
                         </a>
                         <a class="header__dropdown-action" href="{% url 'organisaties:locaties' pk=pk %}">
                             <i class="fas fa-compass"></i> {% trans "Locaties" %}
@@ -40,6 +37,11 @@
                         <a class="header__dropdown-action" href="{% url 'organisaties:bevoegde_organisaties' pk=pk %}">
                             <i class="fas fa-handshake"></i> {% trans "Bevoegde organisaties" %}
                         </a>
+                        {% if request.user|is_manager:lokaleoverheid %}
+                            <a class="header__dropdown-action" href="{% url 'organisaties:roles:list' pk=pk %}">
+                                <i class="fas fa-users"></i> {% trans "Gebruikersbeheer" %}
+                            </a>
+                        {% endif %}
                     {% endif %}
 
                     <a class="header__dropdown-action" href="{% url 'account_logout' %}">
