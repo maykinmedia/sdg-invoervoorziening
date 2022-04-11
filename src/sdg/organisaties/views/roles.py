@@ -1,4 +1,6 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext as _
 from django.views.generic import DeleteView, ListView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -29,6 +31,18 @@ class RoleDeleteView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, DeleteV
     pk_url_kwarg = "role_pk"
     required_roles = ["is_beheerder"]
 
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs)
+        name = str(self.object).split(" — ")[0]
+        organisation = str(self.object).split(" — ")[-1]
+        messages.success(
+            self.request,
+            _(
+                "De gebruiker {role} is niet meer gekoppeld aan gemeente  {organisatie}."
+            ).format(organisatie=organisation, role=name),
+        )
+        return response
+
 
 class RoleUpdateView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, UpdateView):
     queryset = Role.objects.all()
@@ -36,3 +50,15 @@ class RoleUpdateView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, UpdateV
     pk_url_kwarg = "role_pk"
     fields = ["is_beheerder", "is_redacteur"]
     required_roles = ["is_beheerder"]
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        name = str(self.object).split(" — ")[0]
+        organisation = str(self.object).split(" — ")[-1]
+        messages.success(
+            self.request,
+            _(
+                "De gebruikersrol van {role} voor gemeente {organisatie} is succesvol gewijzigd."
+            ).format(organisatie=organisation, role=name),
+        )
+        return response

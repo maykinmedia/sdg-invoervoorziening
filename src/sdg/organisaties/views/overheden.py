@@ -1,4 +1,5 @@
-from django.http import HttpResponseRedirect
+from django.contrib import messages
+from django.utils.translation import gettext as _
 from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -20,4 +21,10 @@ class LokaleOverheidUpdateView(OverheidMixin, UpdateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         Event.create_and_log(self.request, self.object, Event.UPDATE)
+        messages.success(
+            self.request,
+            _(
+                "De organisatie instellingen van gemeente {organisatie} zijn succesvol gewijzigd."
+            ).format(organisatie=self.object),
+        )
         return response
