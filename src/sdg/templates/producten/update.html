@@ -205,31 +205,37 @@
             {% endif %}
         </div>
 
-
-        <div class="toolbar toolbar--sticky-b">
-            <div class="toolbar__section">
-                <div class="calendar-container">
-                    {{ version_form.non_field_errors }}
-                    {% trans "Publicatie datum" %}
-                    <input name="date" type="date" class="calendar form__input"
-                           value="{{ version_form.date.initial }}">
-                </div>
+        <div class="toolbar toolbar--sticky-b toolbar--column">
+            {% if version_form.non_field_errors %}
+            <div class="toolbar--row error">
+                {{ version_form.non_field_errors }}
             </div>
+            {% endif %}
 
-            <div class="toolbar__section">
-                <div class="button-group">
-                    <a href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
-                        <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
-                    </a>
+            <div class="toolbar__section toolbar--row form">
+                <div class="toolbar__section">
+                    <div class="calendar-container">
+                        {% trans "Publicatie datum" %}
+                        <input name="date" type="date" class="calendar form__input"
+                                value="{{ version_form.date.initial }}">
+                    </div>
+                </div>
 
-                    <button class="button tabs__form-button button--light" name="publish" value="concept"
-                            type="submit">
-                        Opslaan als concept
-                    </button>
+                <div class="toolbar__section">
+                    <div class="button-group">
+                        <a href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
+                            <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                        </a>
 
-                    <button class="button tabs__form-button" type="submit" name="publish" value="date">
-                        Opslaan en publiceren
-                    </button>
+                        <button class="button tabs__form-button button--light" name="publish" value="concept"
+                                type="submit">
+                            Opslaan als concept
+                        </button>
+
+                        <button class="button tabs__form-button" type="submit" name="publish" value="date">
+                            Opslaan en publiceren
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
