@@ -94,11 +94,24 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
         "email",
         "first_name",
         "last_name",
+        "organisaties",
         "is_staff",
         "hijack_field",
     )
     ordering = ("email",)
     inlines = (RoleInline,)
+
+    def get_queryset(self, request):
+        return (
+            super()
+            .get_queryset(request)
+            .prefetch_related("roles__lokale_overheid__organisatie")
+        )
+
+    def organisaties(self, obj):
+        return ", ".join(
+            [str(role.lokale_overheid.organisatie) for role in obj.roles.all()]
+        )
 
     def save_related(self, request, form, formsets, change):
         super().save_related(request, form, formsets, change)
