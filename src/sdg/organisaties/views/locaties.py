@@ -11,7 +11,7 @@ from sdg.organisaties.models import LokaleOverheid
 class LocatieUpdateView(OverheidMixin, UpdateView):
     template_name = "organisaties/locaties.html"
     model = LokaleOverheid
-    required_roles = ["is_redacteur"]
+    required_roles = ["is_beheerder"]
     form_class = LocatieInlineFormSet
 
     def get_form_kwargs(self):
