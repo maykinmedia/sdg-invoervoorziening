@@ -94,7 +94,9 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
             defaults={
                 "code": obj.get("SDG_Code"),
                 "thema": obj.get("SDG_Thema"),
-                "informatiegebied": Informatiegebied.objects.filter(informatiegebied_uri=obj.get("SDG_IGURI")).first(),
+                "informatiegebied": Informatiegebied.objects.filter(
+                    informatiegebied_uri=obj.get("SDG_IGURI")
+                ).first(),
             },
         )
         if created:
