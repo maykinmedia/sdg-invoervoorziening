@@ -33,9 +33,7 @@ class LocatieUpdateView(OverheidMixin, UpdateView):
         messages.success(
             self.request,
             _(
-                "De locatie instellingen van de gemeente {organisatie} is succesvol opgeslagen.".format(
-                    organisatie=organisatie
-                )
-            ),
+                "De locatie instellingen van gemeente {organisatie} zijn succesvol gewijzigd."
+            ).format(organisatie=organisatie),
         )
         return response

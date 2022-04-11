@@ -34,9 +34,7 @@ class BevoegdeOrganisatieUpdateView(OverheidMixin, UpdateView):
         messages.success(
             self.request,
             _(
-                "De bevoegde organisaties van de gemeente {organisatie} is succesvol opgeslagen.".format(
-                    organisatie=organisatie
-                )
-            ),
+                "De bevoegde organisaties van gemeente {organisatie} zijn succesvol gewijzigd."
+            ).format(organisatie=organisatie),
         )
         return response

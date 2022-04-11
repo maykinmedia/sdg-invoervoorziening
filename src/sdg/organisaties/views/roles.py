@@ -38,10 +38,8 @@ class RoleDeleteView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, DeleteV
         messages.success(
             self.request,
             _(
-                "De gebruiker {role} van de gemeente {organisatie} is succesvol verwijderd.".format(
-                    organisatie=organisation, role=name
-                )
-            ),
+                "De gebruiker {role} is niet meer gekoppeld aan gemeente  {organisatie}."
+            ).format(organisatie=organisation, role=name),
         )
         return response
 
@@ -60,9 +58,7 @@ class RoleUpdateView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, UpdateV
         messages.success(
             self.request,
             _(
-                "De organisatie role instelling van {role} van de gemeente {organisatie} is succesvol opgeslagen.".format(
-                    organisatie=organisation, role=name
-                )
-            ),
+                "De gebruikersrol van {role} voor gemeente {organisatie} is succesvol gewijzigd."
+            ).format(organisatie=organisation, role=name),
         )
         return response
