@@ -8,7 +8,7 @@
     <h1>Error 500</h1>
     <p class="heading">{% trans "Wij zijn automatisch op de hoogte gebracht van het probleem en zullen het zo spoedig mogelijk onderzoeken." %}</p>
     {% if request.sentry.id %}
-        <p class="subheading">{% trans "Als u hulp nodig heeft, kunt u deze fout als volgt bestempelen" %}
+        <p class="subheading">{% trans "Als je hulp nodig hebt, kan je onderstaande foutcode doorgeven." %}
             <strong>{{ request.sentry.id }}</strong>.</p>
     {% endif %}
     <hr class="divider">

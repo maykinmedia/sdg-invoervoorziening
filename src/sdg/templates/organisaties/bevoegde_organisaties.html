@@ -1,9 +1,12 @@
 {% extends 'organisaties/base.html' %}
+{% load static i18n utils%}
 
-{% load static %}
-{% load i18n %}
-{% load utils %}
-{% block page_title %}{% trans "Bevoegde Organisaties" %}{% endblock %}
+{% block page_title %}{% trans "Bevoegde organisaties" %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% trans "Je kan hier alle bevoegde organisaties opgeven. Bij elk product kan je vervolgens een bevoegde organisatie selecteren uit deze lijst." %}
+    </p>
+{% endblock %}
 
 {% block inner_content %}
     <form action="{% url "organisaties:bevoegde_organisaties" pk=lokaleoverheid.pk %}" method="post" class="form"

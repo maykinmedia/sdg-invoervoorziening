@@ -31,6 +31,8 @@
                 {{ object|capfirst|default:namespace|capfirst }}
             {% endblock %}
         </h2>
+        {% block page_intro %}{% endblock %}
+
         <hr class="divider">
         {% block inner_content %}
         {% endblock inner_content %}

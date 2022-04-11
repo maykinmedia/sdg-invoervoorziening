@@ -4,7 +4,7 @@ from django.core.management import BaseCommand
 
 from sdg.core.constants import TaalChoices
 from sdg.core.models import ProductenCatalogus
-from sdg.organisaties.models import LokaleOverheid
+from sdg.organisaties.models import BevoegdeOrganisatie, LokaleOverheid
 from sdg.producten.models import Product, ProductVersie
 from sdg.producten.models.localized import LocalizedProduct
 
@@ -12,7 +12,26 @@ from sdg.producten.models.localized import LocalizedProduct
 class Command(BaseCommand):
     help = "Creates, updates and corrects catalogs with products based on reference catalogs, for each active organisation."
 
+    def add_arguments(self, parser):
+        super().add_arguments(parser)
+
+        parser.add_argument(
+            "--organisation",
+            help="Enforce a specific plugin to be used. Defaults to the configured plugin.",
+        )
+
     def handle(self, **options):
+        _org_param = options.get("organisation", None)
+
+        product_catalog_query_kwargs = {}
+        if _org_param:
+            local_government = LokaleOverheid.objects.filter(
+                organisatie__owms_pref_label__iexact=_org_param
+            ).first()
+            self.stdout.write(f"Filtering on organisation: {local_government}")
+
+            product_catalog_query_kwargs.update({"lokale_overheid": local_government})
+
         created_catalogs = 0
 
         # Create catalogs, based on reference catalogs, for each local
@@ -22,7 +41,7 @@ class Command(BaseCommand):
         ):
             # Create a specific catalog (if it doesn't exist) for each reference catalog.
             for reference_catalog in ProductenCatalogus.objects.filter(
-                is_referentie_catalogus=True
+                is_referentie_catalogus=True, **product_catalog_query_kwargs
             ):
                 catalog, is_created = ProductenCatalogus.objects.get_or_create(
                     referentie_catalogus=reference_catalog,
@@ -45,7 +64,9 @@ class Command(BaseCommand):
         current_count = 0
         total = (
             Product.objects.filter(catalogus__is_referentie_catalogus=True).count()
-            * ProductenCatalogus.objects.filter(is_referentie_catalogus=False).count()
+            * ProductenCatalogus.objects.filter(
+                is_referentie_catalogus=False, **product_catalog_query_kwargs
+            ).count()
         )
 
         def perc(count):
@@ -73,16 +94,30 @@ class Command(BaseCommand):
                 # Iterate over all (specific) catalogs that belong to the current
                 # reference catalog.
                 for catalog in ProductenCatalogus.objects.filter(
-                    referentie_catalogus=reference_catalog
+                    referentie_catalogus=reference_catalog,
+                    **product_catalog_query_kwargs,
                 ):
                     corrections = []
+
+                    default_auth_org = BevoegdeOrganisatie.objects.filter(
+                        lokale_overheid=catalog.lokale_overheid
+                    ).first()
 
                     # If it doesn't exist yet, create a (specific) product in
                     # this (specific) catalog.
                     product, is_created = Product.objects.get_or_create(
                         referentie_product=reference_product,
                         catalogus=catalog,
+                        defaults={"bevoegde_organisatie": default_auth_org},
                     )
+
+                    # Make sure the product has an authorized organisation.
+                    if not is_created and product.bevoegde_organisatie is None:
+                        Product.objects.filter(pk=product.pk).update(
+                            bevoegde_organisatie=default_auth_org
+                        )
+                        corrections.append("added missing authorized organisation")
+
                     # For newly created products, create an initial version.
                     if is_created or product.versies.count() == 0:
                         created_products += 1
@@ -105,9 +140,6 @@ class Command(BaseCommand):
                     ):
                         if not is_created:
                             corrections.append("added missing translations")
-                            import ipdb
-
-                            ipdb.set_trace()
 
                         # Create localized product version based on available
                         # languages.

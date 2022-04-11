@@ -75,28 +75,27 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
 
     :return: The total count of the created objects.
     """
-    uris = [obj.pop("SDG_IGURI") for obj in data]
-    grouped_data = dict(zip(uris, data))
+    igs = {obj.get("SDG_IGURI"): obj.get("SDG_Informatiegebied") for obj in data}
 
-    for uri, obj in grouped_data.items():
+    for ig_uri, ig_name in igs.items():
         informatiegebied, created = Informatiegebied.objects.update_or_create(
-            informatiegebied_uri=uri,
+            informatiegebied_uri=ig_uri,
             defaults={
-                "informatiegebied": obj.get("SDG_Informatiegebied"),
+                "informatiegebied": ig_name,
             },
         )
 
-        obj["informatiegebied"] = informatiegebied
-
     count_themas = 0
 
-    for obj in grouped_data.values():
+    for obj in data:
         thema, created = Thema.objects.update_or_create(
             thema_uri=obj.get("SDG_ThemaURI"),
             defaults={
                 "code": obj.get("SDG_Code"),
                 "thema": obj.get("SDG_Thema"),
-                "informatiegebied": obj.get("informatiegebied"),
+                "informatiegebied": Informatiegebied.objects.filter(
+                    informatiegebied_uri=obj.get("SDG_IGURI")
+                ).first(),
             },
         )
         if created:

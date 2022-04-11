@@ -1,19 +1,21 @@
 {% extends 'organisaties/roles/base.html' %}
+{% load i18n producten utils humanize %}
 
-{% load i18n %}
-{% load producten %}
-{% load utils %}
-{% load humanize %}
+{% block page_title %}{% blocktrans with user=role.user %}Gebruiker {{ user }} verwijderen{% endblocktrans %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% blocktrans with user=role.user organisation=role.lokale_overheid %}
+            Je staat op het punt om gebruiker "{{ user }}" te verwijderen uit organisatie "{{ organisation }}".
+        {% endblocktrans %}
+    </p>
+{% endblock %}
 
-{% block title %}SDG | {% trans "Gebruiker" %} "{{ role.user }}" {% trans "verwijderen" %}{% endblock %}
 {% block notifications %}{% endblock %}
 
 {% block inner_content %}
     <form method="post">
         {% csrf_token %}
-        <div class="subheading">
-            <p>{% trans "Weet je zeker dat je" %} <span class="primary text-bold">{{ object.user }}</span> {%  trans "wilt verwijderen?" %}</p>
-        </div>
+        <p>{% blocktrans with user=object.user %}Weet je zeker dat je <span class="primary text-bold">{{ user }}</span> wilt verwijderen?{% endblocktrans %}</p>
         <hr class="divider">
         <input type="submit" class="button" value="{% trans 'Verwijderen' %}">
         <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}">

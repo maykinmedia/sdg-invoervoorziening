@@ -221,7 +221,7 @@ class LokaleOverheidUpdateViewTests(WebTest):
         RoleFactory.create(
             user=self.user,
             lokale_overheid=self.lokale_overheid,
-            is_redacteur=True,
+            is_beheerder=True,
         )
 
     def test_can_update_municipality_details(self):
@@ -239,20 +239,6 @@ class LokaleOverheidUpdateViewTests(WebTest):
         self.assertEqual(self.lokale_overheid.contact_emailadres, "email@example.com")
         self.assertEqual(self.lokale_overheid.contact_telefoonnummer, "0619123123")
 
-    def test_municipality_organization_is_readonly(self):
-        org = OverheidsorganisatieFactory.create()
-        response = self.app.get(
-            reverse(self.url, kwargs={"pk": self.lokale_overheid.pk})
-        )
-
-        response.form["contact_website"] = "https://example.com"
-        response.form["organisatie"].value = org.pk
-        response.form.submit()
-
-        self.lokale_overheid.refresh_from_db()
-        self.assertEqual(self.lokale_overheid.contact_website, "https://example.com")
-        self.assertNotEqual(self.lokale_overheid.organisatie, org.pk)
-
 
 class LocatieUpdateViewTests(WebTest):
     def setUp(self):
@@ -266,7 +252,7 @@ class LocatieUpdateViewTests(WebTest):
         RoleFactory.create(
             user=self.user,
             lokale_overheid=self.lokale_overheid,
-            is_redacteur=True,
+            is_beheerder=True,
         )
 
     def test_can_update_municipality_location(self):

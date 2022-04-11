@@ -1,29 +1,20 @@
 {% extends 'organisaties/invitation/base.html' %}
+{% load i18n producten utils humanize %}
 
-{% load i18n %}
-{% load producten %}
-{% load utils %}
-{% load humanize %}
+{% block page_title %}{% trans "Nieuwe gebruiker toevoegen" %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% blocktrans %}
+            U nodigt hiermee een nieuwe of bestaande gebruiker uit voor {{ lokaleoverheid }}. Een gebruiker in de rol van redacteur kan producten in uw catalogi bewerken. Een beheerder kan tevens instellingen en gebruikers beheren voor uw organisatie. Een gebruiker mag ook beide rollen vervullen.
+        {% endblocktrans %}
+    </p>
+{% endblock %}
 
-{% block title %}SDG | {% trans "Gebruikers" %}{% endblock %}
 {% block notifications %}{% endblock %}
 
 {% block inner_content %}
     <form method="post" class="form">
         {% csrf_token %}
-
-        {% blocktrans %}
-            <div class="mt-m">
-                <p class="heading">Nieuwe gebruiker toevoegen.</p>
-                <p class="subheading">U nodigt hiermee een nieuwe of bestaande gebruiker uit voor {{ lokaleoverheid }}.
-                    Een
-                    gebruiker in de rol van redacteur kan
-                    producten in uw catalogi bewerken. Een beheerder kan alleen gebruikers beheren voor uw organisatie,
-                    binnen deze applicatie. Een gebruiker mag ook beide rollen vervullen.</p>
-            </div>
-        {% endblocktrans %}
-
-        <hr class="divider">
 
         {{ formset.management_form }}
         {{ formset.non_form_errors }}

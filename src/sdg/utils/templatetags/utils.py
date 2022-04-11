@@ -125,3 +125,19 @@ def checkbox(field, **kwargs):
 @register.inclusion_tag("forms/status_icon.html")
 def status_icon(status, **kwargs):
     return {**kwargs, "status": status}
+
+
+@register.filter
+def is_manager(user, local_government):
+    """
+    Usage: {{ user|is_manager:local_government }}
+    """
+    if user and local_government:
+        return any(
+            [
+                role.is_beheerder
+                for role in user.roles.all()
+                if role.lokale_overheid == local_government
+            ]
+        )
+    return None

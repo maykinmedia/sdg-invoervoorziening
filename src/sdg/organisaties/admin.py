@@ -37,7 +37,7 @@ class BevoegdeOrganisatieAdmin(admin.ModelAdmin):
 class LokaleOverheidAdmin(admin.ModelAdmin):
     list_display = (
         "organisatie",
-        "has_manager",
+        "managers",
         "contact_website",
         "owms_end_date",
     )
@@ -60,18 +60,20 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
         manager_role = Role.objects.filter(
             is_beheerder=True, lokale_overheid=OuterRef("pk")
         )
-        queryset = queryset.annotate(_has_manager=Exists(manager_role)).select_related(
-            "organisatie"
+        queryset = (
+            queryset.annotate(_has_manager=Exists(manager_role))
+            .select_related("organisatie")
+            .prefetch_related("roles")
         )
         return queryset
 
-    def has_manager(self, obj):
+    def managers(self, obj):
         """:returns: Annotated boolean for list display purposes."""
-        return obj._has_manager
+        return ", ".join(
+            [str(role.user) for role in obj.roles.all() if role.is_beheerder]
+        )
 
-    has_manager.short_description = _("beheerder")
-    has_manager.boolean = True
-    has_manager.admin_order_field = "_has_manager"
+    managers.short_description = _("beheerders")
 
     def owms_end_date(self, obj):
         return obj.organisatie.owms_end_date

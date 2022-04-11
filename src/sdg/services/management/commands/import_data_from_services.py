@@ -21,6 +21,10 @@ class Command(BaseCommand):
                     generiek_product__upn__upn_label=product["upnLabel"],
                     taal=product["taal"],
                 )
+                self.stdout.write(
+                    f"Updating translations for generic product '{product['upnLabel']}' via {service_config}."
+                )
+
                 updated_objects += localized_generic_products.update(
                     product_titel=product["titel"],
                     generieke_tekst=product["tekst"],

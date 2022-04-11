@@ -11,7 +11,7 @@
     <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
     <td class="tabs__table-cell">
     {% if role %}
-        {% if lokaleoverheid_beheerder and user != request.user %}
+        {% if request.user|is_manager:lokaleoverheid and user != request.user %}
             <a class="button--small button--light"
                href="
                    {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>

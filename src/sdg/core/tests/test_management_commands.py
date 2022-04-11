@@ -6,7 +6,12 @@ from django.core.management import call_command
 from django.test import TestCase
 
 from sdg.core.constants import TaalChoices
-from sdg.core.models import Informatiegebied, Overheidsorganisatie, UniformeProductnaam
+from sdg.core.models import (
+    Informatiegebied,
+    Overheidsorganisatie,
+    Thema,
+    UniformeProductnaam,
+)
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import ThemaFactory, UniformeProductnaamFactory
 from sdg.organisaties.models import LokaleOverheid
@@ -86,8 +91,9 @@ class TestImportData(CommandTestCase):
         )
 
         self.assertIn("Successfully imported", out)
-        self.assertIn("(4 objects)", out)
+        self.assertIn("(24 objects)", out)
         self.assertEqual(4, Informatiegebied.objects.count())
+        self.assertEqual(24, Thema.objects.count())
 
         informatiegebied = Informatiegebied.objects.first()
         self.assertEqual(informatiegebied.informatiegebied, "Reizen binnen de Unie")
