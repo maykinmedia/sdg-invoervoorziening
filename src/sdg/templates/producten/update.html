@@ -1,11 +1,11 @@
 {% extends 'producten/base.html' %}
+{% load utils static i18n producten toggle localized_form %}
 
-{% load utils %}
-{% load static %}
-{% load i18n %}
-{% load producten %}
-{% load toggle %}
-{% load localized_form %}
+{% block page_intro %}
+    <p class="subheading">
+        {% trans "Als gemeente kun je alleen de algemene en specifieke gegevens aanpassen. De generieke gegevens komen van de Rijksoverheid en staan hier ter informatie." %}
+    </p>
+{% endblock %}
 
 {% block templates %}
     {% for reference_form in reference_formset.forms %}

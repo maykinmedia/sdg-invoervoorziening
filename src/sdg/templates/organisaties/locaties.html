@@ -1,9 +1,12 @@
 {% extends 'organisaties/base.html' %}
+{% load static i18n utils %}
 
-{% load static %}
-{% load i18n %}
-{% load utils %}
 {% block page_title %}{% trans "Locaties" %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% trans "Je kant hier alle locaties opgeven waar producten worden aangeboden. Bij elk product kan je vervolgens een of meer locaties selecteren uit deze lijst." %}
+    </p>
+{% endblock %}
 
 {% block inner_content %}
     <form action="{% url "organisaties:locaties" pk=lokaleoverheid.pk %}" method="post" class="form">

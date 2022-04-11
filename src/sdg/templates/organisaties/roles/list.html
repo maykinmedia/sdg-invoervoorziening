@@ -1,9 +1,12 @@
 {% extends 'organisaties/roles/base.html' %}
+{% load i18n producten utils humanize %}
 
-{% load i18n %}
-{% load producten %}
-{% load utils %}
-{% load humanize %}
+{% block page_title %}{% trans "Gebruikersbeheer" %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% trans "Hieronder staan alle gebruikers die gekoppeld zijn aan de organisatie. Redacteuren kunnen alleen teksten beheren en beheerders kunnen ook andere instellingen en gebruikers beheren." %}
+    </p>
+{% endblock %}
 
 {% block notifications %}{% endblock %}
 
@@ -34,7 +37,7 @@
                         </table>
                         <hr class="divider">
                         <div class="roles__control">
-                            {% if lokaleoverheid_beheerder %}
+                            {% if request.user|is_manager:lokaleoverheid %}
                                 <a class="button"
                                    href="{% url 'organisaties:roles:invitation_create' pk=lokaleoverheid.pk %}">
                                     <i class="far fa-envelope"></i>

@@ -1,11 +1,13 @@
 {% extends 'organisaties/roles/base.html' %}
+{% load i18n producten utils humanize %}
 
-{% load i18n %}
-{% load producten %}
-{% load utils %}
-{% load humanize %}
+{% block page_title %}{% blocktrans %}Gebruiker {{ role.user }} wijzigen{% endblocktrans %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% trans "Je kan de rol van de gebruiker hieronder wijzigen." %}
+    </p>
+{% endblock %}
 
-{% block title %}SDG | {% trans "Gebruiker" %} "{{ role.user }}" {% trans "wijzigen" %}{% endblock %}
 {% block notifications %}{% endblock %}
 
 {% block inner_content %}

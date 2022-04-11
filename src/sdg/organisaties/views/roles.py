@@ -17,13 +17,6 @@ class RoleListView(RoleBaseMixin, OverheidMixin, ListView):
     def get_queryset(self):
         return self.lokale_overheid.roles.all()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context[
-            "lokaleoverheid_beheerder"
-        ] = self.lokale_overheid.user_has_manager_role(self.request.user)
-        return context
-
 
 class RoleDeleteView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, DeleteView):
     queryset = Role.objects.all()
