@@ -4,7 +4,7 @@
 
 {% for product in products %}
 <div class="form__language-wrapper" lang="{{ product.taal }}">
-    {% for field in product.get_fields|exclude:"id,taal,generiek_product,landelijke_link,korte_omschrijving" %}
+    {% for field in product.template_fields %}
 
     <div class="form__control"{% if product.taal != languages.0 %} aria-hidden="true"{% endif %} lang="{{ product.taal }}">
 
