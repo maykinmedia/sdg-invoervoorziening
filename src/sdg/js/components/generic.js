@@ -1,6 +1,39 @@
-const form = document.querySelector("[class=form]");
+const form = document.querySelector('.form');
 
 class GenericForm {
+    /**
+     * Constructor method.
+     * @param {HTMLFormElement} node
+     */
+    constructor(node) {
+        /** @type {HTMLFormElement} */
+        this.node = node;
+
+        if(!this.isGenericForm()) {
+            return;  // Not a generic form.
+        }
+
+        if (this.node) {
+            this.setUpDynamicProductAanwezig();
+            this.setUpDynamicProductValtOnder();
+        }
+    }
+
+    /**
+     * Returns whether `this.node` represents a generic form based on node tree.
+     * @return {boolean}
+     */
+    isGenericForm() {
+        return Boolean(this.getClarificationField());
+    }
+
+    /**
+     * Returns clarification field (if found).
+     * @return {(Element|null)}
+     */
+    getClarificationField() {
+        return this.node.querySelector('[id$="product_aanwezig_toelichting"]');
+    }
 
     displayHidden(dependency) {
         dependency.style.display = "none";
@@ -19,7 +52,7 @@ class GenericForm {
 
     setUpDynamicProductAanwezig() {
         const input = this.node.querySelector("[name=product_aanwezig]");
-        const dependency = this.node.querySelector('[id$="product_aanwezig_toelichting"]').closest(".form__language-wrapper");
+        const dependency = this.getClarificationField().closest(".form__language-wrapper");
 
         const displayFunc = (displayDependency) => {
             if (input.selectedIndex === 2) {
@@ -110,15 +143,6 @@ class GenericForm {
             displayFunc(event.target, dependency);
         });
     }
-
-    constructor(node) {
-        this.node = node;
-        if (this.node) {
-            this.setUpDynamicProductAanwezig();
-            this.setUpDynamicProductValtOnder();
-        }
-    }
-
 }
 
 if (form) {
