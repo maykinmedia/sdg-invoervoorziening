@@ -3,28 +3,28 @@
 {% load producten %}
 
 {% for product in products %}
-<div class="form__language-wrapper" lang="{{ languages.0 }}">
-    {% for item in product %}
-    <div class="form__control"{% if item.taal is not languages.0 %} aria-hidden="true"{% endif %} lang="{{ item.taal }}">
-        {# Form control header. #}
+<div class="form__language-wrapper" lang="{{ product.taal }}">
+    {% for field in product.get_fields|exclude:"id,taal,generiek_product,landelijke_link,korte_omschrijving" %}
+
+    <div class="form__control"{% if product.taal != languages.0 %} aria-hidden="true"{% endif %} lang="{{ product.taal }}">
+
         <header class="form__control-header">
             {# Label with icon. #}
             <label class="form__label">
-                {{ item.field.verbose_name|capfirst }}
-                <i class="fas fa-info-circle fa-xs dark" title="{{ item.field.help_text }}"></i>
+                {{ field.verbose_name|capfirst }}
+                <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
             </label>
         </header>
-
         {#  Form control body. #}
-        <div class="form__control-body" lang="{{ item.taal }}">
+        <div class="form__control-body" lang="{{ product.taal }}">
             {# Field. #}
             <div class="tabs__table-cell--value">
-                {% if item.url %}
-                <a href="{{ item.url }}" target="_blank">
-                    {% field_info item.field %}
+                {% if field.name == "product_titel" and product.landelijke_link %}
+                <a href="{{ product.landelijke_link }}" target="_blank">
+                    {% field_info field %}
                 </a>
                 {% else %}
-                    {% field_info item.field %}
+                    {% field_info field %}
                 {% endif %}
             </div>
         </div>
