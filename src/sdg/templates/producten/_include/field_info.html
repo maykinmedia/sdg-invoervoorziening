@@ -4,6 +4,8 @@
     <span class="dark">—</span>
 {% elif field.is_text %}
     {{ field.value|markdownify }}
+{% elif field.is_date %}
+    {{ field.value|date }}
 {% elif field.is_boolean %}
     {{ field.value|yesno:"Ja,Nee,Onbekend" }}
 {% elif field.is_dynamicarray %}

@@ -108,6 +108,49 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
         return formset
 
+    def _get_generieke_taal_producten(self):
+        nl_generic_product = {
+            "product": self.product.generic_product.vertalingen.get(
+                taal="nl"
+            ).get_fields(),
+            "taal": "nl",
+        }
+
+        en_generic_product = {
+            "product": self.product.generic_product.vertalingen.get(
+                taal="en"
+            ).get_fields(),
+            "taal": "en",
+        }
+
+        generic_products = []
+
+        for product in [nl_generic_product, en_generic_product]:
+            new_generic_product = []
+            url = [f.value for f in product["product"] if f.name == "landelijke_link"][
+                0
+            ]
+
+            for field in product["product"]:
+                if field.name == "product_titel":
+                    new_field = {
+                        "taal": product["taal"],
+                        "field": field,
+                        "url": url,
+                    }
+                    new_generic_product.append(new_field)
+                elif (
+                    field.name == "korte_omschrijving"
+                    or field.name == "generieke_tekst"
+                    or field.name == "datum_check"
+                ):
+                    new_field = {"taal": product["taal"], "field": field}
+                    new_generic_product.append(new_field)
+
+            generic_products.append(new_generic_product)
+
+        return generic_products
+
     def get_lokale_overheid(self):
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
@@ -117,6 +160,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
+
+        context["generic_products"] = self._get_generieke_taal_producten()
 
         context["languages"] = list(TaalChoices.labels.keys())
         context["product"] = self.product

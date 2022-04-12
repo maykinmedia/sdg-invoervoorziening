@@ -140,7 +140,7 @@
                         </div>
                     </div>
 
-                        {% if generic_information %}
+                        {% if generic_products %}
                             <table class="tabs__table form__generic">
                                 <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
                                 <tr>
@@ -148,16 +148,12 @@
                                         <i class="fa fa-chevron-right bem-toggle__icon"></i>
                                         {% trans 'Generieke gegevens' %}
                                     </th>
-                                    <th class="tabs__table-header"></th>
                                 </tr>
                                 </thead>
                                 <tbody class="tabs__table-body">
-                                {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
-                                    {% table_row title url=url.value %}
-                                {% endwith %}
-                                {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
-                                    {% table_row field %}
-                                {% endfor %}
+                                    <td class="tabs__table-cell">
+                                        {% table_row products=generic_products languages=languages %}
+                                    </td>
                                 </tbody>
                             </table>
                         {% endif %}
