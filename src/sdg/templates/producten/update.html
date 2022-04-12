@@ -122,58 +122,29 @@
 
 
         <div class="tabs tabs--inline">
-            {% for generic_information, form in informatie_forms %}
-                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
-                     id="{{ form.taal.value }}">
 
-                    <div class="toolbar global-language-switch">
-                        {# (Global) language selectors. #}
-                        <div class="button-group">
-                            {% for language in languages %}
-                                <button class="button button--extra-small button--transparent{% if forloop.first %} button--active{% endif %} form__language-switch"
-                                        lang="{{ language }}"
-                                        type="button">
-                                    {{ language|upper }}
-                                    <i class="fas fa-info-circle fa-xs dark" title="{% trans 'De waarde voor deze taal is aangepast.' %}" aria-hidden="true" ></i>
-                                </button>
-                            {% endfor %}
-                        </div>
+                <div class="toolbar global-language-switch">
+                    {# (Global) language selectors. #}
+                    <div class="button-group">
                     </div>
 
-                        {% if generic_information %}
-                            <table class="tabs__table form__generic">
-                                <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
-                                <tr>
-                                    <th class="tabs__table-header" width="25%">
-                                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                                        {% trans 'Generieke gegevens' %}
-                                    </th>
-                                    <th class="tabs__table-header"></th>
-                                </tr>
-                                </thead>
-                                <tbody class="tabs__table-body">
-                                {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
-                                    {% table_row title url=url.value %}
-                                {% endwith %}
-                                {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
-                                    {% table_row field %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        {% endif %}
+                    {# (Global) edit togggle. #}
+                    {% toggle _('Alles bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
+                </div>
 
+                <div class="toolbar global-language-switch">
+                    {# (Global) language selectors. #}
+                    <div class="button-group">
+                        {% for language in languages %}
+                            <button class="button button--extra-small button--transparent{% if forloop.first %} button--active{% endif %} form__language-switch"
+                                    lang="{{ language }}"
+                                    type="button">
+                                {{ language|upper }}
+                                <i class="fas fa-info-circle fa-xs dark" title="{% trans 'De waarde voor deze taal is aangepast.' %}" aria-hidden="true" ></i>
+                            </button>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-
-
-                    <div class="toolbar global-language-switch">
-                        {# (Global) language selectors. #}
-                        <div class="button-group">
-                        </div>
-
-                        {# (Global) edit togggle. #}
-                        {% toggle _('Alles bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
-                    </div>
+                </div>
 
                 <table class="tabs__table form__specific">
                     <thead class="bem-toggle" data-toggle-target=".form__specific" data-toggle-modifier="hidden">
@@ -199,6 +170,35 @@
                         </td>
                     </tbody>
                 </table>
+
+                {% for generic_information, form in informatie_forms %}
+                <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
+                     id="{{ form.taal.value }}">
+
+                        {% if generic_information %}
+                            <table class="tabs__table form__generic">
+                                <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
+                                <tr>
+                                    <th class="tabs__table-header" width="25%">
+                                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
+                                        {% trans 'Generieke gegevens' %}
+                                    </th>
+                                    <th class="tabs__table-header"></th>
+                                </tr>
+                                </thead>
+                                <tbody class="tabs__table-body">
+                                {% with title=generic_information|get_field:"product_titel" url=generic_information|get_field:"landelijke_link" %}
+                                    {% table_row title url=url.value %}
+                                {% endwith %}
+                                {% for field in generic_information.get_fields|exclude:"id,taal,product_titel,generiek_product,landelijke_link,korte_omschrijving" %}
+                                    {% table_row field %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
             </div>
         </div>
 
