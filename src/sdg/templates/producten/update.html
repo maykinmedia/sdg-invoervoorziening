@@ -168,17 +168,21 @@
 
                     <div class="toolbar global-language-switch">
 
-                        <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept"
+                        <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
                             class="preview"
                             target="_blank">
                             <i class="fa fa-vector-square"></i> {% trans "Published Preview" %}
                         </a>
 
-                        <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
+                        {% if not product.most_recent_version.publicatie_datum %}
+
+                        <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept"
                             class="preview"
                             target="_blank">
                             <i class="fa fa-vector-square"></i> {% trans "Concept Preview" %}
                         </a>
+
+                        {% endif %}
 
                         {# (Global) language selectors. #}
                         <div class="button-group">
