@@ -1,5 +1,9 @@
 {% load static producten %}
-<!doctype html>
+{% load i18n %}
+{% load markdownify %}
+{% load static %}
+
+{% load static hijack_tags %}<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,95 +13,420 @@
     <title>SDG | Voorbeeld weergave</title>
     <style>
     </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
+    <script src="{% static 'bundles/fontawesome.js' %}"></script>
     <link href="{% static 'bundles/sdg-css.css' %}" media="all" rel="stylesheet"/>
 </head>
 
 <body id="kvk">
-<div class="rainbow-line"></div>
-<div class="navbar">
-    <div class="navbar__line">
-        SDG invoervoorziening
-        <svg class="navigationBarstyled__ChevronStyled-gqz6er-4 cDsaDd" width="64px" height="64px" viewBox="0 0 64 64"><path d="M52.6,23.4249889 L49.1555976,20 L32.3,36.7611334 L15.4444024,20 L12,23.4249889 L32.3,43.6111111 L52.6,23.4249889" transform="translate(32.300000, 31.805556) rotate(-90.000000) translate(-32.300000, -31.805556) "></path></svg>
-        Voorbeeld weergave
-    </div>
-    <div class="navbar__subline">
-        <a href="#" id="close-button" onclick="window.close();">
-            Voorbeeld sluiten
-        </a>
-    </div>
-</div>
-<div class="content">
-    {% with section_fields=translation.get_fields|exclude:"id,taal,product_versie,specifieke_tekst,product_titel_decentraal,verwijzing_links,datum_wijziging,decentrale_procedure_link" %}
-        <div class="left">
-            <h1>{{ product|capfirst }}</h1>
-            <div class="subtitle">
-                Hieronder staat een voorbeeld van de producttekst zoals deze zou kunnen worden weergeven door een website.
-                <div>
-                    <div class="subtitle__info">
-                        <svg focusable="false" width="16px" height="16px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" version="1.1" aria-hidden="true" class="contentHeader___StyledIconClock-sc-1rc3ui3-6 jdUHeg"><g fill-rule="evenodd"><rect width="64" height="64" style="fill:none"></rect><path d="M34,16H29V33.37l12.7,7.76,2.61-4.27L34,30.57ZM31.5,6A25.5,25.5,0,1,0,57,31.5,25.53,25.53,0,0,0,31.5,6ZM46.13,46.13A20.69,20.69,0,1,1,52.2,31.5,20.56,20.56,0,0,1,46.13,46.13Z" transform="translate(0 0)"></path></g></svg>
-                        Laatst gecontroleerd op {{ translation.datum_wijziging }}
-                    </div>
-                    <div class="subtitle__info">
-                        <svg focusable="false" width="16px" height="16px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" version="1.1" aria-label="Leestijd" class="contentHeader___StyledIconGlasses-sc-1rc3ui3-4 iQXDnt"><g fill-rule="evenodd"><rect width="64" height="64" style="fill:none"></rect><path d="M62,33.52a2.54,2.54,0,0,0-.44-1.25h0c-.94-1.59-9.23-15.6-11.2-18.11-2.84-3.61-6.64-4.11-10.32-4.11v5c3.92,0,5.27.77,6.39,2.2,1,1.26,4.44,6.88,7.63,12.21a32.36,32.36,0,0,0-16.83,1.91A10.39,10.39,0,0,0,32,30.12a10.39,10.39,0,0,0-5.18,1.25A32.39,32.39,0,0,0,10,29.46c3.2-5.33,6.66-10.95,7.64-12.21,1.12-1.43,2.47-2.2,6.39-2.2v-5c-3.68,0-7.48.5-10.32,4.11-2,2.51-10.26,16.52-11.2,18.11h0a2.5,2.5,0,0,0-.43,1.24c-.36,6,1.81,17.59,12.56,18.41,6.31.48,10.58-3.32,13-9.15a30.82,30.82,0,0,0,1.94-7.33,6.62,6.62,0,0,1,4.9,0,30.82,30.82,0,0,0,1.94,7.33c2.43,5.85,6.71,9.63,13,9.15C60.15,51.11,62.32,39.53,62,33.52ZM15,47c-6.84-.52-7.84-8.32-7.95-11.67A23,23,0,0,1,14.79,34a28.61,28.61,0,0,1,9.66,1.75C23.46,41.48,20.76,47.43,15,47Zm34,0c-5.76.45-8.45-5.55-9.45-11.21A28.86,28.86,0,0,1,49.24,34,22.9,22.9,0,0,1,57,35.31C56.86,38.66,55.86,46.46,49,47Z"></path></g></svg>
-                        < 1 min lezen
-                    </div>
+    <div class="navbar">
+        <div class="navbar__link">
+            <a href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">{% trans "Ga terug naar de update pagina" %}</a>
+        </div>
+
+        <div class="navbar__button">
+            <div class="toolbar global-language-switch">
+                <div class="button-group">
+                    {% for language in languages %}
+                        <button class="button button--extra-small button--transparent{% if forloop.first %} button--active{% endif %} language-switch"
+                                lang="{{ language }}"
+                                type="button">
+                            {{ language|upper }}
+                        </button>
+                    {% endfor %}
                 </div>
             </div>
-            <div class="intro">
-                {% field_info translation|get_field:"product_titel_decentraal" %}
-            </div>
-            <div class="toc">
-                <h2>Op deze pagina:</h2>
-                <ul>
-                    {% for field in section_fields %}
-                        {% if field.value %}
-                            <li>
-                                <svg class="goIcon interfaceLink-icon interfaceLink-icon--dark" x="0px" y="0px" width="64px" height="64px" viewBox="0 0 64 64"><g><rect fill="none" width="64" height="64"></rect></g><g><path d="M29.3403,51.0996l-15-19c-1.0058-1.2715-0.9682-3.0801,0.0909-4.3096c1.0576-1.2295,2.8388-1.5371,4.248-0.7334L27,31.8025
-        V14.5264c0-2.7168,2.3491-3.5274,5.0015-3.5264C34.6519,10.999,37,11.8086,37,14.5264v23.7802c0,0,0.2578,0.1543,0.3863-0.3216
-        c0.161-0.5962,2.0104-7.5495,2.0104-7.5495l5.9241-3.3789c1.4092-0.8037,3.1904-0.4961,4.248,0.7334
-        c0.5459,0.6338,0.8199,1.4219,0.8199,2.21c0,0.7412-0.2417,1.4834-0.729,2.0996l-15,19c-0.6426,0.8145-1.6226,1.2891-2.6597,1.2891
-        C30.9629,52.3887,29.9829,51.9141,29.3403,51.0996z"></path></g></svg>
-                                <a href="#{{ field.name }}">
-                                    {{ field.verbose_name|capfirst }}
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
+        </div>
+    </div>
 
-            <div class="text">
-                {% field_info translation|get_field:"specifieke_tekst" %}
-            </div>
+    <div class="content">
 
-            {% for field in section_fields %}
-                {% if field.value %}
-                    <div class="text" id="{{ field.name }}">
-                        <h2>{{ field.verbose_name|capfirst }}</h2>
-                        {% field_info field %}
-                    </div>
-                {% endif %}
+        <div class="content__language-wrapper" lang="{{ languages.0 }}">
+
+            <h1>{{ product.name }}</h1>
+
+            <div class="divider"></div>
+
+            {% for object in generieke_producten %}
+                <div class="generiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %} aria-hidden="true"{% endif %}>
+                    <p>{{ object.generieke_tekst | markdownify }}</p>
+                </div>
             {% endfor %}
+
+            {% for object in algemene_producten %}
+
+                <div class="algemeen" lang="{{ object.taal }}" {% if object.taal != languages.0 %} aria-hidden="true"{% endif %}>
+
+                    <h2> {% trans "Informatie van " %} {{ locale_overheid }}</h2>
+
+                    <div class="divider"></div>
+
+                    {% for field in object.template_fields %}
+
+                        {% if product.product_aanwezig == False and field.name == "product_aanwezig_toelichting" %}
+                            {% if field.configuration %}
+                                <h3><b>{{ field.configuration.0.0 }}</b></h3>
+                            {% else %}
+                                <h3><b>{{ field.verbose_name|capfirst }}</b></h3>
+                            {% endif %}
+                            <p>{% field_info field %}</p>
+                        {% endif %}
+
+                        {% if product.product_valt_onder and product.product_aanwezig != False and field.name == "product_valt_onder_toelichting" %}
+                            {% if field.configuration %}
+                            <h3><b>{{ field.configuration.0.0 }}</b></h3>
+                            {% else %}
+                            <h3><b>{{ field.verbose_name|capfirst }}</b></h3>
+                            {% endif %}
+                            <p>{% field_info field %}</p>
+                        {% endif %}
+
+                    {% endfor%}
+                </div>
+
+            {% endfor %}
+
+            {% if not product.product_valt_onder and product.product_aanwezig != False %}
+
+                {% for object in specifieke_producten %}
+
+                    <div class="specifiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %} aria-hidden="true"{% endif %}>
+
+                        {% if object.product_titel_decentraal %}
+                            <h3>{{ object.product_titel_decentraal }}</h3>
+
+                            <div class="divider"></div>
+
+                            <p>{{ object.specifieke_tekst | markdownify }}<br></p>
+
+                        {% endif %}
+
+                        {% for field in object.template_fields %}
+
+                            {% if field.configuration %}
+                            <h3><b>{{ field.configuration.0.0 }}</b></h3>
+                            {% else %}
+                            <h3><b>{{ field.verbose_name|capfirst }}</b></h3>
+                            {% endif %}
+                            <div class="divider"></div>
+                            <p>{% field_info field %}</p>
+
+                        {% endfor %}
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
         </div>
+
         <div class="right">
-            <div class="right__block">
-                <h3>Externe links</h3>
-                {% with links=translation|get_field:"verwijzing_links" %}
-                    {% for link in links.value %}
-                        <div class="right__block--link">
-                            <svg class="goIcon interfaceLink-icon" width="64px" height="64px" viewBox="0 0 64 64"><path d="M52.6,23.4249889 L49.1555976,20 L32.3,36.7611334 L15.4444024,20 L12,23.4249889 L32.3,43.6111111 L52.6,23.4249889" transform="translate(32.300000, 31.805556) rotate(-90.000000) translate(-32.300000, -31.805556) "></path></svg>
-                            <a href="{{ link.1 }}" target="_blank">{{ link.0 }}</a>
-                            <svg class="goIcon externalLinkIcon" x="0px" y="0px" width="64px" height="64px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" role="img" aria-label="Externe link"><path d="M34,7v5H48.5L28.2,32.2l3.6,3.6L52,15.5V30h5V7Zm9,35a5,5,0,0,1-5,5H22a5,5,0,0,1-5-5V26a5,5,0,0,1,5-5H33.8l5-5H22A10,10,0,0,0,12,26V42A10,10,0,0,0,22,52H38A10,10,0,0,0,48,42V25.2l-5,5Z" transform="translate(0 0)"></path></svg>
-                        </div>
-                    {% endfor %}
-                {% endwith %}
+            <div class="content__language-wrapper" lang="{{ languages.0 }}">
+                {% for object in generieke_producten %}
+                    <div class="generiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %} aria-hidden="true"{% endif %}>
+                        {% if object.verwijzing_links%}
+                            <h3>{% trans "zie ook" %}</h3>
+                            <ul>
+                                {% for item in object.verwijzing_links %}
+                                <li>
+                                    <a href="{{ item.1 }}" target="_blank">{{ item.0 }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        {% if object.datum_check %}
+                            {% trans "Laatst gecontroleerd op" %} {{ object.datum_check | date }}
+                        {% endif %}
+
+                        {% if object.verwijzing_links or object.datum_check %}
+                            <div class="divider"></div>
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
+
+                {% for object in specifieke_producten %}
+                    <div class="specifiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %} aria-hidden="true"{% endif %}>
+                        {% if object.verwijzing_links%}
+                            <h3>{% trans "zie ook" %}</h3>
+                            <ul>
+                                {% for item in object.verwijzing_links %}
+                                <li>
+                                    <a href="{{ item.1 }}" target="_blank">{{ item.0 }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        <h5>{% trans "Neem contact op met gemeente" %} {{ locale_overheid }}</h5>
+
+                        <table>
+                            <tr>
+                                <td>{% trans "website" %}</td>
+                                <td><a href="{{ locale_overheid.contact_website }}">{{ locale_overheid.contact_website }}</a></td>
+                            </tr>
+                            <tr>
+                                <td>{% trans "email" %}</td>
+                                <td>{{ locale_overheid.contact_emailadres }}</td>
+                            </tr>
+                            <tr>
+                                <td>{% trans "telefoon" %}</td>
+                                <td>{{ locale_overheid.contact_telefoonnummer }}</td>
+                            </tr>
+                        </table>
+
+                        <h4>{% trans "Waar kunt u dit product verkrijgen"%}</h4>
+
+                        {% if product.bevoegde_organisatie != locale_overheid and product.bevoegde_locaties %}
+                                {% trans "Uitgevoerd door" %} {{ product.bevoegde_organisatie }} <br>
+
+                                {% for locatie in bevoegde_locaties %}
+
+                                <div class="organisatie_info">
+
+                                    <div class="locatie">
+                                        <p>
+                                            {{ locatie.naam }} <br>
+                                            {{ locatie.straat }} {{ locatie.nummer }} <br>
+                                            {{ locatie.postcode }} {{ locatie.plaats }} <br>
+                                        </p>
+                                    </div>
+
+                                    {% trans "Openingstijden"%}: <br>
+
+                                    <div class="openingstijden">
+                                        <div class="openingstijd">
+                                            <label for="maandag">{% trans "maandag"%}:</label>
+                                            <div id="maandag">
+                                                {% if locatie.maandag %}
+                                                    {% for openingstijd in locatie.maandag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="dinsdag">{% trans "dinsdag"%}:</label>
+                                            <div id="dinsdag">
+                                                {% if locatie.dinsdag %}
+                                                    {% for openingstijd in locatie.dinsdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="woensdag">{% trans "woensdag"%}:</label>
+                                            <div id="woensdag">
+                                                {% if locatie.woensdag %}
+                                                    {% for openingstijd in locatie.woensdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="donderdag">{% trans "donderdag"%}:</label>
+                                            <div id="donderdag">
+                                                {% if locatie.donderdag %}
+                                                    {% for openingstijd in locatie.donderdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="vrijdag">{% trans "vrijdag"%}:</label>
+                                            <div id="vrijdag">
+                                                {% if locatie.vrijdag %}
+                                                    {% for openingstijd in locatie.vrijdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="zaterdag">{% trans "zaterdag"%}:</label>
+                                            <div id="zaterdag">
+                                                {% if locatie.zaterdag %}
+                                                    {% for openingstijd in locatie.zaterdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="zondag">{% trans "zondag"%}:</label>
+                                            <div id="zondag">
+                                                {% if locatie.zondag %}
+                                                    {% for openingstijd in locatie.zondag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                {% endfor %}
+
+                                {% if object.product_versie.publicatie_datum %}
+                                    <h5>{% trans "Laatst gewijzigd op" %} {{ object.product_versie.publicatie_datum }}</h5>
+                                {% else %}
+                                    <h5>{% trans "Concept" %}</h5>
+                                {% endif %}
+
+                        {% else %}
+                                <h5>{% trans "Uitgevoerd door" %} {{ product }}</h5>
+
+                                {% for locatie in locale_locaties %}
+
+                                <div class="organisatie_info">
+                                    <div class="locatie">
+                                        <p>
+                                            {{ locatie.naam }} <br>
+                                            {{ locatie.straat }} {{ locatie.nummer }} <br>
+                                            {{ locatie.postcode }} {{ locatie.plaats }} <br>
+                                        </p>
+                                    </div>
+
+                                    <div class="openingstijden">
+                                        <div class="openingstijd">
+                                            <label for="maandag">{% trans "maandag"%}:</label>
+                                            <div id="maandag">
+                                                {% if locatie.maandag %}
+                                                    {% for openingstijd in locatie.maandag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="dinsdag">{% trans "dinsdag"%}:</label>
+                                            <div id="dinsdag">
+                                                {% if locatie.dinsdag %}
+                                                    {% for openingstijd in locatie.dinsdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="woensdag">{% trans "woensdag"%}:</label>
+                                            <div id="woensdag">
+                                                {% if locatie.woensdag %}
+                                                    {% for openingstijd in locatie.woensdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="donderdag">{% trans "donderdag"%}:</label>
+                                            <div id="donderdag">
+                                                {% if locatie.donderdag %}
+                                                    {% for openingstijd in locatie.donderdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="vrijdag">{% trans "vrijdag"%}:</label>
+                                            <div id="vrijdag">
+                                                {% if locatie.vrijdag %}
+                                                    {% for openingstijd in locatie.vrijdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="zaterdag">{% trans "zaterdag"%}:</label>
+                                            <div id="zaterdag">
+                                                {% if locatie.zaterdag %}
+                                                    {% for openingstijd in locatie.zaterdag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+
+                                        <div class="openingstijd">
+                                            <label for="zondag">{% trans "zondag"%}:</label>
+                                            <div id="zondag">
+                                                {% if locatie.zondag %}
+                                                    {% for openingstijd in locatie.zondag %}
+                                                        {{ openingstijd }}<br>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    {% trans "gesloten" %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+
+                                {% if object.product_versie.publicatie_datum %}
+                                    <h5>{% trans "Laatst gewijzigd op" %} {{ object.product_versie.publicatie_datum }}</h5>
+                                {% else %}
+                                    <h5>{% trans "Concept" %}</h5>
+                                {% endif %}
+
+                        {% endif %}
+
+                    </div>
+                {% endfor %}
             </div>
         </div>
-    {% endwith %}
+
+    </div>
 </div>
-<div class="footer">
-</div>
-<div class="rainbow-line"></div>
+
 <script src="{% static 'js/mocks/kvk.js' %}"></script>
 </body>
 </html>
