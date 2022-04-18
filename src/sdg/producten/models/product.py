@@ -302,6 +302,17 @@ class Product(ProductFieldMixin, models.Model):
 
         return queryset[:quantity:step_slice]
 
+    def get_all_versions(self, active=False, exclude_concept=False, reverse_order=True):
+        """:returns: The versions for this product."""
+        queryset = self.versies.all().order_by("-versie")
+
+        if active:
+            queryset = queryset.filter(publicatie_datum__lte=date.today())
+        if exclude_concept:
+            queryset = queryset.exclude(publicatie_datum=None)
+
+        return queryset
+
     get_revision_list = partialmethod(get_latest_versions, reverse_order=False)
 
     class Meta:
