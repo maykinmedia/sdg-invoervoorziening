@@ -164,7 +164,7 @@ export class ReferenceTextComponent extends FormComponent {
         const inputOrTextarea = this.getInputOrTextarea();
         const referenceForm = this.getCurrentReferenceForm();
         const referenceField = referenceForm.content.getElementById(inputOrTextarea?.id);
-        return new showdown.Converter().makeHtml(referenceField?.value);
+        return new showdown.Converter({tables: true}).makeHtml(referenceField?.value);
     }
 
     /**

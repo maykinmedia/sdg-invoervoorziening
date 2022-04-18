@@ -179,10 +179,6 @@
       th {
         background: #0000000d;
       }
-
-      li {
-        list-style-type: none;
-      }
     }
 
     &--label {
@@ -216,7 +212,7 @@
       }
 
       li:before {
-        content: "—";
+        content: none;
       }
 
     }
