@@ -133,30 +133,13 @@ class ProductPreviewView(OverheidMixin, DetailView):
 
         return [nl, en]
 
-    def _get_bevoegde_locaties(self):
-        if self.object.bevoegde_organisatie:
-            return Lokatie.objects.filter(
-                lokale_overheid=self.object.bevoegde_organisatie.lokale_overheid
-            )
-
-        return []
-
-    def _get_lokale_locaties(self):
-        if self.object.catalogus.lokale_overheid:
-            return Lokatie.objects.filter(
-                lokale_overheid=self.object.catalogus.lokale_overheid
-            )
-
-        return []
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["languages"] = list(TaalChoices.labels.keys())
         context["product"] = self.object
         context["locale_overheid"] = self.object.catalogus.lokale_overheid
 
-        context["locale_locaties"] = self._get_lokale_locaties()
-        context["bevoegde_locaties"] = self._get_bevoegde_locaties()
+        context["product_locaties"] = self.object.locaties.all()
 
         context["generieke_producten"] = self._get_generieke_taal_producten()
         context["algemene_producten"] = self._get_algemene_taal_producten()
