@@ -108,8 +108,8 @@ def table_grid_field(field, **kwargs):
 
 
 @register.inclusion_tag("forms/table_row.html")
-def table_row(field, **kwargs):
-    return {**kwargs, "field": field}
+def table_row(products, **kwargs):
+    return {**kwargs, "products": products}
 
 
 @register.inclusion_tag("forms/select.html")

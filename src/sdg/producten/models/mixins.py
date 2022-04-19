@@ -26,10 +26,12 @@ class ProductFieldMixin(FieldConfigurationMixin):
             ),
         )
 
-    def get_fields(self) -> List[ProductFieldInfo]:
+    def get_fields(self, fields=None) -> List[ProductFieldInfo]:
         """Returns data for each field as a list of Field objects."""
-        all_fields = self.__class__._meta.fields
-        return [self._get_field(field) for field in all_fields]
+        if not fields:
+            fields = self.__class__._meta.fields
+
+        return [self._get_field(field) for field in fields]
 
     def get_field(self, field) -> ProductFieldInfo:
         """Returns data for a single field."""

@@ -108,6 +108,24 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
         return formset
 
+    def _get_generieke_taal_producten(self):
+        required_fields = [
+            "product_titel",
+            "generieke_tekst",
+            "datum_check",
+            "verwijzing_links",
+        ]
+        nl = self.product.generic_product.vertalingen.filter(taal="nl").first()
+        en = self.product.generic_product.vertalingen.filter(taal="en").first()
+
+        if nl:
+            setattr(nl, "template_fields", nl.get_fields(required_fields))
+
+        if en:
+            setattr(en, "template_fields", en.get_fields(required_fields))
+
+        return [nl, en]
+
     def get_lokale_overheid(self):
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
@@ -117,6 +135,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         generic_information = self.product.generic_product.vertalingen.all()
+
+        context["generic_products"] = self._get_generieke_taal_producten()
 
         context["languages"] = list(TaalChoices.labels.keys())
         context["product"] = self.product

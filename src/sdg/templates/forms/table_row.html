@@ -2,22 +2,37 @@
 {% load utils %}
 {% load producten %}
 
-{% with configuration=field.configuration.0 %}
-    <tr>
-        <td class="tabs__table-cell">{{ configuration.0|default:field.verbose_name|capfirst }}<i
-            class="fas fa-info-circle fa-xs dark"
-            title="{{ configuration.1|default:field.help_text }}"></i>
-        </td>
-        <td class="tabs__table-cell">
-        <span class="tabs__table-cell--value">
-            {% if url %}
-                <a href="{{ url }}" target="_blank">
+{% for product in products %}
+<div class="form__language-wrapper" lang="{{ product.taal }}">
+    {% for field in product.template_fields %}
+
+    <div class="form__control"{% if product.taal != languages.0 %} aria-hidden="true"{% endif %} lang="{{ product.taal }}">
+
+        <header class="form__control-header">
+            {# Label with icon. #}
+            <label class="form__label">
+                {% if field.configuration %}
+                {{ field.configuration.0.0 }}
+                {% else %}
+                {{ field.verbose_name|capfirst }}
+                {% endif %}
+                <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+            </label>
+        </header>
+        {#  Form control body. #}
+        <div class="form__control-body" lang="{{ product.taal }}">
+            {# Field. #}
+            <div class="tabs__table-cell--value">
+                {% if field.name == "product_titel" and product.landelijke_link %}
+                <a href="{{ product.landelijke_link }}" target="_blank">
                     {% field_info field %}
                 </a>
-            {% else %}
-                {% field_info field %}
-            {% endif %}
-        </span>
-        </td>
-    </tr>
-{% endwith %}
+                {% else %}
+                    {% field_info field %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endfor %}
