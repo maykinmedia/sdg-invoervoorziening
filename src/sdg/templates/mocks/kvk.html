@@ -1,8 +1,5 @@
 {% load static producten %}
-{% load i18n %}
-{% load markdownify %}
-{% load producten %}
-{% load static %}
+{% load i18n markdownify producten static %}
 
 {% load static hijack_tags %}<!DOCTYPE html>
 <html lang="en">
@@ -242,102 +239,35 @@
                                             </p>
                                         </div>
 
-                                        {% trans "Openingstijden"%}: <br>
-
                                         <div class="openingstijden">
                                             <div class="openingstijd">
-                                                <label for="maandag">{% trans "maandag"%}:</label>
-                                                <div id="maandag">
-                                                    {% if locatie.maandag %}
-                                                        {% for openingstijd in locatie.maandag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="dinsdag">{% trans "dinsdag"%}:</label>
-                                                <div id="dinsdag">
-                                                    {% if locatie.dinsdag %}
-                                                        {% for openingstijd in locatie.dinsdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="woensdag">{% trans "woensdag"%}:</label>
-                                                <div id="woensdag">
-                                                    {% if locatie.woensdag %}
-                                                        {% for openingstijd in locatie.woensdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="donderdag">{% trans "donderdag"%}:</label>
-                                                <div id="donderdag">
-                                                    {% if locatie.donderdag %}
-                                                        {% for openingstijd in locatie.donderdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="vrijdag">{% trans "vrijdag"%}:</label>
-                                                <div id="vrijdag">
-                                                    {% if locatie.vrijdag %}
-                                                        {% for openingstijd in locatie.vrijdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="zaterdag">{% trans "zaterdag"%}:</label>
-                                                <div id="zaterdag">
-                                                    {% if locatie.zaterdag %}
-                                                        {% for openingstijd in locatie.zaterdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="zondag">{% trans "zondag"%}:</label>
-                                                <div id="zondag">
-                                                    {% if locatie.zondag %}
-                                                        {% for openingstijd in locatie.zondag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
+                                                {% trans "Openingstijden"%}: <br>
+                                                <table>
+                                                    {% for day in days %}
+                                                    <tr>
+                                                        <td class="content-top">
+                                                            <span>
+                                                                {% trans day %}
+                                                            </span>
+                                                        </td>
+                                                        <td class="content-top">
+                                                        {% if locatie|get:day %}
+                                                            {% for openingstijd in locatie|get:day %}
+                                                                {{ openingstijd }} {% trans "uur" %}<br>
+                                                            {% endfor %}
+                                                            {% else %}
+                                                                {% trans "gesloten" %}
+                                                        {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
                                             </div>
                                         </div>
 
                                     </div>
+
+                                    <small>{{ locatie.openingstijden_opmerking }}</small>
 
                                     {% endfor %}
 
@@ -363,99 +293,33 @@
 
                                         <div class="openingstijden">
                                             <div class="openingstijd">
-                                                <label for="maandag">{% trans "maandag"%}:</label>
-                                                <div id="maandag">
-                                                    {% if locatie.maandag %}
-                                                        {% for openingstijd in locatie.maandag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="dinsdag">{% trans "dinsdag"%}:</label>
-                                                <div id="dinsdag">
-                                                    {% if locatie.dinsdag %}
-                                                        {% for openingstijd in locatie.dinsdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="woensdag">{% trans "woensdag"%}:</label>
-                                                <div id="woensdag">
-                                                    {% if locatie.woensdag %}
-                                                        {% for openingstijd in locatie.woensdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="donderdag">{% trans "donderdag"%}:</label>
-                                                <div id="donderdag">
-                                                    {% if locatie.donderdag %}
-                                                        {% for openingstijd in locatie.donderdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="vrijdag">{% trans "vrijdag"%}:</label>
-                                                <div id="vrijdag">
-                                                    {% if locatie.vrijdag %}
-                                                        {% for openingstijd in locatie.vrijdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="zaterdag">{% trans "zaterdag"%}:</label>
-                                                <div id="zaterdag">
-                                                    {% if locatie.zaterdag %}
-                                                        {% for openingstijd in locatie.zaterdag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
-                                            </div>
-
-                                            <div class="openingstijd">
-                                                <label for="zondag">{% trans "zondag"%}:</label>
-                                                <div id="zondag">
-                                                    {% if locatie.zondag %}
-                                                        {% for openingstijd in locatie.zondag %}
-                                                            {{ openingstijd }}<br>
-                                                        {% endfor %}
-                                                    {% else %}
-                                                        {% trans "gesloten" %}
-                                                    {% endif %}
-                                                </div>
+                                                {% trans "Openingstijden"%}: <br>
+                                                <table>
+                                                    {% for day in days %}
+                                                    <tr>
+                                                        <td class="content-top">
+                                                            <span>
+                                                                {% trans day %}
+                                                            </span>
+                                                        </td>
+                                                        <td class="content-top">
+                                                        {% if locatie|get:day %}
+                                                            {% for openingstijd in locatie|get:day %}
+                                                                {{ openingstijd }} {% trans "uur" %}<br>
+                                                            {% endfor %}
+                                                            {% else %}
+                                                                {% trans "gesloten" %}
+                                                        {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </table>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    {% endfor %}
+                                        <small>{{ locatie.openingstijden_opmerking }}</small>
+
+                                        {% endfor %}
 
                                     {% if object.product_versie.publicatie_datum %}
                                         <h5>{% trans "Laatst gewijzigd op" %} {{ object.product_versie.publicatie_datum }}</h5>

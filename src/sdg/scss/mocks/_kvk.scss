@@ -99,6 +99,15 @@ $kvk_primary: #01689b;
         .openingstijd div{
           margin-left: 5px;
         }
+
+        table {
+          padding: 0px;
+        }
+
+        table, tr, td, .content-top {
+          vertical-align: top;
+          padding-right: 10px;
+        }
       }
     }
 

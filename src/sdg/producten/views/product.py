@@ -162,6 +162,16 @@ class ProductPreviewView(OverheidMixin, DetailView):
         context["algemene_producten"] = self._get_algemene_taal_producten()
         context["specifieke_producten"] = self._get_specifieke_taal_producten()
 
+        context["days"] = [
+            "maandag",
+            "dinsdag",
+            "woensdag",
+            "donderdag",
+            "vrijdag",
+            "zaterdag",
+            "zondag",
+        ]
+
         return context
 
 
