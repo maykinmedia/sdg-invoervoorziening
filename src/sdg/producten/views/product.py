@@ -279,8 +279,6 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "uiterste_termijn",
             "wtd_bij_geen_reactie",
             "decentrale_procedure_link",
-            "product_valt_onder_toelichting",
-            "product_aanwezig_toelichting",
         ]
         return context
 
