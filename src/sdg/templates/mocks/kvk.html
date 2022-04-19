@@ -47,15 +47,18 @@
 
         <div class="content__language-wrapper" lang="{{ languages.0 }}">
 
-            <h1>{{ product.name }}</h1>
-
-            <div class="divider"></div>
-
                 {% for object in generieke_producten %}
                 <div class="generiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %} aria-hidden="true"
                     {% endif %}>
                     <div class="tabs tabs--inline">
                         <table class="tabs__table">
+                            <thead>
+                                <tr>
+                                    <td class="tabs__table-cell">
+                                        <h1>{{ object.product_titel }}</h1>
+                                    </td>
+                                </tr>
+                            </thead>
                             <tbody class="tabs__table-body">
                                 <tr>
                                     <td class="tabs__table-cell">
