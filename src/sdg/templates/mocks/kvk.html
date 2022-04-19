@@ -51,24 +51,24 @@
 
             <div class="divider"></div>
 
-            <div class="tabs tabs--inline">
                 {% for object in generieke_producten %}
                 <div class="generiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %} aria-hidden="true"
                     {% endif %}>
-                    <table class="tabs__table">
-                        <tbody class="tabs__table-body">
-                            <tr>
-                                <td class="tabs__table-cell">
-                                    <span class="tabs__table-cell--value">
-                                        {{ object.generieke_tekst | markdownify }}
-                                    </span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="tabs tabs--inline">
+                        <table class="tabs__table">
+                            <tbody class="tabs__table-body">
+                                <tr>
+                                    <td class="tabs__table-cell">
+                                        <span class="tabs__table-cell--value">
+                                            {{ object.generieke_tekst | markdownify }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 {% endfor %}
-            </div>
 
             {% for object in algemene_producten %}
 
