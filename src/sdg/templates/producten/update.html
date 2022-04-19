@@ -163,6 +163,29 @@
 
 
                     <div class="toolbar global-language-switch">
+                        <p>
+                            {% trans "Toon voorbeeld" %}:
+                            {% if product.active_version %}
+                            <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
+                                class="preview"
+                                target="_blank">
+                                {% trans "Huidige gepubliceerde tekst" %}
+                            </a>
+                            {% endif %}
+
+                            {% if product.active_version and not product.most_recent_version.publicatie_datum %}
+                            |
+                            {% endif %}
+
+                            {% if not product.most_recent_version.publicatie_datum %}
+                            <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept"
+                                class="preview"
+                                target="_blank">
+                                {% trans "Concept Tekst" %}
+                            </a>
+                            {% endif %}
+                        </p>
+
                         {# (Global) language selectors. #}
                         <div class="button-group">
                         </div>

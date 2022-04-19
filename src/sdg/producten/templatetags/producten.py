@@ -14,6 +14,14 @@ def get_field(instance, field_name):
 
 
 @register.filter
+def get(instance, field_name):
+    if not instance:
+        return None
+
+    return getattr(instance, field_name)
+
+
+@register.filter
 def value(field):
     return field.value
 

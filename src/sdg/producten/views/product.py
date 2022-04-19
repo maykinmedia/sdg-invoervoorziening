@@ -11,6 +11,7 @@ from django.views.generic import DetailView, UpdateView
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
+from sdg.organisaties.models import Lokatie
 from sdg.producten.forms import (
     LocalizedProductForm,
     LocalizedProductFormSet,
@@ -27,31 +28,150 @@ class ProductPreviewView(OverheidMixin, DetailView):
     pk_url_kwarg = "product_pk"
     required_roles = ["is_beheerder", "is_redacteur"]
 
+    def is_concept(self):
+        if self.request.GET.get("status", "") == "concept":
+            return True
+
+        return False
+
     def get_queryset(self):
-        return (
-            Product.objects.select_related("catalogus__lokale_overheid")
-            .prefetch_related(
-                "locaties",
-                Prefetch("referentie_product", queryset=Product.objects.most_recent()),
+        if self.is_concept():
+            return (
+                Product.objects.select_related("catalogus__lokale_overheid")
+                .prefetch_related(
+                    "locaties",
+                    Prefetch(
+                        "referentie_product", queryset=Product.objects.most_recent()
+                    ),
+                )
+                .most_recent()
+                .active()
             )
-            .most_recent()
-            .active()
-        )
+        else:
+            return (
+                Product.objects.select_related("catalogus__lokale_overheid")
+                .prefetch_related(
+                    "locaties",
+                    Prefetch("referentie_product", queryset=Product.objects.active()),
+                )
+                .active()
+            )
 
     def get_lokale_overheid(self):
         self.object = self.get_object()
+
+        if self.is_concept():
+            self.lokale_overheid = (
+                self.object.most_recent_version.product.catalogus.lokale_overheid
+            )
+        else:
+            self.lokale_overheid = (
+                self.object.active_version.product.catalogus.lokale_overheid
+            )
+
         self.lokale_overheid = self.object.catalogus.lokale_overheid
+
         return self.lokale_overheid
 
-    def get(self, request, *args, **kwargs):
-        context = self.get_context_data(object=self.object)
-        context["lokaleoverheid"] = self.lokale_overheid
-        return self.render_to_response(context)
+    def _get_generieke_taal_producten(self):
+        required_fields = ["verwijzing_links", "datum_check"]
+
+        nl = self.object.generic_product.vertalingen.filter(taal="nl").first()
+        en = self.object.generic_product.vertalingen.filter(taal="en").first()
+
+        if nl:
+            setattr(nl, "template_fields", nl.get_fields(required_fields))
+
+        if en:
+            setattr(en, "template_fields", en.get_fields(required_fields))
+
+        return [nl, en]
+
+    def _get_algemene_taal_producten(self):
+        required_fields = [
+            "product_aanwezig_toelichting",
+            "product_valt_onder_toelichting",
+        ]
+        if self.is_concept():
+            nl = self.object.most_recent_version.vertalingen.filter(taal="nl").first()
+            en = self.object.most_recent_version.vertalingen.filter(taal="en").first()
+        else:
+            nl = self.object.active_version.vertalingen.filter(taal="nl").first()
+            en = self.object.active_version.vertalingen.filter(taal="en").first()
+
+        if nl:
+            setattr(nl, "template_fields", nl.get_fields(required_fields))
+
+        if en:
+            setattr(en, "template_fields", en.get_fields(required_fields))
+
+        return [nl, en]
+
+    def _get_specifieke_taal_producten(self):
+        required_fields = [
+            "vereisten",
+            "bewijs",
+            "procedure_beschrijving",
+            "kosten_en_betaalmethoden",
+            "uiterste_termijn",
+            "bezwaar_en_beroep",
+            "wtd_bij_geen_reactie",
+        ]
+
+        if self.is_concept():
+            nl = self.object.most_recent_version.vertalingen.filter(taal="nl").first()
+            en = self.object.most_recent_version.vertalingen.filter(taal="en").first()
+        else:
+            nl = self.object.active_version.vertalingen.filter(taal="nl").first()
+            en = self.object.active_version.vertalingen.filter(taal="en").first()
+
+        if nl:
+            setattr(nl, "template_fields", nl.get_fields(required_fields))
+
+        if en:
+            setattr(en, "template_fields", en.get_fields(required_fields))
+
+        return [nl, en]
+
+    def _get_bevoegde_locaties(self):
+        if self.object.bevoegde_organisatie:
+            return Lokatie.objects.filter(
+                lokale_overheid=self.object.bevoegde_organisatie.lokale_overheid
+            )
+
+        return []
+
+    def _get_lokale_locaties(self):
+        if self.object.catalogus.lokale_overheid:
+            return Lokatie.objects.filter(
+                lokale_overheid=self.object.catalogus.lokale_overheid
+            )
+
+        return []
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        taal = self.request.GET.get("taal", "nl")
-        context["translation"] = self.object.active_version.vertalingen.get(taal=taal)
+        context["languages"] = list(TaalChoices.labels.keys())
+        context["product"] = self.object
+        context["locale_overheid"] = self.object.catalogus.lokale_overheid
+
+        context["locale_locaties"] = self._get_lokale_locaties()
+        context["bevoegde_locaties"] = self._get_bevoegde_locaties()
+
+        context["generieke_producten"] = self._get_generieke_taal_producten()
+        context["algemene_producten"] = self._get_algemene_taal_producten()
+        context["specifieke_producten"] = self._get_specifieke_taal_producten()
+
+        context["days"] = [
+            "maandag",
+            "dinsdag",
+            "woensdag",
+            "donderdag",
+            "vrijdag",
+            "zaterdag",
+            "zondag",
+        ]
+
         return context
 
 
