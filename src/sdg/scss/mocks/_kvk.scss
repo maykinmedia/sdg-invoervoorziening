@@ -25,7 +25,7 @@ $kvk_primary: #01689b;
   .navbar {
     background-color: $kvk_primary;
     min-height: 55px;
-    padding: 8px 84px;
+    padding: 12px 60px;
 
     display: flex;
     flex-direction: row;
@@ -37,8 +37,7 @@ $kvk_primary: #01689b;
     column-gap: 20px;
 
       &__link {
-        padding: 8px 84px;
-        font-size: 25px;
+        padding: 12px 0;
 
         a {
           color: #fff;
@@ -48,9 +47,6 @@ $kvk_primary: #01689b;
       }
 
       &__button {
-        padding: 8px 84px;
-        font-size: 25px;
-
         button {
           color: #fff;
           --label-color: #fff;
