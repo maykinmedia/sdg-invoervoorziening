@@ -264,6 +264,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "product_form", ProductForm(instance=self.product)
         )
 
+        context["history"] = self.product.get_all_versions()
+
         # FIXME: Optimize?
         context["localized_form_fields"] = [
             "product_titel_decentraal",
