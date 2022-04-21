@@ -112,20 +112,23 @@
                 {% endif %}>
 
                 <div class="tabs tabs--inline">
-                    {% if object.product_titel_decentraal %}
                     <div class="tabs__table">
                         <div class="tabs__table-body">
-                            <h3>{{ object.product_titel_decentraal }}</h3>
+                            {% if object.product_titel_decentraal %}
+                                <h3>{{ object.product_titel_decentraal }}</h3>
+                            {% endif %}
 
-                            <div class="divider"></div>
+                            {% if object.product_titel_decentraal and object.specifieke_tekst %}
+                                <div class="divider"></div>
+                            {% endif %}
 
-                            <div class="tabs__table-cell">
-                                <span class="tabs__table-cell--value">{{ object.specifieke_tekst | markdownify }}</span>
-                            </div>
+                            {% if object.specifieke_tekst %}
+                                <div class="tabs__table-cell">
+                                    <span class="tabs__table-cell--value">{{ object.specifieke_tekst | markdownify }}</span>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-
-                    {% endif %}
 
                     {% for field in object.template_fields %}
                     <div class="tabs__table">
