@@ -179,10 +179,6 @@
       th {
         background: #0000000d;
       }
-
-      li {
-        list-style-type: none;
-      }
     }
 
     &--label {
@@ -205,7 +201,7 @@
 
     ol {
       li {
-        margin-left: 16px;
+        margin: 5px 0px 5px 16px;
       }
     }
 
@@ -213,6 +209,7 @@
 
       li {
         list-style-type: none;
+        margin: 5px 0px 5px 0px;
       }
 
       li:before {
