@@ -51,6 +51,8 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                     "localizedproduct_uiterste_termijn",
                     "localizedproduct_wtd_bij_geen_reactie",
                     "localizedproduct_decentrale_procedure_link",
+                    "localizedproduct_product_valt_onder_toelichting",
+                    "localizedproduct_product_aanwezig_toelichting",
                 ],
             },
         ),

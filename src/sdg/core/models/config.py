@@ -103,6 +103,9 @@ class ProductFieldConfiguration(SingletonModel):
     localizedproduct_product_valt_onder_toelichting = LabeledTooltipField(
         verbose_name=_("Specifieke product valt onder toelichting"),
     )
+    localizedproduct_product_aanwezig_toelichting = LabeledTooltipField(
+        verbose_name=_("Algemene aanwezigheid toelichting"),
+    )
 
     def for_field(self, prefix, name):
         return getattr(self, "{}_{}".format(prefix, name), None)
