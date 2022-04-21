@@ -2,6 +2,19 @@
 Change history
 ==============
 
+1.1.2
+=====
+
+*April 21, 2022*
+
+* [#519] Fixed incorrect lock-icon shown on locations.
+* [#534] Fixed bullet styling
+* [#557] Fixed admin field config
+* [#538, #541] Fixed Firefox issues
+* [#553] Added history tab on the edit page
+* [#579] Added title and specific texts to preview if provided
+
+
 1.1.1
 =====
 
@@ -10,6 +23,7 @@ Change history
 * [#418] Added preview functions
 * [#562] Removed unaccessible menu items.
 * Various textual changes
+
 
 1.1.0
 =====
