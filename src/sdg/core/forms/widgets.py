@@ -19,6 +19,11 @@ class DynamicArrayWidget(forms.TextInput):
         id_ = context["widget"]["attrs"].get("id")
         context["widget"]["is_none"] = value is None
 
+        context["lockable"] = False
+        if attrs.get("class"):
+            if attrs["class"].__contains__("lockable"):
+                context["lockable"] = True
+
         if getattr(self.subwidget_form, "chunk", False):
             context["widget"]["value"] = self.subwidget_form.chunk(
                 context["widget"]["value"], 2
