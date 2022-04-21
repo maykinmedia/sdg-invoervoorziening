@@ -30,8 +30,12 @@
     margin: 0 4px;
   }
 
-  &__language-switch .svg-inline--fa {
-    color: $color_red!important;
+  &__language-switch {
+    white-space: nowrap;
+
+    .svg-inline--fa {
+      color: $color_red!important;
+    }
   }
 
   &__control-body {
