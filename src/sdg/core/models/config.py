@@ -29,9 +29,6 @@ class ProductFieldConfiguration(SingletonModel):
     product_product_aanwezig = LabeledTooltipField(
         verbose_name=_("Algemene aanwezigheid"),
     )
-    product_product_aanwezig_toelichting = LabeledTooltipField(
-        verbose_name=_("Algemene aanwezigheid toelichting"),
-    )
     product_product_valt_onder = LabeledTooltipField(
         verbose_name=_("Algemene valt onder"),
     )
@@ -105,6 +102,9 @@ class ProductFieldConfiguration(SingletonModel):
     )
     localizedproduct_product_valt_onder_toelichting = LabeledTooltipField(
         verbose_name=_("Specifieke product valt onder toelichting"),
+    )
+    localizedproduct_product_aanwezig_toelichting = LabeledTooltipField(
+        verbose_name=_("Algemene aanwezigheid toelichting"),
     )
 
     def for_field(self, prefix, name):
