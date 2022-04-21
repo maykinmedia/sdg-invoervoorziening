@@ -23,10 +23,22 @@
   }
 
   &--sticky-b {
-    backdrop-filter: blur(var(--sticky-blur));
     position: sticky;
     bottom: 0;
     z-index: 100;
+  }
+
+  @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    &--sticky-b {
+      -webkit-backdrop-filter: blur(var(--sticky-blur));
+      backdrop-filter: blur(var(--sticky-blur));
+    }
+  }
+  /* slightly transparent fallback for Firefox (not supporting backdrop-filter) */
+  @supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+    &--sticky-b {
+      background-color: rgba(244, 244, 244, .8);
+    }
   }
 
   &--column {
