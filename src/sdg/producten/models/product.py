@@ -139,7 +139,7 @@ class Product(ProductFieldMixin, models.Model):
     referentie_product = models.ForeignKey(
         "self",
         related_name="specifieke_producten",
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         verbose_name=_("referentie product"),
         help_text=_(
             "Een referentie naar een product. "
