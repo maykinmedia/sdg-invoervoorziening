@@ -1,4 +1,6 @@
 import Diff from 'text-diff';
+import showdown from 'showdown';
+
 import {ReferenceTextComponent} from './abstract/reference_text_component';
 
 
@@ -30,7 +32,8 @@ class ReferenceDiffButton extends ReferenceTextComponent {
 
         const diff = new Diff();
         const textDiff = diff.main(previousVersionValue, currentVersionValue);
-        return diff.prettyHtml(textDiff).replace(/\\/g, '');
+        const prettyHtml =  diff.prettyHtml(textDiff).replace(/<\/?span[^>]*>/g,"").replace(/<br\/>/g, "\n");
+        return new showdown.Converter({tables: true}).makeHtml(prettyHtml);
     }
 
     /**
