@@ -130,7 +130,7 @@ class Product(ProductFieldMixin, models.Model):
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
         related_name="producten",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name=_("generiek product"),
         help_text=_("Het generiek product voor het referentieproduct."),
         blank=True,
@@ -139,7 +139,7 @@ class Product(ProductFieldMixin, models.Model):
     referentie_product = models.ForeignKey(
         "self",
         related_name="specifieke_producten",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         verbose_name=_("referentie product"),
         help_text=_(
             "Een referentie naar een product. "

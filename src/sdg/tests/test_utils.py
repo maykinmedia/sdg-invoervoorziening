@@ -1,3 +1,5 @@
+from unittest import skip
+
 from django.test import TestCase
 
 from sdg.core.utils import get_from_cache
@@ -19,6 +21,9 @@ class UtilsTests(TestCase):
             result, product.referentie_product.generiek_product.upn.upn_label
         )
 
+    @skip(
+        "This test can no longer run since a product needs to be either a reference product, or a generic product"
+    )
     def test_get_from_cache_none_value_recursion_error(self):
         """
         This test that cached properties correctly differentiate between no

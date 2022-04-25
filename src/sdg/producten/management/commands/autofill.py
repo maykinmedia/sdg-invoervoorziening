@@ -3,6 +3,7 @@ from django.db.models import Count
 
 from sdg.core.constants import TaalChoices
 from sdg.core.models import ProductenCatalogus, UniformeProductnaam
+from sdg.organisaties.models import BevoegdeOrganisatie
 from sdg.producten.models import (
     GeneriekProduct,
     LocalizedGeneriekProduct,
@@ -46,6 +47,17 @@ class Command(BaseCommand):
             active_fields = upn.get_active_fields()
 
             for catalog, autofill_fields in catalogs:
+
+                default_auth_org = BevoegdeOrganisatie.objects.filter(
+                    lokale_overheid=catalog.lokale_overheid
+                ).first()
+                # Fix missing default authorized organisation.
+                if default_auth_org is None:
+                    default_auth_org = BevoegdeOrganisatie.objects.create(
+                        lokale_overheid=catalog.lokale_overheid,
+                        organisatie=catalog.lokale_overheid.organisatie,
+                    )
+
                 if all(f in active_fields for f in autofill_fields):
                     # Typically, there is only 1 generic product but there
                     # could be more if they were manually added.
@@ -56,7 +68,9 @@ class Command(BaseCommand):
                         # changed, or a new catalog was added, we need to update
                         # their products as well.
                         product, p_created = Product.objects.get_or_create(
-                            generiek_product=generic_product, catalogus=catalog
+                            generiek_product=generic_product,
+                            catalogus=catalog,
+                            defaults={"bevoegde_organisatie": default_auth_org},
                         )
                         if p_created:
                             version = ProductVersie.objects.create(

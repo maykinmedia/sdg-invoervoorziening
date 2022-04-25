@@ -103,6 +103,13 @@ class Command(BaseCommand):
                         lokale_overheid=catalog.lokale_overheid
                     ).first()
 
+                    # Fix missing default authorized organisation.
+                    if default_auth_org is None:
+                        default_auth_org = BevoegdeOrganisatie.objects.create(
+                            lokale_overheid=catalog.lokale_overheid,
+                            organisatie=catalog.lokale_overheid.organisatie,
+                        )
+
                     # If it doesn't exist yet, create a (specific) product in
                     # this (specific) catalog.
                     product, is_created = Product.objects.get_or_create(
