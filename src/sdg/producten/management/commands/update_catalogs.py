@@ -28,6 +28,11 @@ class Command(BaseCommand):
             local_government = LokaleOverheid.objects.filter(
                 organisatie__owms_pref_label__iexact=_org_param
             ).first()
+
+            if local_government is None:
+                self.stderr.write(f"Cannot find organisation: {_org_param}")
+                return
+
             self.stdout.write(f"Filtering on organisation: {local_government}")
 
             product_catalog_query_kwargs.update({"lokale_overheid": local_government})
@@ -37,11 +42,11 @@ class Command(BaseCommand):
         # Create catalogs, based on reference catalogs, for each local
         # government.
         for local_government in LokaleOverheid.objects.filter(
-            automatisch_catalogus_aanmaken=True
+            automatisch_catalogus_aanmaken=True, organisatie__owms_end_date=None
         ):
             # Create a specific catalog (if it doesn't exist) for each reference catalog.
             for reference_catalog in ProductenCatalogus.objects.filter(
-                is_referentie_catalogus=True, **product_catalog_query_kwargs
+                is_referentie_catalogus=True
             ):
                 catalog, is_created = ProductenCatalogus.objects.get_or_create(
                     referentie_catalogus=reference_catalog,
