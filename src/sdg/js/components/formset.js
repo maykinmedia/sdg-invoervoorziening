@@ -66,10 +66,12 @@ class Formset {
      */
     setUpRemoveFormForElement(el) {
         const removeButton = BEM.getChildBEMNode(el, BLOCK_FORMSET, ELEMENT_REMOVE);
-        removeButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.removeForm(e);
-        });
+        if (removeButton != null) {
+            removeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.removeForm(e);
+            });
+        }
     }
 
     /**
