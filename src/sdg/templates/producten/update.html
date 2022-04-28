@@ -45,7 +45,7 @@
     {{ form.management_form }}
     {{ product_form.non_field_errors }}
     <div class="tabs tabs--inline-outer">
-        <table class="tabs__table form__general">
+        <table class="tabs__table form__general {% if product.product_aanwezig == None %} tabs__table--hidden form__history--hidden {% endif %}">
             <thead class="bem-toggle" data-toggle-target=".form__general" data-toggle-modifier="hidden">
                 <tr>
                     <th class="tabs__table-header" width="25%">
