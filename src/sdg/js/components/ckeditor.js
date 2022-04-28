@@ -12,6 +12,8 @@ import ParagraphPlugin from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import MarkdownPlugin from '@ckeditor/ckeditor5-markdown-gfm/src/markdown';
 import Table from '@ckeditor/ckeditor5-table/src/table';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
+import Indent from '@ckeditor/ckeditor5-indent/src/indent'
+import IndentBlock from '@ckeditor/ckeditor5-indent/src/indentblock'
 
 export default class ClassicEditor extends ClassicEditorBase {
 }
@@ -30,6 +32,8 @@ ClassicEditor.builtinPlugins = [
     ParagraphPlugin,
     Table,
     TableToolbar,
+    Indent,
+    IndentBlock
 ];
 
 ClassicEditor.defaultConfig = {
@@ -51,6 +55,8 @@ ClassicEditor.defaultConfig = {
             'numberedList',
             'insertTable',
             'blockQuote',
+            'outdent',
+            'indent',
             'undo',
             'redo',
         ]
