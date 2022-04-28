@@ -16,7 +16,7 @@
                 {% else %}
                 {{ field.verbose_name|capfirst }}
                 {% endif %}
-                <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                <i class="fas fa-info-circle fa-xs dark" title="{{ field.configuration.0.1|default:field.help_text }}"></i>
             </label>
         </header>
         {#  Form control body. #}
