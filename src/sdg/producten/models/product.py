@@ -320,10 +320,7 @@ class Product(ProductFieldMixin, models.Model):
         verbose_name_plural = _("producten")
 
     def __str__(self):
-        if self.is_referentie_product:  # TODO: remove
-            return f"{self.name} (referentie)"
-        else:
-            return f"{self.name}"
+        return f"{self.name}"
 
     def get_absolute_url(self):
         return reverse(
