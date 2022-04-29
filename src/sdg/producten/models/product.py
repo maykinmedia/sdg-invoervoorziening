@@ -139,7 +139,7 @@ class Product(ProductFieldMixin, models.Model):
     referentie_product = models.ForeignKey(
         "self",
         related_name="specifieke_producten",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         verbose_name=_("referentie product"),
         help_text=_(
             "Een referentie naar een product. "
@@ -187,12 +187,10 @@ class Product(ProductFieldMixin, models.Model):
     )
     bevoegde_organisatie = models.ForeignKey(
         "organisaties.BevoegdeOrganisatie",
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         verbose_name=_("bevoegde organisatie"),
         related_name="producten",
         help_text=_("De bevoegde organisatie van de producten."),
-        blank=True,
-        null=True,
     )
 
     objects = ProductQuerySet.as_manager()
@@ -318,6 +316,19 @@ class Product(ProductFieldMixin, models.Model):
     class Meta:
         verbose_name = _("product")
         verbose_name_plural = _("producten")
+        constraints = [
+            models.CheckConstraint(
+                check=(
+                    Q(generiek_product__isnull=False)
+                    & Q(referentie_product__isnull=True)
+                )
+                | (
+                    Q(generiek_product__isnull=True)
+                    & Q(referentie_product__isnull=False)
+                ),
+                name="generic_or_reference",
+            )
+        ]
 
     def __str__(self):
         if self.is_referentie_product:  # TODO: remove

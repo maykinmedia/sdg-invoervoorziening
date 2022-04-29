@@ -105,12 +105,11 @@ class ProductAdmin(admin.ModelAdmin):
         "is_referentie",
         "lokale_overheid",
         "catalogus",
-        "referentie_product",
         "generic_product",
     )
     list_filter = (
-        "catalogus__lokale_overheid",
         IsReferenceProductFilter,
+        "catalogus__lokale_overheid",
     )
     inlines = (ProductVersieInlineAdmin,)
     autocomplete_fields = (

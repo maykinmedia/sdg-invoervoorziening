@@ -4,7 +4,7 @@
 {% block page_title %}{% trans "Bevoegde organisaties" %}{% endblock %}
 {% block page_intro %}
     <p class="subheading">
-        {% trans "Je kan hier alle bevoegde organisaties opgeven. Bij elk product kan je vervolgens een bevoegde organisatie selecteren uit deze lijst." %}
+        {% trans "Je kan hier extra bevoegde organisaties opgeven. De verantwoordelijke organisatie is standaard ook de bevoegde organisatie. Bij elk product kan je vervolgens een bevoegde organisatie selecteren uit deze lijst." %}
     </p>
 {% endblock %}
 
@@ -18,30 +18,45 @@
             </div>
             <div class="formset__body">
                 {% for subform in form %}
-                    <div class="form__subforms">
-                        {% for hidden in subform.hidden_fields %}
-                            {{ hidden }}
-                        {% endfor %}
-                        {{ subform.DELETE|addclass:"hidden" }}
-                        <h3 class="form__subtitle">
-                            <span>{% trans "Organisatie" %} {{ forloop.counter }}</span>
-                            <a class="formset__remove" href="#">
-                                <i class="far fa-trash-alt"></i>
-                                {% trans "Organisatie verwijderen" %}
-                            </a>
-                        </h3>
-                        <div class="form__block-group">
-                            <div>
-                                <div class="form__table-header-left">{% trans "Organisatie" %}</div>
-                                {% choices_field subform.organisatie %}
-                                {% checkbox subform.staat_niet_in_de_lijst %}
-                            </div>
-                            <div>
-                                <div class="form__table-header-left"></div>
-                                {% field subform.naam hidden=True %}
+
+                    {% if subform.instance.organisatie == lokaleoverheid.organisatie %}
+                        <div>{# No form__subforms class to prevent JS-bindings #}
+                            <h3 class="form__subtitle">
+                                <span>{% trans "Organisatie" %} {{ forloop.counter }}</span>
+                            </h3>
+                            <div class="form__block-group">
+                                <div>
+                                    <input type="hidden" name="{{ subform.organisatie.html_name }}" value="{{ lokaleoverheid.organisatie.pk }}">
+                                    <p>{% blocktrans with org=subform.instance.organisatie %}{{ org }} is de standaard bevoegde organisatie.{% endblocktrans %}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    {% else %}
+                        <div class="form__subforms">
+                            {% for hidden in subform.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            {{ subform.DELETE|addclass:"hidden" }}
+                            <h3 class="form__subtitle">
+                                <span>{% trans "Organisatie" %} {{ forloop.counter }}</span>
+                                <a class="formset__remove" href="#">
+                                    <i class="far fa-trash-alt"></i>
+                                    {% trans "Organisatie verwijderen" %}
+                                </a>
+                            </h3>
+                            <div class="form__block-group">
+                                <div>
+                                    <div class="form__table-header-left">{% trans "Organisatie" %}</div>
+                                    {% choices_field subform.organisatie %}
+                                    {% checkbox subform.staat_niet_in_de_lijst %}
+                                </div>
+                                <div>
+                                    <div class="form__table-header-left"></div>
+                                    {% field subform.naam hidden=True %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>
