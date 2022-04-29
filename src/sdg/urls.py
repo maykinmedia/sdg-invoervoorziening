@@ -1,12 +1,11 @@
 from django.apps import apps
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include, path
-from django.utils.translation import ugettext_lazy as _
+from django.urls import include, path, re_path
+from django.utils.translation import gettext_lazy as _
 
 from two_factor.urls import urlpatterns as tf_urls
 
@@ -18,6 +17,7 @@ handler500 = "sdg.utils.views.server_error"
 admin.site.site_header = _("SDG Invoervoorziening")
 admin.site.site_title = _("SDG Invoervoorziening")
 admin.site.index_title = _("Welkom bij de SDG-admin")
+admin.site.enable_nav_sidebar = False
 
 urlpatterns = [
     path(
@@ -43,7 +43,7 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
-    url(
+    re_path(
         r"^invitation/(?P<key>\w+)/?$",
         InvitationAcceptView.as_view(),
         name="invitation_accept",

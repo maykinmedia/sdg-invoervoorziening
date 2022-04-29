@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from sdg.core.forms import DynamicArrayField
 from sdg.organisaties.constants import opening_times_error_messages

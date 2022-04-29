@@ -1,6 +1,3 @@
-default_app_config = "sdg.core.apps.CoreConfig"
-
-
 class empty:
     """
     This class is used to represent no data being provided for a given input

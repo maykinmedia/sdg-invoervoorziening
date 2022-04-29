@@ -19,7 +19,7 @@
                 {% endwith %}
                 {% if namespace == "roles" %}
                     <span>{% trans "Gebruikers" %}</span>
-                    {% elif namespace == "organisaties" %}
+                {% elif namespace == "organisaties" %}
                     <span>{% trans "Locaties" %}</span>
                 {% else %}
                     <span>{{ object|capfirst|default:namespace|capfirst }}</span>

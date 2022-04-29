@@ -4,6 +4,7 @@ import ClassicEditor from './ckeditor';
 
 /** @type {NodeListOf<HTMLTextAreaElement>} */
 const MARKDOWN_EDITORS = document.querySelectorAll('.markdownx textarea');
+const GENERIC_EDITOR_LOCK = Symbol('generic-editor-lock');
 
 
 class MarkdownEditor extends Component {
@@ -45,7 +46,13 @@ class MarkdownEditor extends Component {
     createEditor() {
         return ClassicEditor.create(this.node)
             .then((editor) => {
-                editor.isReadOnly = this.state.readOnly;
+                // editor.isReadOnly = this.state.readOnly;
+                if (this.state.readOnly) {
+                    editor.enableReadOnlyMode(GENERIC_EDITOR_LOCK);
+                }
+                else {
+                    editor.disableReadOnlyMode(GENERIC_EDITOR_LOCK);
+                }
                 editor.model.schema.addChildCheck((context, childDefinition) => {
                     if (childDefinition.name === 'softBreak' && Array.from(context.getNames()).includes('paragraph')) {
                         return false;
@@ -70,7 +77,13 @@ class MarkdownEditor extends Component {
             this.editor = this.createEditor();
             return;
         }
-        this.editor.isReadOnly = readOnly;
+        //this.editor.isReadOnly = readOnly;
+        if (readOnly) {
+            this.editor.enableReadOnlyMode(GENERIC_EDITOR_LOCK);
+        }
+        else {
+            this.editor.disableReadOnlyMode(GENERIC_EDITOR_LOCK);
+        }
     }
 }
 

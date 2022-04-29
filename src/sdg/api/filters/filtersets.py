@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Q, Value
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from django_filters.rest_framework import FilterSet, filters
 from djangorestframework_camel_case.util import camel_to_underscore
