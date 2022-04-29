@@ -2,7 +2,7 @@ from typing import Set
 
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from sdg.core.models.managers import OrganisatieQuerySet
 

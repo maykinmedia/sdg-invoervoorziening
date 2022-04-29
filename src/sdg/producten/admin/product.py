@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from sdg.core.admin.mixins import BaseProductFilter
 from sdg.producten.models import (

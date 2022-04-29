@@ -1,12 +1,11 @@
-from django.conf.urls import url
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from sdg.organisaties.views.catalogi import CatalogListView
 
 app_name = "catalogi"
 urlpatterns = [
     path("", CatalogListView.as_view(), name="list"),
-    url(
+    re_path(
         r"(?P<catalog_pk>[\d]+)/products/",
         include("sdg.producten.urls", namespace="producten"),
     ),
