@@ -7,11 +7,11 @@ python-decouple  # processing of envvar configs
 lxml
 
 # Framework libraries
-django < 3.0
+django < 3.3
 django-admin-index
 django-axes
 django-choices
-django-hijack
+django-hijack ~= 2.3.0
 django-hijack-admin
 django-redis
 django-rosetta

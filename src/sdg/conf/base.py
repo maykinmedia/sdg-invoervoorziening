@@ -62,6 +62,10 @@ DATABASES = {
     }
 }
 
+# keep the current schema for now and deal with migrating to BigAutoField later, see
+# https://docs.djangoproject.com/en/4.0/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -472,33 +476,37 @@ INVITATION_SUBJECT = "Activeer je account invoervoorziening SDG gemeenten"
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
 
 # Markdown
-MARKDOWNIFY_WHITELIST_TAGS = [
-    "table",
-    "thead",
-    "tbody",
-    "th",
-    "tr",
-    "td",
-    "a",
-    "abbr",
-    "acronym",
-    "b",
-    "blockquote",
-    "em",
-    "i",
-    "li",
-    "ol",
-    "p",
-    "strong",
-    "ul",
-    "h1",
-    "h2",
-    "h3",
-    "h4",
-    "h5",
-    "code",
-]
-MARKDOWNIFY_MARKDOWN_EXTENSIONS = ["markdown.extensions.extra"]
+MARKDOWNIFY = {
+    "default": {
+        "WHITELIST_TAGS": [
+            "table",
+            "thead",
+            "tbody",
+            "th",
+            "tr",
+            "td",
+            "a",
+            "abbr",
+            "acronym",
+            "b",
+            "blockquote",
+            "em",
+            "i",
+            "li",
+            "ol",
+            "p",
+            "strong",
+            "ul",
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "code",
+        ],
+        "MARKDOWN_EXTENSIONS": ["markdown.extensions.extra"],
+    }
+}
 
 # Celery
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL", "redis://127.0.0.1:6379/4")

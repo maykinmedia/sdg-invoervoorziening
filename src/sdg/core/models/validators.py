@@ -2,7 +2,7 @@ import re
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, URLValidator, _lazy_re_compile
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 uppercase_validator = RegexValidator(
     _lazy_re_compile(r"^[A-Z]*$"),

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.db.models import Exists, OuterRef
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from sdg.accounts.models import Role
 from sdg.core.admin.mixins import BaseProductFilter
