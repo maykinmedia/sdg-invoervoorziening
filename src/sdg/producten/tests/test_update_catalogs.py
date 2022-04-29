@@ -22,3 +22,6 @@ class UpdateCatalogTests(TestCase):
 
     def test_update_products_with_latest_reference_texts(self):
         pass
+
+    def test_update_products_from_active_orgs_only(self):
+        pass

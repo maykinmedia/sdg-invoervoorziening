@@ -90,7 +90,10 @@ class LokaleOverheid(models.Model):
 
 class BevoegdeOrganisatie(models.Model):
     """
-    Authorized organization
+    Authorized organization custom "through"-table. This model describes the
+    relation between a LokaleOverheid and an authorized organization. The
+    authorized organisation can either be an Organisation or - if it doesn't
+    exist - a custom name on this relation model.
     """
 
     uuid = models.UUIDField(
@@ -114,7 +117,9 @@ class BevoegdeOrganisatie(models.Model):
         LokaleOverheid,
         on_delete=models.CASCADE,
         verbose_name=_("lokale overheid"),
-        help_text=_("De bij de overheid bekende naam van de bevoegde organisatie."),
+        help_text=_(
+            "De verantwoordelijke organisatie horend bij deze bevoegde organisatie."
+        ),
         related_name="bevoegde_organisaties",
     )
     organisatie = models.ForeignKey(

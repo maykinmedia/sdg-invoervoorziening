@@ -47,6 +47,9 @@ class LocatieFactory(DjangoModelFactory):
 class BevoegdeOrganisatieFactory(DjangoModelFactory):
     naam = factory.Faker("company")
     organisatie = factory.SubFactory(OverheidsorganisatieFactory)
+    lokale_overheid = factory.SubFactory(
+        LokaleOverheidFactory, organisatie=factory.SelfAttribute("organisatie")
+    )
 
     class Meta:
         model = BevoegdeOrganisatie

@@ -34,6 +34,10 @@
         "models": [
             [
                 "organisaties",
+                "bevoegdeorganisatie"
+            ],
+            [
+                "organisaties",
                 "lokaleoverheid"
             ],
             [
@@ -83,6 +87,10 @@
             [
                 "auth",
                 "group"
+            ],
+            [
+                "otp_totp",
+                "totpdevice"
             ]
         ]
     }
@@ -131,6 +139,14 @@
             [
                 "core",
                 "productfieldconfiguration"
+            ],
+            [
+                "django_celery_beat",
+                "periodictask"
+            ],
+            [
+                "services",
+                "serviceconfiguration"
             ]
         ]
     }

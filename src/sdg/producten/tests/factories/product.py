@@ -7,7 +7,10 @@ from sdg.core.tests.factories.logius import (
     OverheidsorganisatieFactory,
     UniformeProductnaamFactory,
 )
-from sdg.organisaties.tests.factories.overheid import LocatieFactory
+from sdg.organisaties.tests.factories.overheid import (
+    BevoegdeOrganisatieFactory,
+    LocatieFactory,
+)
 from sdg.producten.models import GeneriekProduct, Product, ProductVersie
 
 
@@ -34,6 +37,11 @@ class ReferentieProductFactory(ProductFactory):
     )
     generiek_product = factory.SubFactory(GeneriekProductFactory)
     referentie_product = None
+    bevoegde_organisatie = factory.SubFactory(
+        BevoegdeOrganisatieFactory,
+        lokale_overheid=factory.SelfAttribute("..catalogus.lokale_overheid"),
+        organisatie=factory.SelfAttribute("..catalogus.lokale_overheid.organisatie"),
+    )
 
 
 class SpecifiekProductFactory(ProductFactory):
@@ -42,6 +50,11 @@ class SpecifiekProductFactory(ProductFactory):
     )
     referentie_product = factory.SubFactory(ReferentieProductFactory)
     generiek_product = None
+    bevoegde_organisatie = factory.SubFactory(
+        BevoegdeOrganisatieFactory,
+        lokale_overheid=factory.SelfAttribute("..catalogus.lokale_overheid"),
+        organisatie=factory.SelfAttribute("..catalogus.lokale_overheid.organisatie"),
+    )
 
 
 class ProductVersieFactory(DjangoModelFactory):
