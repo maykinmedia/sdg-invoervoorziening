@@ -1,3 +1,4 @@
+from django.db.models import Case, When, Value
 from django.db.models import F, Max
 from django.utils.translation import gettext as _
 
@@ -15,15 +16,11 @@ class CatalogListView(OverheidMixin, RHListView):
         {
             "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
             "label": _("Informatiegebied"),
-            # "lookup": "referentie_product__generiek_product__upn__thema__informatiegebied",
         },
         {"label": _("Aanwezig"), "key": "product_aanwezig"},
         {
-            # FIXME: The relation `referentie_product__generiek_product__doelgroep`
-            # doesn't work since doelgroep is not a FK?
             "key": "doelgroep",
             "label": _("Doelgroep"),
-            "lookup": "doelgroep",
         },
         {
             "key": "_latest_publication_date",
@@ -43,12 +40,6 @@ class CatalogListView(OverheidMixin, RHListView):
             "label": _("Doelgroep"),
         },
     ]
-    # FIXME: Setting orderable columns seems to break ordering entirely.
-    # orderable_columns = [
-    #     "_name",
-    #     "_area",
-    #     "pub_date",
-    # ]
 
     model = Product
     required_roles = ["is_beheerder", "is_redacteur"]
@@ -99,5 +90,12 @@ class CatalogListView(OverheidMixin, RHListView):
             )
             # FIXME: Similar to above. This doesn't work for reference products.
             .annotate(doelgroep=F("referentie_product__generiek_product__doelgroep"))
-            .order_by("_name")
+            .order_by(
+                "_name",
+                Case(
+                    When(product_aanwezig=True, then=Value(1)),
+                    When(product_aanwezig=False, then=Value(2)),
+                    When(product_aanwezig=None, then=Value(3)),
+                ),
+            )
         )
