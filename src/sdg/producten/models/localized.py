@@ -90,7 +90,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
     class Meta:
         verbose_name = _("Vertaald generiek product")
         verbose_name_plural = _("Vertaalde generieke producten")
-        ordering = ["-taal"]
+        ordering = ["-taal", "product_titel"]
         constraints = [
             models.UniqueConstraint(
                 fields=["generiek_product", "taal"],
@@ -259,7 +259,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     class Meta:
         verbose_name = _("vertaald product")
         verbose_name_plural = _("vertaalde producten")
-        ordering = ["-taal"]
+        ordering = ["-taal", "product_titel_decentraal"]
         constraints = [
             models.UniqueConstraint(
                 fields=["product_versie", "taal"],
@@ -331,7 +331,7 @@ class LocalizedProductuitvoering(TaalMixin, models.Model):
     class Meta:
         verbose_name = _("vertaalde productuitvoering")
         verbose_name_plural = _("vertaalde productuitvoeringen")
-        ordering = ["-taal"]
+        ordering = ["-taal", "product_titel_uitvoering"]
         constraints = [
             models.UniqueConstraint(
                 fields=["productuitvoering", "taal"],

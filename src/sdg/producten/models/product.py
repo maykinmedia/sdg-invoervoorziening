@@ -98,6 +98,7 @@ class GeneriekProduct(models.Model):
                 name="unique_generic_product_upn_doelgroep",
             )
         ]
+        ordering = ["upn", "verantwoordelijke_organisatie"]
 
     def __str__(self):
         return f"{self.upn.upn_label}"
@@ -329,6 +330,7 @@ class Product(ProductFieldMixin, models.Model):
                 name="generic_or_reference",
             )
         ]
+        ordering = ["generiek_product", "referentie_product", "catalogus"]
 
     def __str__(self):
         if self.is_referentie_product:  # TODO: remove
@@ -451,7 +453,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
     class Meta:
         verbose_name = _("product versie")
         verbose_name_plural = _("product versies")
-        ordering = ("-versie",)
+        ordering = ("-versie", "product")
 
     def __str__(self):
         return self.get_pretty_name()
@@ -486,6 +488,7 @@ class Productuitvoering(models.Model):
     class Meta:
         verbose_name = _("productuitvoering")
         verbose_name_plural = _("productuitvoeringen")
+        ordering = ["product"]
 
     def __str__(self):
         return f"{self.product} (uitvoering)"

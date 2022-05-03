@@ -80,6 +80,7 @@ class LokaleOverheid(models.Model):
     class Meta:
         verbose_name = _("lokale overheid")
         verbose_name_plural = _("lokale overheden")
+        ordering = ["organisatie"]
 
     def __str__(self):
         return self.organisatie.owms_pref_label
@@ -137,6 +138,7 @@ class BevoegdeOrganisatie(models.Model):
     class Meta:
         verbose_name = _("bevoegde organisatie")
         verbose_name_plural = _("bevoegde organisaties")
+        ordering = ["naam", "lokale_overheid", "organisatie"]
 
     def __str__(self):
         return self.naam
@@ -269,6 +271,7 @@ class Lokatie(models.Model):
     class Meta:
         verbose_name = _("locatie")
         verbose_name_plural = _("locaties")
+        ordering = ["naam", "lokale_overheid"]
 
     def __str__(self):
         return self.naam

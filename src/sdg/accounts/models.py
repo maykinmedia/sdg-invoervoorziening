@@ -48,6 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _("gebruiker")
         verbose_name_plural = _("gebruikers")
+        ordering = ["first_name", "last_name", "email"]
 
     def get_full_name(self):
         """
@@ -192,6 +193,7 @@ class Role(models.Model):
                 name="unique_user_per_lokaleoverheid",
             )
         ]
+        ordering = ["user", "lokale_overheid"]
 
     def __str__(self):
         return f"{self.user} — {self.lokale_overheid.organisatie.owms_pref_label}"
