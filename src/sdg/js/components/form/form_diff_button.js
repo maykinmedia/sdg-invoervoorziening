@@ -102,13 +102,12 @@ class FormDiffButton extends ReferenceTextComponent {
         const versionsContainer = this.getVersionsContainer();
 
         if (!versionsContainer.children.length) {
-            const previousVersionData = this.getPreviousVersionData();
             const currentVersionData = this.getCurrentVersionData();
 
             const previousVersionTopElement = document.createElement('del');
             const currentVersionTopElement = document.createElement('ins');
 
-            previousVersionTopElement.innerText = previousVersionData.title;
+            previousVersionTopElement.innerText = "Mijn tekst";
             currentVersionTopElement.innerText = currentVersionData.title;
 
             versionsContainer.append(previousVersionTopElement);
