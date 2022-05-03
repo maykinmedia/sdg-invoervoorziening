@@ -109,28 +109,6 @@
                         </td>
                     </tr>
 
-                    {% with field=product_form.bevoegde_organisatie %}
-                        {% with configuration=field.configuration.0 %}
-                            <tr>
-                                <td>
-                                    <div class="form__control">
-                                        <header class="form__control-header">
-                                            <label class="form__label">
-                                                {{ configuration.0|default:field.label|capfirst }}
-                                                <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>
-                                            </label>
-                                        </header>
-                                        <div class="form__control-body">
-                                            <div class="tabs__table-cell--versions"></div>
-                                            {% select field %}
-                                            {{ field.errors }}
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        {% endwith %}
-                    {% endwith %}
-
                     {% with field=product_form.locaties %}
                     <tr>
                         <td>
@@ -151,6 +129,28 @@
                     </tr>
                     {% endwith %}
                 {% endif %}
+
+                {% with field=product_form.bevoegde_organisatie %}
+                    {% with configuration=field.configuration.0 %}
+                        <tr>
+                            <td>
+                                <div class="form__control">
+                                    <header class="form__control-header">
+                                        <label class="form__label">
+                                            {{ configuration.0|default:field.label|capfirst }}
+                                            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>
+                                        </label>
+                                    </header>
+                                    <div class="form__control-body">
+                                        <div class="tabs__table-cell--versions"></div>
+                                        {% select field %}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% endwith %}
 
                 {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
                     {% with configuration=publication_date.configuration.0 %}
