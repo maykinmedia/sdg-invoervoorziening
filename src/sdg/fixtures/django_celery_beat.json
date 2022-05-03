@@ -59,7 +59,7 @@
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
-        "last_update": "2022-04-08T13:10:42.688"
+        "last_update": "2022-05-03T16:57:36.244"
     }
 },
 {

@@ -98,6 +98,7 @@ class GeneriekProduct(models.Model):
                 name="unique_generic_product_upn_doelgroep",
             )
         ]
+        ordering = ["doelgroep"]
 
     def __str__(self):
         return f"{self.upn.upn_label}"
@@ -328,6 +329,10 @@ class Product(ProductFieldMixin, models.Model):
                 ),
                 name="generic_or_reference",
             )
+        ]
+        ordering = [
+            "generiek_product__upn__upn_label",
+            "referentie_product__generiek_product__upn__upn_label",
         ]
 
     def __str__(self):

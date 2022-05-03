@@ -89,6 +89,7 @@ class ProductenCatalogus(models.Model):
                 name="unique_referentie_catalogus_and_lokale_overheid",
             )
         ]
+        ordering = ["naam"]
 
     def __str__(self):
         if self.is_referentie_catalogus:
