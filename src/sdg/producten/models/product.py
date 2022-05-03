@@ -320,7 +320,7 @@ class Product(ProductFieldMixin, models.Model):
         verbose_name_plural = _("producten")
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
     def get_absolute_url(self):
         return reverse(

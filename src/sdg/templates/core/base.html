@@ -22,13 +22,15 @@
                     {% elif namespace == "organisaties" %}
                     <span>{% trans "Locaties" %}</span>
                 {% else %}
-                    <span>{{ object|capfirst|default:namespace|capfirst }}</span>
+                    {% block breadcrumbs_page_title %}
+                        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
+                    {% endblock %}
                 {% endif %}
             </div>
         </div>
         <h2 class="products__title primary">
             {% block page_title %}
-                {{ object|capfirst|default:namespace|capfirst }}
+                <span>{{ object|capfirst|default:namespace|capfirst }}</span>
             {% endblock %}
         </h2>
         {% block page_intro %}{% endblock %}
