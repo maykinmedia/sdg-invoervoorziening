@@ -1,7 +1,7 @@
-import datetime
-from datetime import date
+from datetime import date, timedelta
 
 from django.core.management import call_command
+from django.db.models import Q
 from django.test import TestCase
 
 from sdg.core.models import ProductenCatalogus
@@ -17,14 +17,9 @@ from sdg.producten.tests.factories.product import (
 
 
 class UpdateCatalogTests(TestCase):
-    def setUp(self):
-        super().setUp()
-        self.producten_catalogus_database = ProductenCatalogus.objects.all()
-        self.producten_database = Product.objects.all()
-        self.producten_versies_database = ProductVersie.objects.all()
-        self.localized_producten_database = LocalizedProduct.objects.all()
-
     def test_create_catalog_from_reference_if_enabled(self):
+        producten_catalogus_table = ProductenCatalogus.objects.all()
+
         ref_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False
         )
@@ -38,11 +33,13 @@ class UpdateCatalogTests(TestCase):
             organisatie__owms_end_date=None,
         )
 
-        self.assertEqual(self.producten_catalogus_database.count(), 1)
+        self.assertEqual(producten_catalogus_table.count(), 1)
         call_command("update_catalogs")
-        self.assertNotEqual(self.producten_catalogus_database.count(), 1)
+        self.assertEqual(producten_catalogus_table.count(), 2)
 
     def test_no_create_catalog_from_reference_if_disabled(self):
+        producten_catalogus_table = ProductenCatalogus.objects.all()
+
         ref_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False
         )
@@ -56,11 +53,15 @@ class UpdateCatalogTests(TestCase):
             organisatie__owms_end_date=None,
         )
 
-        self.assertEqual(self.producten_catalogus_database.count(), 1)
+        self.assertEqual(producten_catalogus_table.count(), 1)
         call_command("update_catalogs")
-        self.assertEqual(self.producten_catalogus_database.count(), 1)
+        self.assertEqual(producten_catalogus_table.count(), 1)
 
     def test_create_products_from_reference_product(self):
+        producten_table = Product.objects.all()
+        producten_versies_table = ProductVersie.objects.all()
+        localized_producten_table = LocalizedProduct.objects.all()
+
         ref_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False
         )
@@ -69,22 +70,35 @@ class UpdateCatalogTests(TestCase):
             is_referentie_catalogus=True,
         )
         ref_product = ReferentieProductFactory.create(catalogus=ref_catalog)
-        ProductVersieFactory.create(
+        ref_product_versie = ProductVersieFactory.create(
             product=ref_product,
             publicatie_datum=date.today(),
         )
+        ref_localized_product_nl = LocalizedProductFactory.create(
+            product_versie=ref_product_versie,
+            taal="nl",
+        )
 
-        LokaleOverheidFactory.create(
+        lokale_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=True,
             organisatie__owms_end_date=None,
         )
 
-        self.assertEqual(self.producten_database.count(), 1)
+        self.assertEqual(producten_table.count(), 1)
+
         call_command("update_catalogs")
-        self.assertEqual(self.producten_database.count(), 2)
+
+        new_product = producten_table.get(referentie_product=ref_product)
+        new_product_versie = producten_versies_table.get(product=new_product)
+        new_localized_product_nl = localized_producten_table.get(
+            product_versie=new_product_versie, taal="nl"
+        )
+
+        self.assertEqual(producten_table.count(), 2)
+        self.assertEqual(new_product.catalogus.lokale_overheid, lokale_overheid)
         self.assertEqual(
-            ref_product,
-            self.producten_database.last().referentie_product,
+            ref_localized_product_nl.specifieke_tekst,
+            new_localized_product_nl.specifieke_tekst,
         )
 
     def test_no_create_products_from_reference_without_active_version(self):
@@ -92,6 +106,8 @@ class UpdateCatalogTests(TestCase):
         pass
 
     def test_correct_products_if_no_initial_version(self):
+        producten_table = Product.objects.all()
+
         ref_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False
         )
@@ -101,20 +117,21 @@ class UpdateCatalogTests(TestCase):
         )
         ref_product = ReferentieProductFactory.create(catalogus=ref_catalog)
 
-        LokaleOverheidFactory.create(
+        lokale_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=True,
             organisatie__owms_end_date=None,
         )
 
-        self.assertEqual(self.producten_database.count(), 1)
+        self.assertEqual(producten_table.count(), 1)
         call_command("update_catalogs")
-        self.assertEqual(self.producten_database.count(), 2)
-        self.assertEqual(
-            self.producten_versies_database.last().product.referentie_product,
-            ref_product,
-        )
+        new_product = producten_table.get(referentie_product=ref_product)
+
+        self.assertEqual(producten_table.count(), 2)
+        self.assertEqual(new_product.catalogus.lokale_overheid, lokale_overheid)
 
     def test_correct_products_if_no_translations(self):
+        localized_producten_table = LocalizedProduct.objects.all()
+
         ref_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False
         )
@@ -135,13 +152,17 @@ class UpdateCatalogTests(TestCase):
             organisatie__owms_end_date=None,
         )
 
-        self.assertEqual(self.localized_producten_database.count(), 0)
+        self.assertEqual(localized_producten_table.count(), 0)
         call_command("update_catalogs")
-        self.assertEqual(self.localized_producten_database.count(), 2)
-        self.assertEqual(self.localized_producten_database.first().taal, "nl")
-        self.assertEqual(self.localized_producten_database.last().taal, "en")
+        self.assertEqual(localized_producten_table.count(), 2)
+        self.assertEqual(localized_producten_table.first().taal, "nl")
+        self.assertEqual(localized_producten_table.last().taal, "en")
 
     def test_update_products_with_latest_reference_texts(self):
+        producten_table = Product.objects.all()
+        producten_versies_table = ProductVersie.objects.all()
+        localized_producten_table = LocalizedProduct.objects.all()
+
         ref_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False
         )
@@ -154,12 +175,14 @@ class UpdateCatalogTests(TestCase):
         )
         ref_product_versie = ProductVersieFactory.create(
             product=ref_product,
-            publicatie_datum=date.today(),
+            publicatie_datum=date.today() - timedelta(days=1),
             versie=1,
         )
-        ref_localized_product_nl = LocalizedProductFactory.create(
+        LocalizedProductFactory.create(
             product_versie=ref_product_versie,
             taal="nl",
+            product_titel_decentraal="Original title",
+            specifieke_tekst="Original text",
         )
 
         LokaleOverheidFactory.create(
@@ -169,42 +192,54 @@ class UpdateCatalogTests(TestCase):
 
         call_command("update_catalogs")
 
-        generated_localized_product = (
-            self.localized_producten_database.filter(taal="nl")
-            .exclude(pk=ref_localized_product_nl.pk)
-            .first()
+        generated_product = producten_table.get(~Q(pk=ref_product.pk))
+        generated_product_versie = producten_versies_table.get(
+            product=generated_product
+        )
+        generated_localized_product = localized_producten_table.get(
+            taal="nl", product_versie=generated_product_versie
         )
 
-        # update referentie product versie and localized product
-        self.producten_versies_database.filter(pk=ref_product_versie.pk).update(
-            versie=2,
-            gewijzigd_op=ref_product_versie.gemaakt_op + datetime.timedelta(days=1),
+        self.assertEqual(
+            generated_localized_product.product_titel_decentraal,
+            "Original title",
         )
-        self.localized_producten_database.filter(pk=ref_localized_product_nl.pk).update(
-            product_titel_decentraal="Lorem Ipsum",
-            specifieke_tekst="Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+        self.assertEqual(generated_localized_product.specifieke_tekst, "Original text")
+
+        ref_product_versie_2 = ProductVersieFactory.create(
+            product=ref_product,
+            publicatie_datum=date.today(),
+            versie=2,
+        )
+        ref_updated_localized_product_nl = LocalizedProductFactory.create(
+            product_versie=ref_product_versie_2,
+            taal="nl",
+            product_titel_decentraal="Updated title",
+            specifieke_tekst="Updated text",
         )
 
         call_command("update_catalogs")
-        self.assertEqual(
-            self.localized_producten_database.get(
-                pk=ref_localized_product_nl.pk
-            ).product_titel_decentraal,
-            self.localized_producten_database.get(
-                pk=generated_localized_product.pk
-            ).product_titel_decentraal,
+        generated_updated_localized_product = (
+            localized_producten_table.filter(
+                taal="nl", product_versie=generated_product_versie
+            )
+            .exclude(pk=ref_updated_localized_product_nl.pk)
+            .first()
         )
 
         self.assertEqual(
-            self.localized_producten_database.get(
-                pk=ref_localized_product_nl.pk
-            ).specifieke_tekst,
-            self.localized_producten_database.get(
-                pk=generated_localized_product.pk
-            ).specifieke_tekst,
+            generated_updated_localized_product.product_titel_decentraal,
+            "Updated title",
+        )
+        self.assertEqual(
+            generated_updated_localized_product.specifieke_tekst, "Updated text"
         )
 
     def test_no_update_products_if_changed_to_latest_reference_texts(self):
+        producten_table = Product.objects.all()
+        producten_versies_table = ProductVersie.objects.all()
+        localized_producten_table = LocalizedProduct.objects.all()
+
         ref_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False
         )
@@ -217,12 +252,14 @@ class UpdateCatalogTests(TestCase):
         )
         ref_product_versie = ProductVersieFactory.create(
             product=ref_product,
-            publicatie_datum=date.today(),
+            publicatie_datum=date.today() - timedelta(days=1),
             versie=1,
         )
-        ref_localized_product_nl = LocalizedProductFactory.create(
+        LocalizedProductFactory.create(
             product_versie=ref_product_versie,
             taal="nl",
+            product_titel_decentraal="Original title",
+            specifieke_tekst="Original text",
         )
 
         LokaleOverheidFactory.create(
@@ -232,55 +269,59 @@ class UpdateCatalogTests(TestCase):
 
         call_command("update_catalogs")
 
-        generated_product_versie = self.producten_versies_database.exclude(
-            pk=ref_product_versie.pk
-        ).last()
-
-        generated_localized_product = (
-            self.localized_producten_database.filter(taal="nl")
-            .exclude(pk=ref_localized_product_nl.pk)
-            .first()
+        generated_product = producten_table.get(~Q(pk=ref_product.pk))
+        generated_product_versie = producten_versies_table.filter(
+            product=generated_product
+        )
+        generated_localized_product = localized_producten_table.filter(
+            taal="nl", product_versie=generated_product_versie.first()
         )
 
-        # update referentie product versie and localized product
-        self.producten_versies_database.filter(pk=ref_product_versie.pk).update(
+        self.assertEqual(
+            generated_localized_product.first().product_titel_decentraal,
+            "Original title",
+        )
+        self.assertEqual(
+            generated_localized_product.first().specifieke_tekst, "Original text"
+        )
+
+        # new reference product version and localized product
+        ref_product_versie_2 = ProductVersieFactory.create(
+            product=ref_product,
+            publicatie_datum=date.today(),
             versie=2,
-            gewijzigd_op=ref_product_versie.gemaakt_op + datetime.timedelta(days=1),
         )
-        self.localized_producten_database.filter(pk=ref_localized_product_nl.pk).update(
-            product_titel_decentraal="Lorem Ipsum",
-            specifieke_tekst="Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+        ref_updated_localized_product_nl = LocalizedProductFactory.create(
+            product_versie=ref_product_versie_2,
+            taal="nl",
+            product_titel_decentraal="Updated reference title",
+            specifieke_tekst="Updated reference text",
         )
 
-        # update newly generated product versie and localized product
-        self.producten_versies_database.filter(pk=generated_product_versie.pk).update(
-            versie=3,
-            gewijzigd_op=generated_product_versie.gemaakt_op
-            + datetime.timedelta(days=2),
+        # new generated product version and localized product
+        generated_product_versie.update(
+            gewijzigd_op=date.today() + timedelta(days=1),
+            publicatie_datum=date.today() + timedelta(days=1),
         )
-        self.localized_producten_database.filter(
-            pk=generated_localized_product.pk
-        ).update(
-            product_titel_decentraal="Updated Product title decentraal",
-            specifieke_tekst="Updated Specifieke tekst.",
+        generated_localized_product.update(
+            product_titel_decentraal="Updated generated title",
+            specifieke_tekst="Updated generated text",
         )
 
         call_command("update_catalogs")
-
-        self.assertNotEqual(
-            self.localized_producten_database.get(
-                pk=ref_localized_product_nl.pk
-            ).product_titel_decentraal,
-            self.localized_producten_database.get(
-                pk=generated_localized_product.pk
-            ).product_titel_decentraal,
+        generated_updated_localized_product = (
+            localized_producten_table.filter(
+                taal="nl", product_versie=generated_product_versie.first()
+            )
+            .exclude(pk=ref_updated_localized_product_nl.pk)
+            .first()
         )
 
-        self.assertNotEqual(
-            self.localized_producten_database.get(
-                pk=ref_localized_product_nl.pk
-            ).specifieke_tekst,
-            self.localized_producten_database.get(
-                pk=generated_localized_product.pk
-            ).specifieke_tekst,
+        self.assertEqual(
+            generated_updated_localized_product.product_titel_decentraal,
+            "Updated generated title",
+        )
+        self.assertEqual(
+            generated_updated_localized_product.specifieke_tekst,
+            "Updated generated text",
         )
