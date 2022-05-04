@@ -44,7 +44,6 @@ class GeneriekProductAdmin(admin.ModelAdmin):
     inlines = (LocalizedGeneriekProductInline,)
     autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
     search_fields = ("upn__upn_label",)
-    ordering = ("upn",)
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).select_related("upn")
@@ -75,7 +74,6 @@ class ProductVersieAdmin(admin.ModelAdmin):
         "gewijzigd_op",
     )
     inlines = (LocalizedProductInline,)
-    ordering = ("-publicatie_datum",)
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return (
@@ -106,7 +104,7 @@ class ProductAdmin(admin.ModelAdmin):
         "is_referentie",
         "lokale_overheid",
         "catalogus",
-        "_referentie_product",
+        "referentie_product",
         "generic_product",
     )
     list_filter = (
@@ -126,11 +124,6 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = (
         "generiek_product__upn__upn_label",
         "referentie_product__generiek_product__upn__upn_label",
-    )
-    ordering = (
-        "catalogus",
-        "generiek_product",
-        "referentie_product",
     )
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
@@ -154,12 +147,6 @@ class ProductAdmin(admin.ModelAdmin):
         return obj.is_referentie_product
 
     is_referentie.boolean = True
-
-    def _referentie_product(self, obj):
-        if obj.is_referentie_product:
-            return "—"
-        else:
-            return f"{obj.referentie_product} (referentie)"
 
     def lokale_overheid(self, obj):
         return obj.catalogus.lokale_overheid
