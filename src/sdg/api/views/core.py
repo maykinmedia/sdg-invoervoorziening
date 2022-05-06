@@ -28,9 +28,6 @@ class CatalogusViewSet(viewsets.ReadOnlyModelViewSet):
     ).prefetch_related(
         Prefetch(
             "producten",
-            queryset=Product.objects.select_related(
-                "generiek_product__upn",
-                "referentie_product__generiek_product__upn",
-            ),
+            queryset=Product.objects.select_related("generiek_product__upn"),
         )
     )

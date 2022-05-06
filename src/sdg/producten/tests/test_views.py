@@ -97,8 +97,11 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.CONCEPT)
+        response = self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.assertEqual(response.status_code, 302)
+
         self.product.refresh_from_db()
 
         self.assertEqual(self.product.versies.count(), 1)
@@ -123,8 +126,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.PUBLISHED)
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
 
         self.product_version.refresh_from_db()
 
@@ -153,8 +158,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.SCHEDULED)
+        response = self._submit_product_form(response.form, Product.status.SCHEDULED)
+        self.assertEqual(response.status_code, 302)
 
         self.product_version.refresh_from_db()
 
@@ -181,8 +188,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.CONCEPT)
+        response = self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.assertEqual(response.status_code, 302)
 
         self.product_version.refresh_from_db()
 
@@ -211,8 +220,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.PUBLISHED)
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
 
         self.product_version.refresh_from_db()
 
@@ -241,8 +252,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.SCHEDULED)
+        response = self._submit_product_form(response.form, Product.status.SCHEDULED)
+        self.assertEqual(response.status_code, 302)
 
         self.product_version.refresh_from_db()
 
@@ -277,8 +290,15 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.assertIn(
+            'Als u kiest voor "Opslaan en publiceren", vervalt de reeds ingeplande publicatie. Indien u kiest voor "Opslaan als concept" dan wordt de publicatiedatum verwijderd van de ingeplande publicatie.',
+            response.text,
+        )
+
+        response = self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.assertEqual(response.status_code, 302)
 
         self.product.refresh_from_db()
 
@@ -296,10 +316,6 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.publicatie_datum, None)
         self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
         self.assertEqual(latest_version.versie, 2)
-        self.assertIn(
-            'Als u kies voor "Opslaan en publiceren", vervalt de reeds ingeplande publicatie. Indien u kiest voor "Opslaan als concept" dan wordt de publicatiedatum verwijderd van de ingeplande publicatie.',
-            response.text,
-        )
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_now(self):
@@ -317,8 +333,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.PUBLISHED)
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
 
         self.product.refresh_from_db()
 
@@ -353,8 +371,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.SCHEDULED)
+        response = self._submit_product_form(response.form, Product.status.SCHEDULED)
+        self.assertEqual(response.status_code, 302)
 
         self.product.refresh_from_db()
 
@@ -389,8 +409,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.CONCEPT)
+        response = self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.assertEqual(response.status_code, 302)
 
         self.product.refresh_from_db()
 
@@ -425,8 +447,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.PUBLISHED)
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
 
         self.product.refresh_from_db()
 
@@ -461,8 +485,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             )
         )
+        self.assertEqual(response.status_code, 200)
 
-        self._submit_product_form(response.form, Product.status.SCHEDULED)
+        response = self._submit_product_form(response.form, Product.status.SCHEDULED)
+        self.assertEqual(response.status_code, 302)
 
         self.product.refresh_from_db()
 
@@ -498,10 +524,14 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.product),
             ),
         )
+        self.assertEqual(response.status_code, 200)
 
         response.form.fields["product_aanwezig"] = False
         response.form.fields["locaties"][0].checked = True
-        self._submit_product_form(response.form, Product.status.CONCEPT)
+
+        response = self._submit_product_form(response.form, Product.status.CONCEPT)
+        self.assertEqual(response.status_code, 302)
+
         self.product.refresh_from_db()
 
         locations = list(self.product.get_municipality_locations())

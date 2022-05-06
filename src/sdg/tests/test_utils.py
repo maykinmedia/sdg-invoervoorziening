@@ -17,9 +17,7 @@ class UtilsTests(TestCase):
         )
 
         self.assertNumQueries(2)
-        self.assertEqual(
-            result, product.referentie_product.generiek_product.upn.upn_label
-        )
+        self.assertEqual(result, product.generiek_product.upn.upn_label)
 
     @skip(
         "This test can no longer run since a product needs to be either a reference product, or a generic product"

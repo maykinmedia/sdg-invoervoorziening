@@ -13,13 +13,12 @@ class CatalogListView(OverheidMixin, RHListView):
     fields = [
         {"key": "_name", "label": _("Naam")},
         {
-            "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
+            "key": "generiek_product__upn__thema__informatiegebied",
             "label": _("Informatiegebied"),
-            # "lookup": "referentie_product__generiek_product__upn__thema__informatiegebied",
         },
         {"label": _("Aanwezig"), "key": "product_aanwezig"},
         {
-            # FIXME: The relation `referentie_product__generiek_product__doelgroep`
+            # FIXME: The relation `generiek_product__doelgroep`
             # doesn't work since doelgroep is not a FK?
             "key": "doelgroep",
             "label": _("Doelgroep"),
@@ -34,7 +33,7 @@ class CatalogListView(OverheidMixin, RHListView):
         # FIXME: Labels don't seem to override the default labels
         {"key": "_name", "label": _("Zoek op productnaam")},
         {
-            "key": "referentie_product__generiek_product__upn__thema__informatiegebied",
+            "key": "generiek_product__upn__thema__informatiegebied",
             "label": _("Thema"),
         },
         {"key": "product_aanwezig", "label": _("Aanwezig")},
@@ -85,19 +84,12 @@ class CatalogListView(OverheidMixin, RHListView):
             # The `annotate_latest_publication_date` is faster than getting the
             # entire active version with `.active_version`
             .annotate_latest_publication_date()
-            .select_related("catalogus__lokale_overheid")
-            # FIXME: The proper way is to `.annotate_area` (because it includes)
-            # areas for both reference and non-reference products. Alas, this
-            # doesn't work well with the datagrid component because it cannot
-            # determine that its a FK and list all possible choices.
-            # .annotate_area()
-            # Instead, we use this line below but it doesn't work for reference
-            # products because they don't have reference products themselves.
             .select_related(
-                "referentie_product__generiek_product",
-                "referentie_product__generiek_product__upn__thema__informatiegebied",
+                "catalogus__lokale_overheid",
+                "generiek_product",
+                "generiek_product__upn__thema__informatiegebied",
             )
-            # FIXME: Similar to above. This doesn't work for reference products.
-            .annotate(doelgroep=F("referentie_product__generiek_product__doelgroep"))
+            # FIXME: We have to annotate doelgroep to fix the RHS-component.
+            .annotate(doelgroep=F("generiek_product__doelgroep"))
             .order_by("_name")
         )

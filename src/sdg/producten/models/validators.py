@@ -43,10 +43,10 @@ def validate_specific_product(product):
         raise ValidationError(
             _("Dit specifieke product moet in een specifieke catalogus staan.")
         )
-    if product.generiek_product:
+    if product.generiek_product != product.referentie_product.generiek_product:
         raise ValidationError(
             _(
-                'Het veld "generiek_product" kan alleen worden toegevoegd als dit product een referentieproduct is.'
+                "Het veld generieke product moet gelijk zijn aan het generieke product van het referentieproduct."
             )
         )
     if not product.referentie_product.catalogus.is_referentie_catalogus:
@@ -66,8 +66,4 @@ def validate_reference_product(product):
     if not product.catalogus.is_referentie_catalogus:
         raise ValidationError(
             _("Dit referentieproduct moet in een referentiecatalogus staan.")
-        )
-    if not product.generiek_product:
-        raise ValidationError(
-            _("Een referentieproduct moet een generiek product hebben.")
         )
