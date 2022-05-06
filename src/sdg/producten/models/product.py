@@ -331,10 +331,7 @@ class Product(ProductFieldMixin, models.Model):
         ]
 
     def __str__(self):
-        if self.is_referentie_product:  # TODO: remove
-            return f"{self.name} (referentie)"
-        else:
-            return f"{self.name}"
+        return self.name
 
     def get_absolute_url(self):
         return reverse(

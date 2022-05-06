@@ -74,7 +74,6 @@ class ProductVersieAdmin(admin.ModelAdmin):
         "gewijzigd_op",
     )
     inlines = (LocalizedProductInline,)
-    ordering = ("-publicatie_datum",)
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return (
