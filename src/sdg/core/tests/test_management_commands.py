@@ -95,7 +95,9 @@ class TestImportData(CommandTestCase):
         self.assertEqual(4, Informatiegebied.objects.count())
         self.assertEqual(24, Thema.objects.count())
 
-        informatiegebied = Informatiegebied.objects.first()
+        informatiegebied = Informatiegebied.objects.get(
+            informatiegebied="Reizen binnen de Unie"
+        )
         self.assertEqual(informatiegebied.informatiegebied, "Reizen binnen de Unie")
         self.assertEqual(
             "http://standaarden.overheid.nl/owms/terms/sdg_reizUnie",
@@ -129,15 +131,14 @@ class TestImportData(CommandTestCase):
         self.assertEqual(True, upn.burger)
 
         # ensure themes are correct
-        upn = UniformeProductnaam.objects.get(upn_label="adoptie")
         self.assertEqual(thema_1, upn.thema)
         self.assertEqual("A1", upn.thema.code)
 
         # ensure target groups are correct
         self.assertEqual(2, upn.generieke_producten.count())
-        first_generic = upn.generieke_producten.first()
+        first_generic = upn.generieke_producten.get(doelgroep="eu-burger")
         self.assertEqual("eu-burger", first_generic.doelgroep)
-        self.assertEqual("eu-bedrijf", upn.generieke_producten.last().doelgroep)
+        self.assertEqual("eu-bedrijf", upn.generieke_producten.first().doelgroep)
         self.assertEqual(len(TaalChoices), first_generic.vertalingen.count())
 
 

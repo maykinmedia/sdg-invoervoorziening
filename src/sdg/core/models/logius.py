@@ -36,6 +36,7 @@ class Overheidsorganisatie(models.Model):
     class Meta:
         verbose_name = _("overheidsorganisatie")
         verbose_name_plural = _("overheidsorganisaties")
+        ordering = ["owms_end_date"]
 
     def __str__(self):
         return self.owms_pref_label
@@ -62,6 +63,7 @@ class Informatiegebied(models.Model):
     class Meta:
         verbose_name = _("informatiegebied")
         verbose_name_plural = _("informatiegebieden")
+        ordering = ["informatiegebied"]
 
     def __str__(self):
         return f"{self.informatiegebied}"
@@ -101,6 +103,7 @@ class Thema(models.Model):
     class Meta:
         verbose_name = _("thema")
         verbose_name_plural = _("thema's")
+        ordering = ["thema"]
 
     def __str__(self):
         return f"{self.thema}"
@@ -178,6 +181,7 @@ class UniformeProductnaam(models.Model):
     class Meta:
         verbose_name = _("uniforme productnaam")
         verbose_name_plural = _("uniforme productnamen")
+        ordering = ["upn_label"]
 
     def __str__(self):
         return self.upn_label
