@@ -76,8 +76,8 @@ class ProductPreviewView(OverheidMixin, DetailView):
     def _get_generieke_taal_producten(self):
         required_fields = ["verwijzing_links", "datum_check"]
 
-        nl = self.object.generic_product.vertalingen.filter(taal="nl").first()
-        en = self.object.generic_product.vertalingen.filter(taal="en").first()
+        nl = self.object.generiek_product.vertalingen.filter(taal="nl").first()
+        en = self.object.generiek_product.vertalingen.filter(taal="en").first()
 
         if nl:
             setattr(nl, "template_fields", nl.get_fields(required_fields))
@@ -218,8 +218,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "datum_check",
             "verwijzing_links",
         ]
-        nl = self.product.generic_product.vertalingen.filter(taal="nl").first()
-        en = self.product.generic_product.vertalingen.filter(taal="en").first()
+        nl = self.product.generiek_product.vertalingen.filter(taal="nl").first()
+        en = self.product.generiek_product.vertalingen.filter(taal="en").first()
 
         if nl:
             setattr(nl, "template_fields", nl.get_fields(required_fields))
@@ -237,7 +237,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        generic_information = self.product.generic_product.vertalingen.all()
+        generic_information = self.product.generiek_product.vertalingen.all()
 
         context["generic_products"] = self._get_generieke_taal_producten()
 

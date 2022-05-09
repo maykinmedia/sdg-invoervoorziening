@@ -24,7 +24,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
             "catalogus__lokale_overheid",
             "generiek_product",
             "generiek_product__upn",
-            "referentie_product__generiek_product__upn",
         )
         .prefetch_related(
             "gerelateerde_producten",

@@ -114,17 +114,11 @@ class ProductFilterSet(FilterSet):
     def filter_upn(self, queryset, name, value):
         """:returns: filtered upn for the given product's UPN."""
         parameter = camel_to_underscore(name)
-        return queryset.all().filter(
-            Q(**{f"generiek_product__upn__{parameter}": value})
-            | Q(**{f"referentie_product__generiek_product__upn__{parameter}": value})
-        )
+        return queryset.all().filter(**{f"generiek_product__upn__{parameter}": value})
 
     def filter_doelgroep(self, queryset, name, value):
         """:returns: filtered doelgroep for the given product's generic product."""
-        return queryset.all().filter(
-            Q(**{f"generiek_product__{name}": value})
-            | Q(**{f"referentie_product__generiek_product__{name}": value})
-        )
+        return queryset.all().filter(**{f"generiek_product__{name}": value})
 
     class Meta:
         model = Product

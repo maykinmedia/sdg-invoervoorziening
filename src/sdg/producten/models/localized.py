@@ -234,7 +234,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
 
     @cached_property
     def generiek_informatie(self):
-        for version in self.product_versie.product.generic_product.vertalingen.all():
+        for version in self.product_versie.product.generiek_product.vertalingen.all():
             if version.taal == self.taal:
                 return version
 

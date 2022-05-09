@@ -59,8 +59,8 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
     Fields: `url`, `upnUri`, `upnLabel`
     """
 
-    upn_label = serializers.CharField(source="generic_product.upn_label")
-    upn_uri = serializers.URLField(source="generic_product.upn_uri")
+    upn_label = serializers.CharField(source="generiek_product.upn_label")
+    upn_uri = serializers.URLField(source="generiek_product.upn_uri")
 
     class Meta:
         model = Product
@@ -147,4 +147,4 @@ class ProductSerializer(ProductBaseSerializer):
         return self._get_active_field(obj, "publicatie_datum")
 
     def get_doelgroep(self, obj: Product) -> str:
-        return obj.generic_product.doelgroep
+        return obj.generiek_product.doelgroep
