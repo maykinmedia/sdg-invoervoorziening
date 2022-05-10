@@ -30,8 +30,9 @@ class ReferenceDiffButton extends ReferenceTextComponent {
         const currentVersionData = this.getCurrentVersionData();
         const currentVersionValue = currentVersionData.input.value;
 
-        const diff = new Diff();
+        const diff = new Diff({timeout: 0, editCost: 4});
         const textDiff = diff.main(previousVersionValue, currentVersionValue);
+        diff.cleanupEfficiency(textDiff)
         const prettyHtml =  diff.prettyHtml(textDiff).replace(/<\/?span[^>]*>/g,"").replace(/<br\/>/g, "\n");
         return new showdown.Converter({tables: true}).makeHtml(prettyHtml);
     }

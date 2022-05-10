@@ -71,14 +71,14 @@ class FormDiffButton extends ReferenceTextComponent {
      */
     getDiffHTML() {
         const currentVersionData = this.getCurrentVersionData();
-        const referenceValue = currentVersionData.input.value;
-        const ownValue = this.getValue();
+        let referenceValue = currentVersionData.input.value;
+        let ownValue = this.getValue();
 
-        const diff = new Diff();
+        const diff = new Diff({timeout: 0, editCost: 4});
         const textDiff = diff.main(referenceValue, ownValue);
-
+        diff.cleanupEfficiency(textDiff)
         const prettyHtml = diff.prettyHtml(textDiff).replace(/<\/?span[^>]*>/g,"").replace(/<br\/>/g, "\n");
-        return new showdown.Converter({tables: true}).makeHtml(prettyHtml);
+        return new showdown.Converter({tables: true}).makeHtml(prettyHtml)
     }
 
     /**
