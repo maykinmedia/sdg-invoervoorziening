@@ -132,6 +132,7 @@ INSTALLED_APPS = [
     "zgw_consumers",
     # SDG applications
     "sdg.api",
+    "sdg.cmsapi",
     "sdg.components",
     "sdg.core",
     "sdg.utils",

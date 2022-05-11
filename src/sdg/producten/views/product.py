@@ -187,14 +187,17 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         return new_version, created
 
     def _generate_version_formset(self, version: ProductVersie):
+        product_nl = self.product.generiek_product.vertalingen.get(taal="nl")
+        product_en = self.product.generiek_product.vertalingen.get(taal="en")
+
         default_explanation_mapping = {
-            "nl": f"In de gemeente {self.lokale_overheid} valt het product {self.product} onder het product [product].",
-            "en": f"In the municipality of {self.lokale_overheid}, the product {self.product} falls under the product [product].",
+            "nl": f"In de gemeente {self.lokale_overheid} valt het product {product_nl} onder het product [product].",
+            "en": f"In the municipality of {self.lokale_overheid}, the product {product_en} falls under the product [product].",
         }
 
         default_aanwezig_toelichting_explanation_mapping = {
-            "nl": f"De gemeente {self.lokale_overheid} levert het product {self.product} niet omdat...",
-            "en": f"The municipality of {self.lokale_overheid} doesn't offer {self.product} because...",
+            "nl": f"De gemeente {self.lokale_overheid} levert het product {product_nl} niet omdat...",
+            "en": f"The municipality of {self.lokale_overheid} doesn't offer {product_en} because...",
         }
         formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0

@@ -49,6 +49,7 @@ urlpatterns = [
         name="invitation_accept",
     ),
     path("api/", include("sdg.api.urls", namespace="api")),
+    path("cmsapi/", include("sdg.cmsapi.urls", namespace="cmsapi")),
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
     path("organizations/", include("sdg.organisaties.urls", namespace="organisaties")),
