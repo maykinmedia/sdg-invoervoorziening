@@ -18,10 +18,12 @@ class ProductTranslation(viewsets.ReadOnlyModelViewSet):
     serializer_class = LocalizedGenericProductSerializer
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
-    lookup_url_kwargs = "product_id"
+    lookup_url_kwargs = ["product_id", "taal"]
 
     def get_queryset(self):
         product_id = self.request.query_params.get("product_id", None)
+        language = self.request.query_params.get("taal", None)
+
         localized_products = (
             LocalizedProduct.objects.filter(
                 product_versie__product__id=product_id,
@@ -30,6 +32,13 @@ class ProductTranslation(viewsets.ReadOnlyModelViewSet):
             .order_by("product_versie")
             .first()
         )
-        return LocalizedGeneriekProduct.objects.filter(
-            generiek_product=localized_products.product_versie.product.referentie_product.generiek_product
-        )
+        if localized_products:
+            if language:
+                return LocalizedGeneriekProduct.objects.filter(
+                    generiek_product=localized_products.product_versie.product.referentie_product.generiek_product,
+                    taal=language,
+                )
+            return LocalizedGeneriekProduct.objects.filter(
+                generiek_product=localized_products.product_versie.product.referentie_product.generiek_product,
+            )
+        return []
