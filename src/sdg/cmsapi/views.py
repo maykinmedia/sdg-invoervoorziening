@@ -3,7 +3,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from sdg.cmsapi.serializers import LocalizedGenericProductSerializer
-from sdg.producten.models.localized import LocalizedProduct, LocalizedGeneriekProduct
+from sdg.producten.models.localized import LocalizedGeneriekProduct, LocalizedProduct
 
 
 class ProductTranslation(viewsets.ReadOnlyModelViewSet):
@@ -12,6 +12,7 @@ class ProductTranslation(viewsets.ReadOnlyModelViewSet):
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
     lookup_url_kwargs = ["product_id", "taal"]
+    schema = None
 
     def get_queryset(self):
         product_id = self.request.query_params.get("product_id", None)
