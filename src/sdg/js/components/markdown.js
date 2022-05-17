@@ -53,11 +53,6 @@ class MarkdownEditor extends Component {
                 else {
                     editor.disableReadOnlyMode(GENERIC_EDITOR_LOCK);
                 }
-                editor.model.schema.addChildCheck((context, childDefinition) => {
-                    if (childDefinition.name === 'softBreak' && Array.from(context.getNames()).includes('paragraph')) {
-                        return false;
-                    }
-                });
                 editor.model.document.on('change:data', (e) => {
                     const event = new CustomEvent('change', e)
                     this.node.dispatchEvent(event);
