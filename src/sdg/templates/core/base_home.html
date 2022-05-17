@@ -48,6 +48,12 @@
                         <i class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}
                     </a>
 
+                    {% if not pk %}
+                        <a class="header__dropdown-text">
+                            {% trans "Selecteer eerst een organisatie voor meer opties." %}
+                        </a>
+                    {% endif %}
+
                     {% endwith %}
                 </div>
             </div>
