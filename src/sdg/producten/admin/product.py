@@ -73,6 +73,7 @@ class ProductVersieAdmin(admin.ModelAdmin):
         "gemaakt_op",
         "gewijzigd_op",
     )
+
     inlines = (LocalizedProductInline,)
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
@@ -93,6 +94,17 @@ class ProductVersieAdmin(admin.ModelAdmin):
         return obj.product.catalogus.lokale_overheid
 
     lokale_overheid.admin_order_field = "product__catalogus__lokale_overheid"
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "product":
+            product_versie = ProductVersie.objects.get(
+                id=request.resolver_match.kwargs["object_id"]
+            )
+            kwargs["queryset"] = Product.objects.filter(
+                catalogus__lokale_overheid=product_versie.product.catalogus.lokale_overheid
+            )
+
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Product)
