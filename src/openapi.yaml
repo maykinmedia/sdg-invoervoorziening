@@ -111,6 +111,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedLocatieList'
           description: ''
+    post:
+      operationId: locatiesCreate
+      description: Maak een nieuwe locatie voor een organisatie.
+      tags:
+      - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Locatie'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
   /api/v1/locaties/{uuid}:
     get:
       operationId: locatiesRetrieve
@@ -136,6 +157,85 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
+    put:
+      operationId: locatiesUpdate
+      description: Update de locatie van een organistatie.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Locatie'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+    patch:
+      operationId: locatiesPartialUpdate
+      description: Viewset for a location, retrieved by uuid
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLocatie'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+    delete:
+      operationId: locatiesDestroy
+      description: Verweider de locatie van een organisatie
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - locaties
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
   /api/v1/organisaties:
     get:
       operationId: organisatiesList
@@ -516,16 +616,14 @@ components:
           type: string
           description: Het land van de locatie.
           maxLength: 128
-        openingstijden:
-          allOf:
-          - $ref: '#/components/schemas/Openingstijden'
-          readOnly: true
         openingstijdenOpmerking:
           type: string
           description: Opmerking over de openingstijden.
           maxLength: 255
         organisatie:
           $ref: '#/components/schemas/LokaleOverheidBase'
+        openingstijden:
+          $ref: '#/components/schemas/Openingstijden'
       required:
       - land
       - naam
@@ -577,10 +675,6 @@ components:
           type: string
           description: Het land van de locatie.
           maxLength: 128
-        openingstijden:
-          allOf:
-          - $ref: '#/components/schemas/Openingstijden'
-          readOnly: true
         openingstijdenOpmerking:
           type: string
           description: Opmerking over de openingstijden.
@@ -589,7 +683,6 @@ components:
       - land
       - naam
       - nummer
-      - openingstijden
       - plaats
       - postcode
       - straat
@@ -852,6 +945,54 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductenCatalogus'
+    PatchedLocatie:
+      type: object
+      description: Serializer for location details, including contact details, address
+        and opening times.
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        naam:
+          type: string
+          description: De naam van de locatie.
+          maxLength: 40
+        straat:
+          type: string
+          description: De straatnaam van de locatie.
+          maxLength: 256
+        nummer:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Het huisnummer van de locatie.
+        postcode:
+          type: string
+          description: De postcode van de locatie.
+          maxLength: 6
+        plaats:
+          type: string
+          description: De plaatsnaam van de locatie.
+          maxLength: 256
+        land:
+          type: string
+          description: Het land van de locatie.
+          maxLength: 128
+        openingstijdenOpmerking:
+          type: string
+          description: Opmerking over de openingstijden.
+          maxLength: 255
+        organisatie:
+          $ref: '#/components/schemas/LokaleOverheidBase'
+        openingstijden:
+          $ref: '#/components/schemas/Openingstijden'
     Product:
       type: object
       description: Serializer for a product, including UPN, availability, locations

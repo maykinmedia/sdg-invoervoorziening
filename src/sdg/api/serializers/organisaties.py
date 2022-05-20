@@ -1,5 +1,7 @@
+from django.db import transaction
+from django.http import Http404
+
 from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
 
 from sdg.api.serializers.logius import OverheidsorganisatieSerializer
 from sdg.organisaties.models import (
@@ -87,8 +89,6 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
 class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer that exposes a subset of the fields for a location, used in references to a location."""
 
-    openingstijden = SerializerMethodField(method_name="get_openingstijden")
-
     class Meta:
         model = Locatie
         fields = (
@@ -100,7 +100,6 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
             "postcode",
             "plaats",
             "land",
-            "openingstijden",
             "openingstijden_opmerking",
         )
         extra_kwargs = {
@@ -110,17 +109,43 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
             },
         }
 
-    def get_openingstijden(self, obj: Locatie) -> OpeningstijdenSerializer:
-        return OpeningstijdenSerializer(obj).data
-
 
 class LocatieSerializer(LocatieBaseSerializer):
     """Serializer for location details, including contact details, address and opening times."""
 
     organisatie = LokaleOverheidBaseSerializer(source="lokale_overheid")
+    openingstijden = OpeningstijdenSerializer(source="*")
 
     class Meta(LocatieBaseSerializer.Meta):
-        fields = LocatieBaseSerializer.Meta.fields + ("organisatie",)
+        fields = LocatieBaseSerializer.Meta.fields + ("organisatie", "openingstijden")
+
+    @transaction.atomic
+    def create(self, validated_data):
+        lokale_overheid = validated_data.pop("lokale_overheid")
+        initial_organisatie = lokale_overheid["organisatie"]
+
+        try:
+            validated_data["lokale_overheid"] = LokaleOverheid.objects.get(
+                organisatie__owms_pref_label=initial_organisatie["owms_pref_label"]
+            )
+        except LokaleOverheid.DoesNotExist:
+            raise Http404
+
+        record = super().create(validated_data)
+
+        return record
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        validated_data.pop("lokale_overheid")
+
+        validated_data["lokale_overheid"] = LokaleOverheid.objects.get(
+            id=Locatie.objects.get(uuid=instance.uuid).lokale_overheid.id
+        )
+
+        record = super().update(instance, validated_data)
+
+        return record
 
 
 class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
