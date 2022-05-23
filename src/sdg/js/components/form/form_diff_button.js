@@ -1,4 +1,6 @@
 import Diff from 'text-diff';
+import showdown from 'showdown';
+
 import {ReferenceTextComponent} from './abstract/reference_text_component';
 
 
@@ -69,13 +71,14 @@ class FormDiffButton extends ReferenceTextComponent {
      */
     getDiffHTML() {
         const currentVersionData = this.getCurrentVersionData();
-        const referenceValue = currentVersionData.input.value;
-        const ownValue = this.getValue();
+        let referenceValue = currentVersionData.input.value;
+        let ownValue = this.getValue();
 
-        const diff = new Diff();
+        const diff = new Diff({timeout: 0, editCost: 4});
         const textDiff = diff.main(referenceValue, ownValue);
-
-        return diff.prettyHtml(textDiff).replace(/\\/g, '');
+        diff.cleanupEfficiency(textDiff)
+        const prettyHtml = diff.prettyHtml(textDiff).replace(/<\/?span[^>]*>/g,"").replace(/<br\/>/g, "\n");
+        return new showdown.Converter({tables: true}).makeHtml(prettyHtml)
     }
 
     /**
@@ -88,7 +91,7 @@ class FormDiffButton extends ReferenceTextComponent {
         if (!this.diffElement) {
             const fieldContainer = this.getFieldContainer();
             this.diffElement = document.createElement('div');
-            this.diffElement.classList.add('form__input', 'diff');
+            this.diffElement.classList.add('form__input', 'diff', 'tabs__table-cell', 'tabs__table-cell--value');
             fieldContainer.append(this.diffElement);
         }
 
