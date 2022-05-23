@@ -20,14 +20,18 @@
                 {% for subform in form %}
 
                     {% if subform.instance.organisatie == lokaleoverheid.organisatie %}
-                        <div>{# No form__subforms class to prevent JS-bindings #}
+                        <div class="form__subforms">{# No form__subforms class to prevent JS-bindings #}
+                            {% for hidden in subform.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
                             <h3 class="form__subtitle">
                                 <span>{% trans "Organisatie" %} {{ forloop.counter }}</span>
                             </h3>
                             <div class="form__block-group">
                                 <div>
                                     <input type="hidden" name="{{ subform.organisatie.html_name }}" value="{{ lokaleoverheid.organisatie.pk }}">
-                                    <p>{% blocktrans with org=subform.instance.organisatie %}{{ org }} is de standaard bevoegde organisatie.{% endblocktrans %}</p>
+                                    <label for="id_form-{{ forloop.counter }}-naam" class="form__label">{% trans "Standaard bevoegde organisatie" %}</label>
+                                    <p id="form-{{ forloop.counter }}-naam">{{ subform.instance.organisatie }}</p>
                                 </div>
                             </div>
                         </div>
