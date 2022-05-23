@@ -73,6 +73,7 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
     owms_end_date = serializers.DateTimeField(
         source="organisatie.owms_end_date",
         help_text="De einddatum, zoals gevonden in het OWMS-model.",
+        allow_null=True,
     )
 
     class Meta:
