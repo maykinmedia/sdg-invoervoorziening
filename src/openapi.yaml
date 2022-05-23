@@ -500,10 +500,9 @@ components:
           description: De straatnaam van de locatie.
           maxLength: 256
         nummer:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
+          type: string
           description: Het huisnummer van de locatie.
+          maxLength: 12
         postcode:
           type: string
           description: De postcode van de locatie.
@@ -561,10 +560,9 @@ components:
           description: De straatnaam van de locatie.
           maxLength: 256
         nummer:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
+          type: string
           description: Het huisnummer van de locatie.
+          maxLength: 12
         postcode:
           type: string
           description: De postcode van de locatie.

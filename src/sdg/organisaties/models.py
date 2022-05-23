@@ -169,9 +169,10 @@ class Lokatie(models.Model):
         max_length=256,
         help_text=_("De straatnaam van de locatie."),
     )
-    nummer = models.PositiveIntegerField(
+    nummer = models.CharField(
         _("nummer"),
         help_text=_("Het huisnummer van de locatie."),
+        max_length=12,
     )
     postcode = models.CharField(
         _("postcode"),
