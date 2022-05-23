@@ -264,7 +264,7 @@ class LocatieUpdateViewTests(WebTest):
 
         response.form["form-0-naam"] = "Name"
         response.form["form-0-straat"] = "Street"
-        response.form["form-0-nummer"] = 91
+        response.form["form-0-nummer"] = "91"
         response.form["form-0-plaats"] = "Town"
         response.form["form-0-postcode"] = "1234AB"
         response.form["form-0-land"] = "Country"
@@ -274,7 +274,7 @@ class LocatieUpdateViewTests(WebTest):
         location = self.lokale_overheid.locaties.get()
         self.assertEqual(location.naam, "Name")
         self.assertEqual(location.straat, "Street")
-        self.assertEqual(location.nummer, 91)
+        self.assertEqual(location.nummer, "91")
         self.assertEqual(location.plaats, "Town")
         self.assertEqual(location.postcode, "1234AB")
         self.assertEqual(location.land, "Country")
