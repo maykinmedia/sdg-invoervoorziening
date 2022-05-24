@@ -116,6 +116,7 @@ class ProductPreviewView(OverheidMixin, DetailView):
             "uiterste_termijn",
             "bezwaar_en_beroep",
             "wtd_bij_geen_reactie",
+            "decentrale_procedure_link",
         ]
 
         if self.is_concept():
