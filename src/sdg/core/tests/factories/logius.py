@@ -22,7 +22,9 @@ class OverheidsorganisatieFactory(DjangoModelFactory):
 
 class InformatiegebiedFactory(DjangoModelFactory):
     informatiegebied = factory.Faker("word")
-    informatiegebied_uri = factory.Faker("url")
+    informatiegebied_uri = factory.Sequence(
+        lambda n: f"http://informatiegebied-uri{n}.org"
+    )
 
     class Meta:
         model = Informatiegebied
