@@ -82,6 +82,11 @@ class LokaleOverheid(models.Model):
         verbose_name_plural = _("lokale overheden")
 
     def __str__(self):
+        if self.organisatie.owms_end_date:
+            return _("{label} (opgeheven op {end_date})").format(
+                label=self.organisatie.owms_pref_label,
+                end_date=self.organisatie.owms_end_date.date(),
+            )
         return self.organisatie.owms_pref_label
 
     def get_absolute_url(self):
@@ -169,9 +174,10 @@ class Lokatie(models.Model):
         max_length=256,
         help_text=_("De straatnaam van de locatie."),
     )
-    nummer = models.PositiveIntegerField(
+    nummer = models.CharField(
         _("nummer"),
         help_text=_("Het huisnummer van de locatie."),
+        max_length=12,
     )
     postcode = models.CharField(
         _("postcode"),

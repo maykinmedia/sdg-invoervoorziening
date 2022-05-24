@@ -101,6 +101,9 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "locaties",
         )
 
+    def _help_text(self, field):
+        return Product._meta.get_field(field).help_text
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         locations = self.instance.get_municipality_locations()
@@ -114,6 +117,10 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         self.fields["bevoegde_organisatie"].queryset = self.fields[
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
+
+        for field in self.fields:
+            self.fields[field].help_text = self._help_text(field)
+
         self.configure_fields()
 
 

@@ -304,6 +304,7 @@ class Product(ProductFieldMixin, models.Model):
     class Meta:
         verbose_name = _("product")
         verbose_name_plural = _("producten")
+        ordering = ["generiek_product__upn__upn_label"]
 
     def __str__(self):
         return self.name
