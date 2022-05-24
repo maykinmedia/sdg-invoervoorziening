@@ -13,7 +13,10 @@ from sdg.producten.tests.constants import (
     NOW_DATE,
     PRODUCT_EDIT_URL,
 )
-from sdg.producten.tests.factories.localized import LocalizedProductFactory
+from sdg.producten.tests.factories.localized import (
+    LocalizedGeneriekProductFactory,
+    LocalizedProductFactory,
+)
 from sdg.producten.tests.factories.product import (
     ProductVersieFactory,
     ReferentieProductVersieFactory,
@@ -42,7 +45,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
         )
 
         LocalizedProductFactory.create_batch(2, product_versie=self.product_version)
-
+        LocalizedGeneriekProductFactory.create_batch(
+            2,
+            generiek_product=self.product_version.product.referentie_product.generiek_product,
+        )
         LocalizedProductFactory.create_batch(2, product_versie=self.test)
         LocalizedProductFactory.create_batch(
             2, product_versie=self.reference_product_version
