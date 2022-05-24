@@ -750,8 +750,6 @@ components:
       - locaties
       - ondersteuningsOrganisatie
       - owmsEndDate
-      - owmsIdentifier
-      - owmsPrefLabel
       - url
       - uuid
     LokaleOverheidBase:
@@ -774,12 +772,10 @@ components:
         owmsEndDate:
           type: string
           format: date-time
-          nullable: true
+          readOnly: true
           description: De einddatum, zoals gevonden in het OWMS-model.
       required:
       - owmsEndDate
-      - owmsIdentifier
-      - owmsPrefLabel
       - url
     Openingstijden:
       type: object

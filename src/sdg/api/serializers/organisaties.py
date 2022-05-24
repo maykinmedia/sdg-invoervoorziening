@@ -65,15 +65,17 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
     owms_identifier = serializers.URLField(
         source="organisatie.owms_identifier",
         help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
+        required=False,
     )
     owms_pref_label = serializers.CharField(
         source="organisatie.owms_pref_label",
         help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
+        required=False,
     )
     owms_end_date = serializers.DateTimeField(
         source="organisatie.owms_end_date",
         help_text="De einddatum, zoals gevonden in het OWMS-model.",
-        allow_null=True,
+        read_only=True,
     )
 
     class Meta:
@@ -118,7 +120,17 @@ class LocatieSerializer(LocatieBaseSerializer):
     openingstijden = OpeningstijdenSerializer(source="*")
 
     class Meta(LocatieBaseSerializer.Meta):
-        fields = LocatieBaseSerializer.Meta.fields + ("organisatie", "openingstijden")
+        fields = LocatieBaseSerializer.Meta.fields + (
+            "organisatie",
+            "openingstijden",
+        )
+
+    def validate(self, attrs):
+        if "organisatie" not in attrs["lokale_overheid"]:
+            raise serializers.ValidationError(
+                "You forgot to provide the owms_pref_label and∕or the owms_identifier"
+            )
+        return attrs
 
     @transaction.atomic
     def create(self, validated_data):
@@ -126,11 +138,23 @@ class LocatieSerializer(LocatieBaseSerializer):
         initial_organisatie = lokale_overheid["organisatie"]
 
         try:
-            validated_data["lokale_overheid"] = LokaleOverheid.objects.get(
-                organisatie__owms_pref_label=initial_organisatie["owms_pref_label"]
-            )
+            if "owms_pref_label" in initial_organisatie:
+                validated_data["lokale_overheid"] = LokaleOverheid.objects.get(
+                    organisatie__owms_pref_label=initial_organisatie["owms_pref_label"]
+                )
         except LokaleOverheid.DoesNotExist:
-            raise Http404
+            raise serializers.ValidationError("Received a non existing owms_pref_label")
+
+        try:
+            if (
+                "lokale_overheid" not in validated_data
+                and "owms_identifier" in initial_organisatie
+            ):
+                validated_data["lokale_overheid"] = LokaleOverheid.objects.get(
+                    organisatie__owms_identifier=initial_organisatie["owms_identifier"]
+                )
+        except LokaleOverheid.DoesNotExist:
+            raise serializers.ValidationError("Received a non existing owms_identifier")
 
         record = super().create(validated_data)
 

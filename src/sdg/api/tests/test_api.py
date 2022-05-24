@@ -119,7 +119,7 @@ class LocatiesTests(APITestCase):
         body = {
             "naam": "Lorem Ipsum",
             "straat": "Lorem Ipsum",
-            "nummer": 12,
+            "nummer": "12",
             "postcode": "1234AB",
             "plaats": "Lorem Ipsum",
             "land": "Lorem Ipsum",
@@ -161,7 +161,7 @@ class LocatiesTests(APITestCase):
         body = {
             "naam": "Lorem Ipsum",
             "straat": "Lorem Ipsum",
-            "nummer": 12,
+            "nummer": "12",
             "postcode": "1234AB",
             "plaats": "Lorem Ipsum",
             "land": "Lorem Ipsum",
@@ -190,6 +190,46 @@ class LocatiesTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_create_location_with_no_organisation_label_or_identifier(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="http://standaarden.overheid.nl/owms/terms/test",
+            owms_pref_label="test",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(organisatie=organisatie)
+        LocatieFactory.create(lokale_overheid=lokale_overheid)
+        detail_url = reverse("api:locatie-list")
+
+        body = {
+            "naam": "Lorem Ipsum",
+            "straat": "Lorem Ipsum",
+            "nummer": "12",
+            "postcode": "1234AB",
+            "plaats": "Lorem Ipsum",
+            "land": "Lorem Ipsum",
+            "openingstijden": {
+                "maandag": ["12:00 - 18:00"],
+                "dinsdag": ["12:00 - 18:00"],
+                "woensdag": ["12:00 - 18:00"],
+                "donderdag": ["12:00 - 18:00"],
+                "vrijdag": ["12:00 - 18:00"],
+                "zaterdag": ["12:00 - 18:00"],
+                "zondag": ["12:00 - 18:00"],
+            },
+            "openingstijdenOpmerking": "Lorem Ipsum",
+            "organisatie": {
+                "owmsEndDate": None,
+            },
+        }
+
+        response = self.client.post(
+            detail_url,
+            data=json.dumps(body),
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_update_location(self):
         organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="http://standaarden.overheid.nl/owms/terms/test",
@@ -203,7 +243,7 @@ class LocatiesTests(APITestCase):
         body = {
             "naam": "Lorem Ipsum",
             "straat": "Lorem Ipsum",
-            "nummer": 12,
+            "nummer": "12",
             "postcode": "1234AB",
             "plaats": "Lorem Ipsum",
             "land": "Lorem Ipsum",
@@ -237,7 +277,7 @@ class LocatiesTests(APITestCase):
         self.assertEqual(str(locatie.uuid), data["uuid"])
         self.assertEqual(data["naam"], "Lorem Ipsum")
         self.assertEqual(data["straat"], "Lorem Ipsum")
-        self.assertEqual(data["nummer"], 12)
+        self.assertEqual(data["nummer"], "12")
         self.assertEqual(data["postcode"], "1234AB")
         self.assertEqual(data["plaats"], "Lorem Ipsum")
         self.assertEqual(data["naam"], "Lorem Ipsum")
