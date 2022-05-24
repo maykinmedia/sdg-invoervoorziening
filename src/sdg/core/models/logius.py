@@ -67,6 +67,7 @@ class Informatiegebied(models.Model):
     class Meta:
         verbose_name = _("informatiegebied")
         verbose_name_plural = _("informatiegebieden")
+        ordering = ["informatiegebied"]
 
     def __str__(self):
         return f"{self.informatiegebied}"
