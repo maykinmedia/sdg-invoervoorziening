@@ -2,6 +2,45 @@
 Change history
 ==============
 
+1.2.0
+=====
+
+*May 24, 2022*
+
+**API changes**
+
+* The attribute "huisnummer" is now a string.
+
+**CMS changes**
+
+* [#636] Increased invite period to 8 weeks
+* [#609] Removed code that was blocking softbreaks
+* [#608] Added decentrale procedure link to the _get_specifieke_taal_producten
+* [#605] Added function that retrieves value from the translation api
+* [#603] Changed huisnummer field in oranisatie model to charfield
+* [#600] Added dom elements so the js can detect all organisations
+* [#593] Changed empty tests to working tests
+* [#588] Added template block tags to show referentie product
+* [#585] Added showdown to render the diff elements as markdown
+* [#581] Changed str of lokale overheid and organisation to display end date
+* [#559] Added standard labels for algemene gegevens
+* [#545] Added if statements to check if the input variable has data
+* [#543] Added ordering for inforamtiegebieden
+* Prevents an infinite loop when cached value is None.
+* Prevent removal of default auth org.
+* Do not create catalogs for expired orgs.
+* Sort products by default.
+* Moved bevoegde organisaties in scope of reference products.
+* Show "my text" when comparing to my text.
+* Moved the toelichtingen fields to be under the pulldowns
+* Generic product is now on all products.
+* Bevoegde organisatie is mandatory and by default the verantwoordelijke organisatie.
+* Removed duplicate tests
+* Remove and don't allow zombie products
+* Updated all JS en Python packages.
+* Updated admin menu
+
+
 1.1.2
 =====
 
