@@ -12,6 +12,9 @@
     <link href="{% static 'hijack/hijack-styles.css' %}" rel="stylesheet" type="text/css"/>
     {% block extra_css %}{% endblock %}
     <link href="{% static 'bundles/sdg-css.css' %}" media="all" rel="stylesheet"/>
+    <script type="text/javascript">
+        const SubPath = "{% if settings.SUBPATH %}{{ settings.SUBPATH }}{% endif %}";
+    </script>
 </head>
 
 <body class="view__body">

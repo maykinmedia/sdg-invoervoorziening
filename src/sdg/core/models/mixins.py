@@ -23,5 +23,6 @@ class FieldConfigurationMixin:
                 field.help_text = model_meta.get_field(field).help_text
             except FieldDoesNotExist:
                 pass
-            if configuration := self.configuration.for_field(prefix=model, name=name):
+            configuration = self.configuration.for_field(prefix=model, name=name)
+            if configuration and len(configuration[0]) == 2:
                 field.label, field.help_text = configuration[0]

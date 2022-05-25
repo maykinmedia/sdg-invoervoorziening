@@ -3,11 +3,11 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from sdg.cmsapi.serializers import LocalizedGenericProductSerializer
-from sdg.producten.models.localized import LocalizedGeneriekProduct, LocalizedProduct
+from sdg.producten.models import Product
 
 
 class ProductTranslation(viewsets.ReadOnlyModelViewSet):
-    queryset = LocalizedProduct.objects.none()
+    queryset = Product.objects.none()
     serializer_class = LocalizedGenericProductSerializer
     authentication_classes = [SessionAuthentication]
     permission_classes = [IsAuthenticated]
@@ -18,21 +18,12 @@ class ProductTranslation(viewsets.ReadOnlyModelViewSet):
         product_id = self.request.query_params.get("product_id", None)
         language = self.request.query_params.get("taal", None)
 
-        localized_products = (
-            LocalizedProduct.objects.filter(
-                product_versie__product__id=product_id,
-                taal="nl",
-            )
-            .order_by("product_versie")
-            .first()
-        )
-        if localized_products:
-            if language:
-                return LocalizedGeneriekProduct.objects.filter(
-                    generiek_product=localized_products.product_versie.product.referentie_product.generiek_product,
-                    taal=language,
-                )
-            return LocalizedGeneriekProduct.objects.filter(
-                generiek_product=localized_products.product_versie.product.referentie_product.generiek_product,
-            ).order_by("-taal")
+        if product_id:
+            product = Product.objects.filter(pk=product_id).first()
+            if product:
+                if language:
+                    return product.generiek_product.vertalingen.filter(taal=language)
+                else:
+                    return product.generiek_product.vertalingen.order_by("-taal")
+
         return []

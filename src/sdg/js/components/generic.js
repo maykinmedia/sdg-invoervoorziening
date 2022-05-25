@@ -51,7 +51,8 @@ class GenericForm {
     }
 
     async getProductTranslationName(productId, language) {
-        const url = `${window.location.origin}/cmsapi/translation/?product_id=${productId}&taal=${language}`
+        // SubPath is a globally defined constant.
+        const url = `${window.location.origin}${SubPath}/cmsapi/translation/?product_id=${productId}&taal=${language}`
         const translationJsonResults = await fetch(url)
             .then(response => response.json())
             .then(data => data.results[0])

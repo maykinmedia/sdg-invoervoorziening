@@ -8,6 +8,7 @@ def settings(request):
         "SHOW_ALERT",
         "PROJECT_NAME",
         "RELEASE",
+        "SUBPATH",
     )
 
     context = {
