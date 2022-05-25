@@ -3,7 +3,8 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import viewsets
 
 from sdg.api.filters import LocatieFilterSet, LokaleOverheidFilterSet
-from sdg.api.serializers import LocatieSerializer, LokaleOverheidSerializer
+from sdg.api.serializers import LokaleOverheidSerializer
+from sdg.api.serializers.organisaties import LocatieSerializer
 from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 
@@ -50,8 +51,11 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
     retrieve=extend_schema(
         description="Locatie waar de bijbehorende organisatie 1 of meer producten aanbiedt."
     ),
+    create=extend_schema(description="Maak een nieuwe locatie voor een organisatie."),
+    update=extend_schema(description="Update de locatie van een organistatie."),
+    destroy=extend_schema(description="Verweider de locatie van een organisatie"),
 )
-class LocatieViewSet(viewsets.ReadOnlyModelViewSet):
+class LocatieViewSet(viewsets.ModelViewSet):
     """Viewset for a location, retrieved by uuid"""
 
     lookup_field = "uuid"
