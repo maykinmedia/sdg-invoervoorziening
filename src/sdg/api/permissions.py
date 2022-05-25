@@ -10,16 +10,21 @@ class LocationPermission(permissions.BasePermission):
         if bypass_permissions(request):
             return True
 
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
         if not request.auth:
             return False
 
         return True
 
     def has_object_permission(self, request, view, obj):
-        if request.method in permissions.SAFE_METHODS:
-            return True
-
-        key = TokenAuthorization.objects.get(lokale_overheid=obj.lokale_overheid).token
+        try:
+            key = TokenAuthorization.objects.get(
+                lokale_overheid=obj.lokale_overheid
+            ).token
+        except TokenAuthorization.DoesNotExist:
+            return False
 
         if request.auth == key:
             return True
