@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from sdg.organisaties.models import LokaleOverheid
+
 
 class Token(models.Model):
     """Custom authorization token model without binding to a specific user."""
