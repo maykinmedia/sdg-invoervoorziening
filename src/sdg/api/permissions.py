@@ -1,32 +1,51 @@
-from rest_framework import permissions
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 from vng_api_common.permissions import bypass_permissions
 
-from sdg.api.models import TokenAuthorization
 
-
-class LocationPermission(permissions.BasePermission):
+class LocationPermission(BasePermission):
     def has_permission(self, request, view):
         if bypass_permissions(request):
             return True
 
-        if request.method in permissions.SAFE_METHODS:
+        if request.method in SAFE_METHODS:
             return True
 
         if not request.auth:
             return False
 
+        if view.action is "create":
+            organisatie = view.get_organisatie(request, view)
+
+            if organisatie.get("owms_pref_label"):
+                if (
+                    request.auth.lokale_overheid.organisatie.owms_pref_label
+                    != organisatie.get("owms_pref_label")
+                ):
+                    return False
+
+            if organisatie.get("owms_identifier"):
+                if (
+                    request.auth.lokale_overheid.organisatie.owms_identifier
+                    != organisatie.get("owms_identifier")
+                ):
+                    return False
+
         return True
 
     def has_object_permission(self, request, view, obj):
-        try:
-            key = TokenAuthorization.objects.get(
-                lokale_overheid=obj.lokale_overheid
-            ).token
-        except TokenAuthorization.DoesNotExist:
-            return False
-
-        if request.auth == key:
+        if bypass_permissions(request):
             return True
 
-        return False
+        organisatie = view.get_organisatie(request, view, obj)
+
+        if view.action is "retrieve":
+            return True
+
+        if (
+            request.auth.lokale_overheid.organisatie.owms_pref_label
+            != organisatie.owms_pref_label
+        ):
+            return False
+
+        return True
