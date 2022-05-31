@@ -3,7 +3,7 @@
 {% if not field.value %}
     <span class="dark">—</span>
 {% elif field.is_text %}
-    {{ field.value|markdownify }}
+    {{ field.value|markdownify|linebreaksbr }}
 {% elif field.is_date %}
     {{ field.value|date }}
 {% elif field.is_boolean %}
