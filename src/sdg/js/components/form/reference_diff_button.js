@@ -71,12 +71,15 @@ class ReferenceDiffButton extends ReferenceTextComponent {
 
         const referenceTextContainer = this.getReferenceTextContainer();
 
-
         if(active) {
             referenceTextContainer.innerHTML = diffHTML;
             this.renderVersionContainer();
         } else {
             referenceTextContainer.innerHTML = this.getReferenceHTML();
+            const version = referenceTextContainer.parentNode.getElementsByClassName("tabs__table-cell--versions")
+            if (version !== undefined && version.length > 0) {
+                referenceTextContainer.parentNode.removeChild(version[0])
+            }
         }
     }
 }
