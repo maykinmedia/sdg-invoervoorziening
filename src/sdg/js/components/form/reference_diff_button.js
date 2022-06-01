@@ -41,10 +41,10 @@ class ReferenceDiffButton extends ReferenceTextComponent {
      * Renders the diff element.
      */
     renderVersionContainer() {
-        const referenceTextContainer = this.getReferenceTextContainer();
+        const referenceTextContainer = this.getReferenceTextContainer().parentElement;
         const versionsContainer = document.createElement('div');
         versionsContainer.classList.add('tabs__table-cell--versions');
-        referenceTextContainer.append(versionsContainer);
+        referenceTextContainer.prepend(versionsContainer);
 
         const previousVersionData = this.getPreviousVersionData();
         const currentVersionData = this.getCurrentVersionData();
