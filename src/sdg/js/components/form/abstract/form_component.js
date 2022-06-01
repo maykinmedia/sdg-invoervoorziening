@@ -88,7 +88,7 @@ export class FormComponent extends Component {
      */
     getVisibleInputOrTextarea() {
         const fieldContainer = this.getFieldContainer();
-        return fieldContainer.querySelector('input, .markdownx');
+        return fieldContainer.querySelector('input, .markdownx').parentElement;
     }
 
     /**
