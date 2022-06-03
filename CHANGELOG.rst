@@ -2,6 +2,14 @@
 Change history
 ==============
 
+1.2.2
+=====
+
+*June 3, 2022*
+
+* [#648] Fixed unwanted whitespacing caused by #641
+
+
 1.2.1
 =====
 

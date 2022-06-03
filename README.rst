@@ -2,7 +2,7 @@
 SDG invoervoorziening
 =====================
 
-:Version: 1.2.1
+:Version: 1.2.2
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: vng, sdg, pdc
 :PythonVersion: 3.8
