@@ -505,6 +505,7 @@ MARKDOWNIFY = {
             "h4",
             "h5",
             "code",
+            "br",
         ],
         "MARKDOWN_EXTENSIONS": ["markdown.extensions.extra"],
     }

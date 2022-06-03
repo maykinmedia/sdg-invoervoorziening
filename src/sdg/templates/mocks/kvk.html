@@ -61,7 +61,7 @@
                                 <tr>
                                     <td class="tabs__table-cell">
                                         <span class="tabs__table-cell--value">
-                                            {{ object.generieke_tekst | markdownify | linebreaksbr }}
+                                            {{ object.generieke_tekst | markdownify }}
                                         </span>
                                     </td>
                                 </tr>
@@ -124,7 +124,7 @@
 
                             {% if object.specifieke_tekst %}
                                 <div class="tabs__table-cell">
-                                    <span class="tabs__table-cell--value">{{ object.specifieke_tekst | markdownify | linebreaksbr }}</span>
+                                    <span class="tabs__table-cell--value">{{ object.specifieke_tekst | markdownify }}</span>
                                 </div>
                             {% endif %}
                         </div>
