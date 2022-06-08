@@ -13,8 +13,15 @@ from sdg.producten.models import Product, ProductVersie
         description="Lijst van alle producten die voorkomen in alle catalogi."
     ),
     retrieve=extend_schema(description="Product dat voorkomt in een catalogus."),
+    create=extend_schema(description="Maak een nieuwe product aan voor een catalogus."),
+    update=extend_schema(
+        description="Update een nieuwe product aan van een catalogus."
+    ),
+    destroy=extend_schema(
+        description="Verweider een nieuwe product aan van een catalogus"
+    ),
 )
-class ProductViewSet(viewsets.ReadOnlyModelViewSet):
+class ProductViewSet(viewsets.ModelViewSet):
     """Viewset for a product, retrieved by uuid"""
 
     lookup_field = "uuid"

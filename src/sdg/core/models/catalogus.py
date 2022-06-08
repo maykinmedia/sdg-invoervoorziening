@@ -37,6 +37,13 @@ class ProductenCatalogus(models.Model):
         default=False,
         help_text=_("Geeft aan of dit een referentiecatalogus is."),
     )
+    is_default_catalogus = models.BooleanField(
+        _("is standaard catalogus"),
+        default=False,
+        help_text=_(
+            "Geeft aan of dit de stabdaard catalogus is van de lokale overheid."
+        ),
+    )
     domein = models.CharField(
         _("domein"),
         max_length=5,
