@@ -42,6 +42,7 @@ class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
         source="organisatie.owms_end_date",
         help_text="De einddatum, zoals gevonden in het OWMS-model.",
         default=None,
+        read_only=True,
     )
     naam = serializers.CharField(
         help_text="De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is."
