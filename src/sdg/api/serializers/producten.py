@@ -1,4 +1,5 @@
 from datetime import date
+from dateutil.parser import parse
 
 from django.db import transaction
 from rest_framework import serializers
@@ -119,8 +120,12 @@ class ProductSerializer(ProductBaseSerializer):
     verantwoordelijke_organisatie = LokaleOverheidBaseSerializer(
         source="catalogus.lokale_overheid",
     )
-    publicatie_datum = SerializerMethodField(method_name="get_publicatie_datum")
-    vertalingen = SerializerMethodField(method_name="get_vertalingen")
+    publicatie_datum = serializers.CharField(
+        source="most_recent_version.publicatie_datum", allow_null=True
+    )
+    vertalingen = LocalizedProductSerializer(
+        source="most_recent_version.vertalingen", many=True
+    )
     versie = SerializerMethodField(method_name="get_versie")
     doelgroep = SerializerMethodField(method_name="get_doelgroep")
     gerelateerde_producten = ProductBaseSerializer(many=True)
@@ -174,19 +179,8 @@ class ProductSerializer(ProductBaseSerializer):
         active_version = getattr(product, "active_version", None)
         return getattr(active_version, field_name) if active_version else default
 
-    def get_vertalingen(self, obj: Product) -> LocalizedProductSerializer(many=True):
-        translations = self._get_active_field(obj, "vertalingen", default=[])
-
-        if translations and getattr(obj, "_filter_taal", None):
-            translations = [i for i in translations.all() if i.taal == obj._filter_taal]
-
-        return LocalizedProductSerializer(translations, many=True).data
-
     def get_versie(self, obj: Product) -> int:
         return self._get_active_field(obj, "versie", default=0)
-
-    def get_publicatie_datum(self, obj: Product) -> date:
-        return self._get_active_field(obj, "publicatie_datum")
 
     def get_doelgroep(self, obj: Product) -> str:
         return obj.generiek_product.doelgroep
@@ -321,6 +315,10 @@ class ProductSerializer(ProductBaseSerializer):
         bevoegde_organisatie = validated_data.pop("bevoegde_organisatie", [])
         locaties = validated_data.pop("locaties", [])
 
+        most_recent_version = validated_data.pop("most_recent_version")
+        publicatie_datum = most_recent_version.pop("publicatie_datum", None)
+        vertalingen = most_recent_version.pop("vertalingen", [])
+
         validated_data["generiek_product"] = self.get_generiek_product(generiek_product)
 
         if verantwoordelijke_organisatie:
@@ -328,7 +326,7 @@ class ProductSerializer(ProductBaseSerializer):
                 verantwoordelijke_organisatie
             )
 
-        if not validated_data["catalogus"]:
+        if not validated_data.get("catalogus", False):
             validated_data["catalogus"] = self.get_default_catalogus(
                 verantwoordelijke_organisatie
             )
@@ -338,7 +336,7 @@ class ProductSerializer(ProductBaseSerializer):
             catalogus=validated_data["catalogus"],
         )
 
-        if not validated_data["catalogus"].is_referentie_catalogus:
+        if not validated_data.get("catalogus").is_referentie_catalogus:
             validated_data["referentie_product"] = self.get_referentie_product(
                 validated_data["generiek_product"]
             )
@@ -380,23 +378,15 @@ class ProductSerializer(ProductBaseSerializer):
                     )
             product.gerelateerde_producten.set(gerelateerde_catalogus_producten)
 
-        publicatie_datum = data.get("publicatie_datum", "")
-
         product_versie = ProductVersie.objects.create(
             product=product,
             versie=1,
             publicatie_datum=publicatie_datum,
         )
 
-        vertalingen = data.get("vertalingen", [])
-
         if vertalingen:
             for vertaling in vertalingen:
                 vertaling["product_versie"] = product_versie
-                for field, value in vertaling.items():
-                    if value is None:
-                        message = f"Het veld '{field}' van de taal '{vertaling['taal']}' mag niet leeg zijn."
-                        raise serializers.ValidationError(message)
 
                 LocalizedProduct.objects.create(**vertaling)
 
@@ -411,6 +401,10 @@ class ProductSerializer(ProductBaseSerializer):
         verantwoordelijke_organisatie = data.get("verantwoordelijke_organisatie", [])
         bevoegde_organisatie = validated_data.pop("bevoegde_organisatie", [])
         locaties = validated_data.pop("locaties", [])
+
+        most_recent_version = validated_data.pop("most_recent_version")
+        publicatie_datum = most_recent_version.pop("publicatie_datum", None)
+        vertalingen = most_recent_version.pop("vertalingen", [])
 
         if verantwoordelijke_organisatie:
             verantwoordelijke_organisatie = self.get_organisatie(
@@ -467,23 +461,21 @@ class ProductSerializer(ProductBaseSerializer):
         instance.referentie_product = validated_data.get(
             "referentie_product", instance.referentie_product
         )
-        instance.gerelateerde_producten.set(
-            validated_data.get(
-                "gerelateerde_producten", instance.gerelateerde_producten
-            )
-        )
         instance.product_aanwezig = validated_data.get(
             "product_aanwezig", instance.product_aanwezig
         )
         instance.product_valt_onder = validated_data.get(
             "product_valt_onder", instance.product_valt_onder
         )
+
+        instance.gerelateerde_producten.set(
+            validated_data.get(
+                "gerelateerde_producten", instance.gerelateerde_producten
+            )
+        )
         instance.locaties.set(validated_data.get("locaties", instance.locaties))
 
         product_versie = ProductVersie.objects.filter(product=instance).first()
-
-        publicatie_datum = data.get("publicatie_datum", "")
-        vertalingen = data.get("vertalingen", [])
 
         if product_versie.publicatie_datum:
             product_versie = ProductVersie.objects.create(
@@ -495,10 +487,6 @@ class ProductSerializer(ProductBaseSerializer):
             if vertalingen:
                 for vertaling in vertalingen:
                     vertaling["product_versie"] = product_versie
-                    for field, value in vertaling.items():
-                        if value is None:
-                            message = f"Het veld '{field}' van de taal '{vertaling['taal']}' mag niet leeg zijn."
-                            raise serializers.ValidationError(message)
 
                     LocalizedProduct.objects.create(**vertaling)
         else:
@@ -508,10 +496,6 @@ class ProductSerializer(ProductBaseSerializer):
             if vertalingen:
                 for vertaling in vertalingen:
                     vertaling["product_versie"] = product_versie
-                    for field, value in vertaling.items():
-                        if value is None:
-                            message = f"Het veld '{field}' van de taal '{vertaling['taal']}' mag niet leeg zijn."
-                            raise serializers.ValidationError(message)
 
                     localized_product = LocalizedProduct.objects.get(
                         taal=vertaling["taal"], product_versie=product_versie

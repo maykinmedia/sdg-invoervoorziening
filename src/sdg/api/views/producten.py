@@ -35,6 +35,8 @@ class ProductViewSet(viewsets.ModelViewSet):
         .prefetch_related(
             "gerelateerde_producten",
             "locaties",
+            "versies",
+            "versies__vertalingen",
         )
         .active()
         .order_by("generiek_product__upn__upn_label")
