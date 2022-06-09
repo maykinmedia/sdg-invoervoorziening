@@ -1,10 +1,8 @@
 from datetime import date
-from gettext import Catalog
 
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from rest_framework.views import exception_handler
 
 from sdg.api.serializers.fields import LabeledUrlListField
 from sdg.api.serializers.organisaties import (
@@ -15,6 +13,7 @@ from sdg.api.serializers.organisaties import (
 )
 from sdg.core.models import catalogus
 from sdg.organisaties.models import BevoegdeOrganisatie, Lokatie as Locatie
+from sdg.organisaties.urls import catalog
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.models.product import GeneriekProduct
 
@@ -191,13 +190,6 @@ class ProductSerializer(ProductBaseSerializer):
 
     def get_doelgroep(self, obj: Product) -> str:
         return obj.generiek_product.doelgroep
-
-    def validate(self, attrs):
-        if "generiek_product" not in attrs:
-            raise serializers.ValidationError(
-                "You forgot to provide the 'upn label' and∕or the 'upn uri'"
-            )
-        return attrs
 
     def does_product_exist(self, generiek_product, catalogus):
         product_exists = Product.objects.filter(
@@ -409,3 +401,121 @@ class ProductSerializer(ProductBaseSerializer):
                 LocalizedProduct.objects.create(**vertaling)
 
         return product
+
+    @transaction.atomic
+    def update(self, instance, validated_data):
+        data = self.context["request"].data.copy()
+        generiek_product = instance.generiek_product
+        product_valt_onder = validated_data.pop("product_valt_onder", [])
+        gerelateerde_producten = validated_data.pop("gerelateerde_producten", [])
+        verantwoordelijke_organisatie = data.get("verantwoordelijke_organisatie", [])
+        bevoegde_organisatie = validated_data.pop("bevoegde_organisatie", [])
+        locaties = validated_data.pop("locaties", [])
+
+        if verantwoordelijke_organisatie:
+            verantwoordelijke_organisatie = self.get_organisatie(
+                verantwoordelijke_organisatie
+            )
+
+        if not validated_data["catalogus"]:
+            validated_data["catalogus"] = self.get_default_catalogus(
+                verantwoordelijke_organisatie
+            )
+
+        if not validated_data["catalogus"].is_referentie_catalogus:
+            validated_data["referentie_product"] = self.get_referentie_product(
+                generiek_product
+            )
+
+        if product_valt_onder:
+            if "generiek_product" in product_valt_onder:
+                validated_data["product_valt_onder"] = self.get_product(
+                    product_valt_onder["generiek_product"],
+                    validated_data["catalogus"],
+                )
+
+        if bevoegde_organisatie:
+            if "organisatie" in bevoegde_organisatie:
+                validated_data["bevoegde_organisatie"] = self.get_organisatie(
+                    bevoegde_organisatie["organisatie"]
+                )
+        else:
+            validated_data["bevoegde_organisatie"] = verantwoordelijke_organisatie
+
+        if gerelateerde_producten:
+            gerelateerde_catalogus_producten = []
+            for gerelateerde_product in gerelateerde_producten:
+                if "generiek_product" in gerelateerde_product:
+                    gerelateerde_catalogus_producten.append(
+                        self.get_product(
+                            gerelateerde_product["generiek_product"],
+                            validated_data["catalogus"],
+                        )
+                    )
+            validated_data["gerelateerde_producten"] = gerelateerde_catalogus_producten
+
+        if locaties:
+            validated_data["locaties"] = self.get_locaties(
+                locaties,
+                validated_data["catalogus"],
+            )
+
+        instance.catalogus = validated_data.get("catalogus", instance.catalogus)
+        instance.generiek_product = validated_data.get(
+            "generiek_product", instance.generiek_product
+        )
+        instance.referentie_product = validated_data.get(
+            "referentie_product", instance.referentie_product
+        )
+        instance.gerelateerde_producten.set(
+            validated_data.get(
+                "gerelateerde_producten", instance.gerelateerde_producten
+            )
+        )
+        instance.product_aanwezig = validated_data.get(
+            "product_aanwezig", instance.product_aanwezig
+        )
+        instance.product_valt_onder = validated_data.get(
+            "product_valt_onder", instance.product_valt_onder
+        )
+        instance.locaties.set(validated_data.get("locaties", instance.locaties))
+
+        product_versie = ProductVersie.objects.filter(product=instance).first()
+
+        publicatie_datum = data.get("publicatie_datum", "")
+        vertalingen = data.get("vertalingen", [])
+
+        if product_versie.publicatie_datum:
+            product_versie = ProductVersie.objects.create(
+                product=instance,
+                versie=product_versie.versie + 1,
+                publicatie_datum=publicatie_datum,
+            )
+
+            if vertalingen:
+                for vertaling in vertalingen:
+                    vertaling["product_versie"] = product_versie
+                    for field, value in vertaling.items():
+                        if value is None:
+                            message = f"Het veld '{field}' van de taal '{vertaling['taal']}' mag niet leeg zijn."
+                            raise serializers.ValidationError(message)
+
+                    LocalizedProduct.objects.create(**vertaling)
+        else:
+            product_versie.publicatie_datum = publicatie_datum
+            product_versie.save()
+
+            if vertalingen:
+                for vertaling in vertalingen:
+                    vertaling["product_versie"] = product_versie
+                    for field, value in vertaling.items():
+                        if value is None:
+                            message = f"Het veld '{field}' van de taal '{vertaling['taal']}' mag niet leeg zijn."
+                            raise serializers.ValidationError(message)
+
+                    localized_product = LocalizedProduct.objects.get(
+                        taal=vertaling["taal"], product_versie=product_versie
+                    )
+                    super().update(localized_product, vertaling)
+
+        return instance
