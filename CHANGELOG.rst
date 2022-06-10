@@ -2,6 +2,24 @@
 Change history
 ==============
 
+1.2.2
+=====
+
+*June 3, 2022*
+
+* [#648] Fixed unwanted whitespacing caused by #641
+
+
+1.2.1
+=====
+
+*June 1, 2022*
+
+* [#644] Fixed the position of the compare labels
+* [#642] Fixed the colour of the compare labels
+* [#641] Fixed linebreaks to be visable on the preview page
+
+
 1.2.0
 =====
 
