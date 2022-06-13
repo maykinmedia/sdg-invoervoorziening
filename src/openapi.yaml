@@ -387,6 +387,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
           description: ''
+    post:
+      operationId: productenCreate
+      description: Maak een nieuwe product aan voor een catalogus.
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
   /api/v1/producten/{productUuid}/concept:
     get:
       operationId: productenConceptList
@@ -472,6 +493,85 @@ paths:
               schema:
                 $ref: '#/components/schemas/Product'
           description: ''
+    put:
+      operationId: productenUpdate
+      description: Update een nieuwe product aan van een catalogus.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    patch:
+      operationId: productenPartialUpdate
+      description: Viewset for a product, retrieved by uuid
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: productenDestroy
+      description: Verweider een nieuwe product aan van een catalogus
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
 components:
   schemas:
     BevoegdeOrganisatie:
@@ -479,6 +579,7 @@ components:
       properties:
         naam:
           type: string
+          readOnly: true
           description: De naam van de bevoegde organisatie. Deze mag alleen afwijken
             indien er geen bekende overheidsorganisatie is.
         owmsIdentifier:
@@ -491,9 +592,11 @@ components:
         owmsEndDate:
           type: string
           format: date-time
+          readOnly: true
           description: De einddatum, zoals gevonden in het OWMS-model.
       required:
       - naam
+      - owmsEndDate
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -581,10 +684,6 @@ components:
           readOnly: true
         uuid:
           type: string
-          format: uuid
-          readOnly: true
-          description: De identificatie die binnen deze API gebruikt wordt voor de
-            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -619,14 +718,12 @@ components:
           $ref: '#/components/schemas/Openingstijden'
       required:
       - land
-      - naam
       - nummer
       - openingstijden
       - plaats
       - postcode
       - straat
       - url
-      - uuid
     LocatieBase:
       type: object
       description: Serializer that exposes a subset of the fields for a location,
@@ -638,10 +735,6 @@ components:
           readOnly: true
         uuid:
           type: string
-          format: uuid
-          readOnly: true
-          description: De identificatie die binnen deze API gebruikt wordt voor de
-            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -672,13 +765,11 @@ components:
           maxLength: 255
       required:
       - land
-      - naam
       - nummer
       - plaats
       - postcode
       - straat
       - url
-      - uuid
     LokaleOverheid:
       type: object
       description: Serializer for municipality details, including organization details,
@@ -946,10 +1037,6 @@ components:
           readOnly: true
         uuid:
           type: string
-          format: uuid
-          readOnly: true
-          description: De identificatie die binnen deze API gebruikt wordt voor de
-            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -982,6 +1069,67 @@ components:
           $ref: '#/components/schemas/LokaleOverheidBase'
         openingstijden:
           $ref: '#/components/schemas/Openingstijden'
+    PatchedProduct:
+      type: object
+      description: Serializer for a product, including UPN, availability, locations
+        and latest version translations.
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        upnLabel:
+          type: string
+        upnUri:
+          type: string
+          format: uri
+        versie:
+          type: integer
+          readOnly: true
+        publicatieDatum:
+          type: string
+          nullable: true
+        productAanwezig:
+          type: boolean
+          nullable: true
+          title: Aanwezig
+          description: Voert u dit product?
+        productValtOnder:
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          nullable: true
+        verantwoordelijkeOrganisatie:
+          $ref: '#/components/schemas/LokaleOverheidBase'
+        bevoegdeOrganisatie:
+          allOf:
+          - $ref: '#/components/schemas/BevoegdeOrganisatie'
+          nullable: true
+        catalogus:
+          type: string
+          format: uri
+          description: De catalogus waartoe dit product behoort.
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLocatie'
+          nullable: true
+        doelgroep:
+          type: string
+          readOnly: true
+        vertalingen:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedProduct'
+        gerelateerdeProducten:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductBase'
     Product:
       type: object
       description: Serializer for a product, including UPN, availability, locations
@@ -1007,19 +1155,22 @@ components:
           readOnly: true
         publicatieDatum:
           type: string
-          format: date
-          readOnly: true
+          nullable: true
         productAanwezig:
           type: boolean
           nullable: true
           title: Aanwezig
           description: Voert u dit product?
         productValtOnder:
-          $ref: '#/components/schemas/ProductBase'
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          nullable: true
         verantwoordelijkeOrganisatie:
           $ref: '#/components/schemas/LokaleOverheidBase'
         bevoegdeOrganisatie:
-          $ref: '#/components/schemas/BevoegdeOrganisatie'
+          allOf:
+          - $ref: '#/components/schemas/BevoegdeOrganisatie'
+          nullable: true
         catalogus:
           type: string
           format: uri
@@ -1027,7 +1178,8 @@ components:
         locaties:
           type: array
           items:
-            $ref: '#/components/schemas/LocatieBase'
+            $ref: '#/components/schemas/ProductLocatie'
+          nullable: true
         doelgroep:
           type: string
           readOnly: true
@@ -1035,21 +1187,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
-          readOnly: true
         gerelateerdeProducten:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
       required:
-      - bevoegdeOrganisatie
-      - catalogus
       - doelgroep
       - gerelateerdeProducten
       - locaties
       - productValtOnder
       - publicatieDatum
-      - upnLabel
-      - upnUri
       - url
       - uuid
       - verantwoordelijkeOrganisatie
@@ -1071,9 +1218,24 @@ components:
         upnLabel:
           type: string
       required:
-      - upnLabel
-      - upnUri
       - url
+    ProductLocatie:
+      type: object
+      description: Serializer that exposes a subset of the fields for a location,
+        used in references to a location.
+      properties:
+        openingstijden:
+          allOf:
+          - $ref: '#/components/schemas/Openingstijden'
+          readOnly: true
+        uuid:
+          type: string
+        naam:
+          type: string
+          description: De naam van de locatie.
+          maxLength: 40
+      required:
+      - openingstijden
     ProductVersie:
       type: object
       description: Serializer for the version of a product.

@@ -38,6 +38,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             "versies",
             "versies__vertalingen",
         )
+        .most_recent()
         .active()
         .order_by("generiek_product__upn__upn_label")
     )

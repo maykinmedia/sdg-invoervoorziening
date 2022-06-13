@@ -32,11 +32,13 @@ class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
         source="organisatie.owms_identifier",
         help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
         default=None,
+        required=False,
     )
     owms_pref_label = serializers.CharField(
         source="organisatie.owms_pref_label",
         help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
         default=None,
+        required=False,
     )
     owms_end_date = serializers.DateTimeField(
         source="organisatie.owms_end_date",
@@ -45,7 +47,8 @@ class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
         read_only=True,
     )
     naam = serializers.CharField(
-        help_text="De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is."
+        help_text="De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is.",
+        read_only=True,
     )
 
     class Meta:
@@ -93,6 +96,8 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
 class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer that exposes a subset of the fields for a location, used in references to a location."""
 
+    uuid = serializers.CharField(required=False)
+
     class Meta:
         model = Locatie
         fields = (
@@ -110,6 +115,9 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "view_name": "api:locatie-detail",
                 "lookup_field": "uuid",
+            },
+            "naam": {
+                "required": False,
             },
         }
 
