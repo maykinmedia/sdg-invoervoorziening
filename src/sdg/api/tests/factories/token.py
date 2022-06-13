@@ -1,7 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
-from sdg.api.models import Token, TokenAuthorization
 
+from sdg.api.models import Token, TokenAuthorization
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 

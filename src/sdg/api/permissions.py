@@ -1,5 +1,4 @@
 from rest_framework.permissions import SAFE_METHODS, BasePermission
-
 from vng_api_common.permissions import bypass_permissions
 
 
@@ -14,7 +13,7 @@ class LocationPermission(BasePermission):
         if not request.auth:
             return False
 
-        if view.action is "create":
+        if view.action == "create":
             organisatie = view.get_organisatie(request, view)
 
             if not organisatie:
@@ -33,7 +32,7 @@ class LocationPermission(BasePermission):
 
         organisatie = view.get_organisatie(request, view, obj)
 
-        if view.action is "retrieve":
+        if view.action == "retrieve":
             return True
 
         if organisatie.pk not in request.auth.tokenauthorization_set.values_list(

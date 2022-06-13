@@ -622,7 +622,6 @@ components:
       - naam
       - nummer
       - openingstijden
-      - organisatie
       - plaats
       - postcode
       - straat
