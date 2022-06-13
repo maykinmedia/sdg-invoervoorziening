@@ -17,19 +17,13 @@ class LocationPermission(BasePermission):
         if view.action is "create":
             organisatie = view.get_organisatie(request, view)
 
-            if organisatie.get("owms_pref_label"):
-                if (
-                    request.auth.lokale_overheid.organisatie.owms_pref_label
-                    != organisatie.get("owms_pref_label")
-                ):
-                    return False
+            if not organisatie:
+                return False
 
-            if organisatie.get("owms_identifier"):
-                if (
-                    request.auth.lokale_overheid.organisatie.owms_identifier
-                    != organisatie.get("owms_identifier")
-                ):
-                    return False
+            if organisatie.pk not in request.auth.tokenauthorization_set.values_list(
+                "lokale_overheid__organisatie__pk", flat=True
+            ):
+                return False
 
         return True
 
@@ -42,9 +36,8 @@ class LocationPermission(BasePermission):
         if view.action is "retrieve":
             return True
 
-        if (
-            request.auth.lokale_overheid.organisatie.owms_pref_label
-            != organisatie.owms_pref_label
+        if organisatie.pk not in request.auth.tokenauthorization_set.values_list(
+            "lokale_overheid__organisatie__pk", flat=True
         ):
             return False
 

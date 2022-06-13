@@ -6,6 +6,7 @@ from sdg.api.filters import LocatieFilterSet, LokaleOverheidFilterSet
 from sdg.api.permissions import LocationPermission
 from sdg.api.serializers import LokaleOverheidSerializer
 from sdg.api.serializers.organisaties import LocatieSerializer
+from sdg.core.models.logius import Overheidsorganisatie
 from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 
@@ -67,6 +68,25 @@ class LocatieViewSet(viewsets.ModelViewSet):
 
     def get_organisatie(self, request, view, obj=None):
         if request.method == "POST":
-            return view.request.data.get("organisatie")
+            organisatie = view.request.data.get("organisatie", None)
+            if not organisatie:
+                return None
+            if "owms_pref_label" in organisatie:
+                try:
+                    return Overheidsorganisatie.objects.get(
+                        owms_pref_label=organisatie.get("owms_pref_label")
+                    )
+                except Overheidsorganisatie.DoesNotExist:
+                    return None
+
+            if "owms_identifier" in organisatie:
+                try:
+                    return Overheidsorganisatie.objects.get(
+                        owms_identifier=organisatie.get("owms_identifier")
+                    )
+                except Overheidsorganisatie.DoesNotExist:
+                    return None
+
+            return None
 
         return obj.lokale_overheid.organisatie

@@ -1,14 +1,21 @@
-from rest_framework import exceptions
+from django.contrib.auth.models import AnonymousUser
+
 from rest_framework.authentication import TokenAuthentication as _TokenAuthentication
 
-from .models import TokenAuthorization
+from sdg.api.models import Token
 
 
 class TokenAuthentication(_TokenAuthentication):
-    def authenticate_credentials(self, key):
-        try:
-            token = TokenAuthorization.objects.get(token=key)
-        except TokenAuthorization.DoesNotExist:
-            raise exceptions.AuthenticationFailed("Invalid token.")
+    """Custom token authentication without user binding."""
 
-        return (token.lokale_overheid, token)
+    model = Token
+
+    def authenticate_credentials(self, key):
+        """Authenticate credentials without user checking."""
+        anon, model = AnonymousUser(), self.get_model()
+
+        try:
+            token = model.objects.get(key=key)
+            return anon, token
+        except model.DoesNotExist:
+            return anon, None  # optional

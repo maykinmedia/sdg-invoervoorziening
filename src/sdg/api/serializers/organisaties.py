@@ -116,7 +116,7 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
 class LocatieSerializer(LocatieBaseSerializer):
     """Serializer for location details, including contact details, address and opening times."""
 
-    organisatie = LokaleOverheidBaseSerializer(source="lokale_overheid")
+    organisatie = LokaleOverheidBaseSerializer(source="lokale_overheid", required=False)
     openingstijden = OpeningstijdenSerializer(source="*")
 
     class Meta(LocatieBaseSerializer.Meta):
@@ -126,15 +126,24 @@ class LocatieSerializer(LocatieBaseSerializer):
         )
 
     def validate(self, attrs):
-        if "organisatie" not in attrs["lokale_overheid"]:
-            raise serializers.ValidationError(
-                "You forgot to provide the owms_pref_label and∕or the owms_identifier"
-            )
+        if self.context["request"].method == "POST":
+            lokale_overheid = attrs.get("lokale_overheid", None)
+
+            if not lokale_overheid:
+                raise serializers.ValidationError(
+                    "You forgot to provide the owms_pref_label and∕or the owms_identifier"
+                )
+
+            if "organisatie" not in lokale_overheid:
+                raise serializers.ValidationError(
+                    "You forgot to provide the owms_pref_label and∕or the owms_identifier"
+                )
+
         return attrs
 
     @transaction.atomic
     def create(self, validated_data):
-        lokale_overheid = validated_data.pop("lokale_overheid")
+        lokale_overheid = validated_data.pop("lokale_overheid", None)
         initial_organisatie = lokale_overheid["organisatie"]
 
         try:
@@ -162,11 +171,9 @@ class LocatieSerializer(LocatieBaseSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        validated_data.pop("lokale_overheid")
+        validated_data.pop("lokale_overheid", None)
 
-        validated_data["lokale_overheid"] = LokaleOverheid.objects.get(
-            id=Locatie.objects.get(uuid=instance.uuid).lokale_overheid.id
-        )
+        validated_data["lokale_overheid"] = instance.lokale_overheid
 
         record = super().update(instance, validated_data)
 
