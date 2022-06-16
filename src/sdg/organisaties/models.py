@@ -170,7 +170,7 @@ class Lokatie(models.Model):
 
     naam = models.CharField(
         _("naam"),
-        max_length=40,
+        max_length=100,
         help_text=_("De naam van de locatie."),
     )
     straat = models.CharField(
