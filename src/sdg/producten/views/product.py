@@ -6,12 +6,12 @@ from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
-from sdg.organisaties.models import Lokatie
 from sdg.producten.forms import (
     LocalizedProductForm,
     LocalizedProductFormSet,
@@ -244,6 +244,10 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         generic_information = self.product.generiek_product.vertalingen.all()
 
         context["generic_products"] = self._get_generieke_taal_producten()
+
+        context["button_information"] = _(
+            "'Opslaan als concept' slaat het product op als een draft zodat u er later nog aan kan werken.\n'Opslaan en Publiceren' maakt een nieuwe gepubliceerde versie van het product aan."
+        )
 
         context["languages"] = list(TaalChoices.labels.keys())
         context["product"] = self.product
