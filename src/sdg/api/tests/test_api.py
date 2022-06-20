@@ -514,39 +514,3 @@ class LocatiesTests(APITestCase):
         deleted_url = self.client.get(detail_url)
 
         self.assertEqual(deleted_url.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_delete_location(self):
-        organisatie = OverheidsorganisatieFactory.create(
-            owms_identifier="http://standaarden.overheid.nl/owms/terms/test",
-            owms_pref_label="test",
-            owms_end_date=None,
-        )
-        lokale_overheid = LokaleOverheidFactory.create(organisatie=organisatie)
-        locatie = LocatieFactory.create(lokale_overheid=lokale_overheid)
-        token_authorization = TokenAuthorizationFactory.create(
-            lokale_overheid=lokale_overheid
-        )
-
-        second_organisatie = OverheidsorganisatieFactory.create(
-            owms_identifier="http://standaarden.overheid.nl/owms/terms/test2",
-            owms_pref_label="test2",
-            owms_end_date=None,
-        )
-        second_lokale_overheid = LokaleOverheidFactory.create(
-            organisatie=second_organisatie
-        )
-        second_token_authorization = TokenAuthorizationFactory.create(
-            lokale_overheid=second_lokale_overheid
-        )
-
-        detail_url = reverse("api:locatie-detail", args=[locatie.uuid])
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {second_token_authorization.token}"}
-
-        response = self.client.delete(
-            detail_url,
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
