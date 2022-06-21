@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from django import forms
@@ -155,7 +156,10 @@ class VersionForm(forms.ModelForm):
         kwargs["instance"] = self._get_version_instance(_instance)
         super().__init__(*args, **kwargs)
         if _instance.publicatie_datum:
-            self.fields["date"].initial = _instance.publicatie_datum.isoformat()
+            if _instance.publicatie_datum > date.today():
+                self.fields["date"].initial = _instance.publicatie_datum.isoformat()
+            else:
+                self.fields["date"].initial = str(date.today())
 
     def clean(self):
         cleaned_data = super().clean()
