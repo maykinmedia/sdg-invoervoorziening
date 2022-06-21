@@ -57,6 +57,9 @@
 
 
 <form action="." method="POST" class="form">
+    <!-- removes submitting on enter -->
+    <button type="submit" disabled aria-hidden="true" class="hidden"></button>
+
     {% csrf_token %}
     {{ form.management_form }}
     {{ product_form.non_field_errors }}
