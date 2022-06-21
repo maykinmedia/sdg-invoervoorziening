@@ -11,17 +11,27 @@ from sdg.producten.models import Product
 
 class CatalogListView(OverheidMixin, RHListView):
     fields = [
-        {"key": "_name", "label": _("Naam")},
+        {
+            "key": "_name",
+            "label": _("Naam"),
+            "filter_label": _("Zoek op productnaam"),
+        },
         {
             "key": "generiek_product__upn__thema__informatiegebied",
             "label": _("Informatiegebied"),
+            "filter_label": _("Thema"),
         },
-        {"label": _("Aanwezig"), "key": "product_aanwezig"},
+        {
+            "label": _("Aangeboden"),
+            "key": "product_aanwezig",
+            "filter_label": _("Aangeboden"),
+        },
         {
             # FIXME: The relation `generiek_product__doelgroep`
             # doesn't work since doelgroep is not a FK?
             "key": "doelgroep",
             "label": _("Doelgroep"),
+            "filter_label": _("Doelgroep"),
             "lookup": "doelgroep",
         },
         {
@@ -30,17 +40,17 @@ class CatalogListView(OverheidMixin, RHListView):
         },
     ]
     filterable_columns = [
-        # FIXME: Labels don't seem to override the default labels
-        {"key": "_name", "label": _("Zoek op productnaam")},
+        "_name",
+        "generiek_product__upn__thema__informatiegebied",
         {
-            "key": "generiek_product__upn__thema__informatiegebied",
-            "label": _("Thema"),
+            "key": "product_aanwezig",
+            "choices": (
+                ("", "Onbekend"),
+                (True, _("Ja")),
+                (False, _("Nee")),
+            ),
         },
-        {"key": "product_aanwezig", "label": _("Aanwezig")},
-        {
-            "key": "doelgroep",
-            "label": _("Doelgroep"),
-        },
+        "doelgroep",
     ]
     # FIXME: Setting orderable columns seems to break ordering entirely.
     # orderable_columns = [
@@ -53,13 +63,6 @@ class CatalogListView(OverheidMixin, RHListView):
     required_roles = ["is_beheerder", "is_redacteur"]
     template_name = "organisaties/catalogi/list.html"
     paginate_by = 100
-
-    def get_datagrid_config(self):
-        config = {
-            **super().get_datagrid_config(),
-            "dom_filter": True,
-        }
-        return config
 
     def get_lokale_overheid(self):
         """
