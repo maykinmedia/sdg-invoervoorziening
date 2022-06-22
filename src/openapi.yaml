@@ -594,7 +594,7 @@ components:
         naam:
           type: string
           description: De naam van de locatie.
-          maxLength: 40
+          maxLength: 100
         straat:
           type: string
           description: De straatnaam van de locatie.
@@ -652,7 +652,7 @@ components:
         naam:
           type: string
           description: De naam van de locatie.
-          maxLength: 40
+          maxLength: 100
         straat:
           type: string
           description: De straatnaam van de locatie.
@@ -960,7 +960,7 @@ components:
         naam:
           type: string
           description: De naam van de locatie.
-          maxLength: 40
+          maxLength: 100
         straat:
           type: string
           description: De straatnaam van de locatie.
