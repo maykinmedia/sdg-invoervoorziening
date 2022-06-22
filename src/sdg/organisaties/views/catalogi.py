@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from rijkshuisstijl.views.generic import ListView as RHListView
 
 from sdg.accounts.mixins import OverheidMixin
+from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
@@ -19,19 +20,19 @@ class CatalogListView(OverheidMixin, RHListView):
         {
             "key": "generiek_product__upn__thema__informatiegebied",
             "label": _("Informatiegebied"),
-            "filter_label": _("Thema"),
+            "filter_label": _("Selecteer thema"),
         },
         {
             "label": _("Aangeboden"),
             "key": "product_aanwezig",
-            "filter_label": _("Aangeboden"),
+            "filter_label": " ",
         },
         {
             # FIXME: The relation `generiek_product__doelgroep`
             # doesn't work since doelgroep is not a FK?
             "key": "doelgroep",
             "label": _("Doelgroep"),
-            "filter_label": _("Doelgroep"),
+            "filter_label": " ",
             "lookup": "doelgroep",
         },
         {
@@ -45,12 +46,15 @@ class CatalogListView(OverheidMixin, RHListView):
         {
             "key": "product_aanwezig",
             "choices": (
-                ("", "Onbekend"),
+                ("", "---------"),
                 (True, _("Ja")),
                 (False, _("Nee")),
             ),
         },
-        "doelgroep",
+        {
+            "key": "doelgroep",
+            "choices": (("", "---------"),) + DoelgroepChoices.choices,
+        },
     ]
     # FIXME: Setting orderable columns seems to break ordering entirely.
     # orderable_columns = [
