@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
@@ -62,6 +63,15 @@ class ProductVersieInlineAdmin(admin.StackedInline):
     extra = 1
 
 
+class ProductVersieForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        product_versie = kwargs["instance"]
+        self.fields["product"].queryset = Product.objects.filter(
+            catalogus__lokale_overheid=product_versie.product.catalogus.lokale_overheid
+        )
+
+
 @admin.register(ProductVersie)
 class ProductVersieAdmin(admin.ModelAdmin):
     list_display = (
@@ -73,6 +83,8 @@ class ProductVersieAdmin(admin.ModelAdmin):
         "gemaakt_op",
         "gewijzigd_op",
     )
+    form = ProductVersieForm
+
     inlines = (LocalizedProductInline,)
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
