@@ -44,6 +44,7 @@ class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
         source="organisatie.owms_end_date",
         help_text="De einddatum, zoals gevonden in het OWMS-model.",
         default=None,
+        required=False,
         read_only=True,
     )
     naam = serializers.CharField(

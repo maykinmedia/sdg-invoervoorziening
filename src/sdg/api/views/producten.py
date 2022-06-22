@@ -17,9 +17,6 @@ from sdg.producten.models import Product, ProductVersie
     update=extend_schema(
         description="Update een nieuwe product aan van een catalogus."
     ),
-    destroy=extend_schema(
-        description="Verweider een nieuwe product aan van een catalogus"
-    ),
 )
 class ProductViewSet(viewsets.ModelViewSet):
     """Viewset for a product, retrieved by uuid"""

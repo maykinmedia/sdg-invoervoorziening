@@ -256,7 +256,7 @@ class ProductSerializer(ProductBaseSerializer):
                 is_default_catalogus=True,
             )
         except ProductenCatalogus.DoesNotExist:
-            raise serializers.ValidationError("Didn't receive a catalogus")
+            raise serializers.ValidationError("Could not find a default catalog.")
 
     def get_referentie_product(self, generiek_product):
         referentie_product = Product.objects.get(
@@ -390,13 +390,12 @@ class ProductSerializer(ProductBaseSerializer):
 
         product, created = Product.objects.get_or_create(**validated_data)
 
-        if locaties:
-            product.locaties.set(
-                self.get_locaties(
-                    locaties,
-                    validated_data["catalogus"],
-                )
+        product.locaties.set(
+            self.get_locaties(
+                locaties,
+                validated_data["catalogus"],
             )
+        )
 
         if gerelateerde_producten:
             gerelateerde_catalogus_producten = []
@@ -442,11 +441,9 @@ class ProductSerializer(ProductBaseSerializer):
                 if not product_versie_created:
                     vertaling["product_versie"] = product_versie
 
-                    localized_product = LocalizedProduct.objects.get(
+                    LocalizedProduct.objects.filter(
                         taal=vertaling["taal"], product_versie=product_versie
-                    )
-
-                    super().update(localized_product, vertaling)
+                    ).update(**vertaling)
 
         return product
 
@@ -466,7 +463,7 @@ class ProductSerializer(ProductBaseSerializer):
         publicatie_datum = most_recent_version.pop("publicatie_datum", None)
         vertalingen = most_recent_version.pop("vertalingen", [])
 
-        product_versie = ProductVersie.objects.filter(product=instance).first()
+        product_versie = instance.most_recent_version
 
         if product_versie.publicatie_datum:
             raise serializers.ValidationError("You can't update a published version")
@@ -545,9 +542,8 @@ class ProductSerializer(ProductBaseSerializer):
             for vertaling in vertalingen:
                 vertaling["product_versie"] = product_versie
 
-                localized_product = LocalizedProduct.objects.get(
+                LocalizedProduct.objects.filter(
                     taal=vertaling["taal"], product_versie=product_versie
-                )
-                super().update(localized_product, vertaling)
+                ).update(**vertaling)
 
         return Product.objects.get(pk=instance.pk)

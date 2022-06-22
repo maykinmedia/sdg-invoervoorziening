@@ -185,7 +185,7 @@ class ProductenTests(APITestCase):
                 {
                     "taal": "nl",
                     "specifiekeTekst": "",
-                    "bewijs": "",
+                    "bewijs": "bewijs dat tekst wordt aangemaakt",
                     "bezwaarEnBeroep": "",
                     "decentraleProcedureLink": "",
                     "kostenEnBetaalmethoden": "",
@@ -201,7 +201,7 @@ class ProductenTests(APITestCase):
                 {
                     "taal": "en",
                     "specifiekeTekst": "",
-                    "bewijs": "",
+                    "bewijs": "proof that text gets created",
                     "bezwaarEnBeroep": "",
                     "decentraleProcedureLink": "",
                     "kostenEnBetaalmethoden": "",
@@ -225,6 +225,56 @@ class ProductenTests(APITestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data = response.json()
+
+        self.assertEqual(str(self.generiek_product.upn_label), data["upnLabel"])
+        self.assertEqual(self.generiek_product.upn_uri, data["upnUri"])
+        self.assertEqual(data["publicatieDatum"], str(NOW_DATE))
+        self.assertEqual(data["productAanwezig"], 1)
+        self.assertEqual(data["productValtOnder"], None)
+        self.assertEqual(
+            data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
+        )
+        self.assertEqual(
+            data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
+            "https://www.organisatie.com",
+        )
+        self.assertEqual(data["locaties"], [])
+        self.assertEqual(data["vertalingen"][0]["taal"], "nl")
+        self.assertEqual(data["vertalingen"][0]["specifiekeTekst"], "")
+        self.assertEqual(
+            data["vertalingen"][0]["bewijs"], "bewijs dat tekst wordt aangemaakt"
+        )
+        self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "")
+        self.assertEqual(data["vertalingen"][0]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "")
+        self.assertEqual(data["vertalingen"][0]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][0]["uitersteTermijn"], "")
+        self.assertEqual(data["vertalingen"][0]["vereisten"], "")
+        self.assertEqual(data["vertalingen"][0]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][0]["wtdBijGeenReactie"], "")
+        self.assertEqual(data["vertalingen"][0]["productAanwezigToelichting"], "")
+        self.assertEqual(data["vertalingen"][0]["productValtOnderToelichting"], "")
+
+        self.assertEqual(data["vertalingen"][1]["taal"], "en")
+        self.assertEqual(data["vertalingen"][1]["specifiekeTekst"], "")
+        self.assertEqual(
+            data["vertalingen"][1]["bewijs"], "proof that text gets created"
+        )
+        self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "")
+        self.assertEqual(data["vertalingen"][1]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "")
+        self.assertEqual(data["vertalingen"][1]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][1]["uitersteTermijn"], "")
+        self.assertEqual(data["vertalingen"][1]["vereisten"], "")
+        self.assertEqual(data["vertalingen"][1]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "")
+        self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
+        self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
+        self.assertEqual(data["gerelateerdeProducten"], [])
 
     def test_create_new_product_version(self):
         organisatie = OverheidsorganisatieFactory.create(
@@ -364,7 +414,7 @@ class ProductenTests(APITestCase):
             "vertalingen": [
                 {
                     "taal": "nl",
-                    "specifiekeTekst": "",
+                    "specifiekeTekst": "generieke tekst om te kijken of hij update",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
                     "decentraleProcedureLink": "",
@@ -380,7 +430,7 @@ class ProductenTests(APITestCase):
                 },
                 {
                     "taal": "en",
-                    "specifiekeTekst": "",
+                    "specifiekeTekst": "generic text to see if it updates",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
                     "decentraleProcedureLink": "",
@@ -409,6 +459,56 @@ class ProductenTests(APITestCase):
         data = response.json()
 
         self.assertEqual(data["versie"], 1)
+
+        self.assertEqual(str(self.generiek_product.upn_label), data["upnLabel"])
+        self.assertEqual(self.generiek_product.upn_uri, data["upnUri"])
+        self.assertEqual(data["publicatieDatum"], str(NOW_DATE))
+        self.assertEqual(data["productAanwezig"], 1)
+        self.assertEqual(data["productValtOnder"], None)
+        self.assertEqual(
+            data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
+        )
+        self.assertEqual(
+            data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
+            "https://www.organisatie.com",
+        )
+        self.assertEqual(data["locaties"], [])
+        self.assertEqual(data["vertalingen"][0]["taal"], "nl")
+        self.assertEqual(
+            data["vertalingen"][0]["specifiekeTekst"],
+            "generieke tekst om te kijken of hij update",
+        )
+        self.assertEqual(data["vertalingen"][0]["bewijs"], "")
+        self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "")
+        self.assertEqual(data["vertalingen"][0]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "")
+        self.assertEqual(data["vertalingen"][0]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][0]["uitersteTermijn"], "")
+        self.assertEqual(data["vertalingen"][0]["vereisten"], "")
+        self.assertEqual(data["vertalingen"][0]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][0]["wtdBijGeenReactie"], "")
+        self.assertEqual(data["vertalingen"][0]["productAanwezigToelichting"], "")
+        self.assertEqual(data["vertalingen"][0]["productValtOnderToelichting"], "")
+
+        self.assertEqual(data["vertalingen"][1]["taal"], "en")
+        self.assertEqual(
+            data["vertalingen"][1]["specifiekeTekst"],
+            "generic text to see if it updates",
+        )
+        self.assertEqual(data["vertalingen"][1]["bewijs"], "")
+        self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "")
+        self.assertEqual(data["vertalingen"][1]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "")
+        self.assertEqual(data["vertalingen"][1]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][1]["uitersteTermijn"], "")
+        self.assertEqual(data["vertalingen"][1]["vereisten"], "")
+        self.assertEqual(data["vertalingen"][1]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "")
+        self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
+        self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
+        self.assertEqual(data["gerelateerdeProducten"], [])
 
     def test_updating_product(self):
         detail_url = reverse("api:product-detail", args=[self.product.uuid])
