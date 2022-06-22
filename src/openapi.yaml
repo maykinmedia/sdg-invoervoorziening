@@ -730,11 +730,13 @@ components:
         contactEmailadres:
           type: string
           format: email
-          description: Het e-mailadres van de verantwoordelijke contactpersoon.
+          description: Het algemene e-mailadres van de gemeente of het e-mailadres
+            van het klantcontactcentrum van de gemeente.
           maxLength: 254
         contactTelefoonnummer:
           type: string
-          description: Het telefoonnummer van de gemeente.
+          description: 'Het internationale telefoonnummer waarop de gemeente bereikbaar
+            is. Bijvoorbeeld: +31 20 624 1111'
           maxLength: 20
         bevoegdeOrganisaties:
           type: array

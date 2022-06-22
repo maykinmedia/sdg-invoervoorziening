@@ -35,13 +35,17 @@ class LokaleOverheid(models.Model):
         _("contact telefoonnummer"),
         max_length=20,
         blank=True,
-        help_text=_("Het telefoonnummer van de gemeente."),
+        help_text=_(
+            "Het internationale telefoonnummer waarop de gemeente bereikbaar is. Bijvoorbeeld: +31 20 624 1111"
+        ),
     )
     contact_emailadres = models.EmailField(
         _("contact emailadres"),
         max_length=254,
         blank=True,
-        help_text=_("Het e-mailadres van de verantwoordelijke contactpersoon."),
+        help_text=_(
+            "Het algemene e-mailadres van de gemeente of het e-mailadres van het klantcontactcentrum van de gemeente."
+        ),
     )
     ondersteunings_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
