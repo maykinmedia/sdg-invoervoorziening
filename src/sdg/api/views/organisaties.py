@@ -71,22 +71,17 @@ class LocatieViewSet(viewsets.ModelViewSet):
             organisatie = view.request.data.get("organisatie", None)
             if not organisatie:
                 return None
-            if "owms_pref_label" in organisatie:
-                try:
-                    return Overheidsorganisatie.objects.get(
-                        owms_pref_label=organisatie.get("owms_pref_label")
-                    )
-                except Overheidsorganisatie.DoesNotExist:
-                    return None
 
-            if "owms_identifier" in organisatie:
-                try:
-                    return Overheidsorganisatie.objects.get(
-                        owms_identifier=organisatie.get("owms_identifier")
-                    )
-                except Overheidsorganisatie.DoesNotExist:
-                    return None
+            for identifier in ["owms_pref_label", "owms_identifier"]:
+                if identifier in organisatie:
+                    try:
+                        return Overheidsorganisatie.objects.get(
+                            **{identifier: organisatie.get(identifier)}
+                        )
+                    except Overheidsorganisatie.DoesNotExist:
+                        return None
 
+        if obj is None:
             return None
 
         return obj.lokale_overheid.organisatie

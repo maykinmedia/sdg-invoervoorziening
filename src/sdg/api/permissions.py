@@ -7,22 +7,24 @@ class LocationPermission(BasePermission):
         if bypass_permissions(request):
             return True
 
-        if request.method in SAFE_METHODS:
+        if view.action in ["list", "retrieve", "option"]:
             return True
 
         if not request.auth:
             return False
 
-        if view.action == "create":
-            organisatie = view.get_organisatie(request, view)
+        if view.action in ["update", "destroy"]:
+            return True
 
-            if not organisatie:
-                return False
+        organisatie = view.get_organisatie(request, view)
 
-            if organisatie.pk not in request.auth.tokenauthorization_set.values_list(
-                "lokale_overheid__organisatie__pk", flat=True
-            ):
-                return False
+        if not organisatie:
+            return False
+
+        if organisatie.pk not in request.auth.tokenauthorization_set.values_list(
+            "lokale_overheid__organisatie__pk", flat=True
+        ):
+            return False
 
         return True
 
@@ -30,10 +32,10 @@ class LocationPermission(BasePermission):
         if bypass_permissions(request):
             return True
 
-        organisatie = view.get_organisatie(request, view, obj)
-
         if view.action == "retrieve":
             return True
+
+        organisatie = view.get_organisatie(request, view, obj)
 
         if organisatie.pk not in request.auth.tokenauthorization_set.values_list(
             "lokale_overheid__organisatie__pk", flat=True
