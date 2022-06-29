@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from sdg.organisaties.models import LokaleOverheid
+
 
 class Token(models.Model):
     """Custom authorization token model without binding to a specific user."""
@@ -67,3 +69,22 @@ class Token(models.Model):
         return get_random_string(
             length=40, allowed_chars="abcdefghijklmnopqrstuvwxyz0123456789"
         )
+
+
+class TokenAuthorization(models.Model):
+    token = models.ForeignKey(
+        "Token",
+        on_delete=models.CASCADE,
+        default=None,
+    )
+    lokale_overheid = models.ForeignKey(
+        "organisaties.LokaleOverheid",
+        on_delete=models.PROTECT,
+    )
+
+    class Meta:
+        verbose_name = _("Betreffende Overheid")
+        verbose_name_plural = _("Betreffende Overheiden")
+
+    def __str__(self):
+        return self.lokale_overheid.organisatie.owms_pref_label

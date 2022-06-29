@@ -103,7 +103,6 @@ paths:
       - locaties
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -124,7 +123,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           content:
@@ -149,7 +147,6 @@ paths:
       - locaties
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -179,7 +176,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -208,7 +204,6 @@ paths:
               $ref: '#/components/schemas/PatchedLocatie'
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -232,7 +227,6 @@ paths:
       - locaties
       security:
       - tokenAuth: []
-      - {}
       responses:
         '204':
           description: No response body
@@ -628,7 +622,6 @@ components:
       - naam
       - nummer
       - openingstijden
-      - organisatie
       - plaats
       - postcode
       - straat

@@ -3,8 +3,10 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import viewsets
 
 from sdg.api.filters import LocatieFilterSet, LokaleOverheidFilterSet
+from sdg.api.permissions import LocationPermission
 from sdg.api.serializers import LokaleOverheidSerializer
 from sdg.api.serializers.organisaties import LocatieSerializer
+from sdg.core.models.logius import Overheidsorganisatie
 from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 
@@ -62,3 +64,24 @@ class LocatieViewSet(viewsets.ModelViewSet):
     queryset = Locatie.objects.select_related("lokale_overheid")
     filterset_class = LocatieFilterSet
     serializer_class = LocatieSerializer
+    permission_classes = [LocationPermission]
+
+    def get_organisatie(self, request, view, obj=None):
+        if request.method == "POST":
+            organisatie = view.request.data.get("organisatie", None)
+            if not organisatie:
+                return None
+
+            for identifier in ["owms_pref_label", "owms_identifier"]:
+                if identifier in organisatie:
+                    try:
+                        return Overheidsorganisatie.objects.get(
+                            **{identifier: organisatie.get(identifier)}
+                        )
+                    except Overheidsorganisatie.DoesNotExist:
+                        return None
+
+        if obj is None:
+            return None
+
+        return obj.lokale_overheid.organisatie
