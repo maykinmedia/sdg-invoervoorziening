@@ -246,7 +246,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         context["generic_products"] = self._get_generieke_taal_producten()
 
         context["button_information"] = _(
-            "'Opslaan als concept' slaat het product op als een draft zodat u er later nog aan kan werken.\n'Opslaan en Publiceren' maakt een nieuwe gepubliceerde versie van het product aan."
+            "'Opslaan als concept' slaat het product op zonder te publiceren zodat u er later nog aan kan werken.\n'Opslaan en publiceren' maakt een nieuwe gepubliceerde versie van het product aan, actief vanaf de gekozen datum aan de linkerkant."
         )
 
         context["languages"] = list(TaalChoices.labels.keys())
