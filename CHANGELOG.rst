@@ -2,6 +2,23 @@
 Change history
 ==============
 
+
+1.2.3
+=====
+
+* [#551] Allow indenting bullet lists.
+* [#607] Remove search from list product page.
+* [#619] Changed location name max length from 40 to 80
+* [#606] Changed standard publicatie date to today or future date
+* [#450] Disabled submition on enter
+* [#540] Added info tool tip to explain the buttons
+* [#558] Added ordering numbers
+* [#628] Optimized product version query in admin page
+* Fixed tooltips after review.
+* Changed tooltip text after review.
+* Added CodeQL action
+
+
 1.2.2
 =====
 
