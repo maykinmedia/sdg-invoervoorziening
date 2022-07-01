@@ -81,6 +81,7 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
         source="organisatie.owms_end_date",
         help_text="De einddatum, zoals gevonden in het OWMS-model.",
         read_only=True,
+        required=False,
     )
 
     class Meta:
@@ -96,8 +97,6 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
 
 class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer that exposes a subset of the fields for a location, used in references to a location."""
-
-    uuid = serializers.CharField(required=False)
 
     class Meta:
         model = Locatie
@@ -118,6 +117,9 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
                 "lookup_field": "uuid",
             },
             "naam": {
+                "required": False,
+            },
+            "uuid": {
                 "required": False,
             },
         }

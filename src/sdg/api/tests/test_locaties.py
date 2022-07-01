@@ -3,8 +3,8 @@ import json
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
-from sdg.api.tests.factories.token import TokenAuthorizationFactory
 
+from sdg.api.tests.factories.token import TokenAuthorizationFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.tests.factories.overheid import (
     LocatieFactory,

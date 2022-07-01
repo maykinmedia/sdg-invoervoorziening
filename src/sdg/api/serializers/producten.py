@@ -3,6 +3,7 @@ from django.forms.models import model_to_dict
 
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+from rest_framework.reverse import reverse
 
 from sdg.api.serializers.fields import LabeledUrlListField
 from sdg.api.serializers.organisaties import (
@@ -11,8 +12,13 @@ from sdg.api.serializers.organisaties import (
     LokaleOverheidBaseSerializer,
     OpeningstijdenSerializer,
 )
+from sdg.core.constants.product import TaalChoices
 from sdg.core.models.catalogus import ProductenCatalogus
-from sdg.organisaties.models import BevoegdeOrganisatie, Lokatie as Locatie
+from sdg.organisaties.models import (
+    BevoegdeOrganisatie,
+    LokaleOverheid,
+    Lokatie as Locatie,
+)
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.models.product import GeneriekProduct
 
@@ -103,16 +109,81 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
             "naam",
         )
 
+        extra_kwargs = {
+            "naam": {
+                "required": False,
+            },
+            "uuid": {
+                "required": False,
+                "read_only": False,
+            },
+        }
+
+
+class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
+    """Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+    - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
+    """
+
+    owms_identifier = serializers.URLField(
+        source="catalogi.organisatie.owms_identifier",
+        help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
+        required=False,
+    )
+    owms_pref_label = serializers.CharField(
+        source="catalogi.organisatie.owms_pref_label",
+        help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
+        required=False,
+    )
+    owms_end_date = serializers.DateTimeField(
+        source="catalogi.organisatie.owms_end_date",
+        help_text="De einddatum, zoals gevonden in het OWMS-model.",
+        read_only=True,
+        required=False,
+    )
+
+    class Meta:
+        model = Product
+        fields = (
+            "url",
+            "owms_identifier",
+            "owms_pref_label",
+            "owms_end_date",
+        )
+        extra_kwargs = {
+            "url": {
+                "view_name": "api:lokaleoverheid-detail",
+                "lookup_field": "uuid",
+            },
+        }
+
+    def to_representation(self, instance):
+        data = super(ProductLokaleOverheidSerializer, self).to_representation(instance)
+
+        data.update(
+            url=reverse(
+                "api:lokaleoverheid-detail",
+                [str(instance.catalogus.lokale_overheid.uuid)],
+            ),
+            owms_pref_label=instance.catalogus.lokale_overheid.organisatie.owms_pref_label,
+            owms_identifier=instance.catalogus.lokale_overheid.organisatie.owms_identifier,
+            owms_end_date=instance.catalogus.lokale_overheid.organisatie.owms_end_date,
+        )
+
+        return data
+
 
 class ProductSerializer(ProductBaseSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 
-    verantwoordelijke_organisatie = LokaleOverheidBaseSerializer(
-        source="catalogus.lokale_overheid",
+    verantwoordelijke_organisatie = ProductLokaleOverheidSerializer(
+        source="*",
     )
-    publicatie_datum = serializers.CharField(
-        source="most_recent_version.publicatie_datum", allow_null=True
+    publicatie_datum = serializers.DateField(
+        source="most_recent_version.publicatie_datum",
+        allow_null=True,
     )
+    product_aanwezig = serializers.BooleanField(allow_null=True, required=True)
     vertalingen = LocalizedProductSerializer(
         source="most_recent_version.vertalingen", many=True
     )
@@ -126,7 +197,7 @@ class ProductSerializer(ProductBaseSerializer):
     bevoegde_organisatie = BevoegdeOrganisatieSerializer(
         required=False, allow_null=True
     )
-    product_valt_onder = ProductBaseSerializer(allow_null=True)
+    product_valt_onder = ProductBaseSerializer(allow_null=True, required=True)
 
     class Meta:
         model = Product
@@ -209,6 +280,16 @@ class ProductSerializer(ProductBaseSerializer):
 
         most_recent_version = attrs["most_recent_version"]
 
+        required_taalen = [taal[0] for taal in TaalChoices]
+        for version in most_recent_version["vertalingen"]:
+            if version["taal"] in required_taalen:
+                required_taalen.remove(version["taal"])
+
+        if required_taalen:
+            raise serializers.ValidationError(
+                f"You forgot to provide the taal choice(s): {required_taalen}"
+            )
+
         if most_recent_version["vertalingen"]:
             if not attrs["product_aanwezig"]:
                 for vertaling in most_recent_version["vertalingen"]:
@@ -252,7 +333,7 @@ class ProductSerializer(ProductBaseSerializer):
     def get_default_catalogus(self, verantwoordelijke_organisatie):
         try:
             return ProductenCatalogus.objects.get(
-                lokale_overheid=verantwoordelijke_organisatie.lokale_overheid,
+                lokale_overheid=verantwoordelijke_organisatie,
                 is_default_catalogus=True,
             )
         except ProductenCatalogus.DoesNotExist:
@@ -285,7 +366,28 @@ class ProductSerializer(ProductBaseSerializer):
             except Product.DoesNotExist:
                 raise serializers.ValidationError("Received a non existing 'upn uri'")
 
-    def get_organisatie(self, organisatie):
+    def get_lokale_overheid(self, organisatie):
+        if "owms_pref_label" in organisatie and organisatie["owms_pref_label"]:
+            try:
+                return LokaleOverheid.objects.get(
+                    organisatie__owms_pref_label=organisatie["owms_pref_label"]
+                )
+            except LokaleOverheid.DoesNotExist:
+                raise serializers.ValidationError(
+                    "Received a non existing 'owms pref label'"
+                )
+
+        if "owms_identifier" in organisatie and organisatie["owms_identifier"]:
+            try:
+                return LokaleOverheid.objects.get(
+                    organisatie__owms_identifier=organisatie["owms_identifier"]
+                )
+            except LokaleOverheid.DoesNotExist:
+                raise serializers.ValidationError(
+                    "Received a non existing 'owms identifier'"
+                )
+
+    def get_bevoegde_organisatie(self, organisatie):
         if "owms_pref_label" in organisatie and organisatie["owms_pref_label"]:
             try:
                 return BevoegdeOrganisatie.objects.get(
@@ -346,6 +448,7 @@ class ProductSerializer(ProductBaseSerializer):
     def create(self, validated_data):
         data = self.context["request"].data.copy()
         generiek_product = validated_data.pop("generiek_product")
+        catalogus = validated_data.get("catalogus", [])
         product_valt_onder = validated_data.pop("product_valt_onder", [])
         gerelateerde_producten = validated_data.pop("gerelateerde_producten", [])
         verantwoordelijke_organisatie = data.get("verantwoordelijke_organisatie", [])
@@ -359,11 +462,11 @@ class ProductSerializer(ProductBaseSerializer):
         validated_data["generiek_product"] = self.get_generiek_product(generiek_product)
 
         if verantwoordelijke_organisatie:
-            verantwoordelijke_organisatie = self.get_organisatie(
+            verantwoordelijke_organisatie = self.get_lokale_overheid(
                 verantwoordelijke_organisatie
             )
 
-        if type(validated_data.get("catalogus")) is dict:
+        if not catalogus:
             validated_data["catalogus"] = self.get_default_catalogus(
                 verantwoordelijke_organisatie
             )
@@ -372,6 +475,8 @@ class ProductSerializer(ProductBaseSerializer):
             validated_data["referentie_product"] = self.get_referentie_product(
                 validated_data["generiek_product"]
             )
+        else:
+            raise serializers.ValidationError("Received a referentie catalogus")
 
         if product_valt_onder:
             if "generiek_product" in product_valt_onder:
@@ -382,13 +487,24 @@ class ProductSerializer(ProductBaseSerializer):
 
         if bevoegde_organisatie:
             if "organisatie" in bevoegde_organisatie:
-                validated_data["bevoegde_organisatie"] = self.get_organisatie(
+                validated_data["bevoegde_organisatie"] = self.get_bevoegde_organisatie(
                     bevoegde_organisatie["organisatie"]
                 )
         else:
-            validated_data["bevoegde_organisatie"] = verantwoordelijke_organisatie
+            validated_data["bevoegde_organisatie"] = BevoegdeOrganisatie.objects.get(
+                lokale_overheid=verantwoordelijke_organisatie
+            )
 
-        product, created = Product.objects.get_or_create(**validated_data)
+        product = Product.objects.get(
+            referentie_product=validated_data["referentie_product"],
+            catalogus=validated_data["catalogus"],
+        )
+
+        product.product_valt_onder = validated_data.get("product_valt_onder", None)
+        product.product_aanwezig = validated_data.get("product_aanwezig", None)
+        product.bevoegde_organisatie = validated_data.get("bevoegde_organisatie", None)
+
+        product.save()
 
         product.locaties.set(
             self.get_locaties(
@@ -411,15 +527,12 @@ class ProductSerializer(ProductBaseSerializer):
 
         versie = 1
 
-        if not created:
-            previous_product_versie = ProductVersie.objects.filter(
-                product=product
-            ).first()
+        previous_product_versie = ProductVersie.objects.filter(product=product).first()
 
-            versie = product.most_recent_version.versie
+        versie = product.most_recent_version.versie
 
-            if previous_product_versie.publicatie_datum:
-                versie += 1
+        if previous_product_versie.publicatie_datum:
+            versie += 1
 
         product_versie, product_versie_created = ProductVersie.objects.update_or_create(
             product=product,
@@ -438,7 +551,7 @@ class ProductSerializer(ProductBaseSerializer):
                         product_versie=product_versie,
                     )
 
-                if not product_versie_created:
+                else:
                     vertaling["product_versie"] = product_versie
 
                     LocalizedProduct.objects.filter(
@@ -446,104 +559,3 @@ class ProductSerializer(ProductBaseSerializer):
                     ).update(**vertaling)
 
         return product
-
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        data = self.context["request"].data.copy()
-        generiek_product = validated_data.pop(
-            "generiek_product", instance.generiek_product
-        )
-        product_valt_onder = validated_data.pop("product_valt_onder", [])
-        gerelateerde_producten = validated_data.pop("gerelateerde_producten", [])
-        verantwoordelijke_organisatie = data.get("verantwoordelijke_organisatie", [])
-        bevoegde_organisatie = validated_data.pop("bevoegde_organisatie", [])
-        locaties = validated_data.pop("locaties", [])
-
-        most_recent_version = validated_data.pop("most_recent_version")
-        publicatie_datum = most_recent_version.pop("publicatie_datum", None)
-        vertalingen = most_recent_version.pop("vertalingen", [])
-
-        product_versie = instance.most_recent_version
-
-        if product_versie.publicatie_datum:
-            raise serializers.ValidationError("You can't update a published version")
-
-        validated_data["generiek_product"] = self.get_generiek_product(generiek_product)
-
-        if verantwoordelijke_organisatie:
-            verantwoordelijke_organisatie = self.get_organisatie(
-                verantwoordelijke_organisatie
-            )
-
-        if type(validated_data.get("catalogus")) is dict:
-            validated_data["catalogus"] = self.get_default_catalogus(
-                verantwoordelijke_organisatie
-            )
-
-        if not validated_data.get("catalogus").is_referentie_catalogus:
-            validated_data["referentie_product"] = self.get_referentie_product(
-                validated_data["generiek_product"]
-            )
-
-        if product_valt_onder:
-            if "generiek_product" in product_valt_onder:
-                validated_data["product_valt_onder"] = self.get_product(
-                    product_valt_onder["generiek_product"],
-                    validated_data["catalogus"],
-                )
-
-        if bevoegde_organisatie:
-            if "organisatie" in bevoegde_organisatie:
-                validated_data["bevoegde_organisatie"] = self.get_organisatie(
-                    bevoegde_organisatie["organisatie"]
-                )
-        else:
-            validated_data["bevoegde_organisatie"] = verantwoordelijke_organisatie
-
-        instance.catalogus = validated_data.get("catalogus", instance.catalogus)
-        instance.referentie_product = validated_data.get(
-            "referentie_product", instance.referentie_product
-        )
-        instance.generiek_product = validated_data.get(
-            "generiek_product", instance.generiek_product
-        )
-        instance.product_aanwezig = validated_data.get(
-            "product_aanwezig", instance.product_aanwezig
-        )
-        instance.product_valt_onder = validated_data.get(
-            "product_valt_onder", instance.product_valt_onder
-        )
-
-        if gerelateerde_producten:
-            gerelateerde_catalogus_producten = []
-            for gerelateerde_product in gerelateerde_producten:
-                if "generiek_product" in gerelateerde_product:
-                    gerelateerde_catalogus_producten.append(
-                        self.get_product(
-                            gerelateerde_product["generiek_product"],
-                            validated_data["catalogus"],
-                        )
-                    )
-            instance.gerelateerde_producten.set(
-                gerelateerde_catalogus_producten,
-            )
-
-        instance.locaties.set(
-            self.get_locaties(
-                locaties,
-                validated_data["catalogus"],
-            ),
-        )
-
-        product_versie.publicatie_datum = publicatie_datum
-        product_versie.save()
-
-        if vertalingen:
-            for vertaling in vertalingen:
-                vertaling["product_versie"] = product_versie
-
-                LocalizedProduct.objects.filter(
-                    taal=vertaling["taal"], product_versie=product_versie
-                ).update(**vertaling)
-
-        return Product.objects.get(pk=instance.pk)

@@ -13,9 +13,8 @@ from sdg.producten.models import Product, ProductVersie
         description="Lijst van alle producten die voorkomen in alle catalogi."
     ),
     retrieve=extend_schema(description="Product dat voorkomt in een catalogus."),
-    create=extend_schema(description="Maak een nieuwe product aan voor een catalogus."),
-    update=extend_schema(
-        description="Update een nieuwe product aan van een catalogus."
+    create=extend_schema(
+        description="Maak een nieuwe product versie aan of update een concept voor een catalogus."
     ),
 )
 class ProductViewSet(viewsets.ModelViewSet):
@@ -35,7 +34,6 @@ class ProductViewSet(viewsets.ModelViewSet):
             "versies",
             "versies__vertalingen",
         )
-        .most_recent()
         .active()
         .order_by("generiek_product__upn__upn_label")
     )

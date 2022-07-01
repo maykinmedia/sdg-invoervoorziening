@@ -389,7 +389,8 @@ paths:
           description: ''
     post:
       operationId: productenCreate
-      description: Maak een nieuwe product aan voor een catalogus.
+      description: Maak een nieuwe product versie aan of update een concept voor een
+        catalogus.
       tags:
       - producten
       requestBody:
@@ -495,7 +496,7 @@ paths:
           description: ''
     put:
       operationId: productenUpdate
-      description: Update een nieuwe product aan van een catalogus.
+      description: Viewset for a product, retrieved by uuid
       parameters:
       - in: path
         name: uuid
@@ -554,7 +555,7 @@ paths:
           description: ''
     delete:
       operationId: productenDestroy
-      description: Verweider een nieuwe product aan van een catalogus
+      description: Viewset for a product, retrieved by uuid
       parameters:
       - in: path
         name: uuid
@@ -684,6 +685,10 @@ components:
           readOnly: true
         uuid:
           type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -724,6 +729,7 @@ components:
       - postcode
       - straat
       - url
+      - uuid
     LocatieBase:
       type: object
       description: Serializer that exposes a subset of the fields for a location,
@@ -735,6 +741,10 @@ components:
           readOnly: true
         uuid:
           type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -770,6 +780,7 @@ components:
       - postcode
       - straat
       - url
+      - uuid
     LokaleOverheid:
       type: object
       description: Serializer for municipality details, including organization details,
@@ -1037,6 +1048,10 @@ components:
           readOnly: true
         uuid:
           type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -1094,18 +1109,17 @@ components:
           readOnly: true
         publicatieDatum:
           type: string
+          format: date
           nullable: true
         productAanwezig:
           type: boolean
           nullable: true
-          title: Aanwezig
-          description: Voert u dit product?
         productValtOnder:
           allOf:
           - $ref: '#/components/schemas/ProductBase'
           nullable: true
         verantwoordelijkeOrganisatie:
-          $ref: '#/components/schemas/LokaleOverheidBase'
+          $ref: '#/components/schemas/ProductLokaleOverheid'
         bevoegdeOrganisatie:
           allOf:
           - $ref: '#/components/schemas/BevoegdeOrganisatie'
@@ -1155,18 +1169,17 @@ components:
           readOnly: true
         publicatieDatum:
           type: string
+          format: date
           nullable: true
         productAanwezig:
           type: boolean
           nullable: true
-          title: Aanwezig
-          description: Voert u dit product?
         productValtOnder:
           allOf:
           - $ref: '#/components/schemas/ProductBase'
           nullable: true
         verantwoordelijkeOrganisatie:
-          $ref: '#/components/schemas/LokaleOverheidBase'
+          $ref: '#/components/schemas/ProductLokaleOverheid'
         bevoegdeOrganisatie:
           allOf:
           - $ref: '#/components/schemas/BevoegdeOrganisatie'
@@ -1195,6 +1208,7 @@ components:
       - doelgroep
       - gerelateerdeProducten
       - locaties
+      - productAanwezig
       - productValtOnder
       - publicatieDatum
       - url
@@ -1230,12 +1244,40 @@ components:
           readOnly: true
         uuid:
           type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
-          maxLength: 40
+          maxLength: 100
       required:
       - openingstijden
+    ProductLokaleOverheid:
+      type: object
+      description: |-
+        Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+        - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        owmsIdentifier:
+          type: string
+          format: uri
+          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
+        owmsPrefLabel:
+          type: string
+          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+        owmsEndDate:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De einddatum, zoals gevonden in het OWMS-model.
+      required:
+      - owmsEndDate
+      - url
     ProductVersie:
       type: object
       description: Serializer for the version of a product.
