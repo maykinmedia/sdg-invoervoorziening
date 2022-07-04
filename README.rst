@@ -1,46 +1,49 @@
-=====================
-SDG invoervoorziening
-=====================
+========================================
+Producten en Diensten beheer voor de SDG
+========================================
 
 :Version: 1.2.3
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
-:Keywords: vng, sdg, pdc
+:Keywords: vng, ipo, sdg, pdc, gemeenten, provincies
 :PythonVersion: 3.8
 
 |build-status| |coverage| |docker| |black| |python-versions|
 
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
-(SDG).
+(SDG) via de invoervoorziening en/of de API.
 
-Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_.
+Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_ en 
+`IPO`_.
 
 
 Introductie
 ===========
 
 De SDG invoervoorziening is een applicatie voor het beheren en ontsluiten van 
-SDG productbeschrijvingen van gemeenten. Deze productomschrijvingen worden 
-ontsloten via een API. 
+productbeschrijvingen van producten die worden aangeboden door organisaties in 
+de verschillende overheidslagen. Deze producten vallen onder de SDG verordening
+en de productbeschrijvingen worden ontsloten via een API. 
 
-Gemeenten kunnen een referentie-productbeschrijving overnemen of kunnen hiervan 
-afwijken en hun eigen beschrijving maken.
+Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen 
+hiervan afwijken en hun eigen beschrijving maken.
 
-Speerpunten zijn:
+Speerpunten zijn (afhankelijk van de installatie en autorisaties):
 
-* Ontzorging: Gemeenten hoeven voor SDG informeren hun website niet aan te 
-  passen.
+* Ontzorging: Organisaties hoeven voor de SDG hun website niet aan te passen.
 * Uniformeren productbeschrijvingen: Een gedeelde invoervoorziening maakt het 
-  mogelijk om gemeenten te ondersteunen met een referentie-productencatalogus. 
-  Gemeenten kunnen een referentie-productbeschrijving overnemen of kunnen 
+  mogelijk om organisaties te ondersteunen met een 
+  standaard-productencatalogus. 
+  Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen 
   hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit op 
   de generieke teksten die met de specifieke teksten worden getoond op de 
   nationale portalen. 
-* Gemeenten beheren SDG content in de invoervoorziening. Gemeenten beheren hun 
-  eigen webcontent in hun eigen CMS. De SDG content wordt bijgehouden ten 
-  behoeve van publicatie op de nationale portalen. De gemeente kan de SDG 
-  content op haar eigen website en via andere kanalen gebruiken en publiceren, 
-  mits ze zelf een API maken die dit mogelijk maakt (dit laatste is buiten 
-  scope van het project).
+* Organisaties beheren SDG content in de invoervoorziening. Organisaties 
+  beheren hun eigen webcontent in hun eigen CMS. De SDG content wordt 
+  bijgehouden ten behoeve van publicatie op de nationale portalen. De 
+  organisatie kan de SDG content op haar eigen website en via andere kanalen 
+  gebruiken en publiceren, mits ze zelf een API-aansluiting maken die dit 
+  mogelijk maakt (dit laatste is buiten scope van het project).
+* Een API om teksten geautomatiseerd aan te leveren vanuit het eigen CMS.
 
 
 API specificatie
@@ -113,5 +116,6 @@ Licensed under the `EUPL`_.
 
 .. _`Maykin Media B.V.`: https://www.maykinmedia.nl
 .. _`VNG Realisatie`: https://www.vngrealisatie.nl/
+.. _`IPO`: https://www.ipo.nl/
 .. _`Single Digital Gateway`: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ:L:2018:295:TOC
 .. _`EUPL`: LICENSE.md

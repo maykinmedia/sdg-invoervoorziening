@@ -2,9 +2,24 @@
 Change history
 ==============
 
+1.3.0
+=====
+
+*tbd*
+
+This release introduces changes to the project requested by `IPO`_, making the
+project suitable for not only municipalities but also for provinces.
+
+* [#635] Added API autorisations
+* [#630] Added writable location API endpoint
+
+.. _`IPO`: https://www.ipo.nl/
+
 
 1.2.3
 =====
+
+*June 30, 2022*
 
 * [#551] Allow indenting bullet lists.
 * [#607] Remove search from list product page.
@@ -14,6 +29,11 @@ Change history
 * [#540] Added info tool tip to explain the buttons
 * [#558] Added ordering numbers
 * [#628] Optimized product version query in admin page
+* [#610] Changed organisation help text
+* [#583] Catch rare case where the UPN is no longer available.
+* [#432] Added explanation for save buttons
+* [#618] Added notice about lesser menu items when no organisation is selected
+* [#565] Changed the column title from "aanwezig" to "aangeboden"
 * Fixed tooltips after review.
 * Changed tooltip text after review.
 * Added CodeQL action
