@@ -46,11 +46,11 @@
                     {% endfor %}</p>
             {% endif %}
             {% if backup_tokens %}
+            <div class="login__backup">
                 <p>{% trans "As a last resort, you can use a backup token:" %}</p>
-                <p>
-                    <button name="wizard_goto_step" type="submit" value="backup"
-                            class="btn btn-secondary btn-block">{% trans "Use Backup Token" %}</button>
-                </p>
+                <button name="wizard_goto_step" type="submit" value="backup"
+                        class="link">{% trans "Use Backup Token" %}</button>
+            </div>
             {% endif %}
 
             {% if wizard.steps.current == 'auth' %}
