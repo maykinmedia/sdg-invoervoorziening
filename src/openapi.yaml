@@ -379,7 +379,6 @@ paths:
       - producten
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -401,7 +400,6 @@ paths:
         required: true
       security:
       - tokenAuth: []
-      - {}
       responses:
         '201':
           content:
@@ -486,7 +484,6 @@ paths:
       - producten
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:

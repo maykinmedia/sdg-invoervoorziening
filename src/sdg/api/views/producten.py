@@ -4,7 +4,9 @@ from rest_framework import mixins, viewsets
 from rest_framework.viewsets import GenericViewSet
 
 from sdg.api.filters import ProductFilterSet
+from sdg.api.permissions import Permissions
 from sdg.api.serializers import ProductSerializer, ProductVersieSerializer
+from sdg.core.models.logius import Overheidsorganisatie
 from sdg.producten.models import Product, ProductVersie
 
 
@@ -44,6 +46,24 @@ class ProductViewSet(
     )
     filterset_class = ProductFilterSet
     serializer_class = ProductSerializer
+    permission_classes = [Permissions]
+
+    def get_organisatie(self, request, view, obj=None):
+        if request.method == "POST":
+            organisatie = view.request.data.get("verantwoordelijke_organisatie", None)
+            if not organisatie:
+                return None
+
+            for field in ["owms_pref_label", "owms_identifier"]:
+                if field in organisatie:
+                    try:
+                        return Overheidsorganisatie.objects.get(
+                            **{field: organisatie.get(field)}
+                        )
+                    except Overheidsorganisatie.DoesNotExist:
+                        return None
+
+        return None
 
 
 @extend_schema_view(
