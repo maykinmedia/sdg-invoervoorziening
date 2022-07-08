@@ -32,35 +32,39 @@ urlpatterns = [
     ),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
-    path("markdownx/", include("markdownx.urls")),
-    path(
-        "reset/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(),
-        name="password_reset_confirm",
-    ),
-    path(
-        "reset/done/",
-        auth_views.PasswordResetCompleteView.as_view(),
-        name="password_reset_complete",
-    ),
-    re_path(
-        r"^invitation/(?P<key>\w+)/?$",
-        InvitationAcceptView.as_view(),
-        name="invitation_accept",
-    ),
     path("api/", include("sdg.api.urls", namespace="api")),
-    path("cmsapi/", include("sdg.cmsapi.urls", namespace="cmsapi")),
-    path("accounts/", include("allauth.urls")),
-    path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
-    path("organizations/", include("sdg.organisaties.urls", namespace="organisaties")),
-    path("", include("sdg.core.urls", namespace="core")),
 ]
 
-# two_factor
-urlpatterns += [
-    path("two_factor/login/", LoginView.as_view(), name="login"),  # custom
-    path("", include(tf_urls)),
-]
+# cms
+if settings.SDG_CMS_ENABLED:
+    urlpatterns += [
+        path("markdownx/", include("markdownx.urls")),
+        path(
+            "reset/<uidb64>/<token>/",
+            auth_views.PasswordResetConfirmView.as_view(),
+            name="password_reset_confirm",
+        ),
+        path(
+            "reset/done/",
+            auth_views.PasswordResetCompleteView.as_view(),
+            name="password_reset_complete",
+        ),
+        re_path(
+            r"^invitation/(?P<key>\w+)/?$",
+            InvitationAcceptView.as_view(),
+            name="invitation_accept",
+        ),
+        path("accounts/", include("allauth.urls")),
+        path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
+        path(
+            "organizations/", include("sdg.organisaties.urls", namespace="organisaties")
+        ),
+        path("", include("sdg.core.urls", namespace="core")),
+        path("cmsapi/", include("sdg.cmsapi.urls", namespace="cmsapi")),
+        # two_factor
+        path("two_factor/login/", LoginView.as_view(), name="login"),  # custom
+        path("", include(tf_urls)),
+    ]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
 # folder and the media folder are only served via Django if DEBUG = True.

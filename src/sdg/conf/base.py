@@ -568,3 +568,5 @@ SOLO_CACHE = "default"
 
 # zgw_consumers
 ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
+
+SDG_CMS_ENABLED = True
