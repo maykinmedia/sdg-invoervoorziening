@@ -1,0 +1,44 @@
+.nav {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #c6c6c6;
+
+  p {
+    margin-bottom: 7px;
+  }
+  
+  &__list {
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #c6c6c6;
+    list-style: none;
+  }
+  
+  &__item {
+    display: block;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    color: #017092;
+    cursor: pointer;
+  
+    &:hover {
+      border-color: #f3f3f3 #f3f3f3
+      #c6c6c6;
+      color: #051f31;
+    }
+  
+    &--active {
+      border-color: #c6c6c6 #c6c6c6
+      #f2f2f2;
+      margin-bottom: -1px;
+    }
+  }
+  
+  &__pane {
+    display: none;
+    text-align: left;
+
+    &--active {
+      display: block;
+    }
+  }
+}

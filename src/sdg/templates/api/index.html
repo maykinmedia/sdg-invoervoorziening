@@ -1,0 +1,154 @@
+{% load static hijack_tags %}<!DOCTYPE html>
+<html lang="en"
+      class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}SDG{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
+    <link href="{% static 'hijack/hijack-styles.css' %}" rel="stylesheet" type="text/css"/>
+    {% block extra_css %}{% endblock %}
+    <link href="{% static 'bundles/sdg-api-css.css' %}" media="all" rel="stylesheet"/>
+    <script type="text/javascript">
+        const SubPath = "{% if settings.SUBPATH %}{{ settings.SUBPATH }}{% endif %}";
+    </script>
+</head>
+
+<body class="view__body">
+  {% hijack_notification %}
+
+  <div class="title">
+    <h1 class="title__header">Producten en Diensten API</h1>
+    <p class="title__description">Voor de Single Digital Gateway (SDG)</p>
+  </div>
+
+  <div class="container container--center">
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item" data-id="en">English</li>
+        <li class="nav__item" data-id="nl">Nederlands</li>
+      </ul>
+
+      <div class="nav__content">
+        <div class="nav__pane" id="en">
+          <p>
+            The SDG invoervoorziening is an application to maintain the product descriptions of the products
+            that gets provided by variant government organizations.These products fall under the SDG regulation
+            and the product descriptions can be accessed by the API.
+          </p>
+          <p>
+            Organizations can use the default product description or can provide their own.
+          </p>
+          <p>
+            Selling points are (depending on the installation and authorization):
+          </p>
+          <p>
+          <ul>
+            <li>
+              Decongestion: Organizations don’t have to update their website for the SDG
+            </li>
+            <li>
+              Uniform product description: The service makes it possible to supply organizations with default product catalogs.
+              Organizations can adopt default product descriptions, they can choose to differ from them and they can provide their own,
+              as long as the description goes side to side with the generic texts who will be shown with the specific texts on the national portal.
+            </li>
+            <li>
+              Organization can manage SDG content in the portal. Organizations can manage their webcontent in their own CMS.
+              The SDG content gets maintained for the purpose of publication on the national portals.
+              The organizations can put their SDG content on their own websites and can use and publish them through other channels,
+              if they make an API connection which allows this (the last point is out of this project's scope).
+            </li>
+            <li>
+              An API to automatically deliver their texts from their own CMS.
+            </li>
+          </ul>
+          </p>
+        </div>
+        <div class="nav__pane" id="nl">
+          <p>
+            De SDG invoervoorziening is een applicatie voor het beheren en ontsluiten van productbeschrijvingen van
+            producten die worden aangeboden door organisaties in de verschillende overheidslagen.
+            Deze producten vallen onder de SDG verordening en de productbeschrijvingen worden ontsloten via een API.
+          </p>
+          <p>
+            Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen hiervan afwijken en hun eigen beschrijving maken.
+          </p>
+          <p>
+            Speerpunten zijn (afhankelijk van de installatie en autorisaties):
+          </p>
+          <p>
+          <ul>
+            <li>
+              Ontzorging: Organisaties hoeven voor de SDG hun website niet aan te passen.
+            </li>
+            <li>
+              Uniformeren productbeschrijvingen: Een gedeelde invoervoorziening maakt het mogelijk om organisaties te ondersteunen met een standaard-productencatalogus.
+              Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen hiervan afwijken en hun eigen beschrijving maken,
+              zo lang deze aansluit op de generieke teksten die met de specifieke teksten worden getoond op de nationale portalen.
+            </li>
+            <li>
+              Organisaties beheren SDG content in de invoervoorziening. Organisaties beheren hun eigen webcontent in hun eigen CMS.
+              De SDG content wordt bijgehouden ten behoeve van publicatie op de nationale portalen. De organisatie kan de SDG content
+              op haar eigen website en via andere kanalen gebruiken en publiceren, mits ze zelf een API-aansluiting maken die dit
+              mogelijk maakt (dit laatste is buiten scope van het project).
+            </li>
+            <li>
+              Een API om teksten geautomatiseerd aan te leveren vanuit het eigen CMS.
+            </li>
+          </ul>
+          </p>
+        </div>
+      </div>
+    </nav>
+
+    <p class="space">
+      <b>Licensed under the <a class="link" href="https://github.com/maykinmedia/sdg-invoervoorziening/blob/master/LICENSE.md">
+        European Union Public License (EUPL) 1.2</a></b>
+    </p>
+
+    <p class="space">
+      <a href="{% url 'api:schema' %}" class="button"><i class="fas fa-file-alt"></i> Open API specification</a>
+      <a href="{% url 'api:api-root' %}" class="button"><i class="fas fa-wifi"></i> API root</a>
+    </p>
+
+    <p class="space">
+      <a href="{% url 'admin:index' %}" class="button button--alert"><i class="fas fa-lock"></i> Administration</a>
+    </p>
+
+  </div>
+
+<footer class="footer container">
+    <div class="footer__row">
+    <div class="footer__col footer__col--small">
+        <img src="{% static 'images/maykin_logo.png' %}" alt="Maykin Media logo" height="48">
+        <img src="{% static 'images/vng_logo.svg' %}" alt="VNG logo" height="48">
+        <p>
+        Developed by <a class="link" href="https://www.maykinmedia.nl">Maykin Media</a><br>
+        commissioned by <a class="link" href="https://vng.nl/">VNG</a>
+        </p>
+    </div>
+    <div class="footer__col">
+        <h5 class="footer__header">SDG invoervoorziening</h5>
+        <ul class="footer__list">
+        <li><a class="link link--muted" href="https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/europa/single-digitale-gateway/">Wat is de SDG</a></li>
+        <li><a class="link link--muted" href="https://werkenaaneenoverheid.pleio.nl/groups/view/ed87e451-f6fc-49b0-aec4-41f2358426f7/single-digital-gateway">Voor gemeenten</a></li>
+        <li><a class="link link--muted" href="https://www.ipo.nl/thema-s/interprovinciale-digitale-agenda/dienstverlening/single-digitale-gateway-en-provinciale-producten-catalogus/">Voor provincies</a></li>
+        </ul>
+    </div>
+    <div class="footer__col">
+        <h5 class="footer__header">Other</h5>
+        <ul class="footer__list">
+        <li><a class="link link--muted" href="https://hub.docker.com/r/maykinmedia/sdg-invoervoorziening">Docker images</a></li>
+        <li><a class="link link--muted" href="https://github.com/maykinmedia/sdg-invoervoorziening">Code on Github</a></li>
+        <li>Report <a class="link link--muted" href="https://github.com/maykinmedia/sdg-invoervoorziening/issues">issues</a> for questions, bugs or wishes</li>
+        </ul>
+    </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/mocks/api.js' %}"></script>
+</body>
+</html>
