@@ -33,6 +33,8 @@ module.exports = {
     // Path to the scss entry point
     scssEntry: sourcesRoot + 'scss/screen.scss',
 
+    scssAPIEntry: sourcesRoot + 'scss/api.scss',
+
     // Path to the scss (sources) directory
     scssSrcDir: sourcesRoot + 'scss/',
 
