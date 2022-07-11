@@ -17,7 +17,12 @@ from sdg.producten.models import Product, ProductVersie
         description="Maak een nieuwe product versie aan of update een concept voor een catalogus."
     ),
 )
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    GenericViewSet,
+):
     """Viewset for a product, retrieved by uuid"""
 
     lookup_field = "uuid"

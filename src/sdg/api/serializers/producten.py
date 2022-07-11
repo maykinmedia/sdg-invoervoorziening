@@ -1,5 +1,4 @@
 from django.db import transaction
-from django.forms.models import model_to_dict
 
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
@@ -525,13 +524,9 @@ class ProductSerializer(ProductBaseSerializer):
                     )
             product.gerelateerde_producten.set(gerelateerde_catalogus_producten)
 
-        versie = 1
-
-        previous_product_versie = ProductVersie.objects.filter(product=product).first()
-
         versie = product.most_recent_version.versie
 
-        if previous_product_versie.publicatie_datum:
+        if product.most_recent_version.publicatie_datum:
             versie += 1
 
         product_versie, product_versie_created = ProductVersie.objects.update_or_create(
