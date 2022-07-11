@@ -1,10 +1,12 @@
 from django.urls import include, path
+from django.views.generic.base import TemplateView
 
 from drf_spectacular.views import (
     SpectacularJSONAPIView,
     SpectacularRedocView,
     SpectacularYAMLAPIView,
 )
+from rest_framework.settings import api_settings
 from vng_api_common import routers
 
 from sdg.api.views import (
@@ -40,6 +42,13 @@ router.register("organisaties", LokaleOverheidViewSet)
 router.register("locaties", LocatieViewSet, basename="locatie")
 
 urlpatterns = [
+    path(
+        "",
+        TemplateView.as_view(
+            template_name="api/index.html",
+            extra_context={"version": api_settings.DEFAULT_VERSION},
+        ),
+    ),
     path("v1/", include(router.urls)),
     path(
         "v1/",

@@ -19,6 +19,7 @@ module.exports = {
     // Entry points locations.
     entry: {
         [`${paths.package.name}-css`]: `${__dirname}/${paths.scssEntry}`,
+        [`${paths.package.name}-api-css`]: `${__dirname}/${paths.scssAPIEntry}`,
         [`${paths.package.name}-js`]: `${__dirname}/${paths.jsEntry}`,
 
         'admin_overrides': `${__dirname}/${paths.scssSrcDir}/admin/admin_overrides.scss`,
