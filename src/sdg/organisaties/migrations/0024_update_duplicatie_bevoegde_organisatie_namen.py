@@ -2,48 +2,32 @@
 
 import re
 from django.db import migrations
-
-
-def add_recursion_number(new_bevoegde_organisaties_lijst, organisatie_naam):
-    if list(
-        filter(
-            lambda x: str(organisatie_naam) in str(x.naam),
-            new_bevoegde_organisaties_lijst,
-        )
-    ):
-        if re.search("( - )([0-9]*)$", organisatie_naam):
-            bevoegde_naam, recursion_number = organisatie_naam.rsplit(" - ", 1)
-            new_organisatie_naam = f"{bevoegde_naam} - {int(recursion_number) + 1}"
-
-            return add_recursion_number(
-                new_bevoegde_organisaties_lijst, new_organisatie_naam
-            )
-        else:
-            new_organisatie_naam = f"{organisatie_naam} - 1"
-
-            return add_recursion_number(
-                new_bevoegde_organisaties_lijst, new_organisatie_naam
-            )
-
-    return organisatie_naam
+from django.db.models import Count
 
 
 def update_duplicate_names(apps, schema_editor):
-    bevoegde_organisaties = apps.get_model("organisaties", "bevoegdeorganisatie")
+    BevoegdeOrganisatie = apps.get_model("organisaties", "bevoegdeorganisatie")
     new_bevoegde_organisaties_lijst = []
 
-    for organisatie in bevoegde_organisaties.objects.all().order_by("naam", "id"):
-        naam = add_recursion_number(new_bevoegde_organisaties_lijst, organisatie.naam)
+    duplicates = (
+        BevoegdeOrganisatie.objects.values("naam")
+        .annotate(Count("id"))
+        .values("naam")
+        .order_by()
+        .filter(id__count__gt=1)
+    )
+
+    for organisatie in BevoegdeOrganisatie.objects.filter(naam__in=duplicates):
 
         new_bevoegde_organisaties_lijst.append(
-            bevoegde_organisaties(
+            BevoegdeOrganisatie(
                 pk=organisatie.pk,
                 uuid=organisatie.uuid,
-                naam=naam,
+                naam=f"{organisatie.naam} - {organisatie.pk}",
             )
         )
 
-    bevoegde_organisaties.objects.bulk_update(new_bevoegde_organisaties_lijst, ["naam"])
+    BevoegdeOrganisatie.objects.bulk_update(new_bevoegde_organisaties_lijst, ["naam"])
 
 
 class Migration(migrations.Migration):
