@@ -2,31 +2,26 @@ import uuid
 
 import django
 from django.test import override_settings
+from django.urls import reverse
 
 from django_webtest import WebTest
 
-from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.accounts.tests.factories import RoleFactory, SuperUserFactory
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
+from sdg.tests.utils import disable_2fa
 
 
+@disable_2fa
 class CMSUrlsPathTest(WebTest):
-    # return 0 if the url is valid, return 1 if the url is not valid
-    def invalid_url_path_check(self, url):
-        try:
-            self.app.get(url)
-            return 0
-        except django.urls.exceptions.NoReverseMatch:
-            return 1
-
     def setUp(self):
         super().setUp()
 
         self.email = "test@test.test"
         self.password = str(uuid.uuid4())
 
-        self.user = UserFactory.create(email=self.email, password=self.password)
+        self.user = SuperUserFactory.create(email=self.email, password=self.password)
         self.app.set_user(self.user)
 
         self.organisatie = OverheidsorganisatieFactory.create(
@@ -44,35 +39,51 @@ class CMSUrlsPathTest(WebTest):
             is_redacteur=True,
         )
 
-    def test_cms_enabled(self, invalid_urls=0):
-        # enabled urls:
-        invalid_urls += self.invalid_url_path_check("/cmsapi/")
-        invalid_urls += self.invalid_url_path_check("/reset/done/")
-        invalid_urls += self.invalid_url_path_check("/accounts/login/")
-        invalid_urls += self.invalid_url_path_check(
-            "/organizations/" + str(self.lokale_overheid.id) + "/productenlijst/"
+    def test_cms_enabled(self):
+        cmsapi = self.app.get(reverse("cmsapi:api-root"), status="*")
+        reset = self.app.get(reverse("password_reset_complete"), status="*")
+        account = self.app.get(reverse("account_login"), status="*")
+        organizations = self.app.get(
+            reverse("organisaties:roles:list", args=[str(self.lokale_overheid.id)]),
+            status="*",
         )
-        invalid_urls += self.invalid_url_path_check("/?name=home/")
-        invalid_urls += self.invalid_url_path_check("/two_factor/")
-        invalid_urls += self.invalid_url_path_check("/admin/")
-        invalid_urls += self.invalid_url_path_check("/api/v1/")
+        home = self.app.get(reverse("core:home"), status="*")
+        two_factor = self.app.get(reverse("two_factor:profile"), status="*")
+        admin = self.app.get(reverse("admin:index"), status="*")
+        api = self.app.get(reverse("api:api-root"), status="*")
 
-        self.assertEqual(invalid_urls, 0)
+        self.assertEqual(cmsapi.status_code, 200)
+        self.assertEqual(reset.status_code, 200)
+        self.assertEqual(account.status_code, 302)
+        self.assertEqual(organizations.status_code, 200)
+        self.assertEqual(home.status_code, 302)
+        self.assertEqual(two_factor.status_code, 200)
+        self.assertEqual(admin.status_code, 200)
+        self.assertEqual(api.status_code, 200)
 
-    @override_settings(ROOT_URLCONF="sdg.cms_disabled_urls")
-    def test_cms_disabled(self, invalid_urls=0):
-        # disabled urls:
-        invalid_urls += self.invalid_url_path_check("/cmsapi/")
-        invalid_urls += self.invalid_url_path_check("/reset/done/")
-        invalid_urls += self.invalid_url_path_check("/accounts/login/")
-        invalid_urls += self.invalid_url_path_check(
-            "/organizations/" + str(self.lokale_overheid.id) + "/productenlijst/"
+    @override_settings(SDG_CMS_ENABLED=False)
+    @override_settings(ROOT_URLCONF="sdg.urls")
+    def test_cms_disabled(self):
+        cmsapi = self.app.get(reverse("cmsapi:api-root"), status="*")
+        reset = self.app.get(reverse("password_reset_complete"), status="*")
+        account = self.app.get(reverse("account_login"), status="*")
+        organizations = self.app.get(
+            reverse("organisaties:roles:list", args=[str(self.lokale_overheid.id)]),
+            status="*",
         )
-        invalid_urls += self.invalid_url_path_check("/?name=home/")
-        invalid_urls += self.invalid_url_path_check("/two_factor/")
-        invalid_urls += self.invalid_url_path_check("/admin/")
+        home = self.app.get(reverse("core:home"), status="*")
+        two_factor = self.app.get(reverse("two_factor:profile"), status="*")
+        admin = self.app.get(reverse("admin:index"), status="*")
+        api = self.app.get(reverse("api:api-root"), status="*")
 
-        # enabled urls:
-        invalid_urls += self.invalid_url_path_check("/api/v1/")
+        # disabled
+        self.assertEqual(cmsapi.status_code, 404)
+        self.assertEqual(reset.status_code, 404)
+        self.assertEqual(account.status_code, 404)
+        self.assertEqual(organizations.status_code, 404)
+        self.assertEqual(home.status_code, 404)
+        self.assertEqual(two_factor.status_code, 404)
 
-        self.assertEqual(invalid_urls, 6)
+        # enabled
+        self.assertEqual(admin.status_code, 200)
+        self.assertEqual(api.status_code, 200)
