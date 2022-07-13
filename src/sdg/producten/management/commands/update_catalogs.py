@@ -53,6 +53,7 @@ class Command(BaseCommand):
                     lokale_overheid=local_government,
                     defaults={
                         "is_referentie_catalogus": False,
+                        "is_default_catalogus": True,
                         "domein": reference_catalog.domein,
                         "versie": reference_catalog.versie,
                         "naam": f"{local_government} ({reference_catalog.naam})",

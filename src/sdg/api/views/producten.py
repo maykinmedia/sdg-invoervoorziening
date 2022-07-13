@@ -13,8 +13,16 @@ from sdg.producten.models import Product, ProductVersie
         description="Lijst van alle producten die voorkomen in alle catalogi."
     ),
     retrieve=extend_schema(description="Product dat voorkomt in een catalogus."),
+    create=extend_schema(
+        description="Maak een nieuwe product versie aan of update een concept voor een catalogus."
+    ),
 )
-class ProductViewSet(viewsets.ReadOnlyModelViewSet):
+class ProductViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+    GenericViewSet,
+):
     """Viewset for a product, retrieved by uuid"""
 
     lookup_field = "uuid"
@@ -28,6 +36,8 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         .prefetch_related(
             "gerelateerde_producten",
             "locaties",
+            "versies",
+            "versies__vertalingen",
         )
         .active()
         .order_by("generiek_product__upn__upn_label")

@@ -387,6 +387,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
           description: ''
+    post:
+      operationId: productenCreate
+      description: Maak een nieuwe product versie aan of update een concept voor een
+        catalogus.
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
   /api/v1/producten/{productUuid}/concept:
     get:
       operationId: productenConceptList
@@ -479,6 +501,7 @@ components:
       properties:
         naam:
           type: string
+          readOnly: true
           description: De naam van de bevoegde organisatie. Deze mag alleen afwijken
             indien er geen bekende overheidsorganisatie is.
         owmsIdentifier:
@@ -491,9 +514,11 @@ components:
         owmsEndDate:
           type: string
           format: date-time
+          readOnly: true
           description: De einddatum, zoals gevonden in het OWMS-model.
       required:
       - naam
+      - owmsEndDate
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -619,7 +644,6 @@ components:
           $ref: '#/components/schemas/Openingstijden'
       required:
       - land
-      - naam
       - nummer
       - openingstijden
       - plaats
@@ -672,7 +696,6 @@ components:
           maxLength: 255
       required:
       - land
-      - naam
       - nummer
       - plaats
       - postcode
@@ -1008,18 +1031,20 @@ components:
         publicatieDatum:
           type: string
           format: date
-          readOnly: true
+          nullable: true
         productAanwezig:
           type: boolean
           nullable: true
-          title: Aanwezig
-          description: Voert u dit product?
         productValtOnder:
-          $ref: '#/components/schemas/ProductBase'
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          nullable: true
         verantwoordelijkeOrganisatie:
-          $ref: '#/components/schemas/LokaleOverheidBase'
+          $ref: '#/components/schemas/ProductLokaleOverheid'
         bevoegdeOrganisatie:
-          $ref: '#/components/schemas/BevoegdeOrganisatie'
+          allOf:
+          - $ref: '#/components/schemas/BevoegdeOrganisatie'
+          nullable: true
         catalogus:
           type: string
           format: uri
@@ -1027,7 +1052,8 @@ components:
         locaties:
           type: array
           items:
-            $ref: '#/components/schemas/LocatieBase'
+            $ref: '#/components/schemas/ProductLocatie'
+          nullable: true
         doelgroep:
           type: string
           readOnly: true
@@ -1035,21 +1061,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
-          readOnly: true
         gerelateerdeProducten:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
       required:
-      - bevoegdeOrganisatie
-      - catalogus
       - doelgroep
       - gerelateerdeProducten
       - locaties
+      - productAanwezig
       - productValtOnder
       - publicatieDatum
-      - upnLabel
-      - upnUri
       - url
       - uuid
       - verantwoordelijkeOrganisatie
@@ -1071,8 +1093,51 @@ components:
         upnLabel:
           type: string
       required:
-      - upnLabel
-      - upnUri
+      - url
+    ProductLocatie:
+      type: object
+      description: Serializer that exposes a subset of the fields for a location,
+        used in references to a location.
+      properties:
+        openingstijden:
+          allOf:
+          - $ref: '#/components/schemas/Openingstijden'
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        naam:
+          type: string
+          description: De naam van de locatie.
+          maxLength: 100
+      required:
+      - openingstijden
+    ProductLokaleOverheid:
+      type: object
+      description: |-
+        Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+        - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        owmsIdentifier:
+          type: string
+          format: uri
+          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
+        owmsPrefLabel:
+          type: string
+          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+        owmsEndDate:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De einddatum, zoals gevonden in het OWMS-model.
+      required:
+      - owmsEndDate
       - url
     ProductVersie:
       type: object
