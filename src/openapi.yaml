@@ -779,13 +779,14 @@ components:
     LokaleOverheidBase:
       type: object
       description: |-
-        Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+        De organisatie die gekoppeld zit aan deze locatie dit geven we aan met een van de volgende velden:
         - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
       properties:
         url:
           type: string
           format: uri
           readOnly: true
+          description: De api url voor het zien van de gegevens van deze locatie.
         owmsIdentifier:
           type: string
           format: uri
@@ -803,7 +804,8 @@ components:
       - url
     Openingstijden:
       type: object
-      description: Serializer for location based opening times.
+      description: Een lijst met de openings tijden van maandag tot zondag van deze
+        locatie.
       properties:
         maandag:
           type: array
@@ -1022,6 +1024,7 @@ components:
           type: string
           format: uri
           readOnly: true
+          description: De api url voor het zien van de gegevens van dit product.
         uuid:
           type: string
           format: uuid
@@ -1030,19 +1033,25 @@ components:
             resource.
         upnLabel:
           type: string
+          description: De UPN label van het product die je wilt bewerken
         upnUri:
           type: string
           format: uri
+          description: De UPN URI van het product die je wilt bewerken
         versie:
           type: integer
           readOnly: true
+          description: De huidige versie van dit product.
         publicatieDatum:
           type: string
           format: date
           nullable: true
+          description: De datum die aangeeft wanneer het product gepubliceerd is/wordt.
         productAanwezig:
           type: boolean
           nullable: true
+          description: Een boolean die aangeeft of de organisatie dit product levert
+            of niet.
         productValtOnder:
           allOf:
           - $ref: '#/components/schemas/ProductBase'
@@ -1053,6 +1062,8 @@ components:
           allOf:
           - $ref: '#/components/schemas/BevoegdeOrganisatie'
           nullable: true
+          description: De bevoegde organisatie van dit product is (als die er niet
+            is wordt de verantwoordelijke organisatie standaard de bevoegde organisatie.)
         catalogus:
           type: string
           format: uri
@@ -1062,16 +1073,23 @@ components:
           items:
             $ref: '#/components/schemas/ProductLocatie'
           nullable: true
+          description: Een lijst met locatie objecten die gekoppeld zijn aan dit product.
         doelgroep:
-          $ref: '#/components/schemas/DoelgroepEnum'
+          type: string
+          readOnly: true
+          description: |-
+            De doelgroep van dit product.
+             - Opties: `eu-burger`, `eu-bedrijf`
         vertalingen:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
+          description: Een lijst met specefieke teksten objecten op basis van taal.
         gerelateerdeProducten:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
+          description: Een lijst met producten die gerelateerd zijn aan dit product
       required:
       - doelgroep
       - gerelateerdeProducten
@@ -1087,8 +1105,8 @@ components:
     ProductBase:
       type: object
       description: |-
-        Serializer that exposes a small subset of the fields for a Product, used in references to a product.
-        Fields: `url`, `upnUri`, `upnLabel`
+        Het product waar dit product van af hankelijk is dit geven we aan met een van de volgende velden:
+        - Fields: `url`, `upnUri`, `upnLabel`
       properties:
         url:
           type: string
@@ -1097,8 +1115,10 @@ components:
         upnUri:
           type: string
           format: uri
+          description: De UPN URI van het product die je wilt bewerken
         upnLabel:
           type: string
+          description: De UPN label van het product die je wilt bewerken
       required:
       - url
     ProductLocatie:
@@ -1124,7 +1144,7 @@ components:
     ProductLokaleOverheid:
       type: object
       description: |-
-        Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+        De organisatie die dit product levert en de teksten hiervan beheerd dit geven we aan met een van de volgende velden:
         - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
       properties:
         url:

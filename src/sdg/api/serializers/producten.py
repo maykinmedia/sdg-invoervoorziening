@@ -65,17 +65,19 @@ class ProductVersieSerializer(serializers.ModelSerializer):
 
 
 class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer that exposes a small subset of the fields for a Product, used in references to a product.
-    Fields: `url`, `upnUri`, `upnLabel`
+    """Het product waar dit product van af hankelijk is dit geven we aan met een van de volgende velden:
+    - Fields: `url`, `upnUri`, `upnLabel`
     """
 
     upn_label = serializers.CharField(
         source="generiek_product.upn_label",
         required=False,
+        help_text="De UPN label van het product die je wilt bewerken",
     )
     upn_uri = serializers.URLField(
         source="generiek_product.upn_uri",
         required=False,
+        help_text="De UPN URI van het product die je wilt bewerken",
     )
 
     class Meta:
@@ -120,7 +122,7 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
 
 
 class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+    """De organisatie die dit product levert en de teksten hiervan beheerd dit geven we aan met een van de volgende velden:
     - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
     """
 
@@ -175,32 +177,49 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
 class ProductSerializer(ProductBaseSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 
-    verantwoordelijke_organisatie = ProductLokaleOverheidSerializer(
-        source="*",
-    )
+    verantwoordelijke_organisatie = ProductLokaleOverheidSerializer(source="*")
     publicatie_datum = serializers.DateField(
         source="most_recent_version.publicatie_datum",
         allow_null=True,
+        help_text="De datum die aangeeft wanneer het product gepubliceerd is/wordt.",
     )
-    product_aanwezig = serializers.BooleanField(allow_null=True, required=True)
+    product_aanwezig = serializers.BooleanField(
+        allow_null=True,
+        required=True,
+        help_text="Een boolean die aangeeft of de organisatie dit product levert of niet.",
+    )
     vertalingen = LocalizedProductSerializer(
-        source="most_recent_version.vertalingen", many=True
+        source="most_recent_version.vertalingen",
+        many=True,
+        help_text="Een lijst met specefieke teksten objecten op basis van taal.",
     )
-    versie = SerializerMethodField(method_name="get_versie")
+    versie = SerializerMethodField(
+        method_name="get_versie", help_text="De huidige versie van dit product."
+    )
     doelgroep = serializers.ChoiceField(
         source="generiek_product.doelgroep",
         choices=DoelgroepChoices.choices,
         required=True,
+        help_text="De doelgroep van dit product.\n - Opties: `eu-burger`, `eu-bedrijf`",
     )
-    gerelateerde_producten = ProductBaseSerializer(many=True)
+    gerelateerde_producten = ProductBaseSerializer(
+        many=True,
+        help_text="Een lijst met producten die gerelateerd zijn aan dit product",
+    )
     locaties = ProductLocatieSerializer(
         allow_null=True,
         many=True,
+        help_text="Een lijst met locatie objecten die gekoppeld zijn aan dit product.",
     )
     bevoegde_organisatie = BevoegdeOrganisatieSerializer(
-        required=False, allow_null=True
+        required=False,
+        allow_null=True,
+        help_text="De bevoegde organisatie van dit product is (als die er niet is wordt de verantwoordelijke organisatie standaard de bevoegde organisatie.)",
     )
-    product_valt_onder = ProductBaseSerializer(allow_null=True, required=True)
+    product_valt_onder = ProductBaseSerializer(
+        allow_null=True,
+        required=True,
+    )
 
     class Meta:
         model = Product
@@ -225,6 +244,7 @@ class ProductSerializer(ProductBaseSerializer):
             "url": {
                 "view_name": "api:product-detail",
                 "lookup_field": "uuid",
+                "help_text": "De api url voor het zien van de gegevens van dit product.",
             },
             "catalogus": {
                 "lookup_field": "uuid",
