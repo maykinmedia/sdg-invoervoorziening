@@ -12,7 +12,7 @@ from sdg.organisaties.models import (
 
 
 class OpeningstijdenSerializer(serializers.ModelSerializer):
-    """Serializer for location based opening times."""
+    """Een lijst met de openings tijden van maandag tot zondag van deze locatie."""
 
     class Meta:
         model = Locatie
@@ -63,7 +63,7 @@ class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
 
 
 class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+    """De organisatie die gekoppeld zit aan deze locatie dit geven we aan met een van de volgende velden:
     - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
     """
 
@@ -91,6 +91,7 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "view_name": "api:lokaleoverheid-detail",
                 "lookup_field": "uuid",
+                "help_text": "De api url voor het zien van de gegevens van deze locatie.",
             },
         }
 
