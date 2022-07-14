@@ -568,3 +568,6 @@ SOLO_CACHE = "default"
 
 # zgw_consumers
 ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
+
+# municipalities or provinces
+SDG_ORGANIZATION_TYPE = "municipalities"
