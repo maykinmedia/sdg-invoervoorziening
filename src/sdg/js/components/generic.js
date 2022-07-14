@@ -151,6 +151,8 @@ class GenericForm {
                             }
 
                             this.displayBlock(dependency)
+                        } else if (previousSelectedProduct == null && textarea.value == "") {
+                            this.displayHidden(dependency)
                         }
                         index++
                     }
