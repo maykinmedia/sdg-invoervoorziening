@@ -11,6 +11,7 @@ class PublicData(Enum):
 
     GOVERNMENT_ORGANISATION = "owms/terms/Overheidsorganisatie.xml"
     MUNICIPALITY = "owms/terms/Gemeente.xml"
+    PROVINCE = "owms/terms/Provincie.xml"
     UPN = "owms/oquery/UPL-actueel.csv"
     INFORMATIEGEBIED = "owms/oquery/SDG-Informatiegebieden.csv"
     UPN_INFORMATIEGEBIED = "owms/oquery/UPL-SDG-Informatiegebied.csv"
