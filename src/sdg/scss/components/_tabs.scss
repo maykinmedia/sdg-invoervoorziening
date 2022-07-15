@@ -205,11 +205,14 @@
 
       li {
         list-style-type: none;
-        margin: 5px 0px 5px 0px;
+        padding-left: 16px;
       }
 
       li:before {
         content: "—";
+        display: inline-block;
+        margin-left: -16px;
+        width: 16px;
       }
 
     }
