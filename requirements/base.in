@@ -11,6 +11,7 @@ django < 3.3
 django-admin-index
 django-axes
 django-choices
+django-decorator-include
 django-hijack ~= 2.3.0
 django-hijack-admin
 django-redis
