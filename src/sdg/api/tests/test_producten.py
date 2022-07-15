@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
+from sdg.api.tests.factories.token import TokenAuthorizationFactory
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import (
     OverheidsorganisatieFactory,
@@ -42,6 +43,9 @@ class ProductenTests(APITestCase):
             automatisch_catalogus_aanmaken=False,
             organisatie=self.referentie_organisatie,
             contact_telefoonnummer="98573415236748",
+        )
+        self.referentie_token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=self.referentie_lokale_overheid
         )
         self.referentie_bevoegde_organisatie = BevoegdeOrganisatieFactory(
             organisatie=self.referentie_organisatie,
@@ -105,6 +109,9 @@ class ProductenTests(APITestCase):
             organisatie=self.organisatie,
             contact_telefoonnummer="12317238712",
         )
+        self.token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=self.lokale_overheid
+        )
         self.bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
             organisatie=self.organisatie, lokale_overheid=self.lokale_overheid
         )
@@ -153,6 +160,9 @@ class ProductenTests(APITestCase):
             automatisch_catalogus_aanmaken=False,
             organisatie=self.test_organisatie,
             contact_telefoonnummer="123456789",
+        )
+        self.test_token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=self.test_lokale_overheid
         )
         self.test_bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
             lokale_overheid=self.test_lokale_overheid,
@@ -309,10 +319,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -394,10 +407,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -411,17 +427,21 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         # update publicatieDatum to change the product first to a published item
         self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -473,10 +493,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -541,10 +564,13 @@ class ProductenTests(APITestCase):
         body = self.body
         body.pop("upnUri")
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -559,10 +585,13 @@ class ProductenTests(APITestCase):
         body = self.get_product_post_body({"publicatieDatum": None})
         body.pop("upnUri")
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -580,10 +609,13 @@ class ProductenTests(APITestCase):
         body.pop("upnLabel")
         body.pop("upnUri")
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -631,10 +663,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -658,10 +693,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -711,10 +749,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -774,10 +815,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -821,7 +865,7 @@ class ProductenTests(APITestCase):
             content_type="application/json",
         )
 
-        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(create_response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_update_product_with_verantwoordelijke_organisatie_pref_label(self):
         list_url = reverse("api:product-list")
@@ -834,10 +878,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -863,10 +910,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -881,6 +931,39 @@ class ProductenTests(APITestCase):
             "https://www.organisatie.com",
         )
 
+    def test_update_product_with_different_verantwoordelijke_organisatie(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body(
+            {
+                "verantwoordelijkeOrganisatie": {
+                    "owmsPrefLabel": "set up",
+                    "owmsIdentifier": "https://www.setup.com",
+                }
+            }
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+
+        create_data = create_response.json()
+
+        self.assertEqual(
+            create_data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "set up"
+        )
+        self.assertEqual(
+            create_data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
+            "https://www.setup.com",
+        )
+
     def test_update_product_with_bevoegde_organisatie_pref_label(self):
         list_url = reverse("api:product-list")
 
@@ -892,10 +975,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -919,10 +1005,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -940,10 +1029,13 @@ class ProductenTests(APITestCase):
 
         body = self.body
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -975,10 +1067,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -1013,10 +1108,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -1085,10 +1183,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
@@ -1166,10 +1267,13 @@ class ProductenTests(APITestCase):
             }
         )
 
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
         create_response = self.client.post(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
+            **headers,
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
