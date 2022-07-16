@@ -89,7 +89,7 @@ Links
 Licentie
 ========
 
-Copyright © `VNG Realisatie`_, 2021 - 2022
+Copyright © `Maykin Media B.V.`_, 2021 - 2022
 
 Licensed under the `EUPL`_.
 
