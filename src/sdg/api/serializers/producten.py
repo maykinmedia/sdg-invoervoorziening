@@ -25,27 +25,74 @@ from sdg.producten.models.product import GeneriekProduct
 class LocalizedProductSerializer(serializers.ModelSerializer):
     """Serializer for the localized version of a product."""
 
-    verwijzing_links = LabeledUrlListField()
+    verwijzing_links = LabeledUrlListField(
+        help_text="Dit zijn de verwijzing links voor burgers en ondernemers naar relevante organisatie informatie."
+    )
 
     class Meta:
         model = LocalizedProduct
         fields = (
             "taal",
-            "specifieke_tekst",
-            "bewijs",
-            "bezwaar_en_beroep",
-            "decentrale_procedure_link",
-            "kosten_en_betaalmethoden",
-            "procedure_beschrijving",
             "product_titel_decentraal",
-            "uiterste_termijn",
-            "vereisten",
+            "specifieke_tekst",
             "verwijzing_links",
+            "procedure_beschrijving",
+            "bewijs",
+            "vereisten",
+            "bezwaar_en_beroep",
+            "kosten_en_betaalmethoden",
+            "uiterste_termijn",
             "wtd_bij_geen_reactie",
-            "datum_wijziging",
+            "decentrale_procedure_link",
             "product_aanwezig_toelichting",
             "product_valt_onder_toelichting",
+            "datum_wijziging",
         )
+        extra_kwargs = {
+            "taal": {
+                "help_text": """Dit is de taal van de onderstaande gegevens, het is de bedoeling dat u dit veld niet veranderd! <br>
+                ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"""
+            },
+            "product_titel_decentraal": {
+                "help_text": "Dit is de titel van het product, als deze afwijkt van de generieke titel kunt u dat hier aangeven."
+            },
+            "specifieke_tekst": {
+                "help_text": "Dit is de inleidende tekst voor het product, hierin kunt u het product beschrijven als u dat nodig vind."
+            },
+            "procedure_beschrijving": {
+                "help_text": "Dit is de beschijving hoe men dit product kunt aanvragen in zijn regio."
+            },
+            "bewijs": {
+                "help_text": "Dit bevat de bestanden die de burger of ondernemer nodig heeft voor dit product."
+            },
+            "vereisten": {
+                "help_text": "Dit zijn de voorwaarden voor het aanvragen van het product."
+            },
+            "bezwaar_en_beroep": {
+                "help_text": "Dit is de beschijving hoe de burger of ondernemer zich bezwaar kunt maken indien dat nodig is."
+            },
+            "kosten_en_betaalmethoden": {
+                "help_text": "Dit is de uitleg hoe de burger of ondernemer zich bezwaar kunt maken indien dat nodig is."
+            },
+            "uiterste_termijn": {
+                "help_text": "Dit is de informatie over hoe hoelang het duurt voor het aanvragen van dit product, dit doet u met de hand van werkdagen/weken."
+            },
+            "wtd_bij_geen_reactie": {
+                "help_text": "Dit is de informatie over wat u moet doen als u geen reactie terug krijgt."
+            },
+            "decentrale_procedure_link": {
+                "help_text": "Dit is de URL waar de burger of ondernemer het product bij de organisatie kan aanvragen."
+            },
+            "product_aanwezig_toelichting": {
+                "help_text": "Dit is een optioneel veld om uit te leggen waarom het product niet aanwezig is, deze moet u alleen invullen als u het product niet levert en dan is dit veld verplicht!"
+            },
+            "product_valt_onder_toelichting": {
+                "help_text": "Dit is een optioneel veld om uit te leggen waarom dit product onder een andere product valt, deze moet u alleen invullen als dit product onder een andere product valt en dan is dit veld verplicht!"
+            },
+            "datum_wijziging": {
+                "help_text": "Dit is de datum wanneer dit product voor het laats gewijzigd was."
+            },
+        }
 
 
 class ProductVersieSerializer(serializers.ModelSerializer):
@@ -72,12 +119,12 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
     upn_label = serializers.CharField(
         source="generiek_product.upn_label",
         required=False,
-        help_text="De UPN label van het product die je wilt bewerken",
+        help_text="De UPN Label (https://standaarden.overheid.nl/owms/4.0/doc/waardelijsten/overheid.uniformeproductnaam) van het specifieke product.",
     )
     upn_uri = serializers.URLField(
         source="generiek_product.upn_uri",
         required=False,
-        help_text="De UPN URI van het product die je wilt bewerken",
+        help_text="De UPN URI (https://standaarden.overheid.nl/owms/4.0/doc/waardelijsten/overheid.uniformeproductnaam) van het specifieke product.",
     )
 
     class Meta:
@@ -87,6 +134,7 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "view_name": "api:product-detail",
                 "lookup_field": "uuid",
+                "help_text": "De Url van de api call voor het inzien van de data van het specifieke product.",
             }
         }
 
@@ -117,6 +165,7 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
             "uuid": {
                 "required": False,
                 "read_only": False,
+                "help_text": "De uuid van een specifieke organisatie (https://en.wikipedia.org/wiki/Universally_unique_identifier).",
             },
         }
 
@@ -128,7 +177,7 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
 
     owms_identifier = serializers.URLField(
         source="catalogi.organisatie.owms_identifier",
-        help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
+        help_text="Dit is de de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier) van de hoofdorganisatie van deze lokale overheid.",
         required=False,
     )
     owms_pref_label = serializers.CharField(
@@ -200,11 +249,11 @@ class ProductSerializer(ProductBaseSerializer):
         source="generiek_product.doelgroep",
         choices=DoelgroepChoices.choices,
         required=True,
-        help_text="De doelgroep van dit product.\n - Opties: `eu-burger`, `eu-bedrijf`",
+        help_text="De doelgroep van dit product.<br> - Opties: `eu-burger`, `eu-bedrijf`",
     )
     gerelateerde_producten = ProductBaseSerializer(
         many=True,
-        help_text="Een lijst met producten die gerelateerd zijn aan dit product",
+        help_text="Een lijst met producten die gerelateerd zijn aan dit product.",
     )
     locaties = ProductLocatieSerializer(
         allow_null=True,

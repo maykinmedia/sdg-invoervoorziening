@@ -80,7 +80,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "URL van de productpagina wanneer het een landelijk product betreft of de pagina met enkel generieke "
             "beschrijving van een decentraal product, bijvoorbeeld : "
             "https://ondernemersplein.kvk.nl/terrasvergunning. gebruikt voor o.a. notificeren, feedback & statistics "
-            "en het kunnen bekijken van de generieke productinformatie (bv door gebruikers van de gemeentelijke "
+            "en het kunnen bekijken van de generieke productinformatie (bv door gebruikers van de organisatie "
             "invoervoorziening) "
         ),
     )

@@ -29,14 +29,14 @@ class LokaleOverheid(models.Model):
     contact_website = models.URLField(
         _("contact website"),
         blank=True,
-        help_text=_("Website van de gemeente."),
+        help_text=_("Website van de organisatie."),
     )
     contact_telefoonnummer = models.CharField(
         _("contact telefoonnummer"),
         max_length=20,
         blank=True,
         help_text=_(
-            "Het internationale telefoonnummer waarop de gemeente bereikbaar is. Bijvoorbeeld: +31 20 624 1111"
+            "Het internationale telefoonnummer waarop de organisatie bereikbaar is. Bijvoorbeeld: +31 20 624 1111"
         ),
     )
     contact_emailadres = models.EmailField(
@@ -44,7 +44,7 @@ class LokaleOverheid(models.Model):
         max_length=254,
         blank=True,
         help_text=_(
-            "Het algemene e-mailadres van de gemeente of het e-mailadres van het klantcontactcentrum van de gemeente."
+            "Het algemene e-mailadres van de organisatie of het e-mailadres van het klantcontactcentrum van de organisatie."
         ),
     )
     contact_formulier_link = models.URLField(

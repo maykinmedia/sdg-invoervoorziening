@@ -12,22 +12,44 @@ from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
 @extend_schema_view(
     list=extend_schema(
-        description="Lijst van alle organisaties die catalogi met producten aanbieden.",
+        description="Een lijst van alle organisaties die gekoppeld zijn aan catalogi met producten.",
+        auth=[],
         parameters=[
             OpenApiParameter(
-                "owmsIdentifier",
-                OpenApiTypes.URI,
-                description="De identificatie (URI) van de organisatie zoals deze gebruikt op standaarden.overheid.nl",
+                name="owmsIdentifier",
+                description="Hierin vermeld u de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier)  van de organisatie waarvan u de informatie wilt zien.",
+                required=False,
+                type=OpenApiTypes.URI,
+                location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
-                "owmsPrefLabel",
-                OpenApiTypes.STR,
-                description="Het label van de organisatie zoals deze gebruikt op standaarden.overheid.nl",
+                name="owmsPrefLabel",
+                description="Hierin vermeld u de OWMS Prefered Label van de organisatie waarvan u de informatie wilt zien.",
+                required=False,
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+            ),
+            OpenApiParameter(
+                name="page",
+                description="Hierin kunt u aangeven welke pagina (https://en.wikipedia.org/wiki/Pagination) u wilt zien.",
+                required=False,
+                type=int,
+                location=OpenApiParameter.QUERY,
             ),
         ],
     ),
     retrieve=extend_schema(
-        description="Organisatie die catalogi met producten aanbiedt."
+        description="Alle informatie over een specifieke organisatie.",
+        auth=[],
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven welke organisatie u wilt zien.",
+                required=False,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            )
+        ],
     ),
 )
 class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
@@ -48,14 +70,90 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
 
 @extend_schema_view(
     list=extend_schema(
-        description="Lijst van alle locaties waar de bijbehorende organisatie 1 of meer producten aanbiedt."
+        description="Lijst van alle locaties waar de bijbehorende organisatie 1 of meer producten aanbiedt.",
+        auth=[],
+        parameters=[
+            OpenApiParameter(
+                name="organisatie",
+                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                required=False,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.QUERY,
+            ),
+            OpenApiParameter(
+                name="organisatieOwmsIdentifier",
+                description="""Hierin vermeld u de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier)
+                van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.""",
+                required=False,
+                type=OpenApiTypes.URI,
+                location=OpenApiParameter.QUERY,
+            ),
+            OpenApiParameter(
+                name="organisatieOwmsPrefLabel",
+                description="Hierin vermeld u de OWMS Prefered Label van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                required=False,
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
+            ),
+            OpenApiParameter(
+                name="page",
+                description="Hierin kunt u aangeven welke pagina (https://en.wikipedia.org/wiki/Pagination) u wilt zien.",
+                required=False,
+                type=int,
+                location=OpenApiParameter.QUERY,
+            ),
+        ],
     ),
     retrieve=extend_schema(
-        description="Locatie waar de bijbehorende organisatie 1 of meer producten aanbiedt."
+        description="Locatie waar de bijbehorende organisatie 1 of meer producten aanbiedt.",
+        auth=[],
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                required=True,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            )
+        ],
     ),
     create=extend_schema(description="Maak een nieuwe locatie voor een organisatie."),
-    update=extend_schema(description="Update de locatie van een organistatie."),
-    destroy=extend_schema(description="Verweider de locatie van een organisatie"),
+    update=extend_schema(
+        description="Update de locatie van een organistatie.",
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                required=True,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            )
+        ],
+    ),
+    partial_update=extend_schema(
+        description="Update de locatie van een organistatie.",
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                required=True,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            )
+        ],
+    ),
+    destroy=extend_schema(
+        description="Verweider de locatie van een organisatie",
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                required=True,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            )
+        ],
+    ),
 )
 class LocatieViewSet(viewsets.ModelViewSet):
     """Viewset for a location, retrieved by uuid"""
