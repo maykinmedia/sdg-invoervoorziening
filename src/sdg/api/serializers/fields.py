@@ -7,8 +7,10 @@ class LabeledUrlSerializer(serializers.Serializer):
     Default serializer for labeled urls.
     """
 
-    label = serializers.CharField()
-    url = serializers.URLField()
+    label = serializers.CharField(help_text="Dit veld bevat de label van de url.")
+    url = serializers.URLField(
+        help_text="Dit velt bevat de url naar relevante informatie over het product."
+    )
 
     def to_representation(self, instance):
         """Split array value into dictionary with label and url."""
