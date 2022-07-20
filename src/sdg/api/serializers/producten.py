@@ -11,7 +11,7 @@ from sdg.api.serializers.organisaties import (
     LokaleOverheidBaseSerializer,
     OpeningstijdenSerializer,
 )
-from sdg.core.constants.product import TaalChoices
+from sdg.core.constants.product import DoelgroepChoices, TaalChoices
 from sdg.core.models.catalogus import ProductenCatalogus
 from sdg.organisaties.models import (
     BevoegdeOrganisatie,
@@ -187,7 +187,11 @@ class ProductSerializer(ProductBaseSerializer):
         source="most_recent_version.vertalingen", many=True
     )
     versie = SerializerMethodField(method_name="get_versie")
-    doelgroep = SerializerMethodField(method_name="get_doelgroep")
+    doelgroep = serializers.ChoiceField(
+        source="generiek_product.doelgroep",
+        choices=DoelgroepChoices.choices,
+        required=True,
+    )
     gerelateerde_producten = ProductBaseSerializer(many=True)
     locaties = ProductLocatieSerializer(
         allow_null=True,
@@ -253,9 +257,6 @@ class ProductSerializer(ProductBaseSerializer):
     def get_versie(self, obj: Product) -> int:
         return self._get_most_recent_version(obj, "versie", default=0)
 
-    def get_doelgroep(self, obj: Product) -> str:
-        return obj.generiek_product.doelgroep
-
     def to_representation(self, instance):
         data = super(ProductBaseSerializer, self).to_representation(instance)
         translations = self.get_vertalingen(instance)
@@ -312,11 +313,11 @@ class ProductSerializer(ProductBaseSerializer):
 
         return attrs
 
-    def get_generiek_product(self, generiek_product):
+    def get_generiek_product(self, generiek_product, doelgroep):
         if "upn_label" in generiek_product:
             try:
                 return GeneriekProduct.objects.get(
-                    upn__upn_label=generiek_product["upn_label"]
+                    upn__upn_label=generiek_product["upn_label"], doelgroep=doelgroep
                 )
             except GeneriekProduct.DoesNotExist:
                 raise serializers.ValidationError("Received a non existing 'upn label'")
@@ -324,7 +325,7 @@ class ProductSerializer(ProductBaseSerializer):
         if "upn_uri" in generiek_product:
             try:
                 return GeneriekProduct.objects.get(
-                    upn__upn_uri=generiek_product["upn_uri"]
+                    upn__upn_uri=generiek_product["upn_uri"], doelgroep=doelgroep
                 )
             except GeneriekProduct.DoesNotExist:
                 raise serializers.ValidationError("Received a non existing 'upn uri'")
@@ -339,12 +340,17 @@ class ProductSerializer(ProductBaseSerializer):
             raise serializers.ValidationError("Could not find a default catalog.")
 
     def get_referentie_product(self, generiek_product):
-        referentie_product = Product.objects.get(
-            generiek_product=generiek_product,
-            referentie_product=None,
-        )
+        try:
+            referentie_product = Product.objects.get(
+                generiek_product=generiek_product,
+                referentie_product=None,
+            )
 
-        return referentie_product
+            return referentie_product
+        except Product.DoesNotExist:
+            raise serializers.ValidationError(
+                "The requested product does not exist for this organization."
+            )
 
     def get_product(self, product_valt_onder, catalogus):
         if "upn_label" in product_valt_onder:
@@ -447,6 +453,7 @@ class ProductSerializer(ProductBaseSerializer):
     def create(self, validated_data):
         data = self.context["request"].data.copy()
         generiek_product = validated_data.pop("generiek_product")
+        doelgroep = data.get("doelgroep")
         catalogus = validated_data.get("catalogus", [])
         product_valt_onder = validated_data.pop("product_valt_onder", [])
         gerelateerde_producten = validated_data.pop("gerelateerde_producten", [])
@@ -458,7 +465,9 @@ class ProductSerializer(ProductBaseSerializer):
         publicatie_datum = most_recent_version.pop("publicatie_datum", None)
         vertalingen = most_recent_version.pop("vertalingen", [])
 
-        validated_data["generiek_product"] = self.get_generiek_product(generiek_product)
+        validated_data["generiek_product"] = self.get_generiek_product(
+            generiek_product, doelgroep
+        )
 
         if verantwoordelijke_organisatie:
             verantwoordelijke_organisatie = self.get_lokale_overheid(
