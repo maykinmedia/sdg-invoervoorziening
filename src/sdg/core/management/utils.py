@@ -37,10 +37,10 @@ def load_government_organisations(data: List[Dict[str, Any]]) -> int:
     return count
 
 
-def load_municipalities(data: List[Dict[str, Any]]) -> int:
+def load_organisation_subset(data: List[Dict[str, Any]]) -> int:
     """
-    Identifies municipalities in the list of all government organisations. It
-    specifically does not add any municipality if it's not in the list of
+    Identifies organisations in the list of all government organisations. It
+    specifically does not add any organiation if it's not in the list of
     government organisations.
 
     WARNING: Depends on `load_government_organisations`.

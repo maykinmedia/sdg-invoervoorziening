@@ -572,3 +572,4 @@ ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
 SDG_CMS_ENABLED = config("SDG_CMS_ENABLED", default=True)
 
 SDG_ORGANIZATION_TYPE = "municipalities"
+assert SDG_ORGANIZATION_TYPE == "municipalities" or SDG_ORGANIZATION_TYPE == "provinces"
