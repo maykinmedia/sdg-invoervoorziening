@@ -5,7 +5,9 @@ from rest_framework.test import APITestCase
 
 from sdg.core.constants import TaalChoices
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
+from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.tests.factories.overheid import (
+    BevoegdeOrganisatieFactory,
     LocatieFactory,
     LokaleOverheidFactory,
 )
@@ -124,10 +126,26 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(str(product.uuid), data[0]["uuid"])
 
     def test_filter_catalogus(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_filter_catalogus.com",
+            owms_pref_label="test_filter_catalogus",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_filter_catalogus",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         catalog = ProductenCatalogusFactory.create(
             is_referentie_catalogus=True,
         )
-        product1, product2 = ReferentieProductFactory.create_batch(2, catalogus=catalog)
+        product1, product2 = ReferentieProductFactory.create_batch(
+            2, catalogus=catalog, bevoegde_organisatie=bevoegde_organisatie
+        )
         ReferentieProductFactory.create_batch(3)
         ProductVersieFactory(product=product1)
         ProductVersieFactory(product=product2)
@@ -159,10 +177,28 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(3, len(data))
 
     def test_filter_upn_label(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_filter_upn_label.com",
+            owms_pref_label="test_filter_upn_label",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_filter_upn_label",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         catalog = ProductenCatalogusFactory.create(
             is_referentie_catalogus=True,
         )
-        product, *_ = ReferentieProductFactory.create_batch(5, catalogus=catalog)
+        product, *_ = ReferentieProductFactory.create_batch(
+            5,
+            catalogus=catalog,
+            bevoegde_organisatie=bevoegde_organisatie,
+        )
         ProductVersieFactory.create(product=product)
 
         response = self.client.get(self.url, {"upnLabel": product.upn.upn_label})
@@ -175,10 +211,28 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(str(product.uuid), data[0]["uuid"])
 
     def test_filter_upn_uri(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_filter_upn_uri.com",
+            owms_pref_label="test_filter_upn_uri",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_filter_upn_uri",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         catalog = ProductenCatalogusFactory.create(
             is_referentie_catalogus=True,
         )
-        product, *_ = ReferentieProductFactory.create_batch(5, catalogus=catalog)
+        product, *_ = ReferentieProductFactory.create_batch(
+            5,
+            catalogus=catalog,
+            bevoegde_organisatie=bevoegde_organisatie,
+        )
         ProductVersieFactory.create(product=product)
 
         response = self.client.get(self.url, {"upnUri": product.upn.upn_uri})
@@ -191,6 +245,20 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(str(product.uuid), data[0]["uuid"])
 
     def test_filter_product_aanwezig(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_filter_product_aanwezig.com",
+            owms_pref_label="test_filter_product_aanwezig",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_filter_product_aanwezig",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         catalog = ProductenCatalogusFactory.create(
             is_referentie_catalogus=True,
         )
@@ -199,16 +267,24 @@ class ProductFilterTests(APITestCase):
             product_aanwezig2,
             product_aanwezig3,
         ) = ReferentieProductFactory.create_batch(
-            3, catalogus=catalog, product_aanwezig=True
+            3,
+            catalogus=catalog,
+            product_aanwezig=True,
+            bevoegde_organisatie=bevoegde_organisatie,
         )
         (
             product_not_aanwezig1,
             product_not_aanwezig2,
         ) = ReferentieProductFactory.create_batch(
-            2, catalogus=catalog, product_aanwezig=False
+            2,
+            catalogus=catalog,
+            product_aanwezig=False,
+            bevoegde_organisatie=bevoegde_organisatie,
         )
         product_aanwezig_unknown = ReferentieProductFactory.create(
-            catalogus=catalog, product_aanwezig=None
+            catalogus=catalog,
+            product_aanwezig=None,
+            bevoegde_organisatie=bevoegde_organisatie,
         )
 
         ProductVersieFactory.create(product=product_aanwezig1)
@@ -237,6 +313,20 @@ class ProductFilterTests(APITestCase):
 
     @freeze_time(NOW_DATE)
     def test_filter_taal(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_filter_taal.com",
+            owms_pref_label="test_filter_taal",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_filter_taal",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         catalog = ProductenCatalogusFactory.create(
             is_referentie_catalogus=True,
         )
@@ -247,7 +337,11 @@ class ProductFilterTests(APITestCase):
             product3,
             product4,
             product5,
-        ) = ReferentieProductFactory.create_batch(5, catalogus=catalog)
+        ) = ReferentieProductFactory.create_batch(
+            5,
+            catalogus=catalog,
+            bevoegde_organisatie=bevoegde_organisatie,
+        )
 
         product1_version = ProductVersieFactory.create(
             product=product1, publicatie_datum=PAST_DATE
@@ -291,12 +385,26 @@ class ProductFilterTests(APITestCase):
         self.assertEqual("nl", first_result["vertalingen"][0]["taal"])
 
     def test_filter_organisatie_owms_identifier(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_filter_organisatie_owms_identifier.com",
+            owms_pref_label="test_filter_organisatie_owms_identifier",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_filter_organisatie_owms_identifier",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         catalog1, catalog2 = ProductenCatalogusFactory.create_batch(
             2,
             is_referentie_catalogus=True,
         )
         catalog1_product1, catalog1_product2 = ReferentieProductFactory.create_batch(
-            2, catalogus=catalog1
+            2, catalogus=catalog1, bevoegde_organisatie=bevoegde_organisatie
         )
         ProductVersieFactory.create(product=catalog1_product1)
         ProductVersieFactory.create(product=catalog1_product2)
@@ -305,7 +413,9 @@ class ProductFilterTests(APITestCase):
             catalog2_product1,
             catalog2_product2,
             catalog2_product3,
-        ) = ReferentieProductFactory.create_batch(3, catalogus=catalog2)
+        ) = ReferentieProductFactory.create_batch(
+            3, catalogus=catalog2, bevoegde_organisatie=bevoegde_organisatie
+        )
 
         ProductVersieFactory.create(product=catalog2_product1)
         ProductVersieFactory.create(product=catalog2_product2)
@@ -328,12 +438,26 @@ class ProductFilterTests(APITestCase):
         self.assertEqual(str(catalog1_product1.uuid), data[0]["uuid"])
 
     def test_filter_organisatie_owms_pref_label(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_filter_organisatie_owms_pref_label.com",
+            owms_pref_label="test_filter_organisatie_owms_pref_label",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_filter_organisatie_owms_pref_label",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         catalog1, catalog2 = ProductenCatalogusFactory.create_batch(
             2,
             is_referentie_catalogus=True,
         )
         catalog1_product1, catalog1_product2 = ReferentieProductFactory.create_batch(
-            2, catalogus=catalog1
+            2, catalogus=catalog1, bevoegde_organisatie=bevoegde_organisatie
         )
         ProductVersieFactory.create(product=catalog1_product1)
         ProductVersieFactory.create(product=catalog1_product2)
@@ -342,7 +466,9 @@ class ProductFilterTests(APITestCase):
             catalog2_product1,
             catalog2_product2,
             catalog2_product3,
-        ) = ReferentieProductFactory.create_batch(3, catalogus=catalog2)
+        ) = ReferentieProductFactory.create_batch(
+            3, catalogus=catalog2, bevoegde_organisatie=bevoegde_organisatie
+        )
 
         ProductVersieFactory.create(product=catalog2_product1)
         ProductVersieFactory.create(product=catalog2_product2)

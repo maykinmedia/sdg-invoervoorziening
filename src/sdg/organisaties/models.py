@@ -117,6 +117,7 @@ class BevoegdeOrganisatie(models.Model):
     naam = models.CharField(
         _("naam"),
         max_length=255,
+        unique=True,
         blank=True,
         help_text=_(
             "De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is."

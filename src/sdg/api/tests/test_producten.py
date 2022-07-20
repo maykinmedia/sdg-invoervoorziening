@@ -837,9 +837,24 @@ class ProductenTests(APITestCase):
         )
 
     def test_update_product_with_product_valt_onder_without_toelichting(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_update_product_with_product_valt_onder_without_toelichting.com",
+            owms_pref_label="test_update_product_with_product_valt_onder_without_toelichting",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_update_product_with_product_valt_onder_without_toelichting",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         second_product = SpecifiekProductFactory.create(
             generiek_product=self.second_generiek_product,
             referentie_product=self.second_referentie_product,
+            bevoegde_organisatie=bevoegde_organisatie,
             catalogus=self.test_catalog,
             product_aanwezig=True,
         )
