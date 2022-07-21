@@ -90,3 +90,59 @@ class LabeledURLTests(TestCase):
                 ["label1", "https://example.com", "extra1"],
             ]
             self.localized_product.full_clean()
+
+    def test_unable_to_save_markdown_with_invaled_h_elements(self):
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "# example text."
+
+            self.localized_product.full_clean()
+
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "## example text."
+
+            self.localized_product.full_clean()
+
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "##### example text."
+
+            self.localized_product.full_clean()
+
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "###### example text."
+
+            self.localized_product.full_clean()
+
+    def test_unable_to_save_markdown_with_img_element(self):
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = (
+                "![alt](/path/to/image.jpg 'title') example text."
+            )
+
+            self.localized_product.full_clean()
+
+    def test_unable_to_save_markdown_with_hr_element(self):
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "___"
+
+            self.localized_product.full_clean()
+
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "---"
+
+            self.localized_product.full_clean()
+
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "***"
+
+            self.localized_product.full_clean()
+
+    def test_unable_to_save_markdown_with_code_element(self):
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = "`example text` example text."
+
+            self.localized_product.full_clean()
+
+    def test_able_to_save_markdown(self):
+        self.localized_product.specifieke_tekst = "### example text\n * example text\n * example text\n * example text\n 1. example text\n 2. example text\n 3. example text\n *italic* **bold**."
+
+        self.localized_product.full_clean()
