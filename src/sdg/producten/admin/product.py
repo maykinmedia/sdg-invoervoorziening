@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.db.models import Count
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -114,7 +115,9 @@ class ProductAdmin(admin.ModelAdmin):
         "is_referentie",
         "lokale_overheid",
         "catalogus",
-        "generiek_product",
+        "product_aanwezig",
+        "latest_version",
+        "latest_publication_date",
     )
     list_filter = (
         IsReferenceProductFilter,
@@ -145,12 +148,21 @@ class ProductAdmin(admin.ModelAdmin):
                 "catalogus__lokale_overheid",
                 "catalogus__lokale_overheid__organisatie",
             )
+            .annotate(versie_nummer=Count("versies", distinct=True))
         )
 
     def is_referentie(self, obj):
         return obj.is_referentie_product
 
     is_referentie.boolean = True
+
+    def latest_version(self, obj):
+        return obj.versie_nummer
+
+    def latest_publication_date(self, obj):
+        return ProductVersie.objects.get(
+            product=obj, versie=obj.versie_nummer
+        ).publicatie_datum
 
     def lokale_overheid(self, obj):
         return obj.catalogus.lokale_overheid
