@@ -37,7 +37,13 @@ class Token(models.Model):
         help_text=_("Naam van de administratie"),
         blank=True,
     )
-
+    last_seen = models.DateTimeField(
+        _("laatst gekeken"),
+        auto_now=False,
+        help_text=_("Wanneer het token voor het laatst gebruikt is in de api."),
+        blank=True,
+        null=True,
+    )
     created = models.DateTimeField(
         _("aangemaakt"),
         auto_now_add=True,
