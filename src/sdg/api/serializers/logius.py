@@ -4,7 +4,7 @@ from sdg.core.models import Overheidsorganisatie
 
 
 class OverheidsorganisatieSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer for Overheidsorganisatie, including identifier, label and end date."""
+    """De organisaties die deze organisatie ondersteunen."""
 
     class Meta:
         model = Overheidsorganisatie
@@ -13,3 +13,14 @@ class OverheidsorganisatieSerializer(serializers.HyperlinkedModelSerializer):
             "owms_pref_label",
             "owms_end_date",
         )
+        extra_kwargs = {
+            "owms_identifier": {
+                "help_text": "Dit is de de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier) van een de ondersteunende organisatie."
+            },
+            "owms_pref_label": {
+                "help_text": "Dit is de de OWMS Prefered Label van een de ondersteunende organisatie."
+            },
+            "owms_end_date": {
+                "help_text": "Dit is de eind datum van de ondersteunende organisatie, als deze null is betekend dat de ondersteunende organisatie nog bestaat."
+            },
+        }

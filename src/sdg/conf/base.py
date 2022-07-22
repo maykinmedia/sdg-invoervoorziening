@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 
 import sentry_sdk
 
+from .api import *  # noqa
 from .utils import config, get_current_version, get_sentry_integrations
 
 # Build paths inside the project, so further paths can be defined relative to
@@ -521,38 +522,6 @@ CELERY_TASK_TIME_LIMIT = 60 * 60  # 1 hour
 CELERY_TASK_SOFT_TIME_LIMIT = 50 * 60  # 50 minutes
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 SILENCED_SYSTEM_CHECKS = ["utils.E001"]
-
-# DRF
-REST_FRAMEWORK = {
-    "DEFAULT_RENDERER_CLASSES": [
-        "djangorestframework_camel_case.render.CamelCaseJSONRenderer",
-    ],
-    "DEFAULT_PARSER_CLASSES": [
-        "djangorestframework_camel_case.parser.CamelCaseJSONParser",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": ["sdg.api.authentication.TokenAuthentication"],
-    "DEFAULT_THROTTLE_CLASSES": [
-        "sdg.api.throttling.CustomRateThrottle",
-    ],
-    "DEFAULT_THROTTLE_RATES": {"user": "100/min"},
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ],
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
-    "PAGE_SIZE": 25,
-}
-SPECTACULAR_SETTINGS = {
-    "TITLE": "SDG Invoervoorziening API",
-    "VERSION": "1.2.0",
-    "SERVE_INCLUDE_SCHEMA": False,
-    "CAMELIZE_NAMES": True,
-    "POSTPROCESSING_HOOKS": [
-        "drf_spectacular.hooks.postprocess_schema_enums",
-        "drf_spectacular.contrib.djangorestframework_camel_case.camelize_serializer_fields",
-    ],
-}
 
 # Subpath (optional)
 # This environment variable can be configured during deployment.
