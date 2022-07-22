@@ -12,7 +12,7 @@ from decorator_include import decorator_include
 from two_factor.urls import urlpatterns as tf_urls
 
 from sdg import miscellaneous_urls
-from sdg.accounts.views.password_reset import PasswordResetView
+from sdg.accounts.views.password_reset import PasswordResetView, ResendInventation
 from sdg.decorators import enabled
 
 handler500 = "sdg.utils.views.server_error"
@@ -34,6 +34,7 @@ urlpatterns = [
         name="password_reset_done",
     ),
     path("admin/hijack/", include("hijack.urls")),
+    path("admin/resend_invite", ResendInventation, name="resend_token"),
     path("admin/", admin.site.urls),
     path("api/", include("sdg.api.urls", namespace="api")),
     # cms - these urls can be disabled if desired though the setting SDG_CMS_ENABLED
