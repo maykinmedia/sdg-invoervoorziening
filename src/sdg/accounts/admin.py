@@ -1,8 +1,12 @@
+from compat import format_html
 from django import forms
+import django
+from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import gettext_lazy as _
+from django.templatetags.static import static
 
 from allauth.account.models import EmailAddress
 from hijack_admin.admin import HijackUserAdminMixin
@@ -31,6 +35,15 @@ class RoleInline(admin.TabularInline):
 
 class UserInvitationInline(admin.TabularInline):
     model = UserInvitation
+    fields = (
+        "key",
+        "accepted",
+        "created",
+        "sent",
+        "inviter",
+        "resend",
+    )
+    readonly_fields = ("resend",)
     fk_name = "user"
     extra = 0
 
@@ -39,6 +52,18 @@ class UserInvitationInline(admin.TabularInline):
 
     def has_change_permission(self, *args, **kwargs) -> bool:
         return False
+
+    def resend(self, obj):
+        subpath = settings.SUBPATH or ""
+
+        return format_html(
+            f"<input type='button' value='resend invite' onclick='resendInvite({obj.pk}, {subpath})'>"
+        )
+
+    resend.allow_tags = True
+
+    class Media:
+        js = (static("/js/admin/resend_invite.js"),)
 
 
 class EmailaddressInline(admin.TabularInline):
