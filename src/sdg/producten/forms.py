@@ -86,6 +86,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     bevoegde_organisatie = forms.ModelChoiceField(
         queryset=BevoegdeOrganisatie.objects.all(),
         required=False,
+        empty_label=None,
     )
     locaties = forms.ModelMultipleChoiceField(
         queryset=None,
