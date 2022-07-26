@@ -217,6 +217,7 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
             "contact_website",
             "contact_emailadres",
             "contact_telefoonnummer",
+            "contact_formulier_link",
             "bevoegde_organisaties",
             "ondersteunings_organisatie",
         )

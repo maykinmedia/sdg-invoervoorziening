@@ -47,6 +47,7 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
         "organisatie__owms_pref_label",
         "contact_emailadres",
         "contact_website",
+        "contact_formulier_link",
     )
     inlines = (LocatieInline, BevoegdeOrganisatieInline)
     autocomplete_fields = (
