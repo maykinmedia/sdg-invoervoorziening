@@ -76,6 +76,24 @@
                 <tbody class="tabs__table-body">
 
                 {% if not product.is_referentie_product %}
+
+                    <tr>
+                        <td>
+                            <div class="form__control">
+                                <header class="form__control-header">
+                                    <label class="form__label">
+                                        {{ _("Doelgroep")|capfirst }}
+                                        <i class="fas fa-info-circle fa-xs dark" title="{{ doelgroep.help_text }}"></i>
+                                    </label>
+                                </header>
+                                <div class="form__control-body">
+                                    <div class="tabs__table-cell--versions"></div>
+                                    {{ doelgroep.value }}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
                     {% with field=product_form.product_aanwezig %}
                     <tr>
                         <td>

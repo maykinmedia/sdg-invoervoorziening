@@ -9,7 +9,7 @@ class GenericForm {
         /** @type {HTMLFormElement} */
         this.node = node;
 
-        if(!this.isGenericForm()) {
+        if (!this.isGenericForm()) {
             return;  // Not a generic form.
         }
 
