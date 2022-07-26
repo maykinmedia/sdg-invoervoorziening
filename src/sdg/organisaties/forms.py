@@ -20,6 +20,7 @@ class LokaleOverheidForm(forms.ModelForm):
             "contact_website",
             "contact_telefoonnummer",
             "contact_emailadres",
+            "contact_formulier_link",
         )
 
     readonly_fields = ("organisatie",)

@@ -18,6 +18,7 @@ class LokaleOverheidFactory(DjangoModelFactory):
     contact_website = factory.Faker("url")
     contact_telefoonnummer = factory.Faker("phone_number", locale="nl_NL")
     contact_emailadres = factory.Faker("email")
+    contact_formulier_link = factory.Faker("url")
 
     class Meta:
         model = LokaleOverheid

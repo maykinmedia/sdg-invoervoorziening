@@ -47,6 +47,11 @@ class LokaleOverheid(models.Model):
             "Het algemene e-mailadres van de gemeente of het e-mailadres van het klantcontactcentrum van de gemeente."
         ),
     )
+    contact_formulier_link = models.URLField(
+        _("contact formulier"),
+        blank=True,
+        help_text=("De webpagina van het contact formulier van de organisatie."),
+    )
     ondersteunings_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
         on_delete=models.SET_NULL,
