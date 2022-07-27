@@ -516,6 +516,11 @@ components:
       required:
       - naam
       - owmsEndDate
+    DoelgroepEnum:
+      enum:
+      - eu-burger
+      - eu-bedrijf
+      type: string
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -1052,8 +1057,7 @@ components:
             $ref: '#/components/schemas/ProductLocatie'
           nullable: true
         doelgroep:
-          type: string
-          readOnly: true
+          $ref: '#/components/schemas/DoelgroepEnum'
         vertalingen:
           type: array
           items:

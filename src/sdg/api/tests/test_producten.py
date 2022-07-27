@@ -63,6 +63,7 @@ class ProductenTests(APITestCase):
         )
         self.generiek_product = GeneriekProductFactory.create(
             upn=self.upn,
+            doelgroep="eu-burger",
         )
         self.referentie_product = ReferentieProductFactory.create(
             generiek_product=self.generiek_product,
@@ -84,6 +85,7 @@ class ProductenTests(APITestCase):
         )
         self.second_generiek_product = GeneriekProductFactory.create(
             upn=self.second_upn,
+            doelgroep="eu-burger",
         )
         self.second_referentie_product = ReferentieProductFactory.create(
             generiek_product=self.second_generiek_product,
@@ -213,6 +215,7 @@ class ProductenTests(APITestCase):
             "publicatieDatum": None,
             "productAanwezig": 1,
             "productValtOnder": None,
+            "doelgroep": "eu-burger",
             "verantwoordelijkeOrganisatie": {
                 "owmsPrefLabel": "organisatie",
                 "owmsIdentifier": "https://www.organisatie.com",
@@ -1154,6 +1157,7 @@ class ProductenTests(APITestCase):
         )
         third_generiek_product = GeneriekProductFactory.create(
             upn=third_upn,
+            doelgroep="eu-burger",
         )
         third_referentie_product = ReferentieProductFactory.create(
             generiek_product=third_generiek_product,
@@ -1238,6 +1242,7 @@ class ProductenTests(APITestCase):
         )
         third_generiek_product = GeneriekProductFactory.create(
             upn=third_upn,
+            doelgroep="eu-burger",
         )
         third_referentie_product = ReferentieProductFactory.create(
             generiek_product=third_generiek_product,
@@ -1314,6 +1319,38 @@ class ProductenTests(APITestCase):
             create_data["gerelateerdeProducten"][1]["upnUri"],
             product3.generiek_product.upn.upn_uri,
         )
+
+    def test_update_product_with_invalid_doelgroep(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body({"doelgroep": "test1234"})
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_product_with_wrong_doelgroep(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body({"doelgroep": "eu-bedrijf"})
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @freeze_time(NOW_DATE)
     def test_list_product_history(self):
