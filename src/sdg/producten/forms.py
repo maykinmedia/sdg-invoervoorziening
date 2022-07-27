@@ -2,6 +2,8 @@ from datetime import date
 from typing import Optional
 
 from django import forms
+from django.db.models import Case, CharField, Count, F, Value, When
+from django.db.models.functions import Concat
 from django.forms import inlineformset_factory
 
 from ..core.models.mixins import FieldConfigurationMixin
@@ -108,11 +110,39 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         locations = self.instance.get_municipality_locations()
+        duplicates_generiek_product_upn_labels = (
+            Product.objects.filter(
+                catalogus=self.instance.catalogus,
+                referentie_product__isnull=False,
+            )
+            .values("generiek_product__upn__upn_label")
+            .annotate(count=Count("id"))
+            .values("generiek_product__upn__upn_label")
+            .order_by()
+            .filter(count__gt=1)
+        )
         self.fields["locaties"].queryset = locations
         self.fields["locaties"].initial = locations.filter(is_product_location=True)
         self.fields["product_valt_onder"].queryset = (
             self.fields["product_valt_onder"]
             .queryset.filter(catalogus=self.instance.catalogus)
+            .annotate(
+                _name=Case(
+                    When(
+                        generiek_product__upn__upn_label__in=[
+                            item["generiek_product__upn__upn_label"]
+                            for item in duplicates_generiek_product_upn_labels
+                        ],
+                        then=Concat(
+                            F("generiek_product__upn__upn_label"),
+                            Value(" - "),
+                            F("generiek_product__doelgroep"),
+                            output_field=CharField(),
+                        ),
+                    ),
+                    default=F("generiek_product__upn__upn_label"),
+                )
+            )
             .exclude(pk=self.instance.pk)
         )
         self.fields["bevoegde_organisatie"].queryset = self.fields[
