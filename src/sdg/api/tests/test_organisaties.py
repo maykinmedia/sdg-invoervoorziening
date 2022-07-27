@@ -42,6 +42,7 @@ class OrganisatiesTests(APITestCase):
                 "contactWebsite": municipality.contact_website,
                 "contactEmailadres": municipality.contact_emailadres,
                 "contactTelefoonnummer": municipality.contact_telefoonnummer,
+                "contactFormulierLink": municipality.contact_formulier_link,
                 "bevoegdeOrganisaties": [],
                 "ondersteuningsOrganisatie": {
                     "owmsIdentifier": municipality.ondersteunings_organisatie.owms_identifier,
