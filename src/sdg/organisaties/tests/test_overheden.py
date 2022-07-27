@@ -251,12 +251,16 @@ class LokaleOverheidUpdateViewTests(WebTest):
         response.form["contact_website"] = "https://example.com"
         response.form["contact_emailadres"] = "email@example.com"
         response.form["contact_telefoonnummer"] = "0619123123"
+        response.form["contact_formulier_link"] = "https://example.com"
         response.form.submit()
 
         self.lokale_overheid.refresh_from_db()
         self.assertEqual(self.lokale_overheid.contact_website, "https://example.com")
         self.assertEqual(self.lokale_overheid.contact_emailadres, "email@example.com")
         self.assertEqual(self.lokale_overheid.contact_telefoonnummer, "0619123123")
+        self.assertEqual(
+            self.lokale_overheid.contact_formulier_link, "https://example.com"
+        )
 
 
 class LocatieUpdateViewTests(WebTest):

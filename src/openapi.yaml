@@ -516,6 +516,11 @@ components:
       required:
       - naam
       - owmsEndDate
+    DoelgroepEnum:
+      enum:
+      - eu-burger
+      - eu-bedrijf
+      type: string
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -751,6 +756,12 @@ components:
           description: 'Het internationale telefoonnummer waarop de gemeente bereikbaar
             is. Bijvoorbeeld: +31 20 624 1111'
           maxLength: 20
+        contactFormulierLink:
+          type: string
+          format: uri
+          title: Contact formulier
+          description: De webpagina van het contact formulier van de organisatie.
+          maxLength: 200
         bevoegdeOrganisaties:
           type: array
           items:
@@ -1052,8 +1063,7 @@ components:
             $ref: '#/components/schemas/ProductLocatie'
           nullable: true
         doelgroep:
-          type: string
-          readOnly: true
+          $ref: '#/components/schemas/DoelgroepEnum'
         vertalingen:
           type: array
           items:
