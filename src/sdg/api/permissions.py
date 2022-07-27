@@ -1,5 +1,9 @@
+import datetime
+
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 from vng_api_common.permissions import bypass_permissions
+
+from sdg.api.models import Token
 
 
 class Permissions(BasePermission):
@@ -26,6 +30,8 @@ class Permissions(BasePermission):
         ):
             return False
 
+        Token.objects.filter(key=request.auth).update(last_seen=datetime.datetime.now())
+
         return True
 
     def has_object_permission(self, request, view, obj):
@@ -41,5 +47,7 @@ class Permissions(BasePermission):
             "lokale_overheid__organisatie__pk", flat=True
         ):
             return False
+
+        Token.objects.filter(key=request.auth).update(last_seen=datetime.datetime.now())
 
         return True
