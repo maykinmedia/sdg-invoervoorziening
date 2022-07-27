@@ -1,6 +1,6 @@
-========================================
-Producten en Diensten beheer voor de SDG
-========================================
+=================================
+SDG Invoervoorziening en API-brug
+=================================
 
 :Version: 1.2.3
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
@@ -19,13 +19,15 @@ Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_ en
 Introductie
 ===========
 
-De SDG invoervoorziening is een applicatie voor het beheren en ontsluiten van 
-productbeschrijvingen van producten die worden aangeboden door organisaties in 
-de verschillende overheidslagen. Deze producten vallen onder de SDG verordening
-en de productbeschrijvingen worden ontsloten via een API. 
+De *SDG Invoervoorziening en API-brug* is een applicatie voor het beheren en 
+ontsluiten van productbeschrijvingen van producten die worden aangeboden door 
+organisaties in de verschillende overheidslagen. Deze producten vallen onder de 
+SDG verordening en de productbeschrijvingen worden ontsloten via een API. 
 
-Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen 
-hiervan afwijken en hun eigen beschrijving maken.
+De SDG Invoervoorziening stelt organisaties in staat via een geïntegreerd CMS 
+de productbeschrijvingen te beheren. De SDG API-brug stelt organisaties in 
+staat productbeschrijvingen via een API aan te leveren. Via beide wegen komen 
+de productbeschrijvingen beschikbaar in de SDG API.
 
 Speerpunten zijn (afhankelijk van de installatie en autorisaties):
 
@@ -37,13 +39,12 @@ Speerpunten zijn (afhankelijk van de installatie en autorisaties):
   hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit op 
   de generieke teksten die met de specifieke teksten worden getoond op de 
   nationale portalen. 
-* Organisaties beheren SDG content in de invoervoorziening. Organisaties 
-  beheren hun eigen webcontent in hun eigen CMS. De SDG content wordt 
-  bijgehouden ten behoeve van publicatie op de nationale portalen. De 
-  organisatie kan de SDG content op haar eigen website en via andere kanalen 
-  gebruiken en publiceren, mits ze zelf een API-aansluiting maken die dit 
-  mogelijk maakt (dit laatste is buiten scope van het project).
-* Een API om teksten geautomatiseerd aan te leveren vanuit het eigen CMS.
+* Hergebruik van SDG productbeschrijvingen: Teksten die in de SDG 
+  Invoervoorziening beheerd worden, kunnen ook opgenomen worden in de eigen 
+  website.
+* Hergebruik van eigen productbeschrijvingen: Teksten die in het CMS van de
+  organisatie staan kunnen aangeleverd worden aan de API-brug zodat er geen
+  teksten beheerd hoeven te worden via de SDG Invoervoorziening.
 
 
 API specificatie
@@ -89,7 +90,7 @@ Links
 Licentie
 ========
 
-Copyright © `VNG Realisatie`_, 2021 - 2022
+Copyright © `Maykin Media B.V.`_, 2021 - 2022
 
 Licensed under the `EUPL`_.
 

@@ -2,7 +2,7 @@ from rest_framework.permissions import SAFE_METHODS, BasePermission
 from vng_api_common.permissions import bypass_permissions
 
 
-class LocationPermission(BasePermission):
+class Permissions(BasePermission):
     def has_permission(self, request, view):
         if bypass_permissions(request):
             return True

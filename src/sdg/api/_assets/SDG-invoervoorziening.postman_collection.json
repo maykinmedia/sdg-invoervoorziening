@@ -1,0 +1,276 @@
+{
+	"info": {
+		"_postman_id": "e75719ed-64ad-4a50-ad39-d18054860469",
+		"name": "SDG-invoervoorziening",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19962313"
+	},
+	"item": [
+		{
+			"name": "Retrieve all catalogs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/api/v1/catalogi",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"catalogi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all organizations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/api/v1/organisaties",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"organisaties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all locations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/api/v1/locaties",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"locaties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/api/v1/producten",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"producten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve all products from",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/api/v1/producten?organisatieOwmsPrefLabel=",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"producten"
+					],
+					"query": [
+						{
+							"key": "organisatieOwmsPrefLabel",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Retrieve product from organization",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_path}}/api/v1/producten?organisatieOwmsPrefLabel=&upnLabel=",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"producten"
+					],
+					"query": [
+						{
+							"key": "organisatieOwmsPrefLabel",
+							"value": ""
+						},
+						{
+							"key": "upnLabel",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create location",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"naam\": \"\",\n    \"straat\": \"\",\n    \"nummer\": \"\",\n    \"postcode\": \"\",\n    \"plaats\": \"\",\n    \"land\": \"\",\n    \"openingstijdenOpmerking\": \"\",\n    \"organisatie\": {\n        \"owmsPrefLabel\": \"\"\n    },\n    \"openingstijden\": {\n        \"maandag\": [],\n        \"dinsdag\": [],\n        \"woensdag\": [],\n        \"donderdag\": [],\n        \"vrijdag\": [],\n        \"zaterdag\": [],\n        \"zondag\": []\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/api/v1/locaties",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"locaties"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update location",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"naam\": \"\",\n    \"straat\": \"\",\n    \"nummer\": \"\",\n    \"postcode\": \"\",\n    \"plaats\": \"\",\n    \"land\": \"\",\n    \"openingstijdenOpmerking\": \"\",\n    \"openingstijden\": {\n        \"maandag\": [],\n        \"dinsdag\": [],\n        \"woensdag\": [],\n        \"donderdag\": [],\n        \"vrijdag\": [],\n        \"zaterdag\": [],\n        \"zondag\": []\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/api/v1/locaties/",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"locaties",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete location",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_path}}/api/v1/locaties/",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"locaties",
+						""
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create (update) products",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"upnLabel\": \"\",\n    \"publicatieDatum\": null,\n    \"productAanwezig\": true,\n    \"productValtOnder\": null,\n    \"verantwoordelijkeOrganisatie\": {\n        \"owmsIdentifier\": \"\",\n        \"owmsPrefLabel\": \"\"\n    },\n    \"bevoegdeOrganisatie\": {\n        \"owmsIdentifier\": \"\",\n        \"owmsPrefLabel\": \"\"\n    },\n    \"locaties\": [{\n        \"uuid\": \"\",\n        \"naam\": \"\"\n    }],\n    \"vertalingen\": [\n        {\n            \"taal\": \"nl\",\n            \"specifiekeTekst\": \"\",\n            \"bewijs\": \"\",\n            \"bezwaarEnBeroep\": \"\",\n            \"decentraleProcedureLink\": \"\",\n            \"kostenEnBetaalmethoden\": \"\",\n            \"procedureBeschrijving\": \"\",\n            \"productTitelDecentraal\": \"\",\n            \"uitersteTermijn\": \"\",\n            \"vereisten\": \"\",\n            \"verwijzingLinks\": [],\n            \"wtdBijGeenReactie\": \"\",\n            \"productAanwezigToelichting\": \"\",\n            \"productValtOnderToelichting\": \"\"\n        },\n        {\n            \"taal\": \"en\",\n            \"specifiekeTekst\": \"\",\n            \"bewijs\": \"\",\n            \"bezwaarEnBeroep\": \"\",\n            \"decentraleProcedureLink\": \"\",\n            \"kostenEnBetaalmethoden\": \"\",\n            \"procedureBeschrijving\": \"\",\n            \"productTitelDecentraal\": \"\",\n            \"uitersteTermijn\": \"\",\n            \"vereisten\": \"\",\n            \"verwijzingLinks\": [],\n            \"wtdBijGeenReactie\": \"\",\n            \"productAanwezigToelichting\": \"\",\n            \"productValtOnderToelichting\": \"\"\n        }\n    ],\n    \"gerelateerdeProducten\": [{\n            \"upnUri\": \"\",\n            \"upnLabel\": \"\"\n        }]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/api/v1/producten",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"producten"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,24 @@
+.button {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  background-color: #04a5bb;
+  border: 1px solid #04a5bb;
+  border-radius: 0.2rem;
+  color: #fff;
+
+  &:hover {
+    background-color: #017092;
+    border-color: #017092;
+  }
+  
+  &--alert {
+    background-color: #dc3545;
+    border-color: #dc3545;
+  
+    &:hover {
+      background-color: #bd2130;
+      border-color: #bd2130;
+    }
+  }
+}
