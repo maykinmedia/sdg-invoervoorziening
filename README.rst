@@ -1,46 +1,50 @@
-=====================
-SDG invoervoorziening
-=====================
+=================================
+SDG Invoervoorziening en API-brug
+=================================
 
-:Version: 1.1.2
+:Version: 1.2.3
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
-:Keywords: vng, sdg, pdc
+:Keywords: vng, ipo, sdg, pdc, gemeenten, provincies
 :PythonVersion: 3.8
 
 |build-status| |coverage| |docker| |black| |python-versions|
 
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
-(SDG).
+(SDG) via de invoervoorziening en/of de API.
 
-Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_.
+Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_ en 
+`IPO`_.
 
 
 Introductie
 ===========
 
-De SDG invoervoorziening is een applicatie voor het beheren en ontsluiten van 
-SDG productbeschrijvingen van gemeenten. Deze productomschrijvingen worden 
-ontsloten via een API. 
+De *SDG Invoervoorziening en API-brug* is een applicatie voor het beheren en 
+ontsluiten van productbeschrijvingen van producten die worden aangeboden door 
+organisaties in de verschillende overheidslagen. Deze producten vallen onder de 
+SDG verordening en de productbeschrijvingen worden ontsloten via een API. 
 
-Gemeenten kunnen een referentie-productbeschrijving overnemen of kunnen hiervan 
-afwijken en hun eigen beschrijving maken.
+De SDG Invoervoorziening stelt organisaties in staat via een geïntegreerd CMS 
+de productbeschrijvingen te beheren. De SDG API-brug stelt organisaties in 
+staat productbeschrijvingen via een API aan te leveren. Via beide wegen komen 
+de productbeschrijvingen beschikbaar in de SDG API.
 
-Speerpunten zijn:
+Speerpunten zijn (afhankelijk van de installatie en autorisaties):
 
-* Ontzorging: Gemeenten hoeven voor SDG informeren hun website niet aan te 
-  passen.
+* Ontzorging: Organisaties hoeven voor de SDG hun website niet aan te passen.
 * Uniformeren productbeschrijvingen: Een gedeelde invoervoorziening maakt het 
-  mogelijk om gemeenten te ondersteunen met een referentie-productencatalogus. 
-  Gemeenten kunnen een referentie-productbeschrijving overnemen of kunnen 
+  mogelijk om organisaties te ondersteunen met een 
+  standaard-productencatalogus. 
+  Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen 
   hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit op 
   de generieke teksten die met de specifieke teksten worden getoond op de 
   nationale portalen. 
-* Gemeenten beheren SDG content in de invoervoorziening. Gemeenten beheren hun 
-  eigen webcontent in hun eigen CMS. De SDG content wordt bijgehouden ten 
-  behoeve van publicatie op de nationale portalen. De gemeente kan de SDG 
-  content op haar eigen website en via andere kanalen gebruiken en publiceren, 
-  mits ze zelf een API maken die dit mogelijk maakt (dit laatste is buiten 
-  scope van het project).
+* Hergebruik van SDG productbeschrijvingen: Teksten die in de SDG 
+  Invoervoorziening beheerd worden, kunnen ook opgenomen worden in de eigen 
+  website.
+* Hergebruik van eigen productbeschrijvingen: Teksten die in het CMS van de
+  organisatie staan kunnen aangeleverd worden aan de API-brug zodat er geen
+  teksten beheerd hoeven te worden via de SDG Invoervoorziening.
 
 
 API specificatie
@@ -54,7 +58,10 @@ Versie          Release datum   API specificatie
 ==============  ==============  =============================
 latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
-                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1fe65d2e43c37196bbdee161d4fa8951191f7e3a..master#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
+                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.2.0..master#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
+1.2.0           2022-05-24      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.2.0/src/openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.2.0/src/openapi.yaml>`_,
+                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.1.0..1.2.0#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
 1.1.0           2022-04-08      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1fe65d2e43c37196bbdee161d4fa8951191f7e3a/src/openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1fe65d2e43c37196bbdee161d4fa8951191f7e3a/src/openapi.yaml>`_,
                                 (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.0.0..1fe65d2e43c37196bbdee161d4fa8951191f7e3a#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
@@ -83,7 +90,7 @@ Links
 Licentie
 ========
 
-Copyright © `VNG Realisatie`_, 2021 - 2022
+Copyright © `Maykin Media B.V.`_, 2021 - 2022
 
 Licensed under the `EUPL`_.
 
@@ -110,5 +117,6 @@ Licensed under the `EUPL`_.
 
 .. _`Maykin Media B.V.`: https://www.maykinmedia.nl
 .. _`VNG Realisatie`: https://www.vngrealisatie.nl/
+.. _`IPO`: https://www.ipo.nl/
 .. _`Single Digital Gateway`: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ:L:2018:295:TOC
 .. _`EUPL`: LICENSE.md

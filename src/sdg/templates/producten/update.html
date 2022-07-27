@@ -25,6 +25,22 @@
 {% endfor %}
 {% endblock %}
 
+{% block breadcrumbs_page_title %}
+    {% if product.is_referentie_product %}
+        <span>{{ object|capfirst|default:namespace|capfirst }} (referentie)</span>
+    {% else %}
+        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {% if product.is_referentie_product %}
+        <span>{{ object|capfirst|default:namespace|capfirst }} (referentie)</span>
+    {% else %}
+        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
+    {% endif %}
+{% endblock %}
+
 {% block inner_content %}
 <div class="notifications">
     {% if form_invalid %}
@@ -41,6 +57,9 @@
 
 
 <form action="." method="POST" class="form">
+    <!-- removes submitting on enter -->
+    <button type="submit" disabled aria-hidden="true" class="hidden"></button>
+
     {% csrf_token %}
     {{ form.management_form }}
     {{ product_form.non_field_errors }}
@@ -50,69 +69,127 @@
                 <tr>
                     <th class="tabs__table-header" width="25%">
                         <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                        {% trans "Algemene Gegevens" %}
+                        1. {% trans "Algemene Gegevens" %}
                     </th>
-                    <th class="tabs__table-header"></th>
                 </tr>
-            </thead>
-            <tbody class="tabs__table-body">
-                <tr>
-                </tr>
+                </thead>
+                <tbody class="tabs__table-body">
 
                 {% if not product.is_referentie_product %}
-                {% with field=product_form.product_aanwezig %}
-                <tr>
-                    <td class="tabs__table-cell" width="25%"> {{ field.label|capfirst }} <i
-                            class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i> </td>
-                    <td class="tabs__table-cell"> {% select field %} {{ field.errors }} </td>
-                </tr>
-                {% endwith %}
+                    {% with field=product_form.product_aanwezig %}
+                    <tr>
+                        <td>
+                            <div class="form__control">
+                                <header class="form__control-header">
+                                    <label class="form__label">
+                                        {{ field.label|capfirst }}
+                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                    </label>
+                                </header>
+                                <div class="form__control-body">
+                                    <div class="tabs__table-cell--versions"></div>
+                                    {% select field %}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endwith %}
 
-                {% with field=product_form.product_valt_onder %}
-                <tr>
-                    <td class="tabs__table-cell" width="25%">{{ field.label|capfirst }}<i
-                            class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i></td>
-                    <td class="tabs__table-cell">{% select field %}{{ field.errors }} </td>
-                </tr>
-                {% endwith %}
+                    <tr>
+                        <td>
+                            {% localized_form formset include_form=False fields="product_aanwezig_toelichting" %}
+                        </td>
+                    </tr>
 
-                {% with field=product_form.bevoegde_organisatie %}
-                {% with configuration=field.configuration.0 %}
-                <tr>
-                    <td class="tabs__table-cell" width="25%">{{ configuration.0|default:field.label|capfirst }}<i
-                            class="fas fa-info-circle fa-xs dark"
-                            title="{{ configuration.1|default:field.help_text }}"></i>
-                    </td>
-                    <td class="tabs__table-cell">
-                        {% select field %}
-                        {{ field.errors }}
-                    </td>
-                </tr>
-                {% endwith %}
-                {% endwith %}
+                    {% with field=product_form.product_valt_onder %}
+                    <tr>
+                        <td>
+                            <div class="form__control">
+                                <header class="form__control-header">
+                                    <label class="form__label">
+                                        {{ field.label|capfirst }}
+                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                    </label>
+                                </header>
+                                <div class="form__control-body">
+                                    <div class="tabs__table-cell--versions"></div>
+                                    {% select field %}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endwith %}
 
-                {% with field=product_form.locaties %}
-                <tr>
-                    <td class="tabs__table-cell" width="25%"> {{ field.label|capfirst }}
-                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-                    </td>
-                    <td class="tabs__table-cell"> {{ field }} {{ field.errors }} </td>
-                </tr>
-                {% endwith %}
+                    <tr>
+                        <td>
+                            {% localized_form formset include_form=False fields="product_valt_onder_toelichting" %}
+                        </td>
+                    </tr>
+
+                    {% with field=product_form.locaties %}
+                    <tr>
+                        <td>
+                            <div class="form__control">
+                                <header class="form__control-header">
+                                    <label class="form__label">
+                                        {{ field.label|capfirst }}
+                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                    </label>
+                                </header>
+                                <div class="form__control-body">
+                                    <div class="tabs__table-cell--versions"></div>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endwith %}
                 {% endif %}
 
-                {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
-                {% with configuration=publication_date.configuration.0 %}
-                <tr>
-                    <td class="tabs__table-cell">{{ configuration.0|default:_("Publicatie datum")|capfirst }}<i
-                            class="fas fa-info-circle fa-xs dark"
-                            title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
-                    </td>
-                    <td class="tabs__table-cell">
-                        <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
-                    </td>
-                </tr>
+                {% with field=product_form.bevoegde_organisatie %}
+                    {% with configuration=field.configuration.0 %}
+                        <tr>
+                            <td>
+                                <div class="form__control">
+                                    <header class="form__control-header">
+                                        <label class="form__label">
+                                            {{ configuration.0|default:field.label|capfirst }}
+                                            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>
+                                        </label>
+                                    </header>
+                                    <div class="form__control-body">
+                                        <div class="tabs__table-cell--versions"></div>
+                                        {% select field %}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endwith %}
                 {% endwith %}
+
+                {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
+                    {% with configuration=publication_date.configuration.0 %}
+                        <tr>
+                            <td>
+                                <div class="form__control">
+                                    <header class="form__control-header">
+                                        <label class="form__label">
+                                            {{ configuration.0|default:_("Publicatie datum")|capfirst }}
+                                            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
+                                        </label>
+                                    </header>
+                                    <div class="form__control-body">
+                                        <div class="tabs__table-cell--versions"></div>
+                                        <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endwith %}
                 {% endwith %}
 
             </tbody>
@@ -145,7 +222,7 @@
                     <tr>
                         <th class="tabs__table-header" width="25%">
                             <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                            {% trans 'Generieke gegevens' %}
+                            2. {% trans 'Generieke gegevens' %}
                         </th>
                     </tr>
                     </thead>
@@ -198,7 +275,7 @@
                 <tr>
                     <th class="tabs__table-header" width="25%">
                         <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                        {% trans 'Specifieke gegevens' %}
+                        3. {% trans 'Specifieke gegevens' %}
                     </th>
                 </tr>
             </thead>
@@ -284,6 +361,9 @@
 
             <div class="toolbar__section">
                 <div class="button-group">
+                    <label class="toolbar toolbar--centered">
+                        <i class="fas fa-info-circle fa-lg dark" title="{{ button_information }}"></i>
+                    </label>
                     <a
                         href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
                         <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>

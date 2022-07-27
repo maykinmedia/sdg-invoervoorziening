@@ -89,4 +89,17 @@
     }
 
   }
+
+  .login__backup {
+    margin-bottom: 26px;
+
+    .link {
+        background: none;
+        border: none;
+        padding: 0;
+        color: #069;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+  }
 }

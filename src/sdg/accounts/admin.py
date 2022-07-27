@@ -4,10 +4,11 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
 from django.utils.translation import gettext_lazy as _
 
+from allauth.account.models import EmailAddress
 from hijack_admin.admin import HijackUserAdminMixin
 
 from ..core.events import post_event
-from .models import Role
+from .models import Role, UserInvitation
 
 User = get_user_model()
 
@@ -26,6 +27,29 @@ class RoleInline(admin.TabularInline):
         return obj.lokale_overheid.organisatie.owms_pref_label
 
     get_role_organization.short_description = _("Organisatie")
+
+
+class UserInvitationInline(admin.TabularInline):
+    model = UserInvitation
+    fk_name = "user"
+    extra = 0
+
+    def has_add_permission(self, *args, **kwargs) -> bool:
+        return False
+
+    def has_change_permission(self, *args, **kwargs) -> bool:
+        return False
+
+
+class EmailaddressInline(admin.TabularInline):
+    model = EmailAddress
+    extra = 0
+
+    def has_add_permission(self, *args, **kwargs) -> bool:
+        return False
+
+    def has_change_permission(self, *args, **kwargs) -> bool:
+        return False
 
 
 class UserCreationForm(forms.ModelForm):
@@ -99,7 +123,7 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
         "hijack_field",
     )
     ordering = ("email",)
-    inlines = (RoleInline,)
+    inlines = (RoleInline, UserInvitationInline, EmailaddressInline)
 
     def get_queryset(self, request):
         return (

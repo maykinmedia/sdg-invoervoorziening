@@ -35,13 +35,17 @@ class LokaleOverheid(models.Model):
         _("contact telefoonnummer"),
         max_length=20,
         blank=True,
-        help_text=_("Het telefoonnummer van de gemeente."),
+        help_text=_(
+            "Het internationale telefoonnummer waarop de gemeente bereikbaar is. Bijvoorbeeld: +31 20 624 1111"
+        ),
     )
     contact_emailadres = models.EmailField(
         _("contact emailadres"),
         max_length=254,
         blank=True,
-        help_text=_("Het e-mailadres van de verantwoordelijke contactpersoon."),
+        help_text=_(
+            "Het algemene e-mailadres van de gemeente of het e-mailadres van het klantcontactcentrum van de gemeente."
+        ),
     )
     ondersteunings_organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
@@ -83,6 +87,11 @@ class LokaleOverheid(models.Model):
         ordering = ["organisatie__owms_identifier"]
 
     def __str__(self):
+        if self.organisatie.owms_end_date:
+            return _("{label} (opgeheven op {end_date})").format(
+                label=self.organisatie.owms_pref_label,
+                end_date=self.organisatie.owms_end_date.date(),
+            )
         return self.organisatie.owms_pref_label
 
     def get_absolute_url(self):
@@ -109,6 +118,7 @@ class BevoegdeOrganisatie(models.Model):
     naam = models.CharField(
         _("naam"),
         max_length=255,
+        unique=True,
         blank=True,
         help_text=_(
             "De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is."
@@ -163,7 +173,7 @@ class Lokatie(models.Model):
 
     naam = models.CharField(
         _("naam"),
-        max_length=40,
+        max_length=100,
         help_text=_("De naam van de locatie."),
     )
     straat = models.CharField(
@@ -171,9 +181,10 @@ class Lokatie(models.Model):
         max_length=256,
         help_text=_("De straatnaam van de locatie."),
     )
-    nummer = models.PositiveIntegerField(
+    nummer = models.CharField(
         _("nummer"),
         help_text=_("Het huisnummer van de locatie."),
+        max_length=12,
     )
     postcode = models.CharField(
         _("postcode"),

@@ -57,6 +57,10 @@ $base_with: (
     background-color: $color_grey_light!important;
   }
 
+  .datagrid__cell {
+    padding: calc(22px - .75em) 6px;
+  }
+
   @include tablet {
     .datagrid .datagrid__header {
       position: absolute;

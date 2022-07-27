@@ -4,20 +4,23 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include, path, re_path
+from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
+from django.views.generic.base import TemplateView
 
+from decorator_include import decorator_include
 from two_factor.urls import urlpatterns as tf_urls
 
-from sdg.accounts.views.auth import LoginView
+from sdg import miscellaneous_urls
 from sdg.accounts.views.password_reset import PasswordResetView
-from sdg.organisaties.views import InvitationAcceptView
+from sdg.decorators import enabled
 
 handler500 = "sdg.utils.views.server_error"
 admin.site.site_header = _("SDG Invoervoorziening")
 admin.site.site_title = _("SDG Invoervoorziening")
 admin.site.index_title = _("Welkom bij de SDG-admin")
 admin.site.enable_nav_sidebar = False
+
 
 urlpatterns = [
     path(
@@ -32,34 +35,27 @@ urlpatterns = [
     ),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/", admin.site.urls),
-    path("markdownx/", include("markdownx.urls")),
-    path(
-        "reset/<uidb64>/<token>/",
-        auth_views.PasswordResetConfirmView.as_view(),
-        name="password_reset_confirm",
-    ),
-    path(
-        "reset/done/",
-        auth_views.PasswordResetCompleteView.as_view(),
-        name="password_reset_complete",
-    ),
-    re_path(
-        r"^invitation/(?P<key>\w+)/?$",
-        InvitationAcceptView.as_view(),
-        name="invitation_accept",
-    ),
     path("api/", include("sdg.api.urls", namespace="api")),
-    path("accounts/", include("allauth.urls")),
-    path("accounts/", include("sdg.accounts.urls", namespace="accounts")),
-    path("organizations/", include("sdg.organisaties.urls", namespace="organisaties")),
-    path("", include("sdg.core.urls", namespace="core")),
+    # cms - these urls can be disabled if desired though the setting SDG_CMS_ENABLED
+    path("markdownx/", decorator_include(enabled, "markdownx.urls")),
+    path("accounts/", decorator_include(enabled, "allauth.urls")),
+    path(
+        "accounts/",
+        decorator_include(enabled, "sdg.accounts.urls", namespace="accounts"),
+    ),
+    path(
+        "organizations/",
+        decorator_include(enabled, "sdg.organisaties.urls", namespace="organisaties"),
+    ),
+    path("", decorator_include(enabled, "sdg.core.urls", namespace="core")),
+    path(
+        "cmsapi/",
+        decorator_include(enabled, "sdg.cmsapi.urls", namespace="cmsapi"),
+    ),
+    path("", decorator_include(enabled, miscellaneous_urls)),
+    path("", decorator_include(enabled, tf_urls)),
 ]
 
-# two_factor
-urlpatterns += [
-    path("two_factor/login/", LoginView.as_view(), name="login"),  # custom
-    path("", include(tf_urls)),
-]
 
 # NOTE: The staticfiles_urlpatterns also discovers static files (ie. no need to run collectstatic). Both the static
 # folder and the media folder are only served via Django if DEBUG = True.

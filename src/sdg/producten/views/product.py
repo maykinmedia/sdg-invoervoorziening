@@ -6,12 +6,12 @@ from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
-from sdg.organisaties.models import Lokatie
 from sdg.producten.forms import (
     LocalizedProductForm,
     LocalizedProductFormSet,
@@ -76,8 +76,8 @@ class ProductPreviewView(OverheidMixin, DetailView):
     def _get_generieke_taal_producten(self):
         required_fields = ["verwijzing_links", "datum_check"]
 
-        nl = self.object.generic_product.vertalingen.filter(taal="nl").first()
-        en = self.object.generic_product.vertalingen.filter(taal="en").first()
+        nl = self.object.generiek_product.vertalingen.filter(taal="nl").first()
+        en = self.object.generiek_product.vertalingen.filter(taal="en").first()
 
         if nl:
             setattr(nl, "template_fields", nl.get_fields(required_fields))
@@ -116,6 +116,7 @@ class ProductPreviewView(OverheidMixin, DetailView):
             "uiterste_termijn",
             "bezwaar_en_beroep",
             "wtd_bij_geen_reactie",
+            "decentrale_procedure_link",
         ]
 
         if self.is_concept():
@@ -187,14 +188,17 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         return new_version, created
 
     def _generate_version_formset(self, version: ProductVersie):
+        product_nl = self.product.generiek_product.vertalingen.get(taal="nl")
+        product_en = self.product.generiek_product.vertalingen.get(taal="en")
+
         default_explanation_mapping = {
-            "nl": f"In de gemeente {self.lokale_overheid} valt het product {self.product} onder het product [product].",
-            "en": f"In the municipality of {self.lokale_overheid}, the product {self.product} falls under the product [product].",
+            "nl": f"In de gemeente {self.lokale_overheid} valt het product {product_nl} onder het product [product].",
+            "en": f"In the municipality of {self.lokale_overheid}, the product {product_en} falls under the product [product].",
         }
 
         default_aanwezig_toelichting_explanation_mapping = {
-            "nl": f"De gemeente {self.lokale_overheid} levert het product {self.product} niet omdat...",
-            "en": f"The municipality of {self.lokale_overheid} doesn't offer {self.product} because...",
+            "nl": f"De gemeente {self.lokale_overheid} levert het product {product_nl} niet omdat...",
+            "en": f"The municipality of {self.lokale_overheid} doesn't offer {product_en} because...",
         }
         formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
@@ -218,8 +222,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "datum_check",
             "verwijzing_links",
         ]
-        nl = self.product.generic_product.vertalingen.filter(taal="nl").first()
-        en = self.product.generic_product.vertalingen.filter(taal="en").first()
+        nl = self.product.generiek_product.vertalingen.filter(taal="nl").first()
+        en = self.product.generiek_product.vertalingen.filter(taal="en").first()
 
         if nl:
             setattr(nl, "template_fields", nl.get_fields(required_fields))
@@ -237,9 +241,13 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        generic_information = self.product.generic_product.vertalingen.all()
+        generic_information = self.product.generiek_product.vertalingen.all()
 
         context["generic_products"] = self._get_generieke_taal_producten()
+
+        context["button_information"] = _(
+            "'Opslaan als concept' slaat het product op zonder te publiceren zodat u er later nog aan kan werken.\n'Opslaan en publiceren' maakt een nieuwe gepubliceerde versie van het product aan, actief vanaf de gekozen datum aan de linkerkant."
+        )
 
         context["languages"] = list(TaalChoices.labels.keys())
         context["product"] = self.product
@@ -279,8 +287,6 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "uiterste_termijn",
             "wtd_bij_geen_reactie",
             "decentrale_procedure_link",
-            "product_valt_onder_toelichting",
-            "product_aanwezig_toelichting",
         ]
         return context
 

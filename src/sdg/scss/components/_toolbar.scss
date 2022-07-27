@@ -51,4 +51,12 @@
     flex-direction: row;
     justify-content: space-between;
   }
+
+  &--centered {
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10px;
+    margin-right: 5px;
+  }
 }

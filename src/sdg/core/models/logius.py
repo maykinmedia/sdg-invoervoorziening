@@ -39,6 +39,11 @@ class Overheidsorganisatie(models.Model):
         ordering = ["owms_end_date"]
 
     def __str__(self):
+        if self.owms_end_date:
+            return _("{label} (opgeheven op {end_date})").format(
+                label=self.owms_pref_label,
+                end_date=self.owms_end_date.date(),
+            )
         return self.owms_pref_label
 
 

@@ -132,6 +132,7 @@ INSTALLED_APPS = [
     "zgw_consumers",
     # SDG applications
     "sdg.api",
+    "sdg.cmsapi",
     "sdg.components",
     "sdg.core",
     "sdg.utils",
@@ -468,6 +469,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 56
 
 # SDG Invitations
 INVITATION_TEMPLATE = "core/email/invitation.html"
@@ -503,6 +505,7 @@ MARKDOWNIFY = {
             "h4",
             "h5",
             "code",
+            "br",
         ],
         "MARKDOWN_EXTENSIONS": ["markdown.extensions.extra"],
     }
@@ -542,7 +545,7 @@ REST_FRAMEWORK = {
 }
 SPECTACULAR_SETTINGS = {
     "TITLE": "SDG Invoervoorziening API",
-    "VERSION": "1.1.0",
+    "VERSION": "1.2.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "CAMELIZE_NAMES": True,
     "POSTPROCESSING_HOOKS": [
@@ -565,3 +568,5 @@ SOLO_CACHE = "default"
 
 # zgw_consumers
 ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
+
+SDG_CMS_ENABLED = True

@@ -5,20 +5,22 @@ class BevoegdeOrganisatiesForm {
 
     setUpDynamicCheckbox() {
         // Show field if checkbox is checked
-        this.checkbox.addEventListener('change', () => {
-            if (this.checkbox.checked) {
-                this.formGroup.classList.remove('form__group--hidden');
-            } else {
-                this.formGroup.classList.add('form__group--hidden');
-            }
-        });
+        if (this.checkbox) {
+            this.checkbox.addEventListener('change', () => {
+                if (this.checkbox.checked) {
+                    this.formGroup.classList.remove('form__group--hidden');
+                } else {
+                    this.formGroup.classList.add('form__group--hidden');
+                }
+            });
+        }
     }
 
 
     constructor(node) {
         this.node = node;
-        this.checkbox = this.node.querySelector('[id$="staat_niet_in_de_lijst"]');
         this.nameField = this.node.querySelector('[id$="naam"]');
+        this.checkbox = this.node.querySelector('[id$="staat_niet_in_de_lijst"]');
         this.formGroup = this.nameField.parentElement;
         if (this.nameField.value) {
             this.formGroup.classList.remove('form__group--hidden');

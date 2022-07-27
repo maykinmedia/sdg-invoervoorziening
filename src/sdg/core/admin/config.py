@@ -14,10 +14,12 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
             {
                 "fields": [
                     "product_product_aanwezig",
+                    "localizedproduct_product_aanwezig_toelichting",
                     "product_bevoegde_organisatie",
                     "product_locaties",
                     "productversie_publicatie_datum",
                     "product_product_valt_onder",
+                    "localizedproduct_product_valt_onder_toelichting",
                 ],
             },
         ),
@@ -51,8 +53,6 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                     "localizedproduct_uiterste_termijn",
                     "localizedproduct_wtd_bij_geen_reactie",
                     "localizedproduct_decentrale_procedure_link",
-                    "localizedproduct_product_valt_onder_toelichting",
-                    "localizedproduct_product_aanwezig_toelichting",
                 ],
             },
         ),

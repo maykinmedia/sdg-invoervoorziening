@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Optional
 
 from django import forms
@@ -101,6 +102,9 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "locaties",
         )
 
+    def _help_text(self, field):
+        return Product._meta.get_field(field).help_text
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         locations = self.instance.get_municipality_locations()
@@ -114,6 +118,10 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         self.fields["bevoegde_organisatie"].queryset = self.fields[
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
+
+        for field in self.fields:
+            self.fields[field].help_text = self._help_text(field)
+
         self.configure_fields()
 
 
@@ -148,7 +156,10 @@ class VersionForm(forms.ModelForm):
         kwargs["instance"] = self._get_version_instance(_instance)
         super().__init__(*args, **kwargs)
         if _instance.publicatie_datum:
-            self.fields["date"].initial = _instance.publicatie_datum.isoformat()
+            if _instance.publicatie_datum > date.today():
+                self.fields["date"].initial = _instance.publicatie_datum.isoformat()
+            else:
+                self.fields["date"].initial = str(date.today())
 
     def clean(self):
         cleaned_data = super().clean()

@@ -133,9 +133,7 @@ class Product(ProductFieldMixin, models.Model):
         related_name="producten",
         on_delete=models.PROTECT,
         verbose_name=_("generiek product"),
-        help_text=_("Het generiek product voor het referentieproduct."),
-        blank=True,
-        null=True,
+        help_text=_("Het generiek product gekoppeld aan dit product."),
     )
     referentie_product = models.ForeignKey(
         "self",
@@ -198,12 +196,12 @@ class Product(ProductFieldMixin, models.Model):
 
     @cached_property
     def upn(self):
-        return self.generic_product.upn
+        return self.generiek_product.upn
 
     @cached_property
     def is_referentie_product(self) -> bool:
         """:returns: Whether this is a reference product or not."""
-        return bool(not self.referentie_product)
+        return bool(not self.referentie_product_id)
 
     @cached_property
     def has_expired(self) -> bool:
@@ -238,16 +236,6 @@ class Product(ProductFieldMixin, models.Model):
             )
             for t in most_recent_version.vertalingen.all()
         ]
-
-    @cached_property
-    def generic_product(self):
-        """:returns: The generic product of this product."""
-
-        return (
-            self.generiek_product
-            if self.is_referentie_product
-            else self.referentie_product.generiek_product
-        )
 
     @cached_property
     def reference_product(self):
@@ -336,10 +324,7 @@ class Product(ProductFieldMixin, models.Model):
         ]
 
     def __str__(self):
-        if self.is_referentie_product:  # TODO: remove
-            return f"{self.name} (referentie)"
-        else:
-            return f"{self.name}"
+        return self.name
 
     def get_absolute_url(self):
         return reverse(

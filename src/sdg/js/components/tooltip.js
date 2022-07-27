@@ -18,7 +18,7 @@ class InfoTooltip {
 }
 
 const iconsDoneRendering = () => {
-    const infoIcons = document.querySelectorAll("svg.fa-info-circle[title]");
+    const infoIcons = document.querySelectorAll("svg.fa-circle-info");
     [...infoIcons].forEach(icon => new InfoTooltip(icon));
 };
 

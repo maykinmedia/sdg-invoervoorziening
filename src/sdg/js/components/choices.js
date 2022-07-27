@@ -5,6 +5,7 @@ export const CHOICES_CONFIG = {
         noResultsText: 'Geen resultaten gevonden',
         noChoicesText: 'Geen keuzes om uit te kiezen',
         itemSelectText: 'Druk om te kiezen',
+        allowHTML: false
     };
 
 const fields = document.querySelectorAll(".choices");

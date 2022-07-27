@@ -53,6 +53,7 @@ class Command(BaseCommand):
                     lokale_overheid=local_government,
                     defaults={
                         "is_referentie_catalogus": False,
+                        "is_default_catalogus": True,
                         "domein": reference_catalog.domein,
                         "versie": reference_catalog.versie,
                         "naam": f"{local_government} ({reference_catalog.naam})",
@@ -120,7 +121,10 @@ class Command(BaseCommand):
                     product, is_created = Product.objects.get_or_create(
                         referentie_product=reference_product,
                         catalogus=catalog,
-                        defaults={"bevoegde_organisatie": default_auth_org},
+                        defaults={
+                            "generiek_product": reference_product.generiek_product,
+                            "bevoegde_organisatie": default_auth_org,
+                        },
                     )
 
                     # Make sure the product has an authorized organisation.

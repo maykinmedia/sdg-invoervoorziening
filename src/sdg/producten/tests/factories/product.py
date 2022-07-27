@@ -49,7 +49,7 @@ class SpecifiekProductFactory(ProductFactory):
         ProductenCatalogusFactory, is_referentie_catalogus=False
     )
     referentie_product = factory.SubFactory(ReferentieProductFactory)
-    generiek_product = None
+    generiek_product = factory.SelfAttribute(".referentie_product.generiek_product")
     bevoegde_organisatie = factory.SubFactory(
         BevoegdeOrganisatieFactory,
         lokale_overheid=factory.SelfAttribute("..catalogus.lokale_overheid"),

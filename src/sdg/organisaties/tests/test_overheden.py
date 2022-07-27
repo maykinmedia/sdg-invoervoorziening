@@ -11,6 +11,7 @@ from sdg.core.models import ProductenCatalogus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.tests.factories.overheid import (
+    BevoegdeOrganisatieFactory,
     LocatieFactory,
     LokaleOverheidFactory,
 )
@@ -125,11 +126,27 @@ class CatalogListViewTests(WebTest):
         self.assertEqual(response.pyquery(CATALOG_SELECTOR).length, 2)
 
     def test_specific_products_are_displayed(self):
+        organisatie = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.test_specific_products_are_displayed.com",
+            owms_pref_label="test_specific_products_are_displayed",
+            owms_end_date=None,
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=organisatie,
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            naam="test_specific_products_are_displayed",
+            organisatie=organisatie,
+            lokale_overheid=lokale_overheid,
+        )
         reference_catalog = ProductenCatalogusFactory.create(
             is_referentie_catalogus=True
         )
         reference_products = ReferentieProductFactory.create_batch(
-            3, catalogus=reference_catalog
+            3,
+            catalogus=reference_catalog,
+            bevoegde_organisatie=bevoegde_organisatie,
         )
 
         specific_catalog = ProductenCatalogusFactory.create(
@@ -142,10 +159,12 @@ class CatalogListViewTests(WebTest):
             LocalizedReferentieProductFactory.create(
                 product_versie__product=reference_product,
                 product_versie__product__catalogus=reference_catalog,
+                product_versie__product__bevoegde_organisatie=bevoegde_organisatie,
             )
             localized_specific_product = LocalizedSpecifiekProductFactory.create(
                 product_versie__product__referentie_product=reference_product,
                 product_versie__product__catalogus=specific_catalog,
+                product_versie__product__bevoegde_organisatie=bevoegde_organisatie,
             )
             specific_products.append(localized_specific_product.product_versie.product)
 
@@ -264,7 +283,7 @@ class LocatieUpdateViewTests(WebTest):
 
         response.form["form-0-naam"] = "Name"
         response.form["form-0-straat"] = "Street"
-        response.form["form-0-nummer"] = 91
+        response.form["form-0-nummer"] = "91"
         response.form["form-0-plaats"] = "Town"
         response.form["form-0-postcode"] = "1234AB"
         response.form["form-0-land"] = "Country"
@@ -274,7 +293,7 @@ class LocatieUpdateViewTests(WebTest):
         location = self.lokale_overheid.locaties.get()
         self.assertEqual(location.naam, "Name")
         self.assertEqual(location.straat, "Street")
-        self.assertEqual(location.nummer, 91)
+        self.assertEqual(location.nummer, "91")
         self.assertEqual(location.plaats, "Town")
         self.assertEqual(location.postcode, "1234AB")
         self.assertEqual(location.land, "Country")

@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: SDG Invoervoorziening API
-  version: 1.1.0
+  version: 1.2.0
 paths:
   /api/v1/catalogi:
     get:
@@ -103,13 +103,32 @@ paths:
       - locaties
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedLocatieList'
+          description: ''
+    post:
+      operationId: locatiesCreate
+      description: Maak een nieuwe locatie voor een organisatie.
+      tags:
+      - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Locatie'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
           description: ''
   /api/v1/locaties/{uuid}:
     get:
@@ -128,7 +147,6 @@ paths:
       - locaties
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -136,6 +154,82 @@ paths:
               schema:
                 $ref: '#/components/schemas/Locatie'
           description: ''
+    put:
+      operationId: locatiesUpdate
+      description: Update de locatie van een organistatie.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Locatie'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+    patch:
+      operationId: locatiesPartialUpdate
+      description: Viewset for a location, retrieved by uuid
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - locaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLocatie'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Locatie'
+          description: ''
+    delete:
+      operationId: locatiesDestroy
+      description: Verweider de locatie van een organisatie
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - locaties
+      security:
+      - tokenAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/v1/organisaties:
     get:
       operationId: organisatiesList
@@ -285,13 +379,33 @@ paths:
       - producten
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
+          description: ''
+    post:
+      operationId: productenCreate
+      description: Maak een nieuwe product versie aan of update een concept voor een
+        catalogus.
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
           description: ''
   /api/v1/producten/{productUuid}/concept:
     get:
@@ -370,7 +484,6 @@ paths:
       - producten
       security:
       - tokenAuth: []
-      - {}
       responses:
         '200':
           content:
@@ -385,6 +498,7 @@ components:
       properties:
         naam:
           type: string
+          readOnly: true
           description: De naam van de bevoegde organisatie. Deze mag alleen afwijken
             indien er geen bekende overheidsorganisatie is.
         owmsIdentifier:
@@ -397,9 +511,11 @@ components:
         owmsEndDate:
           type: string
           format: date-time
+          readOnly: true
           description: De einddatum, zoals gevonden in het OWMS-model.
       required:
       - naam
+      - owmsEndDate
     LabeledUrl:
       type: object
       description: Default serializer for labeled urls.
@@ -494,16 +610,15 @@ components:
         naam:
           type: string
           description: De naam van de locatie.
-          maxLength: 40
+          maxLength: 100
         straat:
           type: string
           description: De straatnaam van de locatie.
           maxLength: 256
         nummer:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
+          type: string
           description: Het huisnummer van de locatie.
+          maxLength: 12
         postcode:
           type: string
           description: De postcode van de locatie.
@@ -516,22 +631,18 @@ components:
           type: string
           description: Het land van de locatie.
           maxLength: 128
-        openingstijden:
-          allOf:
-          - $ref: '#/components/schemas/Openingstijden'
-          readOnly: true
         openingstijdenOpmerking:
           type: string
           description: Opmerking over de openingstijden.
           maxLength: 255
         organisatie:
           $ref: '#/components/schemas/LokaleOverheidBase'
+        openingstijden:
+          $ref: '#/components/schemas/Openingstijden'
       required:
       - land
-      - naam
       - nummer
       - openingstijden
-      - organisatie
       - plaats
       - postcode
       - straat
@@ -555,16 +666,15 @@ components:
         naam:
           type: string
           description: De naam van de locatie.
-          maxLength: 40
+          maxLength: 100
         straat:
           type: string
           description: De straatnaam van de locatie.
           maxLength: 256
         nummer:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
+          type: string
           description: Het huisnummer van de locatie.
+          maxLength: 12
         postcode:
           type: string
           description: De postcode van de locatie.
@@ -577,19 +687,13 @@ components:
           type: string
           description: Het land van de locatie.
           maxLength: 128
-        openingstijden:
-          allOf:
-          - $ref: '#/components/schemas/Openingstijden'
-          readOnly: true
         openingstijdenOpmerking:
           type: string
           description: Opmerking over de openingstijden.
           maxLength: 255
       required:
       - land
-      - naam
       - nummer
-      - openingstijden
       - plaats
       - postcode
       - straat
@@ -639,11 +743,13 @@ components:
         contactEmailadres:
           type: string
           format: email
-          description: Het e-mailadres van de verantwoordelijke contactpersoon.
+          description: Het algemene e-mailadres van de gemeente of het e-mailadres
+            van het klantcontactcentrum van de gemeente.
           maxLength: 254
         contactTelefoonnummer:
           type: string
-          description: Het telefoonnummer van de gemeente.
+          description: 'Het internationale telefoonnummer waarop de gemeente bereikbaar
+            is. Bijvoorbeeld: +31 20 624 1111'
           maxLength: 20
         bevoegdeOrganisaties:
           type: array
@@ -657,8 +763,6 @@ components:
       - locaties
       - ondersteuningsOrganisatie
       - owmsEndDate
-      - owmsIdentifier
-      - owmsPrefLabel
       - url
       - uuid
     LokaleOverheidBase:
@@ -681,11 +785,10 @@ components:
         owmsEndDate:
           type: string
           format: date-time
+          readOnly: true
           description: De einddatum, zoals gevonden in het OWMS-model.
       required:
       - owmsEndDate
-      - owmsIdentifier
-      - owmsPrefLabel
       - url
     Openingstijden:
       type: object
@@ -852,6 +955,53 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductenCatalogus'
+    PatchedLocatie:
+      type: object
+      description: Serializer for location details, including contact details, address
+        and opening times.
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        naam:
+          type: string
+          description: De naam van de locatie.
+          maxLength: 100
+        straat:
+          type: string
+          description: De straatnaam van de locatie.
+          maxLength: 256
+        nummer:
+          type: string
+          description: Het huisnummer van de locatie.
+          maxLength: 12
+        postcode:
+          type: string
+          description: De postcode van de locatie.
+          maxLength: 6
+        plaats:
+          type: string
+          description: De plaatsnaam van de locatie.
+          maxLength: 256
+        land:
+          type: string
+          description: Het land van de locatie.
+          maxLength: 128
+        openingstijdenOpmerking:
+          type: string
+          description: Opmerking over de openingstijden.
+          maxLength: 255
+        organisatie:
+          $ref: '#/components/schemas/LokaleOverheidBase'
+        openingstijden:
+          $ref: '#/components/schemas/Openingstijden'
     Product:
       type: object
       description: Serializer for a product, including UPN, availability, locations
@@ -878,18 +1028,20 @@ components:
         publicatieDatum:
           type: string
           format: date
-          readOnly: true
+          nullable: true
         productAanwezig:
           type: boolean
           nullable: true
-          title: Aanwezig
-          description: Voert u dit product?
         productValtOnder:
-          $ref: '#/components/schemas/ProductBase'
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          nullable: true
         verantwoordelijkeOrganisatie:
-          $ref: '#/components/schemas/LokaleOverheidBase'
+          $ref: '#/components/schemas/ProductLokaleOverheid'
         bevoegdeOrganisatie:
-          $ref: '#/components/schemas/BevoegdeOrganisatie'
+          allOf:
+          - $ref: '#/components/schemas/BevoegdeOrganisatie'
+          nullable: true
         catalogus:
           type: string
           format: uri
@@ -897,7 +1049,8 @@ components:
         locaties:
           type: array
           items:
-            $ref: '#/components/schemas/LocatieBase'
+            $ref: '#/components/schemas/ProductLocatie'
+          nullable: true
         doelgroep:
           type: string
           readOnly: true
@@ -905,21 +1058,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
-          readOnly: true
         gerelateerdeProducten:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
       required:
-      - bevoegdeOrganisatie
-      - catalogus
       - doelgroep
       - gerelateerdeProducten
       - locaties
+      - productAanwezig
       - productValtOnder
       - publicatieDatum
-      - upnLabel
-      - upnUri
       - url
       - uuid
       - verantwoordelijkeOrganisatie
@@ -941,8 +1090,51 @@ components:
         upnLabel:
           type: string
       required:
-      - upnLabel
-      - upnUri
+      - url
+    ProductLocatie:
+      type: object
+      description: Serializer that exposes a subset of the fields for a location,
+        used in references to a location.
+      properties:
+        openingstijden:
+          allOf:
+          - $ref: '#/components/schemas/Openingstijden'
+          readOnly: true
+        uuid:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        naam:
+          type: string
+          description: De naam van de locatie.
+          maxLength: 100
+      required:
+      - openingstijden
+    ProductLokaleOverheid:
+      type: object
+      description: |-
+        Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
+        - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        owmsIdentifier:
+          type: string
+          format: uri
+          description: OWMS identifier van de hoofdorganisatie van deze lokale overheid.
+        owmsPrefLabel:
+          type: string
+          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
+        owmsEndDate:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De einddatum, zoals gevonden in het OWMS-model.
+      required:
+      - owmsEndDate
       - url
     ProductVersie:
       type: object

@@ -68,7 +68,6 @@ class ProductQuerySet(models.QuerySet):
                 queryset=ProductVersie.objects.filter(pk__in=subquery).prefetch_related(
                     "vertalingen",
                     "product__generiek_product__vertalingen",
-                    "product__referentie_product__generiek_product__vertalingen",
                 ),
             )
         )
@@ -80,13 +79,7 @@ class ProductQuerySet(models.QuerySet):
         whether `referentie_product` exists.
         """
         return self.annotate(
-            _name=Case(
-                When(
-                    referentie_product__isnull=False,
-                    then=F("referentie_product__generiek_product__upn__upn_label"),
-                ),
-                default=F("generiek_product__upn__upn_label"),
-            ),
+            _name=F("generiek_product__upn__upn_label"),
         )
 
     def annotate_area(self):
@@ -96,17 +89,7 @@ class ProductQuerySet(models.QuerySet):
         whether `referentie_product` exists.
         """
         return self.annotate(
-            _area=Case(
-                When(
-                    referentie_product__isnull=False,
-                    then=F(
-                        "referentie_product__generiek_product__upn__thema__informatiegebied__informatiegebied"
-                    ),
-                ),
-                default=F(
-                    "generiek_product__upn__thema__informatiegebied__informatiegebied"
-                ),
-            ),
+            _area=F("generiek_product__upn__thema__informatiegebied__informatiegebied"),
         )
 
     def annotate_latest_publication_date(self):
@@ -120,8 +103,6 @@ class ProductQuerySet(models.QuerySet):
             "generiek_product",
             "generiek_product__upn",
             "referentie_product",
-            "referentie_product__generiek_product",
-            "referentie_product__generiek_product__upn",
         )
 
 
