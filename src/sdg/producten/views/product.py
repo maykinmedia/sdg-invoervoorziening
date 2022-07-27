@@ -20,6 +20,7 @@ from sdg.producten.forms import (
     VersionForm,
 )
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
+from sdg.producten.models.product import GeneriekProduct
 from sdg.producten.utils import build_url_kwargs, duplicate_localized_products
 
 
@@ -255,6 +256,10 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
         context["languages"] = list(TaalChoices.labels.keys())
         context["product"] = self.product
+        context["doelgroep"] = {
+            "value": self.product.generiek_product.doelgroep,
+            "help_text": GeneriekProduct._meta.get_field("doelgroep").help_text,
+        }
         context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
 
         context["reference_formset"] = self._generate_version_formset(
