@@ -498,7 +498,6 @@ components:
       properties:
         naam:
           type: string
-          readOnly: true
           description: De naam van de bevoegde organisatie. Deze mag alleen afwijken
             indien er geen bekende overheidsorganisatie is.
         owmsIdentifier:
@@ -514,7 +513,6 @@ components:
           readOnly: true
           description: De einddatum, zoals gevonden in het OWMS-model.
       required:
-      - naam
       - owmsEndDate
     LabeledUrl:
       type: object

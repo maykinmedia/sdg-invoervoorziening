@@ -3,6 +3,7 @@ import string
 
 import factory
 from factory.django import DjangoModelFactory
+from faker import Faker
 
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.models import (
@@ -45,7 +46,7 @@ class LocatieFactory(DjangoModelFactory):
 
 
 class BevoegdeOrganisatieFactory(DjangoModelFactory):
-    naam = factory.Faker("company")
+    naam = Faker().unique.first_name()
     organisatie = factory.SubFactory(OverheidsorganisatieFactory)
     lokale_overheid = factory.SubFactory(
         LokaleOverheidFactory, organisatie=factory.SelfAttribute("organisatie")

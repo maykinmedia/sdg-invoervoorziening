@@ -49,7 +49,8 @@ class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
     )
     naam = serializers.CharField(
         help_text="De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is.",
-        read_only=True,
+        default=None,
+        required=False,
     )
 
     class Meta:

@@ -8,7 +8,6 @@ from sdg.api.serializers.fields import LabeledUrlListField
 from sdg.api.serializers.organisaties import (
     BevoegdeOrganisatieSerializer,
     LocatieBaseSerializer,
-    LokaleOverheidBaseSerializer,
     OpeningstijdenSerializer,
 )
 from sdg.core.constants.product import TaalChoices
@@ -387,24 +386,36 @@ class ProductSerializer(ProductBaseSerializer):
                 )
 
     def get_bevoegde_organisatie(self, organisatie):
-        if "owms_pref_label" in organisatie and organisatie["owms_pref_label"]:
+        if "naam" in organisatie and organisatie["naam"]:
+            try:
+                return BevoegdeOrganisatie.objects.get(naam=organisatie["naam"])
+            except BevoegdeOrganisatie.DoesNotExist:
+                raise serializers.ValidationError("Received a non existing 'naam'")
+
+        if (
+            "owms_pref_label" in organisatie["organisatie"]
+            and organisatie["organisatie"]["owms_pref_label"]
+        ):
             try:
                 return BevoegdeOrganisatie.objects.get(
                     lokale_overheid__organisatie__owms_pref_label=organisatie[
-                        "owms_pref_label"
-                    ]
+                        "organisatie"
+                    ]["owms_pref_label"]
                 )
             except BevoegdeOrganisatie.DoesNotExist:
                 raise serializers.ValidationError(
                     "Received a non existing 'owms pref label'"
                 )
 
-        if "owms_identifier" in organisatie and organisatie["owms_identifier"]:
+        if (
+            "owms_identifier" in organisatie["organisatie"]
+            and organisatie["organisatie"]["owms_identifier"]
+        ):
             try:
                 return BevoegdeOrganisatie.objects.get(
                     lokale_overheid__organisatie__owms_identifier=organisatie[
-                        "owms_identifier"
-                    ]
+                        "organisatie"
+                    ]["owms_identifier"]
                 )
             except BevoegdeOrganisatie.DoesNotExist:
                 raise serializers.ValidationError(
@@ -487,7 +498,7 @@ class ProductSerializer(ProductBaseSerializer):
         if bevoegde_organisatie:
             if "organisatie" in bevoegde_organisatie:
                 validated_data["bevoegde_organisatie"] = self.get_bevoegde_organisatie(
-                    bevoegde_organisatie["organisatie"]
+                    bevoegde_organisatie
                 )
         else:
             validated_data["bevoegde_organisatie"] = BevoegdeOrganisatie.objects.get(
