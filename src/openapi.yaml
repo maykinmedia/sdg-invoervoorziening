@@ -7,13 +7,13 @@ info:
     # Introductie:
     De SDG invoervoorziening is een applicatie voor het beheren en ontsluiten van
     productbeschrijvingen van producten die worden aangeboden door organisaties in de
-    verschillende overheidslagen. Deze producten vallen onder de SDG verordening en de
+    overheidsorganisaties. Deze producten vallen onder de SDG verordening en de
     productbeschrijvingen worden ontsloten via een API.
 
     # Autorisatie
-    De Api maakt gebruik van een API-Token met deze token kunt u toegang krijgen voor de
-    onveilige API calls per organisatie. De API-Token wordt via de header doorgegeven en ziet er
-    uit als het volgende: `Authorization: Token <token>`. Deze token is dus alleen nodig wanneer u
+    De API maakt gebruik van een API-Token. Met deze token kunt u toegang krijgen voor de
+    lees-schrijf API calls per organisatie. De API-Token wordt via de header doorgegeven en ziet er
+    uit als volgt: `Authorization: Token <token>`. Deze token is dus alleen nodig wanneer u
     een `POST`, `PUT` of een `DELETE` call maakt. Voor `GET` calls heeft u geen API-Token nodig.
   contact:
     url: https://github.com/maykinmedia/sdg-invoervoorziening
@@ -512,8 +512,8 @@ components:
   schemas:
     BevoegdeOrganisatie:
       type: object
-      description: Organisaties die rechten hebben tot deze organisatie, standaard
-        heeft een organisatie altijd zichzelf als een bevoegde organisatie.
+      description: De ondersteunende organisaties (standaard heeft een organisatie
+        altijd zichzelf als een bevoegde organisatie.)
       properties:
         naam:
           type: string
@@ -544,15 +544,15 @@ components:
       type: string
     LabeledUrl:
       type: object
-      description: Default serializer for labeled urls.
+      description: Default serializer for labeled URLs.
       properties:
         label:
           type: string
-          description: Dit veld bevat de label van de url.
+          description: Dit veld bevat de label van de URL.
         url:
           type: string
           format: uri
-          description: Dit velt bevat de url naar relevante informatie over het product.
+          description: Dit veld bevat de URL naar referentieinformatie over het product.
       required:
       - label
       - url
@@ -564,7 +564,7 @@ components:
           allOf:
           - $ref: '#/components/schemas/TaalEnum'
           description: |-
-            Dit is de taal van de onderstaande gegevens, het is de bedoeling dat u dit veld niet veranderd! <br>
+            Dit is de taal van de onderstaande gegevens <br>
                             ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
         productTitelDecentraal:
           type: string
@@ -574,7 +574,7 @@ components:
         specifiekeTekst:
           type: string
           description: Dit is de inleidende tekst voor het product, hierin kunt u
-            het product beschrijven als u dat nodig vind.
+            het product beschrijven.
         verwijzingLinks:
           type: array
           items:
@@ -583,8 +583,7 @@ components:
             relevante organisatie informatie.
         procedureBeschrijving:
           type: string
-          description: Dit is de beschijving hoe men dit product kunt aanvragen in
-            zijn regio.
+          description: Dit is de beschrijving van hoe het product wordt aangevragen.
         bewijs:
           type: string
           description: Dit bevat de bestanden die de burger of ondernemer nodig heeft
@@ -594,8 +593,7 @@ components:
           description: Dit zijn de voorwaarden voor het aanvragen van het product.
         bezwaarEnBeroep:
           type: string
-          description: Dit is de beschijving hoe de burger of ondernemer zich bezwaar
-            kunt maken indien dat nodig is.
+          description: Beschrijft hoe de burger of ondernemer bezwaar kan maken.
         kostenEnBetaalmethoden:
           type: string
           description: Dit is de uitleg hoe de burger of ondernemer zich bezwaar kunt
@@ -606,13 +604,12 @@ components:
             van dit product, dit doet u met de hand van werkdagen/weken.
         wtdBijGeenReactie:
           type: string
-          description: Dit is de informatie over wat u moet doen als u geen reactie
-            terug krijgt.
+          description: wat de aanvrager moet doen bij geen reactie.
         decentraleProcedureLink:
           type: string
           format: uri
-          description: Dit is de URL waar de burger of ondernemer het product bij
-            de organisatie kan aanvragen.
+          description: De URL waar de burger of ondernemer het product bij de organisatie
+            kan aanvragen.
           maxLength: 200
         productAanwezigToelichting:
           type: string
@@ -629,8 +626,7 @@ components:
           type: string
           format: date-time
           readOnly: true
-          description: Dit is de datum wanneer dit product voor het laats gewijzigd
-            was.
+          description: Datum wanneer dit product voor het laatst is gewijzigd.
       required:
       - datumWijziging
       - taal
@@ -644,7 +640,8 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De url van een specifieke organisatie api call.
+          description: De URL van een specifieke organisatie, wordt tevens gebruikt
+            om met andere aanroepen te refereren aan 1 organisatie
         uuid:
           type: string
           format: uuid
@@ -677,7 +674,7 @@ components:
         openingstijdenOpmerking:
           type: string
           description: |-
-            Een opmerking over de openingstijden hier kunt u extra informatie
+            Een opmerking over de openingstijden, hier kunt u extra informatie
                             kwijt over de openingstijden wanneer dit gewenst is.
           maxLength: 255
         organisatie:
@@ -701,7 +698,8 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De url van een specifieke organisatie api call.
+          description: De URL van een specifieke organisatie, wordt tevens gebruikt
+            om met andere aanroepen te refereren aan 1 organisatie
         uuid:
           type: string
           format: uuid
@@ -734,7 +732,7 @@ components:
         openingstijdenOpmerking:
           type: string
           description: |-
-            Een opmerking over de openingstijden hier kunt u extra informatie
+            Een opmerking over de openingstijden, hier kunt u extra informatie
                             kwijt over de openingstijden wanneer dit gewenst is.
           maxLength: 255
       required:
@@ -754,7 +752,8 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De url van een specifieke organisatie api call
+          description: De URL van een specifieke organisatie, wordt tevens gebruikt
+            om met andere aanroepen te refereren aan 1 oranisatie.
         uuid:
           type: string
           format: uuid
@@ -765,18 +764,18 @@ components:
           type: string
           format: uri
           description: "Dit is de de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier)\n\
-            \        van een de organisatie die gekoppeld is aan deze catalogus.\n\
-            \        "
+            \        van een de organisatie die gekoppeld is aan deze locatie.\n \
+            \       "
         owmsPrefLabel:
           type: string
-          description: Dit is de de OWMS Prefered Label van een de organisatie die
-            gekoppeld is aan deze catalogus.
+          description: Dit is de de OWMS Prefered Label van de organisatie die gekoppeld
+            is aan deze locatie.
         owmsEndDate:
           type: string
           format: date-time
           readOnly: true
           description: Dit is de eind datum van de organisatie, als deze null is betekend
-            dat de organisatie nog bestaat.
+            dat de organisatie actief is.
         locaties:
           type: array
           items:
@@ -829,7 +828,7 @@ components:
     LokaleOverheidBase:
       type: object
       description: |-
-        De organisatie die gekoppeld zit aan deze locatie dit geven we aan met een van de volgende velden:
+        Organisaties verbonden aan deze locatie, dit geven we aan met een van de volgende velden:
         - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
       properties:
         url:
@@ -842,18 +841,18 @@ components:
           type: string
           format: uri
           description: "Dit is de de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier)\n\
-            \        van een de organisatie die gekoppeld is aan deze catalogus.\n\
-            \        "
+            \        van een de organisatie die gekoppeld is aan deze locatie.\n \
+            \       "
         owmsPrefLabel:
           type: string
-          description: Dit is de de OWMS Prefered Label van een de organisatie die
-            gekoppeld is aan deze catalogus.
+          description: Dit is de de OWMS Prefered Label van de organisatie die gekoppeld
+            is aan deze locatie.
         owmsEndDate:
           type: string
           format: date-time
           readOnly: true
           description: Dit is de eind datum van de organisatie, als deze null is betekend
-            dat de organisatie nog bestaat.
+            dat de organisatie actief is.
       required:
       - owmsEndDate
       - url
@@ -869,7 +868,7 @@ components:
             maxLength: 32
           description: |-
             De openingstijden van maandag. Deze openingstijden geven
-                            we aan ter middel van een lijst met daarin de openingstijden zoals hier: `[“9:00 - 18:00”]`
+                            we aan door middel van een lijst met daarin de openingstijden zoals hier: `[“9:00 - 18:00”]`
         dinsdag:
           type: array
           items:
@@ -920,7 +919,7 @@ components:
                             we aan ter middel van een lijst met daarin de openingstijden zoals hier: `[“9:00 - 18:00”]`
     Overheidsorganisatie:
       type: object
-      description: De organisaties die deze organisatie ondersteunen.
+      description: De ondersteunende organisaties.
       properties:
         owmsIdentifier:
           type: string
@@ -940,8 +939,8 @@ components:
           format: date-time
           nullable: true
           title: Einddatum
-          description: Dit is de eind datum van de ondersteunende organisatie, als
-            deze null is betekend dat de ondersteunende organisatie nog bestaat.
+          description: Dit is de einddatum van de ondersteunende organisatie, als
+            deze null is betekent het dat de ondersteunende organisatie actief is.
       required:
       - owmsIdentifier
       - owmsPrefLabel
@@ -1054,7 +1053,8 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De url van een specifieke organisatie api call.
+          description: De URL van een specifieke organisatie, wordt tevens gebruikt
+            om met andere aanroepen te refereren aan 1 organisatie
         uuid:
           type: string
           format: uuid
@@ -1087,7 +1087,7 @@ components:
         openingstijdenOpmerking:
           type: string
           description: |-
-            Een opmerking over de openingstijden hier kunt u extra informatie
+            Een opmerking over de openingstijden, hier kunt u extra informatie
                             kwijt over de openingstijden wanneer dit gewenst is.
           maxLength: 255
         organisatie:
@@ -1103,7 +1103,7 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De api url voor het zien van de gegevens van dit product.
+          description: De api URL voor het zien van de gegevens van dit product.
         uuid:
           type: string
           format: uuid
@@ -1156,14 +1156,14 @@ components:
           nullable: true
           description: Een lijst met locatie objecten die gekoppeld zijn aan dit product.
         doelgroep:
-          type: string
-          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/DoelgroepEnum'
           description: 'De doelgroep van dit product.<br> - Opties: `eu-burger`, `eu-bedrijf`'
         vertalingen:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
-          description: Een lijst met specefieke teksten objecten op basis van taal.
+          description: Een lijst met specifieke teksten op basis van taal.
         gerelateerdeProducten:
           type: array
           items:
@@ -1184,7 +1184,7 @@ components:
     ProductBase:
       type: object
       description: |-
-        Het product waar dit product van af hankelijk is dit geven we aan met een van de volgende velden:
+        Het product waar dit product van afhankelijk is dit geven we aan met een van de volgende velden:
         - Fields: `url`, `upnUri`, `upnLabel`
       properties:
         url:
@@ -1225,7 +1225,7 @@ components:
     ProductLokaleOverheid:
       type: object
       description: |-
-        De organisatie die dit product levert en de teksten hiervan beheerd dit geven we aan met een van de volgende velden:
+        De organisatie die dit product levert en de teksten hiervan beheert. Dit geven we aan met een van de volgende velden:
         - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
       properties:
         url:
@@ -1289,20 +1289,21 @@ components:
           type: string
           format: uri
           readOnly: true
-          description: De url van de specifieke catalogi api call
+          description: De URL van een specifieke productencatalogus, wordt tevens
+            gebruikt om met andere aanroepen te refereren aan 1 catalogus.
         uuid:
           type: string
           format: uuid
           readOnly: true
           description: De UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier)
-            van de specifieke catalogi
+            van de specifieke catalogus
         domein:
           type: string
           description: Een afkorting die wordt gebruikt om het domein aan te duiden.
           maxLength: 5
         naam:
           type: string
-          description: De naam van de catalogi
+          description: De naam van de catalogus
           maxLength: 120
         organisatie:
           $ref: '#/components/schemas/LokaleOverheidBase'
@@ -1314,23 +1315,23 @@ components:
           type: string
           format: uri
           nullable: true
-          description: Dit is de api call url van de referentie catalogus waar dit
-            product aan gekoppeld is.
+          description: de URL van de referentieproductcatalogus waar deze productcatalogus
+            aan gekoppeld is
         toelichting:
           type: string
-          description: Hierin staat de toelichting beschreven waarom deze catalogi
+          description: Hierin staat de toelichting beschreven waarom deze catalogus
             bestaat.
         versie:
           type: integer
           maximum: 2147483647
           minimum: 0
-          description: Dit is de versie van deze catalogi, hierdoor kunt u zien of
-            er wijzigingen zijn aangebracht voor de catalogi.
+          description: Dit is de versie van deze catalogus, hierdoor kunt u zien of
+            er wijzigingen zijn aangebracht voor de catalogus.
         producten:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
-          description: "Het product waar dit product van af hankelijk is dit geven\
+          description: "Het product waar dit product van afhankelijk is. Dit geven\
             \ we aan met een van de volgende velden:\n        - Fields: `url`, `upnUri`,\
             \ `upnLabel`\n        "
       required:
