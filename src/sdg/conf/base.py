@@ -542,3 +542,21 @@ SDG_ORGANIZATION_TYPE = config("SDG_ORGANIZATION_TYPE", default="municipalities"
 assert SDG_ORGANIZATION_TYPE == "municipalities" or SDG_ORGANIZATION_TYPE == "provinces"
 
 SDG_CMS_ENABLED = config("SDG_CMS_ENABLED", default=True)
+
+
+SDG_API_SERVER_INSTANCES = [
+    {
+        "url": "https://pdc.data.vng.nl/sdg",
+        "description": "SDG Testvoorziening",
+    },
+    {
+        "url": "https://pdc-acc.data.vng.nl/sdg",
+        "description": "SDG Acceptatie",
+    },
+    {
+        "url": "https://sdg-invoervoorziening.maykin.nl",
+        "description": "SDG Testvoorziening",
+    },
+]
+
+SPECTACULAR_SETTINGS["SERVERS"] = SDG_API_SERVER_INSTANCES
