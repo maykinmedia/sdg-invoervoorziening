@@ -50,17 +50,17 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {
             "taal": {
-                "help_text": """Dit is de taal van de onderstaande gegevens, het is de bedoeling dat u dit veld niet veranderd! <br>
+                "help_text": """Dit is de taal van de onderstaande gegevens <br>
                 ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"""
             },
             "product_titel_decentraal": {
                 "help_text": "Dit is de titel van het product, als deze afwijkt van de generieke titel kunt u dat hier aangeven."
             },
             "specifieke_tekst": {
-                "help_text": "Dit is de inleidende tekst voor het product, hierin kunt u het product beschrijven als u dat nodig vind."
+                "help_text": "Dit is de inleidende tekst voor het product, hierin kunt u het product beschrijven."
             },
             "procedure_beschrijving": {
-                "help_text": "Dit is de beschijving hoe men dit product kunt aanvragen in zijn regio."
+                "help_text": "Dit is de beschrijving van hoe het product wordt aangevragen."
             },
             "bewijs": {
                 "help_text": "Dit bevat de bestanden die de burger of ondernemer nodig heeft voor dit product."
@@ -69,7 +69,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
                 "help_text": "Dit zijn de voorwaarden voor het aanvragen van het product."
             },
             "bezwaar_en_beroep": {
-                "help_text": "Dit is de beschijving hoe de burger of ondernemer zich bezwaar kunt maken indien dat nodig is."
+                "help_text": "Beschrijft hoe de burger of ondernemer bezwaar kan maken."
             },
             "kosten_en_betaalmethoden": {
                 "help_text": "Dit is de uitleg hoe de burger of ondernemer zich bezwaar kunt maken indien dat nodig is."
@@ -78,10 +78,10 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
                 "help_text": "Dit is de informatie over hoe hoelang het duurt voor het aanvragen van dit product, dit doet u met de hand van werkdagen/weken."
             },
             "wtd_bij_geen_reactie": {
-                "help_text": "Dit is de informatie over wat u moet doen als u geen reactie terug krijgt."
+                "help_text": "wat de aanvrager moet doen bij geen reactie."
             },
             "decentrale_procedure_link": {
-                "help_text": "Dit is de URL waar de burger of ondernemer het product bij de organisatie kan aanvragen."
+                "help_text": "De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen."
             },
             "product_aanwezig_toelichting": {
                 "help_text": "Dit is een optioneel veld om uit te leggen waarom het product niet aanwezig is, deze moet u alleen invullen als u het product niet levert en dan is dit veld verplicht!"
@@ -90,7 +90,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
                 "help_text": "Dit is een optioneel veld om uit te leggen waarom dit product onder een andere product valt, deze moet u alleen invullen als dit product onder een andere product valt en dan is dit veld verplicht!"
             },
             "datum_wijziging": {
-                "help_text": "Dit is de datum wanneer dit product voor het laats gewijzigd was."
+                "help_text": "Datum wanneer dit product voor het laatst is gewijzigd."
             },
         }
 
@@ -112,7 +112,7 @@ class ProductVersieSerializer(serializers.ModelSerializer):
 
 
 class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
-    """Het product waar dit product van af hankelijk is dit geven we aan met een van de volgende velden:
+    """Het product waar dit product van afhankelijk is dit geven we aan met een van de volgende velden:
     - Fields: `url`, `upnUri`, `upnLabel`
     """
 
@@ -171,7 +171,7 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
 
 
 class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
-    """De organisatie die dit product levert en de teksten hiervan beheerd dit geven we aan met een van de volgende velden:
+    """De organisatie die dit product levert en de teksten hiervan beheert. Dit geven we aan met een van de volgende velden:
     - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
     """
 
@@ -240,7 +240,7 @@ class ProductSerializer(ProductBaseSerializer):
     vertalingen = LocalizedProductSerializer(
         source="most_recent_version.vertalingen",
         many=True,
-        help_text="Een lijst met specefieke teksten objecten op basis van taal.",
+        help_text="Een lijst met specifieke teksten op basis van taal.",
     )
     versie = SerializerMethodField(
         method_name="get_versie", help_text="De huidige versie van dit product."
@@ -293,7 +293,7 @@ class ProductSerializer(ProductBaseSerializer):
             "url": {
                 "view_name": "api:product-detail",
                 "lookup_field": "uuid",
-                "help_text": "De api url voor het zien van de gegevens van dit product.",
+                "help_text": "De api URL voor het zien van de gegevens van dit product.",
             },
             "catalogus": {
                 "lookup_field": "uuid",

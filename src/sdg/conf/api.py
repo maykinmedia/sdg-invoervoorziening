@@ -24,13 +24,13 @@ description = """
 # Introductie:
 De SDG invoervoorziening is een applicatie voor het beheren en ontsluiten van
 productbeschrijvingen van producten die worden aangeboden door organisaties in de
-verschillende overheidslagen. Deze producten vallen onder de SDG verordening en de
+overheidsorganisaties. Deze producten vallen onder de SDG verordening en de
 productbeschrijvingen worden ontsloten via een API.
 
 # Autorisatie
-De Api maakt gebruik van een API-Token met deze token kunt u toegang krijgen voor de
-onveilige API calls per organisatie. De API-Token wordt via de header doorgegeven en ziet er
-uit als het volgende: `Authorization: Token <token>`. Deze token is dus alleen nodig wanneer u
+De API maakt gebruik van een API-Token. Met deze token kunt u toegang krijgen voor de
+lees-schrijf API calls per organisatie. De API-Token wordt via de header doorgegeven en ziet er
+uit als volgt: `Authorization: Token <token>`. Deze token is dus alleen nodig wanneer u
 een `POST`, `PUT` of een `DELETE` call maakt. Voor `GET` calls heeft u geen API-Token nodig.
 """
 
