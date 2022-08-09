@@ -38,12 +38,15 @@ class GeneriekProductAdmin(admin.ModelAdmin):
         "doelgroep",
         "verplicht_product",
         "verantwoordelijke_organisatie",
+        "eind_datum",
+        "product_status",
     )
     list_filter = (
         "doelgroep",
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
+    readonly_fields = ("product_status",)
     autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
     search_fields = ("upn__upn_label",)
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import datetime
 import uuid
 from datetime import date
 from functools import partialmethod
@@ -7,9 +8,8 @@ from typing import Any, List
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.db import models, transaction
-from django.db.models import BooleanField, Case, Model, Q, Value, When
-from django.shortcuts import get_object_or_404
+from django.db import models
+from django.db.models import BooleanField, Case, Q, Value, When
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -17,7 +17,7 @@ from django.utils.translation import gettext_lazy as _
 from djchoices import ChoiceItem, DjangoChoices
 
 from sdg.core.constants import DoelgroepChoices
-from sdg.core.models import ProductenCatalogus
+from sdg.core.constants.product import ProductStatus
 from sdg.core.utils import get_from_cache
 from sdg.producten.models import (
     LocalizedGeneriekProduct,
@@ -70,6 +70,12 @@ class GeneriekProduct(models.Model):
             "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
         ),
     )
+    eind_datum = models.DateField(
+        _("Eind datum"),
+        help_text=_("De datum wanneer het product komt te vervallen."),
+        blank=True,
+        null=True,
+    )
 
     @property
     def upn_uri(self):
@@ -78,6 +84,48 @@ class GeneriekProduct(models.Model):
     @property
     def upn_label(self):
         return self.upn.upn_label
+
+    @property
+    def upn_is_verweiderd(self):
+        return self.upn.is_verwijderd
+
+    @cached_property
+    def referentie_product_publicatie_datum(self):
+        try:
+            return bool(
+                Product.objects.get(
+                    catalogus__is_referentie_catalogus=True, generiek_product=self
+                ).active_version
+            )
+        except Product.DoesNotExist:
+            return ProductStatus.labels.MISSING
+
+    @cached_property
+    def localized_generieke_tekst_empty(self):
+        localized_products = LocalizedGeneriekProduct.objects.filter(
+            generiek_product=self
+        ).values_list("generieke_tekst", flat=True)
+
+        return not all(localized_products)
+
+    @cached_property
+    def product_status(self):
+        if self.upn_is_verweiderd and not self.eind_datum:
+            return ProductStatus.labels.EXPIRED
+        elif self.eind_datum:
+            if self.eind_datum > datetime.date.today():
+                return ProductStatus.labels.EOL
+            if self.eind_datum <= datetime.date.today():
+                return ProductStatus.labels.DELETED
+        elif not self.localized_generieke_tekst_empty:
+            if self.referentie_product_publicatie_datum is ProductStatus.labels.MISSING:
+                return ProductStatus.labels.MISSING
+            elif self.referentie_product_publicatie_datum:
+                return ProductStatus.labels.PUBLICATE
+            else:
+                return ProductStatus.labels.MONITOR
+        else:
+            return ProductStatus.labels.NEW
 
     def generate_localized_information(
         self, language, **kwargs

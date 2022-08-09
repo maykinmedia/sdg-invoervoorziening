@@ -1,3 +1,4 @@
+import datetime
 from itertools import zip_longest
 from typing import Tuple
 
@@ -45,6 +46,7 @@ class ProductPreviewView(OverheidMixin, DetailView):
                         "referentie_product", queryset=Product.objects.most_recent()
                     ),
                 )
+                .exclude(generiek_product__eind_datum__lte=datetime.date.today())
                 .most_recent()
                 .active()
             )
@@ -55,6 +57,7 @@ class ProductPreviewView(OverheidMixin, DetailView):
                     "locaties",
                     Prefetch("referentie_product", queryset=Product.objects.active()),
                 )
+                .exclude(generiek_product__eind_datum__lte=datetime.date.today())
                 .active()
             )
 
@@ -170,6 +173,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def get_queryset(self):
         return (
             Product.objects.most_recent()
+            .exclude(generiek_product__eind_datum__lte=datetime.date.today())
             .active()
             .select_related("catalogus__lokale_overheid")
         )
