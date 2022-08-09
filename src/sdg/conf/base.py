@@ -569,4 +569,8 @@ SOLO_CACHE = "default"
 # zgw_consumers
 ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
 
+# municipalities or provinces
+SDG_ORGANIZATION_TYPE = "municipalities"
+assert SDG_ORGANIZATION_TYPE == "municipalities" or SDG_ORGANIZATION_TYPE == "provinces"
+
 SDG_CMS_ENABLED = config("SDG_CMS_ENABLED", default=True)

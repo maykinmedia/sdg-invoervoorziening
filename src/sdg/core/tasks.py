@@ -1,12 +1,21 @@
+from django.conf import settings
 from django.db import transaction
 
 from sdg.celery import app
 from sdg.core.constants.logius import PublicData
 from sdg.core.types import LoadCommand
 
+if settings.SDG_ORGANIZATION_TYPE == "municipalities":
+    organization = PublicData.MUNICIPALITY
+elif settings.SDG_ORGANIZATION_TYPE == "provinces":
+    organization = PublicData.PROVINCE
+else:
+    organization = None
+
+
 management_commands = [
     LoadCommand("load_government_orgs", PublicData.GOVERNMENT_ORGANISATION),
-    LoadCommand("load_municipalities", PublicData.MUNICIPALITY),
+    LoadCommand("load_organisation_subset", organization),
     LoadCommand("load_informatiegebieden", PublicData.INFORMATIEGEBIED),
     LoadCommand("load_upn", PublicData.UPN),
 ]

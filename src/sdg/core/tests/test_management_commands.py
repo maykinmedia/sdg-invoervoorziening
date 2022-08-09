@@ -55,7 +55,7 @@ class TestImportData(CommandTestCase):
 
     def test_load_municipalities_before_gov_orgs(self):
         out = self.call_command(
-            "load_municipalities", os.path.join(TESTS_DIR, "data/Gemeente.xml")
+            "load_organisation_subset", os.path.join(TESTS_DIR, "data/Gemeente.xml")
         )
 
         self.assertIn("Successfully imported", out)
@@ -69,7 +69,7 @@ class TestImportData(CommandTestCase):
         )
 
         out = self.call_command(
-            "load_municipalities", os.path.join(TESTS_DIR, "data/Gemeente.xml")
+            "load_organisation_subset", os.path.join(TESTS_DIR, "data/Gemeente.xml")
         )
 
         self.assertIn("Successfully imported", out)
