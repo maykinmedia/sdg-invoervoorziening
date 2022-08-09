@@ -1,4 +1,5 @@
-from django.db.models import F, Max
+import datetime
+from django.db.models import F
 from django.utils.translation import gettext as _
 
 from rijkshuisstijl.views.generic import ListView as RHListView
@@ -83,7 +84,7 @@ class CatalogListView(OverheidMixin, RHListView):
             lokale_overheid=self.lokale_overheid
         )
 
-        return (
+        queryset = (
             super()
             .get_queryset()
             .filter(catalogus__in=catalogs)
@@ -98,5 +99,8 @@ class CatalogListView(OverheidMixin, RHListView):
             )
             # FIXME: We have to annotate doelgroep to fix the RHS-component.
             .annotate(doelgroep=F("generiek_product__doelgroep"))
+            .exclude(generiek_product__eind_datum__lte=datetime.date.today())
             .order_by("_name")
         )
+
+        return queryset

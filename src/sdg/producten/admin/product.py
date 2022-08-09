@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models import Count, F
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -38,12 +38,15 @@ class GeneriekProductAdmin(admin.ModelAdmin):
         "doelgroep",
         "verplicht_product",
         "verantwoordelijke_organisatie",
+        "eind_datum",
+        "product_status",
     )
     list_filter = (
         "doelgroep",
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
+    readonly_fields = ("product_status",)
     autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
     search_fields = ("upn__upn_label",)
 
