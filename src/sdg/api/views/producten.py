@@ -12,33 +12,41 @@ from sdg.producten.models import Product, ProductVersie
 
 @extend_schema_view(
     list=extend_schema(
-        description="Lijst van alle producten die voorkomen in de catalogi.",
+        description="""Lijst van alle (actieve versies van de) producten. Om een enkel product op te halen uit deze lijst kunt u filteren op:
+
+* `upnLabel` of `upnUri`
+* `verantwoordelijkeOrganisatie.owmsIdentifier` of `verantwoordelijkeOrganisatie.owmsPrefLabel`
+* `doelgroep`
+
+Deze gegevens tezamen vormen de unieke sleutel van een product.""",
         auth=[],
         parameters=[
             OpenApiParameter(
                 name="catalogus",
-                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een catalogus om aan te geven van welke catalogus u de producten wilt zien.",
+                description="De UUID van een catalogus om aan te geven van welke catalogus u de producten wilt zien.",
                 required=False,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="doelgroep",
-                description="Hierin vermeld u de gewensde doelgroep om aleen producten met die doelgroep te zien. <br> Opties: `eu-bedrijf` `eu-burger`",
+                description="""De gewenste doelgroep om alleen producten met die doelgroep te zien.
+
+Opties: `eu-burger` of `eu-bedrijf`""",
                 required=False,
                 type=str,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="organisatie",
-                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de producten wilt zien.",
+                description="De UUID van een organisatie om aan te geven van welke organisatie u de producten wilt zien.",
                 required=False,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="organisatieOwmsIdentifier",
-                description="""Hierin vermeld u de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier)
+                description="""De OWMS Identifier
                 van een organisatie om aan te geven van welke organisatie u de producten wilt zien.""",
                 required=False,
                 type=OpenApiTypes.URI,
@@ -46,56 +54,60 @@ from sdg.producten.models import Product, ProductVersie
             ),
             OpenApiParameter(
                 name="organisatieOwmsPrefLabel",
-                description="Hierin vermeld u de OWMS Prefered Label van een organisatie om aan te geven van welke organisatie u de producten wilt zien.",
+                description="Het OWMS Prefered Label van een organisatie om aan te geven van welke organisatie u de producten wilt zien.",
                 required=False,
                 type=OpenApiTypes.STR,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="page",
-                description="Hierin kunt u aangeven welke pagina (https://en.wikipedia.org/wiki/Pagination) u wilt zien.",
+                description="Het paginanummer binnen de lijst van resultaten.",
                 required=False,
                 type=int,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="productAanwezig",
-                description="Hierin vermeld u een van de drie opties om alleen producten met die specifieke optie te tonen. <br> Opties: `ja` `nee` `onbekend`",
+                description="""Een van de drie opties om alleen producten met die specifieke optie te tonen.
+
+Opties: `ja`, `nee` of `onbekend`""",
                 required=False,
                 type=str,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="publicatieDatum",
-                description="Hierin vermeld u de publicatie datum om alle producten te zien met die specifieke publicatie datum.",
+                description="De publicatie datum om alle producten te zien met die specifieke publicatie datum.",
                 required=False,
                 type=OpenApiTypes.DATE,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="publicatieDatum__gte",
-                description="Hierin vermeld u de publicatie datum om alle producten te zien met die specifieke publicatie datum of een datum die groter is.",
+                description="De publicatie datum om alle producten te zien met die specifieke publicatie datum of een datum die groter is.",
                 required=False,
                 type=OpenApiTypes.DATE,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="taal",
-                description="Hierin vermeld u de taal die u wilt zien van de producten.<br> ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) <br> Opties: `en` `nl`",
+                description="""De vertaling die u wilt zien van de producten. Indien geen taal is opgegeven dan worden all vertalingen getoond. Formaat: ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+
+Opties: `en` of `nl`""",
                 required=False,
                 type=str,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="upnLabel",
-                description="Hier vermeld u de UPN Label (https://standaarden.overheid.nl/owms/4.0/doc/waardelijsten/overheid.uniformeproductnaam) van het product die u wilt zien.",
+                description="Het UPN Label van het product dat u wilt zien.",
                 required=False,
                 type=str,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="upnUri",
-                description="Hier vermeld u de UPN URI (https://standaarden.overheid.nl/owms/4.0/doc/waardelijsten/overheid.uniformeproductnaam) van het product die u wilt zien.",
+                description="De UPN URI van het product dat u wilt zien.",
                 required=False,
                 type=str,
                 location=OpenApiParameter.QUERY,
@@ -103,18 +115,18 @@ from sdg.producten.models import Product, ProductVersie
         ],
     ),
     retrieve=extend_schema(
-        description="Product dat voorkomt in een catalogus.",
+        description="Haal een specifieke (actieve versie van het) product op.",
         auth=[],
         parameters=[
             OpenApiParameter(
                 "uuid",
                 OpenApiTypes.UUID,
                 OpenApiParameter.PATH,
-                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een product om aan te geven welke product u wilt zien.",
+                description="De UUID van een product om aan te geven welke product u wilt zien.",
             ),
             OpenApiParameter(
                 name="page",
-                description="Hierin kunt u aangeven welke pagina (https://en.wikipedia.org/wiki/Pagination) u wilt zien.",
+                description="Het paginanummer binnen de lijst van resultaten.",
                 required=False,
                 type=int,
                 location=OpenApiParameter.QUERY,
@@ -122,7 +134,18 @@ from sdg.producten.models import Product, ProductVersie
         ],
     ),
     create=extend_schema(
-        description="Maak een nieuwe product versie aan of update een concept voor een catalogus."
+        description="""Maak een nieuwe productversie aan. Om de productversie correct aan te maken, moet u minimaal
+opgeven:
+
+* `upnLabel` of `upnUri`
+* `verantwoordelijkeOrganisatie.owmsIdentifier` of `verantwoordelijkeOrganisatie.owmsPrefLabel`
+* `doelgroep`
+
+Deze gegevens tezamen vormen de unieke sleutel van een product.
+
+Indien u geen `bevoegdeOrganisatie` opgeeft, dan wordt de `verantwoordelijkeOrganisatie` gebruikt als bevoegde
+organisatie. Indien u geen `catalogus` opgeeft, dan wordt de standaard catalogus gebruikt.
+"""
     ),
 )
 class ProductViewSet(
@@ -131,7 +154,7 @@ class ProductViewSet(
     mixins.CreateModelMixin,
     GenericViewSet,
 ):
-    """Viewset for a product, retrieved by uuid"""
+    """Viewset for a product, retrieved by UUID"""
 
     lookup_field = "uuid"
     queryset = (
@@ -180,11 +203,11 @@ class ProductViewSet(
                 "product_uuid",
                 OpenApiTypes.UUID,
                 OpenApiParameter.PATH,
-                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een product om aan te geven welke product u wilt zien.",
+                description="De UUID van een product om aan te geven welke product u wilt zien.",
             ),
             OpenApiParameter(
                 name="page",
-                description="Hierin kunt u aangeven welke pagina (https://en.wikipedia.org/wiki/Pagination) u wilt zien.",
+                description="Het paginanummer binnen de lijst van resultaten.",
                 required=False,
                 type=int,
                 location=OpenApiParameter.QUERY,
@@ -216,11 +239,11 @@ class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
                 "product_uuid",
                 OpenApiTypes.UUID,
                 OpenApiParameter.PATH,
-                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een product om aan te geven welke product u wilt zien.",
+                description="De UUID van een product om aan te geven welke product u wilt zien.",
             ),
             OpenApiParameter(
                 name="page",
-                description="Hierin kunt u aangeven welke pagina (https://en.wikipedia.org/wiki/Pagination) u wilt zien.",
+                description="Het paginanummer binnen de lijst van resultaten.",
                 required=False,
                 type=int,
                 location=OpenApiParameter.QUERY,

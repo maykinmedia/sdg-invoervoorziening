@@ -58,7 +58,7 @@ class ProductFilterSet(FilterSet):
     catalogus = filters.UUIDFilter(
         field_name="catalogus__uuid",
         help_text=_(
-            "Toont producten die behoren tot de catalogus van de opgegeven uuid."
+            "Toont producten die behoren tot de catalogus van de opgegeven UUID."
         ),
     )
     publicatieDatum = filters.DateFilter(
