@@ -50,44 +50,43 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {
             "taal": {
-                "help_text": """Dit is de taal van de onderstaande gegevens <br>
-                ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)"""
+                "help_text": """De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)."""
             },
             "product_titel_decentraal": {
-                "help_text": "Dit is de titel van het product, als deze afwijkt van de generieke titel kunt u dat hier aangeven."
+                "help_text": "De titel van het product. Als deze afwijkt van de generieke titel kunt u dat hier aangeven."
             },
             "specifieke_tekst": {
-                "help_text": "Dit is de inleidende tekst voor het product, hierin kunt u het product beschrijven."
+                "help_text": "De inleidende tekst voor het product. Hierin kunt u het product beschrijven en komt direct na de generieke productbeschrijving. Dit veld ondersteund Markdown."
             },
             "procedure_beschrijving": {
-                "help_text": "Dit is de beschrijving van hoe het product wordt aangevragen."
+                "help_text": "De beschrijving van hoe het product wordt aangevraagd. Dit veld ondersteund Markdown."
             },
             "bewijs": {
-                "help_text": "Dit bevat de bestanden die de burger of ondernemer nodig heeft voor dit product."
+                "help_text": "Dit bevat de bewijsstukken die de burger of ondernemer nodig heeft om dit product aan te vragen. Dit veld ondersteund Markdown."
             },
             "vereisten": {
-                "help_text": "Dit zijn de voorwaarden voor het aanvragen van het product."
+                "help_text": "Dit zijn de voorwaarden voor het aanvragen van het product. Dit veld ondersteund Markdown."
             },
             "bezwaar_en_beroep": {
-                "help_text": "Beschrijft hoe de burger of ondernemer bezwaar kan maken."
+                "help_text": "Beschrijft hoe de burger of ondernemer bezwaar kan maken. Dit veld ondersteund Markdown."
             },
             "kosten_en_betaalmethoden": {
-                "help_text": "Dit is de uitleg hoe de burger of ondernemer zich bezwaar kunt maken indien dat nodig is."
+                "help_text": "Beschrijft hoe de burger of ondernemer kan betalen en wat de kosten zijn. Dit veld ondersteund Markdown."
             },
             "uiterste_termijn": {
-                "help_text": "Dit is de informatie over hoe hoelang het duurt voor het aanvragen van dit product, dit doet u met de hand van werkdagen/weken."
+                "help_text": "De informatie over hoe hoelang het duurt voor het aanvragen van dit product. Dit doet u aan de hand van werkdagen/weken. Dit veld ondersteund Markdown."
             },
             "wtd_bij_geen_reactie": {
-                "help_text": "wat de aanvrager moet doen bij geen reactie."
+                "help_text": "Beschrijft wat de aanvrager moet doen bij geen reactie. Dit veld ondersteund Markdown."
             },
             "decentrale_procedure_link": {
                 "help_text": "De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen."
             },
             "product_aanwezig_toelichting": {
-                "help_text": "Dit is een optioneel veld om uit te leggen waarom het product niet aanwezig is, deze moet u alleen invullen als u het product niet levert en dan is dit veld verplicht!"
+                "help_text": "Een optioneel veld om uit te leggen waarom het product niet aanwezig is. Deze moet u alleen invullen als u het product niet levert en dan is dit veld verplicht! Dit veld ondersteund Markdown."
             },
             "product_valt_onder_toelichting": {
-                "help_text": "Dit is een optioneel veld om uit te leggen waarom dit product onder een andere product valt, deze moet u alleen invullen als dit product onder een andere product valt en dan is dit veld verplicht!"
+                "help_text": "Een optioneel veld om uit te leggen waarom dit product onder een andere product valt. Deze moet u alleen invullen als dit product onder een andere product valt en dan is dit veld verplicht! Dit veld ondersteund Markdown."
             },
             "datum_wijziging": {
                 "help_text": "Datum wanneer dit product voor het laatst is gewijzigd."
@@ -96,8 +95,6 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
 
 
 class ProductVersieSerializer(serializers.ModelSerializer):
-    """Serializer for the version of a product."""
-
     vertalingen = LocalizedProductSerializer(many=True)
 
     class Meta:
@@ -112,19 +109,15 @@ class ProductVersieSerializer(serializers.ModelSerializer):
 
 
 class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
-    """Het product waar dit product van afhankelijk is dit geven we aan met een van de volgende velden:
-    - Fields: `url`, `upnUri`, `upnLabel`
-    """
-
     upn_label = serializers.CharField(
         source="generiek_product.upn_label",
         required=False,
-        help_text="De UPN Label (https://standaarden.overheid.nl/owms/4.0/doc/waardelijsten/overheid.uniformeproductnaam) van het specifieke product.",
+        help_text="Het UPN Label van het specifieke product.",
     )
     upn_uri = serializers.URLField(
         source="generiek_product.upn_uri",
         required=False,
-        help_text="De UPN URI (https://standaarden.overheid.nl/owms/4.0/doc/waardelijsten/overheid.uniformeproductnaam) van het specifieke product.",
+        help_text="De UPN URI van het specifieke product.",
     )
 
     class Meta:
@@ -134,7 +127,7 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "view_name": "api:product-detail",
                 "lookup_field": "uuid",
-                "help_text": "De Url van de api call voor het inzien van de data van het specifieke product.",
+                "help_text": "De unieke URL van dit object binnen deze API.",
             }
         }
 
@@ -165,19 +158,17 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
             "uuid": {
                 "required": False,
                 "read_only": False,
-                "help_text": "De uuid van een specifieke organisatie (https://en.wikipedia.org/wiki/Universally_unique_identifier).",
+                "help_text": "De UUID van een specifieke organisatie.",
             },
         }
 
 
 class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
-    """De organisatie die dit product levert en de teksten hiervan beheert. Dit geven we aan met een van de volgende velden:
-    - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
-    """
+    """De organisatie die dit product levert en de teksten hiervan beheert."""
 
     owms_identifier = serializers.URLField(
         source="catalogi.organisatie.owms_identifier",
-        help_text="Dit is de de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier) van de hoofdorganisatie van deze lokale overheid.",
+        help_text="De OWMS Identifier van de hoofdorganisatie van deze lokale overheid.",
         required=False,
     )
     owms_pref_label = serializers.CharField(
@@ -204,6 +195,7 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "view_name": "api:lokaleoverheid-detail",
                 "lookup_field": "uuid",
+                "help_text": "De unieke URL van dit object binnen deze API.",
             },
         }
 
@@ -235,7 +227,7 @@ class ProductSerializer(ProductBaseSerializer):
     product_aanwezig = serializers.BooleanField(
         allow_null=True,
         required=True,
-        help_text="Een boolean die aangeeft of de organisatie dit product levert of niet.",
+        help_text="Een boolean die aangeeft of de organisatie dit product levert of niet. Als de verantwoordelijke organisatie niet expliciet heeft aangegeven dat een product aanwezig of afwezig is, dan is deze waarde `null`. Als een product afwezig is, dan moet er een toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde velden kunnen dan leeg blijven.",
     )
     vertalingen = LocalizedProductSerializer(
         source="most_recent_version.vertalingen",
@@ -249,7 +241,7 @@ class ProductSerializer(ProductBaseSerializer):
         source="generiek_product.doelgroep",
         choices=DoelgroepChoices.choices,
         required=True,
-        help_text="De doelgroep van dit product.<br> - Opties: `eu-burger`, `eu-bedrijf`",
+        help_text="De doelgroep van dit product.",
     )
     gerelateerde_producten = ProductBaseSerializer(
         many=True,
@@ -258,7 +250,7 @@ class ProductSerializer(ProductBaseSerializer):
     locaties = ProductLocatieSerializer(
         allow_null=True,
         many=True,
-        help_text="Een lijst met locatie objecten die gekoppeld zijn aan dit product.",
+        help_text="Een lijst met locaties waarop dit product beschikbaar is.",
     )
     bevoegde_organisatie = BevoegdeOrganisatieSerializer(
         required=False,
@@ -268,6 +260,7 @@ class ProductSerializer(ProductBaseSerializer):
     product_valt_onder = ProductBaseSerializer(
         allow_null=True,
         required=True,
+        help_text="Als een product valt onder een ander product (het product wordt bijvoorbeeld geleverd middels een ander product), dan staat deze hier vermeld. Als een product onder een ander product valt, dan moet er een toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde velden kunnen dan leeg blijven.",
     )
 
     class Meta:
@@ -293,7 +286,7 @@ class ProductSerializer(ProductBaseSerializer):
             "url": {
                 "view_name": "api:product-detail",
                 "lookup_field": "uuid",
-                "help_text": "De api URL voor het zien van de gegevens van dit product.",
+                "help_text": "De unieke URL van dit object binnen deze API.",
             },
             "catalogus": {
                 "lookup_field": "uuid",

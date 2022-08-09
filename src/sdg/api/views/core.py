@@ -12,33 +12,33 @@ from sdg.producten.models import Product
 
 @extend_schema_view(
     list=extend_schema(
-        description="Een lijst van alle categorieën die gebruikt worden door organisaties.",
+        description="Een lijst van alle catalogi.",
         auth=[],
         parameters=[
             OpenApiParameter(
                 name="organisatie",
-                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de catalogus wilt zien.",
+                description="De UUID van een organisatie om aan te geven van welke organisatie u de catalogi wilt zien.",
                 required=False,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="organisatieOwmsIdentifier",
-                description="Hierin vermeld u de OWMS Identifier (https://standaarden.overheid.nl/owms/4.0/doc/eigenschappen/dcterms.identifier)  van een organisatie om aan te geven van welke organisatie u de catalogus wilt zien.",
+                description="De OWMS Identifier  van een organisatie om aan te geven van welke organisatie u de catalogi wilt zien.",
                 required=False,
                 type=str,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="organisatieOwmsPrefLabel",
-                description="Hierin vermeld u de OWMS Prefered Label van een organisatie om aan te geven van welke organisatie u de catalogus wilt zien.",
+                description="Het OWMS Prefered Label van een organisatie om aan te geven van welke organisatie u de catalogi wilt zien.",
                 required=False,
                 type=str,
                 location=OpenApiParameter.QUERY,
             ),
             OpenApiParameter(
                 name="page",
-                description="Hierin kunt u aangeven welke pagina (https://en.wikipedia.org/wiki/Pagination) u wilt zien.",
+                description="Het paginanummer binnen de lijst van resultaten.",
                 required=False,
                 type=int,
                 location=OpenApiParameter.QUERY,
@@ -46,12 +46,12 @@ from sdg.producten.models import Product
         ],
     ),
     retrieve=extend_schema(
-        description="Catalogus die wordt gebruikt door een organisatie.",
+        description="Een catalogus behoort aan een organisatie en is een verzameling van producten.",
         auth=[],
         parameters=[
             OpenApiParameter(
                 name="uuid",
-                description="Hierin vermeld u de UUID(https://en.wikipedia.org/wiki/Universally_unique_identifier) van een organisatie om aan te geven van welke organisatie u de catalogus wilt zien.",
+                description="De UUID van een catalogus.",
                 required=False,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.PATH,
@@ -60,7 +60,7 @@ from sdg.producten.models import Product
     ),
 )
 class CatalogusViewSet(viewsets.ReadOnlyModelViewSet):
-    """Viewset for a municipality catalog, retrieved by uuid"""
+    """Viewset for a municipality catalog, retrieved by UUID"""
 
     serializer_class = ProductenCatalogusSerializer
     filterset_class = ProductenCatalogusFilterSet
