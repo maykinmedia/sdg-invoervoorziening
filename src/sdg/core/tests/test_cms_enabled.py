@@ -81,7 +81,7 @@ class CMSUrlsPathTest(WebTest):
         self.assertEqual(reset.status_code, 404)
         self.assertEqual(account.status_code, 404)
         self.assertEqual(organizations.status_code, 404)
-        self.assertEqual(home.status_code, 404)
+        self.assertEqual(home.status_code, 302)
         self.assertEqual(two_factor.status_code, 404)
 
         # enabled
