@@ -564,7 +564,6 @@ components:
       properties:
         naam:
           type: string
-          readOnly: true
           description: De naam van de bevoegde organisatie. Deze mag alleen afwijken
             indien er geen bekende overheidsorganisatie is.
         owmsIdentifier:
@@ -581,7 +580,6 @@ components:
           description: De eind datum van de bevoegde organisatie. Indien de waarde
             `null` is, dan is organisatie actief.
       required:
-      - naam
       - owmsEndDate
     DoelgroepEnum:
       enum:

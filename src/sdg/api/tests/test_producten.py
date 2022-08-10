@@ -982,6 +982,40 @@ class ProductenTests(APITestCase):
             "https://www.setup.com",
         )
 
+    def test_update_product_with_bevoegde_organisatie_naam(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body(
+            {
+                "bevoegdeOrganisatie": {
+                    "naam": self.bevoegde_organisatie.naam,
+                }
+            }
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+
+        create_data = create_response.json()
+
+        self.assertEqual(
+            create_data["bevoegdeOrganisatie"]["naam"],
+            self.bevoegde_organisatie.naam,
+        )
+        self.assertEqual(create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "set up")
+        self.assertEqual(
+            create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
+            "https://www.setup.com",
+        )
+
     def test_update_product_with_bevoegde_organisatie_pref_label(self):
         list_url = reverse("api:product-list")
 
@@ -1006,6 +1040,10 @@ class ProductenTests(APITestCase):
 
         create_data = create_response.json()
 
+        self.assertEqual(
+            create_data["bevoegdeOrganisatie"]["naam"],
+            self.bevoegde_organisatie.naam,
+        )
         self.assertEqual(create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "set up")
         self.assertEqual(
             create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
@@ -1036,6 +1074,10 @@ class ProductenTests(APITestCase):
 
         create_data = create_response.json()
 
+        self.assertEqual(
+            create_data["bevoegdeOrganisatie"]["naam"],
+            self.bevoegde_organisatie.naam,
+        )
         self.assertEqual(create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "set up")
         self.assertEqual(
             create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
