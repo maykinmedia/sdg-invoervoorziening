@@ -33,7 +33,7 @@ urlpatterns = [
         name="password_reset_done",
     ),
     path("admin/hijack/", include("hijack.urls")),
-    path("admin/resend_invite", ResendInventation, name="resend_token"),
+    path("admin/resend_invite", ResendInventation.as_view(), name="resend_token"),
     path("admin/", admin.site.urls),
     path("api/", include("sdg.api.urls", namespace="api")),
     # cms - these urls can be disabled if desired though the setting SDG_CMS_ENABLED

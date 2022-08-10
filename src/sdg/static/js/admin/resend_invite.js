@@ -20,7 +20,7 @@ async function resendInvite(pk, subpath="") {
         .then(response => response.status)
 
     if (await response == 200) {
-        alert("De email is herstuurd");
+        alert("De email is opnieuw verstuurd");
     } else {
         alert("De uitnodiging is all geaccepteerd.");
     }
