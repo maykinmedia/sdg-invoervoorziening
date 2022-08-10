@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datetime
 import uuid
-from datetime import date
 from functools import partialmethod
 from typing import Any, List
 
@@ -88,6 +87,10 @@ class GeneriekProduct(models.Model):
     @property
     def upn_is_verweiderd(self):
         return self.upn.is_verwijderd
+
+    @property
+    def is_sdg_product(self):
+        return bool(self.upn.sdg)
 
     @cached_property
     def referentie_product_publicatie_datum(self):
@@ -330,7 +333,7 @@ class Product(ProductFieldMixin, models.Model):
         queryset = self.versies.all().order_by("-versie")
 
         if active:
-            queryset = queryset.filter(publicatie_datum__lte=date.today())
+            queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
         if exclude_concept:
             queryset = queryset.exclude(publicatie_datum=None)
 
@@ -341,7 +344,7 @@ class Product(ProductFieldMixin, models.Model):
         queryset = self.versies.all().order_by("-versie")
 
         if active:
-            queryset = queryset.filter(publicatie_datum__lte=date.today())
+            queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
         if exclude_concept:
             queryset = queryset.exclude(publicatie_datum=None)
 
@@ -433,7 +436,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
         """:returns: The current publishing status for this product version."""
         if not self.publicatie_datum:
             return Product.status.CONCEPT
-        elif self.publicatie_datum <= date.today():
+        elif self.publicatie_datum <= datetime.date.today():
             return Product.status.PUBLISHED
         else:
             return Product.status.SCHEDULED
