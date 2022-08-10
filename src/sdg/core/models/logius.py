@@ -145,7 +145,7 @@ class UniformeProductnaam(models.Model):
     )
     is_verwijderd = models.BooleanField(
         _("Is verwijderd"),
-        help_text=_("Geeft aan of het product verweiderd is."),
+        help_text=_("Geeft aan of het product verwijderd is."),
         default=False,
     )
 

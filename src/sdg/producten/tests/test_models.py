@@ -51,7 +51,7 @@ class GeneriekProductTest(TestCase):
 
         self.assertEqual(new_generic_product.product_status, ProductStatus.labels.NEW)
 
-    def test_product_status_property_monitor(self):
+    def test_product_status_property_ready_for_admin(self):
         new_upn = UniformeProductnaamFactory.create(is_verwijderd=False)
         new_generic_product = GeneriekProductFactory.create(
             upn=new_upn,
@@ -89,10 +89,10 @@ class GeneriekProductTest(TestCase):
         )
 
         self.assertEqual(
-            new_generic_product.product_status, ProductStatus.labels.MONITOR
+            new_generic_product.product_status, ProductStatus.labels.READY_FOR_ADMIN
         )
 
-    def test_product_status_property_publicate(self):
+    def test_product_status_property_ready_for_publication(self):
         new_upn = UniformeProductnaamFactory.create(is_verwijderd=False)
         new_generic_product = GeneriekProductFactory.create(
             upn=new_upn,
@@ -110,6 +110,7 @@ class GeneriekProductTest(TestCase):
         )
         new_product_versie = ReferentieProductVersieFactory.create(
             product__generiek_product=new_generic_product,
+            publicatie_datum=NOW_DATE,
         )
         LocalizedReferentieProductFactory.create_batch(
             product_versie=new_product_versie,
@@ -130,7 +131,8 @@ class GeneriekProductTest(TestCase):
         )
 
         self.assertEqual(
-            new_generic_product.product_status, ProductStatus.labels.MONITOR
+            new_generic_product.product_status,
+            ProductStatus.labels.READY_FOR_PUBLICATION,
         )
 
     def test_product_status_property_missing(self):
