@@ -85,15 +85,11 @@ class GeneriekProduct(models.Model):
         return self.upn.upn_label
 
     @property
-    def upn_is_verweiderd(self):
-        return self.upn.is_verwijderd
-
-    @property
     def is_sdg_product(self):
         return bool(self.upn.sdg)
 
     @cached_property
-    def referentie_product_publicatie_datum(self):
+    def has_referentie_product_publicatie_datum(self):
         try:
             return bool(
                 Product.objects.get(
@@ -101,10 +97,10 @@ class GeneriekProduct(models.Model):
                 ).active_version
             )
         except Product.DoesNotExist:
-            return ProductStatus.labels.MISSING
+            return None
 
     @cached_property
-    def localized_generieke_tekst_empty(self):
+    def is_localized_generieke_tekst_empty(self):
         localized_products = LocalizedGeneriekProduct.objects.filter(
             generiek_product=self
         ).values_list("generieke_tekst", flat=True)
@@ -113,20 +109,20 @@ class GeneriekProduct(models.Model):
 
     @cached_property
     def product_status(self):
-        if self.upn_is_verweiderd and not self.eind_datum:
+        if self.upn.is_verwijderd and not self.eind_datum:
             return ProductStatus.labels.EXPIRED
         elif self.eind_datum:
             if self.eind_datum > datetime.date.today():
                 return ProductStatus.labels.EOL
             if self.eind_datum <= datetime.date.today():
                 return ProductStatus.labels.DELETED
-        elif not self.localized_generieke_tekst_empty:
-            if self.referentie_product_publicatie_datum is ProductStatus.labels.MISSING:
+        elif not self.is_localized_generieke_tekst_empty:
+            if self.has_referentie_product_publicatie_datum is None:
                 return ProductStatus.labels.MISSING
-            elif self.referentie_product_publicatie_datum:
-                return ProductStatus.labels.PUBLICATE
+            elif self.has_referentie_product_publicatie_datum:
+                return ProductStatus.labels.READY_FOR_PUBLICATION
             else:
-                return ProductStatus.labels.MONITOR
+                return ProductStatus.labels.READY_FOR_ADMIN
         else:
             return ProductStatus.labels.NEW
 

@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name="is_verwijderd",
             field=models.BooleanField(
                 default=False,
-                help_text="Geeft aan of het product verweiderd is.",
+                help_text="Geeft aan of het product verwijderd is.",
                 verbose_name="Is verwijderd",
             ),
         ),
