@@ -543,20 +543,33 @@ assert SDG_ORGANIZATION_TYPE == "municipalities" or SDG_ORGANIZATION_TYPE == "pr
 
 SDG_CMS_ENABLED = config("SDG_CMS_ENABLED", default=True)
 
+SDG_API_SERVER_INSTANCES = []
+SDG_API_URL_TEST = config("SDG_API_URL_TEST", None)
+SDG_API_URL_ACC = config("SDG_API_URL_ACC", None)
+SDG_API_URL_PROD = config("SDG_API_URL_PROD", None)
 
-SDG_API_SERVER_INSTANCES = [
-    {
-        "url": "https://pdc.data.vng.nl/sdg",
-        "description": "SDG Testvoorziening",
-    },
-    {
-        "url": "https://pdc-acc.data.vng.nl/sdg",
-        "description": "SDG Acceptatie",
-    },
-    {
-        "url": "https://sdg-invoervoorziening.maykin.nl",
-        "description": "SDG Testvoorziening",
-    },
-]
+if SDG_API_URL_TEST:
+    SDG_API_SERVER_INSTANCES.append(
+        {
+            "url": SDG_API_URL_TEST,
+            "description": "Test",
+        }
+    )
+
+if SDG_API_URL_ACC:
+    SDG_API_SERVER_INSTANCES.append(
+        {
+            "url": SDG_API_URL_ACC,
+            "description": "Acceptatie",
+        }
+    )
+
+if SDG_API_URL_PROD:
+    SDG_API_SERVER_INSTANCES.append(
+        {
+            "url": SDG_API_URL_PROD,
+            "description": "Productie",
+        }
+    )
 
 SPECTACULAR_SETTINGS["SERVERS"] = SDG_API_SERVER_INSTANCES
