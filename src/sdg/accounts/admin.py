@@ -3,7 +3,6 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
-from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
 from allauth.account.models import EmailAddress
@@ -63,7 +62,7 @@ class UserInvitationInline(admin.TabularInline):
     resend.allow_tags = True
 
     class Media:
-        js = (static("/js/admin/resend_invite.js"),)
+        js = ("js/admin/resend_invite.js",)
 
 
 class EmailaddressInline(admin.TabularInline):
