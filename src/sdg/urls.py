@@ -6,13 +6,12 @@ from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
-from django.views.generic.base import TemplateView
 
 from decorator_include import decorator_include
 from two_factor.urls import urlpatterns as tf_urls
 
 from sdg import miscellaneous_urls
-from sdg.accounts.views.password_reset import PasswordResetView
+from sdg.accounts.views.password_reset import PasswordResetView, ResendInventation
 from sdg.decorators import enabled
 
 handler500 = "sdg.utils.views.server_error"
@@ -34,26 +33,30 @@ urlpatterns = [
         name="password_reset_done",
     ),
     path("admin/hijack/", include("hijack.urls")),
+    path("admin/resend_invite", ResendInventation.as_view(), name="resend_token"),
     path("admin/", admin.site.urls),
     path("api/", include("sdg.api.urls", namespace="api")),
     # cms - these urls can be disabled if desired though the setting SDG_CMS_ENABLED
-    path("markdownx/", decorator_include(enabled, "markdownx.urls")),
-    path("accounts/", decorator_include(enabled, "allauth.urls")),
+    path("markdownx/", decorator_include(enabled(), "markdownx.urls")),
+    path("accounts/", decorator_include(enabled(), "allauth.urls")),
     path(
         "accounts/",
-        decorator_include(enabled, "sdg.accounts.urls", namespace="accounts"),
+        decorator_include(enabled(), "sdg.accounts.urls", namespace="accounts"),
     ),
     path(
         "organizations/",
-        decorator_include(enabled, "sdg.organisaties.urls", namespace="organisaties"),
+        decorator_include(enabled(), "sdg.organisaties.urls", namespace="organisaties"),
     ),
-    path("", decorator_include(enabled, "sdg.core.urls", namespace="core")),
+    path(
+        "",
+        decorator_include(enabled(redirect=True), "sdg.core.urls", namespace="core"),
+    ),
     path(
         "cmsapi/",
-        decorator_include(enabled, "sdg.cmsapi.urls", namespace="cmsapi"),
+        decorator_include(enabled(), "sdg.cmsapi.urls", namespace="cmsapi"),
     ),
-    path("", decorator_include(enabled, miscellaneous_urls)),
-    path("", decorator_include(enabled, tf_urls)),
+    path("", decorator_include(enabled(), miscellaneous_urls)),
+    path("", decorator_include(enabled(), tf_urls)),
 ]
 
 

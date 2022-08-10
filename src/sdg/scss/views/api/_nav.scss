@@ -35,7 +35,11 @@
   
   &__pane {
     display: none;
-    text-align: left;
+    text-align: center;
+
+    ul, li {
+      text-align: left;
+    }
 
     &--active {
       display: block;

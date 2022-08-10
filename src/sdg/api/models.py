@@ -38,9 +38,9 @@ class Token(models.Model):
         blank=True,
     )
     last_seen = models.DateTimeField(
-        _("laatst gekeken"),
+        _("laatste verzoek"),
         auto_now=False,
-        help_text=_("Wanneer het token voor het laatst gebruikt is in de api."),
+        help_text=_("Wanneer het token voor het laatst gebruikt is in de API."),
         blank=True,
         null=True,
     )
@@ -52,7 +52,7 @@ class Token(models.Model):
     modified = models.DateTimeField(
         _("aangepast"),
         auto_now=True,
-        help_text=_("Wanneer het token is aangepast"),
+        help_text=_("Wanneer het token voor het laatst is gewijzigd."),
     )
 
     class Meta:
