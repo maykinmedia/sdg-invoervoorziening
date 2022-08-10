@@ -1,6 +1,7 @@
 from django.db.models import Prefetch
 
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import viewsets
 
 from sdg.api.filters import ProductenCatalogusFilterSet
@@ -11,14 +12,55 @@ from sdg.producten.models import Product
 
 @extend_schema_view(
     list=extend_schema(
-        description="Lijst van alle catalogi die worden gebruikt door organisaties."
+        description="Een lijst van alle catalogi.",
+        auth=[],
+        parameters=[
+            OpenApiParameter(
+                name="organisatie",
+                description="De UUID van een organisatie om aan te geven van welke organisatie u de catalogi wilt zien.",
+                required=False,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.QUERY,
+            ),
+            OpenApiParameter(
+                name="organisatieOwmsIdentifier",
+                description="De OWMS Identifier  van een organisatie om aan te geven van welke organisatie u de catalogi wilt zien.",
+                required=False,
+                type=str,
+                location=OpenApiParameter.QUERY,
+            ),
+            OpenApiParameter(
+                name="organisatieOwmsPrefLabel",
+                description="Het OWMS Prefered Label van een organisatie om aan te geven van welke organisatie u de catalogi wilt zien.",
+                required=False,
+                type=str,
+                location=OpenApiParameter.QUERY,
+            ),
+            OpenApiParameter(
+                name="page",
+                description="Het paginanummer binnen de lijst van resultaten.",
+                required=False,
+                type=int,
+                location=OpenApiParameter.QUERY,
+            ),
+        ],
     ),
     retrieve=extend_schema(
-        description="Catalogus die wordt gebruikt door een organisatie."
+        description="Een catalogus behoort aan een organisatie en is een verzameling van producten.",
+        auth=[],
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="De UUID van een catalogus.",
+                required=False,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            ),
+        ],
     ),
 )
 class CatalogusViewSet(viewsets.ReadOnlyModelViewSet):
-    """Viewset for a municipality catalog, retrieved by uuid"""
+    """Viewset for a municipality catalog, retrieved by UUID"""
 
     serializer_class = ProductenCatalogusSerializer
     filterset_class = ProductenCatalogusFilterSet

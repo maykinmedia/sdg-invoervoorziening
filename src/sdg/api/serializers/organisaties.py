@@ -12,7 +12,7 @@ from sdg.organisaties.models import (
 
 
 class OpeningstijdenSerializer(serializers.ModelSerializer):
-    """Serializer for location based opening times."""
+    """Een lijst met de openings tijden van maandag tot en met zondag van deze locatie."""
 
     class Meta:
         model = Locatie
@@ -25,24 +25,49 @@ class OpeningstijdenSerializer(serializers.ModelSerializer):
             "zaterdag",
             "zondag",
         )
+        extra_kwargs = {
+            "maandag": {
+                "help_text": """De openingstijden op maandag. Tijden dienen als volgt opgegeven te worden: `["9:00 - 18:00"]`"""
+            },
+            "dinsdag": {
+                "help_text": """De openingstijden op dinsdag. Tijden dienen als volgt opgegeven te worden: `["9:00 - 18:00"]`"""
+            },
+            "woensdag": {
+                "help_text": """De openingstijden op woensdag. Tijden dienen als volgt opgegeven te worden: `["9:00 - 18:00"]`"""
+            },
+            "donderdag": {
+                "help_text": """De openingstijden op donderdag. Tijden dienen als volgt opgegeven te worden: `["9:00 - 18:00"]`"""
+            },
+            "vrijdag": {
+                "help_text": """De openingstijden op vrijdag. Tijden dienen als volgt opgegeven te worden: `["9:00 - 18:00"]`"""
+            },
+            "zaterdag": {
+                "help_text": """De openingstijden op zaterdag. Tijden dienen als volgt opgegeven te worden: `["9:00 - 18:00"]`"""
+            },
+            "zondag": {
+                "help_text": """De openingstijden op zondag. Tijden dienen als volgt opgegeven te worden: `["9:00 - 18:00"]`"""
+            },
+        }
 
 
 class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
+    """De ondersteunende organisaties (standaard heeft een organisatie altijd zichzelf als een bevoegde organisatie.)"""
+
     owms_identifier = serializers.URLField(
         source="organisatie.owms_identifier",
-        help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
+        help_text="De OWMS Identifier van een de bevoegde organisatie.",
         default=None,
         required=False,
     )
     owms_pref_label = serializers.CharField(
         source="organisatie.owms_pref_label",
-        help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
+        help_text="Het OWMS Prefered Label van een de bevoegde organisatie.",
         default=None,
         required=False,
     )
     owms_end_date = serializers.DateTimeField(
         source="organisatie.owms_end_date",
-        help_text="De einddatum, zoals gevonden in het OWMS-model.",
+        help_text="De eind datum van de bevoegde organisatie. Indien de waarde `null` is, dan is organisatie actief.",
         default=None,
         required=False,
         read_only=True,
@@ -63,23 +88,19 @@ class BevoegdeOrganisatieSerializer(serializers.ModelSerializer):
 
 
 class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer that exposes a small subset of the fields for an organization, used in references to an organization.
-    - Fields: `url`, `owmsIdentifier`, `owmsPrefLabel`
-    """
-
     owms_identifier = serializers.URLField(
         source="organisatie.owms_identifier",
-        help_text="OWMS identifier van de hoofdorganisatie van deze lokale overheid.",
+        help_text="""De OWMS Identifier van een de organisatie die gekoppeld is aan deze locatie.""",
         required=False,
     )
     owms_pref_label = serializers.CharField(
         source="organisatie.owms_pref_label",
-        help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
+        help_text="Het OWMS Prefered Label van de organisatie die gekoppeld is aan deze locatie.",
         required=False,
     )
     owms_end_date = serializers.DateTimeField(
         source="organisatie.owms_end_date",
-        help_text="De einddatum, zoals gevonden in het OWMS-model.",
+        help_text="De eind datum van de organisatie. Indien de waarde `null` is, dan is organisatie actief.",
         read_only=True,
         required=False,
     )
@@ -91,13 +112,12 @@ class LokaleOverheidBaseSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "view_name": "api:lokaleoverheid-detail",
                 "lookup_field": "uuid",
+                "help_text": "De unieke URL van dit object binnen deze API.",
             },
         }
 
 
 class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
-    """Serializer that exposes a subset of the fields for a location, used in references to a location."""
-
     class Meta:
         model = Locatie
         fields = (
@@ -115,20 +135,33 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
             "url": {
                 "view_name": "api:locatie-detail",
                 "lookup_field": "uuid",
+                "help_text": "De unieke URL van dit object binnen deze API.",
             },
-            "naam": {
-                "required": False,
-            },
+            "naam": {"required": False, "help_text": "De naam van de locatie."},
             "uuid": {
                 "required": False,
+                "help_text": "De UUID van een specifieke organisatie.",
+            },
+            "straat": {"help_text": "De straatnaam van de locatie."},
+            "nummer": {
+                "help_text": "Het huisnummer van de locatie, inclusief eventuele toevoegingen."
+            },
+            "postcode": {"help_text": "De postcode van de locatie."},
+            "plaats": {"help_text": "De plaatsnaam van de locatie."},
+            "land": {"help_text": "Het land van de locatie."},
+            "openingstijden_opmerking": {
+                "help_text": """Een opmerking over de openingstijden. Hier kunt u extra informatie
+                kwijt over de openingstijden wanneer dit gewenst is."""
             },
         }
 
 
 class LocatieSerializer(LocatieBaseSerializer):
-    """Serializer for location details, including contact details, address and opening times."""
-
-    organisatie = LokaleOverheidBaseSerializer(source="lokale_overheid", required=False)
+    organisatie = LokaleOverheidBaseSerializer(
+        source="lokale_overheid",
+        required=False,
+        help_text="Organisatie van deze locatie. Om een locatie aan te maken of bij te werken **MOET** de `url`, `owmsIdentifier` of `owmsPrefLabel` opgegeven worden.",
+    )
     openingstijden = OpeningstijdenSerializer(source="*")
 
     class Meta(LocatieBaseSerializer.Meta):
@@ -193,16 +226,24 @@ class LocatieSerializer(LocatieBaseSerializer):
 
 
 class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
-    """Serializer for municipality details, including organization details, catalogs and locations."""
-
     owms_end_date = serializers.DateTimeField(
         source="organisatie.owms_end_date",
-        help_text="OWMS einddatum van de hoofdorganisatie van deze lokale overheid.",
+        help_text="De eind datum van de organisatie. Indien de waarde `null` is, dan is organisatie actief.",
+        required=False,
+        read_only=True,
     )
 
-    bevoegde_organisaties = BevoegdeOrganisatieSerializer(many=True)
-    ondersteunings_organisatie = OverheidsorganisatieSerializer()
-    locaties = LocatieBaseSerializer(many=True)
+    bevoegde_organisaties = BevoegdeOrganisatieSerializer(
+        many=True,
+        help_text="De bevoegde organisaties. In de lijst van bevoegde organisaties staat minimaal altijd de verantwoordelijke organisatie.",
+    )
+    ondersteunings_organisatie = OverheidsorganisatieSerializer(
+        help_text="De ondersteunende organisatie."
+    )
+    locaties = LocatieBaseSerializer(
+        many=True,
+        help_text="Een lijst met alle locaties die gekoppeld zijn aan deze organisatie.",
+    )
 
     class Meta:
         model = LokaleOverheid
@@ -225,6 +266,7 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
             "url": {
                 "view_name": "api:lokaleoverheid-detail",
                 "lookup_field": "uuid",
+                "help_text": "De unieke URL van dit object binnen deze API.",
             },
             "catalogi": {
                 "lookup_field": "uuid",
