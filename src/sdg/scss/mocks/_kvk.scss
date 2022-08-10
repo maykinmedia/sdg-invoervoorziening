@@ -10,7 +10,7 @@ $kvk_primary: #01689b;
   .divider {
     border: none;
     margin: 12px 0;
-    border-bottom: 2px solid $color_grey_dark;
+    border-bottom: 1px solid #bdbdbd;
   }
 
   a {
@@ -56,8 +56,7 @@ $kvk_primary: #01689b;
 
   .content {
     display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-gap: 64px;
+    grid-gap: 20px;
     padding: 60px;
     min-height: 519px;
 
@@ -107,8 +106,25 @@ $kvk_primary: #01689b;
       }
     }
 
-    .right {
-      margin: 32px 0;
+    .reduce-space {
+      margin-top: -34px;
+    }
+
+    .collection {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: auto;
+      gap: 156px;
+
+      .left {
+        align-items: flex-start;
+        flex: 8;
+      }
+
+      .right {
+        align-items: flex-end;
+        flex: 4;
+      }
     }
 
   }
