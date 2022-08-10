@@ -48,6 +48,7 @@ urlpatterns = [
             template_name="api/index.html",
             extra_context={"version": api_settings.DEFAULT_VERSION},
         ),
+        name="index",
     ),
     path("v1/", include(router.urls)),
     path(
