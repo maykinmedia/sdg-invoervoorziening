@@ -78,6 +78,38 @@ elementen die niet ondersteund worden, te weten:
 
 Bij een veld dat Markdown ondersteund staat dit aangegeven.
 
+## Versies
+Productbeschrijvingen kennen versies, die gekenmerkt worden door een bepaalde
+publicatiedatum. Bij het ophalen van producten wordt standaard de *actuele*
+versie getoond. De actuele versie is de productbeschrijving die op dit moment
+geldig is. Het kan echter zijn dat er een concept of een toekomstige versie
+aanwezig is maar die is niet zomaar in te zien.
+
+Stel, versie 1 is in het verleden gepubliceerd en heeft publicatiedatum T-2.
+Versie 1 was te zien tot versie 2 verscheen op publicatiedatum T-1. Vanaf
+publicatiedatum T-1, en ook vandaag (T), is versie 2 te zien. Er is al een
+toekomstige versie 3 ingepland, op publicatiedatum T+1. Deze versie 3 is nog
+niet op te vragen en versie 2 is dus de actieve versie.
+
+Productbeschrijvingen bijwerken kan leiden tot een nieuwe versie. Hieronder
+staan de regels:
+
+* Een publicatiedatum kan niet *voor* een publicatiedatum liggen van een
+  eerdere versie.
+* Indien de actieve versie publicatiedatum *vandaag* heeft, en er wordt een
+  nieuwe versie aangemaakt die ook publicatiedatum *vandaag* heeft, dan zijn er
+  2 versies die gepubliceerd zijn op dezelfde dag. In dat geval wordt de versie
+  met het hoogste versienummer beschouwd als actief.
+* Indien er een versie is met een publicatiedatum in de *toekomst*, en er wordt
+  een nieuwe versie aangemaakt, dan overschrijft deze versie de toekomstige
+  versie. Er kunnen dus niet meerdere toekomstige versies zijn.
+* Indien er geen publicatiedatum wordt opgegeven, dan wordt een concept-versie
+  aangemaakt. Een concept-versie wordt altijd overschreven en er kunnen dus
+  niet meerdere concept-versies zijn.
+
+Niet actieve versies, zoals oude, toekomstige en concept versies, zijn enkel op
+te vragen via historie.
+
 """
 
 SPECTACULAR_SETTINGS = {
@@ -94,7 +126,7 @@ SPECTACULAR_SETTINGS = {
         "description": "Meer informatie over de SDG",
         "url": "https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/europa/single-digitale-gateway/",
     },
-    "VERSION": "1.3.0-beta",
+    "VERSION": "1.3.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "CAMELIZE_NAMES": True,
     "POSTPROCESSING_HOOKS": [
