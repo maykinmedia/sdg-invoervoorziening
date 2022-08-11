@@ -11,7 +11,7 @@ class TokenAuthorizationInline(admin.TabularInline):
 
 @admin.register(Token)
 class TokenAdmin(admin.ModelAdmin):
-    list_display = ("key", "created", "last_seen")
+    list_display = ("organization", "contact_person", "created", "last_seen")
     readonly_fields = ("key", "last_seen")
-    ordering = ("-created",)
+    ordering = ("organization",)
     inlines = (TokenAuthorizationInline,)
