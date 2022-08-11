@@ -1,6 +1,6 @@
-=================================
-SDG Invoervoorziening en API-brug
-=================================
+===============
+PDC voor de SDG
+===============
 
 :Version: 1.2.3
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
@@ -10,7 +10,7 @@ SDG Invoervoorziening en API-brug
 |build-status| |coverage| |docker| |black| |python-versions|
 
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
-(SDG) via de invoervoorziening en/of de API.
+(SDG) via het CMS en/of de API.
 
 Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_ en 
 `IPO`_.
@@ -19,32 +19,27 @@ Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_ en
 Introductie
 ===========
 
-De *SDG Invoervoorziening en API-brug* is een applicatie voor het beheren en 
-ontsluiten van productbeschrijvingen van producten die worden aangeboden door 
-organisaties in de verschillende overheidslagen. Deze producten vallen onder de 
-SDG verordening en de productbeschrijvingen worden ontsloten via een API. 
-
-De SDG Invoervoorziening stelt organisaties in staat via een geïntegreerd CMS 
-de productbeschrijvingen te beheren. De SDG API-brug stelt organisaties in 
-staat productbeschrijvingen via een API aan te leveren. Via beide wegen komen 
-de productbeschrijvingen beschikbaar in de SDG API.
+De applicatie bestaat uit een CMS en een API. Het CMS stelt redacteuren in 
+staat productbeschrijvingen direct te beheren, voorbeelden te zien en te 
+publiceren. De API stelt externe systemen in staat om productbeschrijvingen 
+geautomatiseerd bij te werken vanuit een eigen CMS. De API is tevens het 
+centrale punt waar de nationale portalen de productbeschrijvingen ophalen.
 
 Speerpunten zijn (afhankelijk van de installatie en autorisaties):
 
-* Ontzorging: Organisaties hoeven voor de SDG hun website niet aan te passen.
-* Uniformeren productbeschrijvingen: Een gedeelde invoervoorziening maakt het 
-  mogelijk om organisaties te ondersteunen met een 
-  standaard-productencatalogus. 
+* Ontzorging: Organisaties hoeven voor de SDG hun eigen website niet aan te 
+  passen.
+* Uniformeren productbeschrijvingen: Het CMS maakt het mogelijk om organisaties 
+  te ondersteunen met een standaard-productencatalogus. 
   Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen 
   hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit op 
   de generieke teksten die met de specifieke teksten worden getoond op de 
   nationale portalen. 
-* Hergebruik van SDG productbeschrijvingen: Teksten die in de SDG 
-  Invoervoorziening beheerd worden, kunnen ook opgenomen worden in de eigen 
-  website.
+* Hergebruik van SDG productbeschrijvingen: Teksten die in deze applicatie 
+  beheerd worden, kunnen ook opgenomen worden in de eigen website via de API.
 * Hergebruik van eigen productbeschrijvingen: Teksten die in het CMS van de
-  organisatie staan kunnen aangeleverd worden aan de API-brug zodat er geen
-  teksten beheerd hoeven te worden via de SDG Invoervoorziening.
+  organisatie staan kunnen aangeleverd worden aan de API  zodat er geen
+  teksten beheerd hoeven te worden via het CMS.
 
 
 API specificatie
