@@ -5,12 +5,37 @@ Change history
 1.3.0
 =====
 
-*tbd*
+*August 18, 2022*
 
 This release introduces changes to the project requested by `IPO`_, making the
 project suitable for not only municipalities but also for provinces.
 
-* [#635] Added API autorisations
+* [#405] Added servers to (rendered) APIschema
+* [#672] Added doelgroep to the duplicate product choices
+* [#604] Added field contact formulier link to lokale overheid
+* [#637] Changed colour of the i-tag in the CMS
+* [#650] Removed empty list option for bevoegde organisatie
+* [#621] Improved outlining of preview page
+* [#651] Added button to resend mail
+* [#692] Added markdown validation
+* [#685] Changed list-item styling
+* [#683] Added javascript that closes the toelichting on page load when empty
+* [#447] Addded styling for the use backup token button
+
+* [#667] Created a landing page for the API on /api.
+* [#681] Made doelgroep a required field in the API
+* [#691] Added last seen date to API token
+* [#660] Changed bevoegde organisatie naam to be unique
+* [#669] Created a Postman collection for the supported API calls
+* [#668] Added the option to import different data depending on the organization type
+* [#666] Allow CMS to be disabled
+
+**API changes**
+
+* [#670] Added (better) documentation in the API schema
+* [#722] Added API IP-restrictions
+* [#635, #675] Added API autorisations
+* [#629] Added writable product API endpoint
 * [#630] Added writable location API endpoint
 
 .. _`IPO`: https://www.ipo.nl/
