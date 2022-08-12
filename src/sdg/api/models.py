@@ -61,7 +61,7 @@ class Token(models.Model):
         models.CharField(max_length=15),
         validators=[validate_ip_adress],
         help_text=_(
-            "De IP adressen waar organisaties onveilige API calls van mogen maken"
+            "De IP adressen waarvan organisaties POST, UPDATE en DELETE API calls van kan maken met deze API token."
         ),
         blank=True,
         default=list,
