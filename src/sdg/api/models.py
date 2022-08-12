@@ -1,7 +1,9 @@
+from django import forms
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from sdg.organisaties.models import LokaleOverheid
+from sdg.core.db.fields import DynamicArrayField
+from sdg.core.models.validators import validate_ip_adress
 
 
 class Token(models.Model):
@@ -53,6 +55,16 @@ class Token(models.Model):
         _("aangepast"),
         auto_now=True,
         help_text=_("Wanneer het token voor het laatst is gewijzigd."),
+    )
+
+    whitelisted_ips = DynamicArrayField(
+        models.CharField(max_length=15),
+        validators=[validate_ip_adress],
+        help_text=_(
+            "De IP adressen waar organisaties onveilige API calls van mogen maken"
+        ),
+        blank=True,
+        default=list,
     )
 
     class Meta:

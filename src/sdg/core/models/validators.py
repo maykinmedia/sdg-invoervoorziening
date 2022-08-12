@@ -79,3 +79,13 @@ def validate_specific_catalog(catalog):
                 'Een catalogus kan alleen naar een catalogus linken als "is_referentie_catalogus" is ingeschakeld.'
             )
         )
+
+
+def validate_ip_adress(array):
+    import ipaddress
+
+    for ip in array:
+        try:
+            ipaddress.ip_address(ip)
+        except ValueError:
+            raise ValidationError(_(f"'{ip}' is niet een valide ip adress"))
