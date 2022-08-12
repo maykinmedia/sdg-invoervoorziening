@@ -1,5 +1,7 @@
 import datetime
 
+from django.conf import settings
+
 from rest_framework.permissions import SAFE_METHODS, BasePermission
 from vng_api_common.permissions import bypass_permissions
 
@@ -70,10 +72,13 @@ class WhitelistedPermission(BasePermission):
         if view.action in ["list", "retrieve", "option"]:
             return True
 
-        user_ip = get_client_ip(request)
-        whitelisted_ips = request.auth.whitelisted_ips
+        if settings.WHITELISTING_ENABLED:
+            user_ip = get_client_ip(request)
+            whitelisted_ips = request.auth.whitelisted_ips
 
-        if whitelisted_ips:
+            if not whitelisted_ips:
+                return False
+
             if user_ip not in whitelisted_ips:
                 return False
 
