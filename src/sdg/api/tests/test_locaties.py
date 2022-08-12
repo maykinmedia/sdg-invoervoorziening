@@ -1,5 +1,7 @@
 import json
 
+from django.test import override_settings
+
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
@@ -12,6 +14,7 @@ from sdg.organisaties.tests.factories.overheid import (
 )
 
 
+@override_settings(WHITELISTING_ENABLED=False)
 class LocatiesTests(APITestCase):
     def test_list_locations(self):
         LocatieFactory.create_batch(2)
