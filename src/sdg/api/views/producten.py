@@ -4,7 +4,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.viewsets import GenericViewSet
 
 from sdg.api.filters import ProductFilterSet
-from sdg.api.permissions import Permissions
+from sdg.api.permissions import OrganizationPermissions, WhitelistedPermission
 from sdg.api.serializers import ProductSerializer, ProductVersieSerializer
 from sdg.core.models.logius import Overheidsorganisatie
 from sdg.producten.models import Product, ProductVersie
@@ -175,7 +175,7 @@ class ProductViewSet(
     )
     filterset_class = ProductFilterSet
     serializer_class = ProductSerializer
-    permission_classes = [Permissions]
+    permission_classes = [OrganizationPermissions, WhitelistedPermission]
 
     def get_organisatie(self, request, view, obj=None):
         if request.method == "POST":
