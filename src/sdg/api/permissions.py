@@ -6,7 +6,16 @@ from vng_api_common.permissions import bypass_permissions
 from sdg.api.models import Token
 
 
-class Permissions(BasePermission):
+def get_client_ip(request):
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(",")[-1].strip()
+    else:
+        ip = request.META.get("REMOTE_ADDR")
+    return ip
+
+
+class OrganizationPermissions(BasePermission):
     def has_permission(self, request, view):
         if bypass_permissions(request):
             return True
@@ -49,5 +58,23 @@ class Permissions(BasePermission):
             return False
 
         Token.objects.filter(key=request.auth).update(last_seen=datetime.datetime.now())
+
+        return True
+
+
+class WhitelistedPermission(BasePermission):
+    def has_permission(self, request, view):
+        if bypass_permissions(request):
+            return True
+
+        if view.action in ["list", "retrieve", "option"]:
+            return True
+
+        user_ip = get_client_ip(request)
+        whitelisted_ips = request.auth.whitelisted_ips
+
+        if whitelisted_ips:
+            if user_ip not in whitelisted_ips:
+                return False
 
         return True

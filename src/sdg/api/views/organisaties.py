@@ -3,7 +3,7 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import viewsets
 
 from sdg.api.filters import LocatieFilterSet, LokaleOverheidFilterSet
-from sdg.api.permissions import Permissions
+from sdg.api.permissions import OrganizationPermissions, WhitelistedPermission
 from sdg.api.serializers import LokaleOverheidSerializer
 from sdg.api.serializers.organisaties import LocatieSerializer
 from sdg.core.models.logius import Overheidsorganisatie
@@ -164,7 +164,7 @@ class LocatieViewSet(viewsets.ModelViewSet):
     queryset = Locatie.objects.select_related("lokale_overheid")
     filterset_class = LocatieFilterSet
     serializer_class = LocatieSerializer
-    permission_classes = [Permissions]
+    permission_classes = [OrganizationPermissions, WhitelistedPermission]
 
     def get_organisatie(self, request, view, obj=None):
         if request.method == "POST":
