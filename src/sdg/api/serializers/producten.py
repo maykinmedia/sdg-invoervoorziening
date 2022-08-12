@@ -623,6 +623,12 @@ class ProductSerializer(ProductBaseSerializer):
         if vertalingen:
             for vertaling in vertalingen:
 
+                verwijzing_links = []
+                for verwijzing_link in vertaling["verwijzing_links"]:
+                    verwijzing_links.append(list(verwijzing_link.values()))
+
+                vertaling["verwijzing_links"] = verwijzing_links
+
                 if product_versie_created:
 
                     LocalizedProduct.objects.create(
