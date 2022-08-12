@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 
 from sdg.api.models import Token, TokenAuthorization
@@ -15,3 +16,9 @@ class TokenAdmin(admin.ModelAdmin):
     readonly_fields = ("key", "last_seen")
     ordering = ("organization",)
     inlines = (TokenAuthorizationInline,)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if settings.WHITELISTING_ENABLED:
+            form.base_fields["whitelisted_ips"].required = True
+        return form

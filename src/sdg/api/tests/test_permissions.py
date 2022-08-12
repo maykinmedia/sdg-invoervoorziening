@@ -1,6 +1,8 @@
 import ipaddress
 import socket
 
+from django.test import override_settings
+
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
@@ -13,6 +15,7 @@ from sdg.organisaties.tests.factories.overheid import (
 )
 
 
+@override_settings(WHITELISTING_ENABLED=False)
 class LocationPermissieTest(APITestCase):
     def setUp(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -98,6 +101,7 @@ class LocationPermissieTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    @override_settings(WHITELISTING_ENABLED=True)
     def test_api_white_list_with_correct_ip(self):
         organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="http://standaarden.overheid.nl/owms/terms/test",
@@ -121,6 +125,7 @@ class LocationPermissieTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    @override_settings(WHITELISTING_ENABLED=True)
     def test_api_white_list_with_incorrect_ip(self):
         ip_addr = ipaddress.IPv4Address(self.ip_addr) + 1
 
