@@ -9,9 +9,9 @@ from sdg.api.models import Token
 
 
 def get_client_ip(request):
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[-1].strip()
+    real_ip = request.META.get(settings.REAL_USER_IP)
+    if real_ip:
+        ip = real_ip
     else:
         ip = request.META.get("REMOTE_ADDR")
     return ip
