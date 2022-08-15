@@ -490,6 +490,8 @@ class ProductSerializer(ProductBaseSerializer):
                     "Received a non existing 'owms identifier'"
                 )
 
+        return None
+
     def get_locaties(self, locaties, catalogus):
         organisatie_locaties = []
         for locatie in locaties:
@@ -547,6 +549,9 @@ class ProductSerializer(ProductBaseSerializer):
                 verantwoordelijke_organisatie
             )
 
+        if bevoegde_organisatie:
+            bevoegde_organisatie = self.get_bevoegde_organisatie(bevoegde_organisatie)
+
         if not catalogus:
             validated_data["catalogus"] = self.get_default_catalogus(
                 verantwoordelijke_organisatie
@@ -567,10 +572,7 @@ class ProductSerializer(ProductBaseSerializer):
                 )
 
         if bevoegde_organisatie:
-            if "organisatie" in bevoegde_organisatie:
-                validated_data["bevoegde_organisatie"] = self.get_bevoegde_organisatie(
-                    bevoegde_organisatie
-                )
+            validated_data["bevoegde_organisatie"] = bevoegde_organisatie
         else:
             validated_data["bevoegde_organisatie"] = BevoegdeOrganisatie.objects.get(
                 lokale_overheid=verantwoordelijke_organisatie
