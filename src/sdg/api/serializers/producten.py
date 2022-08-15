@@ -1,4 +1,7 @@
+import datetime
+
 from django.db import transaction
+from django.utils.dateparse import parse_date
 
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
@@ -490,6 +493,32 @@ class ProductSerializer(ProductBaseSerializer):
                     "Received a non existing 'owms identifier'"
                 )
 
+    def get_version_number(self, previous_date, new_date, version):
+        if not previous_date:
+            return version
+
+        if not new_date and previous_date <= datetime.date.today():
+            return version + 1
+
+        if not new_date:
+            return version
+
+        if new_date < previous_date and new_date < datetime.date.today():
+            raise serializers.ValidationError(
+                "Product can't have an earlier publicatie date then earlier versions."
+            )
+
+        if new_date <= datetime.date.today():
+            return version + 1
+
+        if previous_date > datetime.date.today() and new_date > datetime.date.today():
+            return version
+
+        if previous_date < new_date and new_date > datetime.date.today():
+            return version + 1
+
+        return version
+
     def get_locaties(self, locaties, catalogus):
         organisatie_locaties = []
         for locatie in locaties:
@@ -535,8 +564,11 @@ class ProductSerializer(ProductBaseSerializer):
         locaties = validated_data.pop("locaties", [])
 
         most_recent_version = validated_data.pop("most_recent_version")
-        publicatie_datum = most_recent_version.pop("publicatie_datum", None)
         vertalingen = most_recent_version.pop("vertalingen", [])
+        publicatie_datum = data.get("publicatie_datum", None)
+
+        if publicatie_datum:
+            publicatie_datum = parse_date(publicatie_datum)
 
         validated_data["generiek_product"] = self.get_generiek_product(
             generiek_product, doelgroep
@@ -606,10 +638,13 @@ class ProductSerializer(ProductBaseSerializer):
                     )
             product.gerelateerde_producten.set(gerelateerde_catalogus_producten)
 
-        versie = product.most_recent_version.versie
+        previous_publicatie_datum = product.most_recent_version.publicatie_datum
 
-        if product.most_recent_version.publicatie_datum:
-            versie += 1
+        versie = self.get_version_number(
+            previous_publicatie_datum,
+            publicatie_datum,
+            product.most_recent_version.versie,
+        )
 
         product_versie, product_versie_created = ProductVersie.objects.update_or_create(
             product=product,

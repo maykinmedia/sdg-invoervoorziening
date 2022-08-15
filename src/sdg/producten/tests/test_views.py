@@ -5,7 +5,10 @@ from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.tests.utils import hard_refresh_from_db
-from sdg.organisaties.tests.factories.overheid import LocatieFactory
+from sdg.organisaties.tests.factories.overheid import (
+    BevoegdeOrganisatieFactory,
+    LocatieFactory,
+)
 from sdg.producten.models import Product
 from sdg.producten.tests.constants import (
     DUMMY_TITLE,
