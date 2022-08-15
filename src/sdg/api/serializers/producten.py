@@ -27,17 +27,18 @@ from sdg.producten.models.product import GeneriekProduct
 class LocalizedProductSerializer(serializers.ModelSerializer):
     """Serializer for the localized version of a product."""
 
-    verwijzing_links = LabeledUrlListField(
-        help_text="Dit zijn de verwijzing links voor burgers en ondernemers naar relevante organisatie informatie."
+    links = LabeledUrlListField(
+        source="verwijzing_links",
+        help_text="Dit zijn de verwijzing links voor burgers en ondernemers naar relevante organisatie informatie.",
     )
 
     class Meta:
         model = LocalizedProduct
         fields = (
             "taal",
-            "product_titel_decentraal",
-            "specifieke_tekst",
-            "verwijzing_links",
+            "titel",
+            "tekst",
+            "links",
             "procedure_beschrijving",
             "bewijs",
             "vereisten",
@@ -45,7 +46,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "kosten_en_betaalmethoden",
             "uiterste_termijn",
             "wtd_bij_geen_reactie",
-            "decentrale_procedure_link",
+            "procedure_link",
             "product_aanwezig_toelichting",
             "product_valt_onder_toelichting",
             "datum_wijziging",
@@ -54,11 +55,17 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "taal": {
                 "help_text": """De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)."""
             },
-            "product_titel_decentraal": {
-                "help_text": "De titel van het product. Als deze afwijkt van de generieke titel kunt u dat hier aangeven."
+            "titel": {
+                "source": "product_titel_decentraal",
+                "help_text": "De titel van het product. Als deze afwijkt van de generieke titel kunt u dat hier aangeven.",
             },
-            "specifieke_tekst": {
-                "help_text": "De inleidende tekst voor het product. Hierin kunt u het product beschrijven en komt direct na de generieke productbeschrijving. Dit veld ondersteund Markdown."
+            "tekst": {
+                "source": "specifieke_tekst",
+                "help_text": "De inleidende tekst voor het product. Hierin kunt u het product beschrijven en komt direct na de generieke productbeschrijving. Dit veld ondersteund Markdown.",
+            },
+            "procedure_link": {
+                "source": "decentrale_procedure_link",
+                "help_text": "De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen.",
             },
             "procedure_beschrijving": {
                 "help_text": "De beschrijving van hoe het product wordt aangevraagd. Dit veld ondersteund Markdown."
@@ -80,9 +87,6 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             },
             "wtd_bij_geen_reactie": {
                 "help_text": "Beschrijft wat de aanvrager moet doen bij geen reactie. Dit veld ondersteund Markdown."
-            },
-            "decentrale_procedure_link": {
-                "help_text": "De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen."
             },
             "product_aanwezig_toelichting": {
                 "help_text": "Een optioneel veld om uit te leggen waarom het product niet aanwezig is. Deze moet u alleen invullen als u het product niet levert en dan is dit veld verplicht! Dit veld ondersteund Markdown."
@@ -236,6 +240,10 @@ class ProductSerializer(ProductBaseSerializer):
         many=True,
         help_text="Een lijst met specifieke teksten op basis van taal.",
     )
+    beschikbare_talen = serializers.SerializerMethodField(
+        method_name="get_talen",
+        help_text="Alle beschikbare talen.",
+    )
     versie = SerializerMethodField(
         method_name="get_versie", help_text="De huidige versie van dit product."
     )
@@ -283,6 +291,7 @@ class ProductSerializer(ProductBaseSerializer):
             "doelgroep",
             "vertalingen",
             "gerelateerde_producten",
+            "beschikbare_talen",
         )
         extra_kwargs = {
             "url": {
@@ -320,6 +329,9 @@ class ProductSerializer(ProductBaseSerializer):
 
     def get_versie(self, obj: Product) -> int:
         return self._get_most_recent_version(obj, "versie", default=0)
+
+    def get_talen(self, obj: Product) -> list:
+        return TaalChoices.get_available_languages()
 
     def to_representation(self, instance):
         data = super(ProductBaseSerializer, self).to_representation(instance)

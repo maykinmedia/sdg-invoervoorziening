@@ -608,17 +608,17 @@ components:
           allOf:
           - $ref: '#/components/schemas/TaalEnum'
           description: De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
-        productTitelDecentraal:
+        titel:
           type: string
           description: De titel van het product. Als deze afwijkt van de generieke
             titel kunt u dat hier aangeven.
           maxLength: 100
-        specifiekeTekst:
+        tekst:
           type: string
           description: De inleidende tekst voor het product. Hierin kunt u het product
             beschrijven en komt direct na de generieke productbeschrijving. Dit veld
             ondersteund Markdown.
-        verwijzingLinks:
+        links:
           type: array
           items:
             $ref: '#/components/schemas/LabeledUrl'
@@ -653,7 +653,7 @@ components:
           type: string
           description: Beschrijft wat de aanvrager moet doen bij geen reactie. Dit
             veld ondersteund Markdown.
-        decentraleProcedureLink:
+        procedureLink:
           type: string
           format: uri
           description: De URL waar de burger of ondernemer het product bij de organisatie
@@ -678,8 +678,8 @@ components:
           description: Datum wanneer dit product voor het laatst is gewijzigd.
       required:
       - datumWijziging
+      - links
       - taal
-      - verwijzingLinks
     Locatie:
       type: object
       properties:
@@ -1208,7 +1208,13 @@ components:
           items:
             $ref: '#/components/schemas/ProductBase'
           description: Een lijst met producten die gerelateerd zijn aan dit product.
+        beschikbareTalen:
+          type: array
+          items: {}
+          readOnly: true
+          description: Alle beschikbare talen.
       required:
+      - beschikbareTalen
       - doelgroep
       - gerelateerdeProducten
       - locaties

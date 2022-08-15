@@ -225,32 +225,32 @@ class ProductenTests(APITestCase):
             "vertalingen": [
                 {
                     "taal": "nl",
-                    "specifiekeTekst": "",
+                    "tekst": "",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
-                    "decentraleProcedureLink": "",
+                    "procedureLink": "",
                     "kostenEnBetaalmethoden": "",
                     "procedureBeschrijving": "",
-                    "productTitelDecentraal": "",
+                    "titel": "",
                     "uitersteTermijn": "",
                     "vereisten": "",
-                    "verwijzingLinks": [],
+                    "links": [],
                     "wtdBijGeenReactie": "",
                     "productAanwezigToelichting": "",
                     "productValtOnderToelichting": "",
                 },
                 {
                     "taal": "en",
-                    "specifiekeTekst": "",
+                    "tekst": "",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
-                    "decentraleProcedureLink": "",
+                    "procedureLink": "",
                     "kostenEnBetaalmethoden": "",
                     "procedureBeschrijving": "",
-                    "productTitelDecentraal": "",
+                    "titel": "",
                     "uitersteTermijn": "",
                     "vereisten": "",
-                    "verwijzingLinks": [],
+                    "links": [],
                     "wtdBijGeenReactie": "",
                     "productAanwezigToelichting": "",
                     "productValtOnderToelichting": "",
@@ -288,32 +288,32 @@ class ProductenTests(APITestCase):
                 "vertalingen": [
                     {
                         "taal": "nl",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "bewijs dat tekst wordt aangemaakt",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "",
                     },
                     {
                         "taal": "en",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "proof that text gets created",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "",
@@ -349,35 +349,35 @@ class ProductenTests(APITestCase):
         )
         self.assertEqual(data["locaties"], [])
         self.assertEqual(data["vertalingen"][0]["taal"], "nl")
-        self.assertEqual(data["vertalingen"][0]["specifiekeTekst"], "")
+        self.assertEqual(data["vertalingen"][0]["tekst"], "")
         self.assertEqual(
             data["vertalingen"][0]["bewijs"], "bewijs dat tekst wordt aangemaakt"
         )
         self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][0]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureLink"], "")
         self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "")
-        self.assertEqual(data["vertalingen"][0]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][0]["titel"], "")
         self.assertEqual(data["vertalingen"][0]["uitersteTermijn"], "")
         self.assertEqual(data["vertalingen"][0]["vereisten"], "")
-        self.assertEqual(data["vertalingen"][0]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][0]["links"], [])
         self.assertEqual(data["vertalingen"][0]["wtdBijGeenReactie"], "")
         self.assertEqual(data["vertalingen"][0]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][0]["productValtOnderToelichting"], "")
 
         self.assertEqual(data["vertalingen"][1]["taal"], "en")
-        self.assertEqual(data["vertalingen"][1]["specifiekeTekst"], "")
+        self.assertEqual(data["vertalingen"][1]["tekst"], "")
         self.assertEqual(
             data["vertalingen"][1]["bewijs"], "proof that text gets created"
         )
         self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][1]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureLink"], "")
         self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "")
-        self.assertEqual(data["vertalingen"][1]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][1]["titel"], "")
         self.assertEqual(data["vertalingen"][1]["uitersteTermijn"], "")
         self.assertEqual(data["vertalingen"][1]["vereisten"], "")
-        self.assertEqual(data["vertalingen"][1]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][1]["links"], [])
         self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "")
         self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
@@ -392,16 +392,16 @@ class ProductenTests(APITestCase):
                 "vertalingen": [
                     {
                         "taal": "nl",
-                        "specifiekeTekst": "voorbeeld",
+                        "tekst": "voorbeeld",
                         "bewijs": "voorbeeld",
                         "bezwaarEnBeroep": "voorbeeld",
-                        "decentraleProcedureLink": "https://www.voorbeeld.nl",
+                        "procedureLink": "https://www.voorbeeld.nl",
                         "kostenEnBetaalmethoden": "voorbeeld",
                         "procedureBeschrijving": "voorbeeld",
-                        "productTitelDecentraal": "voorbeeld",
+                        "titel": "voorbeeld",
                         "uitersteTermijn": "voorbeeld",
                         "vereisten": "voorbeeld",
-                        "verwijzingLinks": [
+                        "links": [
                             {"label": "Test", "url": "https://www.voorbeeld.nl"},
                             {"label": "Test2", "url": "https://www.voorbeeld2.nl"},
                         ],
@@ -411,16 +411,16 @@ class ProductenTests(APITestCase):
                     },
                     {
                         "taal": "en",
-                        "specifiekeTekst": "example",
+                        "tekst": "example",
                         "bewijs": "example",
                         "bezwaarEnBeroep": "example",
-                        "decentraleProcedureLink": "https://www.example.com",
+                        "procedureLink": "https://www.example.com",
                         "kostenEnBetaalmethoden": "example",
                         "procedureBeschrijving": "example",
-                        "productTitelDecentraal": "example",
+                        "titel": "example",
                         "uitersteTermijn": "example",
                         "vereisten": "example",
-                        "verwijzingLinks": [
+                        "links": [
                             {"label": "Test", "url": "https://www.example.com"},
                             {"label": "Test2", "url": "https://www.example2.com"},
                         ],
@@ -459,20 +459,20 @@ class ProductenTests(APITestCase):
         )
         self.assertEqual(data["locaties"], [])
         self.assertEqual(data["vertalingen"][0]["taal"], "nl")
-        self.assertEqual(data["vertalingen"][0]["specifiekeTekst"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["tekst"], "voorbeeld")
         self.assertEqual(data["vertalingen"][0]["bewijs"], "voorbeeld")
         self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "voorbeeld")
         self.assertEqual(
-            data["vertalingen"][0]["decentraleProcedureLink"],
+            data["vertalingen"][0]["procedureLink"],
             "https://www.voorbeeld.nl",
         )
         self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "voorbeeld")
         self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "voorbeeld")
-        self.assertEqual(data["vertalingen"][0]["productTitelDecentraal"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["titel"], "voorbeeld")
         self.assertEqual(data["vertalingen"][0]["uitersteTermijn"], "voorbeeld")
         self.assertEqual(data["vertalingen"][0]["vereisten"], "voorbeeld")
         self.assertEqual(
-            data["vertalingen"][0]["verwijzingLinks"],
+            data["vertalingen"][0]["links"],
             [
                 {"label": "Test", "url": "https://www.voorbeeld.nl"},
                 {"label": "Test2", "url": "https://www.voorbeeld2.nl"},
@@ -483,19 +483,19 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][0]["productValtOnderToelichting"], "")
 
         self.assertEqual(data["vertalingen"][1]["taal"], "en")
-        self.assertEqual(data["vertalingen"][1]["specifiekeTekst"], "example")
+        self.assertEqual(data["vertalingen"][1]["tekst"], "example")
         self.assertEqual(data["vertalingen"][1]["bewijs"], "example")
         self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "example")
         self.assertEqual(
-            data["vertalingen"][1]["decentraleProcedureLink"], "https://www.example.com"
+            data["vertalingen"][1]["procedureLink"], "https://www.example.com"
         )
         self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "example")
         self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "example")
-        self.assertEqual(data["vertalingen"][1]["productTitelDecentraal"], "example")
+        self.assertEqual(data["vertalingen"][1]["titel"], "example")
         self.assertEqual(data["vertalingen"][1]["uitersteTermijn"], "example")
         self.assertEqual(data["vertalingen"][1]["vereisten"], "example")
         self.assertEqual(
-            data["vertalingen"][1]["verwijzingLinks"],
+            data["vertalingen"][1]["links"],
             [
                 {"label": "Test", "url": "https://www.example.com"},
                 {"label": "Test2", "url": "https://www.example2.com"},
@@ -515,16 +515,16 @@ class ProductenTests(APITestCase):
                 "vertalingen": [
                     {
                         "taal": "nl",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "",
@@ -585,32 +585,32 @@ class ProductenTests(APITestCase):
                 "vertalingen": [
                     {
                         "taal": "nl",
-                        "specifiekeTekst": "generieke tekst om te kijken of hij update",
+                        "tekst": "generieke tekst om te kijken of hij update",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "",
                     },
                     {
                         "taal": "en",
-                        "specifiekeTekst": "generic text to see if it updates",
+                        "tekst": "generic text to see if it updates",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "",
@@ -649,36 +649,36 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["locaties"], [])
         self.assertEqual(data["vertalingen"][0]["taal"], "nl")
         self.assertEqual(
-            data["vertalingen"][0]["specifiekeTekst"],
+            data["vertalingen"][0]["tekst"],
             "generieke tekst om te kijken of hij update",
         )
         self.assertEqual(data["vertalingen"][0]["bewijs"], "")
         self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][0]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureLink"], "")
         self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "")
-        self.assertEqual(data["vertalingen"][0]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][0]["titel"], "")
         self.assertEqual(data["vertalingen"][0]["uitersteTermijn"], "")
         self.assertEqual(data["vertalingen"][0]["vereisten"], "")
-        self.assertEqual(data["vertalingen"][0]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][0]["links"], [])
         self.assertEqual(data["vertalingen"][0]["wtdBijGeenReactie"], "")
         self.assertEqual(data["vertalingen"][0]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][0]["productValtOnderToelichting"], "")
 
         self.assertEqual(data["vertalingen"][1]["taal"], "en")
         self.assertEqual(
-            data["vertalingen"][1]["specifiekeTekst"],
+            data["vertalingen"][1]["tekst"],
             "generic text to see if it updates",
         )
         self.assertEqual(data["vertalingen"][1]["bewijs"], "")
         self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][1]["decentraleProcedureLink"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureLink"], "")
         self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "")
-        self.assertEqual(data["vertalingen"][1]["productTitelDecentraal"], "")
+        self.assertEqual(data["vertalingen"][1]["titel"], "")
         self.assertEqual(data["vertalingen"][1]["uitersteTermijn"], "")
         self.assertEqual(data["vertalingen"][1]["vereisten"], "")
-        self.assertEqual(data["vertalingen"][1]["verwijzingLinks"], [])
+        self.assertEqual(data["vertalingen"][1]["links"], [])
         self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "")
         self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
@@ -755,32 +755,32 @@ class ProductenTests(APITestCase):
                 "vertalingen": [
                     {
                         "taal": "nl",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "Tekst",
                         "productValtOnderToelichting": "",
                     },
                     {
                         "taal": "en",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "Text",
                         "productValtOnderToelichting": "",
@@ -841,32 +841,32 @@ class ProductenTests(APITestCase):
                 "vertalingen": [
                     {
                         "taal": "nl",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "Tekst",
                     },
                     {
                         "taal": "en",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "Text",
@@ -907,32 +907,32 @@ class ProductenTests(APITestCase):
                 "vertalingen": [
                     {
                         "taal": "nl",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "Tekst",
                     },
                     {
                         "taal": "en",
-                        "specifiekeTekst": "",
+                        "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "decentraleProcedureLink": "",
+                        "procedureLink": "",
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
-                        "productTitelDecentraal": "",
+                        "titel": "",
                         "uitersteTermijn": "",
                         "vereisten": "",
-                        "verwijzingLinks": [],
+                        "links": [],
                         "wtdBijGeenReactie": "",
                         "productAanwezigToelichting": "",
                         "productValtOnderToelichting": "Text",
