@@ -13,7 +13,7 @@ from sdg.organisaties.tests.factories.overheid import (
 )
 
 
-@override_settings(WHITELISTING_ENABLED=False)
+@override_settings(SDG_API_WHITELISTING_ENABLED=False)
 class LocationPermissieTest(APITestCase):
     def test_api_call_of_safe_method_without_token(self):
         organisatie = OverheidsorganisatieFactory.create(
@@ -93,7 +93,7 @@ class LocationPermissieTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    @override_settings(WHITELISTING_ENABLED=True)
+    @override_settings(SDG_API_WHITELISTING_ENABLED=True)
     def test_api_white_list_with_correct_ip(self):
         organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="http://standaarden.overheid.nl/owms/terms/test",
@@ -125,7 +125,7 @@ class LocationPermissieTest(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    @override_settings(WHITELISTING_ENABLED=True)
+    @override_settings(SDG_API_WHITELISTING_ENABLED=True)
     def test_api_white_list_with_incorrect_ip(self):
         organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="http://standaarden.overheid.nl/owms/terms/test",

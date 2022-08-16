@@ -14,7 +14,7 @@ from sdg.organisaties.tests.factories.overheid import (
 )
 
 
-@override_settings(WHITELISTING_ENABLED=False)
+@override_settings(SDG_API_WHITELISTING_ENABLED=False)
 class LocatiesTests(APITestCase):
     def test_list_locations(self):
         LocatieFactory.create_batch(2)
