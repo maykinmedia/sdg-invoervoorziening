@@ -16,7 +16,7 @@ from sdg.organisaties.tests.factories.overheid import (
     LocatieFactory,
     LokaleOverheidFactory,
 )
-from sdg.producten.tests.constants import NOW_DATE, PAST_DATE
+from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.localized import LocalizedProductFactory
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,
@@ -379,6 +379,129 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][1]["vereisten"], "")
         self.assertEqual(data["vertalingen"][1]["verwijzingLinks"], [])
         self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "")
+        self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
+        self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
+        self.assertEqual(data["gerelateerdeProducten"], [])
+
+    def test_update_product_with_filled_in_translations(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body(
+            {
+                "publicatieDatum": str(NOW_DATE),
+                "vertalingen": [
+                    {
+                        "taal": "nl",
+                        "specifiekeTekst": "voorbeeld",
+                        "bewijs": "voorbeeld",
+                        "bezwaarEnBeroep": "voorbeeld",
+                        "decentraleProcedureLink": "https://www.voorbeeld.nl",
+                        "kostenEnBetaalmethoden": "voorbeeld",
+                        "procedureBeschrijving": "voorbeeld",
+                        "productTitelDecentraal": "voorbeeld",
+                        "uitersteTermijn": "voorbeeld",
+                        "vereisten": "voorbeeld",
+                        "verwijzingLinks": [
+                            {"label": "Test", "url": "https://www.voorbeeld.nl"},
+                            {"label": "Test2", "url": "https://www.voorbeeld2.nl"},
+                        ],
+                        "wtdBijGeenReactie": "voorbeeld",
+                        "productAanwezigToelichting": "",
+                        "productValtOnderToelichting": "",
+                    },
+                    {
+                        "taal": "en",
+                        "specifiekeTekst": "example",
+                        "bewijs": "example",
+                        "bezwaarEnBeroep": "example",
+                        "decentraleProcedureLink": "https://www.example.com",
+                        "kostenEnBetaalmethoden": "example",
+                        "procedureBeschrijving": "example",
+                        "productTitelDecentraal": "example",
+                        "uitersteTermijn": "example",
+                        "vereisten": "example",
+                        "verwijzingLinks": [
+                            {"label": "Test", "url": "https://www.example.com"},
+                            {"label": "Test2", "url": "https://www.example2.com"},
+                        ],
+                        "wtdBijGeenReactie": "example",
+                        "productAanwezigToelichting": "",
+                        "productValtOnderToelichting": "",
+                    },
+                ],
+            }
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data = response.json()
+
+        self.assertEqual(str(self.generiek_product.upn_label), data["upnLabel"])
+        self.assertEqual(self.generiek_product.upn_uri, data["upnUri"])
+        self.assertEqual(data["publicatieDatum"], str(NOW_DATE))
+        self.assertEqual(data["productAanwezig"], 1)
+        self.assertEqual(data["productValtOnder"], None)
+        self.assertEqual(
+            data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
+        )
+        self.assertEqual(
+            data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
+            "https://www.organisatie.com",
+        )
+        self.assertEqual(data["locaties"], [])
+        self.assertEqual(data["vertalingen"][0]["taal"], "nl")
+        self.assertEqual(data["vertalingen"][0]["specifiekeTekst"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["bewijs"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "voorbeeld")
+        self.assertEqual(
+            data["vertalingen"][0]["decentraleProcedureLink"],
+            "https://www.voorbeeld.nl",
+        )
+        self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["productTitelDecentraal"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["uitersteTermijn"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["vereisten"], "voorbeeld")
+        self.assertEqual(
+            data["vertalingen"][0]["verwijzingLinks"],
+            [
+                {"label": "Test", "url": "https://www.voorbeeld.nl"},
+                {"label": "Test2", "url": "https://www.voorbeeld2.nl"},
+            ],
+        )
+        self.assertEqual(data["vertalingen"][0]["wtdBijGeenReactie"], "voorbeeld")
+        self.assertEqual(data["vertalingen"][0]["productAanwezigToelichting"], "")
+        self.assertEqual(data["vertalingen"][0]["productValtOnderToelichting"], "")
+
+        self.assertEqual(data["vertalingen"][1]["taal"], "en")
+        self.assertEqual(data["vertalingen"][1]["specifiekeTekst"], "example")
+        self.assertEqual(data["vertalingen"][1]["bewijs"], "example")
+        self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "example")
+        self.assertEqual(
+            data["vertalingen"][1]["decentraleProcedureLink"], "https://www.example.com"
+        )
+        self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "example")
+        self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "example")
+        self.assertEqual(data["vertalingen"][1]["productTitelDecentraal"], "example")
+        self.assertEqual(data["vertalingen"][1]["uitersteTermijn"], "example")
+        self.assertEqual(data["vertalingen"][1]["vereisten"], "example")
+        self.assertEqual(
+            data["vertalingen"][1]["verwijzingLinks"],
+            [
+                {"label": "Test", "url": "https://www.example.com"},
+                {"label": "Test2", "url": "https://www.example2.com"},
+            ],
+        )
+        self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "example")
         self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
         self.assertEqual(data["gerelateerdeProducten"], [])
