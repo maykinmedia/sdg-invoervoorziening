@@ -9,7 +9,7 @@ from sdg.api.models import Token
 
 
 def get_client_ip(request):
-    real_ip = request.META.get(settings.REAL_USER_IP)
+    real_ip = request.META.get(settings.CLIENT_IP_HTTP_HEADER)
     if real_ip:
         ip = real_ip
     else:
@@ -72,7 +72,7 @@ class WhitelistedPermission(BasePermission):
         if view.action in ["list", "retrieve", "option"]:
             return True
 
-        if settings.WHITELISTING_ENABLED:
+        if settings.SDG_API_WHITELISTING_ENABLED:
             user_ip = get_client_ip(request)
             whitelisted_ips = request.auth.whitelisted_ips
 

@@ -29,7 +29,7 @@ from sdg.producten.tests.factories.product import (
 )
 
 
-@override_settings(WHITELISTING_ENABLED=False)
+@override_settings(SDG_API_WHITELISTING_ENABLED=False)
 class ProductenTests(APITestCase):
     def get_product_post_body(self, overrides):
         new_body = self.body
