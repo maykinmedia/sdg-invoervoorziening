@@ -19,6 +19,6 @@ class TokenAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        if settings.WHITELISTING_ENABLED:
+        if settings.SDG_API_WHITELISTING_ENABLED:
             form.base_fields["whitelisted_ips"].required = True
         return form

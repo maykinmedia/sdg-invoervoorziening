@@ -1,13 +1,14 @@
 import json
 from datetime import timedelta
 
+from django.test import override_settings
+
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from sdg.api.tests.factories.token import TokenAuthorizationFactory
-from sdg.core.models.logius import Overheidsorganisatie
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import (
     OverheidsorganisatieFactory,
@@ -25,11 +26,11 @@ from sdg.producten.tests.factories.localized import (
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,
     ProductVersieFactory,
-    ReferentieProductFactory,
     SpecifiekProductFactory,
 )
 
 
+@override_settings(SDG_API_WHITELISTING_ENABLED=False)
 class ProductenVersieTest(APITestCase):
     def get_product_post_body(self, overrides):
         new_body = self.body
