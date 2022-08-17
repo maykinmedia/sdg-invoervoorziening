@@ -493,6 +493,8 @@ class ProductSerializer(ProductBaseSerializer):
                     "Received a non existing 'owms identifier'"
                 )
 
+        return None
+
     def get_version_number(self, previous_date, new_date, version):
         if not previous_date:
             return version
@@ -579,6 +581,9 @@ class ProductSerializer(ProductBaseSerializer):
                 verantwoordelijke_organisatie
             )
 
+        if bevoegde_organisatie:
+            bevoegde_organisatie = self.get_bevoegde_organisatie(bevoegde_organisatie)
+
         if not catalogus:
             validated_data["catalogus"] = self.get_default_catalogus(
                 verantwoordelijke_organisatie
@@ -599,10 +604,7 @@ class ProductSerializer(ProductBaseSerializer):
                 )
 
         if bevoegde_organisatie:
-            if "organisatie" in bevoegde_organisatie:
-                validated_data["bevoegde_organisatie"] = self.get_bevoegde_organisatie(
-                    bevoegde_organisatie
-                )
+            validated_data["bevoegde_organisatie"] = bevoegde_organisatie
         else:
             validated_data["bevoegde_organisatie"] = BevoegdeOrganisatie.objects.get(
                 lokale_overheid=verantwoordelijke_organisatie
