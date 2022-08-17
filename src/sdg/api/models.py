@@ -1,7 +1,8 @@
+from django.core.validators import validate_ipv4_address
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from sdg.organisaties.models import LokaleOverheid
+from sdg.core.db.fields import DynamicArrayField
 
 
 class Token(models.Model):
@@ -53,6 +54,14 @@ class Token(models.Model):
         _("aangepast"),
         auto_now=True,
         help_text=_("Wanneer het token voor het laatst is gewijzigd."),
+    )
+
+    whitelisted_ips = DynamicArrayField(
+        models.CharField(max_length=15),
+        validators=[validate_ipv4_address],
+        help_text=_("Whitelisted IP adressen van deze token."),
+        blank=True,
+        default=list,
     )
 
     class Meta:

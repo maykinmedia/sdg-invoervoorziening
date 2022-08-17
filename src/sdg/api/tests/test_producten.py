@@ -1,5 +1,7 @@
 import json
 
+from django.test import override_settings
+
 from freezegun import freeze_time
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -27,6 +29,7 @@ from sdg.producten.tests.factories.product import (
 )
 
 
+@override_settings(SDG_API_WHITELISTING_ENABLED=False)
 class ProductenTests(APITestCase):
     def get_product_post_body(self, overrides):
         new_body = self.body

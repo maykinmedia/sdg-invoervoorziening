@@ -1,3 +1,5 @@
+from django.test import override_settings
+
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
@@ -8,6 +10,7 @@ from sdg.organisaties.tests.factories.overheid import (
 )
 
 
+@override_settings(SDG_API_WHITELISTING_ENABLED=False)
 class OrganisatiesTests(APITestCase):
     def test_list_organizations(self):
         LokaleOverheidFactory.create_batch(2)
@@ -54,6 +57,7 @@ class OrganisatiesTests(APITestCase):
         )
 
 
+@override_settings(SDG_API_WHITELISTING_ENABLED=False)
 class LocatiesTests(APITestCase):
     def test_list_locations(self):
         LocatieFactory.create_batch(2)
