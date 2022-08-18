@@ -57,8 +57,10 @@ class Token(models.Model):
     )
 
     whitelisted_ips = DynamicArrayField(
-        models.CharField(max_length=15),
-        validators=[validate_ipv4_address],
+        models.CharField(
+            max_length=15,
+            validators=[validate_ipv4_address],
+        ),
         help_text=_("Whitelisted IP adressen van deze token."),
         blank=True,
         default=list,

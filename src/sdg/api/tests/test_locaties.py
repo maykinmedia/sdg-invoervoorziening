@@ -37,7 +37,9 @@ class LocatiesTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(str(locatie.uuid), data["uuid"])
+        self.assertEqual(
+            f"http://testserver/api/v1/locaties/{str(locatie.uuid)}", data["url"]
+        )
 
     def test_create_location_with_valid_label(self):
         organisatie = OverheidsorganisatieFactory.create(
@@ -329,7 +331,9 @@ class LocatiesTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(str(locatie.uuid), data["uuid"])
+        self.assertEqual(
+            f"http://testserver/api/v1/locaties/{str(locatie.uuid)}", data["url"]
+        )
         self.assertEqual(data["naam"], "Lorem Ipsum")
         self.assertEqual(data["straat"], "Lorem Ipsum")
         self.assertEqual(data["nummer"], "12")
@@ -397,7 +401,9 @@ class LocatiesTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(str(locatie.uuid), data["uuid"])
+        self.assertEqual(
+            f"http://testserver/api/v1/locaties/{str(locatie.uuid)}", data["url"]
+        )
         self.assertEqual(data["naam"], "Lorem Ipsum")
         self.assertEqual(data["straat"], "Lorem Ipsum")
         self.assertEqual(data["nummer"], "12")

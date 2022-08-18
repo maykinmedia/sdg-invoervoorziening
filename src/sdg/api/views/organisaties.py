@@ -56,10 +56,7 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for a municipality, retrieved by UUID"""
 
     lookup_field = "uuid"
-    queryset = LokaleOverheid.objects.select_related(
-        "ondersteunings_organisatie",
-        "organisatie",
-    ).prefetch_related(
+    queryset = LokaleOverheid.objects.select_related("organisatie",).prefetch_related(
         "locaties",
         "catalogi",
         "bevoegde_organisaties",
@@ -110,7 +107,7 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
         parameters=[
             OpenApiParameter(
                 name="uuid",
-                description="De UUID van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                description="De UUID van de locatie die u wilt zien.",
                 required=True,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.PATH,
@@ -125,7 +122,7 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
         parameters=[
             OpenApiParameter(
                 name="uuid",
-                description="De UUID van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                description="De UUID van de locatie die u wilt bewerken.",
                 required=True,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.PATH,
@@ -137,7 +134,7 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
         parameters=[
             OpenApiParameter(
                 name="uuid",
-                description="De UUID van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                description="De UUID van de locatie die u wilt bewerken.",
                 required=True,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.PATH,
@@ -149,7 +146,7 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
         parameters=[
             OpenApiParameter(
                 name="uuid",
-                description="De UUID van een organisatie om aan te geven van welke organisatie u de locaties wilt zien.",
+                description="De UUID van de locatie die u wilt verwijderen.",
                 required=True,
                 type=OpenApiTypes.UUID,
                 location=OpenApiParameter.PATH,
