@@ -213,14 +213,12 @@ class ProductenTests(APITestCase):
         )
 
         self.body = {
-            "upnLabel": self.generiek_product.upn.upn_label,
             "upnUri": self.generiek_product.upn.upn_uri,
             "publicatieDatum": None,
             "productAanwezig": 1,
             "productValtOnder": None,
             "doelgroep": "eu-burger",
             "verantwoordelijkeOrganisatie": {
-                "owmsPrefLabel": "organisatie",
                 "owmsIdentifier": "https://www.organisatie.com",
             },
             "bevoegdeOrganisatie": None,
@@ -337,14 +335,10 @@ class ProductenTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(str(self.generiek_product.upn_label), data["upnLabel"])
         self.assertEqual(self.generiek_product.upn_uri, data["upnUri"])
         self.assertEqual(data["publicatieDatum"], str(NOW_DATE))
         self.assertEqual(data["productAanwezig"], 1)
         self.assertEqual(data["productValtOnder"], None)
-        self.assertEqual(
-            data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
-        )
         self.assertEqual(
             data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
             "https://www.organisatie.com",
@@ -446,14 +440,10 @@ class ProductenTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(str(self.generiek_product.upn_label), data["upnLabel"])
         self.assertEqual(self.generiek_product.upn_uri, data["upnUri"])
         self.assertEqual(data["publicatieDatum"], str(NOW_DATE))
         self.assertEqual(data["productAanwezig"], 1)
         self.assertEqual(data["productValtOnder"], None)
-        self.assertEqual(
-            data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
-        )
         self.assertEqual(
             data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
             "https://www.organisatie.com",
@@ -634,14 +624,10 @@ class ProductenTests(APITestCase):
 
         self.assertEqual(data["versie"], 1)
 
-        self.assertEqual(str(self.generiek_product.upn_label), data["upnLabel"])
         self.assertEqual(self.generiek_product.upn_uri, data["upnUri"])
         self.assertEqual(data["publicatieDatum"], str(NOW_DATE))
         self.assertEqual(data["productAanwezig"], 1)
         self.assertEqual(data["productValtOnder"], None)
-        self.assertEqual(
-            data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
-        )
         self.assertEqual(
             data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
             "https://www.organisatie.com",
@@ -683,32 +669,10 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
 
-    def test_update_product_with_upn_pref_label(self):
-        list_url = reverse("api:product-list")
-
-        body = self.body
-        body.pop("upnUri")
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
-
-        create_response = self.client.post(
-            list_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-
-        create_data = create_response.json()
-        self.assertEqual(create_data["upnLabel"], "setup")
-        self.assertEqual(create_data["upnUri"], "https://www.setup.com")
-
     def test_update_product_with_upn_uri(self):
         list_url = reverse("api:product-list")
 
         body = self.get_product_post_body({"publicatieDatum": None})
-        body.pop("upnUri")
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
 
@@ -722,7 +686,6 @@ class ProductenTests(APITestCase):
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
 
         create_data = create_response.json()
-        self.assertEqual(create_data["upnLabel"], "setup")
         self.assertEqual(create_data["upnUri"], "https://www.setup.com")
 
     def test_update_product_without_upn(self):
@@ -731,7 +694,6 @@ class ProductenTests(APITestCase):
         body = self.get_product_post_body({"publicatieDatum": str(NOW_DATE)})
 
         body = self.body
-        body.pop("upnLabel")
         body.pop("upnUri")
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
@@ -828,72 +790,6 @@ class ProductenTests(APITestCase):
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_update_product_with_product_valt_onder_label_with_toelichting(self):
-        list_url = reverse("api:product-list")
-
-        body = self.get_product_post_body(
-            {
-                "productValtOnder": {
-                    "upnLabel": self.second_test_product.generiek_product.upn.upn_label,
-                },
-                "vertalingen": [
-                    {
-                        "taal": "nl",
-                        "tekst": "",
-                        "bewijs": "",
-                        "bezwaarEnBeroep": "",
-                        "procedureLink": "",
-                        "kostenEnBetaalmethoden": "",
-                        "procedureBeschrijving": "",
-                        "titel": "",
-                        "uitersteTermijn": "",
-                        "vereisten": "",
-                        "links": [],
-                        "wtdBijGeenReactie": "",
-                        "productAanwezigToelichting": "",
-                        "productValtOnderToelichting": "Tekst",
-                    },
-                    {
-                        "taal": "en",
-                        "tekst": "",
-                        "bewijs": "",
-                        "bezwaarEnBeroep": "",
-                        "procedureLink": "",
-                        "kostenEnBetaalmethoden": "",
-                        "procedureBeschrijving": "",
-                        "titel": "",
-                        "uitersteTermijn": "",
-                        "vereisten": "",
-                        "links": [],
-                        "wtdBijGeenReactie": "",
-                        "productAanwezigToelichting": "",
-                        "productValtOnderToelichting": "Text",
-                    },
-                ],
-            }
-        )
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
-
-        create_response = self.client.post(
-            list_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-
-        create_data = create_response.json()
-
-        self.assertTrue(create_data["productValtOnder"])
-        self.assertEqual(
-            create_data["vertalingen"][0]["productValtOnderToelichting"], "Tekst"
-        )
-        self.assertEqual(
-            create_data["vertalingen"][1]["productValtOnderToelichting"], "Text"
-        )
 
     def test_update_product_with_product_valt_onder_uri_with_toelichting(self):
         list_url = reverse("api:product-list")
@@ -993,7 +889,6 @@ class ProductenTests(APITestCase):
         body = self.get_product_post_body(
             {
                 "productValtOnder": {
-                    "upnLabel": second_product.generiek_product.upn.upn_label,
                     "upnUri": second_product.generiek_product.upn.upn_uri,
                 },
             }
@@ -1006,38 +901,6 @@ class ProductenTests(APITestCase):
         )
 
         self.assertEqual(create_response.status_code, status.HTTP_401_UNAUTHORIZED)
-
-    def test_update_product_with_verantwoordelijke_organisatie_pref_label(self):
-        list_url = reverse("api:product-list")
-
-        body = self.get_product_post_body(
-            {
-                "verantwoordelijkeOrganisatie": {
-                    "owmsPrefLabel": "organisatie",
-                }
-            }
-        )
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
-
-        create_response = self.client.post(
-            list_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-
-        create_data = create_response.json()
-
-        self.assertEqual(
-            create_data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
-        )
-        self.assertEqual(
-            create_data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
-            "https://www.organisatie.com",
-        )
 
     def test_update_product_with_verantwoordelijke_organisatie_identifier(self):
         list_url = reverse("api:product-list")
@@ -1064,9 +927,6 @@ class ProductenTests(APITestCase):
         create_data = create_response.json()
 
         self.assertEqual(
-            create_data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "organisatie"
-        )
-        self.assertEqual(
             create_data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
             "https://www.organisatie.com",
         )
@@ -1077,7 +937,6 @@ class ProductenTests(APITestCase):
         body = self.get_product_post_body(
             {
                 "verantwoordelijkeOrganisatie": {
-                    "owmsPrefLabel": "set up",
                     "owmsIdentifier": "https://www.setup.com",
                 }
             }
@@ -1096,9 +955,6 @@ class ProductenTests(APITestCase):
 
         create_data = create_response.json()
 
-        self.assertEqual(
-            create_data["verantwoordelijkeOrganisatie"]["owmsPrefLabel"], "set up"
-        )
         self.assertEqual(
             create_data["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
             "https://www.setup.com",
@@ -1132,41 +988,6 @@ class ProductenTests(APITestCase):
             create_data["bevoegdeOrganisatie"]["naam"],
             self.bevoegde_organisatie.naam,
         )
-        self.assertEqual(create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "set up")
-        self.assertEqual(
-            create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
-            "https://www.setup.com",
-        )
-
-    def test_update_product_with_bevoegde_organisatie_pref_label(self):
-        list_url = reverse("api:product-list")
-
-        body = self.get_product_post_body(
-            {
-                "bevoegdeOrganisatie": {
-                    "owmsPrefLabel": self.organisatie.owms_pref_label,
-                }
-            }
-        )
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
-
-        create_response = self.client.post(
-            list_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-
-        create_data = create_response.json()
-
-        self.assertEqual(
-            create_data["bevoegdeOrganisatie"]["naam"],
-            self.bevoegde_organisatie.naam,
-        )
-        self.assertEqual(create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "set up")
         self.assertEqual(
             create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
             "https://www.setup.com",
@@ -1200,7 +1021,6 @@ class ProductenTests(APITestCase):
             create_data["bevoegdeOrganisatie"]["naam"],
             self.bevoegde_organisatie.naam,
         )
-        self.assertEqual(create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "set up")
         self.assertEqual(
             create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
             "https://www.setup.com",

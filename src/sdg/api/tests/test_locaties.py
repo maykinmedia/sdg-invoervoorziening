@@ -41,54 +41,6 @@ class LocatiesTests(APITestCase):
             f"http://testserver/api/v1/locaties/{str(locatie.uuid)}", data["url"]
         )
 
-    def test_create_location_with_valid_label(self):
-        organisatie = OverheidsorganisatieFactory.create(
-            owms_identifier="http://standaarden.overheid.nl/owms/terms/test",
-            owms_pref_label="test",
-            owms_end_date=None,
-        )
-        lokale_overheid = LokaleOverheidFactory.create(organisatie=organisatie)
-        LocatieFactory.create(lokale_overheid=lokale_overheid)
-        token_authorization = TokenAuthorizationFactory.create(
-            lokale_overheid=lokale_overheid
-        )
-
-        detail_url = reverse("api:locatie-list")
-
-        body = {
-            "naam": "Lorem Ipsum",
-            "straat": "Lorem Ipsum",
-            "nummer": "12",
-            "postcode": "1234AB",
-            "plaats": "Lorem Ipsum",
-            "land": "Lorem Ipsum",
-            "openingstijden": {
-                "maandag": ["12:00 - 18:00"],
-                "dinsdag": ["12:00 - 18:00"],
-                "woensdag": ["12:00 - 18:00"],
-                "donderdag": ["12:00 - 18:00"],
-                "vrijdag": ["12:00 - 18:00"],
-                "zaterdag": ["12:00 - 18:00"],
-                "zondag": ["12:00 - 18:00"],
-            },
-            "openingstijdenOpmerking": "Lorem Ipsum",
-            "organisatie": {
-                "owmsPrefLabel": organisatie.owms_pref_label,
-                "owmsEndDate": organisatie.owms_end_date,
-            },
-        }
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {token_authorization.token}"}
-
-        response = self.client.post(
-            detail_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
     def test_create_location_with_valid_identifier(self):
         organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="http://standaarden.overheid.nl/owms/terms/test",

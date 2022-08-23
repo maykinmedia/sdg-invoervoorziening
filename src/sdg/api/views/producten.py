@@ -14,8 +14,8 @@ from sdg.producten.models import Product, ProductVersie
     list=extend_schema(
         description="""Lijst van alle (actieve versies van de) producten. Om een enkel product op te halen uit deze lijst kunt u filteren op:
 
-* `upnLabel` of `upnUri`
-* `verantwoordelijkeOrganisatie.owmsIdentifier` of `verantwoordelijkeOrganisatie.owmsPrefLabel`
+* `upnUri`
+* `verantwoordelijkeOrganisatie.owmsIdentifier`
 * `doelgroep`
 
 Deze gegevens tezamen vormen de unieke sleutel van een product.""",
@@ -137,8 +137,8 @@ Opties: `en` of `nl`""",
         description="""Maak een nieuwe productversie aan. Om de productversie correct aan te maken, moet u minimaal
 opgeven:
 
-* `upnLabel` of `upnUri`
-* `verantwoordelijkeOrganisatie.owmsIdentifier` of `verantwoordelijkeOrganisatie.owmsPrefLabel`
+* `upnUri`
+* `verantwoordelijkeOrganisatie.owmsIdentifier`
 * `doelgroep`
 
 Deze gegevens tezamen vormen de unieke sleutel van een product.
