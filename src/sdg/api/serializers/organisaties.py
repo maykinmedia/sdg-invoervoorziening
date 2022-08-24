@@ -239,7 +239,7 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
         help_text="De bevoegde organisaties. In de lijst van bevoegde organisaties staat minimaal altijd de verantwoordelijke organisatie.",
     )
     ondersteunings_organisatie = OverheidsorganisatieSerializer(
-        help_text="De ondersteunende organisatie."
+        help_text="De ondersteunende organisatie.",
     )
     locaties = LocatieBaseSerializer(
         many=True,
@@ -275,3 +275,14 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
                 "help_text": "Lijst van catalogi die deze organisatie gebruikt.",
             },
         }
+
+
+class LokaleOverheidUpdateSerializer(LokaleOverheidBaseSerializer):
+    class Meta:
+        model = LokaleOverheid
+        fields = (
+            "contact_website",
+            "contact_emailadres",
+            "contact_telefoonnummer",
+            "contact_formulier_link",
+        )
