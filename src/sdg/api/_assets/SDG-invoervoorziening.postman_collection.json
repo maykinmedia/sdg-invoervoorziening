@@ -45,6 +45,41 @@
 			"response": []
 		},
 		{
+			"name": "Update organisatie",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Token {{token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"contactWebsite\": \"\",\n    \"contactEmailadres\": \"\",\n    \"contactTelefoonnummer\": \"\",\n    \"contactFormulierLink\": \"\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_path}}/api/v1/organisaties/",
+					"host": [
+						"{{base_path}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"organisaties",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Retrieve all locations",
 			"request": {
 				"method": "GET",

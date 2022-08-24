@@ -1,6 +1,6 @@
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from rest_framework import mixins, viewsets
+from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
 from sdg.api.filters import ProductFilterSet

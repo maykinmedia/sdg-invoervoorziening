@@ -1,11 +1,15 @@
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
+from rest_framework.viewsets import GenericViewSet
 
 from sdg.api.filters import LocatieFilterSet, LokaleOverheidFilterSet
 from sdg.api.permissions import OrganizationPermissions, WhitelistedPermission
 from sdg.api.serializers import LokaleOverheidSerializer
-from sdg.api.serializers.organisaties import LocatieSerializer
+from sdg.api.serializers.organisaties import (
+    LocatieSerializer,
+    LokaleOverheidUpdateSerializer,
+)
 from sdg.core.models.logius import Overheidsorganisatie
 from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
 
@@ -51,8 +55,37 @@ from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
             )
         ],
     ),
+    update=extend_schema(
+        description="Update de organisatie contact informatie.",
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="De UUID van een organisatie die u wilt updaten.",
+                required=True,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            )
+        ],
+    ),
+    partial_update=extend_schema(
+        description="Update de organisatie contact informatie.",
+        parameters=[
+            OpenApiParameter(
+                name="uuid",
+                description="De UUID van een organisatie die u wilt updaten.",
+                required=True,
+                type=OpenApiTypes.UUID,
+                location=OpenApiParameter.PATH,
+            )
+        ],
+    ),
 )
-class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
+class LokaleOverheidViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    GenericViewSet,
+):
     """Viewset for a municipality, retrieved by UUID"""
 
     lookup_field = "uuid"
@@ -65,7 +98,18 @@ class LokaleOverheidViewSet(viewsets.ReadOnlyModelViewSet):
         "bevoegde_organisaties",
     )
     filterset_class = LokaleOverheidFilterSet
-    serializer_class = LokaleOverheidSerializer
+    permission_classes = [OrganizationPermissions, WhitelistedPermission]
+
+    def get_serializer_class(self):
+        if self.request.method in ["PUT", "PATCH"]:
+            return LokaleOverheidUpdateSerializer
+        return LokaleOverheidSerializer
+
+    def get_organisatie(self, request, view, obj=None):
+        if obj is None:
+            return None
+
+        return obj.organisatie
 
 
 @extend_schema_view(
