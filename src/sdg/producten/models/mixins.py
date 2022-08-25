@@ -1,5 +1,6 @@
-from typing import Any, List, Tuple
+from typing import List
 
+from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -13,18 +14,27 @@ class ProductFieldMixin(FieldConfigurationMixin):
         """Gets field specific information for products."""
         if isinstance(field, str):
             field = self._meta.get_field(field)
+            try:
+                language = self._meta.get_field("taal").value_from_object(self)
+            except FieldDoesNotExist:
+                language = "default"
 
-        return ProductFieldInfo(
-            name=field.name,
-            verbose_name=field.verbose_name,
-            value=field.value_from_object(self),
-            help_text=field.help_text,
-            type=field.get_internal_type(),
-            configuration=self.configuration.for_field(
-                prefix=self._meta.model_name,
+        if self.configuration and field:
+            localized_config = (
+                self.configuration[language].for_field(
+                    prefix=self._meta.model_name,
+                    name=field.name,
+                ),
+            )
+
+            return ProductFieldInfo(
                 name=field.name,
-            ),
-        )
+                verbose_name=field.verbose_name,
+                value=field.value_from_object(self),
+                help_text=field.help_text,
+                type=field.get_internal_type(),
+                configuration=localized_config[0],
+            )
 
     def get_fields(self, fields=None) -> List[ProductFieldInfo]:
         """Returns data for each field as a list of Field objects."""

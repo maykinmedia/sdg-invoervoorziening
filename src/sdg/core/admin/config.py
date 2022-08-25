@@ -4,21 +4,17 @@ from django.utils.translation import gettext_lazy as _
 from solo.admin import SingletonModelAdmin
 
 from sdg.core.models import ProductFieldConfiguration
+from sdg.core.models.localized_config import LocalizedProductFieldConfiguration
 
 
-@admin.register(ProductFieldConfiguration)
-class ProductFieldConfigurationAdmin(SingletonModelAdmin):
+class LocalizedProductFieldConfigurationInline(admin.StackedInline):
     fieldsets = [
         (
             _("Algemene gegevens"),
             {
+                "classes": ("collapse",),
                 "fields": [
-                    "product_product_aanwezig",
                     "localizedproduct_product_aanwezig_toelichting",
-                    "product_bevoegde_organisatie",
-                    "product_locaties",
-                    "productversie_publicatie_datum",
-                    "product_product_valt_onder",
                     "localizedproduct_product_valt_onder_toelichting",
                 ],
             },
@@ -26,6 +22,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
         (
             _("Generieke gegevens"),
             {
+                "classes": ("collapse",),
                 "fields": [
                     "localizedgeneriekproduct_product_titel",
                     "localizedgeneriekproduct_generieke_tekst",
@@ -39,6 +36,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
         (
             _("Specifieke gegevens"),
             {
+                "classes": ("collapse",),
                 "fields": [
                     "localizedproduct_product_titel_decentraal",
                     "localizedproduct_specifieke_tekst",
@@ -57,3 +55,31 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
             },
         ),
     ]
+
+    model = LocalizedProductFieldConfiguration
+    extra = 0
+    max_num = 0
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(ProductFieldConfiguration)
+class ProductFieldConfigurationAdmin(SingletonModelAdmin):
+    fieldsets = [
+        (
+            _("Algemene gegevens"),
+            {
+                "classes": ("collapse",),
+                "fields": [
+                    "product_product_aanwezig",
+                    "product_bevoegde_organisatie",
+                    "product_locaties",
+                    "productversie_publicatie_datum",
+                    "product_product_valt_onder",
+                ],
+            },
+        )
+    ]
+
+    inlines = (LocalizedProductFieldConfigurationInline,)
