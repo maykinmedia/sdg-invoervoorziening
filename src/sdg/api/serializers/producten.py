@@ -30,6 +30,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
     links = LabeledUrlListField(
         source="verwijzing_links",
         help_text="Dit zijn de verwijzing links voor burgers en ondernemers naar relevante organisatie informatie.",
+        required=False,
     )
 
     class Meta:
@@ -286,7 +287,6 @@ class ProductSerializer(ProductBaseSerializer):
             "locaties",
             "doelgroep",
             "vertalingen",
-            "gerelateerde_producten",
             "beschikbare_talen",
         )
         extra_kwargs = {

@@ -153,13 +153,6 @@ class Product(ProductFieldMixin, models.Model):
         verbose_name=_("catalogus"),
         help_text=_("De catalogus waartoe dit product behoort."),
     )
-    gerelateerde_producten = models.ManyToManyField(
-        "self",
-        related_name="gerelateerde_producten",
-        blank=True,
-        verbose_name=_("gerelateerd aan"),
-        help_text=_("Een verwijzing naar een gerelateerd product."),
-    )
     product_aanwezig = models.BooleanField(
         _("aanwezig"),
         help_text=_("Voert u dit product?"),

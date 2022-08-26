@@ -165,7 +165,6 @@ class ProductViewSet(
             "generiek_product__upn",
         )
         .prefetch_related(
-            "gerelateerde_producten",
             "locaties",
             "versies",
             "versies__vertalingen",

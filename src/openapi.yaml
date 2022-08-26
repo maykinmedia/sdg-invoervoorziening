@@ -587,9 +587,9 @@ components:
       - eu-burger
       - eu-bedrijf
       type: string
-    LabeledUrlListField:
+    LabeledUrl:
       type: object
-      description: Default field for a labeled URLs.
+      description: Default serializer for labeled URLs.
       properties:
         label:
           type: string
@@ -620,8 +620,9 @@ components:
             beschrijven en komt direct na de generieke productbeschrijving. Dit veld
             ondersteund Markdown.
         links:
-          allOf:
-          - $ref: '#/components/schemas/LabeledUrlListField'
+          type: array
+          items:
+            $ref: '#/components/schemas/LabeledUrl'
           description: Dit zijn de verwijzing links voor burgers en ondernemers naar
             relevante organisatie informatie.
         procedureBeschrijving:
@@ -678,7 +679,6 @@ components:
           description: Datum wanneer dit product voor het laatst is gewijzigd.
       required:
       - datumWijziging
-      - links
       - taal
     Locatie:
       type: object
@@ -1156,14 +1156,6 @@ components:
           items:
             $ref: '#/components/schemas/LocalizedProduct'
           description: Een lijst met specifieke teksten op basis van taal.
-        gerelateerdeProducten:
-          type: array
-          items:
-            type: string
-            format: uri
-            title: Gerelateerd aan
-          title: Gerelateerd aan
-          description: Een verwijzing naar een gerelateerd product.
         beschikbareTalen:
           type: array
           items: {}

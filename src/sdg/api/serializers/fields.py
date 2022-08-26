@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.utils.translation import gettext_lazy as _
 
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 
@@ -56,6 +57,7 @@ class LabeledUrlSerializer(serializers.Serializer):
         }
 
 
+@extend_schema_field(LabeledUrlSerializer(many=True))
 class LabeledUrlListField(LabeledUrlSerializer):
     """
     Default field for a labeled URLs.
