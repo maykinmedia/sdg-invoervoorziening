@@ -266,3 +266,14 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
                 "help_text": "Lijst van catalogi die deze organisatie gebruikt.",
             },
         }
+
+
+class LokaleOverheidUpdateSerializer(LokaleOverheidBaseSerializer):
+    class Meta:
+        model = LokaleOverheid
+        fields = (
+            "contact_website",
+            "contact_emailadres",
+            "contact_telefoonnummer",
+            "contact_formulier_link",
+        )

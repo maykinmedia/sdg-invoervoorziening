@@ -1,9 +1,12 @@
+import json
+
 from django.test import override_settings
 
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
+from sdg.api.tests.factories.token import TokenAuthorizationFactory
 from sdg.organisaties.tests.factories.overheid import (
     LocatieFactory,
     LokaleOverheidFactory,
@@ -50,6 +53,74 @@ class OrganisatiesTests(APITestCase):
             },
             data,
         )
+
+    def test_update_organization_with_valid_values(self):
+        municipality = LokaleOverheidFactory.create()
+        token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=municipality
+        )
+
+        detail_url = reverse("api:lokaleoverheid-detail", args=[municipality.uuid])
+        headers = {"HTTP_AUTHORIZATION": f"Token {token_authorization.token}"}
+        body = {
+            "contactWebsite": "https://test.com",
+            "contactEmailadres": "test@test.test",
+            "contactTelefoonnummer": "06123456789",
+            "contactFormulierLink": "https://www.test.com",
+        }
+
+        response = self.client.put(
+            detail_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()
+
+        self.assertEqual(
+            {
+                "contactWebsite": "https://test.com",
+                "contactEmailadres": "test@test.test",
+                "contactTelefoonnummer": "06123456789",
+                "contactFormulierLink": "https://www.test.com",
+            },
+            data,
+        )
+
+    def test_update_organization_with_invalid_values(self):
+        municipality = LokaleOverheidFactory.create()
+        token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=municipality
+        )
+
+        detail_url = reverse("api:lokaleoverheid-detail", args=[municipality.uuid])
+        headers = {"HTTP_AUTHORIZATION": f"Token {token_authorization.token}"}
+
+        body = {
+            "contactWebsite": "test",
+            "contactEmailadres": "test",
+            "contactTelefoonnummer": [],
+            "contactFormulierLink": "test",
+        }
+
+        response = self.client.put(
+            detail_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+        data = response.json()
+
+        self.assertEqual(data["contactWebsite"], ["Voer een geldige URL in."])
+        self.assertEqual(data["contactEmailadres"], ["Voer een geldig e-mailadres in."])
+        self.assertEqual(data["contactTelefoonnummer"], ["Not a valid string."])
+        self.assertEqual(data["contactFormulierLink"], ["Voer een geldige URL in."])
 
 
 @override_settings(SDG_API_WHITELISTING_ENABLED=False)

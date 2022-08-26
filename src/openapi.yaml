@@ -367,6 +367,60 @@ paths:
               schema:
                 $ref: '#/components/schemas/LokaleOverheid'
           description: ''
+    put:
+      operationId: organisatiesUpdate
+      description: Update de organisatie contact informatie.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een organisatie die u wilt updaten.
+        required: true
+      tags:
+      - organisaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LokaleOverheidUpdate'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LokaleOverheidUpdate'
+          description: ''
+    patch:
+      operationId: organisatiesPartialUpdate
+      description: Update de organisatie contact informatie.
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een organisatie die u wilt updaten.
+        required: true
+      tags:
+      - organisaties
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLokaleOverheidUpdate'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LokaleOverheidUpdate'
+          description: ''
   /api/v1/producten:
     get:
       operationId: productenList
@@ -880,6 +934,31 @@ components:
       required:
       - owmsEndDate
       - url
+    LokaleOverheidUpdate:
+      type: object
+      properties:
+        contactWebsite:
+          type: string
+          format: uri
+          description: Website van de organisatie.
+          maxLength: 200
+        contactEmailadres:
+          type: string
+          format: email
+          description: Het algemene e-mailadres van de organisatie of het e-mailadres
+            van het klantcontactcentrum van de organisatie.
+          maxLength: 254
+        contactTelefoonnummer:
+          type: string
+          description: 'Het internationale telefoonnummer waarop de organisatie bereikbaar
+            is. Bijvoorbeeld: +31 20 624 1111'
+          maxLength: 20
+        contactFormulierLink:
+          type: string
+          format: uri
+          title: Contact formulier
+          description: De webpagina van het contact formulier van de organisatie.
+          maxLength: 200
     Openingstijden:
       type: object
       description: Een lijst met de openings tijden van maandag tot en met zondag
@@ -1080,6 +1159,31 @@ components:
             worden.
         openingstijden:
           $ref: '#/components/schemas/Openingstijden'
+    PatchedLokaleOverheidUpdate:
+      type: object
+      properties:
+        contactWebsite:
+          type: string
+          format: uri
+          description: Website van de organisatie.
+          maxLength: 200
+        contactEmailadres:
+          type: string
+          format: email
+          description: Het algemene e-mailadres van de organisatie of het e-mailadres
+            van het klantcontactcentrum van de organisatie.
+          maxLength: 254
+        contactTelefoonnummer:
+          type: string
+          description: 'Het internationale telefoonnummer waarop de organisatie bereikbaar
+            is. Bijvoorbeeld: +31 20 624 1111'
+          maxLength: 20
+        contactFormulierLink:
+          type: string
+          format: uri
+          title: Contact formulier
+          description: De webpagina van het contact formulier van de organisatie.
+          maxLength: 200
     Product:
       type: object
       description: Serializer for a product, including UPN, availability, locations
