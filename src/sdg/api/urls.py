@@ -17,6 +17,7 @@ from sdg.api.views import (
     ProductHistoryViewSet,
     ProductViewSet,
 )
+from sdg.api.views.api_exception import ErrorDetailView
 
 app_name = "api"
 
@@ -51,6 +52,7 @@ urlpatterns = [
         name="index",
     ),
     path("v1/", include(router.urls)),
+    path("fouten/<exception_class>/", ErrorDetailView.as_view(), name="error-detail"),
     path(
         "v1/",
         include(

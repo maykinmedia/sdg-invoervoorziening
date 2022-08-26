@@ -1,0 +1,23 @@
+.error-detail-properties{
+    min-height: calc(60vh - 300px);
+    display: inline-grid;
+
+    margin-left:auto; 
+    margin-right:auto;
+
+    width: auto;
+    border-collapse: collapse;
+
+    tr>td {
+        border-bottom: 0.5px solid #7e868d;
+        padding-bottom: 7px;
+    }
+
+    td {
+        inline-size: 150px;
+        overflow-wrap: break-word;
+        vertical-align: top;
+        text-align: left;
+    }
+
+}

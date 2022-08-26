@@ -1,0 +1,102 @@
+{% load static hijack_tags %}<!DOCTYPE html>
+<html lang="en"
+      class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}SDG{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
+    <link href="{% static 'hijack/hijack-styles.css' %}" rel="stylesheet" type="text/css"/>
+    {% block extra_css %}{% endblock %}
+    <link href="{% static 'bundles/sdg-api-css.css' %}" media="all" rel="stylesheet"/>
+    <script type="text/javascript">
+        const SubPath = "{% if settings.SUBPATH %}{{ settings.SUBPATH }}{% endif %}";
+    </script>
+    <script src="{% static 'bundles/fontawesome.js' %}"></script>
+</head>
+
+<body class="view__body">
+  {% hijack_notification %}
+
+  <div class="title">
+    <h1 class="title__header">{{ settings.PROJECT_NAME }} foutomschrijving</h1>
+  </div>
+
+  <div class="container container--center">
+    <nav class="nav">
+      <ul class="nav__list">
+        <li class="nav__item" data-id="nl"><code>{{ type }}</code> fouttype</li>
+      </ul>
+
+      <div class="nav__content">
+
+        <table class="error-detail-properties">
+            <tr>
+                <td>HTTP Status code:</td>
+                <td><code>{{ status_code }}</code></td>
+            </tr>
+            <tr>
+                <td>Default title:</td>
+                <td><code>{{ default_detail }}</code></td>
+            </tr>
+            <tr>
+                <td>Default code:</td>
+                <td><code>{{ default_code }}</code></td>
+            </tr>
+        </table>
+
+    </div>
+    </nav>
+
+    <p class="space">
+      <b>Deze software is beschikbaar onder de <a class="link" href="https://github.com/maykinmedia/sdg-invoervoorziening/blob/master/LICENSE.md">
+        European Union Public License (EUPL)</a></b>
+    </p>
+
+    <p class="space">
+      <a href="{% url 'api:schema' %}" class="button"><i class="fas fa-file-alt"></i> Open API Specificatie</a>
+      <a href="{% url 'api:api-root' %}" class="button"><i class="fas fa-wifi"></i> API root</a>
+    </p>
+
+    <p class="space">
+      <a href="{% url 'admin:index' %}" class="button button--alert"><i class="fas fa-lock"></i> Beheer</a>
+    </p>
+
+  </div>
+
+<footer class="footer container">
+    <div class="footer__row">
+    <div class="footer__col footer__col--small">
+        <img src="{% static 'images/maykin_logo.png' %}" alt="Maykin Media logo" height="48">
+        <img src="{% static 'images/vng_logo.svg' %}" alt="VNG logo" height="48">
+        <img src="{% static 'images/ipo_logo.png' %}" alt="IPO logo" height="48">
+        <p>
+        Ontwikkeld door <a class="link" href="https://www.maykinmedia.nl">Maykin Media B.V.</a><br>
+        in opdracht van <a class="link" href="https://vng.nl/">VNG</a> en <a class="link" href="https://www.ipo.nl/">IPO</a>
+        </p>
+    </div>
+    <div class="footer__col">
+        <h5 class="footer__header">SDG</h5>
+        <ul class="footer__list">
+        <li><a class="link link--muted" href="https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/europa/single-digitale-gateway/">Meer over de SDG</a></li>
+        <li><a class="link link--muted" href="https://werkenaaneenoverheid.pleio.nl/groups/view/ed87e451-f6fc-49b0-aec4-41f2358426f7/single-digital-gateway">Voor gemeenten</a></li>
+        <li><a class="link link--muted" href="https://www.ipo.nl/thema-s/interprovinciale-digitale-agenda/dienstverlening/single-digitale-gateway-en-provinciale-producten-catalogus/">Voor provincies</a></li>
+        </ul>
+    </div>
+    <div class="footer__col">
+        <h5 class="footer__header">Overige</h5>
+        <ul class="footer__list">
+        <li><a class="link link--muted" href="https://hub.docker.com/r/maykinmedia/sdg-invoervoorziening">Docker images</a></li>
+        <li><a class="link link--muted" href="https://github.com/maykinmedia/sdg-invoervoorziening">Code op Github</a></li>
+        <li>Maak een <a class="link link--muted" href="https://github.com/maykinmedia/sdg-invoervoorziening/issues">issue</a> aan voor vragen, bugs en wensen</li>
+        </ul>
+    </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/mocks/api.js' %}"></script>
+</body>
+</html>
