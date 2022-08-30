@@ -89,26 +89,22 @@ class GeneriekProduct(models.Model):
         return bool(self.upn.sdg)
 
     @cached_property
-    def has_referentie_product_publicatie_datum(self):
+    def product_status(self):
         try:
-            return bool(
+            referentie_product_publicatie_datum = bool(
                 Product.objects.get(
                     catalogus__is_referentie_catalogus=True, generiek_product=self
                 ).active_version
             )
         except Product.DoesNotExist:
-            return None
+            referentie_product_publicatie_datum = None
 
-    @cached_property
-    def is_localized_generieke_tekst_empty(self):
-        localized_products = LocalizedGeneriekProduct.objects.filter(
-            generiek_product=self
-        ).values_list("generieke_tekst", flat=True)
+        localized_generieke_teksten = all(
+            LocalizedGeneriekProduct.objects.filter(generiek_product=self).values_list(
+                "generieke_tekst", flat=True
+            )
+        )
 
-        return not all(localized_products)
-
-    @cached_property
-    def product_status(self):
         if self.upn.is_verwijderd and not self.eind_datum:
             return ProductStatus.labels.EXPIRED
         elif self.eind_datum:
@@ -116,10 +112,10 @@ class GeneriekProduct(models.Model):
                 return ProductStatus.labels.EOL
             if self.eind_datum <= datetime.date.today():
                 return ProductStatus.labels.DELETED
-        elif not self.is_localized_generieke_tekst_empty:
-            if self.has_referentie_product_publicatie_datum is None:
+        elif localized_generieke_teksten:
+            if referentie_product_publicatie_datum is None:
                 return ProductStatus.labels.MISSING
-            elif self.has_referentie_product_publicatie_datum:
+            elif referentie_product_publicatie_datum:
                 return ProductStatus.labels.READY_FOR_PUBLICATION
             else:
                 return ProductStatus.labels.READY_FOR_ADMIN
