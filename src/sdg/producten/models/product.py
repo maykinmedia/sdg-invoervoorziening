@@ -94,26 +94,22 @@ class GeneriekProduct(models.Model):
         return self.upn.is_verwijderd
 
     @cached_property
-    def referentie_product_publicatie_datum(self):
+    def product_status(self):
         try:
-            return bool(
+            referentie_product_publicatie_datum = bool(
                 Product.objects.get(
                     catalogus__is_referentie_catalogus=True, generiek_product=self
                 ).active_version
             )
         except Product.DoesNotExist:
-            return ProductStatus.labels.MISSING
+            referentie_product_publicatie_datum = None
 
-    @cached_property
-    def localized_generieke_tekst_empty(self):
-        localized_products = LocalizedGeneriekProduct.objects.filter(
-            generiek_product=self
-        ).values_list("generieke_tekst", flat=True)
+        localized_generieke_teksten = all(
+            LocalizedGeneriekProduct.objects.filter(generiek_product=self).values_list(
+                "generieke_tekst", flat=True
+            )
+        )
 
-        return not all(localized_products)
-
-    @cached_property
-    def product_status(self):
         if self.upn_is_verweiderd and not self.eind_datum:
             return ProductStatus.labels.EXPIRED
         elif self.eind_datum:
@@ -121,10 +117,10 @@ class GeneriekProduct(models.Model):
                 return ProductStatus.labels.EOL
             if self.eind_datum <= datetime.date.today():
                 return ProductStatus.labels.DELETED
-        elif not self.localized_generieke_tekst_empty:
-            if self.referentie_product_publicatie_datum is ProductStatus.labels.MISSING:
+        elif localized_generieke_teksten:
+            if referentie_product_publicatie_datum is None:
                 return ProductStatus.labels.MISSING
-            elif self.referentie_product_publicatie_datum:
+            elif referentie_product_publicatie_datum:
                 return ProductStatus.labels.PUBLICATE
             else:
                 return ProductStatus.labels.MONITOR
