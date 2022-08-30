@@ -1,6 +1,8 @@
 import string
 from typing import Any, Dict, List
 
+from django.db.models import Q
+
 from sdg.core.constants import TaalChoices
 from sdg.core.models import (
     Informatiegebied,
@@ -150,7 +152,7 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
                 "is_verwijderd": False,
             },
         )
-        upn_updated_list.append(upn)
+        upn_updated_list.append(upn.pk)
 
         groups = [doelgroep for i in sdg_list if (doelgroep := _get_group(i))]
         # Create generic product (and localize) for each target group
@@ -168,13 +170,9 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
         if created:
             count += 1
 
-    all_upns = UniformeProductnaam.objects.all()
-
-    deleted_upns = [x for x in all_upns if x not in upn_updated_list]
-
-    for upn in deleted_upns:
-        upn.is_verwijderd = True
-        upn.save()
+    UniformeProductnaam.objects.filter(~Q(pk__in=upn_updated_list)).update(
+        is_verwijderd=True
+    )
 
     return count
 
