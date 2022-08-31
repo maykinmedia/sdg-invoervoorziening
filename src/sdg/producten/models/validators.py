@@ -7,6 +7,15 @@ from django.utils.translation import gettext_lazy as _
 import markdown
 
 prohibited_html_tags = ["h1", "h2", "h5", "h6", "hr", "img", "code"]
+html_tags_to_text = {
+    "h1": "Kop 1",
+    "h2": "Kop 2",
+    "h5": "Kop 5",
+    "h6": "Kop 6",
+    "hr": "Horizontale lijn",
+    "img": "Afbeelding",
+    "code": "Code",
+}
 
 
 class allowedMarkdownValidator(HTMLParser):
@@ -41,8 +50,8 @@ def validate_markdown(value):
 
     if hasattr(parser, "data"):
         raise ValidationError(
-            _("Het veld mag geen instantie van <{html_element}> bevatten.").format(
-                html_element=str(parser.data)
+            _("Het veld mag geen '{html_element}' in Markdown bevatten.").format(
+                html_element=str(html_tags_to_text[parser.data])
             )
         )
 
@@ -58,7 +67,7 @@ def validate_product(localized):
     ):
         raise ValidationError(
             _(
-                "Het veld 'product_aanwezig_toelichting' is verplicht als het veld 'product_aanwezig' is uitgeschakeld."
+                "Het veld 'productAanwezigToelichting' is verplicht als product niet aanwezig is."
             )
         )
 
