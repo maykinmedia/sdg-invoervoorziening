@@ -122,10 +122,31 @@ class OrganisatiesTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(data["contactWebsite"], ["Voer een geldige URL in."])
-        self.assertEqual(data["contactEmailadres"], ["Voer een geldig e-mailadres in."])
-        self.assertEqual(data["contactTelefoonnummer"], ["Not a valid string."])
-        self.assertEqual(data["contactFormulierLink"], ["Voer een geldige URL in."])
+        self.assertEqual(
+            [
+                {
+                    "name": "contactWebsite",
+                    "code": "invalid",
+                    "reason": "Voer een geldige URL in.",
+                },
+                {
+                    "name": "contactEmailadres",
+                    "code": "invalid",
+                    "reason": "Voer een geldig e-mailadres in.",
+                },
+                {
+                    "name": "contactTelefoonnummer",
+                    "code": "invalid",
+                    "reason": "Not a valid string.",
+                },
+                {
+                    "name": "contactFormulierLink",
+                    "code": "invalid",
+                    "reason": "Voer een geldige URL in.",
+                },
+            ],
+            data["invalidParams"],
+        )
 
 
 @override_settings(SDG_API_WHITELISTING_ENABLED=False)

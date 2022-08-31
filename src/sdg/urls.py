@@ -55,6 +55,7 @@ urlpatterns = [
         "cmsapi/",
         decorator_include(enabled(), "sdg.cmsapi.urls", namespace="cmsapi"),
     ),
+    path("ref/", include("vng_api_common.urls")),
     path("", decorator_include(enabled(), miscellaneous_urls)),
     path("", decorator_include(enabled(), tf_urls)),
 ]

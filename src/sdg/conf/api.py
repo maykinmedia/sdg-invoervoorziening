@@ -1,3 +1,5 @@
+from vng_api_common.conf.api import *  # noqa
+
 # DRF
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
@@ -17,6 +19,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
+    "EXCEPTION_HANDLER": "vng_api_common.views.exception_handler",
     "PAGE_SIZE": 25,
 }
 

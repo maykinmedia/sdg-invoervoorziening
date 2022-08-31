@@ -1323,6 +1323,7 @@ components:
         catalogus:
           type: string
           format: uri
+          nullable: true
           description: De catalogus waartoe dit product behoort.
         locaties:
           type: array
