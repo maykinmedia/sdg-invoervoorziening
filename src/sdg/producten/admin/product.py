@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.contrib.postgres.aggregates.general import ArrayAgg
-from django.db.models import Count, F
+from django.db.models import Max
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -149,13 +148,8 @@ class ProductAdmin(admin.ModelAdmin):
                 "catalogus__lokale_overheid",
                 "catalogus__lokale_overheid__organisatie",
             )
-            .annotate(versie_nummer=Count("versies", distinct=True))
-            .annotate(
-                publication_date=ArrayAgg(
-                    "versies__publicatie_datum",
-                    ordering=F("versies__versie").desc(),
-                )
-            )
+            .annotate(versie_nummer=Max("versies__versie"))
+            .annotate(publication_date=Max("versies__publicatie_datum"))
         )
 
     def is_referentie(self, obj):
@@ -167,7 +161,7 @@ class ProductAdmin(admin.ModelAdmin):
         return obj.versie_nummer
 
     def latest_publication_date(self, obj):
-        return obj.publication_date[0]
+        return obj.publication_date
 
     def lokale_overheid(self, obj):
         return obj.catalogus.lokale_overheid
