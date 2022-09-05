@@ -15,3 +15,13 @@ class TaalChoices(DjangoChoices):
 class DoelgroepChoices(DjangoChoices):
     burger = ChoiceItem("eu-burger", _("EU Burger"))
     bedrijf = ChoiceItem("eu-bedrijf", _("EU Bedrijf"))
+
+
+class ProductStatus(DjangoChoices):
+    NEW = ChoiceItem("new", _("Nieuw"))
+    READY_FOR_ADMIN = ChoiceItem("ready_admin", _("Gereed voor beheer"))
+    READY_FOR_PUBLICATION = ChoiceItem("ready_publication", _("Gereed voor publicatie"))
+    EXPIRED = ChoiceItem("expired_in_upl", _("Vervallen in de UPL"))
+    EOL = ChoiceItem("eol", _("Wordt binnenkort verwijderd"))
+    DELETED = ChoiceItem("deleted", _("Verwijderd"))
+    MISSING = ChoiceItem("missing", _("Geen referentie producten gevonden"))

@@ -1,15 +1,14 @@
 from __future__ import annotations
 
+import datetime
 import uuid
-from datetime import date
 from functools import partialmethod
 from typing import Any, List
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.db import models, transaction
-from django.db.models import BooleanField, Case, Model, Q, Value, When
-from django.shortcuts import get_object_or_404
+from django.db import models
+from django.db.models import BooleanField, Case, Q, Value, When
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -17,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from djchoices import ChoiceItem, DjangoChoices
 
 from sdg.core.constants import DoelgroepChoices
-from sdg.core.models import ProductenCatalogus
+from sdg.core.constants.product import ProductStatus
 from sdg.core.utils import get_from_cache
 from sdg.producten.models import (
     LocalizedGeneriekProduct,
@@ -70,6 +69,12 @@ class GeneriekProduct(models.Model):
             "ondernemersportalen de ondernemersvariant en de burgerportalen de burgervariant. "
         ),
     )
+    eind_datum = models.DateField(
+        _("Eind datum"),
+        help_text=_("De datum wanneer het product komt te vervallen."),
+        blank=True,
+        null=True,
+    )
 
     @property
     def upn_uri(self):
@@ -78,6 +83,44 @@ class GeneriekProduct(models.Model):
     @property
     def upn_label(self):
         return self.upn.upn_label
+
+    @property
+    def is_sdg_product(self):
+        return bool(self.upn.sdg)
+
+    @cached_property
+    def product_status(self):
+        try:
+            referentie_product_publicatie_datum = bool(
+                Product.objects.get(
+                    catalogus__is_referentie_catalogus=True, generiek_product=self
+                ).active_version
+            )
+        except Product.DoesNotExist:
+            referentie_product_publicatie_datum = None
+
+        localized_generieke_teksten = all(
+            LocalizedGeneriekProduct.objects.filter(generiek_product=self).values_list(
+                "generieke_tekst", flat=True
+            )
+        )
+
+        if self.upn.is_verwijderd and not self.eind_datum:
+            return ProductStatus.labels.EXPIRED
+        elif self.eind_datum:
+            if self.eind_datum > datetime.date.today():
+                return ProductStatus.labels.EOL
+            if self.eind_datum <= datetime.date.today():
+                return ProductStatus.labels.DELETED
+        elif localized_generieke_teksten:
+            if referentie_product_publicatie_datum is None:
+                return ProductStatus.labels.MISSING
+            elif referentie_product_publicatie_datum:
+                return ProductStatus.labels.READY_FOR_PUBLICATION
+            else:
+                return ProductStatus.labels.READY_FOR_ADMIN
+        else:
+            return ProductStatus.labels.NEW
 
     def generate_localized_information(
         self, language, **kwargs
@@ -275,7 +318,7 @@ class Product(ProductFieldMixin, models.Model):
         queryset = self.versies.all().order_by("-versie")
 
         if active:
-            queryset = queryset.filter(publicatie_datum__lte=date.today())
+            queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
         if exclude_concept:
             queryset = queryset.exclude(publicatie_datum=None)
 
@@ -286,7 +329,7 @@ class Product(ProductFieldMixin, models.Model):
         queryset = self.versies.all().order_by("-versie")
 
         if active:
-            queryset = queryset.filter(publicatie_datum__lte=date.today())
+            queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
         if exclude_concept:
             queryset = queryset.exclude(publicatie_datum=None)
 
@@ -378,7 +421,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
         """:returns: The current publishing status for this product version."""
         if not self.publicatie_datum:
             return Product.status.CONCEPT
-        elif self.publicatie_datum <= date.today():
+        elif self.publicatie_datum <= datetime.date.today():
             return Product.status.PUBLISHED
         else:
             return Product.status.SCHEDULED

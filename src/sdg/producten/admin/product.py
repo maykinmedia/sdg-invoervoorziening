@@ -38,14 +38,24 @@ class GeneriekProductAdmin(admin.ModelAdmin):
         "doelgroep",
         "verplicht_product",
         "verantwoordelijke_organisatie",
+        "eind_datum",
+        "product_status",
+        "is_sdg_product",
     )
     list_filter = (
         "doelgroep",
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
+    readonly_fields = ("product_status", "is_sdg_product")
     autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
     search_fields = ("upn__upn_label",)
+
+    # Turns boolean into icon
+    def is_sdg_product(self, obj):
+        return obj.is_sdg_product
+
+    is_sdg_product.boolean = True
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).select_related("upn")
