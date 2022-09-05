@@ -259,7 +259,6 @@ class ProductenTests(APITestCase):
                     "productValtOnderToelichting": "",
                 },
             ],
-            "gerelateerdeProducten": [],
         }
 
     def test_list_producten(self):
@@ -384,7 +383,6 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "")
         self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
-        self.assertEqual(data["gerelateerdeProducten"], [])
 
     def test_update_product_with_filled_in_translations(self):
         list_url = reverse("api:product-list")
@@ -507,7 +505,6 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "example")
         self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
-        self.assertEqual(data["gerelateerdeProducten"], [])
 
     def test_update_product_with_one_translation(self):
         list_url = reverse("api:product-list")
@@ -685,7 +682,6 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "")
         self.assertEqual(data["vertalingen"][1]["productAanwezigToelichting"], "")
         self.assertEqual(data["vertalingen"][1]["productValtOnderToelichting"], "")
-        self.assertEqual(data["gerelateerdeProducten"], [])
 
     def test_update_product_with_upn_pref_label(self):
         list_url = reverse("api:product-list")
@@ -1236,47 +1232,6 @@ class ProductenTests(APITestCase):
             "https://www.organisatie.com",
         )
 
-    def test_update_product_with_locaties_uuid(self):
-        locatie1, locatie2, locatie3 = LocatieFactory.create_batch(
-            3, lokale_overheid=self.test_lokale_overheid
-        )
-
-        list_url = reverse("api:product-list")
-
-        body = self.get_product_post_body(
-            {
-                "locaties": [
-                    {"uuid": str(locatie1.uuid)},
-                    {"uuid": str(locatie2.uuid)},
-                    {"uuid": str(locatie3.uuid)},
-                ],
-            }
-        )
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
-
-        create_response = self.client.post(
-            list_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-
-        create_data = create_response.json()
-
-        self.assertEqual(len(create_data["locaties"]), 3)
-
-        self.assertEqual(create_data["locaties"][0]["uuid"], str(locatie1.uuid))
-        self.assertEqual(create_data["locaties"][0]["naam"], locatie1.naam)
-
-        self.assertEqual(create_data["locaties"][1]["uuid"], str(locatie2.uuid))
-        self.assertEqual(create_data["locaties"][1]["naam"], locatie2.naam)
-
-        self.assertEqual(create_data["locaties"][2]["uuid"], str(locatie3.uuid))
-        self.assertEqual(create_data["locaties"][2]["naam"], locatie3.naam)
-
     def test_update_product_with_locaties_naam(self):
         locatie1, locatie2, locatie3 = LocatieFactory.create_batch(
             3, lokale_overheid=self.test_lokale_overheid
@@ -1309,184 +1264,11 @@ class ProductenTests(APITestCase):
 
         self.assertEqual(len(create_data["locaties"]), 3)
 
-        self.assertEqual(create_data["locaties"][0]["uuid"], str(locatie1.uuid))
         self.assertEqual(create_data["locaties"][0]["naam"], locatie1.naam)
 
-        self.assertEqual(create_data["locaties"][1]["uuid"], str(locatie2.uuid))
         self.assertEqual(create_data["locaties"][1]["naam"], locatie2.naam)
 
-        self.assertEqual(create_data["locaties"][2]["uuid"], str(locatie3.uuid))
         self.assertEqual(create_data["locaties"][2]["naam"], locatie3.naam)
-
-    def test_update_product_with_gerelateerde_producten_upn_label(self):
-        third_upn = UniformeProductnaamFactory.create(
-            upn_label="third",
-            upn_uri="https://www.third.com",
-        )
-        third_generiek_product = GeneriekProductFactory.create(
-            upn=third_upn,
-            doelgroep="eu-burger",
-        )
-        third_referentie_product = ReferentieProductFactory.create(
-            generiek_product=third_generiek_product,
-            referentie_product=None,
-            catalogus=self.referentie_catalogus,
-            bevoegde_organisatie=self.referentie_bevoegde_organisatie,
-            product_aanwezig=True,
-        )
-        third_referentie_product_versie = ProductVersieFactory.create(
-            product=third_referentie_product
-        )
-        LocalizedProductFactory.create_batch(
-            2, product_versie=third_referentie_product_versie
-        )
-
-        product3 = SpecifiekProductFactory.create(
-            generiek_product=third_generiek_product,
-            referentie_product=third_referentie_product,
-            catalogus=self.catalogus,
-            bevoegde_organisatie=self.bevoegde_organisatie,
-            product_aanwezig=True,
-        )
-        product_versie3 = ProductVersieFactory.create(
-            product=product3, publicatie_datum=None
-        )
-        LocalizedProductFactory.create_batch(2, product_versie=product_versie3)
-
-        list_url = reverse("api:product-list")
-
-        body = self.get_product_post_body(
-            {
-                "upnLabel": self.generiek_product.upn.upn_label,
-                "upnUri": self.generiek_product.upn.upn_uri,
-                "verantwoordelijkeOrganisatie": {
-                    "owmsLabel": "set up",
-                    "owmsIdentifier": "https://www.setup.com",
-                },
-                "gerelateerdeProducten": [
-                    {"upnLabel": self.seccond_product.generiek_product.upn.upn_label},
-                    {"upnLabel": product3.generiek_product.upn.upn_label},
-                ],
-            }
-        )
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
-
-        create_response = self.client.post(
-            list_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-
-        create_data = create_response.json()
-
-        self.assertEqual(len(create_data["gerelateerdeProducten"]), 2)
-
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][0]["upnLabel"],
-            self.seccond_product.generiek_product.upn.upn_label,
-        )
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][0]["upnUri"],
-            self.seccond_product.generiek_product.upn.upn_uri,
-        )
-
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][1]["upnLabel"],
-            product3.generiek_product.upn.upn_label,
-        )
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][1]["upnUri"],
-            product3.generiek_product.upn.upn_uri,
-        )
-
-    def test_update_product_with_gerelateerde_producten_upn_uri(self):
-        third_upn = UniformeProductnaamFactory.create(
-            upn_label="third",
-            upn_uri="https://www.third.com",
-        )
-        third_generiek_product = GeneriekProductFactory.create(
-            upn=third_upn,
-            doelgroep="eu-burger",
-        )
-        third_referentie_product = ReferentieProductFactory.create(
-            generiek_product=third_generiek_product,
-            referentie_product=None,
-            catalogus=self.referentie_catalogus,
-            bevoegde_organisatie=self.referentie_bevoegde_organisatie,
-            product_aanwezig=True,
-        )
-        third_referentie_product_versie = ProductVersieFactory.create(
-            product=third_referentie_product
-        )
-        LocalizedProductFactory.create_batch(
-            2, product_versie=third_referentie_product_versie
-        )
-
-        product3 = SpecifiekProductFactory.create(
-            generiek_product=third_generiek_product,
-            referentie_product=third_referentie_product,
-            catalogus=self.catalogus,
-            bevoegde_organisatie=self.bevoegde_organisatie,
-            product_aanwezig=True,
-        )
-        product_versie3 = ProductVersieFactory.create(
-            product=product3, publicatie_datum=None
-        )
-        LocalizedProductFactory.create_batch(2, product_versie=product_versie3)
-
-        list_url = reverse("api:product-list")
-
-        body = self.get_product_post_body(
-            {
-                "upnLabel": self.generiek_product.upn.upn_label,
-                "upnUri": self.generiek_product.upn.upn_uri,
-                "verantwoordelijkeOrganisatie": {
-                    "owmsLabel": "set up",
-                    "owmsIdentifier": "https://www.setup.com",
-                },
-                "gerelateerdeProducten": [
-                    {"upnUri": self.seccond_product.generiek_product.upn.upn_uri},
-                    {"upnUri": product3.generiek_product.upn.upn_uri},
-                ],
-            }
-        )
-
-        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
-
-        create_response = self.client.post(
-            list_url,
-            data=json.dumps(body),
-            content_type="application/json",
-            **headers,
-        )
-
-        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
-
-        create_data = create_response.json()
-
-        self.assertEqual(len(create_data["gerelateerdeProducten"]), 2)
-
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][0]["upnLabel"],
-            self.seccond_product.generiek_product.upn.upn_label,
-        )
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][0]["upnUri"],
-            self.seccond_product.generiek_product.upn.upn_uri,
-        )
-
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][1]["upnLabel"],
-            product3.generiek_product.upn.upn_label,
-        )
-        self.assertEqual(
-            create_data["gerelateerdeProducten"][1]["upnUri"],
-            product3.generiek_product.upn.upn_uri,
-        )
 
     def test_update_product_with_invalid_doelgroep(self):
         list_url = reverse("api:product-list")
@@ -1556,23 +1338,3 @@ class ProductenTests(APITestCase):
 
         data = response.json()["results"]
         self.assertEqual(3, len(data))
-
-    @freeze_time(NOW_DATE)
-    def test_list_product_concept(self):
-        product = ReferentieProductFactory.create()
-        ReferentieProductVersieFactory.create_batch(
-            3, publicatie_datum=PAST_DATE, product=product
-        )
-        concept = ReferentieProductVersieFactory.create(
-            publicatie_datum=None, product=product
-        )
-
-        response = self.client.get(
-            reverse("api:product-concept-list", args=[product.uuid])
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        data = response.json()["results"]
-        self.assertEqual(1, len(data))
-        self.assertEqual(concept.versie, data[0]["versie"])

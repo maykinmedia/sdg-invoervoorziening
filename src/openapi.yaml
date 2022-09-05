@@ -229,8 +229,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: De UUID van een organisatie om aan te geven van welke organisatie
-          u de locaties wilt zien.
+        description: De UUID van de locatie die u wilt zien.
         required: true
       tags:
       - locaties
@@ -250,8 +249,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: De UUID van een organisatie om aan te geven van welke organisatie
-          u de locaties wilt zien.
+        description: De UUID van de locatie die u wilt bewerken.
         required: true
       tags:
       - locaties
@@ -279,8 +277,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: De UUID van een organisatie om aan te geven van welke organisatie
-          u de locaties wilt zien.
+        description: De UUID van de locatie die u wilt bewerken.
         required: true
       tags:
       - locaties
@@ -307,8 +304,7 @@ paths:
         schema:
           type: string
           format: uuid
-        description: De UUID van een organisatie om aan te geven van welke organisatie
-          u de locaties wilt zien.
+        description: De UUID van de locatie die u wilt verwijderen.
         required: true
       tags:
       - locaties
@@ -558,33 +554,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Product'
           description: ''
-  /api/v1/producten/{productUuid}/concept:
-    get:
-      operationId: productenConceptList
-      description: Lijst van concept-productversies voor dit product.
-      parameters:
-      - in: query
-        name: page
-        schema:
-          type: integer
-        description: Het paginanummer binnen de lijst van resultaten.
-      - in: path
-        name: productUuid
-        schema:
-          type: string
-          format: uuid
-        description: De UUID van een product om aan te geven welke product u wilt
-          zien.
-        required: true
-      tags:
-      - producten
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedProductVersieList'
-          description: ''
   /api/v1/producten/{productUuid}/historie:
     get:
       operationId: productenHistorieList
@@ -764,7 +733,6 @@ components:
           description: Datum wanneer dit product voor het laatst is gewijzigd.
       required:
       - datumWijziging
-      - links
       - taal
     Locatie:
       type: object
@@ -774,11 +742,6 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van dit object binnen deze API.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: De UUID van een specifieke organisatie.
         naam:
           type: string
           description: De naam van de locatie.
@@ -825,7 +788,6 @@ components:
       - postcode
       - straat
       - url
-      - uuid
     LocatieBase:
       type: object
       properties:
@@ -834,11 +796,6 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van dit object binnen deze API.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: De UUID van een specifieke organisatie.
         naam:
           type: string
           description: De naam van de locatie.
@@ -876,7 +833,6 @@ components:
       - postcode
       - straat
       - url
-      - uuid
     LokaleOverheid:
       type: object
       properties:
@@ -945,15 +901,10 @@ components:
             $ref: '#/components/schemas/BevoegdeOrganisatie'
           description: De bevoegde organisaties. In de lijst van bevoegde organisaties
             staat minimaal altijd de verantwoordelijke organisatie.
-        ondersteuningsOrganisatie:
-          allOf:
-          - $ref: '#/components/schemas/Overheidsorganisatie'
-          description: De ondersteunende organisatie.
       required:
       - bevoegdeOrganisaties
       - catalogi
       - locaties
-      - ondersteuningsOrganisatie
       - owmsEndDate
       - url
       - uuid
@@ -1062,31 +1013,6 @@ components:
             maxLength: 32
           description: 'De openingstijden op zondag. Tijden dienen als volgt opgegeven
             te worden: `["9:00 - 18:00"]`'
-    Overheidsorganisatie:
-      type: object
-      description: De ondersteunende organisaties.
-      properties:
-        owmsIdentifier:
-          type: string
-          format: uri
-          title: OWMS identificatie
-          description: De OWMS Identifier van een de ondersteunende organisatie.
-          maxLength: 200
-        owmsPrefLabel:
-          type: string
-          title: OWMS label
-          description: Het OWMS Prefered Label van een de ondersteunende organisatie.
-          maxLength: 200
-        owmsEndDate:
-          type: string
-          format: date-time
-          nullable: true
-          title: Einddatum
-          description: De einddatum van de ondersteunende organisatie. Indien de waarde
-            `null` is, dan is organisatie actief.
-      required:
-      - owmsIdentifier
-      - owmsPrefLabel
     PaginatedLocatieList:
       type: object
       properties:
@@ -1195,11 +1121,6 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van dit object binnen deze API.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: De UUID van een specifieke organisatie.
         naam:
           type: string
           description: De naam van de locatie.
@@ -1339,11 +1260,6 @@ components:
           items:
             $ref: '#/components/schemas/LocalizedProduct'
           description: Een lijst met specifieke teksten op basis van taal.
-        gerelateerdeProducten:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductBase'
-          description: Een lijst met producten die gerelateerd zijn aan dit product.
         beschikbareTalen:
           type: array
           items: {}
@@ -1352,7 +1268,6 @@ components:
       required:
       - beschikbareTalen
       - doelgroep
-      - gerelateerdeProducten
       - locaties
       - productAanwezig
       - productValtOnder
@@ -1386,16 +1301,18 @@ components:
           allOf:
           - $ref: '#/components/schemas/Openingstijden'
           readOnly: true
-        uuid:
+        url:
           type: string
-          format: uuid
-          description: De UUID van een specifieke organisatie.
+          format: uri
+          readOnly: true
+          description: De unieke URL van dit object binnen deze API.
         naam:
           type: string
           description: De naam van de locatie.
           maxLength: 100
       required:
       - openingstijden
+      - url
     ProductLokaleOverheid:
       type: object
       description: De organisatie die dit product levert en de teksten hiervan beheert.

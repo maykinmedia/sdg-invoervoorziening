@@ -128,7 +128,6 @@ class ProductAdmin(admin.ModelAdmin):
         "generiek_product",
         "referentie_product",
         "catalogus",
-        "gerelateerde_producten",
         "bevoegde_organisatie",
         "locaties",
         "product_valt_onder",

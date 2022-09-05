@@ -123,7 +123,6 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
         model = Locatie
         fields = (
             "url",
-            "uuid",
             "naam",
             "straat",
             "nummer",
@@ -139,10 +138,6 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
                 "help_text": "De unieke URL van dit object binnen deze API.",
             },
             "naam": {"required": False, "help_text": "De naam van de locatie."},
-            "uuid": {
-                "required": False,
-                "help_text": "De UUID van een specifieke organisatie.",
-            },
             "straat": {"help_text": "De straatnaam van de locatie."},
             "nummer": {
                 "help_text": "Het huisnummer van de locatie, inclusief eventuele toevoegingen."
@@ -238,9 +233,6 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
         many=True,
         help_text="De bevoegde organisaties. In de lijst van bevoegde organisaties staat minimaal altijd de verantwoordelijke organisatie.",
     )
-    ondersteunings_organisatie = OverheidsorganisatieSerializer(
-        help_text="De ondersteunende organisatie.",
-    )
     locaties = LocatieBaseSerializer(
         many=True,
         help_text="Een lijst met alle locaties die gekoppeld zijn aan deze organisatie.",
@@ -261,7 +253,6 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
             "contact_telefoonnummer",
             "contact_formulier_link",
             "bevoegde_organisaties",
-            "ondersteunings_organisatie",
         )
         extra_kwargs = {
             "url": {

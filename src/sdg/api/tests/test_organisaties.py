@@ -50,11 +50,6 @@ class OrganisatiesTests(APITestCase):
                 "contactTelefoonnummer": municipality.contact_telefoonnummer,
                 "contactFormulierLink": municipality.contact_formulier_link,
                 "bevoegdeOrganisaties": [],
-                "ondersteuningsOrganisatie": {
-                    "owmsIdentifier": municipality.ondersteunings_organisatie.owms_identifier,
-                    "owmsPrefLabel": municipality.ondersteunings_organisatie.owms_pref_label,
-                    "owmsEndDate": municipality.ondersteunings_organisatie.owms_end_date.isoformat(),
-                },
             },
             data,
         )
@@ -141,7 +136,7 @@ class LocatiesTests(APITestCase):
         data = response.json()["results"]
         self.assertEqual(2, len(data))
 
-    def test_retrieve_location_by_uuid(self):
+    def test_retrieve_location_by_naam(self):
         locatie = LocatieFactory.create()
         detail_url = reverse("api:locatie-detail", args=[locatie.uuid])
 
@@ -151,4 +146,4 @@ class LocatiesTests(APITestCase):
 
         data = response.json()
 
-        self.assertEqual(str(locatie.uuid), data["uuid"])
+        self.assertEqual(str(locatie.naam), data["naam"])

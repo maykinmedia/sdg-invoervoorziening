@@ -55,9 +55,6 @@ def load_organisation_subset(data: List[Dict[str, Any]]) -> int:
         if gov_org is not None:
             municipality, created = LokaleOverheid.objects.get_or_create(
                 organisatie=gov_org,
-                defaults={
-                    "ondersteunings_organisatie": gov_org,
-                },
             )
             if created:
                 BevoegdeOrganisatie.objects.create(
