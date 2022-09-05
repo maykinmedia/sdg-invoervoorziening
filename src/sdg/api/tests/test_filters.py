@@ -506,7 +506,9 @@ class LocatieFilterTests(APITestCase):
         data = response.json()["results"]
 
         self.assertEqual(1, len(data))
-        self.assertEqual(str(location.uuid), data[0]["uuid"])
+        self.assertEqual(
+            f"http://testserver/api/v1/locaties/{str(location.uuid)}", data[0]["url"]
+        )
 
     def test_filter_organisatie_owms_identifier(self):
         location, *_ = LocatieFactory.create_batch(5)
@@ -523,7 +525,9 @@ class LocatieFilterTests(APITestCase):
         data = response.json()["results"]
 
         self.assertEqual(1, len(data))
-        self.assertEqual(str(location.uuid), data[0]["uuid"])
+        self.assertEqual(
+            f"http://testserver/api/v1/locaties/{str(location.uuid)}", data[0]["url"]
+        )
 
     def test_filter_organisatie_owms_pref_label(self):
         location, *_ = LocatieFactory.create_batch(5)
@@ -540,7 +544,9 @@ class LocatieFilterTests(APITestCase):
         data = response.json()["results"]
 
         self.assertEqual(1, len(data))
-        self.assertEqual(str(location.uuid), data[0]["uuid"])
+        self.assertEqual(
+            f"http://testserver/api/v1/locaties/{str(location.uuid)}", data[0]["url"]
+        )
 
 
 class LokaleOverheidFilterTests(APITestCase):

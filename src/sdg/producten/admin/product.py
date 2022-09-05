@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib import admin
-from django.db.models import Count
+from django.db.models import Max
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
@@ -38,14 +38,24 @@ class GeneriekProductAdmin(admin.ModelAdmin):
         "doelgroep",
         "verplicht_product",
         "verantwoordelijke_organisatie",
+        "eind_datum",
+        "product_status",
+        "is_sdg_product",
     )
     list_filter = (
         "doelgroep",
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
+    readonly_fields = ("product_status", "is_sdg_product")
     autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
     search_fields = ("upn__upn_label",)
+
+    # Turns boolean into icon
+    def is_sdg_product(self, obj):
+        return obj.is_sdg_product
+
+    is_sdg_product.boolean = True
 
     def get_queryset(self, request: HttpRequest) -> QuerySet:
         return super().get_queryset(request).select_related("upn")
@@ -128,7 +138,6 @@ class ProductAdmin(admin.ModelAdmin):
         "generiek_product",
         "referentie_product",
         "catalogus",
-        "gerelateerde_producten",
         "bevoegde_organisatie",
         "locaties",
         "product_valt_onder",
@@ -148,7 +157,8 @@ class ProductAdmin(admin.ModelAdmin):
                 "catalogus__lokale_overheid",
                 "catalogus__lokale_overheid__organisatie",
             )
-            .annotate(versie_nummer=Count("versies", distinct=True))
+            .annotate(versie_nummer=Max("versies__versie"))
+            .annotate(publication_date=Max("versies__publicatie_datum"))
         )
 
     def is_referentie(self, obj):
@@ -160,9 +170,7 @@ class ProductAdmin(admin.ModelAdmin):
         return obj.versie_nummer
 
     def latest_publication_date(self, obj):
-        return ProductVersie.objects.get(
-            product=obj, versie=obj.versie_nummer
-        ).publicatie_datum
+        return obj.publication_date
 
     def lokale_overheid(self, obj):
         return obj.catalogus.lokale_overheid

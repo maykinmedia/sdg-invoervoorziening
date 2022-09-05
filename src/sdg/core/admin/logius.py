@@ -31,8 +31,9 @@ class ThemaAdmin(admin.ModelAdmin):
 @admin.register(UniformeProductnaam)
 class UniformeProductnaamAdmin(admin.ModelAdmin):
     search_fields = ("upn_label",)
-    list_display = ("upn_label", "thema")
+    list_display = ("upn_label", "thema", "is_verwijderd")
     list_filter = (
+        "is_verwijderd",
         "sdg",
         "gemeente",
         "rijk",

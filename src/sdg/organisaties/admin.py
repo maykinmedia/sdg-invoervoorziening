@@ -50,10 +50,7 @@ class LokaleOverheidAdmin(admin.ModelAdmin):
         "contact_formulier_link",
     )
     inlines = (LocatieInline, BevoegdeOrganisatieInline)
-    autocomplete_fields = (
-        "organisatie",
-        "ondersteunings_organisatie",
-    )
+    autocomplete_fields = ("organisatie",)
 
     def get_queryset(self, request):
         """Annotate municipalities with a boolean indicating if contains managers."""

@@ -52,15 +52,6 @@ class LokaleOverheid(models.Model):
         blank=True,
         help_text=("De webpagina van het contact formulier van de organisatie."),
     )
-    ondersteunings_organisatie = models.ForeignKey(
-        "core.Overheidsorganisatie",
-        on_delete=models.SET_NULL,
-        verbose_name=_("ondersteunings organisatie"),
-        help_text=_("organisatie voor ondersteuning."),
-        related_name="ondersteunings",
-        blank=True,
-        null=True,
-    )
     organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",
         on_delete=models.CASCADE,
@@ -285,6 +276,10 @@ class Lokatie(models.Model):
     class Meta:
         verbose_name = _("locatie")
         verbose_name_plural = _("locaties")
+        unique_together = (
+            "naam",
+            "lokale_overheid",
+        )
 
     def __str__(self):
         return self.naam

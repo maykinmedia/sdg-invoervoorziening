@@ -165,7 +165,6 @@ class ProductViewSet(
             "generiek_product__upn",
         )
         .prefetch_related(
-            "gerelateerde_producten",
             "locaties",
             "versies",
             "versies__vertalingen",
@@ -226,41 +225,6 @@ class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
     def get_queryset(self):
         return (
             ProductVersie.objects.published()
-            .filter(product__uuid=self.kwargs["product_uuid"])
-            .prefetch_related("vertalingen")
-        )
-
-
-@extend_schema_view(
-    list=extend_schema(
-        auth=[],
-        parameters=[
-            OpenApiParameter(
-                "product_uuid",
-                OpenApiTypes.UUID,
-                OpenApiParameter.PATH,
-                description="De UUID van een product om aan te geven welke product u wilt zien.",
-            ),
-            OpenApiParameter(
-                name="page",
-                description="Het paginanummer binnen de lijst van resultaten.",
-                required=False,
-                type=int,
-                location=OpenApiParameter.QUERY,
-            ),
-        ],
-        description="Lijst van concept-productversies voor dit product.",
-    ),
-)
-class ProductConceptViewSet(mixins.ListModelMixin, GenericViewSet):
-    """Viewset for the concept version of a product."""
-
-    serializer_class = ProductVersieSerializer
-    queryset = ProductVersie.objects.none()
-
-    def get_queryset(self):
-        return (
-            ProductVersie.objects.filter(publicatie_datum=None)
             .filter(product__uuid=self.kwargs["product_uuid"])
             .prefetch_related("vertalingen")
         )

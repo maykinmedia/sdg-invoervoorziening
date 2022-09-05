@@ -1,6 +1,8 @@
 import string
 from typing import Any, Dict, List
 
+from django.db.models import Q
+
 from sdg.core.constants import TaalChoices
 from sdg.core.models import (
     Informatiegebied,
@@ -55,9 +57,6 @@ def load_organisation_subset(data: List[Dict[str, Any]]) -> int:
         if gov_org is not None:
             municipality, created = LokaleOverheid.objects.get_or_create(
                 organisatie=gov_org,
-                defaults={
-                    "ondersteunings_organisatie": gov_org,
-                },
             )
             if created:
                 BevoegdeOrganisatie.objects.create(
@@ -111,6 +110,7 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
     :return: The total count of the created objects.
     """
     count = 0
+    upn_updated_list = []
 
     for obj in data:
         sdg_list = sdg.split(";") if (sdg := obj.get("SDG")) else []
@@ -146,8 +146,10 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
                 # there can be more than 1 for a UPN. We don't use them at the
                 # moment so they are ignored.
                 "thema": theme,
+                "is_verwijderd": False,
             },
         )
+        upn_updated_list.append(upn.pk)
 
         groups = [doelgroep for i in sdg_list if (doelgroep := _get_group(i))]
         # Create generic product (and localize) for each target group
@@ -164,6 +166,10 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
 
         if created:
             count += 1
+
+    UniformeProductnaam.objects.filter(~Q(pk__in=upn_updated_list)).update(
+        is_verwijderd=True
+    )
 
     return count
 

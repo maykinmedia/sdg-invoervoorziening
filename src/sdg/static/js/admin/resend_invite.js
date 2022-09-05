@@ -19,9 +19,14 @@ async function resendInvite(pk, subpath="") {
     })
         .then(response => response.status)
 
-    if (await response == 200) {
-        alert("De email is opnieuw verstuurd");
-    } else {
-        alert("De uitnodiging is all geaccepteerd.");
+    switch(await response) {
+        case 200:
+            alert("De email is opnieuw verstuurd");
+            break;
+        case 204:
+            alert("De uitnodiging is all geaccepteerd.");
+            break;
+        default:
+            alert("Er is iets fout gegaan met het opniew versturen, probeer later opnieuw.");
     }
 };

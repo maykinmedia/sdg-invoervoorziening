@@ -30,6 +30,7 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
     links = LabeledUrlListField(
         source="verwijzing_links",
         help_text="Dit zijn de verwijzing links voor burgers en ondernemers naar relevante organisatie informatie.",
+        required=False,
     )
 
     class Meta:
@@ -153,7 +154,7 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
         )
         fields = (
             "openingstijden",
-            "uuid",
+            "url",
             "naam",
         )
 
@@ -161,10 +162,10 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
             "naam": {
                 "required": False,
             },
-            "uuid": {
-                "required": False,
-                "read_only": False,
-                "help_text": "De UUID van een specifieke organisatie.",
+            "url": {
+                "view_name": "api:locatie-detail",
+                "lookup_field": "uuid",
+                "help_text": "De unieke URL van dit object binnen deze API.",
             },
         }
 
@@ -253,10 +254,6 @@ class ProductSerializer(ProductBaseSerializer):
         required=True,
         help_text="De doelgroep van dit product.",
     )
-    gerelateerde_producten = ProductBaseSerializer(
-        many=True,
-        help_text="Een lijst met producten die gerelateerd zijn aan dit product.",
-    )
     locaties = ProductLocatieSerializer(
         allow_null=True,
         many=True,
@@ -290,7 +287,6 @@ class ProductSerializer(ProductBaseSerializer):
             "locaties",
             "doelgroep",
             "vertalingen",
-            "gerelateerde_producten",
             "beschikbare_talen",
         )
         extra_kwargs = {
@@ -564,27 +560,11 @@ class ProductSerializer(ProductBaseSerializer):
     def get_locaties(self, locaties, catalogus):
         organisatie_locaties = []
         for locatie in locaties:
-            if "uuid" in locatie:
-                try:
-                    organisatie_locaties.append(
-                        Locatie.objects.get(
-                            uuid=locatie["uuid"],
-                            lokale_overheid__organisatie=catalogus.lokale_overheid.organisatie,
-                        )
-                    )
-                except Locatie.DoesNotExist:
-                    raise serializers.ValidationError(
-                        {
-                            "locaties.uuid": f"Received a non existing 'locatie' of catalogus {catalogus}"
-                        }
-                    )
-            elif "naam" in locatie:
-                # TODO change to get when unique is in place
-
-                overheid_locatie = Locatie.objects.filter(
+            if "naam" in locatie:
+                overheid_locatie = Locatie.objects.get(
                     naam=locatie["naam"],
                     lokale_overheid__organisatie=catalogus.lokale_overheid.organisatie,
-                ).first()
+                )
 
                 if not overheid_locatie:
                     raise serializers.ValidationError(
@@ -604,7 +584,6 @@ class ProductSerializer(ProductBaseSerializer):
         doelgroep = data.get("doelgroep")
         catalogus = validated_data.get("catalogus", [])
         product_valt_onder = validated_data.pop("product_valt_onder", [])
-        gerelateerde_producten = validated_data.pop("gerelateerde_producten", [])
         verantwoordelijke_organisatie = data.get("verantwoordelijke_organisatie", [])
         bevoegde_organisatie = validated_data.pop("bevoegde_organisatie", [])
         locaties = validated_data.pop("locaties", [])
@@ -674,18 +653,6 @@ class ProductSerializer(ProductBaseSerializer):
             )
         )
 
-        if gerelateerde_producten:
-            gerelateerde_catalogus_producten = []
-            for gerelateerde_product in gerelateerde_producten:
-                if "generiek_product" in gerelateerde_product:
-                    gerelateerde_catalogus_producten.append(
-                        self.get_product(
-                            gerelateerde_product["generiek_product"],
-                            validated_data["catalogus"],
-                        )
-                    )
-            product.gerelateerde_producten.set(gerelateerde_catalogus_producten)
-
         previous_publicatie_datum = product.most_recent_version.publicatie_datum
 
         versie = self.get_version_number(
@@ -705,8 +672,9 @@ class ProductSerializer(ProductBaseSerializer):
             for vertaling in vertalingen:
 
                 verwijzing_links = []
-                for verwijzing_link in vertaling["verwijzing_links"]:
-                    verwijzing_links.append(list(verwijzing_link.values()))
+                if "verwijzing_links" in vertaling:
+                    for verwijzing_link in vertaling["verwijzing_links"]:
+                        verwijzing_links.append(list(verwijzing_link.values()))
 
                 vertaling["verwijzing_links"] = verwijzing_links
 

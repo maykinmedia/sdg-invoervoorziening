@@ -56,7 +56,7 @@ class UserInvitationInline(admin.TabularInline):
         disabled = "disabled" if obj.accepted else None
 
         return format_html(
-            f"<input type='button' value='resend invite' onclick='resendInvite({obj.pk}, {subpath})' {disabled}>"
+            f"<input type='button' value='resend invite' onclick='resendInvite({obj.pk}, \"{subpath}\")' {disabled}>"
         )
 
     resend.allow_tags = True

@@ -143,6 +143,11 @@ class UniformeProductnaam(models.Model):
             "volledige UPL. "
         ),
     )
+    is_verwijderd = models.BooleanField(
+        _("Is verwijderd"),
+        help_text=_("Geeft aan of het product verwijderd is."),
+        default=False,
+    )
 
     # There can be several "grondslagen" (legal basis) for a UPN. The
     # representation on standaarden.overheid.nl is flattened. For the sake of
