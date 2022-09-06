@@ -348,7 +348,9 @@ class ProductSerializer(ProductBaseSerializer):
 
     def validate(self, attrs):
         if "generiek_product" not in attrs:
-            raise serializers.ValidationError("You forgot to provide a product")
+            raise serializers.ValidationError(
+                {"generiekProduct": "You forgot to provide a product"}
+            )
 
         most_recent_version = attrs["most_recent_version"]
 
@@ -359,7 +361,9 @@ class ProductSerializer(ProductBaseSerializer):
 
         if required_taalen:
             raise serializers.ValidationError(
-                f"You forgot to provide the taal choice(s): {required_taalen}"
+                {
+                    "vertalingen": f"You forgot to provide the taal choice(s): {required_taalen}"
+                }
             )
 
         if most_recent_version["vertalingen"]:
@@ -370,7 +374,9 @@ class ProductSerializer(ProductBaseSerializer):
                         or vertaling["product_aanwezig_toelichting"] == ""
                     ):
                         raise serializers.ValidationError(
-                            "You forgot to provide the product_aanwezig_toelichting"
+                            {
+                                "productAanwezigToelichting": "You forgot to provide the product_aanwezig_toelichting"
+                            }
                         )
 
             if attrs["product_valt_onder"]:
@@ -380,7 +386,9 @@ class ProductSerializer(ProductBaseSerializer):
                         or vertaling["product_valt_onder_toelichting"] == ""
                     ):
                         raise serializers.ValidationError(
-                            "You forgot to provide the product_valt_onder_toelichting"
+                            {
+                                "productValtOnderToelichting": "You forgot to provide the product_valt_onder_toelichting"
+                            }
                         )
 
         return attrs
@@ -392,7 +400,9 @@ class ProductSerializer(ProductBaseSerializer):
                     upn__upn_label=generiek_product["upn_label"], doelgroep=doelgroep
                 )
             except GeneriekProduct.DoesNotExist:
-                raise serializers.ValidationError("Received a non existing 'upn label'")
+                raise serializers.ValidationError(
+                    {"upnLabel": "Received a non existing 'upn label'"}
+                )
 
         if "upn_uri" in generiek_product:
             try:
@@ -400,7 +410,9 @@ class ProductSerializer(ProductBaseSerializer):
                     upn__upn_uri=generiek_product["upn_uri"], doelgroep=doelgroep
                 )
             except GeneriekProduct.DoesNotExist:
-                raise serializers.ValidationError("Received a non existing 'upn uri'")
+                raise serializers.ValidationError(
+                    {"upnUri": "Received a non existing 'upn uri'"}
+                )
 
     def get_default_catalogus(self, verantwoordelijke_organisatie):
         try:
@@ -409,7 +421,7 @@ class ProductSerializer(ProductBaseSerializer):
                 is_default_catalogus=True,
             )
         except ProductenCatalogus.DoesNotExist:
-            raise serializers.ValidationError("Could not find a default catalog.")
+            raise serializers.ValidationError({"": "Could not find a default catalog."})
 
     def get_referentie_product(self, generiek_product):
         try:
@@ -421,7 +433,9 @@ class ProductSerializer(ProductBaseSerializer):
             return referentie_product
         except Product.DoesNotExist:
             raise serializers.ValidationError(
-                "The requested product does not exist for this organization."
+                {
+                    "upnUri": "The requested product does not exist for this organization."
+                }
             )
 
     def get_product(self, product_valt_onder, catalogus):
@@ -432,7 +446,9 @@ class ProductSerializer(ProductBaseSerializer):
                     catalogus=catalogus,
                 )
             except Product.DoesNotExist:
-                raise serializers.ValidationError("Received a non existing 'upn label'")
+                raise serializers.ValidationError(
+                    {"upnLabel": "Received a non existing 'upn label'"}
+                )
 
         if "upn_uri" in product_valt_onder:
             try:
@@ -441,7 +457,9 @@ class ProductSerializer(ProductBaseSerializer):
                     catalogus=catalogus,
                 )
             except Product.DoesNotExist:
-                raise serializers.ValidationError("Received a non existing 'upn uri'")
+                raise serializers.ValidationError(
+                    {"upnUri": "Received a non existing 'upn uri'"}
+                )
 
     def get_lokale_overheid(self, organisatie):
         if "owms_pref_label" in organisatie and organisatie["owms_pref_label"]:
@@ -451,7 +469,7 @@ class ProductSerializer(ProductBaseSerializer):
                 )
             except LokaleOverheid.DoesNotExist:
                 raise serializers.ValidationError(
-                    "Received a non existing 'owms pref label'"
+                    {"owmsPrefLabel": "Received a non existing 'owms pref label'"}
                 )
 
         if "owms_identifier" in organisatie and organisatie["owms_identifier"]:
@@ -461,7 +479,7 @@ class ProductSerializer(ProductBaseSerializer):
                 )
             except LokaleOverheid.DoesNotExist:
                 raise serializers.ValidationError(
-                    "Received a non existing 'owms identifier'"
+                    {"owmsIdentifier": "Received a non existing 'owms identifier'"}
                 )
 
     def get_bevoegde_organisatie(self, organisatie):
@@ -469,7 +487,11 @@ class ProductSerializer(ProductBaseSerializer):
             try:
                 return BevoegdeOrganisatie.objects.get(naam=organisatie["naam"])
             except BevoegdeOrganisatie.DoesNotExist:
-                raise serializers.ValidationError("Received a non existing 'naam'")
+                raise serializers.ValidationError(
+                    {
+                        "verantwoordelijkeOrganisatie.naam": "Received a non existing 'naam'"
+                    }
+                )
 
         if (
             "owms_pref_label" in organisatie["organisatie"]
@@ -483,7 +505,9 @@ class ProductSerializer(ProductBaseSerializer):
                 )
             except BevoegdeOrganisatie.DoesNotExist:
                 raise serializers.ValidationError(
-                    "Received a non existing 'owms pref label'"
+                    {
+                        "verantwoordelijkeOrganisatie.owmsPrefLabedl": "Received a non existing 'owms pref label'"
+                    }
                 )
 
         if (
@@ -498,7 +522,9 @@ class ProductSerializer(ProductBaseSerializer):
                 )
             except BevoegdeOrganisatie.DoesNotExist:
                 raise serializers.ValidationError(
-                    "Received a non existing 'owms identifier'"
+                    {
+                        "verantwoordelijkeOrganisatie.owmsIdentifier": "Received a non existing 'owms identifier'"
+                    }
                 )
 
         return None
@@ -515,7 +541,9 @@ class ProductSerializer(ProductBaseSerializer):
 
         if new_date < previous_date and new_date < datetime.date.today():
             raise serializers.ValidationError(
-                "Product can't have an earlier publicatie date then earlier versions."
+                {
+                    "publicatieDatum": "Product can't have an earlier publicatie date then earlier versions."
+                }
             )
 
         if new_date <= datetime.date.today():
@@ -533,7 +561,6 @@ class ProductSerializer(ProductBaseSerializer):
         organisatie_locaties = []
         for locatie in locaties:
             if "naam" in locatie:
-
                 overheid_locatie = Locatie.objects.get(
                     naam=locatie["naam"],
                     lokale_overheid__organisatie=catalogus.lokale_overheid.organisatie,
@@ -541,7 +568,9 @@ class ProductSerializer(ProductBaseSerializer):
 
                 if not overheid_locatie:
                     raise serializers.ValidationError(
-                        f"Received a non existing 'locatie' of catalogus {catalogus}"
+                        {
+                            "locaties.naam": f"Received a non existing 'locatie' of catalogus {catalogus}"
+                        }
                     )
 
                 organisatie_locaties.append(overheid_locatie)
@@ -588,7 +617,9 @@ class ProductSerializer(ProductBaseSerializer):
                 validated_data["generiek_product"]
             )
         else:
-            raise serializers.ValidationError("Received a referentie catalogus")
+            raise serializers.ValidationError(
+                {"catalogus": "Received a referentie catalogus"}
+            )
 
         if product_valt_onder:
             if "generiek_product" in product_valt_onder:
