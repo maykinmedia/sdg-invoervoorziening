@@ -18,9 +18,9 @@
             </div>
             <div class="formset__body">
                 {% for subform in form %}
-
                     {% if subform.instance.organisatie == lokaleoverheid.organisatie %}
                         <div class="form__subforms">{# No form__subforms class to prevent JS-bindings #}
+                            {{ subform.non_field_errors }}
                             {% for hidden in subform.hidden_fields %}
                                 {{ hidden }}
                             {% endfor %}
@@ -37,6 +37,7 @@
                         </div>
                     {% else %}
                         <div class="form__subforms">
+                            {{ subform.non_field_errors }}
                             {% for hidden in subform.hidden_fields %}
                                 {{ hidden }}
                             {% endfor %}

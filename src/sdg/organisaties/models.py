@@ -113,7 +113,6 @@ class BevoegdeOrganisatie(models.Model):
     naam = models.CharField(
         _("naam"),
         max_length=255,
-        unique=True,
         blank=True,
         help_text=_(
             "De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen bekende overheidsorganisatie is."
@@ -143,6 +142,7 @@ class BevoegdeOrganisatie(models.Model):
     class Meta:
         verbose_name = _("bevoegde organisatie")
         verbose_name_plural = _("bevoegde organisaties")
+        unique_together = ("naam", "lokale_overheid")
 
     def __str__(self):
         return self.naam

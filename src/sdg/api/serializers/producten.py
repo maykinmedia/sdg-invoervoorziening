@@ -468,11 +468,15 @@ class ProductSerializer(ProductBaseSerializer):
                 {"owmsIdentifier": "Het veld 'owmsIdentifier' is verplicht."}
             )
 
-    def get_bevoegde_organisatie(self, organisatie):
+    def get_bevoegde_organisatie(self, organisatie, verantwoordelijke_organisatie):
         if "naam" in organisatie and organisatie["naam"]:
             try:
-                return BevoegdeOrganisatie.objects.get(naam=organisatie["naam"])
+                return BevoegdeOrganisatie.objects.get(
+                    naam=organisatie["naam"],
+                    lokale_overheid=verantwoordelijke_organisatie,
+                )
             except BevoegdeOrganisatie.DoesNotExist:
+
                 raise serializers.ValidationError(
                     {
                         "verantwoordelijkeOrganisatie.naam": "De waarde van het veld 'naam' is ongeldig. Het object met deze waarde bestaat niet."
@@ -485,9 +489,10 @@ class ProductSerializer(ProductBaseSerializer):
         ):
             try:
                 return BevoegdeOrganisatie.objects.get(
-                    lokale_overheid__organisatie__owms_identifier=organisatie[
-                        "organisatie"
-                    ]["owms_identifier"]
+                    organisatie__owms_identifier=organisatie["organisatie"][
+                        "owms_identifier"
+                    ],
+                    lokale_overheid=verantwoordelijke_organisatie,
                 )
             except BevoegdeOrganisatie.DoesNotExist:
                 raise serializers.ValidationError(
@@ -586,7 +591,9 @@ class ProductSerializer(ProductBaseSerializer):
             )
 
         if bevoegde_organisatie:
-            bevoegde_organisatie = self.get_bevoegde_organisatie(bevoegde_organisatie)
+            bevoegde_organisatie = self.get_bevoegde_organisatie(
+                bevoegde_organisatie, verantwoordelijke_organisatie
+            )
 
         if isinstance(catalogus, dict):
             validated_data["catalogus"] = self.get_default_catalogus(
