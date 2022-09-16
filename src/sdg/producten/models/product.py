@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime
 import uuid
 from functools import partialmethod
-from typing import Any, List
+from typing import Any, List, Optional
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -16,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 from djchoices import ChoiceItem, DjangoChoices
 
 from sdg.core.constants import DoelgroepChoices
-from sdg.core.constants.product import ProductStatus
+from sdg.core.constants.product import ProductStatus, TaalChoices
 from sdg.core.utils import get_from_cache
 from sdg.producten.models import (
     LocalizedGeneriekProduct,
@@ -434,17 +434,27 @@ class ProductVersie(ProductFieldMixin, models.Model):
             **kwargs,
         )
 
-    def update_with_reference_texts(self, reference_product_version):
-        lang_rpv = {
+    def update_with_reference_texts(
+        self,
+        reference_product_version,
+        languages: Optional[List[TaalChoices]] = None,
+        skip_filled_fields=False,
+    ):
+        language_version_map = {
             rpv.taal: rpv for rpv in reference_product_version.vertalingen.all()
         }
+        if languages:
+            language_version_map = {
+                k: v for k, v in language_version_map.items() if k in languages
+            }
+
         for localized_product_version in self.vertalingen.all():
-            localized_reference_product_version = lang_rpv.get(
+            if localized_reference_product_version := language_version_map.get(
                 localized_product_version.taal, None
-            )
-            if localized_reference_product_version:
+            ):
                 localized_product_version.update_with_reference_texts(
-                    localized_reference_product_version
+                    localized_reference_product_version,
+                    skip_filled_fields=skip_filled_fields,
                 )
 
     def get_pretty_version(self):

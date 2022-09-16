@@ -19,9 +19,15 @@ class Command(BaseCommand):
             "--organisation",
             help="Enforce a specific plugin to be used. Defaults to the configured plugin.",
         )
+        parser.add_argument(
+            "--fill-empty-english-text",
+            help="Fill only empty English texts with reference texts.",
+            action="store_true",
+        )
 
     def handle(self, **options):
-        _org_param = options.get("organisation", None)
+        _org_param = options.get("organisation")
+        _fill_empty_english_text = options.get("fill_empty_english_text")
 
         product_catalog_query_kwargs = {}
         if _org_param:
@@ -175,6 +181,16 @@ class Command(BaseCommand):
                                     localized_product_version.update_with_reference_texts(
                                         localized_reference_product_version
                                     )
+
+                    elif _fill_empty_english_text:
+                        corrections.append(
+                            "updated only empty english text with reference texts"
+                        )
+                        product_version.update_with_reference_texts(
+                            active_reference_product_version,
+                            languages=[TaalChoices.en],
+                            skip_filled_fields=True,
+                        )
 
                     # Update products with the latest reference texts if there
                     # is a reference text and the product hasn't been touched
