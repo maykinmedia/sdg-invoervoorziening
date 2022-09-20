@@ -296,6 +296,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "uiterste_termijn",
             "wtd_bij_geen_reactie",
             "decentrale_procedure_link",
+            "decentrale_procedure_link_label",
         ]
         return context
 

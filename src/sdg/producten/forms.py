@@ -29,6 +29,7 @@ class LocalizedProductForm(FieldConfigurationMixin, forms.ModelForm):
             "wtd_bij_geen_reactie",
             "verwijzing_links",
             "decentrale_procedure_link",
+            "decentrale_procedure_link_label",
             "product_valt_onder_toelichting",
             "product_aanwezig_toelichting",
         )

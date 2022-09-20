@@ -24,8 +24,36 @@ from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.models.product import GeneriekProduct
 
 
+class LocalizedProcedureLink(serializers.ModelSerializer):
+    label = serializers.CharField(
+        source="decentrale_procedure_link_label",
+        help_text="Dit veld bevat de label van de URL.",
+        required=False,
+        default="",
+    )
+    url = serializers.URLField(
+        source="decentrale_procedure_link",
+        help_text="Dit veld bevat de URL naar referentieinformatie over het product.",
+        required=False,
+        default="",
+    )
+
+    class Meta:
+        model = LocalizedProduct
+        fields = (
+            "label",
+            "url",
+        )
+
+
 class LocalizedProductSerializer(serializers.ModelSerializer):
     """Serializer for the localized version of a product."""
+
+    procedure_link = LocalizedProcedureLink(
+        source="*",
+        help_text="De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen.",
+        required=False,
+    )
 
     links = LabeledUrlListField(
         source="verwijzing_links",
@@ -63,10 +91,6 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "tekst": {
                 "source": "specifieke_tekst",
                 "help_text": "De inleidende tekst voor het product. Hierin kunt u het product beschrijven en komt direct na de generieke productbeschrijving. Dit veld ondersteund Markdown.",
-            },
-            "procedure_link": {
-                "source": "decentrale_procedure_link",
-                "help_text": "De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen.",
             },
             "procedure_beschrijving": {
                 "help_text": "De beschrijving van hoe het product wordt aangevraagd. Dit veld ondersteund Markdown."

@@ -205,6 +205,12 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
         blank=True,
     )
+    decentrale_procedure_link_label = models.CharField(
+        _("decentrale procedure link label"),
+        max_length=50,
+        help_text=_("Label van de 'decentrale procedure link url'"),
+        blank=True,
+    )
 
     product_valt_onder_toelichting = models.TextField(
         _("product valt onder toelichting"),
