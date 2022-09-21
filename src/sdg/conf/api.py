@@ -51,12 +51,12 @@ en organisaties zoals die bekend zijn bij de
 
 Voor producten wordt gebruik gemaakt van de
 [Uniforme Productnamenlijst (UPL)](https://standaarden.overheid.nl/upl). De
-relevante velden in deze API worden aangeduid met `upnLabel` en
+relevante velden in deze API worden aangeduid met de
 `upnIdentificatie`.
 
 Voor organisaties wordt gebruik gemaakt van
 [OWMS waardenlijsten](https://standaarden.overheid.nl/owms/4.0/doc/waardelijsten).
-De velden in deze API worden aangeduid met `(organisatie)OwmsPrefLabel` en
+De velden in deze API worden aangeduid met de
 `(organisatie)OwmsIdentifier`. Afhankelijk van de resource staat het woord
 "organisatie" (of iets anders) er wel of niet voor.
 

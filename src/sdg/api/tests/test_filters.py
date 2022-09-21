@@ -529,25 +529,6 @@ class LocatieFilterTests(APITestCase):
             f"http://testserver/api/v1/locaties/{str(location.uuid)}", data[0]["url"]
         )
 
-    def test_filter_organisatie_owms_pref_label(self):
-        location, *_ = LocatieFactory.create_batch(5)
-
-        response = self.client.get(
-            self.url,
-            {
-                "organisatieOwmsPrefLabel": f"{location.lokale_overheid.organisatie.owms_pref_label}"
-            },
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        data = response.json()["results"]
-
-        self.assertEqual(1, len(data))
-        self.assertEqual(
-            f"http://testserver/api/v1/locaties/{str(location.uuid)}", data[0]["url"]
-        )
-
 
 class LokaleOverheidFilterTests(APITestCase):
     url = reverse("api:lokaleoverheid-list")

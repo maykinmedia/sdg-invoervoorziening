@@ -123,7 +123,7 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
     )
     upn_uri = serializers.URLField(
         source="generiek_product.upn_uri",
-        required=False,
+        required=True,
         help_text="De UPN URI van het specifieke product.",
     )
 
@@ -174,17 +174,17 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
     """De organisatie die dit product levert en de teksten hiervan beheert."""
 
     owms_identifier = serializers.URLField(
-        source="catalogi.organisatie.owms_identifier",
+        source="catalogus.lokale_overheid.organisatie.owms_identifier",
         help_text="De OWMS Identifier van de hoofdorganisatie van deze lokale overheid.",
-        required=False,
+        required=True,
     )
     owms_pref_label = serializers.CharField(
-        source="catalogi.organisatie.owms_pref_label",
+        source="catalogus.lokale_overheid.organisatie.owms_pref_label",
         help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
         required=False,
     )
     owms_end_date = serializers.DateTimeField(
-        source="catalogi.organisatie.owms_end_date",
+        source="catalogus.lokale_overheid.organisatie.owms_end_date",
         help_text="De einddatum, zoals gevonden in het OWMS-model.",
         read_only=True,
         required=False,
@@ -214,9 +214,6 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
                 "api:lokaleoverheid-detail",
                 [str(instance.catalogus.lokale_overheid.uuid)],
             ),
-            owms_pref_label=instance.catalogus.lokale_overheid.organisatie.owms_pref_label,
-            owms_identifier=instance.catalogus.lokale_overheid.organisatie.owms_identifier,
-            owms_end_date=instance.catalogus.lokale_overheid.organisatie.owms_end_date,
         )
 
         return data
@@ -394,16 +391,6 @@ class ProductSerializer(ProductBaseSerializer):
         return attrs
 
     def get_generiek_product(self, generiek_product, doelgroep):
-        if "upn_label" in generiek_product:
-            try:
-                return GeneriekProduct.objects.get(
-                    upn__upn_label=generiek_product["upn_label"], doelgroep=doelgroep
-                )
-            except GeneriekProduct.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"upnLabel": "Received a non existing 'upn label'"}
-                )
-
         if "upn_uri" in generiek_product:
             try:
                 return GeneriekProduct.objects.get(
@@ -412,6 +399,10 @@ class ProductSerializer(ProductBaseSerializer):
             except GeneriekProduct.DoesNotExist:
                 raise serializers.ValidationError(
                     {"upnUri": "Received a non existing 'upn uri'"}
+                )
+            except KeyError:
+                raise serializers.ValidationError(
+                    {"upnUri": "Didn't receive a 'upn uri'"}
                 )
 
     def get_default_catalogus(self, verantwoordelijke_organisatie):
@@ -439,48 +430,31 @@ class ProductSerializer(ProductBaseSerializer):
             )
 
     def get_product(self, product_valt_onder, catalogus):
-        if "upn_label" in product_valt_onder:
-            try:
-                return Product.objects.get(
-                    generiek_product__upn__upn_label=product_valt_onder["upn_label"],
-                    catalogus=catalogus,
-                )
-            except Product.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"upnLabel": "Received a non existing 'upn label'"}
-                )
-
-        if "upn_uri" in product_valt_onder:
-            try:
-                return Product.objects.get(
-                    generiek_product__upn__upn_uri=product_valt_onder["upn_uri"],
-                    catalogus=catalogus,
-                )
-            except Product.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"upnUri": "Received a non existing 'upn uri'"}
-                )
+        try:
+            return Product.objects.get(
+                generiek_product__upn__upn_uri=product_valt_onder["upn_uri"],
+                catalogus=catalogus,
+            )
+        except Product.DoesNotExist:
+            raise serializers.ValidationError(
+                {"upnUri": "Received a non existing 'upn uri'"}
+            )
+        except KeyError:
+            raise serializers.ValidationError({"upnUri": "Didn't receive a 'upn uri'"})
 
     def get_lokale_overheid(self, organisatie):
-        if "owms_pref_label" in organisatie and organisatie["owms_pref_label"]:
-            try:
-                return LokaleOverheid.objects.get(
-                    organisatie__owms_pref_label=organisatie["owms_pref_label"]
-                )
-            except LokaleOverheid.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"owmsPrefLabel": "Received a non existing 'owms pref label'"}
-                )
-
-        if "owms_identifier" in organisatie and organisatie["owms_identifier"]:
-            try:
-                return LokaleOverheid.objects.get(
-                    organisatie__owms_identifier=organisatie["owms_identifier"]
-                )
-            except LokaleOverheid.DoesNotExist:
-                raise serializers.ValidationError(
-                    {"owmsIdentifier": "Received a non existing 'owms identifier'"}
-                )
+        try:
+            return LokaleOverheid.objects.get(
+                organisatie__owms_identifier=organisatie["owms_identifier"]
+            )
+        except LokaleOverheid.DoesNotExist:
+            raise serializers.ValidationError(
+                {"owmsIdentifier": "Received a non existing 'owms identifier'"}
+            )
+        except KeyError:
+            raise serializers.ValidationError(
+                {"owmsIdentifier": "Didn't receive a 'owms identifier'"}
+            )
 
     def get_bevoegde_organisatie(self, organisatie):
         if "naam" in organisatie and organisatie["naam"]:
@@ -490,23 +464,6 @@ class ProductSerializer(ProductBaseSerializer):
                 raise serializers.ValidationError(
                     {
                         "verantwoordelijkeOrganisatie.naam": "Received a non existing 'naam'"
-                    }
-                )
-
-        if (
-            "owms_pref_label" in organisatie["organisatie"]
-            and organisatie["organisatie"]["owms_pref_label"]
-        ):
-            try:
-                return BevoegdeOrganisatie.objects.get(
-                    lokale_overheid__organisatie__owms_pref_label=organisatie[
-                        "organisatie"
-                    ]["owms_pref_label"]
-                )
-            except BevoegdeOrganisatie.DoesNotExist:
-                raise serializers.ValidationError(
-                    {
-                        "verantwoordelijkeOrganisatie.owmsPrefLabedl": "Received a non existing 'owms pref label'"
                     }
                 )
 
@@ -607,7 +564,7 @@ class ProductSerializer(ProductBaseSerializer):
         if bevoegde_organisatie:
             bevoegde_organisatie = self.get_bevoegde_organisatie(bevoegde_organisatie)
 
-        if not catalogus:
+        if isinstance(catalogus, dict):
             validated_data["catalogus"] = self.get_default_catalogus(
                 verantwoordelijke_organisatie
             )
