@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from allauth.account.models import EmailAddress
 from compat import format_html
+from django_otp.plugins.otp_totp.admin import TOTPDeviceAdmin
 from hijack_admin.admin import HijackUserAdminMixin
 
 from ..core.events import post_event
@@ -178,3 +179,8 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
                 messages.add_message(
                     request, messages.ERROR, f"{function}: {exception}"
                 )
+
+
+# Add search and filter fields for the TOTP device admin page
+TOTPDeviceAdmin.search_fields = ["user__first_name", "user__last_name"]
+TOTPDeviceAdmin.list_filter = ["confirmed"]

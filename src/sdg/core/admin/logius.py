@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
+from django.db.models import Q
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 
@@ -28,13 +30,33 @@ class ThemaAdmin(admin.ModelAdmin):
     list_display = ("code", "thema", "informatiegebied")
 
 
+class SdgFilter(SimpleListFilter):
+    title = "SDG"
+    parameter_name = "sdg"
+
+    def lookups(self, request, model_admin):
+        return (
+            (1, "Ja"),
+            (0, "Nee"),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() is None:
+            return queryset
+
+        if bool(int(self.value())):
+            return queryset.filter(~Q(sdg=[]))
+        else:
+            return queryset.filter(sdg=[])
+
+
 @admin.register(UniformeProductnaam)
 class UniformeProductnaamAdmin(admin.ModelAdmin):
     search_fields = ("upn_label",)
-    list_display = ("upn_label", "thema", "is_verwijderd")
+    list_display = ("upn_label", "is_verwijderd", "sdg")
     list_filter = (
+        SdgFilter,
         "is_verwijderd",
-        "sdg",
         "gemeente",
         "rijk",
         "provincie",
