@@ -961,6 +961,10 @@ class ProductenTests(APITestCase):
         )
 
     def test_update_product_with_bevoegde_organisatie_naam(self):
+        BevoegdeOrganisatieFactory(
+            organisatie=self.organisatie,
+            lokale_overheid=self.test_lokale_overheid,
+        )
         list_url = reverse("api:product-list")
 
         body = self.get_product_post_body(
@@ -994,6 +998,11 @@ class ProductenTests(APITestCase):
         )
 
     def test_update_product_with_bevoegde_organisatie_identifier(self):
+        BevoegdeOrganisatieFactory(
+            organisatie=self.organisatie,
+            lokale_overheid=self.test_lokale_overheid,
+        )
+
         list_url = reverse("api:product-list")
 
         body = self.get_product_post_body(
