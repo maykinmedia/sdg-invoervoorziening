@@ -172,16 +172,12 @@ class LocatieSerializer(LocatieBaseSerializer):
 
             if not lokale_overheid:
                 raise serializers.ValidationError(
-                    {
-                        "organisatie": "You forgot to provide the owms_pref_label and∕or the owms_identifier"
-                    }
+                    {"organisatie": "Het veld 'owmsIdentifier' is verplicht."}
                 )
 
             if "organisatie" not in lokale_overheid:
                 raise serializers.ValidationError(
-                    {
-                        "organisatie": "You forgot to provide the owms_pref_label and∕or the owms_identifier"
-                    }
+                    {"organisatie": "Het veld 'owmsIdentifier' is verplicht."}
                 )
 
         return attrs
@@ -198,12 +194,14 @@ class LocatieSerializer(LocatieBaseSerializer):
         except LokaleOverheid.DoesNotExist:
             raise serializers.ValidationError(
                 {
-                    "organisatie.owmsIdentifier": "Received a non existing owms_identifier"
+                    "organisatie.owmsIdentifier": "De waarde van het veld 'owmsIdentifier' is ongeldig. Het object met deze waarde bestaat niet."
                 }
             )
         except KeyError:
             raise serializers.ValidationError(
-                {"organisatie.owmsIdentifier": "Didn't recieve a owms_identifier"}
+                {
+                    "organisatie.owmsIdentifier": "Het veld 'owmsIdentifier' is verplicht."
+                }
             )
 
         record = super().create(validated_data)

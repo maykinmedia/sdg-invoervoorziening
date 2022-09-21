@@ -346,7 +346,7 @@ class ProductSerializer(ProductBaseSerializer):
     def validate(self, attrs):
         if "generiek_product" not in attrs:
             raise serializers.ValidationError(
-                {"generiekProduct": "You forgot to provide a product"}
+                {"generiekProduct": "Het veld 'product' is verplicht."}
             )
 
         most_recent_version = attrs["most_recent_version"]
@@ -359,7 +359,7 @@ class ProductSerializer(ProductBaseSerializer):
         if required_taalen:
             raise serializers.ValidationError(
                 {
-                    "vertalingen": f"You forgot to provide the taal choice(s): {required_taalen}"
+                    "vertalingen": f"Het veld 'taal' is verplicht. Geldige waarden zijn: {required_taalen}"
                 }
             )
 
@@ -372,7 +372,7 @@ class ProductSerializer(ProductBaseSerializer):
                     ):
                         raise serializers.ValidationError(
                             {
-                                "productAanwezigToelichting": "You forgot to provide the product_aanwezig_toelichting"
+                                "productAanwezigToelichting": "Het veld 'productAanwezigToelichting' is verplicht als het product niet aanwezig is."
                             }
                         )
 
@@ -384,7 +384,7 @@ class ProductSerializer(ProductBaseSerializer):
                     ):
                         raise serializers.ValidationError(
                             {
-                                "productValtOnderToelichting": "You forgot to provide the product_valt_onder_toelichting"
+                                "productValtOnderToelichting": "Het veld 'productValtOnderToelichting' is verplicht als het product onder een ander product valt."
                             }
                         )
 
@@ -398,11 +398,13 @@ class ProductSerializer(ProductBaseSerializer):
                 )
             except GeneriekProduct.DoesNotExist:
                 raise serializers.ValidationError(
-                    {"upnUri": "Received a non existing 'upn uri'"}
+                    {
+                        "upnUri": "De waarde van het veld 'upnUri' is ongeldig. Het object met deze waarde bestaat niet."
+                    }
                 )
             except KeyError:
                 raise serializers.ValidationError(
-                    {"upnUri": "Didn't receive a 'upn uri'"}
+                    {"upnUri": "Het veld 'upnUri' is verplicht.'"}
                 )
 
     def get_default_catalogus(self, verantwoordelijke_organisatie):
@@ -412,7 +414,11 @@ class ProductSerializer(ProductBaseSerializer):
                 is_default_catalogus=True,
             )
         except ProductenCatalogus.DoesNotExist:
-            raise serializers.ValidationError({"": "Could not find a default catalog."})
+            raise serializers.ValidationError(
+                {
+                    "": "Het veld 'catalogus' is verplicht omdat er geen standaard catalogus beschikbaar is."
+                }
+            )
 
     def get_referentie_product(self, generiek_product):
         try:
@@ -425,7 +431,7 @@ class ProductSerializer(ProductBaseSerializer):
         except Product.DoesNotExist:
             raise serializers.ValidationError(
                 {
-                    "upnUri": "The requested product does not exist for this organization."
+                    "upnUri": "Het product is niet (meer) gekoppeld aan een referentie product."
                 }
             )
 
@@ -437,10 +443,14 @@ class ProductSerializer(ProductBaseSerializer):
             )
         except Product.DoesNotExist:
             raise serializers.ValidationError(
-                {"upnUri": "Received a non existing 'upn uri'"}
+                {
+                    "upnUri": "De waarde van het veld 'upnUri' is ongeldig. Het object met deze waarde bestaat niet."
+                }
             )
         except KeyError:
-            raise serializers.ValidationError({"upnUri": "Didn't receive a 'upn uri'"})
+            raise serializers.ValidationError(
+                {"upnUri": "Het veld 'upnUri' is verplicht."}
+            )
 
     def get_lokale_overheid(self, organisatie):
         try:
@@ -449,11 +459,13 @@ class ProductSerializer(ProductBaseSerializer):
             )
         except LokaleOverheid.DoesNotExist:
             raise serializers.ValidationError(
-                {"owmsIdentifier": "Received a non existing 'owms identifier'"}
+                {
+                    "owmsIdentifier": "De waarde van het veld 'owmsIdentifier' is ongeldig. Het object met deze waarde bestaat niet."
+                }
             )
         except KeyError:
             raise serializers.ValidationError(
-                {"owmsIdentifier": "Didn't receive a 'owms identifier'"}
+                {"owmsIdentifier": "Het veld 'owmsIdentifier' is verplicht."}
             )
 
     def get_bevoegde_organisatie(self, organisatie):
@@ -463,7 +475,7 @@ class ProductSerializer(ProductBaseSerializer):
             except BevoegdeOrganisatie.DoesNotExist:
                 raise serializers.ValidationError(
                     {
-                        "verantwoordelijkeOrganisatie.naam": "Received a non existing 'naam'"
+                        "verantwoordelijkeOrganisatie.naam": "De waarde van het veld 'naam' is ongeldig. Het object met deze waarde bestaat niet."
                     }
                 )
 
@@ -480,7 +492,7 @@ class ProductSerializer(ProductBaseSerializer):
             except BevoegdeOrganisatie.DoesNotExist:
                 raise serializers.ValidationError(
                     {
-                        "verantwoordelijkeOrganisatie.owmsIdentifier": "Received a non existing 'owms identifier'"
+                        "verantwoordelijkeOrganisatie.owmsIdentifier": "De waarde van het veld 'owmsIdentifier' is ongeldig. Het object met deze waarde bestaat niet."
                     }
                 )
 
@@ -499,7 +511,7 @@ class ProductSerializer(ProductBaseSerializer):
         if new_date < previous_date and new_date < datetime.date.today():
             raise serializers.ValidationError(
                 {
-                    "publicatieDatum": "Product can't have an earlier publicatie date then earlier versions."
+                    "publicatieDatum": "Het product kan niet een vroegere publicatiedatum krijgen dan een voorgaande versie."
                 }
             )
 
@@ -517,6 +529,18 @@ class ProductSerializer(ProductBaseSerializer):
     def get_locaties(self, locaties, catalogus):
         organisatie_locaties = []
         for locatie in locaties:
+            if "uuid" in locatie:
+                try:
+                    organisatie_locaties.append(
+                        Locatie.objects.get(
+                            uuid=locatie["uuid"],
+                            lokale_overheid__organisatie=catalogus.lokale_overheid.organisatie,
+                        )
+                    )
+                except Locatie.DoesNotExist:
+                    raise serializers.ValidationError(
+                        f"De 'locatie' die u meegegeven heeft bestaat niet in de catalogus: {catalogus.lokale_overheid.organisatie}."
+                    )
             if "naam" in locatie:
                 overheid_locatie = Locatie.objects.get(
                     naam=locatie["naam"],
@@ -526,7 +550,7 @@ class ProductSerializer(ProductBaseSerializer):
                 if not overheid_locatie:
                     raise serializers.ValidationError(
                         {
-                            "locaties.naam": f"Received a non existing 'locatie' of catalogus {catalogus}"
+                            "locaties.naam": f"De 'locatie' die u meegegeven heeft bestaat niet in de catalogus: {catalogus.lokale_overheid.organisatie}."
                         }
                     )
 
@@ -575,7 +599,7 @@ class ProductSerializer(ProductBaseSerializer):
             )
         else:
             raise serializers.ValidationError(
-                {"catalogus": "Received a referentie catalogus"}
+                {"catalogus": "U kunt geen referentiecatalogus gebruiken."}
             )
 
         if product_valt_onder:
