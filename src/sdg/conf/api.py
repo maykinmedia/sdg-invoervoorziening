@@ -115,25 +115,25 @@ te vragen via historie.
 
 ## Proces voor productbeschrijvingen bijwerken
 
-Hoe productbeschrijvingen precies bijgewerkt worden is aan de 
+Hoe productbeschrijvingen precies bijgewerkt worden is aan de
 integratiespecialist van de organisatie. Hieronder staat een mogelijk scenario:
 
 Het scenario bestaat uit 2 onderdelen:
 
 1. Direct bijwerken in deze API, zodra het product bij de organisatie wijzigt.
-2. Dagelijkse (bij voorkeur 's nachts), alle productbeschrijvingen bijwerken 
-   waar wijzigingen in zijn gemaakt en die nog niet zijn verstuurd naar deze 
+2. Dagelijkse (bij voorkeur 's nachts), alle productbeschrijvingen bijwerken
+   waar wijzigingen in zijn gemaakt en die nog niet zijn verstuurd naar deze
    API.
 
-We raden aan om een veld bij te houden "laatstVerstuurdAanSDG". U dient dit 
-veld te voorzien van de actuele datum als een productbeschrijving succesvol is 
+We raden aan om een veld bij te houden "laatstVerstuurdAanSDG". U dient dit
+veld te voorzien van de actuele datum als een productbeschrijving succesvol is
 verstuurd naar deze API. Als u ook een veld "laatstGewijzigd" bijhoudt waarin
-de datum wordt opgeslagen waarop de productbeschrijving aan uw kant is 
+de datum wordt opgeslagen waarop de productbeschrijving aan uw kant is
 gewijzigd, dan kunt u vergelijkingen maken.
 
 Indien de API niet beschikbaar is, en uw productbeschrijving wijzigt, dan zal
-"laatstVerstuurdAanSDG" < "laatstGewijzigd". U kunt dan 's nachts alle 
-productbeschrijvingen waarvoor dit geldt, alsnog proberen te sturen aan deze 
+"laatstVerstuurdAanSDG" < "laatstGewijzigd". U kunt dan 's nachts alle
+productbeschrijvingen waarvoor dit geldt, alsnog proberen te sturen aan deze
 API.
 
 """
