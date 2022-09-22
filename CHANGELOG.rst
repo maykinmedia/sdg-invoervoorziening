@@ -2,6 +2,35 @@
 Change history
 ==============
 
+1.4.0
+=====
+
+*September 22, 2022*
+
+* [#757] Fixed showing date in message for future publications
+* [#742] Fixed bug in the CMS when hosted on a subpath
+* [#714] Added command to update English texts with reference texts
+* [#399] Added search and filter on otp devices
+* [#511] Added product status concept
+* [#724] Added correct version control, based on date
+* [#622] Changed field label config to be language specific
+* [#734] Removed related products entirely
+* [#716] Optimized calculation of publication date
+
+**API changes**
+
+* [#732] Fixed API crash when not sending a bevoegdeOrganisatie
+* [#723] Fixed bug that crashed the product API endpoint when trying toset verwijzinglinks
+* [#722] Added optional IP whitelisting for API access
+* [#738] Added a organisation update endpoint for contact details
+* [#662] Changed procedureLink to object(label, url)
+* [#740] Changed error handeling to match the to NL API strategy
+* [#741] Changed error messages to the Dutch language
+* [#734] Changed the way to identify locations (by name and URI)
+* [#729] Changed the name of certain API fields according to IM 1.6
+* [#736] Removed identify based on label
+
+
 1.3.0
 =====
 
