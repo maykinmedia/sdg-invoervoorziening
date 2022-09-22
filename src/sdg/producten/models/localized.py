@@ -200,6 +200,12 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
         blank=True,
     )
+    decentrale_procedure_label = models.CharField(
+        _("decentrale procedure label"),
+        max_length=100,
+        help_text=_("Label die de context van de procedure beschrijft."),
+        blank=True,
+    )
     decentrale_procedure_link = models.URLField(
         _("decentrale procedure link"),
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),

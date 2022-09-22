@@ -229,7 +229,10 @@ class ProductenTests(APITestCase):
                     "tekst": "",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
-                    "procedureLink": "",
+                    "procedureLink": {
+                        "label": "",
+                        "url": "",
+                    },
                     "kostenEnBetaalmethoden": "",
                     "procedureBeschrijving": "",
                     "titel": "",
@@ -245,7 +248,10 @@ class ProductenTests(APITestCase):
                     "tekst": "",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
-                    "procedureLink": "",
+                    "procedureLink": {
+                        "label": "",
+                        "url": "",
+                    },
                     "kostenEnBetaalmethoden": "",
                     "procedureBeschrijving": "",
                     "titel": "",
@@ -291,7 +297,10 @@ class ProductenTests(APITestCase):
                         "tekst": "",
                         "bewijs": "bewijs dat tekst wordt aangemaakt",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -307,7 +316,10 @@ class ProductenTests(APITestCase):
                         "tekst": "",
                         "bewijs": "proof that text gets created",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -350,7 +362,8 @@ class ProductenTests(APITestCase):
             data["vertalingen"][0]["bewijs"], "bewijs dat tekst wordt aangemaakt"
         )
         self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][0]["procedureLink"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureLink"]["label"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureLink"]["url"], "")
         self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "")
         self.assertEqual(data["vertalingen"][0]["titel"], "")
@@ -367,7 +380,8 @@ class ProductenTests(APITestCase):
             data["vertalingen"][1]["bewijs"], "proof that text gets created"
         )
         self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][1]["procedureLink"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureLink"]["url"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureLink"]["label"], "")
         self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "")
         self.assertEqual(data["vertalingen"][1]["titel"], "")
@@ -390,15 +404,18 @@ class ProductenTests(APITestCase):
                         "tekst": "voorbeeld",
                         "bewijs": "voorbeeld",
                         "bezwaarEnBeroep": "voorbeeld",
-                        "procedureLink": "https://www.voorbeeld.nl",
+                        "procedureLink": {
+                            "label": "voorbeeld",
+                            "url": "https://www.voorbeeld.nl",
+                        },
                         "kostenEnBetaalmethoden": "voorbeeld",
                         "procedureBeschrijving": "voorbeeld",
                         "titel": "voorbeeld",
                         "uitersteTermijn": "voorbeeld",
                         "vereisten": "voorbeeld",
                         "links": [
-                            {"label": "Test", "url": "https://www.voorbeeld.nl"},
-                            {"label": "Test2", "url": "https://www.voorbeeld2.nl"},
+                            {"label": "voorbeeld1", "url": "https://www.voorbeeld.nl"},
+                            {"label": "voorbeeld2", "url": "https://www.voorbeeld2.nl"},
                         ],
                         "wtdBijGeenReactie": "voorbeeld",
                         "productAanwezigToelichting": "",
@@ -409,15 +426,18 @@ class ProductenTests(APITestCase):
                         "tekst": "example",
                         "bewijs": "example",
                         "bezwaarEnBeroep": "example",
-                        "procedureLink": "https://www.example.com",
+                        "procedureLink": {
+                            "label": "example",
+                            "url": "https://www.example.com",
+                        },
                         "kostenEnBetaalmethoden": "example",
                         "procedureBeschrijving": "example",
                         "titel": "example",
                         "uitersteTermijn": "example",
                         "vereisten": "example",
                         "links": [
-                            {"label": "Test", "url": "https://www.example.com"},
-                            {"label": "Test2", "url": "https://www.example2.com"},
+                            {"label": "example1", "url": "https://www.example.com"},
+                            {"label": "example2", "url": "https://www.example2.com"},
                         ],
                         "wtdBijGeenReactie": "example",
                         "productAanwezigToelichting": "",
@@ -454,7 +474,11 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][0]["bewijs"], "voorbeeld")
         self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "voorbeeld")
         self.assertEqual(
-            data["vertalingen"][0]["procedureLink"],
+            data["vertalingen"][0]["procedureLink"]["label"],
+            "voorbeeld",
+        )
+        self.assertEqual(
+            data["vertalingen"][0]["procedureLink"]["url"],
             "https://www.voorbeeld.nl",
         )
         self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "voorbeeld")
@@ -465,8 +489,8 @@ class ProductenTests(APITestCase):
         self.assertEqual(
             data["vertalingen"][0]["links"],
             [
-                {"label": "Test", "url": "https://www.voorbeeld.nl"},
-                {"label": "Test2", "url": "https://www.voorbeeld2.nl"},
+                {"label": "voorbeeld1", "url": "https://www.voorbeeld.nl"},
+                {"label": "voorbeeld2", "url": "https://www.voorbeeld2.nl"},
             ],
         )
         self.assertEqual(data["vertalingen"][0]["wtdBijGeenReactie"], "voorbeeld")
@@ -477,8 +501,9 @@ class ProductenTests(APITestCase):
         self.assertEqual(data["vertalingen"][1]["tekst"], "example")
         self.assertEqual(data["vertalingen"][1]["bewijs"], "example")
         self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "example")
+        self.assertEqual(data["vertalingen"][1]["procedureLink"]["label"], "example")
         self.assertEqual(
-            data["vertalingen"][1]["procedureLink"], "https://www.example.com"
+            data["vertalingen"][1]["procedureLink"]["url"], "https://www.example.com"
         )
         self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "example")
         self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "example")
@@ -488,8 +513,8 @@ class ProductenTests(APITestCase):
         self.assertEqual(
             data["vertalingen"][1]["links"],
             [
-                {"label": "Test", "url": "https://www.example.com"},
-                {"label": "Test2", "url": "https://www.example2.com"},
+                {"label": "example1", "url": "https://www.example.com"},
+                {"label": "example2", "url": "https://www.example2.com"},
             ],
         )
         self.assertEqual(data["vertalingen"][1]["wtdBijGeenReactie"], "example")
@@ -508,7 +533,10 @@ class ProductenTests(APITestCase):
                         "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -578,7 +606,10 @@ class ProductenTests(APITestCase):
                         "tekst": "generieke tekst om te kijken of hij update",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -594,7 +625,10 @@ class ProductenTests(APITestCase):
                         "tekst": "generic text to see if it updates",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -640,7 +674,8 @@ class ProductenTests(APITestCase):
         )
         self.assertEqual(data["vertalingen"][0]["bewijs"], "")
         self.assertEqual(data["vertalingen"][0]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][0]["procedureLink"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureLink"]["label"], "")
+        self.assertEqual(data["vertalingen"][0]["procedureLink"]["url"], "")
         self.assertEqual(data["vertalingen"][0]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][0]["procedureBeschrijving"], "")
         self.assertEqual(data["vertalingen"][0]["titel"], "")
@@ -658,7 +693,8 @@ class ProductenTests(APITestCase):
         )
         self.assertEqual(data["vertalingen"][1]["bewijs"], "")
         self.assertEqual(data["vertalingen"][1]["bezwaarEnBeroep"], "")
-        self.assertEqual(data["vertalingen"][1]["procedureLink"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureLink"]["label"], "")
+        self.assertEqual(data["vertalingen"][1]["procedureLink"]["url"], "")
         self.assertEqual(data["vertalingen"][1]["kostenEnBetaalmethoden"], "")
         self.assertEqual(data["vertalingen"][1]["procedureBeschrijving"], "")
         self.assertEqual(data["vertalingen"][1]["titel"], "")
@@ -719,7 +755,10 @@ class ProductenTests(APITestCase):
                         "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -735,7 +774,10 @@ class ProductenTests(APITestCase):
                         "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -805,7 +847,10 @@ class ProductenTests(APITestCase):
                         "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
@@ -821,7 +866,10 @@ class ProductenTests(APITestCase):
                         "tekst": "",
                         "bewijs": "",
                         "bezwaarEnBeroep": "",
-                        "procedureLink": "",
+                        "procedureLink": {
+                            "label": "",
+                            "url": "",
+                        },
                         "kostenEnBetaalmethoden": "",
                         "procedureBeschrijving": "",
                         "titel": "",
