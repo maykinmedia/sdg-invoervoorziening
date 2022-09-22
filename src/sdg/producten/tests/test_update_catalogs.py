@@ -341,3 +341,114 @@ class UpdateCatalogTests(TestCase):
             generated_updated_localized_product.specifieke_tekst,
             "Changed by user text",
         )
+
+    def test_update_catalogs_with_fill_empty_english_text(self):
+        ref_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False
+        )
+        ref_catalog = ProductenCatalogusFactory.create(
+            lokale_overheid=ref_overheid,
+            is_referentie_catalogus=True,
+        )
+        ref_product = ReferentieProductFactory.create(
+            catalogus=ref_catalog,
+        )
+        ref_product_versie = ProductVersieFactory.create(
+            product=ref_product,
+            publicatie_datum=date.today() - timedelta(days=1),
+            versie=1,
+        )
+        LocalizedProductFactory.create(
+            product_versie=ref_product_versie,
+            taal="nl",
+            product_titel_decentraal="Original title",
+            specifieke_tekst="Original text",
+        )
+
+        LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=True,
+            organisatie__owms_end_date=None,
+        )
+
+        call_command("update_catalogs")
+
+        generated_product = Product.objects.get(~Q(pk=ref_product.pk))
+        generated_product_versie = ProductVersie.objects.get(product=generated_product)
+        generated_localized_product = LocalizedProduct.objects.get(
+            taal="nl", product_versie=generated_product_versie
+        )
+        self.assertEqual(
+            generated_localized_product.product_titel_decentraal,
+            "Original title",
+        )
+        self.assertEqual(generated_localized_product.specifieke_tekst, "Original text")
+
+        # Simulate user creating new product version
+        product_versie_2 = ProductVersieFactory.create(
+            product=generated_product,
+            publicatie_datum=date.today(),
+            versie=2,
+        )
+        localized_product_nl_2 = LocalizedProductFactory.create(
+            taal="nl",
+            product_versie=product_versie_2,
+            product_titel_decentraal="titel NL",
+            specifieke_tekst="",
+            procedure_beschrijving="procedure beschrijving NL",
+        )
+        localized_product_en_2 = LocalizedProductFactory.create(
+            taal="en",
+            product_versie=product_versie_2,
+            product_titel_decentraal="",
+            specifieke_tekst="",
+            procedure_beschrijving="Test description EN",
+        )
+
+        # Simulate localized reference product being updated
+        ref_product_versie_2 = ProductVersieFactory.create(
+            product=ref_product,
+            publicatie_datum=date.today(),
+            versie=2,
+        )
+        LocalizedProductFactory.create(
+            product_versie=ref_product_versie_2,
+            taal="nl",
+            product_titel_decentraal="Updated title NL",
+            specifieke_tekst="Updated text NL",
+            procedure_beschrijving="Updated procedure description NL",
+        )
+        LocalizedProductFactory.create(
+            product_versie=ref_product_versie_2,
+            taal="en",
+            product_titel_decentraal="Updated title EN",
+            specifieke_tekst="Updated text EN",
+            procedure_beschrijving="Updated procedure description EN",
+        )
+
+        call_command("update_catalogs", fill_empty_english_text=True)
+        localized_product_en_2.refresh_from_db()
+
+        self.assertEqual(
+            localized_product_nl_2.product_titel_decentraal,
+            "titel NL",
+        )
+        self.assertEqual(
+            localized_product_nl_2.specifieke_tekst,
+            "",
+        )
+        self.assertEqual(
+            localized_product_nl_2.procedure_beschrijving,
+            "procedure beschrijving NL",
+        )
+        self.assertEqual(
+            localized_product_en_2.product_titel_decentraal,
+            "Updated title EN",
+        )
+        self.assertEqual(
+            localized_product_en_2.specifieke_tekst,
+            "Updated text EN",
+        )
+        self.assertEqual(
+            localized_product_en_2.procedure_beschrijving,
+            "Test description EN",
+        )
