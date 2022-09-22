@@ -15,9 +15,9 @@ from sdg.accounts.views.password_reset import PasswordResetView, ResendInventati
 from sdg.decorators import enabled
 
 handler500 = "sdg.utils.views.server_error"
-admin.site.site_header = _("SDG Invoervoorziening")
-admin.site.site_title = _("SDG Invoervoorziening")
-admin.site.index_title = _("Welkom bij de SDG-admin")
+admin.site.site_header = _("PDC voor de SDG")
+admin.site.site_title = _("PDC voor de SDG")
+admin.site.index_title = _("PDC beheer voor de SDG")
 admin.site.enable_nav_sidebar = False
 
 
