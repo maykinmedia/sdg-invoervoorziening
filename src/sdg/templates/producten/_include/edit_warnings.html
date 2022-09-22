@@ -8,8 +8,8 @@
         {% elif status == product.status.CONCEPT %}
             <span>{% trans "U bewerkt een concept product tekst." %}</span>
         {% elif status == product.status.SCHEDULED %}
-            {% blocktrans %}
-                <span>U bewerkt een producttekst die ingepland staat om gepubliceerd te worden op {{ object.publicatie_datum }}. Aanpassingen overschrijven deze ingeplande publicatie.</span>
+            {% blocktrans with publication_date=object.publicatie_datum %}
+                <span>U bewerkt een producttekst die ingepland staat om gepubliceerd te worden op {{ publication_date }}. Aanpassingen overschrijven deze ingeplande publicatie.</span>
             {% endblocktrans %}
         {% endif %}
         <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
