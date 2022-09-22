@@ -115,6 +115,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     # 'django.contrib.sitemaps',
     # External applications.
+    "django_better_admin_arrayfield",
     "axes",
     "sniplates",
     "compat",  # Part of hijack

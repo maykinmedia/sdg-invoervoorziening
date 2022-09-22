@@ -9,6 +9,7 @@ lxml
 # Framework libraries
 django < 3.3
 django-admin-index
+django-better-admin-arrayfield
 django-axes
 django-choices
 django-decorator-include

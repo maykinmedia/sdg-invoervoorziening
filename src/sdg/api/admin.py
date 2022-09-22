@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.contrib import admin
 
+from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
+
 from sdg.api.models import Token, TokenAuthorization
 
 
@@ -11,8 +13,14 @@ class TokenAuthorizationInline(admin.TabularInline):
 
 
 @admin.register(Token)
-class TokenAdmin(admin.ModelAdmin):
-    list_display = ("organization", "contact_person", "created", "whitelisted_ips")
+class TokenAdmin(admin.ModelAdmin, DynamicArrayMixin):
+    list_display = (
+        "contact_person",
+        "organization",
+        "last_seen",
+        "created",
+        "whitelisted_ips",
+    )
     readonly_fields = ("key", "last_seen")
     ordering = ("organization",)
     inlines = (TokenAuthorizationInline,)

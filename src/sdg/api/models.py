@@ -2,7 +2,7 @@ from django.core.validators import validate_ipv4_address
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from sdg.core.db.fields import DynamicArrayField
+from django_better_admin_arrayfield.models.fields import ArrayField
 
 
 class Token(models.Model):
@@ -17,7 +17,7 @@ class Token(models.Model):
     )
     email = models.EmailField(
         _("email"),
-        help_text=_("Email van de contactpersoon"),
+        help_text=_("E-mail van de contactpersoon"),
     )
 
     organization = models.CharField(
@@ -56,7 +56,7 @@ class Token(models.Model):
         help_text=_("Wanneer het token voor het laatst is gewijzigd."),
     )
 
-    whitelisted_ips = DynamicArrayField(
+    whitelisted_ips = ArrayField(
         models.CharField(
             max_length=15,
             validators=[validate_ipv4_address],
