@@ -22,6 +22,8 @@ from .base import *  # noqa isort:skip
 #
 # Standard Django settings.
 #
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 LOGGING["loggers"].update(
