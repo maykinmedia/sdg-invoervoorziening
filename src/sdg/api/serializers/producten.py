@@ -3,6 +3,7 @@ import datetime
 from django.db import transaction
 from django.utils.dateparse import parse_date
 
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.reverse import reverse
@@ -24,6 +25,25 @@ from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.models.product import GeneriekProduct
 
 
+class ProcedureLink(serializers.ModelSerializer):
+    class Meta:
+        model = LocalizedProduct
+        fields = (
+            "label",
+            "url",
+        )
+        extra_kwargs = {
+            "label": {
+                "source": "decentrale_procedure_label",
+                "help_text": "Het label waarmee de URL wordt aangeduid.",
+            },
+            "url": {
+                "source": "decentrale_procedure_link",
+                "help_text": "De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen.",
+            },
+        }
+
+
 class LocalizedProductSerializer(serializers.ModelSerializer):
     """Serializer for the localized version of a product."""
 
@@ -31,6 +51,9 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
         source="verwijzing_links",
         help_text="Dit zijn de verwijzing links voor burgers en ondernemers naar relevante organisatie informatie.",
         required=False,
+    )
+    procedure_link = ProcedureLink(
+        source="*", required=False, help_text="Het label en de link naar de procedure."
     )
 
     class Meta:
@@ -63,10 +86,6 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             "tekst": {
                 "source": "specifieke_tekst",
                 "help_text": "De inleidende tekst voor het product. Hierin kunt u het product beschrijven en komt direct na de generieke productbeschrijving. Dit veld ondersteund Markdown.",
-            },
-            "procedure_link": {
-                "source": "decentrale_procedure_link",
-                "help_text": "De URL waar de burger of ondernemer het product bij de organisatie kan aanvragen.",
             },
             "procedure_beschrijving": {
                 "help_text": "De beschrijving van hoe het product wordt aangevraagd. Dit veld ondersteund Markdown."

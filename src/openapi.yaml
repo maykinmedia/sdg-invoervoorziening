@@ -732,11 +732,9 @@ components:
           description: Beschrijft wat de aanvrager moet doen bij geen reactie. Dit
             veld ondersteund Markdown.
         procedureLink:
-          type: string
-          format: uri
-          description: De URL waar de burger of ondernemer het product bij de organisatie
-            kan aanvragen.
-          maxLength: 200
+          allOf:
+          - $ref: '#/components/schemas/ProcedureLink'
+          description: Het label en de link naar de procedure.
         productAanwezigToelichting:
           type: string
           title: Aanwezig toelichting
@@ -1206,6 +1204,19 @@ components:
           format: uri
           title: Contact formulier
           description: De webpagina van het contact formulier van de organisatie.
+          maxLength: 200
+    ProcedureLink:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Het label waarmee de URL wordt aangeduid.
+          maxLength: 100
+        url:
+          type: string
+          format: uri
+          description: De URL waar de burger of ondernemer het product bij de organisatie
+            kan aanvragen.
           maxLength: 200
     Product:
       type: object

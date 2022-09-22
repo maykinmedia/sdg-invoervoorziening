@@ -288,7 +288,10 @@ class ProductenVersieTest(APITestCase):
                     "tekst": "",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
-                    "procedureLink": "",
+                    "procedureLink": {
+                        "label": "",
+                        "url": "",
+                    },
                     "kostenEnBetaalmethoden": "",
                     "procedureBeschrijving": "",
                     "titel": "",
@@ -304,7 +307,10 @@ class ProductenVersieTest(APITestCase):
                     "tekst": "",
                     "bewijs": "",
                     "bezwaarEnBeroep": "",
-                    "procedureLink": "",
+                    "procedureLink": {
+                        "label": "",
+                        "url": "",
+                    },
                     "kostenEnBetaalmethoden": "",
                     "procedureBeschrijving": "",
                     "titel": "",
