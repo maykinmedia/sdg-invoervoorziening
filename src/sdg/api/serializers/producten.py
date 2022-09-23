@@ -238,6 +238,183 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
         return data
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Minimaal voorbeeld verzoek",
+            summary="Productbeschrijving bijwerken",
+            description="Om een nieuwe versie van de productbeschrijving aan te maken, kunt alle onderdelen van het product in één keer meegeven.",
+            value={
+                "url": "http://example.com",  # MAKE NOT REQUIRED AND REMOVE
+                "uuid": "095be615-a8ad-4c33-8e9c-c7612fbf6c9f",  # MAKE NOT REQUIRED AND REMOVE
+                "versie": 1,  # MAKE NOT REQUIRED AND REMOVE
+                "upnUri": "http://standaarden.overheid.nl/owms/terms/product",
+                "publicatieDatum": "2022-09-22",
+                "productAanwezig": True,
+                "productValtOnder": {  # MAKE NOT REQUIRED AND REMOVE
+                    "url": "http://example.com", # MAKE NOT REQUIRED
+                    "upnUri":"http://example.com",
+                },
+                "verantwoordelijkeOrganisatie": {
+                    "url": "http://example.com",  # MAKE NOT REQUIRED AND REMOVE
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/Organisatie",
+                    "owmsEndDate": "2022-09-22T14:15:22Z",  # MAKE NOT REQUIRED AND REMOVE AND ALLOW NONE
+                },
+                "locaties": [{"naam": "Hoofdgebouw"}],
+                "doelgroep": "eu-bedrijf",
+                "vertalingen": [
+                    {
+                        "taal": "nl",
+                        "titel": "Lorem ipsum",
+                        "tekst": "### Lorem\\r\\n\\r\\n**ipsum**",
+                        "links": [
+                            {
+                                "label": "Meer informatie",
+                                "url": "https://organisatie.com/product",
+                            }
+                        ],
+                        "procedureBeschrijving": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "bewijs": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "vereisten": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "bezwaarEnBeroep": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "kostenEnBetaalmethoden": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "uitersteTermijn": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "wtdBijGeenReactie": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "procedureLink": {
+                            "label": "Aanvragen",
+                            "url": "https://organisatie.com/product/aanvragen",
+                        },
+                        "productAanwezigToelichting": "",
+                        "productValtOnderToelichting": "",
+                    },
+                    {
+                        "taal": "en",
+                        "titel": "Lorem ipsum",
+                        "tekst": "### Lorem\\r\\n\\r\\n**ipsum**",
+                        "links": [
+                            {
+                                "label": "To request",
+                                "url": "https://organisatie.com/product",
+                            }
+                        ],
+                        "procedureBeschrijving": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "bewijs": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "vereisten": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "bezwaarEnBeroep": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "kostenEnBetaalmethoden": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "uitersteTermijn": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "wtdBijGeenReactie": "Lorem\\r\\n\\r\\n**ipsum**",
+                        "procedureLink": {
+                            "label": "Apply",
+                            "url": "https://organisatie.com/product/aanvragen",
+                        },
+                        "productAanwezigToelichting": "",
+                        "productValtOnderToelichting": "",
+                    },
+                ],
+            },
+            request_only=True,  # signal that example only applies to requests
+            response_only=False,  # signal that example only applies to responses
+        ),
+        # OpenApiExample(
+        #     "Minimaal voorbeeld antwoord",
+        #     value={
+        #         "url": "http://api.example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+        #         "uuid": "095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+        #         "upnLabel": "product",
+        #         "upnUri": "http://standaarden.overheid.nl/owms/terms/product",
+        #         "versie": 1,
+        #         "publicatieDatum": "2022-09-22",
+        #         "productAanwezig": True,
+        #         "productValtOnder": None,
+        #         "verantwoordelijkeOrganisatie": {
+        #             "url": "http://api.example.com/api/v1/organisaties/0238cee2-c4db-432f-ac5e-6d7ff4755103",
+        #             "owmsIdentifier": "https://standaarden.overheid.nl/owms/terms/Organisatie",
+        #             "owmsPrefLabel": "Organisatie",
+        #             "owmsEndDate": None,
+        #         },
+        #         "bevoegdeOrganisatie": {
+        #             "naam": "Andere Organisatie",
+        #             "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/AndereOrganisatie",
+        #             "owmsPrefLabel": "AndereOrganisatie",
+        #             "owmsEndDate": None,
+        #         },
+        #         "catalogus": "http://api.example.com/api/v1/catalogus/4aad45c2-0c4e-47b2-ad65-6ba8a58e9903",
+        #         "locaties": [
+        #             {
+        #                 "openingstijden": {
+        #                     "maandag": ["09:00 - 17:00"],
+        #                     "dinsdag": ["09:00 - 17:00"],
+        #                     "woensdag": ["09:00 - 17:00"],
+        #                     "donderdag": ["09:00 - 16:00", "18:00 - 21:00"],
+        #                     "vrijdag": ["09:00 - 17:00"],
+        #                     "zaterdag": ["09:00 - 13:00"],
+        #                     "zondag": [],
+        #                 },
+        #                 "url": "http://api.example.com/api/v1/locaties/a453308a-a100-45fc-9a60-65da3184d7c7",
+        #                 "naam": "Hoofdgebouw",
+        #             }
+        #         ],
+        #         "doelgroep": "eu-bedrijf",
+        #         "vertalingen": [
+        #             {
+        #                 "taal": "nl",
+        #                 "titel": "Lorem ipsum",
+        #                 "tekst": "### Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "links": [
+        #                     {
+        #                         "label": "Meer informatie",
+        #                         "url": "https://organisatie.com/product",
+        #                     }
+        #                 ],
+        #                 "procedureBeschrijving": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "bewijs": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "vereisten": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "bezwaarEnBeroep": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "kostenEnBetaalmethoden": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "uitersteTermijn": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "wtdBijGeenReactie": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "procedureLink": {
+        #                     "label": "Aanvragen",
+        #                     "url": "https://organisatie.com/product/aanvragen",
+        #                 },
+        #                 "productAanwezigToelichting": "",
+        #                 "productValtOnderToelichting": "",
+        #                 "datumWijziging": "2022-09-22T14:15:22Z",
+        #             },
+        #             {
+        #                 "taal": "en",
+        #                 "titel": "Lorem ipsum",
+        #                 "tekst": "### Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "links": [
+        #                     {
+        #                         "label": "To request",
+        #                         "url": "https://organisatie.com/product",
+        #                     }
+        #                 ],
+        #                 "procedureBeschrijving": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "bewijs": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "vereisten": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "bezwaarEnBeroep": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "kostenEnBetaalmethoden": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "uitersteTermijn": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "wtdBijGeenReactie": "Lorem\\r\\n\\r\\n**ipsum**",
+        #                 "procedureLink": {
+        #                     "label": "Apply",
+        #                     "url": "https://organisatie.com/product/aanvragen",
+        #                 },
+        #                 "productAanwezigToelichting": "",
+        #                 "productValtOnderToelichting": "",
+        #                 "datumWijziging": "2022-09-22T14:15:22Z",
+        #             },
+        #         ],
+        #         "beschikbareTalen": ["nl", "en"],
+        #     },
+        #     request_only=False,  # signal that example only applies to requests
+        #     response_only=True,  # signal that example only applies to responses
+        # ),
+    ]
+)
 class ProductSerializer(ProductBaseSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 

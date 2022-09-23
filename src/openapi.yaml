@@ -6,7 +6,8 @@ info:
 
     ## Introductie
     Deze API stelt u in staat om productbeschrijvingen te beheren voor producten
-    die relevant zijn voor de SDG-verordening.
+    die relevant zijn voor de SDG-verordening. De API is gebaseerd op het SDG
+    informatiemodel versie 1.6.
 
     ## Authenticatie en autorisatie
     De API is zonder authenticatie toegankelijk voor lees-toegang.
@@ -567,6 +568,65 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Product'
+            examples:
+              MinimaalVoorbeeldVerzoek:
+                value:
+                  url: http://example.com
+                  uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  versie: 1
+                  upnUri: http://standaarden.overheid.nl/owms/terms/product
+                  publicatieDatum: '2022-09-22'
+                  productAanwezig: true
+                  productValtOnder:
+                    url: http://example.com
+                    upnUri: http://example.com
+                  verantwoordelijkeOrganisatie:
+                    url: http://example.com
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Organisatie
+                    owmsEndDate: '2022-09-22T14:15:22Z'
+                  locaties:
+                  - naam: Hoofdgebouw
+                  doelgroep: eu-bedrijf
+                  vertalingen:
+                  - taal: nl
+                    titel: Lorem ipsum
+                    tekst: '### Lorem\r\n\r\n**ipsum**'
+                    links:
+                    - label: Meer informatie
+                      url: https://organisatie.com/product
+                    procedureBeschrijving: Lorem\r\n\r\n**ipsum**
+                    bewijs: Lorem\r\n\r\n**ipsum**
+                    vereisten: Lorem\r\n\r\n**ipsum**
+                    bezwaarEnBeroep: Lorem\r\n\r\n**ipsum**
+                    kostenEnBetaalmethoden: Lorem\r\n\r\n**ipsum**
+                    uitersteTermijn: Lorem\r\n\r\n**ipsum**
+                    wtdBijGeenReactie: Lorem\r\n\r\n**ipsum**
+                    procedureLink:
+                      label: Aanvragen
+                      url: https://organisatie.com/product/aanvragen
+                    productAanwezigToelichting: ''
+                    productValtOnderToelichting: ''
+                  - taal: en
+                    titel: Lorem ipsum
+                    tekst: '### Lorem\r\n\r\n**ipsum**'
+                    links:
+                    - label: To request
+                      url: https://organisatie.com/product
+                    procedureBeschrijving: Lorem\r\n\r\n**ipsum**
+                    bewijs: Lorem\r\n\r\n**ipsum**
+                    vereisten: Lorem\r\n\r\n**ipsum**
+                    bezwaarEnBeroep: Lorem\r\n\r\n**ipsum**
+                    kostenEnBetaalmethoden: Lorem\r\n\r\n**ipsum**
+                    uitersteTermijn: Lorem\r\n\r\n**ipsum**
+                    wtdBijGeenReactie: Lorem\r\n\r\n**ipsum**
+                    procedureLink:
+                      label: Apply
+                      url: https://organisatie.com/product/aanvragen
+                    productAanwezigToelichting: ''
+                    productValtOnderToelichting: ''
+                summary: Productbeschrijving bijwerken
+                description: Om een nieuwe versie van de productbeschrijving aan te
+                  maken, kunt alle onderdelen van het product in één keer meegeven.
         required: true
       security:
       - tokenAuth: []
