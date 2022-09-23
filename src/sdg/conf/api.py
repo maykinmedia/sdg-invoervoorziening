@@ -26,7 +26,8 @@ REST_FRAMEWORK = {
 description = f"""
 ## Introductie
 Deze API stelt u in staat om productbeschrijvingen te beheren voor producten
-die relevant zijn voor de SDG-verordening.
+die relevant zijn voor de SDG-verordening. De API is gebaseerd op het SDG
+informatiemodel versie 1.6.
 
 ## Authenticatie en autorisatie
 De API is zonder authenticatie toegankelijk voor lees-toegang.
