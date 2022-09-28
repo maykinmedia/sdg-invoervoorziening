@@ -42,6 +42,34 @@
 {% endblock %}
 
 {% block inner_content %}
+<div class="toolbox">
+
+    <div class="toolbox__item toolbox__item--countries global-language-switch" title="{% trans 'Selecteer de te bewerken taal' %}">
+        {% toggle '' icon_before='flag-icon flag-icon-nl' icon_after='flag-icon flag-icon-gb' id='toggle-language' %}
+    </div>
+
+    <div class="toolbox__item">
+        {% trans "Toon voorbeeld" %}:
+        {% if product.active_version %}
+            <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
+               class="preview"
+               target="_blank">
+                {% trans "Huidige gepubliceerde tekst" %}
+            </a>
+        {% endif %}
+    </div>
+
+    {# Notifications. #}
+    <div class="toolbox__item">
+        <i class="fa fa-bell"></i> {% trans "Notificaties & Geschiedenis" %}
+    </div>
+
+    {# (Global) edit togggle. #}
+    <div class="toolbox__item global-edit-toggle" title="{% trans 'Alles bewerken' %}">
+        {% toggle "" icon_before='fa fa-lock fa-xs' icon_after='fa fa-lock-open fa-xs' id='toggle-edit' %}
+    </div>
+</div>
+
 <div class="notifications">
     {% if form_invalid %}
     <div class="notifications__notification notification__error">
@@ -217,21 +245,6 @@
         <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
             id="{{ form.taal.value }}">
 
-            <div class="toolbar global-language-switch">
-                {# (Global) language selectors. #}
-                <div class="button-group">
-                    {% for language in languages %}
-                    <button
-                        class="button button--extra-small button--transparent{% if forloop.first %} button--active{% endif %} form__language-switch"
-                        lang="{{ language }}" type="button">
-                        {{ language|upper }}
-                        <i class="fas fa-info-circle fa-xs dark"
-                            title="{% trans 'Let op dat je beide talen aanpast.' %}" aria-hidden="true"></i>
-                    </button>
-                    {% endfor %}
-                </div>
-            </div>
-
             {% if generic_products %}
                 <table class="tabs__table form__generic">
                     <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
@@ -252,39 +265,6 @@
 
         </div>
         {% endfor %}
-
-
-        <div class="toolbar global-language-switch">
-            <p>
-                {% trans "Toon voorbeeld" %}:
-                {% if product.active_version %}
-                <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
-                    class="preview"
-                    target="_blank">
-                    {% trans "Huidige gepubliceerde tekst" %}
-                </a>
-                {% endif %}
-
-                {% if product.active_version and not product.most_recent_version.publicatie_datum %}
-                |
-                {% endif %}
-
-                {% if not product.most_recent_version.publicatie_datum %}
-                <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept"
-                    class="preview"
-                    target="_blank">
-                    {% trans "Concept Tekst" %}
-                </a>
-                {% endif %}
-            </p>
-
-            {# (Global) language selectors. #}
-            <div class="button-group">
-            </div>
-
-            {# (Global) edit togggle. #}
-            {% toggle _('Alles bewerken') icon_before='lock' icon_after='lock-open' id='toggle-edit' %}
-        </div>
 
         <table class="tabs__table form__specific">
             <thead class="bem-toggle" data-toggle-target=".form__specific" data-toggle-modifier="hidden">

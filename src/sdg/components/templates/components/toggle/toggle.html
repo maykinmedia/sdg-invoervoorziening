@@ -5,7 +5,7 @@
 
     {% if icon_before %}
         <label class="toggle__label" for="{{ id }}">
-            <i class="fa fa-{{ icon_before }} fa-xs" aria-hidden="true"></i>
+            <i class="{{ icon_before }}" aria-hidden="true"></i>
         </label>
     {% endif %}
 
@@ -15,7 +15,7 @@
 
     {% if icon_after %}
         <label class="toggle__label" for="{{ id }}">
-            <i class="fa fa-{{ icon_after }} fa-xs" aria-hidden="true"></i>
+            <i class="{{ icon_after }}" aria-hidden="true"></i>
         </label>
     {% endif %}
 </div>
