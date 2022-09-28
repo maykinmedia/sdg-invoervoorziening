@@ -6,7 +6,7 @@ const LANGUAGE_SWITCHES = document.querySelectorAll('.form__language-switch');
 /**
  * Sets the language of the form control.
  */
-class LanguageSwitch extends FormComponent {
+export class LanguageSwitch extends FormComponent {
     /**
      * Binds events to callbacks.
      * Use this to define EventListeners, MutationObservers etc.
@@ -27,7 +27,7 @@ class LanguageSwitch extends FormComponent {
 
         const observer = new MutationObserver(this.updateActive.bind(this));
         observer.observe(formControl, {attributes: true});
-     }
+    }
 
     /**
      * Returns whether this language switch is global.
@@ -90,7 +90,7 @@ class LanguageSwitch extends FormComponent {
      */
     onClick(event) {
         super.onClick(event);
-        this.setActiveLanguage(this.node.lang, this.isGlobal());
+        this.setActiveLanguage(this.getLanguage(), this.isGlobal());
     }
 
     /**
@@ -98,7 +98,7 @@ class LanguageSwitch extends FormComponent {
      * @param {MouseEvent} e
      */
     onButtonGroupClick(e) {
-        const active = this.node.lang === e.target.lang;
+        const active = this.getLanguage() === e.target.lang;
         this.setState({active: active});
     }
 
@@ -128,9 +128,12 @@ class LanguageSwitch extends FormComponent {
         const {active, changed} = state;
         this.node.classList.toggle('button--active', Boolean(active));
 
-        this.getIcon().setAttribute('aria-hidden', true);
+        const icon = this.getIcon();
+        if (!icon) return;
+
+        icon.setAttribute('aria-hidden', true);
         if (changed) {
-            this.getIcon().removeAttribute('aria-hidden');
+            icon.removeAttribute('aria-hidden');
         }
     }
 }
