@@ -15,3 +15,11 @@ def update_catalogs():
     Create, update, correct all specific products for each organisation.
     """
     call_command("update_catalogs")
+
+
+@app.task()
+def update_generic_product_status():
+    """
+    Create, update, correct all specific products for each organisation.
+    """
+    call_command("update_generic_product_status")
