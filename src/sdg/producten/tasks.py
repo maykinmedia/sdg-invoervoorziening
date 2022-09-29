@@ -20,6 +20,6 @@ def update_catalogs():
 @app.task()
 def update_generic_product_status():
     """
-    Create, update, correct all specific products for each organisation.
+    Generate and update the status of all generic products.
     """
     call_command("update_generic_product_status")

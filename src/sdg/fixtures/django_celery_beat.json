@@ -59,8 +59,8 @@
     "model": "django_celery_beat.crontabschedule",
     "pk": 5,
     "fields": {
-        "minute": "0",
-        "hour": "5",
+        "minute": "*/5",
+        "hour": "*",
         "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
@@ -238,8 +238,8 @@
         "enabled": true,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2022-09-28T16:31:53.472",
-        "description": "Update the status for all generic products based on defined logic."
+        "date_changed": "2022-09-29T10:29:06.729",
+        "description": "Update the status for all generic products based on defined logic.\r\n\r\nNote: crontab runs every 5 minutes."
     }
 }
 ]
