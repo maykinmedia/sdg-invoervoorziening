@@ -1,7 +1,12 @@
 @import "colors";
 
 .toolbox {
-  background-color: $color_primary_light;
+  .toggle {
+    --active-color: #{rgba($color_primary_dark, 0.3)};
+    --shadow-color: #{$color_primary_lighter};
+  }
+  background-color: rgba($color_primary_light, 0.9);
+  box-shadow: 0 4px 2px $color_primary_light;
   height: 64px;
   margin-bottom: 16px;
   display: grid;
@@ -37,15 +42,17 @@
   }
 
   .flag-icon {
+    border-radius: 50%;
     height: 24px;
     width: 24px;
-    border-radius: 6px;
     filter: contrast(0.75);
     position: relative;
     bottom: 2px;
+    background-size: cover;
   }
 
   a {
     color: #fff;
   }
+
 }
