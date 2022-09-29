@@ -22,6 +22,13 @@ class GeneriekProductFactory(DjangoModelFactory):
     class Meta:
         model = GeneriekProduct
 
+    class Params:
+        localized = factory.Trait(
+            vertalingen=factory.RelatedFactoryList(
+                "sdg.producten.tests.factories.localized.LocalizedGeneriekProductFactory",
+            )
+        )
+
 
 class ProductFactory(DjangoModelFactory):
     product_aanwezig = True
