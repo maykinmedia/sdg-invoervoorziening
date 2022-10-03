@@ -1,6 +1,9 @@
 from datetime import datetime
+from typing import List
 
 from django.utils.timezone import now
+
+from sdg.producten.types import _code_to_flag
 
 
 def is_past_date(date: datetime.date) -> bool:
@@ -30,3 +33,16 @@ def build_url_kwargs(product, catalog=None) -> dict:
         "catalog_pk": catalog_pk,
         "product_pk": product.pk,
     }
+
+
+def parse_changed_data(changed_data, *, form, language=None) -> List[dict]:
+    """Parse changed data into correct JSON for `ProductVersie.bewerkte_velden`."""
+
+    return [
+        {
+            "language": _code_to_flag(language),
+            "label": str(form.fields[field].label),
+            "field": field,
+        }
+        for field in changed_data
+    ]
