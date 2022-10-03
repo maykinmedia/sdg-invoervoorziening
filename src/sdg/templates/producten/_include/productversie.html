@@ -27,14 +27,7 @@
         {% endif %}
         {% if version.bewerkte_velden %}
             <li class="revision-list__edited-fields" title="{% trans 'Bewerkte velden' %}">
-                {% for field in version.bewerkte_velden %}
-                    <code>
-                        {% if field.language %}
-                            <i class="flag-icon flag-icon-{{ field.language }}"></i>
-                        {% endif %}
-                        {{ field.label }}
-                    </code>
-                {% endfor %}
+                {% include 'producten/_include/productversie_bewerkte_velden.html' %}
             </li>
         {% endif %}
     </td>

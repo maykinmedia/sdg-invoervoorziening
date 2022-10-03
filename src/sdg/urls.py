@@ -13,6 +13,7 @@ from two_factor.urls import urlpatterns as tf_urls
 from sdg import miscellaneous_urls
 from sdg.accounts.views.password_reset import PasswordResetView, ResendInventation
 from sdg.decorators import enabled
+from sdg.organisaties.views.notificaties import ProductVersieListView
 
 handler500 = "sdg.utils.views.server_error"
 admin.site.site_header = _("PDC voor de SDG")
@@ -46,6 +47,11 @@ urlpatterns = [
     path(
         "organizations/",
         decorator_include(enabled(), "sdg.organisaties.urls", namespace="organisaties"),
+    ),
+    path(
+        "notifications/",
+        ProductVersieListView.as_view(),
+        name="notificaties",
     ),
     path(
         "",

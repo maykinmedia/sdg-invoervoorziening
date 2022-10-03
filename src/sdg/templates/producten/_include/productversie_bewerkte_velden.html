@@ -1,0 +1,8 @@
+{% for field in version.bewerkte_velden %}
+<code>
+    {% if field.language %}
+        <i class="flag-icon flag-icon-{{ field.language }}"></i>
+    {% endif %}
+    {{ field.label }}
+</code>
+{% endfor %}

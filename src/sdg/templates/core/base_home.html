@@ -44,6 +44,9 @@
                         </a>
                     {% endif %}
 
+                    <a class="header__dropdown-action" href="{% url 'notificaties' %}">
+                        <i class="fa fa-bell"></i> {% trans "Notificaties" %}
+                    </a>
                     <a class="header__dropdown-action" href="{% url 'account_logout' %}">
                         <i class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}
                     </a>
