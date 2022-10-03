@@ -238,7 +238,7 @@ class Product(ProductFieldMixin, models.Model):
     @cached_property
     def is_referentie_product(self) -> bool:
         """:returns: Whether this is a reference product or not."""
-        return bool(not self.referentie_product_id)
+        return bool(not self.referentie_product)
 
     @cached_property
     def has_expired(self) -> bool:
@@ -326,7 +326,7 @@ class Product(ProductFieldMixin, models.Model):
 
         return queryset[:quantity:step_slice]
 
-    def get_all_versions(self, active=False, exclude_concept=False, reverse_order=True):
+    def get_all_versions(self, active=False, exclude_concept=False):
         """:returns: The versions for this product."""
         queryset = self.versies.all().order_by("-versie")
 

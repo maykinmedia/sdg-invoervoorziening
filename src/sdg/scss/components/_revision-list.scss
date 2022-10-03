@@ -44,8 +44,11 @@
     }
 
     &--user {
+      svg {
+        margin-right: 8px !important;
+      }
+
       border-radius: 20px;
-      background-color: #d5e2ea;
       color: #2a576f;
       padding: 4px 24px;
       position: relative;
@@ -70,10 +73,6 @@
     margin-left: -4px;
 
     code {
-      opacity: .75;
-      padding: 0 8px;
-      margin: 4px;
-      display: inline-block;
       .flag-icon {
         font-size: 10px;
         height: 9px;
@@ -81,9 +80,15 @@
         border-radius: 50%;
         background-size: cover;
       }
-      background-color: $color_accent_notification-bg;
-      color: $color_accent_darkest;
-      border-radius: 8px;
+
+      opacity: .75;
+      padding: 0 8px;
+      margin: 4px;
+      display: inline-block;
+      font-size: 11px;
+      background-color: $color_grey_light;
+      color: $color_grey_darkest;
+      border-radius: 16px;
     }
   }
 
