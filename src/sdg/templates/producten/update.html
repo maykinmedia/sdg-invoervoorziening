@@ -1,5 +1,5 @@
 {% extends 'producten/base.html' %}
-{% load utils static i18n producten toggle localized_form %}
+{% load utils static i18n producten toggle localized_form nonlocalized_form %}
 
 {% block page_intro %}
     <p class="subheading">
@@ -208,6 +208,33 @@
                     {% endwith %}
                 {% endwith %}
 
+                <tr>
+                    <td>
+                        {% nonlocalized_form version_form include_form=False fields="interne_opmerkingen" %}
+                    </td>
+                </tr>
+{#                {% with field=version_form.interne_opmerkingen %}#}
+{#                    {% with configuration=field.configuration.0 %}#}
+{#                        <tr>#}
+{#                            <td>#}
+{#                                <div class="form__control">#}
+{#                                    <header class="form__control-header">#}
+{#                                        <label class="form__label">#}
+{#                                            {{ configuration.0|default:field.label|capfirst }}#}
+{#                                            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>#}
+{#                                        </label>#}
+{#                                    </header>#}
+{#                                    <div class="form__control-body">#}
+{#                                        <div class="tabs__table-cell--versions"></div>#}
+{#                                        {{ field|addclass:"form__input" }}#}
+{#                                        {{ field.errors }}#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </td>#}
+{#                        </tr>#}
+{#                    {% endwith %}#}
+{#                {% endwith %}#}
+
             </tbody>
         </table>
     </div>
@@ -325,27 +352,7 @@
             </thead>
             <tbody class="tabs__table-body">
                 {% for version in history %}
-                <tr class="revision-list">
-                    <td class="tabs__table-cell">
-                        <strong class="revision-list__item--user">{{ version.gemaakt_door|default:"Systeem" }}</strong>
-                    </td>
-                    <td class="tabs__table-cell">
-                        <li class="revision-list__item">
-                            {% with last_modified=version.gewijzigd_op version=version.get_pretty_version %}
-                            <span class="tabs__table-cell--value">
-                                <strong>{{ last_modified }}</strong> product versie
-                                <strong>{{ version }}</strong> gewijzigd.
-                            </span>
-                            {% endwith %}
-
-                            {% if version.publicatie_datum %}
-                            {% blocktrans with publication_date=version.publicatie_datum %}
-                            Gepubliceerd op &nbsp <strong>{{ publication_date }}</strong>.
-                            {% endblocktrans %}
-                            {% endif %}
-                        </li>
-                    </td>
-                </tr>
+                    {{ version.as_html }}
                 {% endfor %}
             </tbody>
         </table>

@@ -1,0 +1,41 @@
+{% load i18n %}
+
+<tr class="revision-list">
+    <td class="tabs__table-cell">
+        <strong class="revision-list__item--user">{{ version.gemaakt_door|default:"Systeem" }}</strong>
+    </td>
+    <td class="tabs__table-cell">
+        <li class="revision-list__item">
+            {% with last_modified=version.gewijzigd_op version=version.get_pretty_version %}
+                <span class="tabs__table-cell--value">
+                                <strong>{{ last_modified }}</strong> product versie
+                                <strong>{{ version }}</strong> gewijzigd.
+                            </span>
+            {% endwith %}
+
+            {% if version.publicatie_datum %}
+                {% blocktrans with publication_date=version.publicatie_datum %}
+                    Gepubliceerd op &nbsp <strong>{{ publication_date }}</strong>.
+                {% endblocktrans %}
+            {% endif %}
+        </li>
+        {% if version.interne_opmerkingen %}
+            <li class="revision-list__remarks" title="{% trans 'Interne opmerkingen' %}">
+                <i class="fa fa-note-sticky fa-xs"></i>
+                <span>{{ version.interne_opmerkingen }}</span>
+            </li>
+        {% endif %}
+        {% if version.bewerkte_velden %}
+            <li class="revision-list__edited-fields" title="{% trans 'Bewerkte velden' %}">
+                {% for field in version.bewerkte_velden %}
+                    <code>
+                        {% if field.language %}
+                            <i class="flag-icon flag-icon-{{ field.language }}"></i>
+                        {% endif %}
+                        {{ field.label }}
+                    </code>
+                {% endfor %}
+            </li>
+        {% endif %}
+    </td>
+</tr>

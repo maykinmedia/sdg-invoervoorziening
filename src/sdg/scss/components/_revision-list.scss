@@ -5,6 +5,12 @@
     color: #1c3a4a;
   }
 
+  svg {
+    display: inline-block !important;
+    visibility: visible !important;
+    margin: 0 2px -1px 0 !important;
+  }
+
   list-style-type: none;
   margin: 0.4em 0;
   border-bottom: 1px solid $color_grey_light;
@@ -50,4 +56,35 @@
     }
 
   }
+
+  .revision-list__remarks {
+    color: $color_grey_darker;
+    font-size: 14px;
+    margin: -4px 0 8px 0;
+  }
+
+  .revision-list__edited-fields {
+    font-size: 10px;
+    color: $color_secondary_darker;
+    line-height: 3;
+    margin-left: -4px;
+
+    code {
+      opacity: .75;
+      padding: 0 8px;
+      margin: 4px;
+      display: inline-block;
+      .flag-icon {
+        font-size: 10px;
+        height: 9px;
+        width: 10px;
+        border-radius: 50%;
+        background-size: cover;
+      }
+      background-color: $color_accent_notification-bg;
+      color: $color_accent_darkest;
+      border-radius: 8px;
+    }
+  }
+
 }
