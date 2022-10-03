@@ -14,4 +14,8 @@ class ProductVersieListView(LoginRequiredMixin, ListView):
         """
         Returns the queryset for the notifications (product versions).
         """
-        return ProductVersie.objects.published().order_by("-gewijzigd_op")[: self.limit]
+        return (
+            ProductVersie.objects.filter(product__referentie_product=None)
+            .published()
+            .order_by("-gewijzigd_op")[: self.limit]
+        )

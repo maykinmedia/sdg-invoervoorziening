@@ -40,7 +40,8 @@ def parse_changed_data(changed_data, *, form, language=None) -> List[dict]:
 
     return [
         {
-            "language": _code_to_flag(language),
+            "language": language,
+            "flag": _code_to_flag(language),
             "label": str(form.fields[field].label),
             "field": field,
         }
