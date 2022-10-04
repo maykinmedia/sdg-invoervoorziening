@@ -25,7 +25,7 @@ class LokaleOverheidFactory(DjangoModelFactory):
 
 class LocatieFactory(DjangoModelFactory):
     lokale_overheid = factory.SubFactory(LokaleOverheidFactory)
-    naam = factory.Faker("color_name")
+    naam = factory.Sequence(lambda n: str(n))
     straat = factory.Faker("street_name")
     nummer = factory.Faker("building_number")
     postcode = factory.LazyFunction(

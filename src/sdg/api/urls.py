@@ -16,6 +16,10 @@ from sdg.api.views import (
     ProductHistoryViewSet,
     ProductViewSet,
 )
+from sdg.api.views.producten import (
+    ProductSingleTranslation,
+    ProductSingleTranslationGeneric,
+)
 
 app_name = "api"
 
@@ -29,6 +33,16 @@ router.register(
             "historie",
             ProductHistoryViewSet,
             basename="product-history",
+        ),
+        routers.nested(
+            "single",
+            viewset=ProductSingleTranslationGeneric,
+            basename="product-single",
+        ),
+        routers.nested(
+            "single/vertalingen",
+            ProductSingleTranslation,
+            basename="product-single-vertalingen",
         ),
     ],
 )

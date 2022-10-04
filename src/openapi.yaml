@@ -607,6 +607,94 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductVersieList'
           description: ''
+  /api/v1/producten/{productUuid}/single:
+    post:
+      operationId: productenSingleCreate
+      description: "Maak/update een productversie concept. Om de productversie correct\
+        \ aan te maken,moet u in de url het 'productUuid' opgeven.\n        "
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSingleTranslationGeneric'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSingleTranslationGeneric'
+          description: ''
+  /api/v1/producten/{productUuid}/single/publish:
+    post:
+      operationId: productenSinglePublishCreate
+      description: |-
+        Publiseer het concept.
+
+        Door het publiseren van het concept krijgt het product de publicatie datum van vandaag de dag.
+        Letop een gepubliseerde product kan niet meer worden aangepast, er kan wel een nieuwe product versie worden aangemaakt.
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSingleTranslationGeneric'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSingleTranslationGeneric'
+          description: ''
+  /api/v1/producten/{productUuid}/single/vertalingen:
+    post:
+      operationId: productenSingleVertalingenCreate
+      description: "Update 1 specifieke vertaling van een productversie concept. Om\
+        \ de productversie correct aan te maken,moet u in de url het 'productUuid'\
+        \ opgeven.\n        "
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductSingleTranslation'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSingleTranslation'
+          description: ''
   /api/v1/producten/{uuid}:
     get:
       operationId: productenRetrieve
@@ -1377,6 +1465,109 @@ components:
       - owmsEndDate
       - owmsIdentifier
       - url
+    ProductSingleTranslation:
+      type: object
+      properties:
+        taal:
+          allOf:
+          - $ref: '#/components/schemas/TaalEnum'
+          description: De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+        titel:
+          type: string
+          description: De titel van het product. Als deze afwijkt van de generieke
+            titel kunt u dat hier aangeven.
+          maxLength: 100
+        tekst:
+          type: string
+          description: De inleidende tekst voor het product. Hierin kunt u het product
+            beschrijven en komt direct na de generieke productbeschrijving. Dit veld
+            ondersteund Markdown.
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabeledUrl'
+          description: Dit zijn de verwijzing links voor burgers en ondernemers naar
+            relevante organisatie informatie.
+        procedureBeschrijving:
+          type: string
+          description: De beschrijving van hoe het product wordt aangevraagd. Dit
+            veld ondersteund Markdown.
+        bewijs:
+          type: string
+          description: Dit bevat de bewijsstukken die de burger of ondernemer nodig
+            heeft om dit product aan te vragen. Dit veld ondersteund Markdown.
+        vereisten:
+          type: string
+          description: Dit zijn de voorwaarden voor het aanvragen van het product.
+            Dit veld ondersteund Markdown.
+        bezwaarEnBeroep:
+          type: string
+          description: Beschrijft hoe de burger of ondernemer bezwaar kan maken. Dit
+            veld ondersteund Markdown.
+        kostenEnBetaalmethoden:
+          type: string
+          description: Beschrijft hoe de burger of ondernemer kan betalen en wat de
+            kosten zijn. Dit veld ondersteund Markdown.
+        uitersteTermijn:
+          type: string
+          description: De informatie over hoe hoelang het duurt voor het aanvragen
+            van dit product. Dit doet u aan de hand van werkdagen/weken. Dit veld
+            ondersteund Markdown.
+        wtdBijGeenReactie:
+          type: string
+          description: Beschrijft wat de aanvrager moet doen bij geen reactie. Dit
+            veld ondersteund Markdown.
+        procedureLink:
+          allOf:
+          - $ref: '#/components/schemas/ProcedureLink'
+          description: Het label en de link naar de procedure.
+        productAanwezigToelichting:
+          type: string
+          title: Aanwezig toelichting
+          description: Een optioneel veld om uit te leggen waarom het product niet
+            aanwezig is. Deze moet u alleen invullen als u het product niet levert
+            en dan is dit veld verplicht! Dit veld ondersteund Markdown.
+        productValtOnderToelichting:
+          type: string
+          description: Een optioneel veld om uit te leggen waarom dit product onder
+            een andere product valt. Deze moet u alleen invullen als dit product onder
+            een andere product valt en dan is dit veld verplicht! Dit veld ondersteund
+            Markdown.
+        datumWijziging:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum wanneer dit product voor het laatst is gewijzigd.
+      required:
+      - datumWijziging
+      - taal
+    ProductSingleTranslationGeneric:
+      type: object
+      properties:
+        productAanwezig:
+          type: boolean
+          nullable: true
+          title: Aanwezig
+          description: Voert u dit product?
+        productValtOnder:
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          nullable: true
+          description: Als een product valt onder een ander product (het product wordt
+            bijvoorbeeld geleverd middels een ander product), dan staat deze hier
+            vermeld. Als een product onder een ander product valt, dan moet er een
+            toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde
+            velden kunnen dan leeg blijven.
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLocatie'
+          nullable: true
+          description: Een lijst met locaties waarop dit product beschikbaar is.
+      required:
+      - locaties
+      - productAanwezig
+      - productValtOnder
     ProductVersie:
       type: object
       properties:
