@@ -47,7 +47,7 @@
 
                         {% if siteconfig.documentatie_link %}
                             <a class="header__dropdown-action" href="{{ siteconfig.documentatie_link }}" target="_blank"
-                               rel="noopener">
+                               rel="noopener" id="documentation">
                                 <i class="fa fa-book"></i> {{ siteconfig.documentatie_titel|capfirst|default:_("Documentatie") }}
                             </a>
                         {% endif %}
