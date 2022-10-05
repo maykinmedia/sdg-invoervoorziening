@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 from solo.admin import SingletonModelAdmin
 
-from sdg.core.models import ProductFieldConfiguration
+from sdg.core.models import ProductFieldConfiguration, SiteConfiguration
 from sdg.core.models.localized_config import LocalizedProductFieldConfiguration
 
 
@@ -83,3 +83,27 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
     ]
 
     inlines = (LocalizedProductFieldConfigurationInline,)
+
+
+@admin.register(SiteConfiguration)
+class SiteConfigurationAdmin(SingletonModelAdmin):
+    fieldsets = [
+        (
+            _("Documentatie configuratie"),
+            {
+                "fields": [
+                    "documentatie_titel",
+                    "documentatie_link",
+                ],
+            },
+        ),
+        (
+            _("Analytics configuratie"),
+            {
+                "classes": ("collapse",),
+                "fields": [
+                    "goatcounter_code",
+                ],
+            },
+        ),
+    ]
