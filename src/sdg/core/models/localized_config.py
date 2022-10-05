@@ -1,22 +1,8 @@
-from functools import partial
-
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from sdg.core.db.fields import DynamicArrayField
-from sdg.core.forms import LabeledTooltipWidget
+from sdg.core.models import LabeledTooltipField
 from sdg.producten.models.mixins import TaalMixin
-
-LabeledTooltipField = partial(
-    DynamicArrayField,
-    base_field=ArrayField(
-        models.CharField(max_length=512),
-    ),
-    subwidget_form=LabeledTooltipWidget,
-    blank=True,
-    default=list,
-)
 
 
 class LocalizedProductFieldConfiguration(TaalMixin, models.Model):
