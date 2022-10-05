@@ -44,3 +44,8 @@ class HomeViewTests(WebTest):
         role = RoleFactory.create(user=self.user, is_redacteur=True)
         response = self.app.get(reverse(HOME_URL), auto_follow=True)
         self.assertEqual(role.lokale_overheid.get_absolute_url(), response.request.path)
+
+    def test_consultant_user_can_visit_home_page(self):
+        RoleFactory.create(user=self.user, is_raadpleger=True)
+        response = self.app.get(reverse(HOME_URL), auto_follow=True)
+        self.assertEqual(200, response.status_code)

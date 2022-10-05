@@ -37,6 +37,7 @@ class InvitationTests(WebTest):
         form["last_name"] = "Dent"
         form["form-0-is_beheerder"] = False
         form["form-0-is_redacteur"] = True
+        form["form-0-is_raadpleger"] = False
 
     def test_manager_can_create_invitation(self):
         response = self.app.get(
@@ -131,6 +132,30 @@ class InvitationTests(WebTest):
         user = User.objects.get(email="test@example.com")
         self.assertEqual(invite.accepted, True)
         self.assertEqual(user.check_password("Test@1234"), True)
+
+    def test_consultant_can_accept_invitation(self):
+        response = self.app.get(
+            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+        self._fill_invitation_form(response.form)
+        response.form.is_beheerder = False
+        response.form.is_raadpleger = True
+        response.form.submit()
+
+        invite = UserInvitation.objects.get()
+        response = self.app.get(
+            reverse(INVITATION_ACCEPT_URL, kwargs={"key": invite.key})
+        )
+        response.form["password"] = "Test@1234"
+        response.form["password_confirm"] = "Test@1234"
+        response.form.submit()
+
+        invite.refresh_from_db()
+
+        user = User.objects.get(email="test@example.com")
+        self.assertEqual(invite.accepted, True)
+        self.assertEqual(user.check_password("Test@1234"), True)
+        self.assertEqual(user.is_raadpleger, True)
 
     def test_accept_invitation_invalid_password_fails(self):
         response = self.app.get(
