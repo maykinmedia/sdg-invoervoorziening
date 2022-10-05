@@ -53,6 +53,10 @@ class ProductFieldConfiguration(SingletonModel):
 
 
 class SiteConfiguration(SingletonModel):
+    """
+    The global site configuration is used to modify customizable areas of
+    the website, analytics, general settings, etc.
+    """
 
     documentatie_titel = models.CharField(
         verbose_name=_("Documentatietitel"),
