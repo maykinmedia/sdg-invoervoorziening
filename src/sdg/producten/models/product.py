@@ -229,6 +229,12 @@ class Product(ProductFieldMixin, models.Model):
         help_text=_("De bevoegde organisatie van de producten."),
     )
 
+    heeft_kosten = models.BooleanField(
+        _("heeft kosten"),
+        help_text=_("Heeft dit product kosten?"),
+        default=False,
+    )
+
     objects = ProductQuerySet.as_manager()
 
     @cached_property
