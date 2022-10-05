@@ -29,6 +29,12 @@ class ProductenCatalogusQuerySet(models.QuerySet):
             )
         )
 
+    def active_organization(self):
+        """
+        Filter the catalogs to only include catalogs from active organizations.
+        """
+        return self.filter(lokale_overheid__organisatie__owms_end_date__gte=now())
+
 
 class OrganisatieQuerySet(models.QuerySet):
     def active(self):
