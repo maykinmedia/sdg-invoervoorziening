@@ -34,6 +34,9 @@ class ProductFieldConfiguration(SingletonModel):
     product_locaties = LabeledTooltipField(
         verbose_name=_("Locaties"),
     )
+    product_heeft_kosten = LabeledTooltipField(
+        verbose_name=_("Heeft kosten"),
+    )
     productversie_publicatie_datum = LabeledTooltipField(
         verbose_name=_("Publicatie datum"),
     )
