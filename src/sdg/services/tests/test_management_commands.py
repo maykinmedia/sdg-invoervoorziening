@@ -28,17 +28,19 @@ class TestImportDataFromServices(CommandTestCase):
             doelgroep=DoelgroepChoices.burger,
         )
         self.upn_1 = UniformeProductnaamFactory.create(
-            upn_label="verklaring omtrent gedrag (vog)"
+            upn_uri="http://standaarden.overheid.nl/owms/terms/geluidsontheffing"
         )
-        self.upn_2 = UniformeProductnaamFactory.create(upn_label="toeristenbelasting")
+        self.upn_2 = UniformeProductnaamFactory.create(
+            upn_uri="http://standaarden.overheid.nl/owms/terms/toeristenbelasting",
+        )
         self.localized_1 = LocalizedGeneriekProductFactory.create(
             generiek_product__upn=self.upn_1,
-            taal="en",
+            taal="nl",
             generiek_product__doelgroep=DoelgroepChoices.burger,
         )
         self.localized_2 = LocalizedGeneriekProductFactory.create(
             generiek_product__upn=self.upn_2,
-            taal="en",
+            taal="nl",
             generiek_product__doelgroep=DoelgroepChoices.burger,
         )
 
@@ -52,44 +54,53 @@ class TestImportDataFromServices(CommandTestCase):
 
         self.localized_1.refresh_from_db()
         self.assertEqual(
-            "Certificate of conduct for individuals (VOG NP)",
+            "Geluidsvoorschriften",
             self.localized_1.product_titel,
         )
-        self.assertIn("## VOG denial", self.localized_1.generieke_tekst)
+        self.assertIn(
+            "In sommige gemeenten moet u uw festiviteit een paar weken van",
+            self.localized_1.generieke_tekst,
+        )
         self.assertEqual(
             [
                 [
-                    "Certificate of conduct (Justis)",
-                    "https://www.justis.nl/en/products/certificate-of-conduct",
-                ],
-                ["VOG check tool (Justis, in Dutch)", "https://vogcheck.justis.nl/"],
-                [
-                    "Frequently asked questions certificate of conduct (Justis)",
-                    "https://www.justis.nl/en/service-contact/frequently-asked-questions/certificate-of-conduct",
+                    "Regelgeving geluid (Kenniscentrum InfoMil)",
+                    "http://www.infomil.nl/onderwerpen/geluid/regelgeving/",
                 ],
                 [
-                    "Certificate of conduct for legal entities (VOG RP)",
-                    "https://business.gov.nl/regulation/vogrp/",
+                    "Akoestisch rapport (Kenniscentrum InfoMil)",
+                    "http://www.infomil.nl/onderwerpen/geluid/thema/akoestisch-rapport-0/",
                 ],
                 [
-                    "Applying for a permit or subsidy with eHerkenning",
-                    "https://business.gov.nl/regulation/applying-for-a-permit-or-subsidy-with-eherkenning/",
+                    "Wet algemene bepalingen omgevingsrecht (Wabo) (Overheid.nl)",
+                    "http://wetten.overheid.nl/1.0:c:BWBR0024779",
                 ],
                 [
-                    "Register for persons active in the childcare sector",
-                    "https://business.gov.nl/regulation/register-for-persons-active-in-the-childcare-sector/",
+                    "Wet geluidhinder (Wgh) (Overheid.nl)",
+                    "http://wetten.overheid.nl/1.0:c:BWBR0003227",
                 ],
                 [
-                    "Refusing certificate of conduct (VOG) based on police data",
-                    "https://business.gov.nl/amendment/refusing-certificate-conduct-vog-based-police-data/",
+                    "Activiteitenbesluit milieubeheer (Barim) (Overheid.nl)",
+                    "http://wetten.overheid.nl/1.0:c:BWBR0022762",
+                ],
+                [
+                    "Activiteitenbesluit milieubeheer (Barim), Artikel 1.11. Akoestisch rapport (Overheid.nl)",
+                    "http://wetten.overheid.nl/BWBR0022762/#Hoofdstuk1_Afdeling1.2_Artikel1.11",
+                ],
+                [
+                    "Lokale wet- en regelgeving (Overheid.nl)",
+                    "https://www.overheid.nl/lokale-wet-en-regelgeving",
                 ],
             ],
             self.localized_1.verwijzing_links,
         )
         self.assertEqual(
-            "https://business.gov.nl/regulation/vog/", self.localized_1.landelijke_link
+            "https://ondernemersplein.kvk.nl/geluidsvoorschriften/",
+            self.localized_1.landelijke_link,
         )
-        self.assertEqual(datetime(2021, 7, 28, 16, 27, 2), self.localized_1.datum_check)
+        self.assertEqual(
+            datetime(2020, 11, 27, 15, 1, 59), self.localized_1.datum_check
+        )
 
     @patch("zgw_consumers.client.ZGWClient.retrieve")
     def test_import_data_from_services_unreachable_api(self, retrieve_mock):
