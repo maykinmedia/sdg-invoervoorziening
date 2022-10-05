@@ -9,7 +9,7 @@ from django.views.generic.detail import SingleObjectMixin
 
 from sdg.accounts.forms import InvitationAcceptForm, RoleInlineFormSet
 from sdg.accounts.mixins import OverheidMixin
-from sdg.accounts.models import UserInvitation
+from sdg.accounts.models import Role, UserInvitation
 from sdg.core.events import post_event
 from sdg.organisaties.models import LokaleOverheid
 
@@ -20,7 +20,7 @@ class InvitationCreateView(OverheidMixin, CreateView):
     template_name = "organisaties/invitation/create.html"
     queryset = LokaleOverheid.objects.all()
     model = User
-    required_roles = ["is_beheerder"]
+    required_roles = [Role.choices.MANAGER]
     fields = [
         "email",
         "first_name",

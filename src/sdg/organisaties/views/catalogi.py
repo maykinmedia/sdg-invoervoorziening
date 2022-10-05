@@ -66,7 +66,6 @@ class CatalogListView(OverheidMixin, RHListView):
     # ]
 
     model = Product
-    required_roles = ["is_beheerder", "is_redacteur"]
     template_name = "organisaties/catalogi/list.html"
     paginate_by = 100
 

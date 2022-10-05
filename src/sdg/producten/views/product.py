@@ -11,6 +11,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
+from sdg.accounts.models import Role
+from sdg.accounts.utils import user_has_valid_roles
+from sdg.accounts.views.decorators import municipality_role_required
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
 from sdg.producten.forms import (
@@ -32,7 +35,7 @@ class ProductPreviewView(OverheidMixin, DetailView):
     template_name = "mocks/kvk.html"
     context_object_name = "product"
     pk_url_kwarg = "product_pk"
-    required_roles = ["is_beheerder", "is_redacteur"]
+    required_roles = [Role.choices.MANAGER, Role.choices.EDITOR]
 
     def is_concept(self):
         if self.request.GET.get("status", "") == "concept":
@@ -172,7 +175,6 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"
     form_class = LocalizedProductFormSet
-    required_roles = ["is_beheerder", "is_redacteur"]
 
     def get_queryset(self):
         return (
@@ -316,11 +318,21 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "decentrale_procedure_link",
             "decentrale_procedure_label",
         ]
+
+        context["user_can_edit"] = user_has_valid_roles(
+            self.request.user,
+            municipality=self.get_lokale_overheid(),
+            required_roles=[
+                Role.choices.MANAGER,
+                Role.choices.EDITOR,
+            ],
+        )
         return context
 
     def get(self, request, *args, **kwargs):
         return self.render_to_response(self.get_context_data())
 
+    @municipality_role_required([Role.choices.MANAGER, Role.choices.EDITOR])
     def post(self, request, *args, **kwargs):
         product_form = ProductForm(request.POST, instance=self.product)
         version_form = VersionForm(
