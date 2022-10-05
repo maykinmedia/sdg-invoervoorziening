@@ -9,6 +9,7 @@ from sdg.accounts.mixins import OverheidMixin
 from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid
+from sdg.producten.constants import BooleanChoices
 from sdg.producten.models import Product
 
 
@@ -41,21 +42,26 @@ class CatalogListView(OverheidMixin, RHListView):
             "key": "_latest_publication_date",
             "label": _("Publicatie datum"),
         },
+        {
+            "label": _("Heeft kosten"),
+            "key": "heeft_kosten",
+            "filter_label": " ",
+        },
     ]
     filterable_columns = [
         "_name",
         "generiek_product__upn__thema__informatiegebied",
         {
             "key": "product_aanwezig",
-            "choices": (
-                ("", "---------"),
-                (True, _("Ja")),
-                (False, _("Nee")),
-            ),
+            "choices": (("", "---------"),) + BooleanChoices.choices,
         },
         {
             "key": "doelgroep",
             "choices": (("", "---------"),) + DoelgroepChoices.choices,
+        },
+        {
+            "key": "heeft_kosten",
+            "choices": (("", "---------"),) + BooleanChoices.choices,
         },
     ]
     # FIXME: Setting orderable columns seems to break ordering entirely.

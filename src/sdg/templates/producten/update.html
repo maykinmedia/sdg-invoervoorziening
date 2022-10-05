@@ -238,7 +238,25 @@
                         </tr>
                     {% endwith %}
                 {% endwith %}
-
+                {% with field=product_form.heeft_kosten %}
+                    <tr>
+                        <td>
+                            <div class="form__control">
+                                <header class="form__control-header">
+                                    <label class="form__label">
+                                        {{ field.label|capfirst }}
+                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                    </label>
+                                </header>
+                                <div class="form__control-body">
+                                    <div class="tabs__table-cell--versions"></div>
+                                    {% select field %}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endwith %}
                 <tr>
                     <td>
                         {% nonlocalized_form version_form include_form=False fields="interne_opmerkingen" %}

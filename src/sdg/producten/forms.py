@@ -8,7 +8,7 @@ from django.forms import inlineformset_factory
 
 from ..core.models.mixins import FieldConfigurationMixin
 from ..organisaties.models import BevoegdeOrganisatie
-from .constants import PublishChoices
+from .constants import BooleanChoices, PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .utils import parse_changed_data
 from .widgets import CheckboxSelectMultiple
@@ -110,6 +110,11 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         required=False,
         widget=CheckboxSelectMultiple(),
     )
+    heeft_kosten = forms.ChoiceField(
+        required=False,
+        widget=forms.Select(),
+        choices=BooleanChoices.choices,
+    )
 
     class Meta:
         model = Product
@@ -118,6 +123,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "product_valt_onder",
             "bevoegde_organisatie",
             "locaties",
+            "heeft_kosten",
         )
 
     def _help_text(self, field):
