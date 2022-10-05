@@ -12,6 +12,7 @@ from django.utils.html import strip_tags
 from django.utils.translation import gettext_lazy as _
 
 from allauth.account.models import EmailAddress
+from djchoices import ChoiceItem, DjangoChoices
 
 from .managers import UserInvitationManager, UserManager
 
@@ -150,6 +151,13 @@ class Role(models.Model):
     A role that governs the relationship between a municipality and user.
     """
 
+    class choices(DjangoChoices):
+        """All possible role choices for a municipality and user."""
+
+        MANAGER = ChoiceItem("is_beheerder", label=_("Beheerder"))
+        EDITOR = ChoiceItem("is_redacteur", label=_("Redacteur"))
+        CONSULTANT = ChoiceItem("is_raadpleger", label=_("Raadpleger"))
+
     user = models.ForeignKey(
         "User",
         on_delete=models.CASCADE,
@@ -175,14 +183,13 @@ class Role(models.Model):
             "Designates whether this is an editor of a specific overheidsorganisatie. "
         ),
     )
-
-    @classmethod
-    def get_roles(cls):
-        return [
-            f
-            for f in cls._meta.fields
-            if f.name.startswith("is_") and getattr(cls, f.name)
-        ]
+    is_raadpleger = models.BooleanField(
+        _("raadpleger"),
+        default=False,
+        help_text=_(
+            "Designates whether this user is a consultant of a specific overheidsorganisatie. "
+        ),
+    )
 
     class Meta:
         verbose_name = _("rol")
