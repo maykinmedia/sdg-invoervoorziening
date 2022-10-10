@@ -1,0 +1,2486 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-09-27 16:47+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: sdg/accounts/admin.py:26
+msgid "Gebruiker"
+msgstr ""
+
+#: sdg/accounts/admin.py:31
+#: sdg/templates/organisaties/_prefix/organisatie_formset.html:10
+#: sdg/templates/organisaties/_prefix/organisatie_formset.html:18
+#: sdg/templates/organisaties/base.html:5
+#: sdg/templates/organisaties/bevoegde_organisaties.html:28
+#: sdg/templates/organisaties/bevoegde_organisaties.html:45
+#: sdg/templates/organisaties/bevoegde_organisaties.html:53
+msgid "Organisatie"
+msgstr ""
+
+#: sdg/accounts/admin.py:108
+msgid "Persoonlijke informatie"
+msgstr ""
+
+#: sdg/accounts/admin.py:117
+msgid "Rechten"
+msgstr ""
+
+#: sdg/accounts/admin.py:128
+msgid "Overige"
+msgstr ""
+
+#: sdg/accounts/admin.py:173
+msgid "Een uitnodiging is succesvol naar de gebruiker verzonden."
+msgstr ""
+
+#: sdg/accounts/forms.py:29
+msgid "U moet ten minste één rol selecteren."
+msgstr ""
+
+#: sdg/accounts/forms.py:40
+msgid "Wachtwoord"
+msgstr ""
+
+#: sdg/accounts/forms.py:43
+msgid "Wachtwoord bevestigen"
+msgstr ""
+
+#: sdg/accounts/forms.py:53
+msgid "Wachtwoord en bevestigingswachtwoord komen niet overeen"
+msgstr ""
+
+#: sdg/accounts/mixins.py:48
+msgid "U hebt niet de vereiste rol om deze pagina te openen."
+msgstr ""
+
+#: sdg/accounts/mixins.py:82
+msgid ""
+"De einddatum van deze lokale overheid is verstreken en zij is niet langer "
+"toegankelijk."
+msgstr ""
+
+#: sdg/accounts/models.py:26
+msgid "voornaam"
+msgstr ""
+
+#: sdg/accounts/models.py:27
+msgid "achternaam"
+msgstr ""
+
+#: sdg/accounts/models.py:28
+msgid "e-mailadres"
+msgstr ""
+
+#: sdg/accounts/models.py:30
+msgid "staff status"
+msgstr ""
+
+#: sdg/accounts/models.py:32
+msgid "Geeft aan of de gebruiker kan inloggen op deze beheerdersite."
+msgstr ""
+
+#: sdg/accounts/models.py:35
+msgid "active"
+msgstr ""
+
+#: sdg/accounts/models.py:38
+msgid ""
+"Geeft aan of deze gebruiker als actief moet worden behandeld. Deselecteer "
+"dit in plaats van accounts te verwijderen."
+msgstr ""
+
+#: sdg/accounts/models.py:42
+msgid "date joined"
+msgstr ""
+
+#: sdg/accounts/models.py:49 sdg/accounts/models.py:72
+msgid "gebruiker"
+msgstr ""
+
+#: sdg/accounts/models.py:50
+msgid "gebruikers"
+msgstr ""
+
+#: sdg/accounts/models.py:76 sdg/api/models.py:11
+msgid "key"
+msgstr ""
+
+#: sdg/accounts/models.py:78
+msgid "geaccepteerd"
+msgstr ""
+
+#: sdg/accounts/models.py:80 sdg/api/models.py:49
+msgid "aangemaakt"
+msgstr ""
+
+#: sdg/accounts/models.py:81
+msgid "verzonden"
+msgstr ""
+
+#: sdg/accounts/models.py:128
+msgid "Uitnodiging met succes aanvaard."
+msgstr ""
+
+#: sdg/accounts/models.py:140
+msgid "uitnodiging"
+msgstr ""
+
+#: sdg/accounts/models.py:141
+msgid "uitnodigingen"
+msgstr ""
+
+#: sdg/accounts/models.py:164
+msgid "beheerder"
+msgstr ""
+
+#: sdg/accounts/models.py:167
+msgid ""
+"Designates whether this user is a manager of a specific "
+"overheidsorganisatie. "
+msgstr ""
+
+#: sdg/accounts/models.py:171
+msgid "redacteur"
+msgstr ""
+
+#: sdg/accounts/models.py:174
+msgid ""
+"Designates whether this is an editor of a specific overheidsorganisatie. "
+msgstr ""
+
+#: sdg/accounts/models.py:187
+msgid "rol"
+msgstr ""
+
+#: sdg/accounts/models.py:188
+msgid "rollen"
+msgstr ""
+
+#: sdg/api/filters/constants.py:7 sdg/organisaties/views/catalogi.py:52
+msgid "Ja"
+msgstr ""
+
+#: sdg/api/filters/constants.py:8 sdg/organisaties/views/catalogi.py:53
+msgid "Nee"
+msgstr ""
+
+#: sdg/api/filters/constants.py:9
+msgid "Onbekend"
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:20
+msgid "Toont catalogi die bij de opgegeven organisatie UUID horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:25
+msgid "Toont catalogi die bij de opgegeven organisatie OWMS identifier horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:31
+msgid "Toont catalogi die bij de opgegeven organisatie OWMS pref label horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:45
+msgid "Toont producten die bij de opgegeven organisatie horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:50
+msgid "Toont producten die overeenkomen met de opgegeven doelgroepen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:55
+msgid "Toont producten die aanwezig zijn in de opgegeven catalogus."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:61
+msgid "Toont producten die behoren tot de catalogus van de opgegeven UUID."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:67
+msgid ""
+"Toont producten met een publicatiedatum groter dan of gelijk aan de "
+"opgegeven datum."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:72
+msgid "Toont producten die overeenkomen met de opgegeven taal."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:76
+msgid "Toont producten met een UPN label"
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:79
+msgid "Toont producten met een UPN URI"
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:84
+msgid "Toont producten die bij de opgegeven organisatie OWMS identifier horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:90
+msgid "Toont producten die bij de opgegeven organisatie OWMS pref label horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:153
+msgid "Toont locaties die bij de opgegeven organisatie horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:158
+msgid "Toont locaties die bij de opgegeven organisatie OWMS identifier horen."
+msgstr ""
+
+#: sdg/api/filters/filtersets.py:164
+msgid "Toont locaties die bij de opgegeven organisatie OWMS pref label horen."
+msgstr ""
+
+#: sdg/api/models.py:14
+msgid "contactpersoon"
+msgstr ""
+
+#: sdg/api/models.py:16
+msgid "Naam van de contactpersoon"
+msgstr ""
+
+#: sdg/api/models.py:19 sdg/templates/mocks/kvk.html:264
+msgid "email"
+msgstr "e-mail"
+
+#: sdg/api/models.py:20
+msgid "Email van de contactpersoon"
+msgstr ""
+
+#: sdg/api/models.py:24 sdg/organisaties/models.py:58
+#: sdg/organisaties/models.py:134
+msgid "organisatie"
+msgstr ""
+
+#: sdg/api/models.py:26
+msgid "Naam van de organisatie"
+msgstr ""
+
+#: sdg/api/models.py:30
+msgid "applicatie"
+msgstr ""
+
+#: sdg/api/models.py:32
+msgid "Naam van de applicatie"
+msgstr ""
+
+#: sdg/api/models.py:36
+msgid "administratie"
+msgstr ""
+
+#: sdg/api/models.py:38
+msgid "Naam van de administratie"
+msgstr ""
+
+#: sdg/api/models.py:42
+msgid "laatste verzoek"
+msgstr ""
+
+#: sdg/api/models.py:44
+msgid "Wanneer het token voor het laatst gebruikt is in de API."
+msgstr ""
+
+#: sdg/api/models.py:51
+msgid "Wanneer het token is aangemaakt"
+msgstr ""
+
+#: sdg/api/models.py:54
+msgid "aangepast"
+msgstr ""
+
+#: sdg/api/models.py:56
+msgid "Wanneer het token voor het laatst is gewijzigd."
+msgstr ""
+
+#: sdg/api/models.py:64
+msgid "Whitelisted IP adressen van deze token."
+msgstr ""
+
+#: sdg/api/models.py:70
+msgid "token"
+msgstr ""
+
+#: sdg/api/models.py:71
+msgid "tokens"
+msgstr ""
+
+#: sdg/api/models.py:103
+msgid "Betreffende Overheid"
+msgstr ""
+
+#: sdg/api/models.py:104
+msgid "Betreffende Overheiden"
+msgstr ""
+
+#: sdg/api/serializers/fields.py:24
+msgid "Label has to be a valid string."
+msgstr ""
+
+#: sdg/api/serializers/fields.py:29
+msgid "Verwijzings Link has to have a valid label."
+msgstr ""
+
+#: sdg/api/serializers/fields.py:38
+msgid "Value has to be a valid url."
+msgstr ""
+
+#: sdg/api/serializers/fields.py:42
+msgid "Verwijzings Link has to have a valid url."
+msgstr ""
+
+#: sdg/api/serializers/fields.py:47
+#, python-brace-format
+msgid "Verwijzings Link doesn't have key/value pair(s) {data}"
+msgstr ""
+
+#: sdg/api/serializers/fields.py:82
+msgid "Give a valid 'label', 'value' instance"
+msgstr ""
+
+#: sdg/api/serializers/fields.py:87
+msgid "Field has to be a list instance"
+msgstr ""
+
+#: sdg/components/templates/components/localized_form/localized_form.html:36
+msgid "De waarde voor deze taal is aangepast."
+msgstr ""
+
+#: sdg/components/templates/components/localized_form/localized_form.html:63
+#: sdg/templates/forms/table_field.html:25
+msgid "Toon standaardtekst"
+msgstr ""
+
+#: sdg/components/templates/components/localized_form/localized_form.html:65
+#: sdg/templates/forms/table_field.html:27
+msgid "Bewerken"
+msgstr ""
+
+#: sdg/components/templates/components/localized_form/localized_form.html:76
+#: sdg/components/templates/components/localized_form/localized_form.html:81
+msgid "Toon de verschillen tussen mijn tekst en de standaardtekst"
+msgstr ""
+
+#: sdg/components/templates/components/localized_form/localized_form.html:78
+msgid "Vergelijk met mijn tekst"
+msgstr ""
+
+#: sdg/components/templates/components/localized_form/localized_form.html:83
+msgid "Vergelijk met vorige versie"
+msgstr ""
+
+#: sdg/components/templates/components/localized_form/localized_form.html:89
+#: sdg/templates/forms/table_field.html:43
+#: sdg/templates/forms/table_field.html:62
+msgid "Gebruik standaardtekst"
+msgstr ""
+
+#: sdg/core/admin/config.py:13 sdg/core/admin/config.py:71
+msgid "Algemene gegevens"
+msgstr ""
+
+#: sdg/core/admin/config.py:23 sdg/templates/producten/update.html:241
+msgid "Generieke gegevens"
+msgstr ""
+
+#: sdg/core/admin/config.py:37 sdg/templates/producten/update.html:294
+msgid "Specifieke gegevens"
+msgstr ""
+
+#: sdg/core/constants/product.py:7
+msgid "Nederlands"
+msgstr ""
+
+#: sdg/core/constants/product.py:8
+msgid "Engels"
+msgstr ""
+
+#: sdg/core/constants/product.py:16
+msgid "EU Burger"
+msgstr ""
+
+#: sdg/core/constants/product.py:17
+msgid "EU Bedrijf"
+msgstr ""
+
+#: sdg/core/constants/product.py:21
+msgid "Nieuw"
+msgstr ""
+
+#: sdg/core/constants/product.py:22
+msgid "Gereed voor beheer"
+msgstr ""
+
+#: sdg/core/constants/product.py:23
+msgid "Gereed voor publicatie"
+msgstr ""
+
+#: sdg/core/constants/product.py:24
+msgid "Vervallen in de UPL"
+msgstr ""
+
+#: sdg/core/constants/product.py:25
+msgid "Wordt binnenkort verwijderd"
+msgstr ""
+
+#: sdg/core/constants/product.py:26
+msgid "Verwijderd"
+msgstr ""
+
+#: sdg/core/constants/product.py:27
+msgid "Geen referentie producten gevonden"
+msgstr ""
+
+#: sdg/core/forms/fields.py:13
+#, python-format
+msgid "Item %(nth)s in de lijst is niet geldig."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:21
+msgid "referentie catalogus"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:23
+msgid "De catalogus van referentie."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:30 sdg/organisaties/models.py:81
+#: sdg/organisaties/models.py:125 sdg/organisaties/models.py:164
+msgid "lokale overheid"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:31
+msgid "De lokale overheid die bij deze catalogus hoort."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:36
+msgid "is referentie catalogus"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:38
+msgid "Geeft aan of dit een referentiecatalogus is."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:41
+msgid "is standaard catalogus"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:44
+msgid "Geeft aan of dit de stabdaard catalogus is van de lokale overheid."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:48
+msgid "domein"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:51
+msgid "Een afkorting die wordt gebruikt om het domein aan te duiden."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:55 sdg/producten/models/product.py:394
+msgid "versie"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:56
+msgid "Het versienummer van het producten catalogus."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:59 sdg/organisaties/models.py:114
+#: sdg/organisaties/models.py:169
+msgid "naam"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:61
+msgid "De naam van de producten catalogus."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:64
+msgid "toelichting"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:67 sdg/organisaties/models.py:21
+#: sdg/organisaties/models.py:105 sdg/organisaties/models.py:264
+#: sdg/producten/models/product.py:165
+msgid "UUID"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:72 sdg/organisaties/models.py:26
+#: sdg/organisaties/models.py:110 sdg/organisaties/models.py:269
+#: sdg/producten/models/product.py:170
+msgid "De identificatie die binnen deze API gebruikt wordt voor de resource."
+msgstr ""
+
+#: sdg/core/models/catalogus.py:76
+msgid "autofill"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:78
+msgid "filter"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:79
+msgid "autofill upn filter"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:91
+msgid "producten catalogus"
+msgstr ""
+
+#: sdg/core/models/catalogus.py:92
+msgid "producten catalogi"
+msgstr ""
+
+#: sdg/core/models/config.py:25
+msgid "Product aanwezig"
+msgstr ""
+
+#: sdg/core/models/config.py:28
+msgid "Product valt onder"
+msgstr ""
+
+#: sdg/core/models/config.py:31
+msgid "Bevoegde organisatie"
+msgstr ""
+
+#: sdg/core/models/config.py:34 sdg/templates/core/base.html:23
+#: sdg/templates/core/base_home.html:35
+#: sdg/templates/organisaties/locaties.html:4
+msgid "Locaties"
+msgstr ""
+
+#: sdg/core/models/config.py:37 sdg/organisaties/views/catalogi.py:42
+#: sdg/templates/producten/update.html:197
+#: sdg/templates/producten/update.html:373
+msgid "Publicatie datum"
+msgstr ""
+
+#: sdg/core/models/config.py:48 sdg/core/models/config.py:49
+msgid "Product field configuratie"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:31
+msgid "configuratie"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:32
+msgid "De configuratie singelton van deze vertaling."
+msgstr ""
+
+#: sdg/core/models/localized_config.py:36
+msgid "Product aanwezig toelichting"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:39
+msgid "Product valt onder toelichting"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:43
+msgid "Product titel"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:46
+msgid "Generieke tekst"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:49
+msgid "Korte omschrijving"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:52
+msgid "Datum check"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:55
+#: sdg/core/models/localized_config.py:68
+msgid "Verwijzing links"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:58
+msgid "Landelijke link"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:62
+msgid "Product titel decentraal"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:65
+msgid "Specifieke tekst"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:71
+msgid "Decentrale link"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:74
+msgid "Datum wijziging"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:77
+msgid "Procedure beschrijving"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:80
+msgid "Vereisten"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:83
+msgid "Bewijs"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:86
+msgid "Bezwaar en beroep"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:89
+msgid "Kosten en betaalmethoden"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:92
+msgid "Uiterste termijn"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:95
+msgid "Wtd bij geen reactie"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:98
+msgid "Decentrale procedure link"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:106
+msgid "Vertaalde configuratie"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:107
+msgid "Vertaalde configuraties"
+msgstr ""
+
+#: sdg/core/models/logius.py:16
+msgid "OWMS identificatie"
+msgstr ""
+
+#: sdg/core/models/logius.py:18
+msgid ""
+"De metadatastandaard voor informatie van de nederlandse overheid op internet."
+msgstr ""
+
+#: sdg/core/models/logius.py:23
+msgid "OWMS label"
+msgstr ""
+
+#: sdg/core/models/logius.py:25
+msgid "De wettelijk erkende naam van de organisatie."
+msgstr ""
+
+#: sdg/core/models/logius.py:28
+msgid "einddatum"
+msgstr ""
+
+#: sdg/core/models/logius.py:29
+msgid "De einddatum, zoals gevonden in het OWMS-model."
+msgstr ""
+
+#: sdg/core/models/logius.py:37
+msgid "overheidsorganisatie"
+msgstr ""
+
+#: sdg/core/models/logius.py:38
+msgid "overheidsorganisaties"
+msgstr ""
+
+#: sdg/core/models/logius.py:42 sdg/organisaties/models.py:86
+#, python-brace-format
+msgid "{label} (opgeheven op {end_date})"
+msgstr ""
+
+#: sdg/core/models/logius.py:55 sdg/core/models/logius.py:68
+#: sdg/core/models/logius.py:91
+msgid "informatiegebied"
+msgstr ""
+
+#: sdg/core/models/logius.py:57
+msgid "Het bij de gegevens behorende SDG informatiegebied."
+msgstr ""
+
+#: sdg/core/models/logius.py:60
+msgid "informatiegebied URI"
+msgstr ""
+
+#: sdg/core/models/logius.py:62
+msgid "Informatiegebied SDG URI van landelijk product"
+msgstr ""
+
+#: sdg/core/models/logius.py:69
+msgid "informatiegebieden"
+msgstr ""
+
+#: sdg/core/models/logius.py:82
+msgid "code"
+msgstr ""
+
+#: sdg/core/models/logius.py:84
+msgid "De SDG code van het desbetreffende informatiegebied."
+msgstr ""
+
+#: sdg/core/models/logius.py:92 sdg/core/models/logius.py:127
+msgid "Het informatiegebied met betrekking tot dit thema."
+msgstr ""
+
+#: sdg/core/models/logius.py:95 sdg/core/models/logius.py:108
+#: sdg/core/models/logius.py:126
+msgid "thema"
+msgstr ""
+
+#: sdg/core/models/logius.py:97
+msgid "Het SDG thema dat verband houdt met de gegevens."
+msgstr ""
+
+#: sdg/core/models/logius.py:100
+msgid "thema uri"
+msgstr ""
+
+#: sdg/core/models/logius.py:102
+msgid "SDG thema URI van landelijk product"
+msgstr ""
+
+#: sdg/core/models/logius.py:109
+msgid "thema's"
+msgstr ""
+
+#: sdg/core/models/logius.py:132
+msgid "UPN URI"
+msgstr ""
+
+#: sdg/core/models/logius.py:134
+msgid "Uniforme Productnaam URI van landelijk product"
+msgstr ""
+
+#: sdg/core/models/logius.py:139
+msgid "UPN label"
+msgstr ""
+
+#: sdg/core/models/logius.py:142
+msgid ""
+"Het bijbehorende label. Zie https://standaarden.overheid.nl/owms/oquery/UPL-"
+"actueel.plain voor de volledige UPL. "
+msgstr ""
+
+#: sdg/core/models/logius.py:147
+msgid "Is verwijderd"
+msgstr ""
+
+#: sdg/core/models/logius.py:148
+msgid "Geeft aan of het product verwijderd is."
+msgstr ""
+
+#: sdg/core/models/logius.py:157
+msgid "rijk"
+msgstr ""
+
+#: sdg/core/models/logius.py:158
+msgid "provincie"
+msgstr ""
+
+#: sdg/core/models/logius.py:159
+msgid "waterschap"
+msgstr ""
+
+#: sdg/core/models/logius.py:160
+msgid "gemeente"
+msgstr ""
+
+#: sdg/core/models/logius.py:161
+msgid "burger"
+msgstr ""
+
+#: sdg/core/models/logius.py:162
+msgid "bedrijf"
+msgstr ""
+
+#: sdg/core/models/logius.py:163
+msgid "dienstenwet"
+msgstr ""
+
+#: sdg/core/models/logius.py:164
+msgid "autonomie"
+msgstr ""
+
+#: sdg/core/models/logius.py:165
+msgid "medebewind"
+msgstr ""
+
+#: sdg/core/models/logius.py:166
+msgid "aanvraag"
+msgstr ""
+
+#: sdg/core/models/logius.py:167
+msgid "subsidie"
+msgstr ""
+
+#: sdg/core/models/logius.py:168
+msgid "melding"
+msgstr ""
+
+#: sdg/core/models/logius.py:169
+msgid "verplichting"
+msgstr ""
+
+#: sdg/core/models/logius.py:170
+msgid "digi_d_macht"
+msgstr ""
+
+#: sdg/core/models/logius.py:172
+msgid "sdg"
+msgstr ""
+
+#: sdg/core/models/logius.py:190
+msgid "uniforme productnaam"
+msgstr ""
+
+#: sdg/core/models/logius.py:191
+msgid "uniforme productnamen"
+msgstr ""
+
+#: sdg/core/models/validators.py:9
+msgid "Voer alleen hoofdletters in."
+msgstr ""
+
+#: sdg/core/models/validators.py:15
+msgid "Voer een geldige LAU code in. Bijvoorbeeld: NL123"
+msgstr ""
+
+#: sdg/core/models/validators.py:21
+msgid "Voer een geldige postcode code in. Bijvoorbeeld: 1234AA"
+msgstr ""
+
+#: sdg/core/models/validators.py:28
+msgid ""
+"Voer een geldige openingstijd in of laat leeg indien gesloten. Bijvoorbeeld: "
+"09:00 - 17:00"
+msgstr ""
+
+#: sdg/core/models/validators.py:34
+msgid "Voer een geldige URL in."
+msgstr ""
+
+#: sdg/core/models/validators.py:60
+msgid "De link moet een label en een URL bevatten."
+msgstr ""
+
+#: sdg/core/models/validators.py:69
+msgid "Een referentiecatalogus kan geen \"referentie_catalogus\" hebben."
+msgstr ""
+
+#: sdg/core/models/validators.py:75
+msgid "Een catalogus moet een referentiecatalogus hebben."
+msgstr ""
+
+#: sdg/core/models/validators.py:79
+msgid ""
+"Een catalogus kan alleen naar een catalogus linken als "
+"\"is_referentie_catalogus\" is ingeschakeld."
+msgstr ""
+
+#: sdg/organisaties/admin.py:26 sdg/templates/organisaties/roles/list.html:25
+msgid "Beheerder"
+msgstr ""
+
+#: sdg/organisaties/admin.py:74
+msgid "beheerders"
+msgstr ""
+
+#: sdg/organisaties/admin.py:79
+msgid "end date"
+msgstr ""
+
+#: sdg/organisaties/constants.py:4
+#, python-format
+msgid "(%(nth)s) Voer een juiste tijd in bijvoorbeeld 12:00 - 18:00."
+msgstr ""
+
+#: sdg/organisaties/forms.py:79
+msgid "Mijn bevoegde organisatie staat niet in de lijst."
+msgstr ""
+
+#: sdg/organisaties/models.py:30
+msgid "contact website"
+msgstr ""
+
+#: sdg/organisaties/models.py:32
+msgid "Website van de organisatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:35
+msgid "contact telefoonnummer"
+msgstr ""
+
+#: sdg/organisaties/models.py:39
+msgid ""
+"Het internationale telefoonnummer waarop de organisatie bereikbaar is. "
+"Bijvoorbeeld: +31 20 624 1111"
+msgstr ""
+
+#: sdg/organisaties/models.py:43
+msgid "contact emailadres"
+msgstr ""
+
+#: sdg/organisaties/models.py:47
+msgid ""
+"Het algemene e-mailadres van de organisatie of het e-mailadres van het "
+"klantcontactcentrum van de organisatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:51
+msgid "contact formulier"
+msgstr ""
+
+#: sdg/organisaties/models.py:59
+msgid "De organisatie van de lokale overheid."
+msgstr ""
+
+#: sdg/organisaties/models.py:64
+msgid "Automatisch catalogus aanmaken"
+msgstr ""
+
+#: sdg/organisaties/models.py:67
+msgid ""
+"Indien aangevinkt wordt een specifieke catalogus aangemaakt voor deze lokale "
+"overheid."
+msgstr ""
+
+#: sdg/organisaties/models.py:82
+msgid "lokale overheden"
+msgstr ""
+
+#: sdg/organisaties/models.py:119
+msgid ""
+"De naam van de bevoegde organisatie. Deze mag alleen afwijken indien er geen "
+"bekende overheidsorganisatie is."
+msgstr ""
+
+#: sdg/organisaties/models.py:127
+msgid "De verantwoordelijke organisatie horend bij deze bevoegde organisatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:137
+msgid ""
+"De bij de Rijksoverheid bekende organisatie die optreed als bevoegde "
+"organisatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:144 sdg/producten/models/product.py:225
+msgid "bevoegde organisatie"
+msgstr ""
+
+#: sdg/organisaties/models.py:145
+msgid "bevoegde organisaties"
+msgstr ""
+
+#: sdg/organisaties/models.py:171
+msgid "De naam van de locatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:174
+msgid "straat"
+msgstr ""
+
+#: sdg/organisaties/models.py:176
+msgid "De straatnaam van de locatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:179
+msgid "nummer"
+msgstr ""
+
+#: sdg/organisaties/models.py:180
+msgid "Het huisnummer van de locatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:184
+msgid "postcode"
+msgstr ""
+
+#: sdg/organisaties/models.py:187
+msgid "De postcode van de locatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:190
+msgid "plaats"
+msgstr ""
+
+#: sdg/organisaties/models.py:192
+msgid "De plaatsnaam van de locatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:195
+msgid "land"
+msgstr ""
+
+#: sdg/organisaties/models.py:197
+msgid "Het land van de locatie."
+msgstr ""
+
+#: sdg/organisaties/models.py:201
+msgid "maandag"
+msgstr ""
+
+#: sdg/organisaties/models.py:209
+msgid "dinsdag"
+msgstr ""
+
+#: sdg/organisaties/models.py:217
+msgid "woensdag"
+msgstr ""
+
+#: sdg/organisaties/models.py:225
+msgid "donderdag"
+msgstr ""
+
+#: sdg/organisaties/models.py:233
+msgid "vrijdag"
+msgstr ""
+
+#: sdg/organisaties/models.py:241
+msgid "zaterdag"
+msgstr ""
+
+#: sdg/organisaties/models.py:249
+msgid "zondag"
+msgstr ""
+
+#: sdg/organisaties/models.py:257
+msgid "openingstijden opmerking"
+msgstr ""
+
+#: sdg/organisaties/models.py:259
+msgid "Opmerking over de openingstijden."
+msgstr ""
+
+#: sdg/organisaties/models.py:277
+msgid "locatie"
+msgstr ""
+
+#: sdg/organisaties/models.py:278 sdg/producten/models/product.py:215
+msgid "locaties"
+msgstr ""
+
+#: sdg/organisaties/views/bevoegde_organisaties.py:37
+#, python-brace-format
+msgid ""
+"De bevoegde organisaties van gemeente {organisatie} zijn succesvol gewijzigd."
+msgstr ""
+
+#: sdg/organisaties/views/catalogi.py:19
+#: sdg/templates/organisaties/roles/list.html:24
+msgid "Naam"
+msgstr ""
+
+#: sdg/organisaties/views/catalogi.py:20
+msgid "Zoek op productnaam"
+msgstr ""
+
+#: sdg/organisaties/views/catalogi.py:24
+msgid "Informatiegebied"
+msgstr ""
+
+#: sdg/organisaties/views/catalogi.py:25
+msgid "Selecteer thema"
+msgstr ""
+
+#: sdg/organisaties/views/catalogi.py:28
+msgid "Aangeboden"
+msgstr ""
+
+#: sdg/organisaties/views/catalogi.py:36 sdg/templates/producten/update.html:84
+msgid "Doelgroep"
+msgstr ""
+
+#: sdg/organisaties/views/invitation.py:82
+msgid ""
+"Er bestaat al een gebruiker met dit e-mailadres binnen deze organisatie."
+msgstr ""
+
+#: sdg/organisaties/views/locaties.py:36
+#, python-brace-format
+msgid ""
+"De locatie instellingen van gemeente {organisatie} zijn succesvol gewijzigd."
+msgstr ""
+
+#: sdg/organisaties/views/overheden.py:27
+#, python-brace-format
+msgid ""
+"De organisatie instellingen van gemeente {organisatie} zijn succesvol "
+"gewijzigd."
+msgstr ""
+
+#: sdg/organisaties/views/roles.py:34
+#, python-brace-format
+msgid "De gebruiker {role} is niet meer gekoppeld aan gemeente  {organisatie}."
+msgstr ""
+
+#: sdg/organisaties/views/roles.py:54
+#, python-brace-format
+msgid ""
+"De gebruikersrol van {role} voor gemeente {organisatie} is succesvol "
+"gewijzigd."
+msgstr ""
+
+#: sdg/producten/admin/product.py:19
+msgid "Is Referentie"
+msgstr ""
+
+#: sdg/producten/constants.py:7
+msgid "Opslaan en publiceren"
+msgstr ""
+
+#: sdg/producten/constants.py:8
+msgid "Opslaan als concept"
+msgstr ""
+
+#: sdg/producten/models/localized.py:23 sdg/producten/models/product.py:136
+#: sdg/producten/models/product.py:177
+msgid "generiek product"
+msgstr ""
+
+#: sdg/producten/models/localized.py:24
+msgid "Het generieke product van deze vertaling."
+msgstr ""
+
+#: sdg/producten/models/localized.py:30
+msgid "product titel"
+msgstr ""
+
+#: sdg/producten/models/localized.py:33 sdg/producten/models/localized.py:124
+msgid ""
+"De titel van het decentrale product, die immers kan afwijken van de "
+"landelijke titel."
+msgstr ""
+
+#: sdg/producten/models/localized.py:37
+msgid "generieke tekst"
+msgstr ""
+
+#: sdg/producten/models/localized.py:39
+msgid ""
+"De Nationale Portalen schrijven een inleidende, algemene tekst over het "
+"product. Dit veld ondersteund Markdown."
+msgstr ""
+
+#: sdg/producten/models/localized.py:43
+msgid "korte omschrijving"
+msgstr ""
+
+#: sdg/producten/models/localized.py:46
+msgid ""
+"Korte omschrijving van wat er op de pagina staat, gebruikt in de meta tags "
+"van de productpagina (meta name=\"description\"). Deze tekst wordt gebruikt "
+"om te tonen wanneer de pagina wordt gevonden in een zoekmachine. "
+msgstr ""
+
+#: sdg/producten/models/localized.py:52
+msgid "datum check"
+msgstr ""
+
+#: sdg/producten/models/localized.py:54
+msgid ""
+"De informatie over het product kan worden gewijzigd en gecontroleerd op "
+"actualiteit (gecheckt). De Nationale portalen houden bij wanneer de "
+"informatie voor het laasts is 'gecheckt'.  Deze datum wordt op het portaal "
+"getoond."
+msgstr ""
+
+#: sdg/producten/models/localized.py:68
+msgid ""
+"Zowel de Nationale Portalen als de decentrale overheden kunnen een x-tal "
+"'verwijzingen' opnemen bij een product. Voorstel hierbij om zo'n "
+"'verwijzing' te laten bestaan uit een -bij elkaar horende-  beschrijving en "
+"hyperlink. De tekst van artikel 9 geeft enkele voorbeelden hiervan: "
+"'richtsnoeren/ NEN-specs bijv en ook links naar de wetgeving (dit laatste is "
+"inderdaad te verstaan als vertaling van 'Legal Acts'. Bart heeft dit bij "
+"Jurist van bNC (Vanessa) gecheckt. "
+msgstr ""
+
+#: sdg/producten/models/localized.py:78
+msgid "landelijke link"
+msgstr ""
+
+#: sdg/producten/models/localized.py:80
+msgid ""
+"URL van de productpagina wanneer het een landelijk product betreft of de "
+"pagina met enkel generieke beschrijving van een decentraal product, "
+"bijvoorbeeld : https://ondernemersplein.kvk.nl/terrasvergunning. gebruikt "
+"voor o.a. notificeren, feedback & statistics en het kunnen bekijken van de "
+"generieke productinformatie (bv door gebruikers van de organisatie "
+"invoervoorziening) "
+msgstr ""
+
+#: sdg/producten/models/localized.py:91
+msgid "Vertaald generiek product"
+msgstr ""
+
+#: sdg/producten/models/localized.py:92
+msgid "Vertaalde generieke producten"
+msgstr ""
+
+#: sdg/producten/models/localized.py:114
+msgid "specifieke product"
+msgstr ""
+
+#: sdg/producten/models/localized.py:115
+msgid "Het specifieke product van deze vertaling."
+msgstr ""
+
+#: sdg/producten/models/localized.py:121
+msgid "product titel decentraal"
+msgstr ""
+
+#: sdg/producten/models/localized.py:129
+msgid "specifieke tekst"
+msgstr ""
+
+#: sdg/producten/models/localized.py:130
+msgid "Decentrale omschrijving."
+msgstr ""
+
+#: sdg/producten/models/localized.py:139
+msgid "Decentrale verwijzingen."
+msgstr ""
+
+#: sdg/producten/models/localized.py:144
+msgid "datum wijziging"
+msgstr ""
+
+#: sdg/producten/models/localized.py:146
+msgid ""
+"Decentrale overheden geven een wijzigingsdatum mee voor hun informatie. Deze "
+"datum wordt op het portaal getoond. "
+msgstr ""
+
+#: sdg/producten/models/localized.py:155
+msgid "procedure beschrijving"
+msgstr ""
+
+#: sdg/producten/models/localized.py:157
+msgid "Procedurebeschrijving."
+msgstr ""
+
+#: sdg/producten/models/localized.py:162
+msgid "vereisten"
+msgstr ""
+
+#: sdg/producten/models/localized.py:164
+msgid "Vereisten auth/id/sign."
+msgstr ""
+
+#: sdg/producten/models/localized.py:169
+msgid "bewijs"
+msgstr ""
+
+#: sdg/producten/models/localized.py:171
+msgid "Bewijs (type/format)."
+msgstr ""
+
+#: sdg/producten/models/localized.py:176
+msgid "bezwaar en beroep"
+msgstr ""
+
+#: sdg/producten/models/localized.py:178
+msgid "Bezwaar en beroep."
+msgstr ""
+
+#: sdg/producten/models/localized.py:183
+msgid "kosten en betaalmethoden"
+msgstr ""
+
+#: sdg/producten/models/localized.py:185
+msgid "Kosten en betaalmethoden."
+msgstr ""
+
+#: sdg/producten/models/localized.py:190
+msgid "uiterste termijn"
+msgstr ""
+
+#: sdg/producten/models/localized.py:192
+msgid "Deadlines."
+msgstr ""
+
+#: sdg/producten/models/localized.py:197
+msgid "wtd bij geen reactie"
+msgstr ""
+
+#: sdg/producten/models/localized.py:199
+msgid "Wat te doen bij geen reactie."
+msgstr ""
+
+#: sdg/producten/models/localized.py:204
+msgid "decentrale procedure link"
+msgstr ""
+
+#: sdg/producten/models/localized.py:205
+msgid "Link naar de procedure voor burgers en / of bedrijven."
+msgstr ""
+
+#: sdg/producten/models/localized.py:210
+msgid "product valt onder toelichting"
+msgstr ""
+
+#: sdg/producten/models/localized.py:212
+msgid "Toelichting over het product valt onder."
+msgstr ""
+
+#: sdg/producten/models/localized.py:217
+msgid "aanwezig toelichting"
+msgstr ""
+
+#: sdg/producten/models/localized.py:218
+msgid "Toelichting"
+msgstr ""
+
+#: sdg/producten/models/localized.py:260
+msgid "vertaald product"
+msgstr ""
+
+#: sdg/producten/models/localized.py:261
+msgid "vertaalde producten"
+msgstr ""
+
+#: sdg/producten/models/localized.py:323 sdg/producten/models/product.py:506
+msgid "productuitvoering"
+msgstr ""
+
+#: sdg/producten/models/localized.py:324
+msgid "De productuitvoering van deze vertaling."
+msgstr ""
+
+#: sdg/producten/models/localized.py:331
+msgid "product titel uitvoering"
+msgstr ""
+
+#: sdg/producten/models/localized.py:333
+msgid "De titel van de uitvoering van het product."
+msgstr ""
+
+#: sdg/producten/models/localized.py:337
+msgid "vertaalde productuitvoering"
+msgstr ""
+
+#: sdg/producten/models/localized.py:338
+msgid "vertaalde productuitvoeringen"
+msgstr ""
+
+#: sdg/producten/models/mixins.py:53
+msgid "taal"
+msgstr ""
+
+#: sdg/producten/models/mixins.py:57
+msgid ""
+"De taal waarin de betreffende tekst is geschreven.ISO 639-1 (https://en."
+"wikipedia.org/wiki/List_of_ISO_639-1_codes)"
+msgstr ""
+
+#: sdg/producten/models/product.py:45
+msgid "De uniforme productnaam met betrekking tot dit product."
+msgstr ""
+
+#: sdg/producten/models/product.py:51
+msgid "verantwoordelijke organisatie"
+msgstr ""
+
+#: sdg/producten/models/product.py:52
+msgid "Organisatie verantwoordelijk voor de landelijke informatie"
+msgstr ""
+
+#: sdg/producten/models/product.py:57
+msgid "verplicht product"
+msgstr ""
+
+#: sdg/producten/models/product.py:59
+msgid ""
+"Geeft aan of decentrale overheden verplicht zijn informatie over dit product "
+"te leveren."
+msgstr ""
+
+#: sdg/producten/models/product.py:67
+msgid ""
+"Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of "
+"burgers en bedrijven. Wordt gebruikt wanneer een portaal informatie over het "
+"product ophaalt uit de invoervoorziening. Zo krijgen de ondernemersportalen "
+"de ondernemersvariant en de burgerportalen de burgervariant. "
+msgstr ""
+
+#: sdg/producten/models/product.py:73
+msgid "Eind datum"
+msgstr ""
+
+#: sdg/producten/models/product.py:74
+msgid "De datum wanneer het product komt te vervallen."
+msgstr ""
+
+#: sdg/producten/models/product.py:137
+msgid "generieke producten"
+msgstr ""
+
+#: sdg/producten/models/product.py:160
+msgid "Gepubliceerd"
+msgstr ""
+
+#: sdg/producten/models/product.py:161
+msgid "Gepland"
+msgstr ""
+
+#: sdg/producten/models/product.py:162
+msgid "Concept"
+msgstr ""
+
+#: sdg/producten/models/product.py:178
+msgid "Het generiek product gekoppeld aan dit product."
+msgstr ""
+
+#: sdg/producten/models/product.py:184
+msgid "referentie product"
+msgstr ""
+
+#: sdg/producten/models/product.py:186
+msgid ""
+"Een referentie naar een product. Het toewijzen van een referentieproduct "
+"veronderstelt automatisch dat dit product specifiek is."
+msgstr ""
+
+#: sdg/producten/models/product.py:196
+msgid "catalogus"
+msgstr ""
+
+#: sdg/producten/models/product.py:197
+msgid "De catalogus waartoe dit product behoort."
+msgstr ""
+
+#: sdg/producten/models/product.py:200
+msgid "aanwezig"
+msgstr ""
+
+#: sdg/producten/models/product.py:201
+msgid "Voert u dit product?"
+msgstr ""
+
+#: sdg/producten/models/product.py:208
+msgid "product valt onder"
+msgstr ""
+
+#: sdg/producten/models/product.py:209
+msgid "Een verwijzing naar een product waarvan dit product valt onder."
+msgstr ""
+
+#: sdg/producten/models/product.py:218
+msgid "De locaties die zijn toegewezen aan de product."
+msgstr ""
+
+#: sdg/producten/models/product.py:227
+msgid "De bevoegde organisatie van de producten."
+msgstr ""
+
+#: sdg/producten/models/product.py:341 sdg/producten/models/product.py:380
+#: sdg/producten/models/product.py:501
+msgid "product"
+msgstr ""
+
+#: sdg/producten/models/product.py:342
+msgid "producten"
+msgstr ""
+
+#: sdg/producten/models/product.py:381
+msgid "Het product voor het product versie."
+msgstr ""
+
+#: sdg/producten/models/product.py:388
+msgid "gemaakt door"
+msgstr ""
+
+#: sdg/producten/models/product.py:389
+msgid "De maker van deze productversie."
+msgstr ""
+
+#: sdg/producten/models/product.py:395
+msgid "Het versienummer van het product."
+msgstr ""
+
+#: sdg/producten/models/product.py:401
+msgid "publicatie datum"
+msgstr ""
+
+#: sdg/producten/models/product.py:402
+msgid "De datum van publicatie van de productversie."
+msgstr ""
+
+#: sdg/producten/models/product.py:407
+msgid "gemaakt op"
+msgstr ""
+
+#: sdg/producten/models/product.py:408
+msgid "De oorspronkelijke aanmaakdatum voor deze productversie."
+msgstr ""
+
+#: sdg/producten/models/product.py:412
+msgid "gewijzigd op"
+msgstr ""
+
+#: sdg/producten/models/product.py:413
+msgid "De wijzigingsdatum voor deze productversie."
+msgstr ""
+
+#: sdg/producten/models/product.py:471
+msgid "product versie"
+msgstr ""
+
+#: sdg/producten/models/product.py:472
+msgid "product versies"
+msgstr ""
+
+#: sdg/producten/models/product.py:485
+msgid "De publicatiedatum kan niet in het verleden liggen."
+msgstr ""
+
+#: sdg/producten/models/product.py:502
+msgid "Het product voor het productuitvoering."
+msgstr ""
+
+#: sdg/producten/models/product.py:507
+msgid "productuitvoeringen"
+msgstr ""
+
+#: sdg/producten/models/validators.py:21
+msgid ""
+"Het veld mag geen HTML-tags bevatten. Zorg ervoor dat de tabel een header "
+"rij heeft."
+msgstr ""
+
+#: sdg/producten/models/validators.py:44
+#, python-brace-format
+msgid "Het veld mag geen instantie van <{html_element}> bevatten."
+msgstr ""
+
+#: sdg/producten/models/validators.py:61
+msgid ""
+"Het veld 'product_aanwezig_toelichting' is verplicht als het veld "
+"'product_aanwezig' is uitgeschakeld."
+msgstr ""
+
+#: sdg/producten/models/validators.py:75
+msgid "Dit specifieke product moet in een specifieke catalogus staan."
+msgstr ""
+
+#: sdg/producten/models/validators.py:80
+msgid ""
+"Het veld generieke product moet gelijk zijn aan het generieke product van "
+"het referentieproduct."
+msgstr ""
+
+#: sdg/producten/models/validators.py:86
+msgid ""
+"Het referentieproduct van dit product moet in een referentiecatalogus staan."
+msgstr ""
+
+#: sdg/producten/models/validators.py:99
+msgid "Dit referentieproduct moet in een referentiecatalogus staan."
+msgstr ""
+
+#: sdg/producten/views/product.py:267
+msgid ""
+"'Opslaan als concept' slaat het product op zonder te publiceren zodat u er "
+"later nog aan kan werken.\n"
+"'Opslaan en publiceren' maakt een nieuwe gepubliceerde versie van het "
+"product aan, actief vanaf de gekozen datum aan de linkerkant."
+msgstr ""
+
+#: sdg/services/models.py:16
+msgid "De doelgroep waarvoor deze service is geconfigureerd. "
+msgstr ""
+
+#: sdg/services/models.py:27
+msgid "Serviceconfiguratie"
+msgstr ""
+
+#: sdg/services/models.py:28
+msgid "Serviceconfiguraties"
+msgstr ""
+
+#: sdg/templates/403.html:9
+msgid "Sorry, je hebt geen toegang tot deze pagina."
+msgstr ""
+
+#: sdg/templates/404.html:7
+msgid "Sorry, de aanvraagpagina kon niet worden gevonden."
+msgstr ""
+
+#: sdg/templates/500.html:9
+msgid ""
+"Wij zijn automatisch op de hoogte gebracht van het probleem en zullen het zo "
+"spoedig mogelijk onderzoeken."
+msgstr ""
+
+#: sdg/templates/500.html:11
+msgid "Als je hulp nodig hebt, kan je onderstaande foutcode doorgeven."
+msgstr ""
+
+#: sdg/templates/500.html:15 sdg/templates/503.html:11
+#: sdg/templates/core/index.html:6
+msgid "Home"
+msgstr ""
+
+#: sdg/templates/503.html:8
+msgid "Sorry, deze website is gesloten voor reparatie / is niet beschikbaar."
+msgstr ""
+
+#: sdg/templates/503.html:9
+msgid "Probeer het over een paar minuten nog eens."
+msgstr ""
+
+#: sdg/templates/account/email_confirm.html:10
+msgid "Bevestig e-mailadres"
+msgstr ""
+
+#: sdg/templates/account/email_confirm.html:16
+#, python-format
+msgid ""
+"Bevestig dat <a href=\"mailto:%(email)s\">%(email)s</a> een e-mailadres is "
+"voor gebruiker %(user_display)s."
+msgstr ""
+
+#: sdg/templates/account/email_confirm.html:20
+#: sdg/templates/organisaties/invitation/create.html:38
+#: sdg/templates/organisaties/roles/update.html:26
+msgid "Opslaan"
+msgstr ""
+
+#: sdg/templates/account/email_confirm.html:27
+#, python-format
+msgid ""
+"Deze e-mailbevestigingslink is verlopen of ongeldig. Gelieve <a href="
+"\"%(email_url)s\">een nieuwe bevestigingsmail aan te vragen</a>."
+msgstr ""
+
+#: sdg/templates/account/login.html:7 sdg/templates/account/login.html:10
+#: sdg/templates/account/login_dashboard.html:6
+#: sdg/templates/account/signup.html:7 sdg/templates/account/signup.html:10
+msgid "Aanmelden"
+msgstr ""
+
+#: sdg/templates/account/login.html:12
+#, python-format
+msgid ""
+"Als u nog geen account hebt aangemaakt,\n"
+"            <a href=\"%(signup_url)s\">meld u dan eerst aan</a>."
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:9
+msgid "SDG voor gemeenten"
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:10
+msgid ""
+"Welkom bij de Single Digital Gateway (SDG) Invoervoorziening van VNG "
+"Realisatie."
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:11
+msgid ""
+"Hier beheert u gemeente specifieke teksten voor gemeentelijke producten."
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:12
+msgid ""
+"Deze informatie wordt gepresenteerd op <a href=\"#\">Rijksoverheid.nl</a> en "
+"<a href=\"#\">Digitaalondernemersplein.nl</a>."
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:13
+msgid "Log in om verder te gaan."
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:14
+msgid "Inloggen"
+msgstr ""
+
+#: sdg/templates/account/logout.html:5 sdg/templates/account/logout.html:8
+#: sdg/templates/account/logout.html:17 sdg/templates/admin/base_site.html:42
+#: sdg/templates/core/base_home.html:48
+msgid "Uitloggen"
+msgstr ""
+
+#: sdg/templates/account/logout.html:10
+msgid "Weet u zeker dat u wilt uitloggen?"
+msgstr ""
+
+#: sdg/templates/account/password_reset.html:7
+#: sdg/templates/account/password_reset.html:10
+#: sdg/templates/account/password_reset_from_key.html:4
+#: sdg/templates/account/password_reset_from_key.html:7
+#: sdg/templates/account/password_reset_from_key_done.html:4
+msgid "Wachtwoord reset"
+msgstr ""
+
+#: sdg/templates/account/password_reset.html:15
+msgid ""
+"Bent u uw wachtwoord vergeten? Vul hieronder uw e-mail adres in, en wij "
+"sturen u een e-mail waarmee u het kunt resetten."
+msgstr ""
+
+#: sdg/templates/account/password_reset.html:26
+#: sdg/templates/account/password_reset_from_key.html:23
+msgid "Wachtwoord resetten"
+msgstr ""
+
+#: sdg/templates/account/password_reset.html:31
+msgid ""
+"Neem contact met ons op als u problemen ondervindt bij het resetten van uw "
+"wachtwoord."
+msgstr ""
+
+#: sdg/templates/account/password_reset_done.html:6
+msgid "Wachtwoord Reset"
+msgstr ""
+
+#: sdg/templates/account/password_reset_done.html:9
+msgid "Wachtwoord reset e-mail"
+msgstr ""
+
+#: sdg/templates/account/password_reset_done.html:17
+msgid ""
+"Wij hebben u een e-mail gestuurd. Neem contact met ons op als u deze niet "
+"binnen enkele minuten ontvangt."
+msgstr ""
+
+#: sdg/templates/account/password_reset_from_key.html:7
+msgid "Verkeerde token"
+msgstr ""
+
+#: sdg/templates/account/password_reset_from_key.html:11
+#, python-format
+msgid ""
+"De link voor het opnieuw instellen van het wachtwoord was ongeldig, mogelijk "
+"omdat deze al is gebruikt. <a href=\"%(passwd_reset_url)s\">Gelieve een "
+"nieuw wachtwoord aan te vragen</a>."
+msgstr ""
+
+#: sdg/templates/account/password_reset_from_key.html:28
+#: sdg/templates/account/password_reset_from_key_done.html:9
+msgid "Uw wachtwoord is nu gewijzigd."
+msgstr ""
+
+#: sdg/templates/account/password_reset_from_key_done.html:7
+msgid "Wachtwoord gereset"
+msgstr ""
+
+#: sdg/templates/account/signup.html:12
+#, python-format
+msgid ""
+"Heeft u al een account? Dan kunt u\n"
+"    <a href=\"%(login_url)s\">aanmelden</a>."
+msgstr ""
+
+#: sdg/templates/account/signup_closed.html:5
+#: sdg/templates/account/signup_closed.html:9
+msgid "Aanmelden gesloten"
+msgstr ""
+
+#: sdg/templates/account/signup_closed.html:11
+msgid ""
+"Het spijt ons, maar de inschrijving is momenteel gesloten. Neem contact op "
+"met een SDG-beheerder."
+msgstr ""
+
+#: sdg/templates/account/verification_sent.html:5
+#: sdg/templates/account/verification_sent.html:8
+msgid "Verifieer uw e-mailadres"
+msgstr ""
+
+#: sdg/templates/account/verification_sent.html:11
+msgid ""
+"We hebben een e-mail ter verificatie naar u gestuurd. Volg de link om het "
+"aanmeldingsproces af te ronden. Neem contact met ons op als u deze niet "
+"binnen een paar minuten ontvangt."
+msgstr ""
+
+#: sdg/templates/admin/base_site.html:5 sdg/templates/admin/base_site.html:24
+msgid "Administratie"
+msgstr ""
+
+#: sdg/templates/admin/base_site.html:34
+msgid "Wachtwoord wijzigen"
+msgstr ""
+
+#: sdg/templates/admin/base_site.html:39
+msgid "Beheer two-factor auth"
+msgstr ""
+
+#: sdg/templates/admin/core/logger/event.html:3
+msgid "Anonymous user"
+msgstr ""
+
+#: sdg/templates/core/_municipality_switch.html:5
+msgid "Wissel naar andere organisatie"
+msgstr ""
+
+#: sdg/templates/core/_notifications.html:7 sdg/templates/core/index.html:38
+#: sdg/templates/producten/_include/availability_warnings.html:8
+#: sdg/templates/producten/_include/availability_warnings.html:14
+#: sdg/templates/producten/_include/edit_warnings.html:15
+msgid "Sluiten"
+msgstr ""
+
+#: sdg/templates/core/base.html:11
+msgid "Homepage"
+msgstr ""
+
+#: sdg/templates/core/base.html:17
+#: sdg/templates/organisaties/catalogi/base.html:5
+#: sdg/templates/organisaties/catalogi/list.html:4
+msgid "Productenlijst"
+msgstr ""
+
+#: sdg/templates/core/base.html:21
+msgid "Gebruikers"
+msgstr ""
+
+#: sdg/templates/core/base_home.html:32
+#: sdg/templates/organisaties/update.html:4
+msgid "Organisatie instellingen"
+msgstr ""
+
+#: sdg/templates/core/base_home.html:38
+#: sdg/templates/organisaties/bevoegde_organisaties.html:4
+msgid "Bevoegde organisaties"
+msgstr ""
+
+#: sdg/templates/core/base_home.html:43
+#: sdg/templates/organisaties/invitation/base.html:5
+#: sdg/templates/organisaties/roles/base.html:5
+#: sdg/templates/organisaties/roles/list.html:4
+msgid "Gebruikersbeheer"
+msgstr ""
+
+#: sdg/templates/core/base_home.html:53
+msgid "Selecteer eerst een organisatie voor meer opties."
+msgstr ""
+
+#: sdg/templates/core/base_home.html:94
+msgid "Toegankelijkheid"
+msgstr ""
+
+#: sdg/templates/core/base_home.html:95
+msgid "Privacybeleid"
+msgstr ""
+
+#: sdg/templates/core/email/invitation.html:4
+#, python-format
+msgid ""
+"\n"
+"        <div style=\"font-family: arial; sans-serif; font-size: 11px;\">\n"
+"            <p>Beste %(user_full_name)s,</p>\n"
+"\n"
+"            <p>Hartelijk dank voor het aanmelden bij de invoervoorziening "
+"Single Digital Gateway (SDG) voor gemeenten. Je hebt zojuist toegang "
+"gekregen.</p>\n"
+"    \n"
+"            <br>\n"
+"            <p><strong>Activeer nu jouw account</strong></p>\n"
+"            <p>Met de onderstaande link stel je jouw account in en lees je "
+"de instructies op onze website.</p>\n"
+"\n"
+"            <p><a href=\"%(invite_url)s\">%(invite_url)s</a></p>\n"
+"\n"
+"            <p><strong><i>Let op: je hebt 8 weken de tijd om je account te "
+"activeren.</i></strong></p>\n"
+"\n"
+"            <p>Met jouw account heb je toegang tot de invoervoorziening. Ook "
+"kun je hier de teksten controleren en aanvullen met informatie van jouw "
+"gemeente.</p>\n"
+"\n"
+"            <br>\n"
+"            <p><strong>Heb je vragen?</strong></p>\n"
+"            <p>Op de <a href=\"https://werkenaaneenoverheid.pleio.nl/groups/"
+"view/ed87e451-f6fc-49b0-aec4-41f2358426f7/single-digital-gateway\">Pleio "
+"omgeving van SDG</a> vind je informatie en handleidingen voor de "
+"invoervoorziening. Heb je andere vragen? Stuur een e-mail naar <a href="
+"\"mailto:sdg@vng.nl\">sdg@vng.nl</a>.</p>\n"
+"\n"
+"            <br>\n"
+"            <p>Met vriendelijke groet,</p>\n"
+"\n"
+"            <p>\n"
+"            Programmateam Single Digital Gateway<br>\n"
+"            VNG Realisatie<br>\n"
+"            </p>\n"
+"\n"
+"            <p><small>Dit bericht is automatisch aangemaakt en verstuurd. Je "
+"kunt hier niet op antwoorden.</small></p>\n"
+"        </div>\n"
+"    "
+msgstr ""
+
+#: sdg/templates/core/index.html:11
+msgid "Invoervoorziening"
+msgstr ""
+
+#: sdg/templates/core/index.html:37
+msgid "Je hebt geen toegang tot enige lokale overheid."
+msgstr ""
+
+#: sdg/templates/forms/table_field.html:36
+#: sdg/templates/forms/table_field.html:55
+msgid "Toon wijzigingen in standaard tekst t.o.v. vorige versie"
+msgstr ""
+
+#: sdg/templates/forms/table_field.html:38
+#: sdg/templates/forms/table_field.html:57
+msgid "Vergelijken"
+msgstr ""
+
+#: sdg/templates/forms/widgets/dynamic_array.html:25
+msgid "Toevoegen"
+msgstr ""
+
+#: sdg/templates/forms/widgets/dynamic_array.html:28
+msgid "Aanpassen"
+msgstr ""
+
+#: sdg/templates/mocks/kvk.html:94 sdg/templates/mocks/kvk.html:235
+msgid "See also"
+msgstr "Zie ook"
+
+#: sdg/templates/mocks/kvk.html:117
+msgid "Last checked on"
+msgstr "Laatst gecontroleerd op"
+
+#: sdg/templates/mocks/kvk.html:140
+msgid "Information from"
+msgstr "Informatie van"
+
+#: sdg/templates/mocks/kvk.html:255
+msgid "Contact municipality"
+msgstr "Neem contact op met de gemeente"
+
+#: sdg/templates/mocks/kvk.html:268
+msgid "phone"
+msgstr "telefoon"
+
+#: sdg/templates/mocks/kvk.html:273
+msgid "Where to get this product"
+msgstr "Waar kunt u dit product verkrijgen"
+
+#: sdg/templates/mocks/kvk.html:274
+msgid "Handled by"
+msgstr "Uitgevoerd door"
+
+#: sdg/templates/mocks/kvk.html:291
+msgid "Opening hours"
+msgstr "Openingstijden"
+
+#: sdg/templates/mocks/kvk.html:304
+msgid "uur"
+msgstr ""
+
+#: sdg/templates/mocks/kvk.html:307
+msgid "closed"
+msgstr "gesloten"
+
+#: sdg/templates/mocks/kvk.html:324
+msgid "Last updated on"
+msgstr "Laatst gewijzigd op"
+
+#: sdg/templates/organisaties/_prefix/locatie_formset.html:6
+#: sdg/templates/organisaties/_prefix/locatie_formset.html:14
+#: sdg/templates/organisaties/locaties.html:26
+#: sdg/templates/organisaties/locaties.html:34
+msgid "Locatie"
+msgstr ""
+
+#: sdg/templates/organisaties/_prefix/locatie_formset.html:9
+#: sdg/templates/organisaties/locaties.html:29
+msgid "Locatie verwijderen"
+msgstr ""
+
+#: sdg/templates/organisaties/_prefix/organisatie_formset.html:13
+#: sdg/templates/organisaties/bevoegde_organisaties.html:48
+msgid "Organisatie verwijderen"
+msgstr ""
+
+#: sdg/templates/organisaties/bevoegde_organisaties.html:7
+msgid ""
+"Je kan hier extra bevoegde organisaties opgeven. De verantwoordelijke "
+"organisatie is standaard ook de bevoegde organisatie. Bij elk product kan je "
+"vervolgens een bevoegde organisatie selecteren uit deze lijst."
+msgstr ""
+
+#: sdg/templates/organisaties/bevoegde_organisaties.html:33
+msgid "Standaard bevoegde organisatie"
+msgstr ""
+
+#: sdg/templates/organisaties/bevoegde_organisaties.html:69
+msgid "Nog een organisatie toevoegen"
+msgstr ""
+
+#: sdg/templates/organisaties/bevoegde_organisaties.html:76
+#: sdg/templates/organisaties/invitation/create.html:40
+#: sdg/templates/organisaties/locaties.html:70
+#: sdg/templates/organisaties/roles/delete.html:22
+#: sdg/templates/organisaties/roles/update.html:28
+#: sdg/templates/organisaties/update.html:27
+#: sdg/templates/producten/update.html:385
+msgid "Annuleren"
+msgstr ""
+
+#: sdg/templates/organisaties/catalogi/list.html:7
+msgid ""
+"Je ziet hieronder de lijst van alle SDG producten. Klik op een product om "
+"deze te bewerken."
+msgstr ""
+
+#: sdg/templates/organisaties/invitation/accept.html:11
+msgid "Beste"
+msgstr ""
+
+#: sdg/templates/organisaties/invitation/accept.html:12
+msgid "Stel een wachtwoord in voor uw SDG account."
+msgstr ""
+
+#: sdg/templates/organisaties/invitation/accept.html:20
+msgid "Wachtwoord instellen"
+msgstr ""
+
+#: sdg/templates/organisaties/invitation/create.html:4
+#: sdg/templates/organisaties/roles/list.html:44
+msgid "Nieuwe gebruiker toevoegen"
+msgstr ""
+
+#: sdg/templates/organisaties/invitation/create.html:7
+#, python-format
+msgid ""
+"\n"
+"            U nodigt hiermee een nieuwe of bestaande gebruiker uit voor "
+"%(lokaleoverheid)s. Een gebruiker in de rol van redacteur kan producten in "
+"uw catalogi bewerken. Een beheerder kan tevens instellingen en gebruikers "
+"beheren voor uw organisatie. Een gebruiker mag ook beide rollen vervullen.\n"
+"        "
+msgstr ""
+
+#: sdg/templates/organisaties/locaties.html:7
+msgid ""
+"Je kant hier alle locaties opgeven waar producten worden aangeboden. Bij elk "
+"product kan je vervolgens een of meer locaties selecteren uit deze lijst."
+msgstr ""
+
+#: sdg/templates/organisaties/locaties.html:63
+msgid "Nog een locatie toevoegen"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/_user.html:7
+msgid "Uitnodiging verstuurd"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/_user.html:17
+msgid "Wijzigen"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/_user.html:20
+#: sdg/templates/organisaties/roles/delete.html:20
+msgid "Verwijderen"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/delete.html:4
+#, python-format
+msgid "Gebruiker %(user)s verwijderen"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/delete.html:7
+#, python-format
+msgid ""
+"\n"
+"            Je staat op het punt om gebruiker \"%(user)s\" te verwijderen "
+"uit organisatie \"%(organisation)s\".\n"
+"        "
+msgstr ""
+
+#: sdg/templates/organisaties/roles/delete.html:18
+#, python-format
+msgid ""
+"Weet je zeker dat je <span class=\"primary text-bold\">%(user)s</span> wilt "
+"verwijderen?"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/list.html:7
+msgid ""
+"Hieronder staan alle gebruikers die gekoppeld zijn aan de organisatie. "
+"Redacteuren kunnen alleen teksten beheren en beheerders kunnen ook andere "
+"instellingen en gebruikers beheren."
+msgstr ""
+
+#: sdg/templates/organisaties/roles/list.html:26
+msgid "Redacteur"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/list.html:27
+msgid "Acties"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/update.html:4
+#, python-format
+msgid "Gebruiker %(role.user)s wijzigen"
+msgstr ""
+
+#: sdg/templates/organisaties/roles/update.html:7
+msgid "Je kan de rol van de gebruiker hieronder wijzigen."
+msgstr ""
+
+#: sdg/templates/organisaties/update.html:7
+msgid ""
+"Je kan hier de contactgegevens van de organisatie wijzigen. Let op: Deze "
+"contactgegevens worden ook gebruikt door engelstalige bezoekers."
+msgstr ""
+
+#: sdg/templates/producten/_include/availability_warnings.html:7
+msgid "U heeft aangegeven dat u dit product niet aanbiedt."
+msgstr ""
+
+#: sdg/templates/producten/_include/availability_warnings.html:13
+msgid "U heeft nog niet aangegeven of u dit product aanbiedt."
+msgstr ""
+
+#: sdg/templates/producten/_include/edit_warnings.html:7
+msgid ""
+"U bewerkt een reeds gepubliceerde producttekst. Als u deze opslaat wordt een "
+"nieuwe versie aangemaakt."
+msgstr ""
+
+#: sdg/templates/producten/_include/edit_warnings.html:9
+msgid "U bewerkt een concept product tekst."
+msgstr ""
+
+#: sdg/templates/producten/_include/edit_warnings.html:11
+#, python-format
+msgid ""
+"\n"
+"                <span>U bewerkt een producttekst die ingepland staat om "
+"gepubliceerd te worden op %(object.publicatie_datum)s. Aanpassingen "
+"overschrijven deze ingeplande publicatie.</span>\n"
+"            "
+msgstr ""
+
+#: sdg/templates/producten/_include/icon.html:5
+msgid "Product niet gepubliceerd, u voldoet niet aan de SDG verordening."
+msgstr ""
+
+#: sdg/templates/producten/_include/icon.html:8
+msgid "De standaardtekst is gewijzigd, controleer uw specifieke tekst."
+msgstr ""
+
+#: sdg/templates/producten/_include/icon.html:10
+msgid "Mijn gemeente voert dit product niet."
+msgstr ""
+
+#: sdg/templates/producten/_include/icon.html:12
+msgid "Mijn gemeente heeft dit product beschikbaar."
+msgstr ""
+
+#: sdg/templates/producten/_include/product_status.html:5
+msgid "Status"
+msgstr ""
+
+#: sdg/templates/producten/_include/product_status.html:10
+msgid "gepubliceerd"
+msgstr ""
+
+#: sdg/templates/producten/_include/product_status.html:15
+msgid "concept"
+msgstr ""
+
+#: sdg/templates/producten/_include/product_status.html:20
+msgid "ongepubliceerd"
+msgstr ""
+
+#: sdg/templates/producten/_include/schedule_to_concept_warning.html:6
+msgid ""
+"Als u kiest voor \"Opslaan en publiceren\", vervalt de reeds ingeplande "
+"publicatie. Indien u kiest voor \"Opslaan als concept\" dan wordt de "
+"publicatiedatum verwijderd van de ingeplande publicatie."
+msgstr ""
+
+#: sdg/templates/producten/base.html:6
+msgid "Producten"
+msgstr ""
+
+#: sdg/templates/producten/update.html:6
+msgid ""
+"Onderstaande velden kun je apart bewerken. Je kunt alles in één keer opslaan "
+"met de knoppen onderaan."
+msgstr ""
+
+#: sdg/templates/producten/update.html:49
+msgid ""
+"Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder "
+"gemarkeerde fouten."
+msgstr ""
+
+#: sdg/templates/producten/update.html:72
+msgid "Algemene Gegevens"
+msgstr ""
+
+#: sdg/templates/producten/update.html:198
+msgid "Publicatiedatum van de productversie"
+msgstr ""
+
+#: sdg/templates/producten/update.html:229
+msgid "Let op dat je beide talen aanpast."
+msgstr ""
+
+#: sdg/templates/producten/update.html:259
+msgid "Toon voorbeeld"
+msgstr ""
+
+#: sdg/templates/producten/update.html:264
+msgid "Huidige gepubliceerde tekst"
+msgstr ""
+
+#: sdg/templates/producten/update.html:276
+msgid "Concept Tekst"
+msgstr ""
+
+#: sdg/templates/producten/update.html:286
+msgid "Alles bewerken"
+msgstr ""
+
+#: sdg/templates/producten/update.html:321
+msgid "Geschiedenis"
+msgstr ""
+
+#: sdg/templates/producten/update.html:342
+#, python-format
+msgid ""
+"\n"
+"                            Gepubliceerd op &nbsp <strong>"
+"%(publication_date)s</strong>.\n"
+"                            "
+msgstr ""
+
+#: sdg/templates/two_factor/_wizard_actions.html:4
+msgid "Next"
+msgstr ""
+
+#: sdg/templates/two_factor/core/backup_tokens.html:5
+msgid "Backup Tokens"
+msgstr ""
+
+#: sdg/templates/two_factor/core/backup_tokens.html:6
+msgid ""
+"Backup tokens can be used when your primary and backup phone numbers aren't "
+"available. The backup tokens below can be used for login verification. If "
+"you've used up all your backup tokens, you can generate a new set of backup "
+"tokens. Only the backup tokens shown below will be valid."
+msgstr ""
+
+#: sdg/templates/two_factor/core/backup_tokens.html:18
+msgid "Print these tokens and keep them somewhere safe."
+msgstr ""
+
+#: sdg/templates/two_factor/core/backup_tokens.html:20
+msgid "You don't have any backup codes yet."
+msgstr ""
+
+#: sdg/templates/two_factor/core/backup_tokens.html:25
+msgid "Back to Account Security"
+msgstr ""
+
+#: sdg/templates/two_factor/core/backup_tokens.html:26
+msgid "Generate Tokens"
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:14
+msgid "Voer je inloggegevens in."
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:17
+#: sdg/templates/two_factor/core/setup.html:31
+msgid "We are calling your phone right now, please enter the digits you hear."
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:20
+#: sdg/templates/two_factor/core/setup.html:34
+msgid "We sent you a text message, please enter the tokens we sent."
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:23
+msgid "Please enter the tokens generated by your token generator."
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:27
+msgid ""
+"Use this form for entering backup tokens for logging in. These tokens have "
+"been generated for you to print and keep safe. Please enter one of these "
+"backup tokens to login to your account."
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:39
+msgid "Or, alternatively, use one of your backup phones:"
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:50
+msgid "As a last resort, you can use a backup token:"
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:52
+msgid "Use Backup Token"
+msgstr ""
+
+#: sdg/templates/two_factor/core/login.html:58
+msgid "Login"
+msgstr ""
+
+#: sdg/templates/two_factor/core/otp_required.html:5
+msgid "Tweestapsauthenticatie verplicht"
+msgstr ""
+
+#: sdg/templates/two_factor/core/otp_required.html:7
+msgid ""
+"The page you requested, enforces users to verify using two-factor "
+"authentication for security reasons. You need to enable these security "
+"features in order to access this page."
+msgstr ""
+
+#: sdg/templates/two_factor/core/otp_required.html:11
+msgid ""
+"Two-factor authentication is not enabled for your account. Enable two-factor "
+"authentication for enhanced account security."
+msgstr ""
+
+#: sdg/templates/two_factor/core/otp_required.html:16
+msgid "Go back"
+msgstr ""
+
+#: sdg/templates/two_factor/core/otp_required.html:18
+#: sdg/templates/two_factor/core/setup.html:7
+#: sdg/templates/two_factor/core/setup_complete.html:7
+msgid "Enable Two-Factor Authentication"
+msgstr ""
+
+#: sdg/templates/two_factor/core/phone_register.html:5
+msgid "Add Backup Phone"
+msgstr ""
+
+#: sdg/templates/two_factor/core/phone_register.html:8
+msgid ""
+"You'll be adding a backup phone number to your account. This number will be "
+"used if your primary method of registration is not available."
+msgstr ""
+
+#: sdg/templates/two_factor/core/phone_register.html:12
+msgid ""
+"We've sent a token to your phone number. Please enter the token you've "
+"received."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:4
+msgid "Setup"
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:9
+msgid ""
+"You are about to take your account security to the next level. Follow the "
+"steps in this wizard to enable two-factor authentication."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:13
+msgid "Please select which authentication method you would like to use."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:16
+msgid ""
+"To start using a token generator, please use your smartphone to scan the QR "
+"code below. For example, use Google Authenticator. Then, enter the token "
+"generated by the app."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:22
+msgid ""
+"Please enter the phone number you wish to receive the text messages on. This "
+"number will be validated in the next step."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:26
+msgid ""
+"Please enter the phone number you wish to be called on. This number will be "
+"validated in the next step."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:38
+msgid ""
+"We've encountered an issue with the selected authentication method. Please "
+"go back and verify that you entered your information correctly, try again, "
+"or use a different authentication method instead. If the issue persists, "
+"contact the site administrator."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup.html:45
+msgid ""
+"To identify and verify your YubiKey, please insert a token in the field "
+"below. Your YubiKey will be linked to your account."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup_complete.html:4
+msgid "Setup completed"
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup_complete.html:9
+msgid "Congratulations, you've successfully enabled two-factor authentication."
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup_complete.html:15
+#: sdg/templates/two_factor/core/setup_complete.html:23
+msgid "Naar de homepage"
+msgstr ""
+
+#: sdg/templates/two_factor/core/setup_complete.html:18
+msgid ""
+"However, it might happen that you don't have access to your primary token "
+"device. To enable account recovery, add a phone number."
+msgstr ""
+
+#: sdg/urls.py:18 sdg/urls.py:19
+msgid "SDG Invoervoorziening"
+msgstr ""
+
+#: sdg/urls.py:20
+msgid "Welkom bij de SDG-admin"
+msgstr ""
+
+#: sdg/utils/management/commands/clear_cache.py:10
+msgid "Alleen voorziene cache wissen"
+msgstr ""
+
+#: sdg/utils/validators.py:22
+#, python-format
+msgid "Uw invoer bevat een ongeldig teken: %s"
+msgstr ""
+
+#: sdg/utils/validators.py:30
+msgid "Het opgegeven mobiele telefoonnummer is ongeldig."
+msgstr ""
+
+#: sdg/utils/validators.py:50
+msgid "Ongeldige postcode"
+msgstr ""
