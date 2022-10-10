@@ -5,7 +5,7 @@ import {FormComponent} from './abstract/form_component';
  * @type {NodeListOf<HTMLElement>}
  * TODO: All toggles within a form a considered to control editable for now.
  **/
-const FORM_TOGGLES = document.querySelectorAll('.form .toggle');
+const FORM_TOGGLES = document.querySelectorAll('.form .toggle, .global-edit-toggle .toggle');
 
 
 /**
@@ -43,7 +43,7 @@ class FormToggle extends FormComponent {
         try {
             return [this.getFormControl()];
         } catch (e) {
-            return this.node.form.querySelectorAll('.form__control');
+            return document.querySelectorAll('.form__control');
         }
     }
 

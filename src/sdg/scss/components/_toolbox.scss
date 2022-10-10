@@ -1,0 +1,58 @@
+@import "colors";
+
+.toolbox {
+  .toggle {
+    --active-color: #{rgba($color_primary_dark, 0.3)};
+    --shadow-color: #{$color_primary_lighter};
+  }
+  background-color: rgba($color_primary_light, 0.9);
+  box-shadow: 0 4px 2px $color_primary_light;
+  height: 64px;
+  margin-bottom: 16px;
+  display: grid;
+  grid-template-columns: 1.4fr 3fr 2fr 1fr;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+
+  .toolbox__item {
+    padding: 24px;
+    height: 64px;
+    color: $color_primary_lightest;
+    text-align: center;
+
+    svg:first-child {
+      margin-right: 2px;
+    }
+
+    &:not(:first-child) {
+      border-left: 2px solid $color_primary;
+    }
+
+    &--countries {
+      position: relative;
+      bottom: 5px;
+    }
+  }
+
+  &--divider {
+    height: 32px;
+    background-color: white;
+    width: 1px;
+  }
+
+  .flag-icon {
+    border-radius: 50%;
+    height: 24px;
+    width: 24px;
+    filter: contrast(0.75);
+    position: relative;
+    bottom: 2px;
+    background-size: cover;
+  }
+
+  a {
+    color: #fff;
+  }
+
+}
