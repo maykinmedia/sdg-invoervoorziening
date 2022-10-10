@@ -6,9 +6,11 @@ from functools import partialmethod
 from typing import Any, List, Optional
 
 from django.contrib.auth import get_user_model
+from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import BooleanField, Case, Q, Value, When
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -236,7 +238,7 @@ class Product(ProductFieldMixin, models.Model):
     @cached_property
     def is_referentie_product(self) -> bool:
         """:returns: Whether this is a reference product or not."""
-        return bool(not self.referentie_product_id)
+        return bool(not self.referentie_product)
 
     @cached_property
     def has_expired(self) -> bool:
@@ -324,7 +326,7 @@ class Product(ProductFieldMixin, models.Model):
 
         return queryset[:quantity:step_slice]
 
-    def get_all_versions(self, active=False, exclude_concept=False, reverse_order=True):
+    def get_all_versions(self, active=False, exclude_concept=False):
         """:returns: The versions for this product."""
         queryset = self.versies.all().order_by("-versie")
 
@@ -414,6 +416,19 @@ class ProductVersie(ProductFieldMixin, models.Model):
         auto_now=True,
     )
 
+    bewerkte_velden = JSONField(
+        verbose_name=_("bewerkte_velden"),
+        blank=True,
+        default=dict,
+    )
+    interne_opmerkingen = models.TextField(
+        _("interne opmerkingen"),
+        help_text=_(
+            "Interne opmerkingen die niet zichtbaar zijn buiten deze omgeving."
+        ),
+        blank=True,
+    )
+
     objects = ProductVersieQuerySet.as_manager()
 
     @property
@@ -425,6 +440,13 @@ class ProductVersie(ProductFieldMixin, models.Model):
             return Product.status.PUBLISHED
         else:
             return Product.status.SCHEDULED
+
+    @property
+    def as_html(self):
+        return render_to_string(
+            "producten/_include/productversie.html",
+            context={"version": self},
+        )
 
     def generate_localized_information(self, language, **kwargs) -> LocalizedProduct:
         """Generate localized information for this product."""

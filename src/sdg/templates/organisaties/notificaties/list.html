@@ -1,0 +1,37 @@
+{% extends 'organisaties/base.html' %}
+{% load i18n producten utils humanize %}
+
+{% block page_title %}{% trans "Notificaties" %}{% endblock %}
+{% block container_title %}{% endblock %}
+{% block breadcrumbs_page_title %}
+    <span>{% trans 'Notificaties' %}</span>
+{% endblock %}
+
+{% block notifications %}{% endblock %}
+
+{% block inner_content %}
+    <div class="roles">
+        <div class="tabs">
+            <div class="tabs__tab-contents">
+                <div class="tabs__tab-content tabs__tab-content--active"
+                     id="notifications">
+                    <table class="tabs__table">
+                        <thead>
+                        <tr>
+                            <th class="tabs__table-header">{% trans "Datum" %}</th>
+                            <th class="tabs__table-header">{% trans "Product" %}</th>
+                            <th class="tabs__table-header">{% trans "Velden" %}</th>
+                            <th class="tabs__table-header" width="25%">{% trans "Interne Opmerkingen" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for version in versions %}
+                            {% include "organisaties/notificaties/_notificatie.html" %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock inner_content %}

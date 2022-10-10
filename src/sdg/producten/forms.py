@@ -10,6 +10,7 @@ from ..core.models.mixins import FieldConfigurationMixin
 from ..organisaties.models import BevoegdeOrganisatie
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
+from .utils import parse_changed_data
 from .widgets import CheckboxSelectMultiple
 
 
@@ -73,6 +74,19 @@ class LocalizedProductFormSet(
                     )
 
         return cleaned_data
+
+    @property
+    def changed_data_localized(self):
+        result = []
+        for form in self.forms:
+            result.extend(
+                parse_changed_data(
+                    form.changed_data,
+                    form=form,
+                    language=form.instance.taal,
+                )
+            )
+        return result
 
 
 class ProductForm(FieldConfigurationMixin, forms.ModelForm):
@@ -179,6 +193,8 @@ class VersionForm(forms.ModelForm):
             "gemaakt_door",
             "versie",
             "publicatie_datum",
+            "interne_opmerkingen",
+            "bewerkte_velden",
         )
 
     def __init__(self, *args, **kwargs):

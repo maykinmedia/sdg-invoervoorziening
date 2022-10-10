@@ -1,5 +1,5 @@
 import datetime
-from itertools import zip_longest
+from itertools import chain, zip_longest
 from typing import Tuple
 
 from django.db import transaction
@@ -21,7 +21,11 @@ from sdg.producten.forms import (
 )
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 from sdg.producten.models.product import GeneriekProduct
-from sdg.producten.utils import build_url_kwargs, duplicate_localized_products
+from sdg.producten.utils import (
+    build_url_kwargs,
+    duplicate_localized_products,
+    parse_changed_data,
+)
 
 
 class ProductPreviewView(OverheidMixin, DetailView):
@@ -178,7 +182,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             .select_related("catalogus__lokale_overheid")
         )
 
-    def _save_version_form(self, version_form) -> Tuple[ProductVersie, bool]:
+    def _save_version_form(
+        self, product_form, version_form, form
+    ) -> Tuple[ProductVersie, bool]:
         """Save the version form.
         Return a tuple of (version object, created), where created is a boolean
         specifying whether an object was created.
@@ -189,6 +195,14 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         new_version.product = self.product
         new_version.gemaakt_door = self.request.user
         new_version.versie = self.object.versie + 1 if created else self.object.versie
+        new_version.bewerkte_velden = list(
+            chain.from_iterable(
+                [
+                    form.changed_data_localized,
+                    parse_changed_data(product_form.changed_data, form=product_form),
+                ]
+            )
+        )
         new_version.save()
         return new_version, created
 
@@ -282,7 +296,10 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             "product_form", ProductForm(instance=self.product)
         )
 
-        context["history"] = self.product.get_all_versions()
+        context["history"] = (
+            self.product.get_all_versions()
+            | self.product.reference_product.get_all_versions()
+        )
 
         # FIXME: Optimize?
         context["localized_form_fields"] = [
@@ -324,7 +341,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
     def form_valid(self, product_form, version_form, form):
         with transaction.atomic():
             product_form.save()
-            new_version, created = self._save_version_form(version_form)
+            new_version, created = self._save_version_form(
+                product_form, version_form, form
+            )
             if created:
                 Event.create_and_log(self.request, self.object, Event.CREATE)
                 duplicate_localized_products(form, new_version)

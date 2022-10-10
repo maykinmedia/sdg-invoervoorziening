@@ -36,6 +36,9 @@ class ProductFieldConfiguration(SingletonModel):
     productversie_publicatie_datum = LabeledTooltipField(
         verbose_name=_("Publicatie datum"),
     )
+    productversie_interne_opmerkingen = LabeledTooltipField(
+        verbose_name=_("Interne opmerkingen"),
+    )
 
     def for_field(self, prefix, name):
         if name != "config":

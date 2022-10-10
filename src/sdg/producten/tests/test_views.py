@@ -547,3 +547,95 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertTrue(locations[0].is_product_location)
         self.assertFalse(locations[1].is_product_location)
         self.assertFalse(locations[2].is_product_location)
+
+    @freeze_time(NOW_DATE)
+    def test_update_product_edited_fields(self):
+        self._change_product_status(Product.status.PUBLISHED)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 2)
+        self.assertEqual(
+            latest_active_version.bewerkte_velden,
+            [
+                {
+                    "field": "product_titel_decentraal",
+                    "label": "Product titel decentraal",
+                    "language": "nl",
+                    "flag": "nl",
+                },
+                {
+                    "field": "verwijzing_links",
+                    "label": "Verwijzing links",
+                    "language": "nl",
+                    "flag": "nl",
+                },
+                {
+                    "field": "verwijzing_links",
+                    "label": "Verwijzing links",
+                    "language": "en",
+                    "flag": "gb",
+                },
+            ],
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_update_product_internal_remarks(self):
+        self._change_product_status(Product.status.PUBLISHED)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response.form["interne_opmerkingen"] = "test internal remarks"
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 2)
+
+        latest_active_version = self.product.active_version
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 2)
+        self.assertEqual(
+            latest_active_version.interne_opmerkingen, "test internal remarks"
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_history_displays_reference_version(self):
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        revisions = response.pyquery(".revision-list")
+        self.assertEqual(len(revisions), 2)
+        self.assertIn(str(self.product), revisions[0].text_content())
+        self.assertIn(str(self.reference_product), revisions[1].text_content())

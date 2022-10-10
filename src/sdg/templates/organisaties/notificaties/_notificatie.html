@@ -1,0 +1,12 @@
+{% load i18n producten utils %}
+
+<tr>
+    <td class="tabs__table-cell">
+        {{ version.gewijzigd_op }}
+    </td>
+    <td class="tabs__table-cell">{{ version }}</td>
+    <td class="tabs__table-cell">
+        {% include 'producten/_include/productversie_bewerkte_velden.html' %}
+    </td>
+    <td class="tabs__table-cell">{{ version.interne_opmerkingen }}</td>
+</tr>

@@ -89,6 +89,18 @@
     width: 100%;
     border-spacing: 0;
     margin-bottom: 48px;
+
+    code {
+      font-size: 12px;
+      display: block;
+
+      .flag-icon {
+        border-radius: 50%;
+        background-size: cover;
+        height: 14px;
+        width: 14px;
+      }
+    }
   }
 
   .tabs__table-header {
