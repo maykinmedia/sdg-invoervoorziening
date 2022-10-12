@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from django_webtest import WebTest
 
@@ -121,8 +122,8 @@ class InvitationTests(WebTest):
         response = self.app.get(
             reverse(INVITATION_ACCEPT_URL, kwargs={"key": invite.key})
         )
-        response.form["password"] = "Test@1234"
-        response.form["password_confirm"] = "Test@1234"
+        response.form["password1"] = "Test@1234"
+        response.form["password2"] = "Test@1234"
         response.form.submit()
 
         invite.refresh_from_db()
@@ -130,6 +131,34 @@ class InvitationTests(WebTest):
         user = User.objects.get(email="test@example.com")
         self.assertEqual(invite.accepted, True)
         self.assertEqual(user.check_password("Test@1234"), True)
+
+    def test_accept_invitation_invalid_password_fails(self):
+        response = self.app.get(
+            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+        self._fill_invitation_form(response.form)
+        response.form.submit()
+
+        invite = UserInvitation.objects.get()
+        response = self.app.get(
+            reverse(INVITATION_ACCEPT_URL, kwargs={"key": invite.key})
+        )
+        response.form["password1"] = "bad"
+        response.form["password2"] = "bad"
+        response = response.form.submit()
+
+        errors = response.pyquery(".errorlist li")
+        self.assertEqual(
+            errors[0].text,
+            _("Dit wachtwoord is te kort. De minimale lengte is 8 tekens."),
+        )
+        self.assertEqual(
+            errors[1].text,
+            _("Dit wachtwoord is te algemeen."),
+        )
+
+        invite.refresh_from_db()
+        self.assertEqual(invite.accepted, False)
 
     def test_cannot_accept_invitation_with_invalid_key(self):
         response = self.app.get(
