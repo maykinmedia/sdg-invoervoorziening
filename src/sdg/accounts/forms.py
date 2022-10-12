@@ -5,6 +5,12 @@ from django.contrib.auth.forms import AuthenticationForm as _AuthenticationForm
 from django.forms import inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
+from allauth.account.forms import (
+    PasswordField,
+    PasswordVerificationMixin,
+    SetPasswordField,
+)
+
 from sdg.accounts.models import Role, User
 
 
@@ -34,24 +40,9 @@ class RoleInlineFormSet(
             raise forms.ValidationError(errors)
 
 
-class InvitationAcceptForm(forms.Form):
-    password = forms.CharField(
-        widget=forms.PasswordInput(),
-        label=_("Wachtwoord"),
-    )
-    password_confirm = forms.CharField(
-        widget=forms.PasswordInput(), label=_("Wachtwoord bevestigen")
-    )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        password = cleaned_data["password"]
-        password_confirm = cleaned_data["password_confirm"]
-
-        if not compare_digest(password, password_confirm):
-            raise forms.ValidationError(
-                _("Wachtwoord en bevestigingswachtwoord komen niet overeen")
-            )
+class InvitationAcceptForm(PasswordVerificationMixin, forms.Form):
+    password1 = SetPasswordField(label=_("Wachtwoord"))
+    password2 = PasswordField(label=_("Wachtwoord bevestigen"))
 
 
 class AuthenticationForm(_AuthenticationForm):
