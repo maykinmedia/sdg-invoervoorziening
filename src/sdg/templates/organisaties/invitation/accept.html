@@ -12,8 +12,8 @@
         <p class="subheading">{% trans "Stel een wachtwoord in voor uw SDG account." %}</p>
         <hr class="divider">
         <div class="form__block">
-            {% field form.password %}
-            {% field form.password_confirm %}
+            {% field form.password1 %}
+            {% field form.password2 %}
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
             <hr class="divider">
             <div class="form__buttons">
