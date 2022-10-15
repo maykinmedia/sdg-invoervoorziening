@@ -18,11 +18,11 @@ class Command(BaseCommand):
             for product in products:
                 localized_generic_products = LocalizedGeneriekProduct.objects.filter(
                     generiek_product__doelgroep=service_config.doelgroep,
-                    generiek_product__upn__upn_label=product["upnLabel"],
+                    generiek_product__upn__upn_uri=product["upnUri"],
                     taal=product["taal"],
                 )
                 self.stdout.write(
-                    f"Updating translations for generic product '{product['upnLabel']}' via {service_config}."
+                    f"Updating translations for generic product '{product['upnUri']}' via {service_config}."
                 )
 
                 updated_objects += localized_generic_products.update(
