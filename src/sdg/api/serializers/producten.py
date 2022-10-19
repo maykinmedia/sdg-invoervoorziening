@@ -3,7 +3,8 @@ import datetime
 from django.db import transaction
 from django.utils.dateparse import parse_date
 
-from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.reverse import reverse
@@ -192,6 +193,9 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
 class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
     """De organisatie die dit product levert en de teksten hiervan beheert."""
 
+    url = serializers.SerializerMethodField(
+        help_text="De unieke URL van dit object binnen deze API."
+    )
     owms_identifier = serializers.URLField(
         source="catalogus.lokale_overheid.organisatie.owms_identifier",
         help_text="De OWMS Identifier van de hoofdorganisatie van deze lokale overheid.",
@@ -217,25 +221,14 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
             "owms_pref_label",
             "owms_end_date",
         )
-        extra_kwargs = {
-            "url": {
-                "view_name": "api:lokaleoverheid-detail",
-                "lookup_field": "uuid",
-                "help_text": "De unieke URL van dit object binnen deze API.",
-            },
-        }
 
-    def to_representation(self, instance):
-        data = super(ProductLokaleOverheidSerializer, self).to_representation(instance)
-
-        data.update(
-            url=reverse(
-                "api:lokaleoverheid-detail",
-                [str(instance.catalogus.lokale_overheid.uuid)],
-            ),
+    @extend_schema_field(OpenApiTypes.URI)
+    def get_url(self, instance):
+        return reverse(
+            "api:lokaleoverheid-detail",
+            [str(instance.catalogus.lokale_overheid.uuid)],
+            request=self.context["request"],
         )
-
-        return data
 
 
 class ProductSerializer(ProductBaseSerializer):
