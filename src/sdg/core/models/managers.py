@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import BooleanField, Case, F, Value, When
+from django.db.models import BooleanField, Case, F, Q, Value, When
 from django.utils.timezone import now
 
 
@@ -33,7 +33,10 @@ class ProductenCatalogusQuerySet(models.QuerySet):
         """
         Filter the catalogs to only include catalogs from active organizations.
         """
-        return self.filter(lokale_overheid__organisatie__owms_end_date__gte=now())
+        return self.filter(
+            Q(lokale_overheid__organisatie__owms_end_date__gte=now())
+            | Q(lokale_overheid__organisatie__owms_end_date__isnull=True)
+        )
 
 
 class OrganisatieQuerySet(models.QuerySet):

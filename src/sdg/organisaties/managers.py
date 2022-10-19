@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.utils.timezone import now
 
 
@@ -7,7 +8,10 @@ class LokaleOverheidQuerySet(models.QuerySet):
         """
         Filter the municipalities to only include municipalities from active organizations.
         """
-        return self.filter(organisatie__owms_end_date__gte=now())
+        return self.filter(
+            Q(organisatie__owms_end_date__gte=now())
+            | Q(organisatie__owms_end_date__isnull=True)
+        )
 
 
 class LokaleOverheidManager(models.Manager.from_queryset(LokaleOverheidQuerySet)):

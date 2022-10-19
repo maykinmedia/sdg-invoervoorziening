@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.db import models
-from django.db.models import Case, F, Max, OuterRef, Prefetch, Subquery, When
+from django.db.models import Case, F, Max, OuterRef, Prefetch, Q, Subquery, When
 from django.utils.timezone import now
 
 from sdg.core.constants import GenericProductStatus
@@ -50,7 +50,8 @@ class ProductQuerySet(models.QuerySet):
         Filter the products to only include products from active organizations.
         """
         return self.filter(
-            catalogus__lokale_overheid__organisatie__owms_end_date__gte=now()
+            Q(catalogus__lokale_overheid__organisatie__owms_end_date__gte=now())
+            | Q(catalogus__lokale_overheid__organisatie__owms_end_date__isnull=True)
         )
 
     def most_recent(self):
