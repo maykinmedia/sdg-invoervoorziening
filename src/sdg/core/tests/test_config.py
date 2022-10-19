@@ -31,11 +31,11 @@ class SiteConfigurationTests(WebTest):
         self.assertNotIn("data-goatcounter", response.text)
 
         siteconfig = SiteConfiguration.get_solo()
-        siteconfig.goatcounter_code = "TEST"
+        siteconfig.goatcounter_domain = "example.com"
         siteconfig.save()
 
         response = self.app.get("/")
         self.assertInHTML(
-            '<script data-goatcounter="https://TEST.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>',
+            '<script data-goatcounter="https://example.com/count" async src="//example.com/count.js"></script>',
             response.text,
         )

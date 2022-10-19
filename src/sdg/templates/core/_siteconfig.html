@@ -1,4 +1,4 @@
-{% if siteconfig.goatcounter_code %}
-    <script data-goatcounter="https://{{ siteconfig.goatcounter_code }}.goatcounter.com/count"
-            async src="//gc.zgo.at/count.js"></script>
+{% if siteconfig.goatcounter_domain %}
+    <script data-goatcounter="https://{{ siteconfig.goatcounter_domain }}/count"
+            async src="//{{ siteconfig.goatcounter_domain }}/count.js"></script>
 {% endif %}

@@ -102,7 +102,7 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
             {
                 "classes": ("collapse",),
                 "fields": [
-                    "goatcounter_code",
+                    "goatcounter_domain",
                 ],
             },
         ),

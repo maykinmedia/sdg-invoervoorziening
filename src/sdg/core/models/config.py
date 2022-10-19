@@ -8,6 +8,7 @@ from solo.models import SingletonModel
 
 from sdg.core.db.fields import DynamicArrayField
 from sdg.core.forms import LabeledTooltipWidget
+from sdg.core.models.validators import DomainValidator
 
 LabeledTooltipField = partial(
     DynamicArrayField,
@@ -70,13 +71,16 @@ class SiteConfiguration(SingletonModel):
         blank=True,
     )
 
-    goatcounter_code = models.CharField(
-        verbose_name=_("GoatCounter code"),
+    goatcounter_domain = models.CharField(
+        verbose_name=_("GoatCounter domain"),
         help_text=_(
-            "De code geleverd door goatcounter, d.w.z. https://[my-code].goatcounter.com. Zorg ervoor dat GoatCounter is toegestaan in het Content-Security-Policy als u het gebruikt."
+            "Het domein waar goatcounter wordt gehost, bijvoorbeeld: example.com. Zorg ervoor dat het is toegestaan in het Content Security Policy als u het gebruikt."
         ),
         max_length=255,
         blank=True,
+        validators=[
+            DomainValidator(),
+        ],
     )
 
     def __str__(self):
