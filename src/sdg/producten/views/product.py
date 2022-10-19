@@ -182,6 +182,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             .exclude(generiek_product__eind_datum__lte=datetime.date.today())
             .active()
             .select_related("catalogus__lokale_overheid")
+            .annotate_area()
         )
 
     def _save_version_form(

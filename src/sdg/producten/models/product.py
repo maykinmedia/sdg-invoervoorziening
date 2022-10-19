@@ -277,6 +277,13 @@ class Product(ProductFieldMixin, models.Model):
             self, "active_version", manager_methods=[ProductQuerySet.active]
         )
 
+    @property
+    def area(self):
+        """:returns: The generic product's upn's theme's information area."""
+        return get_from_cache(
+            self, "area", manager_methods=[ProductQuerySet.annotate_area]
+        )
+
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
         return self.catalogus.lokale_overheid.locaties.annotate(
