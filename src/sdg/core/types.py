@@ -42,6 +42,7 @@ class Event(metaclass=EventMeta):
         self._instance = instance
 
         self.name = instance.__class__.__name__
+        self.object_name = str(instance)
         self.result = result.value
         self.method = request.method
         self.params = dict(request.GET)
