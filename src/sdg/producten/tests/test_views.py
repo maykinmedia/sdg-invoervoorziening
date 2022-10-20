@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.urls import reverse
 
 from django_webtest import WebTest
@@ -72,8 +74,10 @@ class ProductUpdateViewTests(WebTest):
         most_recent_version.refresh_from_db()
         self.product = hard_refresh_from_db(self.product)
 
-    def _submit_product_form(self, form, publish_choice: Product.status, **kwargs):
-        form_data = {
+    def _submit_product_form(
+        self, form, publish_choice: Optional[Product.status], **kwargs
+    ):
+        _form_data = {
             Product.status.PUBLISHED: {
                 "publish": "date",
                 "date": NOW_DATE,
@@ -87,11 +91,13 @@ class ProductUpdateViewTests(WebTest):
                 "date": FUTURE_DATE,
             },
         }
-        data = form_data[publish_choice]
+        if status_data := _form_data.get(publish_choice):
+            for date_field in form.fields["date"]:
+                date_field.value = status_data["date"]
+
         form["vertalingen-0-product_titel_decentraal"] = DUMMY_TITLE
-        for date_field in form.fields["date"]:
-            date_field.value = data["date"]
-        form.submit(name="publish", value="date", **kwargs)
+
+        return form.submit(name="publish", value="date", **kwargs)
 
     @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
@@ -666,6 +672,6 @@ class ProductUpdateViewTests(WebTest):
 
         self._submit_product_form(
             response.form,
-            Product.status.CONCEPT,
+            None,
             status=403,
         )

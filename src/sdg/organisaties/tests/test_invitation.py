@@ -31,13 +31,18 @@ class InvitationTests(WebTest):
         self.app.set_user(self.manager_user)
 
     @staticmethod
-    def _fill_invitation_form(form):
+    def _fill_invitation_form(form, extra_kwargs=None):
+        extra_kwargs = extra_kwargs or {}
+
         form["email"] = "test@example.com"
         form["first_name"] = "Arthur"
         form["last_name"] = "Dent"
         form["form-0-is_beheerder"] = False
         form["form-0-is_redacteur"] = True
         form["form-0-is_raadpleger"] = False
+
+        for key, value in extra_kwargs.items():
+            form[key] = value
 
     def test_manager_can_create_invitation(self):
         response = self.app.get(
@@ -137,17 +142,22 @@ class InvitationTests(WebTest):
         response = self.app.get(
             reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
         )
-        self._fill_invitation_form(response.form)
-        response.form.is_beheerder = False
-        response.form.is_raadpleger = True
+        self._fill_invitation_form(
+            response.form,
+            extra_kwargs={
+                "form-0-is_beheerder": False,
+                "form-0-is_redacteur": False,
+                "form-0-is_raadpleger": True,
+            },
+        )
         response.form.submit()
 
         invite = UserInvitation.objects.get()
         response = self.app.get(
             reverse(INVITATION_ACCEPT_URL, kwargs={"key": invite.key})
         )
-        response.form["password"] = "Test@1234"
-        response.form["password_confirm"] = "Test@1234"
+        response.form["password1"] = "Test@1234"
+        response.form["password2"] = "Test@1234"
         response.form.submit()
 
         invite.refresh_from_db()
@@ -155,7 +165,7 @@ class InvitationTests(WebTest):
         user = User.objects.get(email="test@example.com")
         self.assertEqual(invite.accepted, True)
         self.assertEqual(user.check_password("Test@1234"), True)
-        self.assertEqual(user.is_raadpleger, True)
+        self.assertEqual(user.roles.get().is_raadpleger, True)
 
     def test_accept_invitation_invalid_password_fails(self):
         response = self.app.get(
