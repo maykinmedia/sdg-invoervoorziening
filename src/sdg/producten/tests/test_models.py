@@ -1,9 +1,10 @@
 from django.core.exceptions import ValidationError
+from django.core.management import call_command
 from django.test import TestCase
 
 from freezegun import freeze_time
 
-from sdg.core.constants.product import ProductStatus
+from sdg.core.constants import GenericProductStatus
 from sdg.core.tests.factories.logius import UniformeProductnaamFactory
 from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE
 from sdg.producten.tests.factories.localized import (
@@ -49,7 +50,9 @@ class GeneriekProductTest(TestCase):
             product__generiek_product=new_generic_product,
         )
 
-        self.assertEqual(new_generic_product.product_status, ProductStatus.labels.NEW)
+        call_command("update_generic_product_status")
+        new_generic_product.refresh_from_db()
+        self.assertEqual(new_generic_product.product_status, GenericProductStatus.NEW)
 
     def test_product_status_property_ready_for_admin(self):
         new_upn = UniformeProductnaamFactory.create(is_verwijderd=False)
@@ -88,8 +91,11 @@ class GeneriekProductTest(TestCase):
             size=2,
         )
 
+        call_command("update_generic_product_status")
+        new_generic_product.refresh_from_db()
         self.assertEqual(
-            new_generic_product.product_status, ProductStatus.labels.READY_FOR_ADMIN
+            new_generic_product.product_status,
+            GenericProductStatus.READY_FOR_ADMIN,
         )
 
     def test_product_status_property_ready_for_publication(self):
@@ -130,9 +136,11 @@ class GeneriekProductTest(TestCase):
             size=2,
         )
 
+        call_command("update_generic_product_status")
+        new_generic_product.refresh_from_db()
         self.assertEqual(
             new_generic_product.product_status,
-            ProductStatus.labels.READY_FOR_PUBLICATION,
+            GenericProductStatus.READY_FOR_PUBLICATION,
         )
 
     def test_product_status_property_missing(self):
@@ -152,8 +160,10 @@ class GeneriekProductTest(TestCase):
             size=2,
         )
 
+        call_command("update_generic_product_status")
+        new_generic_product.refresh_from_db()
         self.assertEqual(
-            new_generic_product.product_status, ProductStatus.labels.MISSING
+            new_generic_product.product_status, GenericProductStatus.MISSING
         )
 
     def test_product_status_property_expired(self):
@@ -168,8 +178,11 @@ class GeneriekProductTest(TestCase):
             product__generiek_product=vervallen_generic_product
         )
 
+        call_command("update_generic_product_status")
+        vervallen_generic_product.refresh_from_db()
         self.assertEqual(
-            vervallen_generic_product.product_status, ProductStatus.labels.EXPIRED
+            vervallen_generic_product.product_status,
+            GenericProductStatus.EXPIRED,
         )
 
     def test_product_status_property_end_of_life(self):
@@ -185,8 +198,10 @@ class GeneriekProductTest(TestCase):
             product__generiek_product=vervallen_generic_product
         )
 
+        call_command("update_generic_product_status")
+        vervallen_generic_product.refresh_from_db()
         self.assertEqual(
-            vervallen_generic_product.product_status, ProductStatus.labels.EOL
+            vervallen_generic_product.product_status, GenericProductStatus.EOL
         )
 
     def test_product_status_property_deleted(self):
@@ -201,8 +216,11 @@ class GeneriekProductTest(TestCase):
             product__generiek_product=vervallen_generic_product
         )
 
+        call_command("update_generic_product_status")
+        vervallen_generic_product.refresh_from_db()
         self.assertEqual(
-            vervallen_generic_product.product_status, ProductStatus.labels.DELETED
+            vervallen_generic_product.product_status,
+            GenericProductStatus.DELETED,
         )
 
 
