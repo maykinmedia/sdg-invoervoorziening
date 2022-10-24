@@ -12,7 +12,7 @@ User = get_user_model()
 
 class RoleListView(RoleBaseMixin, OverheidMixin, ListView):
     template_name = "organisaties/roles/list.html"
-    required_roles = ["is_beheerder", "is_redacteur"]
+    required_roles = [Role.choices.MANAGER, Role.choices.EDITOR]
 
     def get_queryset(self):
         return self.lokale_overheid.roles.all()
@@ -22,7 +22,7 @@ class RoleDeleteView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, DeleteV
     queryset = Role.objects.all()
     template_name = "organisaties/roles/delete.html"
     pk_url_kwarg = "role_pk"
-    required_roles = ["is_beheerder"]
+    required_roles = [Role.choices.MANAGER]
 
     def delete(self, request, *args, **kwargs):
         response = super().delete(request, *args, **kwargs)
@@ -42,7 +42,7 @@ class RoleUpdateView(DisallowOwnRoleMixin, RoleBaseMixin, OverheidMixin, UpdateV
     template_name = "organisaties/roles/update.html"
     pk_url_kwarg = "role_pk"
     fields = ["is_beheerder", "is_redacteur"]
-    required_roles = ["is_beheerder"]
+    required_roles = [Role.choices.MANAGER]
 
     def form_valid(self, form):
         response = super().form_valid(form)

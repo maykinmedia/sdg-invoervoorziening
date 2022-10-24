@@ -20,6 +20,7 @@ class RoleForm(forms.ModelForm):
         fields = (
             "is_beheerder",
             "is_redacteur",
+            "is_raadpleger",
         )
 
 

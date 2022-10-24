@@ -1,3 +1,5 @@
+from typing import Optional
+
 from django.urls import reverse
 
 from django_webtest import WebTest
@@ -5,10 +7,7 @@ from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.tests.utils import hard_refresh_from_db
-from sdg.organisaties.tests.factories.overheid import (
-    BevoegdeOrganisatieFactory,
-    LocatieFactory,
-)
+from sdg.organisaties.tests.factories.overheid import LocatieFactory
 from sdg.producten.models import Product
 from sdg.producten.tests.constants import (
     DUMMY_TITLE,
@@ -28,7 +27,7 @@ from sdg.producten.tests.factories.product import (
 from sdg.producten.utils import build_url_kwargs
 
 
-class SpecifiekProductUpdateViewTests(WebTest):
+class ProductUpdateViewTests(WebTest):
     def setUp(self):
         super().setUp()
 
@@ -57,7 +56,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
             2, product_versie=self.reference_product_version
         )
 
-        RoleFactory.create(
+        self.role = RoleFactory.create(
             user=self.user,
             lokale_overheid=self.product_version.product.catalogus.lokale_overheid,
             is_redacteur=True,
@@ -75,8 +74,10 @@ class SpecifiekProductUpdateViewTests(WebTest):
         most_recent_version.refresh_from_db()
         self.product = hard_refresh_from_db(self.product)
 
-    def _submit_product_form(self, form, publish_choice: Product.status):
-        form_data = {
+    def _submit_product_form(
+        self, form, publish_choice: Optional[Product.status], **kwargs
+    ):
+        _form_data = {
             Product.status.PUBLISHED: {
                 "publish": "date",
                 "date": NOW_DATE,
@@ -90,11 +91,13 @@ class SpecifiekProductUpdateViewTests(WebTest):
                 "date": FUTURE_DATE,
             },
         }
-        data = form_data[publish_choice]
+        if status_data := _form_data.get(publish_choice):
+            for date_field in form.fields["date"]:
+                date_field.value = status_data["date"]
+
         form["vertalingen-0-product_titel_decentraal"] = DUMMY_TITLE
-        for date_field in form.fields["date"]:
-            date_field.value = data["date"]
-        return form.submit(name="publish", value="date")
+
+        return form.submit(name="publish", value="date", **kwargs)
 
     @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
@@ -522,6 +525,7 @@ class SpecifiekProductUpdateViewTests(WebTest):
         LocatieFactory.create_batch(
             3, lokale_overheid=self.product.catalogus.lokale_overheid
         )
+
         locations = list(self.product.get_municipality_locations())
         self.assertEqual(len(locations), 3)
         for location in locations:
@@ -639,3 +643,35 @@ class SpecifiekProductUpdateViewTests(WebTest):
         self.assertEqual(len(revisions), 2)
         self.assertIn(str(self.product), revisions[0].text_content())
         self.assertIn(str(self.reference_product), revisions[1].text_content())
+
+    @freeze_time(NOW_DATE)
+    def test_consultant__cannot_update_product(self):
+        self.role.is_redacteur = False
+        self.role.is_raadpleger = True
+        self.role.save()
+        self._change_product_status(Product.status.CONCEPT)
+        LocatieFactory.create_batch(
+            3, lokale_overheid=self.product.catalogus.lokale_overheid
+        )
+
+        locations = list(self.product.get_municipality_locations())
+        self.assertEqual(len(locations), 3)
+        for location in locations:
+            self.assertFalse(location.is_product_location)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            ),
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response.form.fields["product_aanwezig"] = False
+        response.form.fields["locaties"][0].checked = True
+
+        self._submit_product_form(
+            response.form,
+            None,
+            status=403,
+        )

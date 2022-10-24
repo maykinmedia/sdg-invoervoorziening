@@ -9,6 +9,7 @@ from django.utils.translation import gettext_lazy as _
 from two_factor.views import OTPRequiredMixin
 
 from sdg.accounts.models import Role
+from sdg.accounts.utils import user_has_valid_roles
 
 if getattr(settings, "TWO_FACTOR_FORCE_OTP", True):
     VerificationMixin = OTPRequiredMixin
@@ -43,7 +44,7 @@ class BaseOverheidMixin(VerificationMixin, UserPassesTestMixin, ABC):
 class OverheidRoleRequiredMixin(BaseOverheidMixin):
     """Ensures an authenticated user has a given list of role permissions."""
 
-    required_roles = {i.name for i in Role.get_roles()}
+    required_roles = Role.choices.values.keys()
     permission_denied_message = _(
         "U hebt niet de vereiste rol om deze pagina te openen."
     )
@@ -62,14 +63,11 @@ class OverheidRoleRequiredMixin(BaseOverheidMixin):
         if not _super.test_func():
             return False
 
-        try:
-            role = self.request.user.roles.get(
-                lokale_overheid=self._get_lokale_overheid()
-            )
-        except Role.DoesNotExist:
-            raise PermissionDenied(message)
-
-        if not any(getattr(role, r) for r in self.get_required_roles()):
+        if not user_has_valid_roles(
+            self.request.user,
+            municipality=self._get_lokale_overheid(),
+            required_roles=self.get_required_roles(),
+        ):
             raise PermissionDenied(message)
 
         return True
