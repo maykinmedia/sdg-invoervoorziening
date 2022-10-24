@@ -51,6 +51,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("core", "0037_productfieldconfiguration_productversie_interne_opmerkingen"),
+        ("timeline_logger", "0006_auto_20220413_0749"),
     ]
 
     operations = [
