@@ -4,6 +4,12 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, URLValidator, _lazy_re_compile
 from django.utils.translation import gettext_lazy as _
 
+
+class DomainValidator(URLValidator):
+    def __call__(self, value):
+        return super().__call__(f"https://{value}")
+
+
 uppercase_validator = RegexValidator(
     _lazy_re_compile(r"^[A-Z]*$"),
     message=_("Voer alleen hoofdletters in."),

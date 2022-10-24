@@ -27,35 +27,43 @@
                 <div class="header__dropdown-list">
                     {% with pk=lokaleoverheid.pk %}
 
-                    {% if pk and request.user|is_manager:lokaleoverheid %}
-                        <a class="header__dropdown-action" href="{% url 'organisaties:edit' pk=pk %}">
-                            <i class="fas fa-building"></i> {% trans "Organisatie instellingen" %}
-                        </a>
-                        <a class="header__dropdown-action" href="{% url 'organisaties:locaties' pk=pk %}">
-                            <i class="fas fa-compass"></i> {% trans "Locaties" %}
-                        </a>
-                        <a class="header__dropdown-action" href="{% url 'organisaties:bevoegde_organisaties' pk=pk %}">
-                            <i class="fas fa-handshake"></i> {% trans "Bevoegde organisaties" %}
-                        </a>
-                    {% endif %}
-                    {% if pk %}
-                        <a class="header__dropdown-action" href="{% url 'organisaties:roles:list' pk=pk %}">
-                            <i class="fas fa-users"></i> {% trans "Gebruikersbeheer" %}
-                        </a>
-                    {% endif %}
+                        {% if pk and request.user|is_manager:lokaleoverheid %}
+                            <a class="header__dropdown-action" href="{% url 'organisaties:edit' pk=pk %}">
+                                <i class="fas fa-building"></i> {% trans "Organisatie instellingen" %}
+                            </a>
+                            <a class="header__dropdown-action" href="{% url 'organisaties:locaties' pk=pk %}">
+                                <i class="fas fa-compass"></i> {% trans "Locaties" %}
+                            </a>
+                            <a class="header__dropdown-action"
+                               href="{% url 'organisaties:bevoegde_organisaties' pk=pk %}">
+                                <i class="fas fa-handshake"></i> {% trans "Bevoegde organisaties" %}
+                            </a>
+                        {% endif %}
+                        {% if pk %}
+                            <a class="header__dropdown-action" href="{% url 'organisaties:roles:list' pk=pk %}">
+                                <i class="fas fa-users"></i> {% trans "Gebruikersbeheer" %}
+                            </a>
+                        {% endif %}
 
-                    <a class="header__dropdown-action" href="{% url 'notificaties' %}">
-                        <i class="fa fa-bell"></i> {% trans "Notificaties" %}
-                    </a>
-                    <a class="header__dropdown-action" href="{% url 'account_logout' %}">
-                        <i class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}
-                    </a>
+                        {% if siteconfig.documentatie_link %}
+                            <a class="header__dropdown-action" href="{{ siteconfig.documentatie_link }}" target="_blank"
+                               rel="noopener" id="documentation">
+                                <i class="fa fa-book"></i> {{ siteconfig.documentatie_titel|capfirst|default:_("Documentatie") }}
+                            </a>
+                        {% endif %}
 
-                    {% if not pk %}
-                        <a class="header__dropdown-text">
-                            {% trans "Selecteer eerst een organisatie voor meer opties." %}
+                        <a class="header__dropdown-action" href="{% url 'notificaties' %}">
+                            <i class="fa fa-bell"></i> {% trans "Notificaties" %}
                         </a>
-                    {% endif %}
+                        <a class="header__dropdown-action" href="{% url 'account_logout' %}">
+                            <i class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}
+                        </a>
+
+                        {% if not pk %}
+                            <a class="header__dropdown-text">
+                                {% trans "Selecteer eerst een organisatie voor meer opties." %}
+                            </a>
+                        {% endif %}
 
                     {% endwith %}
                 </div>

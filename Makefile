@@ -20,6 +20,7 @@ beat:
 
 migrations:
 	venv/bin/python src/manage.py makemigrations
+	$(MAKE) graph
 
 migrate:
 	venv/bin/python src/manage.py migrate

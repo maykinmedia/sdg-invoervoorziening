@@ -1,4 +1,7 @@
-{% load static hijack_tags %}<!DOCTYPE html>
+{% load static hijack_tags solo_tags %}
+{% get_solo 'core.SiteConfiguration' as siteconfig %}
+
+<!DOCTYPE html>
 <html lang="en"
       class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
 <head>
@@ -37,5 +40,6 @@
 {% block extra_js %}
 {% endblock %}
 <script defer src="{% static 'bundles/sdg-js.js' %}"></script>
+{% include "core/_siteconfig.html" %}
 </body>
 </html>

@@ -141,6 +141,10 @@
                 "productfieldconfiguration"
             ],
             [
+                "core",
+                "siteconfiguration"
+            ],
+            [
                 "django_celery_beat",
                 "periodictask"
             ],
