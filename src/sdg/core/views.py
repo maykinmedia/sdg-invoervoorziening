@@ -12,9 +12,7 @@ class HomeView(VerificationMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        roles = self.request.user.roles.filter(
-            Q(is_redacteur=True) | Q(is_beheerder=True),
-        )
+        roles = self.request.user.roles.all()
         context["lokale_overheden"] = LokaleOverheid.objects.filter(
             pk__in=Subquery(roles.values("lokale_overheid")),
         )

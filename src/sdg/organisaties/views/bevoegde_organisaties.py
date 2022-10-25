@@ -4,6 +4,7 @@ from django.utils.translation import gettext as _
 from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
+from sdg.accounts.models import Role
 from sdg.organisaties.forms import BevoegdeOrganisatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 
@@ -11,7 +12,7 @@ from sdg.organisaties.models import LokaleOverheid
 class BevoegdeOrganisatieUpdateView(OverheidMixin, UpdateView):
     template_name = "organisaties/bevoegde_organisaties.html"
     model = LokaleOverheid
-    required_roles = ["is_beheerder"]
+    required_roles = [Role.choices.MANAGER]
     form_class = BevoegdeOrganisatieInlineFormSet
 
     def get_form_kwargs(self):
