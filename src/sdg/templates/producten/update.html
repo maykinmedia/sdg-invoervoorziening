@@ -61,7 +61,10 @@
 
     {# Notifications. #}
     <div class="toolbox__item">
-        <i class="fa fa-bell"></i> {% trans "Notificaties & Geschiedenis" %}
+        <i class="fa fa-bell"></i>
+        <a href="{% url 'notificaties' %}" target="_blank">
+             {% trans "Notificaties & Geschiedenis" %}
+        </a>
     </div>
 
     {# (Global) edit togggle. #}
