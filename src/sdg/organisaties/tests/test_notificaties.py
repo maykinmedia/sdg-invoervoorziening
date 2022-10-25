@@ -50,7 +50,7 @@ class NotificatiesTests(WebTest):
         self.assertEqual(len(notifications), 5)
 
         for version in reference_versions:
-            self.assertIn(str(version), response.text)
+            self.assertIn(str(version.product), response.text)
 
         for version in specific_versions:
-            self.assertNotIn(str(version), response.text)
+            self.assertNotIn(str(version.product), response.text)
