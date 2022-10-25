@@ -16,9 +16,11 @@ from sdg.api.views import (
     ProductHistoryViewSet,
     ProductViewSet,
 )
-from sdg.api.views.producten import (
-    ProductSingleTranslation,
-    ProductSingleTranslationGeneric,
+from sdg.api.views.versies import (
+    ProductVersieCreateViewSet,
+    ProductVersieTranslationCreateViewSet,
+    ProductVersieTranslationListViewSet,
+    ProductVersieViewSet,
 )
 
 app_name = "api"
@@ -34,20 +36,31 @@ router.register(
             ProductHistoryViewSet,
             basename="product-history",
         ),
-        routers.nested(
-            "single",
-            viewset=ProductSingleTranslationGeneric,
-            basename="product-single",
-        ),
-        routers.nested(
-            "single/vertalingen",
-            ProductSingleTranslation,
-            basename="product-single-vertalingen",
-        ),
     ],
 )
 router.register("organisaties", LokaleOverheidViewSet)
 router.register("locaties", LocatieViewSet, basename="locatie")
+router.register(
+    "versies",
+    ProductVersieViewSet,
+    [
+        routers.nested(
+            r"(?P<versie>[0-9]+)",
+            ProductVersieCreateViewSet,
+            basename="versies-create",
+        ),
+        routers.nested(
+            r"(?P<versie>[0-9]+)/vertalingen/(?P<taal>[a-z]+)",
+            ProductVersieTranslationCreateViewSet,
+            basename="versies-vertalingen-create",
+        ),
+        routers.nested(
+            r"(?P<versie>[0-9]+)/vertalingen",
+            ProductVersieTranslationListViewSet,
+            basename="versies-vertalingen-list",
+        ),
+    ],
+)
 
 urlpatterns = [
     path(

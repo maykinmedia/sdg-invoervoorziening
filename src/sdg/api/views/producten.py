@@ -11,10 +11,8 @@ from sdg.api.filters import ProductFilterSet
 from sdg.api.permissions import OrganizationPermissions, WhitelistedPermission
 from sdg.api.serializers import (
     ProductSerializer,
-    ProductSingleTranslationGenericSerializer,
     ProductVersieSerializer,
 )
-from sdg.api.serializers.producten import ProductSingleTranslationSerializer
 from sdg.core.models.logius import Overheidsorganisatie
 from sdg.producten.models import Product, ProductVersie
 
@@ -237,75 +235,3 @@ class ProductHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
             .filter(product__uuid=self.kwargs["product_uuid"])
             .prefetch_related("vertalingen")
         )
-
-
-@extend_schema_view(
-    create=extend_schema(
-        description="""Maak/update een productversie concept. Om de productversie correct aan te maken,moet u in de url het 'productUuid' opgeven.
-        """
-    ),
-)
-class ProductSingleTranslationGeneric(mixins.CreateModelMixin, GenericViewSet):
-
-    serializer_class = ProductSingleTranslationGenericSerializer
-    permission_classes = [OrganizationPermissions, WhitelistedPermission]
-    lookup_field = "product_uuid"
-    lookup_url_kwarg = "product_uuid"
-    lookup_field = "uuid"
-
-    def get_queryset(self):
-        return Product.objects.filter(uuid=self.kwargs["product_uuid"])
-
-    @action(detail=False, methods=["post"])
-    def publish(self, request, *args, **kwargs):
-        """
-        Publiseer het concept.
-
-        Door het publiseren van het concept krijgt het product de publicatie datum van vandaag de dag.
-        Letop een gepubliseerde product kan niet meer worden aangepast, er kan wel een nieuwe product versie worden aangemaakt.
-        """
-        instance = self.get_object()
-        version = instance.most_recent_version
-
-        publication_date = version.publicatie_datum
-
-        if publication_date is not None:
-            raise serializers.ValidationError(
-                {
-                    "": "Een gepubliceerde product kan niet nog een keer gepubliseerd worden."
-                }
-            )
-        version.publicatie_datum = datetime.date.today()
-        version.save()
-
-        serializer = self.get_serializer(instance)
-
-        return Response(serializer.data)
-
-    def get_organisatie(self, request, view, obj=None):
-        if request.method == "POST":
-            product_uuid = view.kwargs["product_uuid"]
-            product = Product.objects.get(uuid=product_uuid)
-            return product.catalogus.lokale_overheid.organisatie
-
-        return None
-
-
-@extend_schema_view(
-    create=extend_schema(
-        description="""Update 1 specifieke vertaling van een productversie concept. Om de productversie correct aan te maken,moet u in de url het 'productUuid' opgeven.
-        """
-    ),
-)
-class ProductSingleTranslation(mixins.CreateModelMixin, GenericViewSet):
-
-    serializer_class = ProductSingleTranslationSerializer
-    permission_classes = [OrganizationPermissions, WhitelistedPermission]
-
-    def get_organisatie(self, request, view, obj=None):
-        if request.method == "POST":
-            product_uuid = view.kwargs["product_uuid"]
-            product = Product.objects.get(uuid=product_uuid)
-            return product.catalogus.lokale_overheid.organisatie
-
-        return None

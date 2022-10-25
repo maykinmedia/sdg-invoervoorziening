@@ -97,6 +97,28 @@ class SingleProductenTests(APITestCase):
             2, product_versie=self.second_referentie_product_versie
         )
 
+        self.future_published_upn = UniformeProductnaamFactory.create(
+            upn_label="future",
+            upn_uri="https://www.future.com",
+        )
+        self.future_published_generiek_product = GeneriekProductFactory.create(
+            upn=self.future_published_upn,
+            doelgroep="eu-burger",
+        )
+        self.future_published_referentie_product = ReferentieProductFactory.create(
+            generiek_product=self.future_published_generiek_product,
+            referentie_product=None,
+            catalogus=self.referentie_catalogus,
+            bevoegde_organisatie=self.referentie_bevoegde_organisatie,
+            product_aanwezig=True,
+        )
+        self.future_published_referentie_product_versie = ProductVersieFactory.create(
+            product=self.future_published_referentie_product
+        )
+        LocalizedProductFactory.create_batch(
+            2, product_versie=self.future_published_referentie_product_versie
+        )
+
         self.organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="https://www.setup.com",
             owms_pref_label="set up",
@@ -152,8 +174,29 @@ class SingleProductenTests(APITestCase):
             2, product_versie=self.second_product_versie
         )
 
+        self.future_published_product = SpecifiekProductFactory.create(
+            generiek_product=self.future_published_generiek_product,
+            referentie_product=self.future_published_referentie_product,
+            catalogus=self.catalogus,
+            product_aanwezig=True,
+            bevoegde_organisatie=self.bevoegde_organisatie,
+        )
+        self.future_published_product_versie = ProductVersieFactory.create(
+            product=self.future_published_product,
+            publicatie_datum=FUTURE_DATE,
+        )
+        self.future_published_localized_products = LocalizedProductFactory.create_batch(
+            2, product_versie=self.future_published_product_versie
+        )
+
     def test_single_product_withBody(self):
-        list_url = reverse("api:product-single-list", args=[str(self.product.uuid)])
+        list_url = reverse(
+            "api:versies-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+            },
+        )
 
         body = {
             "productAanwezig": True,
@@ -188,7 +231,13 @@ class SingleProductenTests(APITestCase):
         self.assertEqual(data["locaties"][2]["naam"], self.locatie3.naam)
 
     def test_single_product_without_body(self):
-        list_url = reverse("api:product-single-list", args=[str(self.product.uuid)])
+        list_url = reverse(
+            "api:versies-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+            },
+        )
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
@@ -223,13 +272,57 @@ class SingleProductenTests(APITestCase):
             ],
         )
 
-    def test_single_product_vertaling_with_body(self):
+    def test_single_future_published(self):
         list_url = reverse(
-            "api:product-single-vertalingen-list", args=[str(self.product.uuid)]
+            "api:versies-create-list",
+            kwargs={
+                "product_uuid": str(self.future_published_product.uuid),
+                "versie": str(self.future_published_product_versie.versie),
+            },
         )
 
         body = {
-            "taal": "nl",
+            "productAanwezig": True,
+            "productValtOnder": {"upnUri": "https://www.second-setup.com"},
+            "locaties": [
+                {"naam": self.locatie1.naam},
+                {"naam": self.locatie2.naam},
+                {"naam": self.locatie3.naam},
+            ],
+        }
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+        response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        data = response.json()
+
+        self.assertEqual(data["productAanwezig"], 1)
+        self.assertEqual(
+            data["productValtOnder"]["upnUri"],
+            str(self.seccond_product.generiek_product.upn_uri),
+        )
+        self.assertEqual(data["locaties"][0]["naam"], self.locatie1.naam)
+        self.assertEqual(data["locaties"][1]["naam"], self.locatie2.naam)
+        self.assertEqual(data["locaties"][2]["naam"], self.locatie3.naam)
+
+    def test_single_product_vertaling_with_body(self):
+        list_url = reverse(
+            "api:versies-vertalingen-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+                "taal": "nl",
+            },
+        )
+
+        body = {
             "titel": "test",
             "tekst": "test",
             "links": [
@@ -287,7 +380,12 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_vertaling_without_body(self):
         list_url = reverse(
-            "api:product-single-vertalingen-list", args=[str(self.product.uuid)]
+            "api:versies-vertalingen-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+                "taal": "nl",
+            },
         )
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
@@ -298,23 +396,82 @@ class SingleProductenTests(APITestCase):
             **headers,
         )
 
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_single_product_vertaling_future_published(self):
+        list_url = reverse(
+            "api:versies-vertalingen-create-list",
+            kwargs={
+                "product_uuid": str(self.future_published_product.uuid),
+                "versie": str(self.future_published_product_versie.versie),
+                "taal": "nl",
+            },
+        )
+
+        body = {
+            "titel": "test",
+            "tekst": "test",
+            "links": [
+                {"label": "test1", "url": "https://www.test1.com"},
+                {"label": "test2", "url": "https://www.test2.com"},
+            ],
+            "procedureBeschrijving": "test",
+            "bewijs": "test",
+            "vereisten": "test",
+            "bezwaarEnBeroep": "test",
+            "kostenEnBetaalmethoden": "test",
+            "uitersteTermijn": "test",
+            "wtdBijGeenReactie": "test",
+            "procedureLink": {"label": "test", "url": "http://test.com"},
+            "productAanwezigToelichting": "",
+            "productValtOnderToelichting": "",
+        }
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+        response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         data = response.json()
 
+        self.assertEqual(data["taal"], "nl")
+        self.assertEqual(data["tekst"], "test")
+        self.assertEqual(data["titel"], "test")
         self.assertEqual(
-            data["invalidParams"],
+            data["links"],
             [
-                {
-                    "name": "taal",
-                    "code": "required",
-                    "reason": "Dit veld is vereist.",
-                }
+                {"label": "test1", "url": "https://www.test1.com"},
+                {"label": "test2", "url": "https://www.test2.com"},
             ],
         )
+        self.assertEqual(data["procedureBeschrijving"], "test")
+        self.assertEqual(data["bewijs"], "test")
+        self.assertEqual(data["vereisten"], "test")
+        self.assertEqual(data["bezwaarEnBeroep"], "test")
+        self.assertEqual(data["kostenEnBetaalmethoden"], "test")
+        self.assertEqual(data["uitersteTermijn"], "test")
+        self.assertEqual(data["wtdBijGeenReactie"], "test")
+        self.assertEqual(
+            data["procedureLink"],
+            {"label": "test", "url": "http://test.com"},
+        )
+        self.assertEqual(data["productAanwezigToelichting"], "")
+        self.assertEqual(data["productValtOnderToelichting"], "")
 
     def test_single_product_vertaling_toelichting_wrongly_filled_in(self):
-        list_url = reverse("api:product-single-list", args=[str(self.product.uuid)])
+        list_url = reverse(
+            "api:versies-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+            },
+        )
 
         generic_single_body = {
             "productAanwezig": True,
@@ -332,18 +489,20 @@ class SingleProductenTests(APITestCase):
         )
 
         list_url = reverse(
-            "api:product-single-vertalingen-list", args=[str(self.product.uuid)]
+            "api:versies-vertalingen-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+                "taal": "nl",
+            },
         )
 
         with self.subTest("productAanwezigToelichting"):
 
             body = {
-                "taal": "nl",
                 "productAanwezigToelichting": "test",
                 "productValtOnderToelichting": "",
             }
-
-            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
             response = self.client.post(
                 list_url,
@@ -369,12 +528,9 @@ class SingleProductenTests(APITestCase):
         with self.subTest("productValtOnderToelichting"):
 
             body = {
-                "taal": "nl",
                 "productAanwezigToelichting": "",
                 "productValtOnderToelichting": "test",
             }
-
-            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
             response = self.client.post(
                 list_url,
@@ -398,7 +554,13 @@ class SingleProductenTests(APITestCase):
             )
 
     def test_single_product_vertaling_toelichting_wrongly_forgotten(self):
-        list_url = reverse("api:product-single-list", args=[str(self.product.uuid)])
+        list_url = reverse(
+            "api:versies-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+            },
+        )
 
         generic_single_body = {
             "productAanwezig": False,
@@ -416,13 +578,17 @@ class SingleProductenTests(APITestCase):
         )
 
         list_url = reverse(
-            "api:product-single-vertalingen-list", args=[str(self.product.uuid)]
+            "api:versies-vertalingen-create-list",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+                "taal": "nl",
+            },
         )
 
         with self.subTest("productAanwezigToelichting"):
 
             body = {
-                "taal": "nl",
                 "productAanwezigToelichting": "",
                 "productValtOnderToelichting": "test",
             }
@@ -453,7 +619,6 @@ class SingleProductenTests(APITestCase):
         with self.subTest("productValtOnderToelichting"):
 
             body = {
-                "taal": "nl",
                 "productAanwezigToelichting": "test",
                 "productValtOnderToelichting": "",
             }
@@ -483,11 +648,15 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_vertaling_on_published_product(self):
         list_url = reverse(
-            "api:product-single-vertalingen-list", args=[str(self.seccond_product.uuid)]
+            "api:versies-vertalingen-create-list",
+            kwargs={
+                "product_uuid": str(self.seccond_product.uuid),
+                "versie": str(self.second_product_versie.versie),
+                "taal": "nl",
+            },
         )
 
         body = {
-            "taal": "nl",
             "titel": "test",
             "tekst": "test",
             "links": [
@@ -530,7 +699,13 @@ class SingleProductenTests(APITestCase):
         )
 
     def test_single_product_publish(self):
-        list_url = reverse("api:product-single-publish", args=[str(self.product.uuid)])
+        list_url = reverse(
+            "api:versies-create-publish",
+            kwargs={
+                "product_uuid": str(self.product.uuid),
+                "versie": str(self.product_versie.versie),
+            },
+        )
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
@@ -540,11 +715,15 @@ class SingleProductenTests(APITestCase):
             **headers,
         )
 
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_single_product_publish_already_published_product(self):
         list_url = reverse(
-            "api:product-single-publish", args=[str(self.seccond_product.uuid)]
+            "api:versies-create-publish",
+            kwargs={
+                "product_uuid": str(self.seccond_product.uuid),
+                "versie": str(self.second_product_versie.versie),
+            },
         )
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
@@ -568,3 +747,256 @@ class SingleProductenTests(APITestCase):
                 }
             ],
         )
+
+    def test_single_product_with_not_correctly_filled_out_product(self):
+        with self.subTest("wrongly_filled_out_productAanwezig"):
+            list_url = reverse(
+                "api:versies-create-list",
+                kwargs={
+                    "product_uuid": str(self.product.uuid),
+                    "versie": str(self.product_versie.versie),
+                },
+            )
+
+            body = {
+                "productAanwezig": False,
+                "productValtOnder": None,
+                "locaties": [],
+            }
+
+            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+            response = self.client.post(
+                list_url,
+                data=json.dumps(body),
+                content_type="application/json",
+                **headers,
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+            list_url = reverse(
+                "api:versies-create-publish",
+                kwargs={
+                    "product_uuid": str(self.product.uuid),
+                    "versie": str(self.product_versie.versie),
+                },
+            )
+
+            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+            response = self.client.post(
+                list_url,
+                content_type="application/json",
+                **headers,
+            )
+            data = response.json()
+
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                data["invalidParams"],
+                [
+                    {
+                        "name": "",
+                        "code": "invalid",
+                        "reason": "ProductAanwezigToelichting moet ingevult zijn zolang productAanwezig op 'false' staat.",
+                    }
+                ],
+            )
+
+        with self.subTest("wrongly_filled_out_productValtOnder"):
+            list_url = reverse(
+                "api:versies-create-list",
+                kwargs={
+                    "product_uuid": str(self.product.uuid),
+                    "versie": str(self.product_versie.versie),
+                },
+            )
+
+            body = {
+                "productAanwezig": True,
+                "productValtOnder": {"upnUri": "https://www.second-setup.com"},
+                "locaties": [],
+            }
+
+            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+            response = self.client.post(
+                list_url,
+                data=json.dumps(body),
+                content_type="application/json",
+                **headers,
+            )
+
+            self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+            list_url = reverse(
+                "api:versies-create-publish",
+                kwargs={
+                    "product_uuid": str(self.product.uuid),
+                    "versie": str(self.product_versie.versie),
+                },
+            )
+
+            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+            response2 = self.client.post(
+                list_url,
+                content_type="application/json",
+                **headers,
+            )
+            data = response2.json()
+            self.assertEqual(response2.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                data["invalidParams"],
+                [
+                    {
+                        "name": "",
+                        "code": "invalid",
+                        "reason": "ProductValtOnderToelichting moet ingevult zijn zolang productValtOnder niet op 'null' staat.",
+                    }
+                ],
+            )
+
+        with self.subTest("wrongly_filled_out_productAanwezigToelichting"):
+            upn = UniformeProductnaamFactory.create(
+                upn_label="error",
+                upn_uri="https://www.error.com",
+            )
+            generiek_product = GeneriekProductFactory.create(
+                upn=upn,
+                doelgroep="eu-burger",
+            )
+            referentie_product = ReferentieProductFactory.create(
+                generiek_product=generiek_product,
+                referentie_product=None,
+                catalogus=self.referentie_catalogus,
+                bevoegde_organisatie=self.referentie_bevoegde_organisatie,
+                product_aanwezig=True,
+            )
+            ProductVersieFactory.create(product=referentie_product)
+
+            product = SpecifiekProductFactory.create(
+                generiek_product=generiek_product,
+                referentie_product=referentie_product,
+                catalogus=self.catalogus,
+                product_aanwezig=True,
+                product_valt_onder=None,
+                bevoegde_organisatie=self.bevoegde_organisatie,
+            )
+            product_versie = ProductVersieFactory.create(
+                product=product,
+                publicatie_datum=FUTURE_DATE,
+            )
+            LocalizedProductFactory.create_batch(
+                2, product_versie=product_versie, product_aanwezig_toelichting="error"
+            )
+
+            url = reverse(
+                "api:versies-create-publish",
+                kwargs={
+                    "product_uuid": str(product.uuid),
+                    "versie": str(product_versie.versie),
+                },
+            )
+
+            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+            response = self.client.post(
+                url,
+                content_type="application/json",
+                **headers,
+            )
+            data = response.json()
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                data["invalidParams"],
+                [
+                    {
+                        "name": "",
+                        "code": "invalid",
+                        "reason": "ProductAanwezigToelichting moet niet ingevult zijn zolang productAanwezig op 'true' staat.",
+                    }
+                ],
+            )
+
+        with self.subTest("wrongly_filled_out_productValtOnderToelichting"):
+            upn = UniformeProductnaamFactory.create(
+                upn_label="error2",
+                upn_uri="https://www.error2.com",
+            )
+            generiek_product = GeneriekProductFactory.create(
+                upn=upn,
+                doelgroep="eu-burger",
+            )
+            referentie_product = ReferentieProductFactory.create(
+                generiek_product=generiek_product,
+                referentie_product=None,
+                catalogus=self.referentie_catalogus,
+                bevoegde_organisatie=self.referentie_bevoegde_organisatie,
+                product_aanwezig=True,
+            )
+            ProductVersieFactory.create(product=referentie_product)
+
+            product = SpecifiekProductFactory.create(
+                generiek_product=generiek_product,
+                referentie_product=referentie_product,
+                catalogus=self.catalogus,
+                product_aanwezig=True,
+                product_valt_onder=None,
+                bevoegde_organisatie=self.bevoegde_organisatie,
+            )
+            product_versie = ProductVersieFactory.create(
+                product=product,
+                publicatie_datum=FUTURE_DATE,
+            )
+            LocalizedProductFactory.create_batch(
+                2, product_versie=product_versie, product_valt_onder_toelichting="error"
+            )
+
+            url = reverse(
+                "api:versies-create-publish",
+                kwargs={
+                    "product_uuid": str(product.uuid),
+                    "versie": str(product_versie.versie),
+                },
+            )
+
+            headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+            response = self.client.post(
+                url,
+                content_type="application/json",
+                **headers,
+            )
+            data = response.json()
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+            self.assertEqual(
+                data["invalidParams"],
+                [
+                    {
+                        "name": "",
+                        "code": "invalid",
+                        "reason": "ProductValtOnderToelichting moet niet ingevult zijn zolang productValtOnder op 'null' staat.",
+                    }
+                ],
+            )
+
+    def test_single_product_publish_future_date(self):
+        list_url = reverse(
+            "api:versies-create-publish",
+            kwargs={
+                "product_uuid": str(self.future_published_product.uuid),
+                "versie": str(self.future_published_product_versie.versie),
+            },
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+
+        response = self.client.post(
+            list_url,
+            content_type="application/json",
+            **headers,
+            data=json.dumps({"publicatieDatum": str(NOW_DATE)}),
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
