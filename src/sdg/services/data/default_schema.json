@@ -1,0 +1,294 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "SDG Producten API",
+    "description": "Deze API serveert SDG producten met generieke teksten die getoond worden op de Ondernemersplein.kvk.nl website.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://sdgapi.ondernemersplein.kvk.nl"
+    }
+  ],
+  "paths": {
+    "{{products_url}}": {
+      "get": {
+        "tags": [
+          "Producten"
+        ],
+        "summary": "SDG producten",
+        "parameters": [
+          {
+            "name": "laatstGewijzigd",
+            "in": "query",
+            "description": "Filter op vanaf laatst gewijzigd datum. Datum heeft het formaat {datum} of {datum}T{tijd}, bijvoorbeeld: 2021-10-03, 2021-10-03T10:30:00",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "laatstGecheckt",
+            "in": "query",
+            "description": "Filter op vanaf laatst gecheckt datum. Datum heeft het formaat {datum} of {datum}T{tijd}, bijvoorbeeld: 2021-09-12, 2022-02-03T12:45:00",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "upnUri",
+            "in": "query",
+            "description": "Filter op UPN URI",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "upnLabel",
+            "in": "query",
+            "description": "Filter op UPN label",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taal",
+            "in": "query",
+            "description": "Filter op taal (nl of en)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Paginering pagina",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductsContract"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "{{products_url}}/{id}": {
+      "get": {
+        "tags": [
+          "Producten"
+        ],
+        "summary": "SDG product",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Identifier van het product",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductContract"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Link": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Linktekst",
+            "nullable": true
+          },
+          "url": {
+            "type": "string",
+            "description": "Link URL",
+            "nullable": true
+          },
+          "categorie": {
+            "type": "string",
+            "description": "Link categorie. Dit zijn de mogelijke categorieën: intern, extern, wetgeving en wetswijziging",
+            "nullable": true,
+            "example": "intern, extern, wetgeving, wetswijziging"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PartnerOrganisation": {
+        "required": [
+          "owmsPrefLabel",
+          "owmsUri",
+          "rol"
+        ],
+        "type": "object",
+        "properties": {
+          "rol": {
+            "type": "string",
+            "description": "Rol van organisatie"
+          },
+          "owmsPrefLabel": {
+            "type": "string",
+            "description": "OWMS PrefLabel"
+          },
+          "owmsUri": {
+            "type": "string",
+            "description": "OWMS URI"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductContract": {
+        "required": [
+          "id",
+          "laatstGecheckt",
+          "laatstGewijzigd",
+          "organisaties",
+          "self",
+          "taal",
+          "tekst",
+          "titel",
+          "upnLabel",
+          "upnUri",
+          "url"
+        ],
+        "type": "object",
+        "properties": {
+          "titel": {
+            "type": "string",
+            "description": "Titel van het product"
+          },
+          "tekst": {
+            "type": "string",
+            "description": "Tekst van het product"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            },
+            "description": "Linkverwijzingen",
+            "nullable": true
+          },
+          "organisaties": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PartnerOrganisation"
+            },
+            "description": "Organisaties"
+          },
+          "laatstGewijzigd": {
+            "type": "string",
+            "description": "Laatst gewijzigd datum. Datum heeft het formaat {datum}T{tijd}",
+            "example": "2021-10-03T10:30:00"
+          },
+          "laatstGecheckt": {
+            "type": "string",
+            "description": "Laatst gecheckt datum. Datum heeft het formaat {datum}T{tijd}",
+            "example": "2021-10-03T10:30:00"
+          },
+          "url": {
+            "type": "string",
+            "description": "URL van het product op de Ondernemersplein website"
+          },
+          "upnUri": {
+            "type": "string",
+            "description": "UPN URI van het product"
+          },
+          "upnLabel": {
+            "type": "string",
+            "description": "UPN label van het product"
+          },
+          "taal": {
+            "type": "string",
+            "description": "Taal"
+          },
+          "self": {
+            "type": "string",
+            "description": "Linkverwijzing naar het product op de Generieke SDG Producten API"
+          },
+          "id": {
+            "type": "string",
+            "description": "Identifier van het product"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProductsContract": {
+        "required": [
+          "results"
+        ],
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "Totaal aantal resultaten",
+            "format": "int32"
+          },
+          "next": {
+            "type": "string",
+            "description": "Link naar de volgende resultatenpagina",
+            "nullable": true
+          },
+          "previous": {
+            "type": "string",
+            "description": "Link naar de vorige resultatenpagina",
+            "nullable": true
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProductContract"
+            },
+            "description": "Producten"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
