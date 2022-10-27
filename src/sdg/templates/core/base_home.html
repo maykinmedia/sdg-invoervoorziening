@@ -27,19 +27,23 @@
                 <div class="header__dropdown-list">
                     {% with pk=lokaleoverheid.pk %}
 
-                        {% if pk and request.user|is_manager:lokaleoverheid %}
-                            <a class="header__dropdown-action" href="{% url 'organisaties:edit' pk=pk %}">
-                                <i class="fas fa-building"></i> {% trans "Organisatie instellingen" %}
+                        {% if not pk %}
+                            <a class="header__dropdown-text">
+                                {% trans "Selecteer eerst een organisatie voor meer opties." %}
                             </a>
-                            <a class="header__dropdown-action" href="{% url 'organisaties:locaties' pk=pk %}">
-                                <i class="fas fa-compass"></i> {% trans "Locaties" %}
-                            </a>
-                            <a class="header__dropdown-action"
-                               href="{% url 'organisaties:bevoegde_organisaties' pk=pk %}">
-                                <i class="fas fa-handshake"></i> {% trans "Bevoegde organisaties" %}
-                            </a>
-                        {% endif %}
-                        {% if pk %}
+                        {% else %}
+                            {% if request.user|is_manager:lokaleoverheid %}
+                                <a class="header__dropdown-action" href="{% url 'organisaties:edit' pk=pk %}">
+                                    <i class="fas fa-building"></i> {% trans "Organisatie instellingen" %}
+                                </a>
+                                <a class="header__dropdown-action" href="{% url 'organisaties:locaties' pk=pk %}">
+                                    <i class="fas fa-compass"></i> {% trans "Locaties" %}
+                                </a>
+                                <a class="header__dropdown-action"
+                                   href="{% url 'organisaties:bevoegde_organisaties' pk=pk %}">
+                                    <i class="fas fa-handshake"></i> {% trans "Bevoegde organisaties" %}
+                                </a>
+                            {% endif %}
                             <a class="header__dropdown-action" href="{% url 'organisaties:roles:list' pk=pk %}">
                                 <i class="fas fa-users"></i> {% trans "Gebruikersbeheer" %}
                             </a>
@@ -52,18 +56,17 @@
                             </a>
                         {% endif %}
 
+                        <hr>
+
                         <a class="header__dropdown-action" href="{% url 'notificaties' %}">
                             <i class="fa fa-bell"></i> {% trans "Notificaties" %}
                         </a>
+
+                        <hr>
+
                         <a class="header__dropdown-action" href="{% url 'account_logout' %}">
                             <i class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}
                         </a>
-
-                        {% if not pk %}
-                            <a class="header__dropdown-text">
-                                {% trans "Selecteer eerst een organisatie voor meer opties." %}
-                            </a>
-                        {% endif %}
 
                     {% endwith %}
                 </div>
@@ -73,8 +76,14 @@
             <p class="header__subtitle">{% block container_subtitle %}{% endblock container_subtitle %}</p>
             <p class="header__title">
                 {% block container_title %}
-                    <b>{{ lokaleoverheid }}</b>
-                    {% include "core/_municipality_switch.html" %}
+                    {% if lokaleoverheid %}
+                        <b>{{ lokaleoverheid }}</b>
+                        {% include "core/_municipality_switch.html" %}
+                    {% else %}
+                        <div class="header__title">
+                            <b>SDG</b> {% trans "Invoervoorziening" %}
+                        </div>
+                    {% endif %}
                 {% endblock container_title %}
             </p>
         </div>

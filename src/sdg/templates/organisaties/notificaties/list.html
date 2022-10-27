@@ -2,7 +2,11 @@
 {% load i18n producten utils humanize %}
 
 {% block page_title %}{% trans "Notificaties" %}{% endblock %}
-{% block container_title %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% trans "Hieronder staan de producten waarvan de standaardteksten recent gewijzigd zijn." %}
+    </p>
+{% endblock %}
 {% block breadcrumbs_page_title %}
     <span>{% trans 'Notificaties' %}</span>
 {% endblock %}
