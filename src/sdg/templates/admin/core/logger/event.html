@@ -1,7 +1,7 @@
 {% load i18n %}
 
-{% with timestamp=log.timestamp|date:'DATETIME_FORMAT' user=log.user|default:_('Anonymous user') object=log.content_object event=log.extra_data %}
-    <h1>{{ timestamp }} - {{ user }} event on {{ object }}.</h1>
+{% with timestamp=log.timestamp|date:'DATETIME_FORMAT' user=log.user|default:_('Anonymous user') event=log.extra_data %}
+    <h1>{{ timestamp }} - {{ user }} event on {{ event.object_name }}.</h1>
 
     <div>
         <span>Name:</span> {{ event.name }}

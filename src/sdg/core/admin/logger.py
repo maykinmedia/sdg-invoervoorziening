@@ -37,9 +37,10 @@ class TimelineLogAdmin(admin.ModelAdmin):
         title = f"Gebruiker {obj.user} heeft {obj.content_type}"
         result = obj.extra_data["result"]
         payload = obj.extra_data["payload"]
+        object_name = obj.extra_data["object_name"]
 
         title += self._format_payload(payload)
-        return f"[{obj.timestamp}] {title} ({obj.content_object}) - {result}."
+        return f"[{obj.timestamp}] {title} ({object_name}) - {result}."
 
     def has_add_permission(self, request):
         return False
