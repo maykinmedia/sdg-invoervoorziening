@@ -6,8 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("accounts", "0011_alter_user_options"),
-        ("accounts", "0011_role_is_raadpleger"),
+        ("core", "0037_productfieldconfiguration_product_heeft_kosten"),
+        ("core", "0038_siteconfiguration"),
     ]
 
     operations = []
