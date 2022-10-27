@@ -6,8 +6,10 @@ from django.utils.translation import gettext_lazy as _
 
 import markdown
 
-prohibited_html_tags = ["h1", "h2", "h5", "h6", "hr", "img", "code"]
-html_tags_to_text = {
+SIMPLE_HTML_REGEX = _lazy_re_compile(
+    r"""<[A-Za-z\s="']+?>.*?<\/[A-Za-z\s="']+?>|<[A-Za-z\s="']+?\/>"""
+)
+HTML_TAGS_TO_TEXT = {
     "h1": "Kop 1",
     "h2": "Kop 2",
     "h5": "Kop 5",
@@ -18,14 +20,16 @@ html_tags_to_text = {
 }
 
 
-class allowedMarkdownValidator(HTMLParser):
+class AllowedMarkdownValidator(HTMLParser):
+    prohibited_html_tags = ["h1", "h2", "h5", "h6", "hr", "img", "code"]
+
     def handle_starttag(self, tag, attr):
-        if tag in prohibited_html_tags:
+        if tag in self.prohibited_html_tags:
             self.data = tag
 
 
 no_html_validator = RegexValidator(
-    _lazy_re_compile(r"<(.*)>.*?|<(.*) \>"),
+    SIMPLE_HTML_REGEX,
     message=_(
         "Het veld mag geen HTML-tags bevatten. Zorg ervoor dat de tabel een header rij heeft."
     ),
@@ -45,13 +49,13 @@ def validate_markdown(value):
 
     html_text = markdown.markdown(value)
 
-    parser = allowedMarkdownValidator()
+    parser = AllowedMarkdownValidator()
     parser.feed(html_text)
 
     if hasattr(parser, "data"):
         raise ValidationError(
             _("Het veld mag geen '{html_element}' in Markdown bevatten.").format(
-                html_element=str(html_tags_to_text[parser.data])
+                html_element=str(HTML_TAGS_TO_TEXT[parser.data])
             )
         )
 

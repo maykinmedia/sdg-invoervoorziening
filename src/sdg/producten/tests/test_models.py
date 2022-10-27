@@ -248,7 +248,7 @@ class ProductTests(TestCase):
         self.assertEqual(p3.product.active_version, p3)
 
 
-class LabeledURLTests(TestCase):
+class LocalizedProductTests(TestCase):
     def setUp(self):
         super().setUp()
 
@@ -336,7 +336,58 @@ class LabeledURLTests(TestCase):
 
             self.localized_product.full_clean()
 
+    def test_able_to_save_markdown_with_angle_brackets(self):
+        self.localized_product.specifieke_tekst = (
+            "### example text\n * example text\n * example text\n * example "
+            "text\n 1. example text\n 2. example text\n 3. example text\n "
+            "*italic* **bold**. hello>"
+        )
+        self.localized_product.full_clean()
+
+        self.localized_product.specifieke_tekst = (
+            "### example text\n * example text\n * example text\n * example "
+            "text\n 1. example text\n 2. example text\n 3. example text\n "
+            "*italic* **bold**. <hello>"
+        )
+        self.localized_product.full_clean()
+
+        self.localized_product.specifieke_tekst = (
+            "### example text\n * example text\n * example text\n * example "
+            "text\n 1. example text\n 2. example text\n 3. example text\n "
+            "*italic* **bold**. >hello<"
+        )
+        self.localized_product.full_clean()
+
+    def test_unable_to_save_markdown_with_basic_html(self):
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = (
+                "### example text\n * example text\n * example text\n * example "
+                "text\n 1. example text\n 2. example text\n 3. example text\n "
+                "*italic* **bold**. <p>Test</p>"
+            )
+            self.localized_product.full_clean()
+
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = (
+                "### example text\n * example text\n * example text\n * example "
+                "text\n 1. example text\n 2. example text\n 3. example text\n "
+                "*italic* **bold**. <hr/>"
+            )
+            self.localized_product.full_clean()
+
+        with self.assertRaises(ValidationError):
+            self.localized_product.specifieke_tekst = (
+                "### example text\n * example text\n * example text\n * example "
+                "text\n 1. example text\n 2. example text\n 3. example text\n "
+                '*italic* **bold**. <a href="test"></a>'
+            )
+            self.localized_product.full_clean()
+
     def test_able_to_save_markdown(self):
-        self.localized_product.specifieke_tekst = "### example text\n * example text\n * example text\n * example text\n 1. example text\n 2. example text\n 3. example text\n *italic* **bold**."
+        self.localized_product.specifieke_tekst = (
+            "### example text\n * example text\n * example text\n * example "
+            "text\n 1. example text\n 2. example text\n 3. example text\n "
+            "*italic* **bold**."
+        )
 
         self.localized_product.full_clean()
