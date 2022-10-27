@@ -6,9 +6,10 @@ from django.db.models import Case, CharField, Count, F, Value, When
 from django.db.models.functions import Concat
 from django.forms import inlineformset_factory
 
+from ..core.forms import BooleanChoiceField
 from ..core.models.mixins import FieldConfigurationMixin
 from ..organisaties.models import BevoegdeOrganisatie
-from .constants import BooleanChoices, PublishChoices
+from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .utils import parse_changed_data
 from .widgets import CheckboxSelectMultiple
@@ -110,11 +111,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         required=False,
         widget=CheckboxSelectMultiple(),
     )
-    heeft_kosten = forms.ChoiceField(
-        required=False,
-        widget=forms.Select(),
-        choices=BooleanChoices.choices,
-    )
+    heeft_kosten = BooleanChoiceField()
 
     class Meta:
         model = Product

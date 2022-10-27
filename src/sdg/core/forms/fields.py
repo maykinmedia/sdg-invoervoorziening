@@ -2,13 +2,14 @@ from itertools import chain
 
 from django import forms
 from django.contrib.postgres.utils import prefix_validation_error
+from django.forms import ChoiceField, Field
 from django.utils.translation import gettext_lazy as _
 
-from sdg.core.forms.widgets import DynamicArrayWidget, LabeledURLWidget
+from sdg.core.forms.widgets import BooleanSelect, DynamicArrayWidget
+from sdg.producten.constants import BooleanChoices
 
 
 class DynamicArrayField(forms.Field):
-
     default_error_messages = {
         "item_invalid": _("Item %(nth)s in de lijst is niet geldig."),
     }
@@ -61,3 +62,12 @@ class DynamicArrayField(forms.Field):
         if not data and not initial:
             return False
         return super().has_changed(initial, data)
+
+
+class BooleanChoiceField(ChoiceField):
+    to_python = Field.to_python
+    widget = BooleanSelect
+
+    def __init__(self, *, choices=(), **kwargs):
+        super().__init__(**kwargs)
+        self.choices = choices or BooleanChoices.choices

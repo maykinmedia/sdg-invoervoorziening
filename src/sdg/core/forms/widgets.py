@@ -1,6 +1,9 @@
 from itertools import chain
 
 from django import forms
+from django.forms import NullBooleanSelect, Select
+
+from sdg.producten.constants import BooleanChoices
 
 
 class DynamicArrayWidget(forms.TextInput):
@@ -103,3 +106,10 @@ class LabeledURLWidget(LabeledWidget):
 class LabeledTooltipWidget(LabeledWidget):
     template_name = "forms/widgets/labeled_tooltip_field.html"
     single = True
+
+
+class BooleanSelect(Select):
+    def __init__(self, attrs=None):
+        super().__init__(attrs, BooleanChoices.choices)
+
+    value_from_datadict = NullBooleanSelect.value_from_datadict
