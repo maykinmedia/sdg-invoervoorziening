@@ -6,6 +6,7 @@ from django.db.models import Case, CharField, Count, F, Value, When
 from django.db.models.functions import Concat
 from django.forms import inlineformset_factory
 
+from ..core.forms import BooleanChoiceField
 from ..core.models.mixins import FieldConfigurationMixin
 from ..organisaties.models import BevoegdeOrganisatie
 from .constants import PublishChoices
@@ -110,6 +111,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         required=False,
         widget=CheckboxSelectMultiple(),
     )
+    heeft_kosten = BooleanChoiceField()
 
     class Meta:
         model = Product
@@ -118,6 +120,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "product_valt_onder",
             "bevoegde_organisatie",
             "locaties",
+            "heeft_kosten",
         )
 
     def _help_text(self, field):

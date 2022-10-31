@@ -77,6 +77,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                     "product_locaties",
                     "productversie_publicatie_datum",
                     "product_product_valt_onder",
+                    "product_heeft_kosten",
                 ],
             },
         )

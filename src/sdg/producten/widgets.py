@@ -1,5 +1,5 @@
 from django.forms.widgets import (
-    CheckboxInput,
+    CheckboxInput as _CheckboxInput,
     CheckboxSelectMultiple as _CheckboxSelectMultiple,
     ChoiceWidget,
 )
@@ -16,5 +16,5 @@ class CheckboxSelectMultiple(_CheckboxSelectMultiple):
     option_template_name = "forms/widgets/checkbox_option.html"
 
 
-class PrettyCheckboxInput(CheckboxInput):
-    option_template_name = "forms/checkbox.html"
+class CheckboxInput(_CheckboxInput):
+    template_name = "forms/widgets/checkbox_option.html"

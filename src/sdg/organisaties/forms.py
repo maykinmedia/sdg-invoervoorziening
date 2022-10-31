@@ -9,7 +9,6 @@ from sdg.organisaties.models import (
     LokaleOverheid,
     Lokatie as Locatie,
 )
-from sdg.producten.widgets import PrettyCheckboxInput
 
 
 class LokaleOverheidForm(forms.ModelForm):
