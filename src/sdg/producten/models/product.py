@@ -18,7 +18,7 @@ from django.utils.translation import gettext_lazy as _
 from djchoices import ChoiceItem, DjangoChoices
 
 from sdg.core.constants import DoelgroepChoices
-from sdg.core.constants.product import ProductStatus, TaalChoices
+from sdg.core.constants.product import GenericProductStatus, TaalChoices
 from sdg.core.utils import get_from_cache
 from sdg.producten.models import (
     LocalizedGeneriekProduct,
@@ -77,6 +77,11 @@ class GeneriekProduct(models.Model):
         blank=True,
         null=True,
     )
+    product_status = models.CharField(
+        max_length=32,
+        choices=GenericProductStatus.choices,
+        default=GenericProductStatus.NEW,
+    )
 
     @property
     def upn_uri(self):
@@ -89,40 +94,6 @@ class GeneriekProduct(models.Model):
     @property
     def is_sdg_product(self):
         return bool(self.upn.sdg)
-
-    @cached_property
-    def product_status(self):
-        try:
-            referentie_product_publicatie_datum = bool(
-                Product.objects.get(
-                    catalogus__is_referentie_catalogus=True, generiek_product=self
-                ).active_version
-            )
-        except Product.DoesNotExist:
-            referentie_product_publicatie_datum = None
-
-        localized_generieke_teksten = all(
-            LocalizedGeneriekProduct.objects.filter(generiek_product=self).values_list(
-                "generieke_tekst", flat=True
-            )
-        )
-
-        if self.upn.is_verwijderd and not self.eind_datum:
-            return ProductStatus.labels.EXPIRED
-        elif self.eind_datum:
-            if self.eind_datum > datetime.date.today():
-                return ProductStatus.labels.EOL
-            if self.eind_datum <= datetime.date.today():
-                return ProductStatus.labels.DELETED
-        elif localized_generieke_teksten:
-            if referentie_product_publicatie_datum is None:
-                return ProductStatus.labels.MISSING
-            elif referentie_product_publicatie_datum:
-                return ProductStatus.labels.READY_FOR_PUBLICATION
-            else:
-                return ProductStatus.labels.READY_FOR_ADMIN
-        else:
-            return ProductStatus.labels.NEW
 
     def generate_localized_information(
         self, language, **kwargs

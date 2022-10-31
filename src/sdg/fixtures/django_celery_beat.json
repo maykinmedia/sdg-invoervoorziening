@@ -56,6 +56,18 @@
     }
 },
 {
+    "model": "django_celery_beat.crontabschedule",
+    "pk": 5,
+    "fields": {
+        "minute": "*/5",
+        "hour": "*",
+        "day_of_week": "*",
+        "day_of_month": "*",
+        "month_of_year": "*",
+        "timezone": "UTC"
+    }
+},
+{
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
@@ -198,8 +210,36 @@
         "enabled": true,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2022-04-08T13:10:15.808",
+        "date_changed": "2022-09-28T16:31:45.616",
         "description": ""
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 6,
+    "fields": {
+        "name": "Update generic product status",
+        "task": "sdg.producten.tasks.update_generic_product_status",
+        "interval": null,
+        "crontab": 5,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2022-09-29T10:29:06.729",
+        "description": "Update the status for all generic products based on defined logic.\r\n\r\nNote: crontab runs every 5 minutes."
     }
 }
 ]

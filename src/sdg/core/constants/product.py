@@ -17,7 +17,7 @@ class DoelgroepChoices(DjangoChoices):
     bedrijf = ChoiceItem("eu-bedrijf", _("EU Bedrijf"))
 
 
-class ProductStatus(DjangoChoices):
+class GenericProductStatus(DjangoChoices):
     NEW = ChoiceItem("new", _("Nieuw"))
     READY_FOR_ADMIN = ChoiceItem("ready_admin", _("Gereed voor beheer"))
     READY_FOR_PUBLICATION = ChoiceItem("ready_publication", _("Gereed voor publicatie"))
