@@ -9,6 +9,7 @@
     </td>
     <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
     <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
+    <td class="tabs__table-cell">{% status_icon role.is_raadpleger %}</td>
     <td class="tabs__table-cell">
     {% if role %}
         {% if request.user|is_manager:lokaleoverheid and user != request.user %}
