@@ -1,6 +1,7 @@
 from itertools import chain
 
 from django import forms
+from django.contrib.postgres.forms import SimpleArrayField
 from django.contrib.postgres.utils import prefix_validation_error
 from django.forms import ChoiceField, Field
 from django.utils.translation import gettext_lazy as _
@@ -16,11 +17,13 @@ class DynamicArrayField(forms.Field):
 
     def __init__(self, base_field, **kwargs):
         self.base_field = base_field
-        self.base_field.delimiter = "|"
         self.max_length = kwargs.pop("max_length", None)
         self.default = kwargs.pop("default", None)
-
         subwidget_form = kwargs.pop("subwidget_form", None)
+
+        if isinstance(self.base_field, SimpleArrayField):
+            self.base_field.delimiter = "|"
+
         kwargs.setdefault(
             "widget",
             DynamicArrayWidget(subwidget_form=subwidget_form)
