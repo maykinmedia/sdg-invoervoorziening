@@ -6,13 +6,15 @@ from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from sdg.core.admin.mixins import BaseProductFilter
-from sdg.producten.models import (
+
+from ..models import (
     GeneriekProduct,
     LocalizedGeneriekProduct,
     LocalizedProduct,
     Product,
     ProductVersie,
 )
+from .filters import IsSDGProductFilter
 
 
 class IsReferenceProductFilter(BaseProductFilter):
@@ -37,13 +39,14 @@ class GeneriekProductAdmin(admin.ModelAdmin):
         "upn_label",
         "doelgroep",
         "verplicht_product",
-        "verantwoordelijke_organisatie",
         "eind_datum",
         "product_status",
         "is_sdg_product",
     )
     list_filter = (
+        IsSDGProductFilter,
         "doelgroep",
+        "product_status",
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
