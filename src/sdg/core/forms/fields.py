@@ -16,6 +16,7 @@ class DynamicArrayField(forms.Field):
 
     def __init__(self, base_field, **kwargs):
         self.base_field = base_field
+        self.base_field.delimiter = "|"
         self.max_length = kwargs.pop("max_length", None)
         self.default = kwargs.pop("default", None)
 
