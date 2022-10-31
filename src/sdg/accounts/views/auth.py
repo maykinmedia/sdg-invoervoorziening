@@ -33,6 +33,7 @@ class LoginView(_LoginView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.form_list["auth"] = AuthenticationForm
+        self.__form = None
 
     @method_decorator(axes_dispatch)
     def dispatch(self, request, *args, **kwargs):
@@ -53,11 +54,23 @@ class LoginView(_LoginView):
                 request=self.request,
             )
 
-    def post(self, *args, **kwargs):
-        response = super().post(*args, **kwargs)
-        form = self.get_form(data=self.request.POST, files=self.request.FILES)
+    def _cache_wizard_form(self, form):
+        """
+        Cache the form instance to access the correct form.is_valid()
+        * Workaround for django-two-factor-auth + axes.
+        """
+        if self.__form and form.data == self.__form.data:
+            return self.__form
 
+        self.__form = form
+        return form
+
+    def get_form(self, *args, **kwargs):
+        form = super().get_form(*args, **kwargs)
+        return self._cache_wizard_form(form)
+
+    def post(self, *args, **kwargs):
+        form = self.get_form(data=self.request.POST, files=self.request.FILES)
         if not form.is_valid():
             self._form_invalid(self)
-
-        return response
+        return super().post(*args, **kwargs)
