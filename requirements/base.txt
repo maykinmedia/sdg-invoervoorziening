@@ -59,7 +59,7 @@ defusedxml==0.7.1
     # via python3-openid
 deprecated==1.2.13
     # via redis
-django==3.2.13
+django==3.2.16
     # via
     #   -r requirements/base.in
     #   django-admin-index
@@ -151,7 +151,7 @@ django-rijkshuisstijl @ git+https://github.com/maykinmedia/django-rijkshuisstijl
     # via -r requirements/base.in
 django-rosetta==0.9.8
     # via -r requirements/base.in
-django-sendfile2==0.6.1
+django-sendfile2==0.7.0
     # via django-privates
 django-sitetree==1.17.2
     # via django-rijkshuisstijl
@@ -233,7 +233,7 @@ packaging==21.3
     #   redis
 phonenumbers==8.12.47
     # via maykin-django-two-factor-auth
-pillow==9.1.0
+pillow==9.1.1
     # via
     #   -r requirements/base.in
     #   django-markdownx
