@@ -607,94 +607,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductVersieList'
           description: ''
-  /api/v1/producten/{productUuid}/single:
-    post:
-      operationId: productenSingleCreate
-      description: "Maak/update een productversie concept. Om de productversie correct\
-        \ aan te maken,moet u in de url het 'productUuid' opgeven.\n        "
-      parameters:
-      - in: path
-        name: productUuid
-        schema:
-          type: string
-        required: true
-      tags:
-      - producten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductSingleTranslationGeneric'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductSingleTranslationGeneric'
-          description: ''
-  /api/v1/producten/{productUuid}/single/publish:
-    post:
-      operationId: productenSinglePublishCreate
-      description: |-
-        Publiseer het concept.
-
-        Door het publiseren van het concept krijgt het product de publicatie datum van vandaag de dag.
-        Letop een gepubliseerde product kan niet meer worden aangepast, er kan wel een nieuwe product versie worden aangemaakt.
-      parameters:
-      - in: path
-        name: productUuid
-        schema:
-          type: string
-        required: true
-      tags:
-      - producten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductSingleTranslationGeneric'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductSingleTranslationGeneric'
-          description: ''
-  /api/v1/producten/{productUuid}/single/vertalingen:
-    post:
-      operationId: productenSingleVertalingenCreate
-      description: "Update 1 specifieke vertaling van een productversie concept. Om\
-        \ de productversie correct aan te maken,moet u in de url het 'productUuid'\
-        \ opgeven.\n        "
-      parameters:
-      - in: path
-        name: productUuid
-        schema:
-          type: string
-        required: true
-      tags:
-      - producten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductSingleTranslation'
-        required: true
-      security:
-      - tokenAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductSingleTranslation'
-          description: ''
   /api/v1/producten/{uuid}:
     get:
       operationId: productenRetrieve
@@ -721,6 +633,206 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+          description: ''
+  /api/v1/versies:
+    get:
+      operationId: versiesList
+      description: "Krijg een lijst met alle product versies te zien.\n        "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      tags:
+      - versies
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductVersieSingleList'
+          description: ''
+  /api/v1/versies/{uuid}:
+    get:
+      operationId: versiesRetrieve
+      description: "Krijg een specifieke product versie te zien.\n        "
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van het product die u wilt ophalen.
+        required: true
+      tags:
+      - versies
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersieSingle'
+          description: ''
+  /api/v1/versies/{versiesUuid}/{versie}:
+    post:
+      operationId: versiesCreate
+      description: "Maak/update een productversie concept. Om de productversie correct\
+        \ aan te maken,moet u in de url het 'productUuid' opgeven.\n        "
+      parameters:
+      - in: path
+        name: versie
+        schema:
+          type: integer
+        description: Het versie nummer van het product die u wilt updaten.
+        required: true
+      - in: path
+        name: versiesUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van het product die u wilt updaten.
+        required: true
+      tags:
+      - versies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVersieSingle'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersieSingle'
+          description: ''
+  /api/v1/versies/{versiesUuid}/{versie}/publish:
+    post:
+      operationId: versiesPublishCreate
+      description: |-
+        Publiseer het concept.
+
+        Door het publiseren van het concept krijgt het product de publicatie datum van vandaag de dag.
+        Letop een gepubliseerde product kan niet meer worden aangepast, er kan wel een nieuwe product versie worden aangemaakt.
+      parameters:
+      - in: path
+        name: versie
+        schema:
+          type: string
+          pattern: ^[0-9]+$
+        required: true
+      - in: path
+        name: versiesUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van het product die u wilt updaten.
+        required: true
+      tags:
+      - versies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVersiePublish'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersiePublish'
+          description: ''
+  /api/v1/versies/{versiesUuid}/{versie}/vertalingen:
+    get:
+      operationId: versiesVertalingenList
+      description: "Een lijst met alle vertalingen van de specifieke `versie` van\
+        \ een `product`.\n        "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - in: path
+        name: versie
+        schema:
+          type: integer
+        description: Het versie nummer van het `product` die u wilt ophalen.
+        required: true
+      - in: path
+        name: versiesUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van het `product` die u wilt ophalen.
+        required: true
+      tags:
+      - versies
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductVersieVertalingenList'
+          description: ''
+  /api/v1/versies/{versiesUuid}/{versie}/vertalingen/{taal}:
+    post:
+      operationId: versiesVertalingenCreate
+      description: "Update 1 specifieke vertaling van een productversie concept. Om\
+        \ de productversie correct aan te maken,moet u in de url het 'productUuid'\
+        \ opgeven.\n        "
+      parameters:
+      - in: path
+        name: taal
+        schema:
+          type: string
+          enum:
+          - en
+          - nl
+        description: De taal van de tekst die u wilt updaten.
+        required: true
+      - in: path
+        name: versie
+        schema:
+          type: integer
+        description: Het versie nummer van het product die u wilt updaten.
+        required: true
+      - in: path
+        name: versiesUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van het product die u wilt updaten.
+        required: true
+      tags:
+      - versies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVersieVertalingen'
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersieVertalingen'
           description: ''
 components:
   schemas:
@@ -1204,6 +1316,46 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductVersie'
+    PaginatedProductVersieSingleList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVersieSingle'
+    PaginatedProductVersieVertalingenList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVersieVertalingen'
     PaginatedProductenCatalogusList:
       type: object
       properties:
@@ -1465,12 +1617,113 @@ components:
       - owmsEndDate
       - owmsIdentifier
       - url
-    ProductSingleTranslation:
+    ProductVersie:
+      type: object
+      properties:
+        versie:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Het versienummer van het product.
+        gemaaktOp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De oorspronkelijke aanmaakdatum voor deze productversie.
+        gewijzigdOp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: De wijzigingsdatum voor deze productversie.
+        publicatieDatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum van publicatie van de productversie.
+        vertalingen:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocalizedProduct'
+      required:
+      - gemaaktOp
+      - gewijzigdOp
+      - vertalingen
+    ProductVersiePublish:
+      type: object
+      properties:
+        publicatieDatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum van publicatie van de productversie.
+        productValtOnder:
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          readOnly: true
+          description: Als een product valt onder een ander product (het product wordt
+            bijvoorbeeld geleverd middels een ander product), dan staat deze hier
+            vermeld. Als een product onder een ander product valt, dan moet er een
+            toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde
+            velden kunnen dan leeg blijven.
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLocatie'
+          readOnly: true
+          description: Een lijst met locaties waarop dit product beschikbaar is.
+        versie:
+          type: integer
+          readOnly: true
+          description: Het versienummer van het product.
+      required:
+      - locaties
+      - productValtOnder
+      - versie
+    ProductVersieSingle:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van dit object binnen deze API.
+        productAanwezig:
+          type: boolean
+          nullable: true
+          title: Aanwezig
+          description: Voert u dit product?
+        productValtOnder:
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          nullable: true
+          description: Als een product valt onder een ander product (het product wordt
+            bijvoorbeeld geleverd middels een ander product), dan staat deze hier
+            vermeld. Als een product onder een ander product valt, dan moet er een
+            toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde
+            velden kunnen dan leeg blijven.
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLocatie'
+          nullable: true
+          description: Een lijst met locaties waarop dit product beschikbaar is.
+        versie:
+          type: integer
+          readOnly: true
+          description: De huidige versie van dit product.
+      required:
+      - locaties
+      - productAanwezig
+      - productValtOnder
+      - url
+      - versie
+    ProductVersieVertalingen:
       type: object
       properties:
         taal:
           allOf:
           - $ref: '#/components/schemas/TaalEnum'
+          readOnly: true
           description: De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
         titel:
           type: string
@@ -1541,64 +1794,6 @@ components:
       required:
       - datumWijziging
       - taal
-    ProductSingleTranslationGeneric:
-      type: object
-      properties:
-        productAanwezig:
-          type: boolean
-          nullable: true
-          title: Aanwezig
-          description: Voert u dit product?
-        productValtOnder:
-          allOf:
-          - $ref: '#/components/schemas/ProductBase'
-          nullable: true
-          description: Als een product valt onder een ander product (het product wordt
-            bijvoorbeeld geleverd middels een ander product), dan staat deze hier
-            vermeld. Als een product onder een ander product valt, dan moet er een
-            toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde
-            velden kunnen dan leeg blijven.
-        locaties:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductLocatie'
-          nullable: true
-          description: Een lijst met locaties waarop dit product beschikbaar is.
-      required:
-      - locaties
-      - productAanwezig
-      - productValtOnder
-    ProductVersie:
-      type: object
-      properties:
-        versie:
-          type: integer
-          maximum: 2147483647
-          minimum: 0
-          description: Het versienummer van het product.
-        gemaaktOp:
-          type: string
-          format: date-time
-          readOnly: true
-          description: De oorspronkelijke aanmaakdatum voor deze productversie.
-        gewijzigdOp:
-          type: string
-          format: date-time
-          readOnly: true
-          description: De wijzigingsdatum voor deze productversie.
-        publicatieDatum:
-          type: string
-          format: date
-          nullable: true
-          description: De datum van publicatie van de productversie.
-        vertalingen:
-          type: array
-          items:
-            $ref: '#/components/schemas/LocalizedProduct'
-      required:
-      - gemaaktOp
-      - gewijzigdOp
-      - vertalingen
     ProductenCatalogus:
       type: object
       description: Serializer for ProductenCatalogus details, including organizations

@@ -1,36 +1,22 @@
 import datetime
 
 from django.db import transaction
-from django.utils.dateparse import parse_date
 
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from rest_framework.reverse import reverse
-from sdg.accounts.models import User
 
 from sdg.api.serializers.fields import LabeledUrlListField
-from sdg.api.serializers.organisaties import (
-    BevoegdeOrganisatieSerializer,
-    LocatieBaseSerializer,
-    OpeningstijdenSerializer,
-)
 from sdg.api.serializers.producten import (
     ProcedureLink,
     ProductBaseSerializer,
     ProductLocatieSerializer,
 )
-from sdg.core.constants.product import DoelgroepChoices, TaalChoices
-from sdg.core.models.catalogus import ProductenCatalogus
-from sdg.organisaties.models import (
-    BevoegdeOrganisatie,
-    LokaleOverheid,
-    Lokatie as Locatie,
-)
+from sdg.core.constants.product import TaalChoices
+from sdg.organisaties.models import Lokatie as Locatie
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
-from sdg.producten.models.product import GeneriekProduct
 
 
-class ProductVersieSerializer(ProductBaseSerializer):
+class ProductVersieSingleSerializer(ProductBaseSerializer):
     product_valt_onder = ProductBaseSerializer(
         allow_null=True,
         required=True,
@@ -75,9 +61,9 @@ class ProductVersieSerializer(ProductBaseSerializer):
         return self._get_most_recent_version(obj, "versie", default=0)
 
     def validate(self, attrs):
-        product_uuid = self.context["view"].kwargs["product_uuid"]
+        versies_uuid = self.context["view"].kwargs["versies_uuid"]
         versie = int(self.context["view"].kwargs["versie"])
-        product = Product.objects.get(uuid=product_uuid)
+        product = Product.objects.get(uuid=versies_uuid)
 
         most_recent_version = product.most_recent_version
         if (
@@ -152,12 +138,12 @@ class ProductVersieSerializer(ProductBaseSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        product_uuid = self.context["view"].kwargs["product_uuid"]
+        versies_uuid = self.context["view"].kwargs["versies_uuid"]
         versie = int(self.context["view"].kwargs["versie"])
         product_valt_onder = validated_data.pop("product_valt_onder", None)
         locaties = validated_data.pop("locaties", None)
 
-        product = Product.objects.get(uuid=product_uuid)
+        product = Product.objects.get(uuid=versies_uuid)
         most_recent_version = product.most_recent_version
 
         if (
@@ -272,12 +258,19 @@ class ProductVersieVertalingenSerializer(ProductBaseSerializer):
         }
 
     def validate(self, attrs):
-        product_uuid = self.context["view"].kwargs["product_uuid"]
+        versies_uuid = self.context["view"].kwargs["versies_uuid"]
         versie = int(self.context["view"].kwargs["versie"])
         taal = self.context["view"].kwargs["taal"]
 
-        product = Product.objects.get(uuid=product_uuid)
-        product_versie = ProductVersie.objects.get(product=product, versie=versie)
+        product = Product.objects.get(uuid=versies_uuid)
+        try:
+            product_versie = ProductVersie.objects.get(product=product, versie=versie)
+        except ProductVersie.DoesNotExist:
+            raise serializers.ValidationError(
+                {
+                    "": f"De meegegeven versie nummer is verkeerd, het nummer moet '{product.most_recent_version.versie}' zijn"
+                }
+            )
 
         if product.most_recent_version.versie is not product_versie.versie:
             raise serializers.ValidationError(
@@ -351,12 +344,12 @@ class ProductVersieVertalingenSerializer(ProductBaseSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        product_uuid = self.context["view"].kwargs["product_uuid"]
+        versies_uuid = self.context["view"].kwargs["versies_uuid"]
         versie = int(self.context["view"].kwargs["versie"])
         taal = self.context["view"].kwargs["taal"]
 
         product = Product.objects.get(
-            uuid=product_uuid,
+            uuid=versies_uuid,
         )
         localized_product = LocalizedProduct.objects.get(
             product_versie__product=product,

@@ -1,18 +1,11 @@
-import datetime
-
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
-from rest_framework import mixins, serializers
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
 from sdg.api.filters import ProductFilterSet
 from sdg.api.permissions import OrganizationPermissions, WhitelistedPermission
-from sdg.api.serializers import (
-    ProductSerializer,
-    ProductVersieSerializer,
-)
+from sdg.api.serializers import ProductSerializer, ProductVersieSerializer
 from sdg.core.models.logius import Overheidsorganisatie
 from sdg.producten.models import Product, ProductVersie
 

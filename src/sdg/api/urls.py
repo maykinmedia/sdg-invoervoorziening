@@ -30,36 +30,37 @@ router.register("catalogi", CatalogusViewSet)
 router.register(
     "producten",
     ProductViewSet,
-    [
-        routers.nested(
-            "historie",
-            ProductHistoryViewSet,
-            basename="product-history",
-        ),
-    ],
 )
 router.register("organisaties", LokaleOverheidViewSet)
 router.register("locaties", LocatieViewSet, basename="locatie")
 router.register(
-    "versies",
-    ProductVersieViewSet,
-    [
+    prefix="versies",
+    viewset=ProductVersieViewSet,
+    basename="versies",
+    nested=[
         routers.nested(
-            r"(?P<versie>[0-9]+)",
-            ProductVersieCreateViewSet,
+            prefix=r"(?P<versie>[0-9]+)",
+            viewset=ProductVersieCreateViewSet,
             basename="versies-create",
         ),
         routers.nested(
-            r"(?P<versie>[0-9]+)/vertalingen/(?P<taal>[a-z]+)",
-            ProductVersieTranslationCreateViewSet,
+            prefix=r"(?P<versie>[0-9]+)/vertalingen/(?P<taal>[a-z]+)",
+            viewset=ProductVersieTranslationCreateViewSet,
             basename="versies-vertalingen-create",
         ),
         routers.nested(
-            r"(?P<versie>[0-9]+)/vertalingen",
-            ProductVersieTranslationListViewSet,
+            prefix=r"(?P<versie>[0-9]+)/vertalingen",
+            viewset=ProductVersieTranslationListViewSet,
             basename="versies-vertalingen-list",
         ),
     ],
+)
+
+product_history_router = routers.NestedSimpleRouter(
+    router, "producten", lookup="product"
+)
+product_history_router.register(
+    "historie", ProductHistoryViewSet, basename="product-history"
 )
 
 urlpatterns = [
@@ -72,6 +73,7 @@ urlpatterns = [
         name="index",
     ),
     path("v1/", include(router.urls)),
+    path("v1/", include(product_history_router.urls)),
     path(
         "v1/",
         include(

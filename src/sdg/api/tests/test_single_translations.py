@@ -31,8 +31,8 @@ from sdg.producten.tests.factories.product import (
 class SingleProductenTests(APITestCase):
     def setUp(self):
         self.referentie_organisatie = OverheidsorganisatieFactory.create(
-            owms_identifier="https://www.referentie.com",
-            owms_pref_label="referentie",
+            owms_identifier="https://www.single_producten_tests.com",
+            owms_pref_label="single_producten_tests",
             owms_end_date=None,
         )
         self.referentie_lokale_overheid = LokaleOverheidFactory.create(
@@ -51,11 +51,11 @@ class SingleProductenTests(APITestCase):
             lokale_overheid=self.referentie_lokale_overheid,
             is_referentie_catalogus=True,
             is_default_catalogus=True,
-            naam="referentie_catalogus",
+            naam="single_producten_tests_catalogus",
         )
         self.upn = UniformeProductnaamFactory.create(
-            upn_label="setup",
-            upn_uri="https://www.setup.com",
+            upn_label="single_producten_tests_first_product",
+            upn_uri="https://www.single_producten_tests_first_product.com",
         )
         self.generiek_product = GeneriekProductFactory.create(
             upn=self.upn,
@@ -69,15 +69,15 @@ class SingleProductenTests(APITestCase):
             product_aanwezig=True,
         )
         self.referentie_product_versie = ProductVersieFactory.create(
-            product=self.referentie_product
+            product=self.referentie_product, versie=1
         )
         self.referentie_localized_products = LocalizedProductFactory.create_batch(
             2, product_versie=self.referentie_product_versie
         )
 
         self.second_upn = UniformeProductnaamFactory.create(
-            upn_label="second_setup",
-            upn_uri="https://www.second-setup.com",
+            upn_label="single-producten-tests-second-product",
+            upn_uri="https://www.single-producten-tests-second-product.com",
         )
         self.second_generiek_product = GeneriekProductFactory.create(
             upn=self.second_upn,
@@ -91,7 +91,7 @@ class SingleProductenTests(APITestCase):
             product_aanwezig=True,
         )
         self.second_referentie_product_versie = ProductVersieFactory.create(
-            product=self.second_referentie_product
+            product=self.second_referentie_product, versie=1
         )
         LocalizedProductFactory.create_batch(
             2, product_versie=self.second_referentie_product_versie
@@ -113,14 +113,14 @@ class SingleProductenTests(APITestCase):
             product_aanwezig=True,
         )
         self.future_published_referentie_product_versie = ProductVersieFactory.create(
-            product=self.future_published_referentie_product
+            product=self.future_published_referentie_product, versie=1
         )
         LocalizedProductFactory.create_batch(
             2, product_versie=self.future_published_referentie_product_versie
         )
 
         self.organisatie = OverheidsorganisatieFactory.create(
-            owms_identifier="https://www.setup.com",
+            owms_identifier="https://www.single_producten_tests_first_organisatie.com",
             owms_pref_label="set up",
             owms_end_date=None,
         )
@@ -142,7 +142,7 @@ class SingleProductenTests(APITestCase):
             lokale_overheid=self.lokale_overheid,
             is_referentie_catalogus=False,
             is_default_catalogus=True,
-            naam="set_up_catalogus",
+            naam="single_producten_tests_first_catalogus",
         )
         self.product = SpecifiekProductFactory.create(
             generiek_product=self.generiek_product,
@@ -152,8 +152,7 @@ class SingleProductenTests(APITestCase):
             bevoegde_organisatie=self.bevoegde_organisatie,
         )
         self.product_versie = ProductVersieFactory.create(
-            product=self.product,
-            publicatie_datum=None,
+            product=self.product, publicatie_datum=None, versie=1
         )
         self.localized_products = LocalizedProductFactory.create_batch(
             2, product_versie=self.product_versie
@@ -167,8 +166,7 @@ class SingleProductenTests(APITestCase):
             bevoegde_organisatie=self.bevoegde_organisatie,
         )
         self.second_product_versie = ProductVersieFactory.create(
-            product=self.seccond_product,
-            publicatie_datum=NOW_DATE,
+            product=self.seccond_product, publicatie_datum=NOW_DATE, versie=1
         )
         self.second_localized_products = LocalizedProductFactory.create_batch(
             2, product_versie=self.second_product_versie
@@ -184,6 +182,7 @@ class SingleProductenTests(APITestCase):
         self.future_published_product_versie = ProductVersieFactory.create(
             product=self.future_published_product,
             publicatie_datum=FUTURE_DATE,
+            versie=1,
         )
         self.future_published_localized_products = LocalizedProductFactory.create_batch(
             2, product_versie=self.future_published_product_versie
@@ -193,14 +192,16 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
             },
         )
 
         body = {
             "productAanwezig": True,
-            "productValtOnder": {"upnUri": "https://www.second-setup.com"},
+            "productValtOnder": {
+                "upnUri": "https://www.single-producten-tests-second-product.com"
+            },
             "locaties": [
                 {"naam": self.locatie1.naam},
                 {"naam": self.locatie2.naam},
@@ -234,7 +235,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
             },
         )
@@ -276,14 +277,16 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-list",
             kwargs={
-                "product_uuid": str(self.future_published_product.uuid),
+                "versies_uuid": str(self.future_published_product.uuid),
                 "versie": str(self.future_published_product_versie.versie),
             },
         )
 
         body = {
             "productAanwezig": True,
-            "productValtOnder": {"upnUri": "https://www.second-setup.com"},
+            "productValtOnder": {
+                "upnUri": "https://www.single-producten-tests-second-product.com"
+            },
             "locaties": [
                 {"naam": self.locatie1.naam},
                 {"naam": self.locatie2.naam},
@@ -316,7 +319,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-vertalingen-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -382,7 +385,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-vertalingen-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -402,7 +405,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-vertalingen-create-list",
             kwargs={
-                "product_uuid": str(self.future_published_product.uuid),
+                "versies_uuid": str(self.future_published_product.uuid),
                 "versie": str(self.future_published_product_versie.versie),
                 "taal": "nl",
             },
@@ -468,7 +471,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
             },
         )
@@ -491,7 +494,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-vertalingen-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -557,14 +560,16 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
             },
         )
 
         generic_single_body = {
             "productAanwezig": False,
-            "productValtOnder": {"upnUri": "https://www.second-setup.com"},
+            "productValtOnder": {
+                "upnUri": "https://www.single-producten-tests-second-product.com"
+            },
             "locaties": [],
         }
 
@@ -580,7 +585,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-vertalingen-create-list",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -650,7 +655,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-vertalingen-create-list",
             kwargs={
-                "product_uuid": str(self.seccond_product.uuid),
+                "versies_uuid": str(self.seccond_product.uuid),
                 "versie": str(self.second_product_versie.versie),
                 "taal": "nl",
             },
@@ -702,7 +707,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-publish",
             kwargs={
-                "product_uuid": str(self.product.uuid),
+                "versies_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
             },
         )
@@ -721,7 +726,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-publish",
             kwargs={
-                "product_uuid": str(self.seccond_product.uuid),
+                "versies_uuid": str(self.seccond_product.uuid),
                 "versie": str(self.second_product_versie.versie),
             },
         )
@@ -753,7 +758,7 @@ class SingleProductenTests(APITestCase):
             list_url = reverse(
                 "api:versies-create-list",
                 kwargs={
-                    "product_uuid": str(self.product.uuid),
+                    "versies_uuid": str(self.product.uuid),
                     "versie": str(self.product_versie.versie),
                 },
             )
@@ -778,7 +783,7 @@ class SingleProductenTests(APITestCase):
             list_url = reverse(
                 "api:versies-create-publish",
                 kwargs={
-                    "product_uuid": str(self.product.uuid),
+                    "versies_uuid": str(self.product.uuid),
                     "versie": str(self.product_versie.versie),
                 },
             )
@@ -808,14 +813,16 @@ class SingleProductenTests(APITestCase):
             list_url = reverse(
                 "api:versies-create-list",
                 kwargs={
-                    "product_uuid": str(self.product.uuid),
+                    "versies_uuid": str(self.product.uuid),
                     "versie": str(self.product_versie.versie),
                 },
             )
 
             body = {
                 "productAanwezig": True,
-                "productValtOnder": {"upnUri": "https://www.second-setup.com"},
+                "productValtOnder": {
+                    "upnUri": "https://www.single-producten-tests-second-product.com"
+                },
                 "locaties": [],
             }
 
@@ -828,12 +835,14 @@ class SingleProductenTests(APITestCase):
                 **headers,
             )
 
+            print(response.json())
+
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
             list_url = reverse(
                 "api:versies-create-publish",
                 kwargs={
-                    "product_uuid": str(self.product.uuid),
+                    "versies_uuid": str(self.product.uuid),
                     "versie": str(self.product_versie.versie),
                 },
             )
@@ -874,7 +883,7 @@ class SingleProductenTests(APITestCase):
                 bevoegde_organisatie=self.referentie_bevoegde_organisatie,
                 product_aanwezig=True,
             )
-            ProductVersieFactory.create(product=referentie_product)
+            ProductVersieFactory.create(product=referentie_product, versie=1)
 
             product = SpecifiekProductFactory.create(
                 generiek_product=generiek_product,
@@ -885,8 +894,7 @@ class SingleProductenTests(APITestCase):
                 bevoegde_organisatie=self.bevoegde_organisatie,
             )
             product_versie = ProductVersieFactory.create(
-                product=product,
-                publicatie_datum=FUTURE_DATE,
+                product=product, publicatie_datum=FUTURE_DATE, versie=1
             )
             LocalizedProductFactory.create_batch(
                 2, product_versie=product_versie, product_aanwezig_toelichting="error"
@@ -895,7 +903,7 @@ class SingleProductenTests(APITestCase):
             url = reverse(
                 "api:versies-create-publish",
                 kwargs={
-                    "product_uuid": str(product.uuid),
+                    "versies_uuid": str(product.uuid),
                     "versie": str(product_versie.versie),
                 },
             )
@@ -936,7 +944,7 @@ class SingleProductenTests(APITestCase):
                 bevoegde_organisatie=self.referentie_bevoegde_organisatie,
                 product_aanwezig=True,
             )
-            ProductVersieFactory.create(product=referentie_product)
+            ProductVersieFactory.create(product=referentie_product, versie=1)
 
             product = SpecifiekProductFactory.create(
                 generiek_product=generiek_product,
@@ -947,8 +955,7 @@ class SingleProductenTests(APITestCase):
                 bevoegde_organisatie=self.bevoegde_organisatie,
             )
             product_versie = ProductVersieFactory.create(
-                product=product,
-                publicatie_datum=FUTURE_DATE,
+                product=product, publicatie_datum=FUTURE_DATE, versie=1
             )
             LocalizedProductFactory.create_batch(
                 2, product_versie=product_versie, product_valt_onder_toelichting="error"
@@ -957,7 +964,7 @@ class SingleProductenTests(APITestCase):
             url = reverse(
                 "api:versies-create-publish",
                 kwargs={
-                    "product_uuid": str(product.uuid),
+                    "versies_uuid": str(product.uuid),
                     "versie": str(product_versie.versie),
                 },
             )
@@ -986,7 +993,7 @@ class SingleProductenTests(APITestCase):
         list_url = reverse(
             "api:versies-create-publish",
             kwargs={
-                "product_uuid": str(self.future_published_product.uuid),
+                "versies_uuid": str(self.future_published_product.uuid),
                 "versie": str(self.future_published_product_versie.versie),
             },
         )
