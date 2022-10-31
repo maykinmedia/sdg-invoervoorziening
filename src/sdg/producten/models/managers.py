@@ -82,16 +82,6 @@ class ProductQuerySet(models.QuerySet):
             _name=F("generiek_product__upn__upn_label"),
         )
 
-    def annotate_area(self):
-        """
-        Annotate the area for the product.
-        The field is filled with the data from the specific or reference product depending on
-        whether `referentie_product` exists.
-        """
-        return self.annotate(
-            _area=F("generiek_product__upn__thema__informatiegebied__informatiegebied"),
-        )
-
     def annotate_latest_publication_date(self):
         return self.annotate(_latest_publication_date=Max("versies__publicatie_datum"))
 

@@ -277,11 +277,14 @@ class Product(ProductFieldMixin, models.Model):
             self, "active_version", manager_methods=[ProductQuerySet.active]
         )
 
-    @property
-    def area(self):
-        """:returns: The generic product's upn's theme's information area."""
-        return get_from_cache(
-            self, "area", manager_methods=[ProductQuerySet.annotate_area]
+    def get_areas(self):
+        """
+        :returns: A list of areas matching the UPN's "sdg" codes.
+        """
+        from sdg.core.models import Thema
+
+        return Thema.objects.filter(code__in=self.upn.sdg).values_list(
+            "informatiegebied__informatiegebied", flat=True
         )
 
     def get_municipality_locations(self):

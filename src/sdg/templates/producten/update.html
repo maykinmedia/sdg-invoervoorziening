@@ -3,9 +3,6 @@
 
 {% block page_intro %}
     <p class="subheading">
-        <i class="fa fa-tags"></i> {{ product.area }}
-    </p>
-    <p class="subheading">
         {% trans "Onderstaande velden kun je apart bewerken. Je kunt alles in één keer opslaan met de knoppen onderaan." %}
     </p>
 {% endblock %}
@@ -200,14 +197,13 @@
                 {% endif %}
 
                 {% with field=product_form.bevoegde_organisatie %}
-                    {% with configuration=field.configuration.0 %}
                         <tr>
                             <td>
                                 <div class="form__control">
                                     <header class="form__control-header">
                                         <label class="form__label">
-                                            {{ configuration.0|default:field.label|capfirst }}
-                                            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>
+                                            {{ field.label }}
+                                            <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                                         </label>
                                     </header>
                                     <div class="form__control-body">
@@ -218,7 +214,6 @@
                                 </div>
                             </td>
                         </tr>
-                    {% endwith %}
                 {% endwith %}
 
                 {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
@@ -260,6 +255,23 @@
                         </td>
                     </tr>
                 {% endwith %}
+                <tr>
+                    <td>
+                        <div class="form__control">
+                            <header class="form__control-header">
+                                <label class="form__label">
+                                    {% trans "Informatiegebied" %}
+                                    <i class="fas fa-info-circle fa-xs dark" title="{% trans 'Informatiegebied in verband met dit product.' %}"></i>
+                                </label>
+                            </header>
+                            <div class="form__control-body">
+                                <div class="tabs__table-cell--versions"></div>
+                                <span class="tabs__table-cell--value">{{ areas|join:", " }}</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
                 <tr>
                     <td>
                         {% nonlocalized_form version_form include_form=False fields="interne_opmerkingen" %}
