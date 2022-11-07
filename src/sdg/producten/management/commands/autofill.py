@@ -72,7 +72,10 @@ class Command(BaseCommand):
                             catalogus=catalog,
                             defaults={"bevoegde_organisatie": default_auth_org},
                         )
-                        if p_created:
+                        if p_created or product.versies.count() == 0:
+                            # In case there are no versions, someone manually
+                            # deleted them as this is the only way to create
+                            # products in the reference catalogs.
                             version = ProductVersie.objects.create(
                                 product=product, publicatie_datum=None
                             )
