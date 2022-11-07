@@ -3,6 +3,51 @@
 Het functioneel beheer wordt uitgevoerd door VNG en bestaat uit een aantal veel
 voorkomende handmatige acties.
 
+## Producten beheer
+
+Producten kennen een bepaalde status in de PDC. Deze status is enkel zichtbaar
+voor beheerders. Gebruikers van de PDC merken enkel dat het product wel of niet
+zichtbaar is.
+
+* **Nieuw** Het product is nieuw in de UPL en nog niet voorzien van een 
+  generieke tekst. Een beheerder kan nu nog niets met het product.
+* **Gereed voor beheer** Het product is voorzien van een generieke tekst en kan
+  voorzien worden van een standaard tekst in de invoervoorziening.
+* **Gereed voor publicatie** Het product is voorzien van een standaard tekst en
+  kan door een beheerder beschikbaar gemaakt worden in alle gemeentelijke PDCs.
+* **Vervallen in de UPL** Het product komt niet (meer) voor in de UPL maar het 
+  generieke product is (nog) niet voorzien van een einddatum (de datum waarop 
+  gemeenten het product niet meer kunnen zien/bewerken en uit de API verdwijnt).
+* **Wordt binnenkort verwijderd** Het generieke product heeft een einddatum. Op
+  deze einddatum verdwijnt het product uit alle gemeentelijke PDCs.
+* **Verwijderd** Het product is niet meer beschikbaar. De einddatum van het
+  generieke product is bereikt.
+
+### Producten introduceren
+
+Er zijn diverse scenario's denkbaar waarin een product wordt geïntroduceerd.
+Het product is bijvoorbeeld toegevoegd aan de UPL of het product valt (opeens) 
+onder de SDG-verordening.
+
+De product status wordt in dit geval automatisch **Nieuw**. Als het product
+voorzien wordt (vanuit de Nationale Portalen) door een generieke tekst, dan
+zal de status **Gereed voor beheer** worden.
+
+Deze status houdt in dat het product zichtbaar is voor VNG in de 
+invoervoorziening, zodat de standaardtekst ingevuld kan worden. Zodra de VNG 
+het product publiceerd, wordt de status automatisch **Gereed voor publicatie**
+waarna ook gemeenten het product kunnen zien.
+
+### Producten uitfaseren
+
+Er zijn diverse scenario's denkbaar waarin een product wordt uitgefaseerd.
+Het product wordt bijvoorbeeld verwijderd uit de UPL of valt niet meer onder de SDG-verordening.
+
+De product status wordt in dit geval automatisch **Vervallen in de UPL**. De
+beheerder dient een einddatum te zetten op het generieke product. Op deze datum
+zal het product niet meer beschikbaar zijn. De status wordt hierna
+**Wordt binnenkort verwijderd**.
+
 ## Handmatige acties
 
 ### Controleren van gemeenten zonder gemeentelijke beheerder
@@ -120,3 +165,8 @@ ontbreken van een API van de Nationale Portalen.
 
 Dagelijks rond 4:00 (UTC) worden allerhande log-bestanden opgeschoond waar 
 nodig.
+
+### Product status bijwerken
+
+Het berekenen van de product status gebeurt elke 5 minuten. Deze status is van
+diverse factoren afhankelijk.

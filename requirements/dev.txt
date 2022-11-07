@@ -149,7 +149,7 @@ dill==0.3.4
     #   pylint
 distlib==0.3.4
     # via virtualenv
-django==3.2.13
+django==3.2.16
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -315,7 +315,7 @@ django-rosetta==0.9.8
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-django-sendfile2==0.6.1
+django-sendfile2==0.7.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -543,7 +543,7 @@ phonenumbers==8.12.47
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   maykin-django-two-factor-auth
-pillow==9.1.0
+pillow==9.1.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
