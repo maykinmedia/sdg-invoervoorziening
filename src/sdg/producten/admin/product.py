@@ -97,6 +97,11 @@ class ProductVersieAdmin(admin.ModelAdmin):
         "gemaakt_op",
         "gewijzigd_op",
     )
+    list_filter = (
+        "product__catalogus__lokale_overheid",
+        "product__generiek_product__upn",
+    )
+
     form = ProductVersieForm
 
     inlines = (LocalizedProductInline,)
