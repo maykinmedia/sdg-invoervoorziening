@@ -181,7 +181,10 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             Product.objects.most_recent()
             .exclude(generiek_product__eind_datum__lte=datetime.date.today())
             .active()
-            .select_related("catalogus__lokale_overheid")
+            .select_related(
+                "catalogus__lokale_overheid",
+                "generiek_product__upn",
+            )
         )
 
     def _save_version_form(
@@ -302,6 +305,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             self.product.get_all_versions()
             | self.product.reference_product.get_all_versions()
         )
+
+        context["areas"] = self.product.get_areas()
 
         # FIXME: Optimize?
         context["localized_form_fields"] = [

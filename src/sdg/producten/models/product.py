@@ -277,6 +277,16 @@ class Product(ProductFieldMixin, models.Model):
             self, "active_version", manager_methods=[ProductQuerySet.active]
         )
 
+    def get_areas(self):
+        """
+        :returns: A list of areas matching the UPN's "sdg" codes.
+        """
+        from sdg.core.models import Thema
+
+        return Thema.objects.filter(code__in=self.upn.sdg).values_list(
+            "informatiegebied__informatiegebied", flat=True
+        )
+
     def get_municipality_locations(self):
         """:returns: All available locations for this product. Selected locations are labeled as a boolean."""
         return self.catalogus.lokale_overheid.locaties.annotate(
