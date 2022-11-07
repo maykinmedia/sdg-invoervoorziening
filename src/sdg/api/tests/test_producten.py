@@ -8,6 +8,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from sdg.api.tests.factories.token import TokenAuthorizationFactory
+from sdg.core.constants import GenericProductStatus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import (
     OverheidsorganisatieFactory,
@@ -274,6 +275,21 @@ class ProductenTests(APITestCase):
 
         data = response.json()["results"]
         self.assertEqual(6, len(data))
+
+    def test_list_producten_with_deleted_product_not_shown(self):
+        self.generiek_product.product_status = GenericProductStatus.DELETED
+        self.generiek_product.save()
+
+        list_url = reverse("api:product-list")
+
+        response = self.client.get(list_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+        self.assertEqual(3, len(data))
+        for product in data:
+            self.assertNotEqual(product["upnLabel"], str(self.generiek_product))
 
     def test_retrieve_product_by_uuid(self):
         detail_url = reverse("api:product-detail", args=[self.product.uuid])

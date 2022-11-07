@@ -3,6 +3,8 @@ from datetime import date
 from django.db import models
 from django.db.models import Case, F, Max, OuterRef, Prefetch, Subquery, When
 
+from sdg.core.constants import GenericProductStatus
+
 
 class ProductQuerySet(models.QuerySet):
     def active(self, active_on=None):
@@ -94,6 +96,15 @@ class ProductQuerySet(models.QuerySet):
             "generiek_product__upn",
             "referentie_product",
         )
+
+    def exclude_generic_status(self):
+        """
+        Exclude products with certain generic product status.
+        """
+        status_to_hide = [
+            GenericProductStatus.DELETED,
+        ]
+        return self.exclude(generiek_product__product_status__in=status_to_hide)
 
 
 class ProductVersieQuerySet(models.QuerySet):
