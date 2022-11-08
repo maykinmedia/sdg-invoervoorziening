@@ -160,6 +160,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductenCatalogusList'
+              examples:
+                Organisaties/put:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                      url: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      domein: SDG
+                      naam: Naam (SDG Catalogus)
+                      organisatie:
+                        url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                        owmsPrefLabel: Organisatie naam
+                        owmsEndDate: '2023-01-01T00:01:22Z'
+                      isReferentieCatalogus: false
+                      referentieCatalogus: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      toelichting: Een stuk tekst die toelichting geeft over de catalogus
+                      versie: 1
+                      producten:
+                      - url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        upnUri: http://standaarden.overheid.nl/owms/terms/product
+                        upnLabel: Naam van het product
           description: ''
   /api/v1/catalogi/{uuid}:
     get:
@@ -182,6 +206,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductenCatalogus'
+              examples:
+                Organisaties/put:
+                  value:
+                    url: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    domein: SDG
+                    naam: Naam (SDG Catalogus)
+                    organisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2023-01-01T00:01:22Z'
+                    isReferentieCatalogus: false
+                    referentieCatalogus: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    toelichting: Een stuk tekst die toelichting geeft over de catalogus
+                    versie: 1
+                    producten:
+                    - url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      upnUri: http://standaarden.overheid.nl/owms/terms/product
+                      upnLabel: Naam van het product
           description: ''
   /api/v1/locaties:
     get:
@@ -222,6 +266,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedLocatieList'
+              examples:
+                Locaties:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                      url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      naam: Locatie naam
+                      straat: Straat naam
+                      nummer: '12'
+                      postcode: 1234AA
+                      plaats: Plaats naam
+                      land: Nederland
+                      openingstijdenOpmerking: Informatie over de locatie.
+                      organisatie:
+                        url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                        owmsPrefLabel: Organisatie naam
+                        owmsEndDate: '2022-01-01T00:01:22Z'
+                      openingstijden:
+                        maandag:
+                        - 07:00-18:00
+                        dinsdag:
+                        - 07:00-18:00
+                        woensdag:
+                        - 07:00-18:00
+                        donderdag:
+                        - 07:00-18:00
+                        vrijdag:
+                        - 07:00-18:00
+                        zaterdag:
+                        - 09:00-12:00
+                        - 13:00-15:00
+                        zondag:
+                        - 09:00-12:00
+                        - 13:00-15:00
           description: ''
     post:
       operationId: locatiesCreate
@@ -233,6 +314,39 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Locatie'
+            examples:
+              Locaties:
+                value:
+                  url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  naam: Locatie naam
+                  straat: Straat naam
+                  nummer: '12'
+                  postcode: 1234AA
+                  plaats: Plaats naam
+                  land: Nederland
+                  openingstijdenOpmerking: Informatie over de locatie.
+                  organisatie:
+                    url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                    owmsPrefLabel: Organisatie naam
+                    owmsEndDate: '2022-01-01T00:01:22Z'
+                  openingstijden:
+                    maandag:
+                    - 07:00-18:00
+                    dinsdag:
+                    - 07:00-18:00
+                    woensdag:
+                    - 07:00-18:00
+                    donderdag:
+                    - 07:00-18:00
+                    vrijdag:
+                    - 07:00-18:00
+                    zaterdag:
+                    - 09:00-12:00
+                    - 13:00-15:00
+                    zondag:
+                    - 09:00-12:00
+                    - 13:00-15:00
         required: true
       security:
       - tokenAuth: []
@@ -242,6 +356,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                Locaties:
+                  value:
+                    url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    naam: Locatie naam
+                    straat: Straat naam
+                    nummer: '12'
+                    postcode: 1234AA
+                    plaats: Plaats naam
+                    land: Nederland
+                    openingstijdenOpmerking: Informatie over de locatie.
+                    organisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2022-01-01T00:01:22Z'
+                    openingstijden:
+                      maandag:
+                      - 07:00-18:00
+                      dinsdag:
+                      - 07:00-18:00
+                      woensdag:
+                      - 07:00-18:00
+                      donderdag:
+                      - 07:00-18:00
+                      vrijdag:
+                      - 07:00-18:00
+                      zaterdag:
+                      - 09:00-12:00
+                      - 13:00-15:00
+                      zondag:
+                      - 09:00-12:00
+                      - 13:00-15:00
           description: ''
   /api/v1/locaties/{uuid}:
     get:
@@ -263,6 +410,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                Locaties:
+                  value:
+                    url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    naam: Locatie naam
+                    straat: Straat naam
+                    nummer: '12'
+                    postcode: 1234AA
+                    plaats: Plaats naam
+                    land: Nederland
+                    openingstijdenOpmerking: Informatie over de locatie.
+                    organisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2022-01-01T00:01:22Z'
+                    openingstijden:
+                      maandag:
+                      - 07:00-18:00
+                      dinsdag:
+                      - 07:00-18:00
+                      woensdag:
+                      - 07:00-18:00
+                      donderdag:
+                      - 07:00-18:00
+                      vrijdag:
+                      - 07:00-18:00
+                      zaterdag:
+                      - 09:00-12:00
+                      - 13:00-15:00
+                      zondag:
+                      - 09:00-12:00
+                      - 13:00-15:00
           description: ''
     put:
       operationId: locatiesUpdate
@@ -282,6 +462,39 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Locatie'
+            examples:
+              Locaties:
+                value:
+                  url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  naam: Locatie naam
+                  straat: Straat naam
+                  nummer: '12'
+                  postcode: 1234AA
+                  plaats: Plaats naam
+                  land: Nederland
+                  openingstijdenOpmerking: Informatie over de locatie.
+                  organisatie:
+                    url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                    owmsPrefLabel: Organisatie naam
+                    owmsEndDate: '2022-01-01T00:01:22Z'
+                  openingstijden:
+                    maandag:
+                    - 07:00-18:00
+                    dinsdag:
+                    - 07:00-18:00
+                    woensdag:
+                    - 07:00-18:00
+                    donderdag:
+                    - 07:00-18:00
+                    vrijdag:
+                    - 07:00-18:00
+                    zaterdag:
+                    - 09:00-12:00
+                    - 13:00-15:00
+                    zondag:
+                    - 09:00-12:00
+                    - 13:00-15:00
         required: true
       security:
       - tokenAuth: []
@@ -291,6 +504,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                Locaties:
+                  value:
+                    url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    naam: Locatie naam
+                    straat: Straat naam
+                    nummer: '12'
+                    postcode: 1234AA
+                    plaats: Plaats naam
+                    land: Nederland
+                    openingstijdenOpmerking: Informatie over de locatie.
+                    organisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2022-01-01T00:01:22Z'
+                    openingstijden:
+                      maandag:
+                      - 07:00-18:00
+                      dinsdag:
+                      - 07:00-18:00
+                      woensdag:
+                      - 07:00-18:00
+                      donderdag:
+                      - 07:00-18:00
+                      vrijdag:
+                      - 07:00-18:00
+                      zaterdag:
+                      - 09:00-12:00
+                      - 13:00-15:00
+                      zondag:
+                      - 09:00-12:00
+                      - 13:00-15:00
           description: ''
     patch:
       operationId: locatiesPartialUpdate
@@ -310,6 +556,39 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedLocatie'
+            examples:
+              Locaties:
+                value:
+                  url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  naam: Locatie naam
+                  straat: Straat naam
+                  nummer: '12'
+                  postcode: 1234AA
+                  plaats: Plaats naam
+                  land: Nederland
+                  openingstijdenOpmerking: Informatie over de locatie.
+                  organisatie:
+                    url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                    owmsPrefLabel: Organisatie naam
+                    owmsEndDate: '2022-01-01T00:01:22Z'
+                  openingstijden:
+                    maandag:
+                    - 07:00-18:00
+                    dinsdag:
+                    - 07:00-18:00
+                    woensdag:
+                    - 07:00-18:00
+                    donderdag:
+                    - 07:00-18:00
+                    vrijdag:
+                    - 07:00-18:00
+                    zaterdag:
+                    - 09:00-12:00
+                    - 13:00-15:00
+                    zondag:
+                    - 09:00-12:00
+                    - 13:00-15:00
       security:
       - tokenAuth: []
       responses:
@@ -318,6 +597,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Locatie'
+              examples:
+                Locaties:
+                  value:
+                    url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    naam: Locatie naam
+                    straat: Straat naam
+                    nummer: '12'
+                    postcode: 1234AA
+                    plaats: Plaats naam
+                    land: Nederland
+                    openingstijdenOpmerking: Informatie over de locatie.
+                    organisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2022-01-01T00:01:22Z'
+                    openingstijden:
+                      maandag:
+                      - 07:00-18:00
+                      dinsdag:
+                      - 07:00-18:00
+                      woensdag:
+                      - 07:00-18:00
+                      donderdag:
+                      - 07:00-18:00
+                      vrijdag:
+                      - 07:00-18:00
+                      zaterdag:
+                      - 09:00-12:00
+                      - 13:00-15:00
+                      zondag:
+                      - 09:00-12:00
+                      - 13:00-15:00
           description: ''
     delete:
       operationId: locatiesDestroy
@@ -368,6 +680,38 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedLokaleOverheidList'
+              examples:
+                Organisaties/get:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2022-01-01T00:01:22Z'
+                      locaties:
+                      - url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        naam: Locatie naam
+                        straat: Straat naam
+                        nummer: '12'
+                        postcode: 1234AA
+                        plaats: Plaats naam
+                        land: Nederland
+                        openingstijdenOpmerking: Informatie over de locatie.
+                      catalogi:
+                      - http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      contactWebsite: http://example.com
+                      contactEmailadres: user@example.com
+                      contactTelefoonnummer: '31021234567'
+                      contactFormulierLink: http://example.com
+                      bevoegdeOrganisaties:
+                      - naam: Organisatie naam
+                        owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                        owmsPrefLabel: Organisatie naam
+                        owmsEndDate: '2022-01-01T00:01:22Z'
           description: ''
   /api/v1/organisaties/{uuid}:
     get:
@@ -390,6 +734,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LokaleOverheid'
+              examples:
+                Organisaties/get:
+                  value:
+                    url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                    owmsPrefLabel: Organisatie naam
+                    owmsEndDate: '2022-01-01T00:01:22Z'
+                    locaties:
+                    - url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      naam: Locatie naam
+                      straat: Straat naam
+                      nummer: '12'
+                      postcode: 1234AA
+                      plaats: Plaats naam
+                      land: Nederland
+                      openingstijdenOpmerking: Informatie over de locatie.
+                    catalogi:
+                    - http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    contactWebsite: http://example.com
+                    contactEmailadres: user@example.com
+                    contactTelefoonnummer: '31021234567'
+                    contactFormulierLink: http://example.com
+                    bevoegdeOrganisaties:
+                    - naam: Organisatie naam
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2022-01-01T00:01:22Z'
           description: ''
     put:
       operationId: organisatiesUpdate
@@ -409,6 +781,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LokaleOverheidUpdate'
+            examples:
+              Organisaties/put:
+                value:
+                  contactWebsite: http://example.com
+                  contactEmailadres: user@example.com
+                  contactTelefoonnummer: '31021234567'
+                  contactFormulierLink: http://example.com
       security:
       - tokenAuth: []
       responses:
@@ -417,6 +796,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LokaleOverheidUpdate'
+              examples:
+                Organisaties/put:
+                  value:
+                    contactWebsite: http://example.com
+                    contactEmailadres: user@example.com
+                    contactTelefoonnummer: '31021234567'
+                    contactFormulierLink: http://example.com
           description: ''
     patch:
       operationId: organisatiesPartialUpdate
@@ -436,6 +822,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/PatchedLokaleOverheidUpdate'
+            examples:
+              Organisaties/put:
+                value:
+                  contactWebsite: http://example.com
+                  contactEmailadres: user@example.com
+                  contactTelefoonnummer: '31021234567'
+                  contactFormulierLink: http://example.com
       security:
       - tokenAuth: []
       responses:
@@ -444,6 +837,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LokaleOverheidUpdate'
+              examples:
+                Organisaties/put:
+                  value:
+                    contactWebsite: http://example.com
+                    contactEmailadres: user@example.com
+                    contactTelefoonnummer: '31021234567'
+                    contactFormulierLink: http://example.com
           description: ''
   /api/v1/producten:
     get:
@@ -546,6 +946,98 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductList'
+              examples:
+                Producten:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                      url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      upnLabel: Product label
+                      upnUri: http://example.com/owms/terms/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      versie: 1
+                      publicatieDatum: '2022-01-01'
+                      productAanwezig: true
+                      productValtOnder:
+                        url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        upnUri: http://standaarden.overheid.nl/owms/terms/product
+                        upnLabel: Product label
+                      verantwoordelijkeOrganisatie:
+                        url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                        owmsPrefLabel: Organisatie naam
+                        owmsEndDate: ''
+                      bevoegdeOrganisatie:
+                        url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                        owmsPrefLabel: Organisatie naam
+                        owmsEndDate: '2023-01-01T00:01:22Z'
+                      catalogus: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      locaties:
+                      - openingstijden:
+                          maandag:
+                          - 07:00-18:00
+                          dinsdag:
+                          - 07:00-18:00
+                          woensdag:
+                          - 07:00-18:00
+                          donderdag:
+                          - 07:00-18:00
+                          vrijdag:
+                          - 07:00-18:00
+                          zaterdag:
+                          - 09:00-12:00
+                          - 13:00-15:00
+                          zondag:
+                          - 09:00-12:00
+                          - 13:00-15:00
+                        url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                        naam: Locatie naam
+                      doelgroep: eu-burger
+                      vertalingen:
+                      - taal: nl
+                        titel: titel
+                        tekst: Lorem ipsum
+                        links:
+                        - label: label
+                          url: http://voorbeeld.nl
+                        procedureBeschrijving: procedure beschijving
+                        bewijs: Lorem ipsum
+                        vereisten: Lorem ipsum
+                        bezwaarEnBeroep: Lorem ipsum
+                        kostenEnBetaalmethoden: Lorem ipsum
+                        uitersteTermijn: Lorem ipsum
+                        wtdBijGeenReactie: Lorem ipsum
+                        procedureLink:
+                          label: label
+                          url: http://voorbeeld.nl
+                        productAanwezigToelichting: Lorem ipsum
+                        productValtOnderToelichting: Lorem ipsum
+                        datumWijziging: '2022-01-01T00:01:22Z'
+                      - taal: en
+                        titel: titel
+                        tekst: Lorem ipsum
+                        links:
+                        - label: label
+                          url: http://example.com
+                        procedureBeschrijving: procedure beschijving
+                        bewijs: Lorem ipsum
+                        vereisten: Lorem ipsum
+                        bezwaarEnBeroep: Lorem ipsum
+                        kostenEnBetaalmethoden: Lorem ipsum
+                        uitersteTermijn: Lorem ipsum
+                        wtdBijGeenReactie: Lorem ipsum
+                        procedureLink:
+                          label: label
+                          url: http://example.com
+                        productAanwezigToelichting: Lorem ipsum
+                        productValtOnderToelichting: Lorem ipsum
+                        datumWijziging: '2022-01-01T00:01:22Z'
+                      beschikbareTalen:
+                      - nl
+                      - en
           description: ''
     post:
       operationId: productenCreate
@@ -568,6 +1060,94 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Product'
+            examples:
+              Producten:
+                value:
+                  url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  upnLabel: Product label
+                  upnUri: http://example.com/owms/terms/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  versie: 1
+                  publicatieDatum: '2022-01-01'
+                  productAanwezig: true
+                  productValtOnder:
+                    url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    upnUri: http://standaarden.overheid.nl/owms/terms/product
+                    upnLabel: Product label
+                  verantwoordelijkeOrganisatie:
+                    url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                    owmsPrefLabel: Organisatie naam
+                    owmsEndDate: ''
+                  bevoegdeOrganisatie:
+                    url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                    owmsPrefLabel: Organisatie naam
+                    owmsEndDate: '2023-01-01T00:01:22Z'
+                  catalogus: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                  locaties:
+                  - openingstijden:
+                      maandag:
+                      - 07:00-18:00
+                      dinsdag:
+                      - 07:00-18:00
+                      woensdag:
+                      - 07:00-18:00
+                      donderdag:
+                      - 07:00-18:00
+                      vrijdag:
+                      - 07:00-18:00
+                      zaterdag:
+                      - 09:00-12:00
+                      - 13:00-15:00
+                      zondag:
+                      - 09:00-12:00
+                      - 13:00-15:00
+                    url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    naam: Locatie naam
+                  doelgroep: eu-burger
+                  vertalingen:
+                  - taal: nl
+                    titel: titel
+                    tekst: Lorem ipsum
+                    links:
+                    - label: label
+                      url: http://voorbeeld.nl
+                    procedureBeschrijving: procedure beschijving
+                    bewijs: Lorem ipsum
+                    vereisten: Lorem ipsum
+                    bezwaarEnBeroep: Lorem ipsum
+                    kostenEnBetaalmethoden: Lorem ipsum
+                    uitersteTermijn: Lorem ipsum
+                    wtdBijGeenReactie: Lorem ipsum
+                    procedureLink:
+                      label: label
+                      url: http://voorbeeld.nl
+                    productAanwezigToelichting: Lorem ipsum
+                    productValtOnderToelichting: Lorem ipsum
+                    datumWijziging: '2022-01-01T00:01:22Z'
+                  - taal: en
+                    titel: titel
+                    tekst: Lorem ipsum
+                    links:
+                    - label: label
+                      url: http://example.com
+                    procedureBeschrijving: procedure beschijving
+                    bewijs: Lorem ipsum
+                    vereisten: Lorem ipsum
+                    bezwaarEnBeroep: Lorem ipsum
+                    kostenEnBetaalmethoden: Lorem ipsum
+                    uitersteTermijn: Lorem ipsum
+                    wtdBijGeenReactie: Lorem ipsum
+                    procedureLink:
+                      label: label
+                      url: http://example.com
+                    productAanwezigToelichting: Lorem ipsum
+                    productValtOnderToelichting: Lorem ipsum
+                    datumWijziging: '2022-01-01T00:01:22Z'
+                  beschikbareTalen:
+                  - nl
+                  - en
         required: true
       security:
       - tokenAuth: []
@@ -577,6 +1157,94 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                Producten:
+                  value:
+                    url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    upnLabel: Product label
+                    upnUri: http://example.com/owms/terms/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    versie: 1
+                    publicatieDatum: '2022-01-01'
+                    productAanwezig: true
+                    productValtOnder:
+                      url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      upnUri: http://standaarden.overheid.nl/owms/terms/product
+                      upnLabel: Product label
+                    verantwoordelijkeOrganisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: ''
+                    bevoegdeOrganisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2023-01-01T00:01:22Z'
+                    catalogus: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    locaties:
+                    - openingstijden:
+                        maandag:
+                        - 07:00-18:00
+                        dinsdag:
+                        - 07:00-18:00
+                        woensdag:
+                        - 07:00-18:00
+                        donderdag:
+                        - 07:00-18:00
+                        vrijdag:
+                        - 07:00-18:00
+                        zaterdag:
+                        - 09:00-12:00
+                        - 13:00-15:00
+                        zondag:
+                        - 09:00-12:00
+                        - 13:00-15:00
+                      url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      naam: Locatie naam
+                    doelgroep: eu-burger
+                    vertalingen:
+                    - taal: nl
+                      titel: titel
+                      tekst: Lorem ipsum
+                      links:
+                      - label: label
+                        url: http://voorbeeld.nl
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: Lorem ipsum
+                      vereisten: Lorem ipsum
+                      bezwaarEnBeroep: Lorem ipsum
+                      kostenEnBetaalmethoden: Lorem ipsum
+                      uitersteTermijn: Lorem ipsum
+                      wtdBijGeenReactie: Lorem ipsum
+                      procedureLink:
+                        label: label
+                        url: http://voorbeeld.nl
+                      productAanwezigToelichting: Lorem ipsum
+                      productValtOnderToelichting: Lorem ipsum
+                      datumWijziging: '2022-01-01T00:01:22Z'
+                    - taal: en
+                      titel: titel
+                      tekst: Lorem ipsum
+                      links:
+                      - label: label
+                        url: http://example.com
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: Lorem ipsum
+                      vereisten: Lorem ipsum
+                      bezwaarEnBeroep: Lorem ipsum
+                      kostenEnBetaalmethoden: Lorem ipsum
+                      uitersteTermijn: Lorem ipsum
+                      wtdBijGeenReactie: Lorem ipsum
+                      procedureLink:
+                        label: label
+                        url: http://example.com
+                      productAanwezigToelichting: Lorem ipsum
+                      productValtOnderToelichting: Lorem ipsum
+                      datumWijziging: '2022-01-01T00:01:22Z'
+                    beschikbareTalen:
+                    - nl
+                    - en
           description: ''
   /api/v1/producten/{productUuid}/historie:
     get:
@@ -606,6 +1274,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaginatedProductVersieList'
+              examples:
+                Organisaties/put:
+                  value:
+                    count: 123
+                    next: http://api.example.org/accounts/?page=4
+                    previous: http://api.example.org/accounts/?page=2
+                    results:
+                      versie: 1
+                      gemaaktOp: '2022-01-01T00:01:22Z'
+                      gewijzigdOp: '2022-01-01T00:01:22Z'
+                      publicatieDatum: '2022-01-01'
+                      vertalingen:
+                      - taal: nl
+                        titel: titel
+                        tekst: Lorem ipsum
+                        links:
+                        - label: label
+                          url: http://voorbeeld.nl
+                        procedureBeschrijving: procedure beschijving
+                        bewijs: Lorem ipsum
+                        vereisten: Lorem ipsum
+                        bezwaarEnBeroep: Lorem ipsum
+                        kostenEnBetaalmethoden: Lorem ipsum
+                        uitersteTermijn: Lorem ipsum
+                        wtdBijGeenReactie: Lorem ipsum
+                        procedureLink:
+                          label: label
+                          url: http://voorbeeld.nl
+                        productAanwezigToelichting: Lorem ipsum
+                        productValtOnderToelichting: Lorem ipsum
+                        datumWijziging: '2022-01-01T00:01:22Z'
+                      - taal: en
+                        titel: titel
+                        tekst: Lorem ipsum
+                        links:
+                        - label: label
+                          url: http://example.com
+                        procedureBeschrijving: procedure beschijving
+                        bewijs: Lorem ipsum
+                        vereisten: Lorem ipsum
+                        bezwaarEnBeroep: Lorem ipsum
+                        kostenEnBetaalmethoden: Lorem ipsum
+                        uitersteTermijn: Lorem ipsum
+                        wtdBijGeenReactie: Lorem ipsum
+                        procedureLink:
+                          label: label
+                          url: http://example.com
+                        productAanwezigToelichting: Lorem ipsum
+                        productValtOnderToelichting: Lorem ipsum
+                        datumWijziging: '2022-01-01T00:01:22Z'
           description: ''
   /api/v1/producten/{uuid}:
     get:
@@ -633,6 +1351,94 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                Producten:
+                  value:
+                    url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    uuid: 095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    upnLabel: Product label
+                    upnUri: http://example.com/owms/terms/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    versie: 1
+                    publicatieDatum: '2022-01-01'
+                    productAanwezig: true
+                    productValtOnder:
+                      url: http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      upnUri: http://standaarden.overheid.nl/owms/terms/product
+                      upnLabel: Product label
+                    verantwoordelijkeOrganisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: ''
+                    bevoegdeOrganisatie:
+                      url: http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/product
+                      owmsPrefLabel: Organisatie naam
+                      owmsEndDate: '2023-01-01T00:01:22Z'
+                    catalogus: http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                    locaties:
+                    - openingstijden:
+                        maandag:
+                        - 07:00-18:00
+                        dinsdag:
+                        - 07:00-18:00
+                        woensdag:
+                        - 07:00-18:00
+                        donderdag:
+                        - 07:00-18:00
+                        vrijdag:
+                        - 07:00-18:00
+                        zaterdag:
+                        - 09:00-12:00
+                        - 13:00-15:00
+                        zondag:
+                        - 09:00-12:00
+                        - 13:00-15:00
+                      url: http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f
+                      naam: Locatie naam
+                    doelgroep: eu-burger
+                    vertalingen:
+                    - taal: nl
+                      titel: titel
+                      tekst: Lorem ipsum
+                      links:
+                      - label: label
+                        url: http://voorbeeld.nl
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: Lorem ipsum
+                      vereisten: Lorem ipsum
+                      bezwaarEnBeroep: Lorem ipsum
+                      kostenEnBetaalmethoden: Lorem ipsum
+                      uitersteTermijn: Lorem ipsum
+                      wtdBijGeenReactie: Lorem ipsum
+                      procedureLink:
+                        label: label
+                        url: http://voorbeeld.nl
+                      productAanwezigToelichting: Lorem ipsum
+                      productValtOnderToelichting: Lorem ipsum
+                      datumWijziging: '2022-01-01T00:01:22Z'
+                    - taal: en
+                      titel: titel
+                      tekst: Lorem ipsum
+                      links:
+                      - label: label
+                        url: http://example.com
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: Lorem ipsum
+                      vereisten: Lorem ipsum
+                      bezwaarEnBeroep: Lorem ipsum
+                      kostenEnBetaalmethoden: Lorem ipsum
+                      uitersteTermijn: Lorem ipsum
+                      wtdBijGeenReactie: Lorem ipsum
+                      procedureLink:
+                        label: label
+                        url: http://example.com
+                      productAanwezigToelichting: Lorem ipsum
+                      productValtOnderToelichting: Lorem ipsum
+                      datumWijziging: '2022-01-01T00:01:22Z'
+                    beschikbareTalen:
+                    - nl
+                    - en
           description: ''
 components:
   schemas:

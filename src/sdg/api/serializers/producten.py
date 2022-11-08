@@ -4,7 +4,11 @@ from django.db import transaction
 from django.utils.dateparse import parse_date
 
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema_field,
+    extend_schema_serializer,
+)
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.reverse import reverse
@@ -121,6 +125,61 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
         }
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Organisaties/put",
+            value={
+                "versie": 1,
+                "gemaaktOp": "2022-01-01T00:01:22Z",
+                "gewijzigdOp": "2022-01-01T00:01:22Z",
+                "publicatieDatum": "2022-01-01",
+                "vertalingen": [
+                    {
+                        "taal": "nl",
+                        "titel": "titel",
+                        "tekst": "Lorem ipsum",
+                        "links": [{"label": "label", "url": "http://voorbeeld.nl"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "Lorem ipsum",
+                        "vereisten": "Lorem ipsum",
+                        "bezwaarEnBeroep": "Lorem ipsum",
+                        "kostenEnBetaalmethoden": "Lorem ipsum",
+                        "uitersteTermijn": "Lorem ipsum",
+                        "wtdBijGeenReactie": "Lorem ipsum",
+                        "procedureLink": {
+                            "label": "label",
+                            "url": "http://voorbeeld.nl",
+                        },
+                        "productAanwezigToelichting": "Lorem ipsum",
+                        "productValtOnderToelichting": "Lorem ipsum",
+                        "datumWijziging": "2022-01-01T00:01:22Z",
+                    },
+                    {
+                        "taal": "en",
+                        "titel": "titel",
+                        "tekst": "Lorem ipsum",
+                        "links": [{"label": "label", "url": "http://example.com"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "Lorem ipsum",
+                        "vereisten": "Lorem ipsum",
+                        "bezwaarEnBeroep": "Lorem ipsum",
+                        "kostenEnBetaalmethoden": "Lorem ipsum",
+                        "uitersteTermijn": "Lorem ipsum",
+                        "wtdBijGeenReactie": "Lorem ipsum",
+                        "procedureLink": {
+                            "label": "label",
+                            "url": "http://example.com",
+                        },
+                        "productAanwezigToelichting": "Lorem ipsum",
+                        "productValtOnderToelichting": "Lorem ipsum",
+                        "datumWijziging": "2022-01-01T00:01:22Z",
+                    },
+                ],
+            },
+        ),
+    ]
+)
 class ProductVersieSerializer(serializers.ModelSerializer):
     vertalingen = LocalizedProductSerializer(many=True)
 
@@ -231,6 +290,102 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Producten",
+            value={
+                "url": "http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "uuid": "095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "upnLabel": "Product label",
+                "upnUri": "http://example.com/owms/terms/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "versie": 1,
+                "publicatieDatum": "2022-01-01",
+                "productAanwezig": True,
+                "productValtOnder": {
+                    "url": "http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                    "upnUri": "http://standaarden.overheid.nl/owms/terms/product",
+                    "upnLabel": "Product label",
+                },
+                "verantwoordelijkeOrganisatie": {
+                    "url": "http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/product",
+                    "owmsPrefLabel": "Organisatie naam",
+                    "owmsEndDate": "",
+                },
+                "bevoegdeOrganisatie": {
+                    "url": "http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/product",
+                    "owmsPrefLabel": "Organisatie naam",
+                    "owmsEndDate": "2023-01-01T00:01:22Z",
+                },
+                "catalogus": "http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "locaties": [
+                    {
+                        "openingstijden": {
+                            "maandag": ["07:00-18:00"],
+                            "dinsdag": ["07:00-18:00"],
+                            "woensdag": ["07:00-18:00"],
+                            "donderdag": ["07:00-18:00"],
+                            "vrijdag": ["07:00-18:00"],
+                            "zaterdag": ["09:00-12:00", "13:00-15:00"],
+                            "zondag": ["09:00-12:00", "13:00-15:00"],
+                        },
+                        "url": "http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                        "naam": "Locatie naam",
+                    }
+                ],
+                "doelgroep": "eu-burger",
+                "vertalingen": [
+                    {
+                        "taal": "nl",
+                        "titel": "titel",
+                        "tekst": "Lorem ipsum",
+                        "links": [{"label": "label", "url": "http://voorbeeld.nl"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "Lorem ipsum",
+                        "vereisten": "Lorem ipsum",
+                        "bezwaarEnBeroep": "Lorem ipsum",
+                        "kostenEnBetaalmethoden": "Lorem ipsum",
+                        "uitersteTermijn": "Lorem ipsum",
+                        "wtdBijGeenReactie": "Lorem ipsum",
+                        "procedureLink": {
+                            "label": "label",
+                            "url": "http://voorbeeld.nl",
+                        },
+                        "productAanwezigToelichting": "Lorem ipsum",
+                        "productValtOnderToelichting": "Lorem ipsum",
+                        "datumWijziging": "2022-01-01T00:01:22Z",
+                    },
+                    {
+                        "taal": "en",
+                        "titel": "titel",
+                        "tekst": "Lorem ipsum",
+                        "links": [{"label": "label", "url": "http://example.com"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "Lorem ipsum",
+                        "vereisten": "Lorem ipsum",
+                        "bezwaarEnBeroep": "Lorem ipsum",
+                        "kostenEnBetaalmethoden": "Lorem ipsum",
+                        "uitersteTermijn": "Lorem ipsum",
+                        "wtdBijGeenReactie": "Lorem ipsum",
+                        "procedureLink": {
+                            "label": "label",
+                            "url": "http://example.com",
+                        },
+                        "productAanwezigToelichting": "Lorem ipsum",
+                        "productValtOnderToelichting": "Lorem ipsum",
+                        "datumWijziging": "2022-01-01T00:01:22Z",
+                    },
+                ],
+                "beschikbareTalen": [
+                    "nl",
+                    "en",
+                ],
+            },
+        ),
+    ]
+)
 class ProductSerializer(ProductBaseSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 

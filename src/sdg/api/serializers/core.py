@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from sdg.api.serializers.organisaties import LokaleOverheidBaseSerializer
@@ -5,6 +6,36 @@ from sdg.api.serializers.producten import ProductBaseSerializer
 from sdg.core.models import ProductenCatalogus
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Organisaties/put",
+            value={
+                "url": "http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "uuid": "095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "domein": "SDG",
+                "naam": "Naam (SDG Catalogus)",
+                "organisatie": {
+                    "url": "http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/product",
+                    "owmsPrefLabel": "Organisatie naam",
+                    "owmsEndDate": "2023-01-01T00:01:22Z",
+                },
+                "isReferentieCatalogus": False,
+                "referentieCatalogus": "http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "toelichting": "Een stuk tekst die toelichting geeft over de catalogus",
+                "versie": 1,
+                "producten": [
+                    {
+                        "url": "http://example.com/api/v1/producten/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                        "upnUri": "http://standaarden.overheid.nl/owms/terms/product",
+                        "upnLabel": "Naam van het product",
+                    }
+                ],
+            },
+        ),
+    ]
+)
 class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
     """Serializer for ProductenCatalogus details, including organizations and products."""
 

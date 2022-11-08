@@ -1,9 +1,8 @@
 from django.db import transaction
-from django.http import Http404
 
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
-from sdg.api.serializers.logius import OverheidsorganisatieSerializer
 from sdg.organisaties.models import (
     BevoegdeOrganisatie,
     LokaleOverheid,
@@ -152,6 +151,38 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Locaties",
+            value={
+                "url": "http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "naam": "Locatie naam",
+                "straat": "Straat naam",
+                "nummer": "12",
+                "postcode": "1234AA",
+                "plaats": "Plaats naam",
+                "land": "Nederland",
+                "openingstijdenOpmerking": "Informatie over de locatie.",
+                "organisatie": {
+                    "url": "http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/product",
+                    "owmsPrefLabel": "Organisatie naam",
+                    "owmsEndDate": "2022-01-01T00:01:22Z",
+                },
+                "openingstijden": {
+                    "maandag": ["07:00-18:00"],
+                    "dinsdag": ["07:00-18:00"],
+                    "woensdag": ["07:00-18:00"],
+                    "donderdag": ["07:00-18:00"],
+                    "vrijdag": ["07:00-18:00"],
+                    "zaterdag": ["09:00-12:00", "13:00-15:00"],
+                    "zondag": ["09:00-12:00", "13:00-15:00"],
+                },
+            },
+        ),
+    ]
+)
 class LocatieSerializer(LocatieBaseSerializer):
     organisatie = LokaleOverheidBaseSerializer(
         source="lokale_overheid",
@@ -219,6 +250,47 @@ class LocatieSerializer(LocatieBaseSerializer):
         return record
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Organisaties/get",
+            value={
+                "url": "http://example.com/api/v1/organisaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "uuid": "095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/product",
+                "owmsPrefLabel": "Organisatie naam",
+                "owmsEndDate": "2022-01-01T00:01:22Z",
+                "locaties": [
+                    {
+                        "url": "http://example.com/api/v1/locaties/095be615-a8ad-4c33-8e9c-c7612fbf6c9f",
+                        "naam": "Locatie naam",
+                        "straat": "Straat naam",
+                        "nummer": "12",
+                        "postcode": "1234AA",
+                        "plaats": "Plaats naam",
+                        "land": "Nederland",
+                        "openingstijdenOpmerking": "Informatie over de locatie.",
+                    }
+                ],
+                "catalogi": [
+                    "http://example.com/api/v1/catalogi/095be615-a8ad-4c33-8e9c-c7612fbf6c9f"
+                ],
+                "contactWebsite": "http://example.com",
+                "contactEmailadres": "user@example.com",
+                "contactTelefoonnummer": "31021234567",
+                "contactFormulierLink": "http://example.com",
+                "bevoegdeOrganisaties": [
+                    {
+                        "naam": "Organisatie naam",
+                        "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/product",
+                        "owmsPrefLabel": "Organisatie naam",
+                        "owmsEndDate": "2022-01-01T00:01:22Z",
+                    }
+                ],
+            },
+        ),
+    ]
+)
 class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
     owms_end_date = serializers.DateTimeField(
         source="organisatie.owms_end_date",
@@ -266,6 +338,19 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
         }
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Organisaties/put",
+            value={
+                "contactWebsite": "http://example.com",
+                "contactEmailadres": "user@example.com",
+                "contactTelefoonnummer": "31021234567",
+                "contactFormulierLink": "http://example.com",
+            },
+        ),
+    ]
+)
 class LokaleOverheidUpdateSerializer(LokaleOverheidBaseSerializer):
     class Meta:
         model = LokaleOverheid
