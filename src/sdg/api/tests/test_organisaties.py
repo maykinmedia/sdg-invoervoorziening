@@ -60,7 +60,7 @@ class OrganisatiesTests(APITestCase):
                 "uuid": str(municipality.uuid),
                 "owmsIdentifier": municipality.organisatie.owms_identifier,
                 "owmsPrefLabel": municipality.organisatie.owms_pref_label,
-                "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
+                "owmsEndDate": None,
                 "locaties": [],
                 "catalogi": [],
                 "contactWebsite": municipality.contact_website,
