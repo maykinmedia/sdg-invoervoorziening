@@ -89,10 +89,16 @@ class LokaleOverheidViewSet(
     """Viewset for a municipality, retrieved by UUID"""
 
     lookup_field = "uuid"
-    queryset = LokaleOverheid.objects.select_related("organisatie",).prefetch_related(
-        "locaties",
-        "catalogi",
-        "bevoegde_organisaties",
+    queryset = (
+        LokaleOverheid.objects.active_organization()
+        .select_related(
+            "organisatie",
+        )
+        .prefetch_related(
+            "locaties",
+            "catalogi",
+            "bevoegde_organisaties",
+        )
     )
     filterset_class = LokaleOverheidFilterSet
     permission_classes = [OrganizationPermissions, WhitelistedPermission]

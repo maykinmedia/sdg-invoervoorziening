@@ -158,7 +158,8 @@ class ProductViewSet(
 
     lookup_field = "uuid"
     queryset = (
-        Product.objects.select_related(
+        Product.objects.active_organization()
+        .select_related(
             "catalogus",
             "catalogus__lokale_overheid",
             "generiek_product",
