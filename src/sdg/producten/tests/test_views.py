@@ -6,6 +6,7 @@ from django_webtest import WebTest
 from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.core.constants import GenericProductStatus
 from sdg.core.tests.utils import hard_refresh_from_db
 from sdg.organisaties.tests.factories.overheid import LocatieFactory
 from sdg.producten.models import Product
@@ -674,4 +675,164 @@ class ProductUpdateViewTests(WebTest):
             response.form,
             None,
             status=403,
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_specific_product_is_editable_if_generic_status_ready_for_publication(self):
+        self._change_product_status(Product.status.CONCEPT)
+        self.product.generiek_product.product_status = (
+            GenericProductStatus.READY_FOR_PUBLICATION
+        )
+        self.product.generiek_product.save()
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 1)
+
+        latest_active_version = self.product.active_version
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
+    def test_specific_product_is_not_found_if_generic_status_is_not_ready_for_publication(
+        self,
+    ):
+        self._change_product_status(Product.status.CONCEPT)
+
+        self.product.generiek_product.product_status = (
+            GenericProductStatus.READY_FOR_ADMIN
+        )
+        self.product.generiek_product.save()
+        self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            ),
+            status=404,
+        )
+
+        self.product.generiek_product.product_status = GenericProductStatus.NEW
+        self.product.generiek_product.save()
+        self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            ),
+            status=404,
+        )
+
+        self.product.generiek_product.product_status = GenericProductStatus.DELETED
+        self.product.generiek_product.save()
+        self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            ),
+            status=404,
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_reference_product_is_editable_if_generic_status_ready_for_admin(self):
+        self.role = RoleFactory.create(
+            user=self.user,
+            lokale_overheid=self.reference_product.catalogus.lokale_overheid,
+            is_beheerder=True,
+        )
+        self._change_product_status(Product.status.CONCEPT)
+        self.reference_product.generiek_product.product_status = (
+            GenericProductStatus.READY_FOR_ADMIN
+        )
+        self.reference_product.generiek_product.save()
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.reference_product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.reference_product.versies.count(), 1)
+
+        latest_active_version = self.reference_product.active_version
+        latest_version = self.reference_product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
+    def test_reference_product_is_not_found_if_generic_status_is_not_ready_for_admin(
+        self,
+    ):
+        self.role = RoleFactory.create(
+            user=self.user,
+            lokale_overheid=self.reference_product.catalogus.lokale_overheid,
+            is_beheerder=True,
+        )
+        self._change_product_status(Product.status.CONCEPT)
+
+        self.reference_product.generiek_product.product_status = (
+            GenericProductStatus.READY_FOR_PUBLICATION
+        )
+        self.reference_product.generiek_product.save()
+        self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.reference_product),
+            ),
+            status=404,
+        )
+
+        self.reference_product.generiek_product.product_status = (
+            GenericProductStatus.NEW
+        )
+        self.reference_product.generiek_product.save()
+        self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.reference_product),
+            ),
+            status=404,
+        )
+
+        self.reference_product.generiek_product.product_status = (
+            GenericProductStatus.DELETED
+        )
+        self.reference_product.generiek_product.save()
+        self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.reference_product),
+            ),
+            status=404,
         )

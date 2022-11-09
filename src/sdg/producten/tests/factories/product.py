@@ -2,6 +2,7 @@ import factory
 from factory.django import DjangoModelFactory
 
 from sdg.accounts.tests.factories import UserFactory
+from sdg.core.constants import GenericProductStatus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import (
     OverheidsorganisatieFactory,
@@ -18,6 +19,7 @@ class GeneriekProductFactory(DjangoModelFactory):
     upn = factory.SubFactory(UniformeProductnaamFactory)
     verantwoordelijke_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
     verplicht_product = factory.Faker("pybool")
+    product_status = GenericProductStatus.READY_FOR_PUBLICATION
 
     class Meta:
         model = GeneriekProduct

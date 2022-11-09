@@ -106,5 +106,6 @@ class CatalogListView(OverheidMixin, RHListView):
             # FIXME: We have to annotate doelgroep to fix the RHS-component.
             .annotate(doelgroep=F("generiek_product__doelgroep"))
             .exclude(generiek_product__eind_datum__lte=datetime.date.today())
+            .exclude_generic_status()
             .order_by("_name")
         )

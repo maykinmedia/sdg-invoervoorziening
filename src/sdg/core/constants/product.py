@@ -25,3 +25,33 @@ class GenericProductStatus(DjangoChoices):
     EOL = ChoiceItem("eol", _("Wordt binnenkort verwijderd"))
     DELETED = ChoiceItem("deleted", _("Verwijderd"))
     MISSING = ChoiceItem("missing", _("Geen referentie producten gevonden"))
+
+    @classmethod
+    def get_cms_excluded(cls, reference=False):
+        """
+        Get excluded statuses for the CMS.
+
+        - For reference products: only show products that are READY_FOR_ADMIN.
+        - For specific products: only show products that are READY_FOR_PUBLICATION.
+
+        :param reference: Whether to exclude for reference products or not.
+        """
+        exclude = [
+            cls.NEW,
+            cls.EXPIRED,
+            cls.EOL,
+            cls.DELETED,
+            cls.MISSING,
+        ]
+
+        if reference:
+            return exclude + [cls.READY_FOR_PUBLICATION]
+        else:
+            return exclude + [cls.READY_FOR_ADMIN]
+
+    @classmethod
+    def get_api_excluded(cls):
+        """
+        Get excluded statuses for the API.
+        """
+        return [cls.DELETED]
