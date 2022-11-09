@@ -25,7 +25,7 @@ class LokaleOverheidFactory(DjangoModelFactory):
 
 class LocatieFactory(DjangoModelFactory):
     lokale_overheid = factory.SubFactory(LokaleOverheidFactory)
-    naam = factory.Faker("color_name")
+    naam = factory.Sequence(lambda n: f"Location {n}")
     straat = factory.Faker("street_name")
     nummer = factory.Faker("building_number")
     postcode = factory.LazyFunction(
@@ -45,7 +45,7 @@ class LocatieFactory(DjangoModelFactory):
 
 
 class BevoegdeOrganisatieFactory(DjangoModelFactory):
-    naam = factory.Sequence(lambda n: str(n))
+    naam = factory.Sequence(lambda n: f"Bevoegde organisatie {n}")
     organisatie = factory.SubFactory(OverheidsorganisatieFactory)
     lokale_overheid = factory.SubFactory(
         LokaleOverheidFactory, organisatie=factory.SelfAttribute("organisatie")
