@@ -185,6 +185,7 @@ class ProductUpdateView(OverheidMixin, UpdateView):
                 "catalogus__lokale_overheid",
                 "generiek_product__upn",
             )
+            .exclude_generic_status()
         )
 
     def _save_version_form(
