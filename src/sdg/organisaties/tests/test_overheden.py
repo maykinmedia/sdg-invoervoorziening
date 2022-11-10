@@ -1,7 +1,9 @@
 from datetime import datetime
 from unittest import skip
 
+from django.test import override_settings
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from django_webtest import WebTest
 from freezegun import freeze_time
@@ -73,6 +75,22 @@ class CatalogListViewTests(WebTest):
         lokale_overheid.organisatie.owms_end_date = datetime(day=3, month=1, year=2021)
         lokale_overheid.organisatie.save()
         self.app.get(lokale_overheid.get_absolute_url(), status=403)
+
+    @override_settings(SDG_CMS_PRODUCTS_DISABLED=True)
+    def test_unable_to_see_catalog_with_setting_cms_products_disabled(self):
+        lokale_overheid = LokaleOverheidFactory.create()
+        RoleFactory.create(
+            user=self.user,
+            lokale_overheid=lokale_overheid,
+            is_redacteur=True,
+        )
+        response = self.app.get(lokale_overheid.get_absolute_url())
+        self.assertIn(
+            _(
+                "Je kan producten niet beheren in het CMS maar enkel via de API. Je kan wel via het menu bovenin de organisatie gegevens, locaties en bevoegde organisaties beheren."
+            ),
+            response.text,
+        )
 
     def test_specific_catalog_is_displayed(self):
         localized_reference_product = LocalizedReferentieProductFactory.create()
