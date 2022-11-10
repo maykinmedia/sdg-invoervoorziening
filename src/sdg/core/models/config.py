@@ -46,14 +46,14 @@ class ProductFieldConfiguration(SingletonModel):
 
     def for_field(self, prefix, name):
         if name != "config":
-            return getattr(self, "{}_{}".format(prefix, name), None)
-
-    def __str__(self):
-        return "Product field configuratie"
+            return getattr(self, f"{prefix}_{name}", None)
 
     class Meta:
         verbose_name = _("Product field configuratie")
         verbose_name_plural = _("Product field configuratie")
+
+    def __str__(self):
+        return "Product field configuratie"
 
 
 class SiteConfiguration(SingletonModel):
