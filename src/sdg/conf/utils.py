@@ -23,13 +23,16 @@ def config(option: str, default=undefined, *args, **kwargs):
 
     Pass ``split=True`` to split the comma-separated input into a list.
     """
+    transform = kwargs.pop("transform", lambda x: x)
+
     if "split" in kwargs:
         kwargs.pop("split")
         kwargs["cast"] = Csv()
 
     if default is not undefined and default is not None:
         kwargs.setdefault("cast", type(default))
-    return _config(option, default=default, *args, **kwargs)
+
+    return transform(_config(option, default=default, *args, **kwargs))
 
 
 def get_sentry_integrations() -> list:
