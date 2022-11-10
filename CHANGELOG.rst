@@ -2,6 +2,49 @@
 Change history
 ==============
 
+1.5.0
+=====
+
+*November 10, 2022*
+
+* [#801] Added extra admin fields to filter and sort on
+* [#800] Added validation on duplicate name per organisation in the API
+* [#751] Added "has costs" field to edit/list pages
+* [#799] Added missing lock icon
+* [#769] Added periodic task to update status for generic products
+* [#576] Added "raadpleger" role
+* [#750] Added goatcounter
+* [#214] Added notifications page and updated revision list
+* [#617] Added sticky toolbox for product editing
+* [#770] Added ordering for user model
+* [#758] Added localization for preview page
+* [#662] Added decentrale procedure label to CMS
+* [#819] Excluded products based on generic status
+* [#408] Organizations no longer have an enddate by default. 
+* [#408] Ensure the API does not return inactive organizations
+* [#807] Allow commas in dynamic array fields
+* [#576] Fixed edit view and added raadpleger on missing places.
+* [#811] How to deal with new/old products
+* [#809] Exclude certain generic product status
+* [#792] Display information area in product view
+* [#808] Textual updates
+* [#798] Apply notification improvements
+* [#791] Make services fetching more robust to handle DPC API without schema
+* [#435] Updated regex for simple HTML detection
+* [#484] Ensure logger saves instance name so they are shown when deleted
+* [#790] Pass context request for reverse
+* [#759] Apply siteconfig and include to templates
+* [#785] Ensure proper validation for invitation password
+* [#784] Disabled registration / enumeration
+* [#671] Updated data loading from services (use `"upnUri"`)
+* [#617] Minor styling adjustments
+* [#747] Updated text for product-valt-onder
+* Create reference product versions if missing
+* Fixed several minor security issues
+* Added API docs to indicate IM version
+* Upgraded libraries
+
+
 1.4.0
 =====
 

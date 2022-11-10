@@ -2,7 +2,7 @@
 PDC voor de SDG
 ===============
 
-:Version: 1.4.0
+:Version: 1.5.0
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: vng, ipo, sdg, pdc, gemeenten, provincies
 :PythonVersion: 3.8
