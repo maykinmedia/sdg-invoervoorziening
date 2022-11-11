@@ -15,7 +15,7 @@
                         <span class="logo__uncolored">SD</span><span class="logo__colored">G</span>
                     </a>
                 </h1>
-                <h2 class="logo__subtitle logo__subtitle-medium">voor gemeenten</h2>
+                <h2 class="logo__subtitle logo__subtitle-medium">voor {{ org_type_cfg.name_plural }}</h2>
             </div>
             <div class="header__user header__dropdown">
                 <i class="fas fa-user"></i>
@@ -106,13 +106,15 @@
     <div class="footer">
         <div class="footer__left">
             Een initiatief van
-            <a href="https://vng.nl/" target="_blank">
-                <img class="footer__logo" src="{% static 'images/vng_logo.svg' %}"/>
-            </a>
+            {% with logo=org_type_cfg.footer_logo %}
+                <a href="{{ org_type_cfg.url }}" target="_blank">
+                    <img class="footer__logo" src="{% static logo %}"/>
+                </a>
+            {% endwith %}
         </div>
         <div class="footer__right">
-            <a class="footer__link" href="#" rel="noopener noreferrer">{% trans "Toegankelijkheid" %}</a>
-            <a class="footer__link" href="#" rel="noopener noreferrer">{% trans "Privacybeleid" %}</a>
+            <a class="footer__link" href="{{ org_type_cfg.accessibility_url }}" rel="noopener noreferrer">{% trans "Toegankelijkheid" %}</a>
+            <a class="footer__link" href="{{ org_type_cfg.privacy_policy_url }}" rel="noopener noreferrer">{% trans "Privacybeleid" %}</a>
         </div>
     </div>
 {% endblock footer %}

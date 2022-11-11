@@ -480,7 +480,7 @@ ACCOUNT_PREVENT_ENUMERATION = False
 
 # SDG Invitations
 INVITATION_TEMPLATE = "core/email/invitation.html"
-INVITATION_SUBJECT = "Activeer je account invoervoorziening SDG gemeenten"
+INVITATION_SUBJECT = "Activeer je account invoervoorziening SDG {org_type_name}"
 
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
 

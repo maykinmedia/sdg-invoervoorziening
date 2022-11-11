@@ -89,17 +89,19 @@ class UserInvitation(models.Model):
     def send_invitation(self, request, **kwargs):
         invite_url = reverse("invitation_accept", args=[self.key])
         invite_url = request.build_absolute_uri(invite_url)
+        org_type_cfg = settings.SDG_ORGANIZATION_TYPE.config
         ctx = kwargs
 
         ctx.update(
             {
+                "org_type_cfg": org_type_cfg,
                 "invite_url": invite_url,
                 "user_full_name": self.user.get_full_name(),
                 "key": self.key,
                 "inviter": self.inviter,
             }
         )
-        subject = settings.INVITATION_SUBJECT
+        subject = settings.INVITATION_SUBJECT.format(org_type_cfg.name)
         email_template = settings.INVITATION_TEMPLATE
         html_message = render_to_string(email_template, context=ctx)
 

@@ -72,9 +72,11 @@
             <a href="https://www.vngrealisatie.nl/onderwerpen/single-digital-gateway" target="_blank">
                 Meer informatie over de single digital gateway.
             </a>
-            <a href="https://vng.nl/" target="_blank">
-                <img class="login__footer--logo" src="{% static 'images/vng_logo.svg' %}"/>
-            </a>
+            {% with logo=org_type_cfg.footer_logo %}
+                <a href="{{ org_type_cfg.url }}" target="_blank">
+                    <img class="login__footer--logo" src="{% static logo %}"/>
+                </a>
+            {% endwith %}
         </div>
     </div>
 {% endblock %}

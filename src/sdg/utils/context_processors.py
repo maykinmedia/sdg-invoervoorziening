@@ -20,4 +20,6 @@ def settings(request):
     if hasattr(django_settings, "SENTRY_CONFIG"):
         context.update(dsn=django_settings.SENTRY_CONFIG.get("public_dsn", ""))
 
+    context.update(org_type_cfg=django_settings.SDG_ORGANIZATION_TYPE.config)
+
     return context

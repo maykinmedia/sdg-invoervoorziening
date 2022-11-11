@@ -13,5 +13,6 @@ class SDGSettingsMixin(ContextMixin):
             SDG_CMS_PRODUCTS_DISABLED=getattr(
                 settings, "SDG_CMS_PRODUCTS_DISABLED", False
             ),
+            org_type_cfg=getattr(settings, "SDG_ORGANIZATION_TYPE").config,
         )
         return context
