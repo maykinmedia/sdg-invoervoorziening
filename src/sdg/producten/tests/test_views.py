@@ -822,7 +822,7 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.versie, 1)
 
     @freeze_time(NOW_DATE)
-    def test_reference_product_is_not_found_if_generic_status_is_not_ready_for_admin(
+    def test_reference_product_is_not_found_if_generic_status_is_not_ready_for_admin_or_pub(
         self,
     ):
         self.role = RoleFactory.create(
@@ -831,18 +831,6 @@ class ProductUpdateViewTests(WebTest):
             is_beheerder=True,
         )
         self._change_product_status(Product.status.CONCEPT)
-
-        self.reference_product.generiek_product.product_status = (
-            GenericProductStatus.READY_FOR_PUBLICATION
-        )
-        self.reference_product.generiek_product.save()
-        self.app.get(
-            reverse(
-                PRODUCT_EDIT_URL,
-                kwargs=build_url_kwargs(self.reference_product),
-            ),
-            status=404,
-        )
 
         self.reference_product.generiek_product.product_status = (
             GenericProductStatus.NEW
