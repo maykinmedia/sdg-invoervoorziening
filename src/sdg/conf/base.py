@@ -546,12 +546,10 @@ ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
 
 # organization type
 SDG_ORGANIZATION_TYPE = config(
-    "SDG_ORGANIZATION_TYPE", default=OrganizationType.MUNICIPALITY, transform=str.upper
+    "SDG_ORGANIZATION_TYPE",
+    default=OrganizationType.MUNICIPALITY,
+    transform=OrganizationType.from_string,
 )
-if SDG_ORGANIZATION_TYPE not in list(OrganizationType):
-    raise ImproperlyConfigured(
-        f"SDG_ORGANIZATION_TYPE must be one of: {', '.join(OrganizationType)}"
-    )
 
 
 SDG_CMS_ENABLED = config("SDG_CMS_ENABLED", default=True)
