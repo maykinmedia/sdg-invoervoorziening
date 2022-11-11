@@ -16,6 +16,7 @@ from sdg.accounts.utils import user_has_valid_roles
 from sdg.accounts.views.decorators import municipality_role_required
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
+from sdg.core.views.mixins import SDGSettingsMixin
 from sdg.producten.forms import (
     LocalizedProductForm,
     LocalizedProductFormSet,
@@ -32,6 +33,13 @@ from sdg.producten.utils import (
 
 
 class ProductPreviewView(OverheidMixin, DetailView):
+    """
+    Preview a product.
+
+    This view is used to produce a preview example as it is
+    used in the municipality website.
+    """
+
     template_name = "mocks/kvk.html"
     context_object_name = "product"
     pk_url_kwarg = "product_pk"
@@ -170,7 +178,16 @@ class ProductPreviewView(OverheidMixin, DetailView):
         return context
 
 
-class ProductUpdateView(OverheidMixin, UpdateView):
+class ProductUpdateView(
+    SDGSettingsMixin,
+    OverheidMixin,
+    UpdateView,
+):
+    """
+    Update a product.
+    This view is used for both the product form and the product preview.
+    """
+
     template_name = "producten/update.html"
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"

@@ -547,6 +547,7 @@ SDG_ORGANIZATION_TYPE = config("SDG_ORGANIZATION_TYPE", default="municipalities"
 assert SDG_ORGANIZATION_TYPE in ["municipalities", "provinces", "waterauthorities"]
 
 SDG_CMS_ENABLED = config("SDG_CMS_ENABLED", default=True)
+SDG_CMS_PRODUCTS_DISABLED = config("SDG_CMS_PRODUCTS_DISABLED", default=False)
 
 SDG_API_SERVER_INSTANCES = []
 SDG_API_URL_TEST = config("SDG_API_URL_TEST", None)

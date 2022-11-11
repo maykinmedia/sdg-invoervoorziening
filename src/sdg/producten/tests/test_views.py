@@ -1,6 +1,8 @@
 from typing import Optional
 
+from django.test import override_settings
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from django_webtest import WebTest
 from freezegun import freeze_time
@@ -675,6 +677,35 @@ class ProductUpdateViewTests(WebTest):
             response.form,
             None,
             status=403,
+        )
+
+    @freeze_time(NOW_DATE)
+    @override_settings(SDG_CMS_PRODUCTS_DISABLED=True)
+    def test_unable_to_see_product_with_setting_cms_products_disabled(self):
+        self.role.is_redacteur = False
+        self.role.is_raadpleger = True
+        self.role.save()
+        self._change_product_status(Product.status.CONCEPT)
+        LocatieFactory.create_batch(
+            3, lokale_overheid=self.product.catalogus.lokale_overheid
+        )
+
+        locations = list(self.product.get_municipality_locations())
+        self.assertEqual(len(locations), 3)
+        for location in locations:
+            self.assertFalse(location.is_product_location)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            ),
+        )
+        self.assertIn(
+            _(
+                "Je kan producten niet beheren in het CMS maar enkel via de API. Je kan wel via het menu bovenin de organisatie gegevens, locaties en bevoegde organisaties beheren."
+            ),
+            response.text,
         )
 
     @freeze_time(NOW_DATE)
