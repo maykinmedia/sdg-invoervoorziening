@@ -23,6 +23,27 @@ zichtbaar is.
 * **Verwijderd** Het product is niet meer beschikbaar. De einddatum van het
   generieke product is bereikt.
 
+Een typische flow is:
+
+1. Er komt een **Nieuw** product in de UPL.
+2. Er komt een generieke tekst beschikbaar via de API van de Nationale Portalen,
+   waardoor het product **Gereed voor beheer** wordt. Het product is hiermee 
+   enkel zichtbaar in het CMS voor redacteuren van de overkoepelde organisatie 
+   en niet voor andere organisaties.
+3. Een redacteur van de overkoepelde organisatie maakt standaardteksten in het 
+   CMS en publiceert deze. Hiermee wordt het product **Gereed voor publicatie** 
+   en zichtbaar voor andere organisaties in het CMS (en nog niet in de API en
+   dus ook niet bij de Nationale Portalen).
+4. Een organisatie publiceert een product. Hiermee wordt het product beschikbaar 
+   via de API en ook de Nationale Portalen.
+5. Als het product niet meer in de UPL voorkomt, wordt de status 
+   **Vervallen in de UPL**. Het product blijft zichtbaar voor iedereen.
+6. Als een redacteur van de overkoepelde organisatie een einddatum op het 
+   generieke product zet, wordt de status **Wordt binnenkort verwijderd**. Het
+   product blijft echter voor iedereen zichtbaar.
+7. Als de einddatum is bereikt, wordt de status **Verwijderd**. Het product is
+   nu voor niemand meer zichtbaar.
+
 ### Producten introduceren
 
 Er zijn diverse scenario's denkbaar waarin een product wordt geïntroduceerd.
@@ -35,7 +56,7 @@ zal de status **Gereed voor beheer** worden.
 
 Deze status houdt in dat het product zichtbaar is voor VNG in de 
 invoervoorziening, zodat de standaardtekst ingevuld kan worden. Zodra de VNG 
-het product publiceerd, wordt de status automatisch **Gereed voor publicatie**
+het product publiceert, wordt de status automatisch **Gereed voor publicatie**
 waarna ook gemeenten het product kunnen zien.
 
 ### Producten uitfaseren

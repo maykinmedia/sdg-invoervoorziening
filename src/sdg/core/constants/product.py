@@ -38,14 +38,12 @@ class GenericProductStatus(DjangoChoices):
         """
         exclude = [
             cls.NEW,
-            cls.EXPIRED,
-            cls.EOL,
             cls.DELETED,
             cls.MISSING,
         ]
 
         if reference:
-            return exclude + [cls.READY_FOR_PUBLICATION]
+            return exclude
         else:
             return exclude + [cls.READY_FOR_ADMIN]
 
