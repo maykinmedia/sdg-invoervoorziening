@@ -6,8 +6,8 @@
   height: 100vh;
 
   .login__left {
-    background: rgb(57,106,136);
-    background: linear-gradient(180deg, rgba(57,106,136,1) 0%, rgba(24,68,95,1) 100%);
+    background: hsl(var(--color-theme-hue), 41%, 38%);
+    background: linear-gradient(180deg, var(--color-theme-bg) 0%, var(--color-theme-bg-dark) 100%);
     padding: 202px 125px 125px 125px;
     text-align: center;
     overflow: hidden;

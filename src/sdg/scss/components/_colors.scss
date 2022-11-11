@@ -1,3 +1,13 @@
+:root {
+  --s: 50%;
+  --l: 50%;
+
+  --color-theme-bg: hsl(var(--color-theme-hue), var(--s), var(--l));
+  --color-theme-bg-dark: hsl(var(--color-theme-hue), calc(var(--s) + 50%), calc(var(--l) - 25%));
+  --color-theme-bg-darker: hsl(var(--color-theme-hue), calc(var(--s) + 30%), calc(var(--l) - 30%));
+  --color-theme-bg-darkest: hsl(var(--color-theme-hue), calc(var(--s) + 20%), calc(var(--l) - 40%));
+}
+
 $color_primary_lightest: #D5E2EA;
 $color_primary_lighter: #549bc4;
 $color_primary_light: #3b82ab;
