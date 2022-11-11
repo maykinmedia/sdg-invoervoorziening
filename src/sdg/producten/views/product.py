@@ -233,48 +233,37 @@ class ProductUpdateView(
         return new_version, created
 
     def _generate_version_formset(self, version: ProductVersie):
-        product_nl = self.product.generiek_product.vertalingen.get(taal="nl")
-        product_en = self.product.generiek_product.vertalingen.get(taal="en")
-
-        # TODO: Clean up .i.e. move translation to template
+        """
+        TODO: Clean up further .i.e. move translation to template
+        """
         default_explanation_mapping = {}
         default_aanwezig_toelichting_explanation_mapping = {}
-        with translation.override("nl"):
-            default_explanation_mapping["nl"] = _(
-                "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
-            ).format(
-                org_type_name=self.org_type_cfg.name,
-                lokale_overheid=self.lokale_overheid,
-                product=product_nl,
-            )
-            default_aanwezig_toelichting_explanation_mapping["nl"] = _(
-                "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
-            ).format(
-                org_type_name=self.org_type_cfg.name,
-                lokale_overheid=self.lokale_overheid,
-                product=product_nl,
-            )
 
-        with translation.override("en"):
-            default_explanation_mapping["en"] = _(
-                "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
-            ).format(
-                org_type_name=self.org_type_cfg.name,
-                lokale_overheid=self.lokale_overheid,
-                product=product_en,
+        for language in TaalChoices.get_available_languages():
+            localized_generic_product = self.product.generiek_product.vertalingen.get(
+                taal=language
             )
-            default_aanwezig_toelichting_explanation_mapping["en"] = _(
-                "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
-            ).format(
-                org_type_name=self.org_type_cfg.name,
-                lokale_overheid=self.lokale_overheid,
-                product=product_en,
-            )
+            with translation.override(language):
+                default_explanation_mapping[language] = _(
+                    "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
+                ).format(
+                    org_type_name=self.org_type_cfg.name,
+                    lokale_overheid=self.lokale_overheid,
+                    product=localized_generic_product,
+                )
+                default_aanwezig_toelichting_explanation_mapping[language] = _(
+                    "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
+                ).format(
+                    org_type_name=self.org_type_cfg.name,
+                    lokale_overheid=self.lokale_overheid,
+                    product=localized_generic_product,
+                )
 
         formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(instance=version)
         formset.title = f"Standaardtekst v{version.versie} ({version.publicatie_datum if version.publicatie_datum else 'concept'})"
+
         for form in formset:
             form.default_toelichting = default_explanation_mapping.get(
                 form.instance.taal

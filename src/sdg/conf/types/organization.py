@@ -8,15 +8,16 @@ class OrganizationTypeConfiguration(ABC):
     Base class used to configure a given organization type.
     """
 
-    url: str = ""
-    accessibility_url: str = ""
-    privacy_policy_url: str = ""
+    url: str = None
+    accessibility_url: str = None
+    privacy_policy_url: str = None
 
-    overlay = str = ""
-    footer_logo: str = ""
+    overlay: str = None
+    footer_logo: str = None
+    color_hue = int = None
 
-    name: str = ""
-    name_plural: str = ""
+    name: str = None
+    name_plural: str = None
 
 
 class MunicipalityConfiguration(OrganizationTypeConfiguration):
@@ -25,6 +26,8 @@ class MunicipalityConfiguration(OrganizationTypeConfiguration):
     """
 
     url = "https://vng.nl"
+    accessibility_url = "#"
+    privacy_policy_url = "#"
 
     overlay = "images/gemeentes.png"
     footer_logo = "images/vng_logo.svg"
@@ -40,7 +43,10 @@ class ProvinceConfiguration(OrganizationTypeConfiguration):
     """
 
     url = "https://www.ipo.nl/"
+    accessibility_url = "#"
+    privacy_policy_url = "#"
 
+    overlay = ""
     footer_logo = "images/ipo_logo.png"
     color_hue = 31
 
@@ -54,6 +60,8 @@ class WaterauthorityConfiguration(OrganizationTypeConfiguration):
     """
 
     url = "https://www.hetwaterschapshuis.nl/"
+    accessibility_url = "#"
+    privacy_policy_url = "#"
 
     overlay = ""
     footer_logo = "images/waterschap_logo.png"
