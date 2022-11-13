@@ -68,9 +68,10 @@ daarom alleen relevant in gebruik met deze API.
 
 ## Ondersteuning voor Markdown
 Sommige velden in de API ondersteunen
-de basisset van het [Markdown](https://www.markdownguide.org/basic-syntax/)
-formaat. Op deze basisset gelden ook nog een aantal uitzonderingen van
-elementen die niet ondersteund worden, te weten:
+de basisset van het
+[Markdown formaat](https://www.markdownguide.org/basic-syntax/). Op deze
+basisset gelden ook nog een aantal uitzonderingen van elementen die niet
+ondersteund worden, te weten:
 
 * Kop 1 (`#` in Markdown of `<h1>` in HTML)
 * Kop 2 (`##` in Markdown of `<h2>` in HTML)
@@ -79,6 +80,13 @@ elementen die niet ondersteund worden, te weten:
 * Horizontale regel (`***`, `---` of `___` in Markdown of `<hr>` in HTML)
 * Afbeeldingen (`![](image.jpg)` in Markdown of `<img>` in HTML)
 * Code (`` `voorbeeld` `` in Markdown of `<code>` in HTML)
+
+Additioneel worden tabellen uit het
+[Extended Markdown formaat](https://www.markdownguide.org/extended-syntax/#tables)
+ondersteund.
+
+Let op dat "returns" typisch niet als speciale karakters (`\\r\\n`) zichtbaar
+zijn in (Markdown) editors maar deze wel nodig zijn in de API.
 
 Bij een veld dat Markdown ondersteund staat dit aangegeven.
 
