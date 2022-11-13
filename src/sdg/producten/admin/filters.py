@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 class IsSDGProductFilter(admin.SimpleListFilter):
-    title = _("Is SDG product")
+    title = _("is SDG product")
     parameter_name = "is_sdg_product"
     filter_field = "upn__sdg"
 
