@@ -2,9 +2,9 @@ url: https://www.ipo.nl/
 accessibility_url: "#"
 privacy_policy_url: "#"
 
-overlay: ""
+overlay: images/circuit.svg
 footer_logo: images/ipo_logo.png
-color_hue: 31
+color_hue: 16
 
 name: provincie
 name_plural: provincies
