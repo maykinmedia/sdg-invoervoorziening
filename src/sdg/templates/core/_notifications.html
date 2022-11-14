@@ -2,7 +2,15 @@
 
 {% for message in messages %}
     <div class="notifications__notification notification__{{ message.tags }}">
-        <i class="fas fa-exclamation-circle"></i>
+        {% if message.level_tag == 'success' %}
+            <i class="fa fa-check-circle"></i>
+        {% elif message.level_tag == 'error' %}
+            <i class="fa fa-times-circle"></i>
+        {% elif message.level_tag == 'warning' %}
+            <i class="fa fa-exclamation-circle"></i>
+        {% elif message.level_tag == 'info' %}
+            <i class="fa fa-info-circle"></i>
+        {% endif %}
         <span>{{ message }}</span>
         <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
     </div>
