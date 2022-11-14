@@ -164,6 +164,47 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.versie, 1)
 
     @freeze_time(NOW_DATE)
+    def test_error_notification_is_displayed(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(PRODUCT_EDIT_URL, kwargs=build_url_kwargs(self.product))
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response.form["vertalingen-0-specifieke_tekst"] = "<a></a>"
+        response.form["vertalingen-0-decentrale_procedure_link"] = "bad"
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            _(
+                "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten."
+            ),
+            response.text,
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_success_notification_is_displayed(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
+
+        response = response.follow()
+        self.assertIn(
+            _("Product {product} is opgeslagen.").format(product=self.product),
+            response.text,
+        )
+
+    @freeze_time(NOW_DATE)
     def test_concept_save_later(self):
         self._change_product_status(Product.status.CONCEPT)
 
