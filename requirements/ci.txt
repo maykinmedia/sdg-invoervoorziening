@@ -515,6 +515,10 @@ pycparser==2.21
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   cffi
+pydantic==1.10.2
+    # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
 pyflakes==2.4.0
     # via flake8
 pyjwt[crypto]==2.3.0
@@ -662,10 +666,13 @@ tomli==2.0.1
     # via
     #   black
     #   pylint
-typing-extensions==4.2.0
+typing-extensions==4.4.0
     # via
+    #   -c requirements/base.txt
+    #   -r requirements/base.txt
     #   astroid
     #   black
+    #   pydantic
     #   pylint
 uritemplate==4.1.1
     # via

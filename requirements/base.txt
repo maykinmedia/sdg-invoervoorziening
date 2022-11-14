@@ -253,6 +253,8 @@ psycopg2==2.8.6
     # via -r requirements/base.in
 pycparser==2.21
     # via cffi
+pydantic==1.10.2
+    # via -r requirements/base.in
 pyjwt[crypto]==2.3.0
     # via
     #   django-allauth
@@ -327,6 +329,8 @@ soupsieve==2.3.2.post1
     # via beautifulsoup4
 sqlparse==0.4.2
     # via django
+typing-extensions==4.4.0
+    # via pydantic
 uritemplate==4.1.1
     # via
     #   coreapi

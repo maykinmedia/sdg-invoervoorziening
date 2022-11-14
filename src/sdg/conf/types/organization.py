@@ -1,71 +1,48 @@
-from abc import ABC
+from pathlib import Path
+from typing import Dict, Literal, Union
 
 from django.utils.translation import gettext_lazy as _
 
+import yaml
+from pydantic import BaseModel, Field, HttpUrl, validator
 
-class OrganizationTypeConfiguration(ABC):
+EmptyUrl = Literal["#"]
+
+
+class OrganizationTypeConfiguration(BaseModel):
     """
-    Base class used to configure a given organization type.
-    """
-
-    url: str = None
-    accessibility_url: str = None
-    privacy_policy_url: str = None
-
-    overlay: str = None
-    footer_logo: str = None
-    color_hue = int = None
-
-    name: str = None
-    name_plural: str = None
-
-
-class MunicipalityConfiguration(OrganizationTypeConfiguration):
-    """
-    Configuration for municipalities.
+    Base class used to configure an organization type.
     """
 
-    url = "https://vng.nl"
-    accessibility_url = "#"
-    privacy_policy_url = "#"
+    url: Union[HttpUrl, EmptyUrl]
+    accessibility_url: Union[HttpUrl, EmptyUrl]
+    privacy_policy_url: Union[HttpUrl, EmptyUrl]
 
-    overlay = "images/gemeentes.png"
-    footer_logo = "images/vng_logo.svg"
-    color_hue = 202
+    overlay: str
+    footer_logo: str
+    color_hue: int = Field(gte=0, lte=360)
 
-    name = _("gemeente")
-    name_plural = _("gemeenten")
+    name: str
+    name_plural: str
+
+    @validator("name", "name_plural")
+    def i18n(cls, value):
+        return _(value)
 
 
-class ProvinceConfiguration(OrganizationTypeConfiguration):
+def _load_organization_types() -> Dict[str, OrganizationTypeConfiguration]:
     """
-    Configuration for provinces.
+    Dynamically load the organization types from ``conf.organizations``
     """
+    result = {}
 
-    url = "https://www.ipo.nl/"
-    accessibility_url = "#"
-    privacy_policy_url = "#"
+    conf_path = Path(__file__).parent.parent
+    for conf in (conf_path / "organizations").glob("*.yml"):
+        with open(conf) as f:
+            data = yaml.safe_load(f)
+            result[conf.stem] = OrganizationTypeConfiguration(**data)
 
-    overlay = ""
-    footer_logo = "images/ipo_logo.png"
-    color_hue = 31
-
-    name = _("provincie")
-    name_plural = _("provincies")
+    return result
 
 
-class WaterauthorityConfiguration(OrganizationTypeConfiguration):
-    """
-    Configuration for water authorities.
-    """
-
-    url = "https://www.hetwaterschapshuis.nl/"
-    accessibility_url = "#"
-    privacy_policy_url = "#"
-
-    overlay = ""
-    footer_logo = "images/waterschap_logo.png"
-    color_hue = 186
-
-    name = _("waterschap")
-    name_plural = _("waterschappen")
+organization_types = _load_organization_types()

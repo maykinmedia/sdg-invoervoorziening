@@ -596,6 +596,10 @@ pycparser==2.21
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   cffi
+pydantic==1.10.2
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
 pyflakes==2.4.0
     # via
     #   -c requirements/ci.txt
@@ -782,12 +786,13 @@ tomli==2.0.1
     #   black
     #   pep517
     #   pylint
-typing-extensions==4.2.0
+typing-extensions==4.4.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   astroid
     #   black
+    #   pydantic
     #   pylint
 uritemplate==4.1.1
     # via

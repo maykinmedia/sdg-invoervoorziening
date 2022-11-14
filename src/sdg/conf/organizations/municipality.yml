@@ -1,0 +1,10 @@
+url: https://vng.nl
+accessibility_url: "#"
+privacy_policy_url: "#"
+
+overlay: images/gemeentes.png
+footer_logo: images/vng_logo.svg
+color_hue: 202
+
+name: gemeente
+name_plural: gemeenten
