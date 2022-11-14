@@ -6,6 +6,8 @@ from django.utils.translation import gettext_lazy as _
 import yaml
 from pydantic import BaseModel, Field, HttpUrl, validator
 
+from sdg.conf.types.exceptions import OrganizationTypeException
+
 EmptyUrl = Literal["#"]
 
 
@@ -24,6 +26,15 @@ class OrganizationTypeConfiguration(BaseModel):
 
     name: str
     name_plural: str
+
+    @validator("overlay", "footer_logo")
+    def static_file(cls, value):
+        from django.contrib.staticfiles import finders
+
+        if value and not finders.find(value):
+            raise OrganizationTypeException("Static file does not exist.")
+
+        return value
 
     @validator("name", "name_plural")
     def i18n(cls, value):
