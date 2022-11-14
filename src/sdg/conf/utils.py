@@ -2,14 +2,12 @@ import codecs
 import logging
 import os
 import re
-from pathlib import Path
 from shutil import which
 from subprocess import CalledProcessError, check_output
-from typing import Dict
 
 from django.conf import settings
 
-import yaml
+import pydantic
 from decouple import Csv, config as _config, undefined
 from sentry_sdk.integrations import DidNotEnable, django, redis
 
@@ -132,3 +130,15 @@ def clean_rst(text: str) -> str:
     text = re.sub(r"[|:][\w-]+[|:]", "", text)
     text = re.sub(r"(.)\1{4,}", "", text)
     return text
+
+
+@pydantic.tools.lru_cache
+def org_type_cfg():
+    """
+    Get the organization type configuration for the current environment.
+    """
+    from sdg.conf.types.organization import available_org_types
+
+    return OrganizationTypeConfiguration(
+        **available_org_types[getattr(settings, "SDG_ORGANIZATION_TYPE")]
+    )

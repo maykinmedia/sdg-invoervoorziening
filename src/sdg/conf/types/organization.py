@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, Literal, Union
+from typing import Literal, Union
 
 from django.utils.translation import gettext_lazy as _
 
@@ -41,9 +41,9 @@ class OrganizationTypeConfiguration(BaseModel):
         return _(value)
 
 
-def _load_organization_types() -> Dict[str, OrganizationTypeConfiguration]:
+def _load_type_map() -> dict:
     """
-    Dynamically load the organization types from ``conf.organizations``
+    Load the organization type map from available types.
     """
     result = {}
 
@@ -51,9 +51,9 @@ def _load_organization_types() -> Dict[str, OrganizationTypeConfiguration]:
     for conf in (conf_path / "organizations").glob("*.yml"):
         with open(conf) as f:
             data = yaml.safe_load(f)
-            result[conf.stem] = OrganizationTypeConfiguration(**data)
+            result[conf.stem] = data
 
     return result
 
 
-organization_types = _load_organization_types()
+available_org_types = _load_type_map()

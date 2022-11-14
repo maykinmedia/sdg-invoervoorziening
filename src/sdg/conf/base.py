@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 import sentry_sdk
 
 from .api import *  # noqa
-from .types.organization import organization_types
+from .types.organization import available_org_types
 from .utils import config, get_current_version, get_sentry_integrations
 
 # Build paths inside the project, so further paths can be defined relative to
@@ -548,9 +548,9 @@ ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
 SDG_ORGANIZATION_TYPE = config(
     "SDG_ORGANIZATION_TYPE", default="municipality", transform=str.lower
 )
-if SDG_ORGANIZATION_TYPE not in organization_types:
+if SDG_ORGANIZATION_TYPE not in available_org_types:
     raise ImproperlyConfigured(
-        f"SDG_ORGANIZATION_TYPE must be one of {', '.join(organization_types)}"
+        f"SDG_ORGANIZATION_TYPE must be one of {', '.join(available_org_types)}"
     )
 
 
