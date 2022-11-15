@@ -4,7 +4,11 @@ from django.db import transaction
 from django.utils.dateparse import parse_date
 
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import (
+    OpenApiExample,
+    extend_schema_field,
+    extend_schema_serializer,
+)
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 from rest_framework.reverse import reverse
@@ -231,6 +235,169 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            "Organisaties/put",
+            value={
+                "upnUri": "http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland",
+                "doelgroep": "eu-burger",
+                "verantwoordelijkeOrganisatie": {
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/Amsterdam"
+                },
+                "bevoegdeOrganisatie": {
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/Vereniging_van_Nederlandse_Gemeenten"
+                },
+                "productValtOnder": {
+                    "upnUri": "http://standaarden.overheid.nl/owms/terms/belastingaangifte"
+                },
+                "catalogus": "https://sdg-api.example.com/api/v1/catalogi/dfdc4792-1725-42cb-bd90-e1789fb6c3b8",
+                "productAanwezig": True,
+                "publicatieDatum": None,
+                "locaties": [{"naam": "locatie_naam"}],
+                "vertalingen": [
+                    {
+                        "taal": "nl",
+                        "titel": "titel",
+                        "tekst": "### Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "links": [{"label": "label", "url": "http://url-example.nl"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. *",
+                        "vereisten": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "bezwaarEnBeroep": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "kostenEnBetaalmethoden": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "uitersteTermijn": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "wtdBijGeenReactie": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "procedureLink": {
+                            "label": "label",
+                            "url": "http://domain.nl",
+                        },
+                        "productAanwezigToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                        "productValtOnderToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                    },
+                    {
+                        "taal": "en",
+                        "titel": "titel",
+                        "tekst": "### Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "links": [{"label": "label", "url": "http://domain.com"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. *",
+                        "vereisten": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "bezwaarEnBeroep": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "kostenEnBetaalmethoden": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "uitersteTermijn": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "wtdBijGeenReactie": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "procedureLink": {
+                            "label": "label",
+                            "url": "http://domain.com",
+                        },
+                        "productAanwezigToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                        "productValtOnderToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                    },
+                ],
+            },
+            response_only=False,
+            request_only=True,
+        ),
+        OpenApiExample(
+            "Organisaties/put",
+            value={
+                "url": "https://sdg-api.example.com/api/v1/producten/be1d371f-78b8-4824-8e15-80f58155a9be",
+                "uuid": "be1d371f-78b8-4824-8e15-80f58155a9be",
+                "upnLabel": "aangifte vertrek buitenland",
+                "upnUri": "http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland",
+                "versie": 1,
+                "publicatieDatum": None,
+                "productAanwezig": True,
+                "productValtOnder": {
+                    "url": "https://sdg-api.example.com/api/v1/producten/e299b470-bd40-47c0-aae8-e86e079d6163",
+                    "upnUri": "http://standaarden.overheid.nl/owms/terms/belastingaangifte",
+                    "upnLabel": "belastingaangifte",
+                },
+                "verantwoordelijkeOrganisatie": {
+                    "url": "https://sdg-api.example.com/api/v1/organisaties/8ed807d3-70f2-4db3-b87c-2a028b13ee69",
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/Amsterdam",
+                    "owmsPrefLabel": "Amsterdam",
+                    "owmsEndDate": "2023-01-01T00:00:22Z",
+                },
+                "bevoegdeOrganisatie": {
+                    "naam": "Amsterdam",
+                    "owmsIdentifier": "http://standaarden.overheid.nl/owms/terms/Vereniging_van_Nederlandse_Gemeenten",
+                    "owmsPrefLabel": "Vereniging van Nederlandse Gemeenten",
+                    "owmsEndDate": "2023-01-01T00:00:22Z",
+                },
+                "catalogus": "https://sdg-api.example.com/api/v1/catalogi/dfdc4792-1725-42cb-bd90-e1789fb6c3b8",
+                "locaties": [
+                    {
+                        "url": "https://sdg-api.example.com/api/v1/locaties/e089cf3c-457f-4700-9933-225a824b8118",
+                        "naam": "locatie_naam",
+                        "openingstijden": {
+                            "maandag": ["9:00 - 18:00"],
+                            "dinsdag": ["9:00 - 18:00"],
+                            "woensdag": ["9:00 - 18:00"],
+                            "donderdag": ["9:00 - 18:00"],
+                            "vrijdag": ["9:00 - 18:00"],
+                            "zaterdag": ["10:00 - 12:00", "13:00 - 15:00"],
+                            "zondag": ["10:00 - 12:00", "13:00 - 15:00"],
+                        },
+                    }
+                ],
+                "doelgroep": "eu-burger",
+                "vertalingen": [
+                    {
+                        "taal": "nl",
+                        "titel": "titel",
+                        "tekst": "### Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "links": [{"label": "label", "url": "http://domain.nl"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. *",
+                        "vereisten": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "bezwaarEnBeroep": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "kostenEnBetaalmethoden": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "uitersteTermijn": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "wtdBijGeenReactie": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "procedureLink": {"label": "label", "url": "http://domain.nl"},
+                        "productAanwezigToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                        "productValtOnderToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                        "datumWijziging": "2023-01-01T00:00:22Z",
+                    },
+                    {
+                        "taal": "en",
+                        "titel": "titel",
+                        "tekst": "### Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "links": [{"label": "label", "url": "http://domain.com"}],
+                        "procedureBeschrijving": "procedure beschijving",
+                        "bewijs": "* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. *",
+                        "vereisten": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "bezwaarEnBeroep": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "kostenEnBetaalmethoden": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "uitersteTermijn": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "wtdBijGeenReactie": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra.",
+                        "procedureLink": {"label": "label", "url": "http://domain.com"},
+                        "productAanwezigToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                        "productValtOnderToelichting": "** Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed viverra. **",
+                        "datumWijziging": "2023-01-01T00:00:22Z",
+                    },
+                ],
+                "beschikbareTalen": ["nl", "en"],
+            },
+            response_only=True,
+            request_only=False,
+        ),
+    ],
+    many=False,
+    exclude_fields=(
+        "uuid",
+        "url",
+        "versie",
+        "product_valt_onder",
+        "verantwoordelijke_organisatie",
+        "bevoegde_organisatie",
+        "locaties",
+        "vertalingen",
+        "beschikbare_talen",
+    ),
+)
 class ProductSerializer(ProductBaseSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 

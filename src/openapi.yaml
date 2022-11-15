@@ -545,7 +545,113 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaginatedProductList'
+                $ref: '#/components/schemas/Product'
+              examples:
+                Organisaties/put:
+                  value:
+                    url: https://sdg-api.example.com/api/v1/producten/be1d371f-78b8-4824-8e15-80f58155a9be
+                    uuid: be1d371f-78b8-4824-8e15-80f58155a9be
+                    upnLabel: aangifte vertrek buitenland
+                    upnUri: http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland
+                    versie: 1
+                    publicatieDatum: null
+                    productAanwezig: true
+                    productValtOnder:
+                      url: https://sdg-api.example.com/api/v1/producten/e299b470-bd40-47c0-aae8-e86e079d6163
+                      upnUri: http://standaarden.overheid.nl/owms/terms/belastingaangifte
+                      upnLabel: belastingaangifte
+                    verantwoordelijkeOrganisatie:
+                      url: https://sdg-api.example.com/api/v1/organisaties/8ed807d3-70f2-4db3-b87c-2a028b13ee69
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Amsterdam
+                      owmsPrefLabel: Amsterdam
+                      owmsEndDate: '2023-01-01T00:00:22Z'
+                    bevoegdeOrganisatie:
+                      naam: Amsterdam
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Vereniging_van_Nederlandse_Gemeenten
+                      owmsPrefLabel: Vereniging van Nederlandse Gemeenten
+                      owmsEndDate: '2023-01-01T00:00:22Z'
+                    catalogus: https://sdg-api.example.com/api/v1/catalogi/dfdc4792-1725-42cb-bd90-e1789fb6c3b8
+                    locaties:
+                    - url: https://sdg-api.example.com/api/v1/locaties/e089cf3c-457f-4700-9933-225a824b8118
+                      naam: locatie_naam
+                      openingstijden:
+                        maandag:
+                        - 9:00 - 18:00
+                        dinsdag:
+                        - 9:00 - 18:00
+                        woensdag:
+                        - 9:00 - 18:00
+                        donderdag:
+                        - 9:00 - 18:00
+                        vrijdag:
+                        - 9:00 - 18:00
+                        zaterdag:
+                        - 10:00 - 12:00
+                        - 13:00 - 15:00
+                        zondag:
+                        - 10:00 - 12:00
+                        - 13:00 - 15:00
+                    doelgroep: eu-burger
+                    vertalingen:
+                    - taal: nl
+                      titel: titel
+                      tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.'
+                      links:
+                      - label: label
+                        url: http://domain.nl
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra. *'
+                      vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Sed viverra.
+                      uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      procedureLink:
+                        label: label
+                        url: http://domain.nl
+                      productAanwezigToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      productValtOnderToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      datumWijziging: '2023-01-01T00:00:22Z'
+                    - taal: en
+                      titel: titel
+                      tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.'
+                      links:
+                      - label: label
+                        url: http://domain.com
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra. *'
+                      vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Sed viverra.
+                      uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      procedureLink:
+                        label: label
+                        url: http://domain.com
+                      productAanwezigToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      productValtOnderToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      datumWijziging: '2023-01-01T00:00:22Z'
+                    beschikbareTalen:
+                    - nl
+                    - en
           description: ''
     post:
       operationId: productenCreate
@@ -568,6 +674,77 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Product'
+            examples:
+              Organisaties/put:
+                value:
+                  upnUri: http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland
+                  doelgroep: eu-burger
+                  verantwoordelijkeOrganisatie:
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Amsterdam
+                  bevoegdeOrganisatie:
+                    owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Vereniging_van_Nederlandse_Gemeenten
+                  productValtOnder:
+                    upnUri: http://standaarden.overheid.nl/owms/terms/belastingaangifte
+                  catalogus: https://sdg-api.example.com/api/v1/catalogi/dfdc4792-1725-42cb-bd90-e1789fb6c3b8
+                  productAanwezig: true
+                  publicatieDatum: null
+                  locaties:
+                  - naam: locatie_naam
+                  vertalingen:
+                  - taal: nl
+                    titel: titel
+                    tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.'
+                    links:
+                    - label: label
+                      url: http://url-example.nl
+                    procedureBeschrijving: procedure beschijving
+                    bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra. *'
+                    vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit. Sed viverra.
+                    uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    procedureLink:
+                      label: label
+                      url: http://domain.nl
+                    productAanwezigToelichting: '** Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit. Sed viverra. **'
+                    productValtOnderToelichting: '** Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit. Sed viverra. **'
+                  - taal: en
+                    titel: titel
+                    tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.'
+                    links:
+                    - label: label
+                      url: http://domain.com
+                    procedureBeschrijving: procedure beschijving
+                    bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra. *'
+                    vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit. Sed viverra.
+                    uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                      elit. Sed viverra.
+                    procedureLink:
+                      label: label
+                      url: http://domain.com
+                    productAanwezigToelichting: '** Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit. Sed viverra. **'
+                    productValtOnderToelichting: '** Lorem ipsum dolor sit amet, consectetur
+                      adipiscing elit. Sed viverra. **'
         required: true
       security:
       - tokenAuth: []
@@ -577,6 +754,112 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                Organisaties/put:
+                  value:
+                    url: https://sdg-api.example.com/api/v1/producten/be1d371f-78b8-4824-8e15-80f58155a9be
+                    uuid: be1d371f-78b8-4824-8e15-80f58155a9be
+                    upnLabel: aangifte vertrek buitenland
+                    upnUri: http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland
+                    versie: 1
+                    publicatieDatum: null
+                    productAanwezig: true
+                    productValtOnder:
+                      url: https://sdg-api.example.com/api/v1/producten/e299b470-bd40-47c0-aae8-e86e079d6163
+                      upnUri: http://standaarden.overheid.nl/owms/terms/belastingaangifte
+                      upnLabel: belastingaangifte
+                    verantwoordelijkeOrganisatie:
+                      url: https://sdg-api.example.com/api/v1/organisaties/8ed807d3-70f2-4db3-b87c-2a028b13ee69
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Amsterdam
+                      owmsPrefLabel: Amsterdam
+                      owmsEndDate: '2023-01-01T00:00:22Z'
+                    bevoegdeOrganisatie:
+                      naam: Amsterdam
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Vereniging_van_Nederlandse_Gemeenten
+                      owmsPrefLabel: Vereniging van Nederlandse Gemeenten
+                      owmsEndDate: '2023-01-01T00:00:22Z'
+                    catalogus: https://sdg-api.example.com/api/v1/catalogi/dfdc4792-1725-42cb-bd90-e1789fb6c3b8
+                    locaties:
+                    - url: https://sdg-api.example.com/api/v1/locaties/e089cf3c-457f-4700-9933-225a824b8118
+                      naam: locatie_naam
+                      openingstijden:
+                        maandag:
+                        - 9:00 - 18:00
+                        dinsdag:
+                        - 9:00 - 18:00
+                        woensdag:
+                        - 9:00 - 18:00
+                        donderdag:
+                        - 9:00 - 18:00
+                        vrijdag:
+                        - 9:00 - 18:00
+                        zaterdag:
+                        - 10:00 - 12:00
+                        - 13:00 - 15:00
+                        zondag:
+                        - 10:00 - 12:00
+                        - 13:00 - 15:00
+                    doelgroep: eu-burger
+                    vertalingen:
+                    - taal: nl
+                      titel: titel
+                      tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.'
+                      links:
+                      - label: label
+                        url: http://domain.nl
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra. *'
+                      vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Sed viverra.
+                      uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      procedureLink:
+                        label: label
+                        url: http://domain.nl
+                      productAanwezigToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      productValtOnderToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      datumWijziging: '2023-01-01T00:00:22Z'
+                    - taal: en
+                      titel: titel
+                      tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.'
+                      links:
+                      - label: label
+                        url: http://domain.com
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra. *'
+                      vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Sed viverra.
+                      uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      procedureLink:
+                        label: label
+                        url: http://domain.com
+                      productAanwezigToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      productValtOnderToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      datumWijziging: '2023-01-01T00:00:22Z'
+                    beschikbareTalen:
+                    - nl
+                    - en
           description: ''
   /api/v1/producten/{productUuid}/historie:
     get:
@@ -633,6 +916,112 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+              examples:
+                Organisaties/put:
+                  value:
+                    url: https://sdg-api.example.com/api/v1/producten/be1d371f-78b8-4824-8e15-80f58155a9be
+                    uuid: be1d371f-78b8-4824-8e15-80f58155a9be
+                    upnLabel: aangifte vertrek buitenland
+                    upnUri: http://standaarden.overheid.nl/owms/terms/AangifteVertrekBuitenland
+                    versie: 1
+                    publicatieDatum: null
+                    productAanwezig: true
+                    productValtOnder:
+                      url: https://sdg-api.example.com/api/v1/producten/e299b470-bd40-47c0-aae8-e86e079d6163
+                      upnUri: http://standaarden.overheid.nl/owms/terms/belastingaangifte
+                      upnLabel: belastingaangifte
+                    verantwoordelijkeOrganisatie:
+                      url: https://sdg-api.example.com/api/v1/organisaties/8ed807d3-70f2-4db3-b87c-2a028b13ee69
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Amsterdam
+                      owmsPrefLabel: Amsterdam
+                      owmsEndDate: '2023-01-01T00:00:22Z'
+                    bevoegdeOrganisatie:
+                      naam: Amsterdam
+                      owmsIdentifier: http://standaarden.overheid.nl/owms/terms/Vereniging_van_Nederlandse_Gemeenten
+                      owmsPrefLabel: Vereniging van Nederlandse Gemeenten
+                      owmsEndDate: '2023-01-01T00:00:22Z'
+                    catalogus: https://sdg-api.example.com/api/v1/catalogi/dfdc4792-1725-42cb-bd90-e1789fb6c3b8
+                    locaties:
+                    - url: https://sdg-api.example.com/api/v1/locaties/e089cf3c-457f-4700-9933-225a824b8118
+                      naam: locatie_naam
+                      openingstijden:
+                        maandag:
+                        - 9:00 - 18:00
+                        dinsdag:
+                        - 9:00 - 18:00
+                        woensdag:
+                        - 9:00 - 18:00
+                        donderdag:
+                        - 9:00 - 18:00
+                        vrijdag:
+                        - 9:00 - 18:00
+                        zaterdag:
+                        - 10:00 - 12:00
+                        - 13:00 - 15:00
+                        zondag:
+                        - 10:00 - 12:00
+                        - 13:00 - 15:00
+                    doelgroep: eu-burger
+                    vertalingen:
+                    - taal: nl
+                      titel: titel
+                      tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.'
+                      links:
+                      - label: label
+                        url: http://domain.nl
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra. *'
+                      vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Sed viverra.
+                      uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      procedureLink:
+                        label: label
+                        url: http://domain.nl
+                      productAanwezigToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      productValtOnderToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      datumWijziging: '2023-01-01T00:00:22Z'
+                    - taal: en
+                      titel: titel
+                      tekst: '### Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.'
+                      links:
+                      - label: label
+                        url: http://domain.com
+                      procedureBeschrijving: procedure beschijving
+                      bewijs: '* Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra. *'
+                      vereisten: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      bezwaarEnBeroep: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      kostenEnBetaalmethoden: Lorem ipsum dolor sit amet, consectetur
+                        adipiscing elit. Sed viverra.
+                      uitersteTermijn: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      wtdBijGeenReactie: Lorem ipsum dolor sit amet, consectetur adipiscing
+                        elit. Sed viverra.
+                      procedureLink:
+                        label: label
+                        url: http://domain.com
+                      productAanwezigToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      productValtOnderToelichting: '** Lorem ipsum dolor sit amet,
+                        consectetur adipiscing elit. Sed viverra. **'
+                      datumWijziging: '2023-01-01T00:00:22Z'
+                    beschikbareTalen:
+                    - nl
+                    - en
           description: ''
 components:
   schemas:
@@ -1076,26 +1465,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LokaleOverheid'
-    PaginatedProductList:
-      type: object
-      properties:
-        count:
-          type: integer
-          example: 123
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=4
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?page=2
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
     PaginatedProductVersieList:
       type: object
       properties:
@@ -1224,17 +1593,6 @@ components:
       description: Serializer for a product, including UPN, availability, locations
         and latest version translations.
       properties:
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van dit object binnen deze API.
-        uuid:
-          type: string
-          format: uuid
-          readOnly: true
-          description: De identificatie die binnen deze API gebruikt wordt voor de
-            resource.
         upnLabel:
           type: string
           description: Het UPN Label van het specifieke product.
@@ -1242,10 +1600,6 @@ components:
           type: string
           format: uri
           description: De UPN URI van het specifieke product.
-        versie:
-          type: integer
-          readOnly: true
-          description: De huidige versie van dit product.
         publicatieDatum:
           type: string
           format: date
@@ -1259,61 +1613,20 @@ components:
             dat een product aanwezig of afwezig is, dan is deze waarde `null`. Als
             een product afwezig is, dan moet er een toelichting worden gegeven in
             alle beschikbare talen. Alle andere vertaalde velden kunnen dan leeg blijven.
-        productValtOnder:
-          allOf:
-          - $ref: '#/components/schemas/ProductBase'
-          nullable: true
-          description: Als een product valt onder een ander product (het product wordt
-            bijvoorbeeld geleverd middels een ander product), dan staat deze hier
-            vermeld. Als een product onder een ander product valt, dan moet er een
-            toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde
-            velden kunnen dan leeg blijven.
-        verantwoordelijkeOrganisatie:
-          $ref: '#/components/schemas/ProductLokaleOverheid'
-        bevoegdeOrganisatie:
-          allOf:
-          - $ref: '#/components/schemas/BevoegdeOrganisatie'
-          nullable: true
-          description: De bevoegde organisatie van dit product is (als die er niet
-            is wordt de verantwoordelijke organisatie standaard de bevoegde organisatie.)
         catalogus:
           type: string
           format: uri
           nullable: true
           description: De catalogus waartoe dit product behoort.
-        locaties:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductLocatie'
-          nullable: true
-          description: Een lijst met locaties waarop dit product beschikbaar is.
         doelgroep:
           allOf:
           - $ref: '#/components/schemas/DoelgroepEnum'
           description: De doelgroep van dit product.
-        vertalingen:
-          type: array
-          items:
-            $ref: '#/components/schemas/LocalizedProduct'
-          description: Een lijst met specifieke teksten op basis van taal.
-        beschikbareTalen:
-          type: array
-          items: {}
-          readOnly: true
-          description: Alle beschikbare talen.
       required:
-      - beschikbareTalen
       - doelgroep
-      - locaties
       - productAanwezig
-      - productValtOnder
       - publicatieDatum
       - upnUri
-      - url
-      - uuid
-      - verantwoordelijkeOrganisatie
-      - versie
-      - vertalingen
     ProductBase:
       type: object
       properties:
@@ -1331,51 +1644,6 @@ components:
           description: Het UPN Label van het specifieke product.
       required:
       - upnUri
-      - url
-    ProductLocatie:
-      type: object
-      properties:
-        openingstijden:
-          allOf:
-          - $ref: '#/components/schemas/Openingstijden'
-          readOnly: true
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van dit object binnen deze API.
-        naam:
-          type: string
-          description: De naam van de locatie.
-          maxLength: 100
-      required:
-      - openingstijden
-      - url
-    ProductLokaleOverheid:
-      type: object
-      description: De organisatie die dit product levert en de teksten hiervan beheert.
-      properties:
-        url:
-          type: string
-          format: uri
-          readOnly: true
-          description: De unieke URL van dit object binnen deze API.
-        owmsIdentifier:
-          type: string
-          format: uri
-          description: De OWMS Identifier van de hoofdorganisatie van deze lokale
-            overheid.
-        owmsPrefLabel:
-          type: string
-          description: OWMS label van de hoofdorganisatie van deze lokale overheid.
-        owmsEndDate:
-          type: string
-          format: date-time
-          readOnly: true
-          description: De einddatum, zoals gevonden in het OWMS-model.
-      required:
-      - owmsEndDate
-      - owmsIdentifier
       - url
     ProductVersie:
       type: object
