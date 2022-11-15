@@ -62,6 +62,7 @@ jobs:
       - name: Run tests
         run: |
           python src/manage.py collectstatic --noinput --link
+          make trans
           coverage run src/manage.py test src
         env:
           DJANGO_SETTINGS_MODULE: sdg.conf.ci
