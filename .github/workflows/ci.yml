@@ -41,10 +41,10 @@ jobs:
         with:
           node-version: '12'
 
-      # - name: Install OS dependencies
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl gettext
+      - name: Install OS dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libxml2-dev libxmlsec1-dev libxmlsec1-openssl gettext -y
 
       - name: Install dependencies
         run: |
