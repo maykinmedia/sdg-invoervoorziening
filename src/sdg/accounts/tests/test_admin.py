@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core import mail
 from django.urls import reverse
+from django.utils.translation import gettext as _
 
 from django_webtest import WebTest
 
@@ -32,7 +33,10 @@ class AdminTests(WebTest):
         self.assertEqual(len(mail.outbox), 1)
 
         invite = UserInvitation.objects.get()
-        self.assertEqual(mail.outbox[0].subject, settings.INVITATION_SUBJECT)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            settings.INVITATION_SUBJECT.format(org_type_name_plural=_("gemeenten")),
+        )
         self.assertIn(
             "Arthur Dent",
             mail.outbox[0].body,

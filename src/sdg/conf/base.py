@@ -1,12 +1,12 @@
 import os
 import sys
 
-from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse_lazy
 
 import sentry_sdk
 
 from .api import *  # noqa
+from .types.exceptions import OrganizationTypeException
 from .types.organization import available_org_types
 from .utils import config, get_current_version, get_sentry_integrations
 
@@ -480,7 +480,7 @@ ACCOUNT_PREVENT_ENUMERATION = False
 
 # SDG Invitations
 INVITATION_TEMPLATE = "core/email/invitation.html"
-INVITATION_SUBJECT = "Activeer je account invoervoorziening SDG {org_type_name}"
+INVITATION_SUBJECT = "Activeer je account invoervoorziening SDG {org_type_name_plural}"
 
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
 
@@ -549,7 +549,7 @@ SDG_ORGANIZATION_TYPE = config(
     "SDG_ORGANIZATION_TYPE", default="municipality", transform=str.lower
 )
 if SDG_ORGANIZATION_TYPE not in available_org_types:
-    raise ImproperlyConfigured(
+    raise OrganizationTypeException(
         f"SDG_ORGANIZATION_TYPE must be one of {', '.join(available_org_types)}"
     )
 
