@@ -21,6 +21,7 @@ class OrganizationTypeConfiguration(BaseModel):
     privacy_policy_url: Union[HttpUrl, EmptyUrl]
 
     overlay: str
+    overlay_size: str
     footer_logo: str
     color_hue: int = Field(gte=0, lte=360)
 

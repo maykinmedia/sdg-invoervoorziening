@@ -8,12 +8,8 @@
 
 {% block outer_content %}
     <div class="login">
-        <div class="login__left">
-            {% with overlay=org_type_cfg.overlay %}
-                {% if overlay %}
-                    <img class="login__background-image" src="{% static overlay %}" alt="">
-                {% endif %}
-            {% endwith %}
+        <div class="login__left"
+             style="background-image: url({% static org_type_cfg.overlay %}); background-size: {{ org_type_cfg.overlay_size }}">
             {% block login_left %}
                 <div class="logo">
                     <h1 class="logo__title logo__title-large"><a href="{% url 'core:home' %}">

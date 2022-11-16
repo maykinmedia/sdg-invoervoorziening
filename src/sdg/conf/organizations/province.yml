@@ -3,6 +3,7 @@ accessibility_url: "#"
 privacy_policy_url: "#"
 
 overlay: images/circuit.svg
+overlay_size: 800px
 footer_logo: images/ipo_logo.png
 color_hue: 16
 

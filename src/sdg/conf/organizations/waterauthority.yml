@@ -2,7 +2,8 @@ url: https://www.hetwaterschapshuis.nl/
 accessibility_url: "#"
 privacy_policy_url: "#"
 
-overlay: images/sprinkle.svg
+overlay: images/rain.svg
+overlay_size: 260px
 footer_logo: images/waterschap_logo.png
 color_hue: 186
 

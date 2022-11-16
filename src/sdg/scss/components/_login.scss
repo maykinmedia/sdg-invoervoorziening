@@ -6,24 +6,21 @@
   height: 100vh;
 
   .login__left {
-    background: hsl(var(--color-theme-hue), 41%, 38%);
-    background: linear-gradient(180deg, var(--color-theme-bg) 0%, var(--color-theme-bg-dark) 100%);
     padding: 202px 125px 125px 125px;
     text-align: center;
     overflow: hidden;
     position: relative;
+  }
 
-    .login__background-image {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
-    }
-
+  .login__left::after{
+    content: "";
+    background: linear-gradient(180deg, var(--org-theme-bg) 0%, var(--org-theme-bg-dark) 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
   }
 
   .login__right {
