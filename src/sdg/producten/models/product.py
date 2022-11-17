@@ -65,6 +65,7 @@ class GeneriekProduct(models.Model):
     doelgroep = models.CharField(
         max_length=32,
         choices=DoelgroepChoices.choices,
+        blank=True,
         help_text=_(
             "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
             "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
