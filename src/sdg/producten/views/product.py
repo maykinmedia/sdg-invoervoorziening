@@ -2,6 +2,7 @@ import datetime
 from itertools import chain, zip_longest
 from typing import Tuple
 
+from django.contrib import messages
 from django.db import transaction
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
@@ -380,19 +381,35 @@ class ProductUpdateView(
             new_version, created = self._save_version_form(
                 product_form, version_form, form
             )
+
             if created:
                 Event.create_and_log(self.request, self.object, Event.CREATE)
                 duplicate_localized_products(form, new_version)
             else:
                 Event.create_and_log(self.request, self.object, Event.UPDATE)
                 form.save()
+
+            messages.add_message(
+                self.request,
+                messages.SUCCESS,
+                _("Product {product} is opgeslagen.").format(product=self.product),
+            )
+
             return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, product_form, version_form, form):
         context = self.get_context_data(
             form=form, version_form=version_form, product_form=product_form
         )
-        context["form_invalid"] = True
+
+        messages.add_message(
+            self.request,
+            messages.ERROR,
+            _(
+                "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten."
+            ),
+        )
+
         return self.render_to_response(context)
 
     def get_success_url(self):

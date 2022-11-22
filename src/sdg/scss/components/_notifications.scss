@@ -30,8 +30,7 @@
       margin-right: 10px;
     }
 
-    &.notification__info,
-    &.notification__success,
+    &.notification__info
     {
       border-left: 5px solid #0B71A1;
       background-color: $color_primary_lightest;
@@ -39,6 +38,18 @@
       .svg-inline--fa,
       a {
         color: #0B71A1;
+      }
+    }
+
+    &.notification__success
+    {
+      border-left: 5px solid $color_success;
+      background-color: $color_success_notification-bg;
+      color: $color_success_darkest;
+
+      .svg-inline--fa,
+      a {
+        color: $color_success_darkest;
       }
     }
 
