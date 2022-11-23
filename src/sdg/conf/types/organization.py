@@ -9,6 +9,7 @@ from pydantic import BaseModel, EmailStr, Field, HttpUrl, validator
 from sdg.conf.types.exceptions import OrganizationTypeException
 
 EmptyUrl = Literal["#"]
+OptionalUrl = Union[HttpUrl, EmptyUrl]
 
 
 class OrganizationTypeConfiguration(BaseModel):
@@ -16,9 +17,11 @@ class OrganizationTypeConfiguration(BaseModel):
     Base class used to configure an organization type.
     """
 
-    url: Union[HttpUrl, EmptyUrl]
-    accessibility_url: Union[HttpUrl, EmptyUrl]
-    privacy_policy_url: Union[HttpUrl, EmptyUrl]
+    url: OptionalUrl
+    accessibility_url: OptionalUrl
+    privacy_policy_url: OptionalUrl
+    more_info_url: OptionalUrl
+
     email: EmailStr
 
     overlay: str
