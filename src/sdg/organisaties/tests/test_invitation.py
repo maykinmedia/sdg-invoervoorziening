@@ -145,6 +145,10 @@ class InvitationTests(WebTest):
             "Ook kun je hier de teksten controleren en aanvullen met informatie van jouw waterschap",
             mail.outbox[0].body,
         )
+        self.assertIn(
+            "servicedesk@hetwaterschapshuis.nl",
+            mail.outbox[0].body,
+        )
 
     def test_can_accept_invitation(self):
         response = self.app.get(

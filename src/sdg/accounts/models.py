@@ -97,6 +97,7 @@ class UserInvitation(models.Model):
             {
                 "org_type_name": cfg.name,
                 "org_type_name_plural": cfg.name_plural,
+                "org_type_email": cfg.email,
                 "invite_url": invite_url,
                 "user_full_name": self.user.get_full_name(),
                 "key": self.key,

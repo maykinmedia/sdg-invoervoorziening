@@ -140,5 +140,5 @@ def org_type_cfg():
     from sdg.conf.types.organization import available_org_types
 
     return OrganizationTypeConfiguration(
-        **available_org_types[getattr(settings, "SDG_ORGANIZATION_TYPE")]
+        **available_org_types[settings.SDG_ORGANIZATION_TYPE]
     )

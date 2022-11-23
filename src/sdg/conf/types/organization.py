@@ -4,7 +4,7 @@ from typing import Literal, Union
 from django.utils.translation import gettext_lazy as _
 
 import yaml
-from pydantic import BaseModel, Field, HttpUrl, validator
+from pydantic import BaseModel, EmailStr, Field, HttpUrl, validator
 
 from sdg.conf.types.exceptions import OrganizationTypeException
 
@@ -19,6 +19,7 @@ class OrganizationTypeConfiguration(BaseModel):
     url: Union[HttpUrl, EmptyUrl]
     accessibility_url: Union[HttpUrl, EmptyUrl]
     privacy_policy_url: Union[HttpUrl, EmptyUrl]
+    email: EmailStr
 
     overlay: str
     overlay_size: str
