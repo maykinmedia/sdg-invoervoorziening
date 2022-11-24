@@ -2,7 +2,7 @@ from datetime import date
 from typing import Optional
 
 from django import forms
-from django.db.models import Case, CharField, Count, F, Value, When
+from django.db.models import Case, CharField, Count, F, Q, Value, When
 from django.db.models.functions import Concat
 from django.forms import inlineformset_factory
 
@@ -150,6 +150,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             .annotate(
                 _name=Case(
                     When(
+                        ~Q(generiek_product__doelgroep=""),
                         generiek_product__upn__upn_label__in=[
                             item["generiek_product__upn__upn_label"]
                             for item in duplicates_generiek_product_upn_labels
