@@ -328,7 +328,7 @@ class ProductUpdateView(
 
         context["areas"] = self.product.get_areas()
 
-        context["localized_form_fields"] = settings.LOCALIZED_FORM_FIELDS
+        context["localized_form_fields"] = settings.SDG_LOCALIZED_FORM_FIELDS
 
         context["user_can_edit"] = user_has_valid_roles(
             self.request.user,
