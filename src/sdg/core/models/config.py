@@ -13,7 +13,7 @@ from sdg.core.models.validators import DomainValidator
 LabeledTooltipField = partial(
     DynamicArrayField,
     base_field=ArrayField(
-        models.CharField(max_length=51),
+        models.CharField(max_length=512),
     ),
     subwidget_form=LabeledTooltipWidget,
     blank=True,

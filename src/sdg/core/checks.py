@@ -18,11 +18,11 @@ def localized_form_field_check(app_configs, **kwargs):
     ProductFieldConfiguration = apps.get_model("core", "ProductFieldConfiguration")
 
     # Ensure all fields are exposed in the admin
-    registry_inline = admin.site._registry[ProductFieldConfiguration].inlines[0]
-    admin_fields = [
-        glom(fieldset, "1.fields") for fieldset in registry_inline.fieldsets
-    ]
-    admin_fields = list(chain(*admin_fields))
+    admin_inlines = admin.site._registry[ProductFieldConfiguration].inlines
+    admin_fields = []
+    for inline in admin_inlines:
+        fields = [glom(fieldset, "1.fields") for fieldset in inline.fieldsets]
+        admin_fields.extend(chain(*fields))
 
     for field in settings.SDG_LOCALIZED_FORM_FIELDS:
         field_name = f"localizedproduct_{field}"
