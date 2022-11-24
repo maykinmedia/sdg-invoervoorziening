@@ -281,7 +281,7 @@ msgstr ""
 msgid "Naam van de contactpersoon"
 msgstr ""
 
-#: sdg/api/models.py:19 sdg/templates/mocks/kvk.html:264
+#: sdg/api/models.py:19 sdg/templates/mocks/kvk.html:266
 msgid "email"
 msgstr ""
 
@@ -713,35 +713,35 @@ msgstr ""
 
 #: sdg/core/models/localized_config.py:63
 msgid "Procedure beschrijving"
-msgstr ""
+msgstr "Procedure description"
 
 #: sdg/core/models/localized_config.py:66
 msgid "Vereisten"
-msgstr ""
+msgstr "Requirements"
 
 #: sdg/core/models/localized_config.py:69
 msgid "Bewijs"
-msgstr ""
+msgstr "Evidence"
 
 #: sdg/core/models/localized_config.py:72
 msgid "Bezwaar en beroep"
-msgstr ""
+msgstr "Objection and appeal"
 
 #: sdg/core/models/localized_config.py:75
 msgid "Kosten en betaalmethoden"
-msgstr ""
+msgstr "Costs and payment methods"
 
 #: sdg/core/models/localized_config.py:78
 msgid "Uiterste termijn"
-msgstr ""
+msgstr "Deadline"
 
 #: sdg/core/models/localized_config.py:81
 msgid "Wtd bij geen reactie"
-msgstr ""
+msgstr "Wtd in case of no response"
 
 #: sdg/core/models/localized_config.py:84
 msgid "Decentrale procedure link"
-msgstr ""
+msgstr "Decentralized procedure link"
 
 #: sdg/core/models/localized_config.py:87
 msgid "Decentrale procedure label"
@@ -1175,11 +1175,10 @@ msgid ""
 "organisaties beheren."
 msgstr ""
 
-#: sdg/organisaties/views/bevoegde_organisaties.py:39
+#: sdg/organisaties/views/bevoegde_organisaties.py:38
 #, python-brace-format
 msgid ""
-"De bevoegde organisaties van {org_type_name} {organisatie} zijn succesvol "
-"gewijzigd."
+"De bevoegde organisaties van gemeente {organisatie} zijn succesvol gewijzigd."
 msgstr ""
 
 #: sdg/organisaties/views/catalogi.py:25
@@ -1214,11 +1213,10 @@ msgid ""
 "Er bestaat al een gebruiker met dit e-mailadres binnen deze organisatie."
 msgstr ""
 
-#: sdg/organisaties/views/locaties.py:43
+#: sdg/organisaties/views/locaties.py:37
 #, python-brace-format
 msgid ""
-"De locatie instellingen van {org_type_name} {organisatie} zijn succesvol "
-"gewijzigd."
+"De locatie instellingen van gemeente {organisatie} zijn succesvol gewijzigd."
 msgstr ""
 
 #: sdg/organisaties/views/overheden.py:28
@@ -1226,16 +1224,15 @@ msgstr ""
 msgid "De organisatie instellingen van {organisatie} zijn succesvol gewijzigd."
 msgstr ""
 
-#: sdg/organisaties/views/roles.py:42
+#: sdg/organisaties/views/roles.py:34
 #, python-brace-format
-msgid ""
-"De gebruiker {role} is niet meer gekoppeld aan {org_type_name} {organisatie}."
+msgid "De gebruiker {role} is niet meer gekoppeld aan gemeente  {organisatie}."
 msgstr ""
 
-#: sdg/organisaties/views/roles.py:73
+#: sdg/organisaties/views/roles.py:54
 #, python-brace-format
 msgid ""
-"De gebruikersrol van {role} voor {org_type_name} {organisatie} is succesvol "
+"De gebruikersrol van {role} voor gemeente {organisatie} is succesvol "
 "gewijzigd."
 msgstr ""
 
@@ -1398,7 +1395,7 @@ msgstr ""
 
 #: sdg/producten/models/localized.py:159
 msgid "procedure beschrijving"
-msgstr ""
+msgstr "procedure description"
 
 #: sdg/producten/models/localized.py:161
 msgid "Procedurebeschrijving."
@@ -1406,7 +1403,7 @@ msgstr ""
 
 #: sdg/producten/models/localized.py:166
 msgid "vereisten"
-msgstr ""
+msgstr "requirements"
 
 #: sdg/producten/models/localized.py:168
 msgid "Vereisten auth/id/sign."
@@ -1414,7 +1411,7 @@ msgstr ""
 
 #: sdg/producten/models/localized.py:173
 msgid "bewijs"
-msgstr ""
+msgstr "evidence"
 
 #: sdg/producten/models/localized.py:175
 msgid "Bewijs (type/format)."
@@ -1422,23 +1419,23 @@ msgstr ""
 
 #: sdg/producten/models/localized.py:180
 msgid "bezwaar en beroep"
-msgstr ""
+msgstr "Objection and appeal"
 
 #: sdg/producten/models/localized.py:182
 msgid "Bezwaar en beroep."
-msgstr ""
+msgstr "Objection and appeal."
 
 #: sdg/producten/models/localized.py:187
 msgid "kosten en betaalmethoden"
-msgstr ""
+msgstr "costs and payment methods"
 
 #: sdg/producten/models/localized.py:189
 msgid "Kosten en betaalmethoden."
-msgstr ""
+msgstr "Costs and payment methods."
 
 #: sdg/producten/models/localized.py:194
 msgid "uiterste termijn"
-msgstr ""
+msgstr "deadline"
 
 #: sdg/producten/models/localized.py:196
 msgid "Deadlines."
@@ -1446,7 +1443,7 @@ msgstr ""
 
 #: sdg/producten/models/localized.py:201
 msgid "wtd bij geen reactie"
-msgstr ""
+msgstr "wtd in case of no response"
 
 #: sdg/producten/models/localized.py:203
 msgid "Wat te doen bij geen reactie."
@@ -1462,7 +1459,7 @@ msgstr ""
 
 #: sdg/producten/models/localized.py:214
 msgid "decentrale procedure link"
-msgstr ""
+msgstr "decentralized procedure link"
 
 #: sdg/producten/models/localized.py:215
 msgid "Link naar de procedure voor burgers en / of bedrijven."
@@ -1779,9 +1776,9 @@ msgstr ""
 #: sdg/producten/views/product.py:250
 #, python-brace-format
 msgid ""
-"In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
+"Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder "
+"gemarkeerde fouten."
 msgstr ""
-"In the {org_type_name} of {lokale_overheid}, {product} falls under [product]."
 
 #: sdg/producten/views/product.py:257
 #, python-brace-format
@@ -2086,11 +2083,11 @@ msgstr ""
 msgid "Invoervoorziening"
 msgstr ""
 
-#: sdg/templates/core/base_home.html:116
+#: sdg/templates/core/base_home.html:114
 msgid "Toegankelijkheid"
 msgstr ""
 
-#: sdg/templates/core/base_home.html:117
+#: sdg/templates/core/base_home.html:115
 msgid "Privacybeleid"
 msgstr ""
 
@@ -2162,7 +2159,7 @@ msgstr ""
 msgid "Aanpassen"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:94 sdg/templates/mocks/kvk.html:235
+#: sdg/templates/mocks/kvk.html:94 sdg/templates/mocks/kvk.html:236
 msgid "See also"
 msgstr ""
 
@@ -2174,7 +2171,7 @@ msgstr ""
 msgid "Information from"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:255
+#: sdg/templates/mocks/kvk.html:256
 msgid "Contact municipality"
 msgstr ""
 
@@ -2416,21 +2413,11 @@ msgid "De standaardtekst is gewijzigd, controleer uw specifieke tekst."
 msgstr ""
 
 #: sdg/templates/producten/_include/icon.html:10
-#, python-format
-msgid ""
-"\n"
-"        <i class=\"fas fa-minus green\" title=\"Mijn %(org_type_cfg.name)s "
-"voert dit product niet.\"></i>\n"
-"    "
+msgid "Mijn gemeente voert dit product niet."
 msgstr ""
 
-#: sdg/templates/producten/_include/icon.html:14
-#, python-format
-msgid ""
-"\n"
-"        <i class=\"fas fa-check green\" title=\"Mijn %(org_type_cfg.name)s "
-"heeft dit product beschikbaar.\"></i>\n"
-"    "
+#: sdg/templates/producten/_include/icon.html:12
+msgid "Mijn gemeente heeft dit product beschikbaar."
 msgstr ""
 
 #: sdg/templates/producten/_include/product_status.html:5

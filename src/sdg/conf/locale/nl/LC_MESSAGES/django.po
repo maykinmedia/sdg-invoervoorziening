@@ -281,7 +281,7 @@ msgstr ""
 msgid "Naam van de contactpersoon"
 msgstr ""
 
-#: sdg/api/models.py:19 sdg/templates/mocks/kvk.html:264
+#: sdg/api/models.py:19 sdg/templates/mocks/kvk.html:266
 msgid "email"
 msgstr "e-mail"
 
@@ -1182,8 +1182,7 @@ msgstr ""
 #: sdg/organisaties/views/bevoegde_organisaties.py:38
 #, python-brace-format
 msgid ""
-"De bevoegde organisaties van {org_type_name} {organisatie} zijn succesvol "
-"gewijzigd."
+"De bevoegde organisaties van gemeente {organisatie} zijn succesvol gewijzigd."
 msgstr ""
 
 #: sdg/organisaties/views/catalogi.py:25
@@ -1218,11 +1217,10 @@ msgid ""
 "Er bestaat al een gebruiker met dit e-mailadres binnen deze organisatie."
 msgstr ""
 
-#: sdg/organisaties/views/locaties.py:43
+#: sdg/organisaties/views/locaties.py:37
 #, python-brace-format
 msgid ""
-"De locatie instellingen van {org_type_name} {organisatie} zijn succesvol "
-"gewijzigd."
+"De locatie instellingen van gemeente {organisatie} zijn succesvol gewijzigd."
 msgstr ""
 
 #: sdg/organisaties/views/overheden.py:28
@@ -1230,16 +1228,15 @@ msgstr ""
 msgid "De organisatie instellingen van {organisatie} zijn succesvol gewijzigd."
 msgstr ""
 
-#: sdg/organisaties/views/roles.py:42
+#: sdg/organisaties/views/roles.py:34
 #, python-brace-format
-msgid ""
-"De gebruiker {role} is niet meer gekoppeld aan {org_type_name} {organisatie}."
+msgid "De gebruiker {role} is niet meer gekoppeld aan gemeente  {organisatie}."
 msgstr ""
 
-#: sdg/organisaties/views/roles.py:73
+#: sdg/organisaties/views/roles.py:54
 #, python-brace-format
 msgid ""
-"De gebruikersrol van {role} voor {org_type_name} {organisatie} is succesvol "
+"De gebruikersrol van {role} voor gemeente {organisatie} is succesvol "
 "gewijzigd."
 msgstr ""
 
@@ -1789,7 +1786,8 @@ msgstr ""
 #: sdg/producten/views/product.py:250
 #, python-brace-format
 msgid ""
-"In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
+"Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder "
+"gemarkeerde fouten."
 msgstr ""
 
 #: sdg/producten/views/product.py:257
@@ -1798,6 +1796,12 @@ msgid "De {org_type_name} {lokale_overheid} levert het product {product} niet."
 msgstr ""
 
 #: sdg/producten/views/product.py:313
+#: sdg/producten/tests/test_views.py:203 sdg/producten/views/product.py:395
+#, python-brace-format
+msgid "Product {product} is opgeslagen."
+msgstr ""
+
+#: sdg/producten/views/product.py:293
 msgid ""
 "'Opslaan als concept' slaat het product op zonder te publiceren zodat u er "
 "later nog aan kan werken.\n"
@@ -1868,8 +1872,8 @@ msgstr ""
 #: sdg/templates/account/email_confirm.html:27
 #, python-format
 msgid ""
-"Deze e-mailbevestigingslink is verlopen of ongeldig. Gelieve <a href="
-"\"%(email_url)s\">een nieuwe bevestigingsmail aan te vragen</a>."
+"Deze e-mailbevestigingslink is verlopen of ongeldig. Gelieve <a "
+"href=\"%(email_url)s\">een nieuwe bevestigingsmail aan te vragen</a>."
 msgstr ""
 
 #: sdg/templates/account/login.html:7 sdg/templates/account/login.html:10
@@ -2095,11 +2099,11 @@ msgstr ""
 msgid "Invoervoorziening"
 msgstr ""
 
-#: sdg/templates/core/base_home.html:116
+#: sdg/templates/core/base_home.html:114
 msgid "Toegankelijkheid"
 msgstr ""
 
-#: sdg/templates/core/base_home.html:117
+#: sdg/templates/core/base_home.html:115
 msgid "Privacybeleid"
 msgstr ""
 
@@ -2171,7 +2175,7 @@ msgstr ""
 msgid "Aanpassen"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:94 sdg/templates/mocks/kvk.html:235
+#: sdg/templates/mocks/kvk.html:94 sdg/templates/mocks/kvk.html:236
 msgid "See also"
 msgstr "Zie ook"
 
@@ -2183,7 +2187,7 @@ msgstr "Laatst gecontroleerd op"
 msgid "Information from"
 msgstr "Informatie van"
 
-#: sdg/templates/mocks/kvk.html:255
+#: sdg/templates/mocks/kvk.html:256
 msgid "Contact municipality"
 msgstr "Neem contact op met de gemeente"
 
@@ -2425,21 +2429,11 @@ msgid "De standaardtekst is gewijzigd, controleer uw specifieke tekst."
 msgstr ""
 
 #: sdg/templates/producten/_include/icon.html:10
-#, python-format
-msgid ""
-"\n"
-"        <i class=\"fas fa-minus green\" title=\"Mijn %(org_type_cfg.name)s "
-"voert dit product niet.\"></i>\n"
-"    "
+msgid "Mijn gemeente voert dit product niet."
 msgstr ""
 
-#: sdg/templates/producten/_include/icon.html:14
-#, python-format
-msgid ""
-"\n"
-"        <i class=\"fas fa-check green\" title=\"Mijn %(org_type_cfg.name)s "
-"heeft dit product beschikbaar.\"></i>\n"
-"    "
+#: sdg/templates/producten/_include/icon.html:12
+msgid "Mijn gemeente heeft dit product beschikbaar."
 msgstr ""
 
 #: sdg/templates/producten/_include/product_status.html:5
