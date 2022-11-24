@@ -98,7 +98,9 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     product_valt_onder = forms.ModelChoiceField(
         queryset=Product.objects.filter(
             referentie_product__isnull=False,
-        ).annotate_name(),
+        )
+        .annotate_name()
+        .exclude_generic_status(),
         required=False,
     )
     bevoegde_organisatie = forms.ModelChoiceField(
