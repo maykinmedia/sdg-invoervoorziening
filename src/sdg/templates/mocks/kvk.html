@@ -257,16 +257,30 @@
                                 <tr>
                                     <td>website</td>
                                     <td><a
-                                        href="{{ locale_overheid.contact_website }}">{{ locale_overheid.contact_website }}</a>
+                                        href="{{ locale_overheid.contact_website }}" rel="noopener norreferer">{{ locale_overheid.contact_website }}</a>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>{% trans "email" %}</td>
-                                    <td>{{ locale_overheid.contact_emailadres }}</td>
+                                    <td>
+                                        <a href="mailto:{{ locale_overheid.contact_emailadres }}">
+                                            {{ locale_overheid.contact_emailadres }}
+                                        </a>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>{% trans "phone" %}</td>
-                                    <td>{{ locale_overheid.contact_telefoonnummer }}</td>
+                                    <td>
+                                        <a href="tel:{{ locale_overheid.contact_telefoonnummer }}">
+                                            {{ locale_overheid.contact_telefoonnummer }}
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans "formulier" %}</td>
+                                    <td><a
+                                        href="{{ locale_overheid.contact_formulier_link }}" rel="noopener norreferer">{{ locale_overheid.contact_formulier_link }}</a>
+                                    </td>
                                 </tr>
                             </table>
 
