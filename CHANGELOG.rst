@@ -2,6 +2,22 @@
 Change history
 ==============
 
+1.5.1
+=====
+
+*November 25, 2022*
+
+* [#793] Added webform to preview
+* [#837] Moved publication column in product list page to last column
+* [#815] Fixed product list in "product valt onder"
+* [#846] Fixed missing label configuration
+* [#831] Fixed save notifications from not showing up
+* [#825] Added `SDG_CMS_PRODUCTS_DISABLED` setting to limit CMS functions
+* Fixed issue with detecting proper IP in whitelist
+* Various admin improvements
+* Added support for water authorities.
+
+
 1.5.0
 =====
 

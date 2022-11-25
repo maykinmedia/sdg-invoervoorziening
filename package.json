@@ -1,6 +1,6 @@
 {
     "name": "sdg",
-    "version": "1.1.2",
+    "version": "1.5.1",
     "description": "sdg project",
     "main": "src/static/sdg/js/sdg.js",
     "directories": {
