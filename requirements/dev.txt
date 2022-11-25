@@ -60,6 +60,8 @@ boltons==21.0.0
     #   -r requirements/ci.txt
     #   face
     #   glom
+bump2version==1.0.1
+    # via -r requirements/dev.in
 celery==5.2.6
     # via
     #   -c requirements/ci.txt
