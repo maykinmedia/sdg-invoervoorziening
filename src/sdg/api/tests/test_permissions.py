@@ -110,7 +110,7 @@ class LocationPermissieTest(APITestCase):
         list_url = reverse("api:locatie-detail", args=[locatie.uuid])
         headers = {
             "HTTP_AUTHORIZATION": f"Token {token_authorization.token}",
-            "REMOTE_ADDR": "127.0.0.1",
+            "HTTP_X_REAL_IP": "127.0.0.1",
         }
 
         request = RequestFactory().delete(
@@ -142,7 +142,7 @@ class LocationPermissieTest(APITestCase):
         list_url = reverse("api:locatie-detail", args=[locatie.uuid])
         headers = {
             "HTTP_AUTHORIZATION": f"Token {token_authorization.token}",
-            "REMOTE_ADDR": "59.227.39.14",
+            "HTTP_X_REAL_IP": "59.227.39.14",
         }
 
         request = RequestFactory().delete(
