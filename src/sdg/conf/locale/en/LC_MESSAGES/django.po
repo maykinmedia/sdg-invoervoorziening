@@ -1740,10 +1740,9 @@ msgstr ""
 #: sdg/producten/views/product.py:249 sdg/producten/views/product.py:265
 #, python-brace-format
 msgid ""
-"De {org_type_name} {lokale_overheid} levert het product {product} niet "
-"omdat..."
+"De {org_type_name} {lokale_overheid} levert het product {product} niet."
 msgstr ""
-"The {org_type_name} of {lokale_overheid} doesn't offer {product} because..."
+"The {org_type_name} of {lokale_overheid} doesn't offer {product}."
 
 #: sdg/producten/views/product.py:320
 msgid ""

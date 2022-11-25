@@ -205,7 +205,11 @@ class ProductUpdateView(
                 "catalogus__lokale_overheid",
                 "generiek_product__upn",
             )
+            .prefetch_related(
+                "generiek_product__vertalingen",
+            )
             .exclude_generic_status()
+            .annotate_name()
         )
 
     def _save_version_form(
@@ -233,9 +237,6 @@ class ProductUpdateView(
         return new_version, created
 
     def _generate_version_formset(self, version: ProductVersie):
-        """
-        TODO: Clean up further .i.e. move translation to template
-        """
         default_explanation_mapping = {}
         default_aanwezig_toelichting_explanation_mapping = {}
 
@@ -252,7 +253,7 @@ class ProductUpdateView(
                     product=localized_generic_product,
                 )
                 default_aanwezig_toelichting_explanation_mapping[language] = _(
-                    "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
+                    "De {org_type_name} {lokale_overheid} levert het product {product} niet."
                 ).format(
                     org_type_name=self.org_type_cfg.name,
                     lokale_overheid=self.lokale_overheid,
@@ -282,8 +283,7 @@ class ProductUpdateView(
             "datum_check",
             "verwijzing_links",
         ]
-        nl = self.product.generiek_product.vertalingen.filter(taal="nl").first()
-        en = self.product.generiek_product.vertalingen.filter(taal="en").first()
+        nl, en = self.product.generiek_product.vertalingen.all()
 
         if nl:
             setattr(nl, "template_fields", nl.get_fields(required_fields))
@@ -338,9 +338,13 @@ class ProductUpdateView(
             "product_form", ProductForm(instance=self.product)
         )
 
-        context["history"] = (
+        def _select_related_for_version(qs):
+            return qs.select_related("gemaakt_door")
+
+        context["history"] = _select_related_for_version(
             self.product.get_all_versions()
-            | self.product.reference_product.get_all_versions()
+        ) | _select_related_for_version(
+            self.product.reference_product.get_all_versions()
         )
 
         context["areas"] = self.product.get_areas()
