@@ -35,5 +35,7 @@ class CoreConfig(AppConfig):
     ]
 
     def ready(self):
+        from .checks import localized_form_field_check
+
         post_migrate.connect(register_project_models, sender=self)
         post_migrate.connect(load_app_fixtures, sender=self)

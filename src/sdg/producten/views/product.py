@@ -2,6 +2,7 @@ import datetime
 from itertools import chain, zip_longest
 from typing import Tuple
 
+from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Prefetch
@@ -327,21 +328,7 @@ class ProductUpdateView(
 
         context["areas"] = self.product.get_areas()
 
-        # FIXME: Optimize?
-        context["localized_form_fields"] = [
-            "product_titel_decentraal",
-            "specifieke_tekst",
-            "verwijzing_links",
-            "procedure_beschrijving",
-            "vereisten",
-            "bewijs",
-            "bezwaar_en_beroep",
-            "kosten_en_betaalmethoden",
-            "uiterste_termijn",
-            "wtd_bij_geen_reactie",
-            "decentrale_procedure_link",
-            "decentrale_procedure_label",
-        ]
+        context["localized_form_fields"] = settings.SDG_LOCALIZED_FORM_FIELDS
 
         context["user_can_edit"] = user_has_valid_roles(
             self.request.user,

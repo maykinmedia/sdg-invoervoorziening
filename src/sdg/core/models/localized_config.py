@@ -83,6 +83,9 @@ class LocalizedProductFieldConfiguration(TaalMixin, models.Model):
     localizedproduct_decentrale_procedure_link = LabeledTooltipField(
         verbose_name=_("Decentrale procedure link"),
     )
+    localizedproduct_decentrale_procedure_label = LabeledTooltipField(
+        verbose_name=_("Decentrale procedure label"),
+    )
 
     def for_field(self, prefix, name):
         if name != "config":

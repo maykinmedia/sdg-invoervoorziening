@@ -51,6 +51,7 @@ class LocalizedProductFieldConfigurationInline(admin.StackedInline):
                     "localizedproduct_uiterste_termijn",
                     "localizedproduct_wtd_bij_geen_reactie",
                     "localizedproduct_decentrale_procedure_link",
+                    "localizedproduct_decentrale_procedure_label",
                 ],
             },
         ),
