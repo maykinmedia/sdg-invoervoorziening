@@ -44,13 +44,13 @@ class CatalogListView(
             "lookup": "doelgroep",
         },
         {
-            "key": "_latest_publication_date",
-            "label": _("Publicatie datum"),
-        },
-        {
             "label": _("Heeft kosten"),
             "key": "heeft_kosten",
             "filter_label": " ",
+        },
+        {
+            "key": "_latest_publication_date",
+            "label": _("Publicatie datum"),
         },
     ]
     filterable_columns = [
