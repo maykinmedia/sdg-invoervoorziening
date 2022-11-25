@@ -25,7 +25,7 @@ class LokaleOverheidUpdateView(OverheidMixin, UpdateView):
         messages.success(
             self.request,
             _(
-                "De organisatie instellingen van gemeente {organisatie} zijn succesvol gewijzigd."
+                "De organisatie instellingen van {organisatie} zijn succesvol gewijzigd."
             ).format(organisatie=self.object),
         )
         return response

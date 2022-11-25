@@ -8,7 +8,7 @@ email: servicedesk@hetwaterschapshuis.nl
 # Style
 overlay: images/rain.svg
 overlay_size: 260px
-footer_logo: images/waterschap_logo.png
+footer_logo: images/hwh_logo.png
 color_hue: 186
 
 # Text

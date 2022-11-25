@@ -102,6 +102,7 @@ class InvitationTests(WebTest):
 
         self.assertEqual(len(mail.outbox), 1)
 
+    @override_settings(SDG_ORGANIZATION_TYPE="municipality")
     def test_invitation_template_is_correct(self):
         response = self.app.get(
             reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})

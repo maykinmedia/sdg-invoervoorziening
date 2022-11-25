@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core import mail
+from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
@@ -22,6 +23,7 @@ class AdminTests(WebTest):
         super().setUp()
         self.app.set_user(self.user)
 
+    @override_settings(SDG_ORGANIZATION_TYPE="municipality")
     def test_invitation_email_is_sent_after_creating_user(self):
         response = self.app.get(self.user_add_url)
 
