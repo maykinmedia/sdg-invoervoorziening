@@ -363,9 +363,10 @@ class ProductUpdateView(
         )
         return context
 
-    def _check_placeholders(self):
+    def _add_placeholder_warning(self):
         """
         Check for any placeholder texts in the current data.
+        Add a warning if any are found.
         """
         current_data = chain(
             self.object.__dict__.values(),
@@ -385,7 +386,10 @@ class ProductUpdateView(
 
     def get(self, request, *args, **kwargs):
         ctx = self.get_context_data()
-        self._check_placeholders()
+
+        if not self.product.is_referentie_product:
+            self._add_placeholder_warning()
+
         return self.render_to_response(ctx)
 
     @municipality_role_required([Role.choices.MANAGER, Role.choices.EDITOR])
