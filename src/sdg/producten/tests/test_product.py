@@ -97,13 +97,20 @@ class ProductUpdateViewTests(WebTest):
                 "date": FUTURE_DATE,
             },
         }
+        _submit_value = "date"
+
         if status_data := _form_data.get(publish_choice):
             for date_field in form.fields["date"]:
                 date_field.value = status_data["date"]
+            _submit_value = status_data["publish"]
 
         form["vertalingen-0-product_titel_decentraal"] = DUMMY_TITLE
 
-        return form.submit(name="publish", value="date", **kwargs)
+        return form.submit(
+            name="publish",
+            value=_submit_value,
+            **kwargs,
+        )
 
     @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
@@ -327,22 +334,30 @@ class ProductUpdateViewTests(WebTest):
             "vertalingen-0-product_titel_decentraal"
         ] = "Title [[placeholder]]"
 
-        response = response.form.submit(name="publish", value="date")
-        self.assertEqual(response.status_code, 200)
+        response = response.form.submit(name="publish", value="concept")
+        self.assertEqual(response.status_code, 302)
 
-        self.assertIn(
+        self.assertNotIn(
             _(
                 "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten."
             ),
             response.text,
         )
-        self.assertIn(
+        self.assertNotIn(
             _("De tekst mag geen placeholders bevatten."),
             response.text,
         )
 
         self.product_version.refresh_from_db()
         self.assertEqual(self.product.versies.count(), 1)
+
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_nl.product_titel_decentraal, "Title [[placeholder]]")
+        self.assertEqual(latest_version.publicatie_datum, None)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
+        self.assertEqual(latest_version.versie, 1)
 
     @freeze_time(NOW_DATE)
     def test_published_save_concept(self):
