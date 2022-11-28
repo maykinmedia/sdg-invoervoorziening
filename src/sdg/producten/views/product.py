@@ -33,6 +33,7 @@ from sdg.producten.utils import (
     duplicate_localized_products,
     parse_changed_data,
 )
+from sdg.utils.validators import validate_placeholders
 
 
 class ProductPreviewView(OverheidMixin, DetailView):
@@ -297,6 +298,7 @@ class ProductUpdateView(
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
         self.object = self.product.most_recent_version
+        self.product_nl, self.product_en = self.object.vertalingen.all()
         return self.lokale_overheid
 
     def get_context_data(self, **kwargs):
@@ -361,8 +363,30 @@ class ProductUpdateView(
         )
         return context
 
+    def _check_placeholders(self):
+        """
+        Check for any placeholder texts in the current data.
+        """
+        current_data = chain(
+            self.object.__dict__.values(),
+            self.product.__dict__.values(),
+            self.product_en.__dict__.values(),
+            self.product_nl.__dict__.values(),
+        )
+
+        for value in current_data:
+            if validate_placeholders(value):
+                messages.add_message(
+                    self.request,
+                    messages.WARNING,
+                    _("De huidige gegevens bevatten placeholder tekst."),
+                )
+                return
+
     def get(self, request, *args, **kwargs):
-        return self.render_to_response(self.get_context_data())
+        ctx = self.get_context_data()
+        self._check_placeholders()
+        return self.render_to_response(ctx)
 
     @municipality_role_required([Role.choices.MANAGER, Role.choices.EDITOR])
     def post(self, request, *args, **kwargs):

@@ -1,3 +1,5 @@
+import re
+
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.utils.encoding import force_str
@@ -49,3 +51,27 @@ class CustomRegexValidator(RegexValidator):
 validate_postal_code = CustomRegexValidator(
     regex="^[1-9][0-9]{3} ?[a-zA-Z]{2}$", message=_("Ongeldige postcode")
 )
+
+
+def validate_placeholders(value, form=None, field_name=None):
+    """
+    Ensure the form value does not contain any placeholders.
+
+    i.e. [placeholder] or XXX
+    """
+    placeholder_re = re.compile(r"\[.*?]|X{3}")
+
+    if (form and not field_name) or (not form and field_name):
+        raise ValueError("Both form and field_name or neither must be provided")
+
+    if not isinstance(value, str):
+        return
+
+    if placeholder_re.search(value):
+        if not form:
+            return True
+
+        form.add_error(
+            field_name,
+            "De tekst mag geen placeholders bevatten.",
+        )

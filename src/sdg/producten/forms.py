@@ -2,6 +2,7 @@ from datetime import date
 from typing import Optional
 
 from django import forms
+from django.conf import settings
 from django.db.models import Case, CharField, Count, F, Q, Value, When
 from django.db.models.functions import Concat
 from django.forms import inlineformset_factory
@@ -9,6 +10,7 @@ from django.forms import inlineformset_factory
 from ..core.forms import BooleanChoiceField
 from ..core.models.mixins import FieldConfigurationMixin
 from ..organisaties.models import BevoegdeOrganisatie
+from ..utils.validators import validate_placeholders
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
 from .utils import parse_changed_data
@@ -20,20 +22,9 @@ class LocalizedProductForm(FieldConfigurationMixin, forms.ModelForm):
         model = LocalizedProduct
         fields = (
             "taal",
-            "product_titel_decentraal",
-            "specifieke_tekst",
-            "vereisten",
-            "bewijs",
-            "procedure_beschrijving",
-            "kosten_en_betaalmethoden",
-            "uiterste_termijn",
-            "bezwaar_en_beroep",
-            "wtd_bij_geen_reactie",
-            "verwijzing_links",
-            "decentrale_procedure_link",
-            "decentrale_procedure_label",
             "product_valt_onder_toelichting",
             "product_aanwezig_toelichting",
+            *settings.SDG_LOCALIZED_FORM_FIELDS,
         )
 
     def __init__(self, *args, **kwargs):
@@ -56,6 +47,7 @@ class LocalizedProductFormSet(
           if `product_valt_onder` is filled.
         """
         cleaned_data = super().clean()
+
         if self._product_form.cleaned_data.get("product_valt_onder"):
             for form in self.forms:
                 if not form.cleaned_data.get("product_valt_onder_toelichting"):
@@ -75,7 +67,20 @@ class LocalizedProductFormSet(
                         "product_aanwezig_toelichting", "Dit veld is verplicht."
                     )
 
+        if not self.instance.product.is_referentie_product:
+            self._validate_specific(self.forms)
+
         return cleaned_data
+
+    def _validate_specific(self, forms_):
+        """
+        Validate only for localized specific product.
+        """
+        for form in forms_:
+            cleaned_data = list(form.cleaned_data.items())
+            for name, value in cleaned_data:
+                if self.data.get("publish") == PublishChoices.date:  # only published
+                    validate_placeholders(value, form=form, field_name=name)
 
     @property
     def changed_data_localized(self):
@@ -225,5 +230,9 @@ class VersionForm(forms.ModelForm):
             cleaned_data["publicatie_datum"] = cleaned_data["date"]
         else:
             cleaned_data["publicatie_datum"] = None
+
+        for name, value in list(cleaned_data.items()):
+            if cleaned_data.get("publish") == PublishChoices.date:
+                validate_placeholders(value, form=self, field_name=name)
 
         return cleaned_data
