@@ -340,13 +340,9 @@ class ProductUpdateView(
             "product_form", ProductForm(instance=self.product)
         )
 
-        def _select_related_for_version(qs):
-            return qs.select_related("gemaakt_door")
-
-        context["history"] = _select_related_for_version(
+        context["history"] = (
             self.product.get_all_versions()
-        ) | _select_related_for_version(
-            self.product.reference_product.get_all_versions()
+            | self.product.reference_product.get_all_versions()
         )
 
         context["areas"] = self.product.get_areas()
