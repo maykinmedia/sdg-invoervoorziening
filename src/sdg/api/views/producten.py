@@ -161,6 +161,7 @@ class ProductViewSet(
     lookup_field = "uuid"
     queryset = (
         Product.objects.active_organization()
+        .filter(api_zichtbaarheid=True)
         .select_related(
             "catalogus",
             "catalogus__lokale_overheid",
