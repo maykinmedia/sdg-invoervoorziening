@@ -168,6 +168,26 @@
                         </td>
                     </tr>
 
+                    {% with field=product_form.api_zichtbaarheid %}
+                        <tr>
+                            <td>
+                                <div class="form__control">
+                                    <header class="form__control-header">
+                                        <label class="form__label">
+                                            {{ field.label|capfirst }}
+                                            <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                        </label>
+                                    </header>
+                                    <div class="form__control-body">
+                                        <div class="tabs__table-cell--versions"></div>
+                                        {% select field %}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endwith %}
+
                     {% with field=product_form.locaties %}
                     <tr>
                         <td>

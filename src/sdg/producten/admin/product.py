@@ -167,6 +167,7 @@ class ProductAdmin(admin.ModelAdmin):
         "is_referentie",
         "product_aanwezig",
         "latest_publication_date",
+        "api_zichtbaarheid",
     )
     list_filter = (
         IsReferenceProductFilter,
