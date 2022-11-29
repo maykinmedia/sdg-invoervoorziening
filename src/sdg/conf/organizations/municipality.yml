@@ -1,0 +1,16 @@
+# Data
+url: https://vng.nl
+accessibility_url: "#"
+privacy_policy_url: "#"
+more_info_url: "https://www.vngrealisatie.nl/onderwerpen/single-digital-gateway"
+email: sdg@vng.nl
+
+# Style
+overlay: images/gemeentes.png
+overlay_size: 800px
+footer_logo: images/vng_logo.svg
+color_hue: 202
+
+# Text
+name: gemeente
+name_plural: gemeenten

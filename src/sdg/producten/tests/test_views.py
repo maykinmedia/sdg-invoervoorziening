@@ -8,7 +8,8 @@ from django_webtest import WebTest
 from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
-from sdg.core.constants import GenericProductStatus
+from sdg.conf.utils import org_type_cfg
+from sdg.core.constants import GenericProductStatus, TaalChoices
 from sdg.core.tests.utils import hard_refresh_from_db
 from sdg.organisaties.tests.factories.overheid import LocatieFactory
 from sdg.producten.models import Product
@@ -64,6 +65,8 @@ class ProductUpdateViewTests(WebTest):
             lokale_overheid=self.product_version.product.catalogus.lokale_overheid,
             is_redacteur=True,
         )
+
+        org_type_cfg.cache_clear()
 
     def _change_product_status(self, publish_choice: Product.status):
         dates = {
@@ -895,4 +898,46 @@ class ProductUpdateViewTests(WebTest):
                 kwargs=build_url_kwargs(self.reference_product),
             ),
             status=404,
+        )
+
+    @freeze_time(NOW_DATE)
+    @override_settings(SDG_ORGANIZATION_TYPE="waterauthority")
+    def test_version_form_produces_correct_organization_type_data(self):
+        self._change_product_status(Product.status.CONCEPT)
+        self.product.generiek_product.product_status = (
+            GenericProductStatus.READY_FOR_PUBLICATION
+        )
+        self.product.generiek_product.save()
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        municipality = self.product.catalogus.lokale_overheid
+        localized_generic_product_en = self.product.generiek_product.vertalingen.get(
+            taal="en"
+        )
+        localized_generic_product_nl = self.product.generiek_product.vertalingen.get(
+            taal="nl"
+        )
+
+        self.assertIn(
+            f"In de waterschap {municipality} is {localized_generic_product_nl} onderdeel van [product].",
+            response.text,
+        )
+        self.assertIn(
+            f"In the water authority of {municipality}, {localized_generic_product_en} falls under [product].",
+            response.text,
+        )
+        self.assertIn(
+            f"De waterschap {municipality} levert het product {localized_generic_product_nl} niet omdat...",
+            response.text,
+        )
+        self.assertIn(
+            f"In the water authority of {municipality}, {localized_generic_product_en} falls under [product].",
+            response.text,
         )

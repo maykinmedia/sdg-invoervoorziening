@@ -18,6 +18,9 @@ admin:
 beat:
 	./bin/generate_celery_beat_fixture.sh
 
+trans:
+	./bin/makemessages.sh
+
 migrations:
 	venv/bin/python src/manage.py makemigrations
 	$(MAKE) graph

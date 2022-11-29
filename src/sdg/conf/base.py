@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 import sentry_sdk
 
 from .api import *  # noqa
+from .types.exceptions import OrganizationTypeException
+from .types.organization import available_org_types
 from .utils import config, get_current_version, get_sentry_integrations
 
 # Build paths inside the project, so further paths can be defined relative to
@@ -478,7 +480,7 @@ ACCOUNT_PREVENT_ENUMERATION = False
 
 # SDG Invitations
 INVITATION_TEMPLATE = "core/email/invitation.html"
-INVITATION_SUBJECT = "Activeer je account invoervoorziening SDG gemeenten"
+INVITATION_SUBJECT = "Activeer je account invoervoorziening SDG {org_type_name_plural}"
 
 ACCOUNT_ADAPTER = "sdg.accounts.adapters.AccountAdapter"
 
@@ -542,9 +544,15 @@ SOLO_CACHE = "default"
 # zgw_consumers
 ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
 
-# municipalities, provinces or waterauthorities
-SDG_ORGANIZATION_TYPE = config("SDG_ORGANIZATION_TYPE", default="municipalities")
-assert SDG_ORGANIZATION_TYPE in ["municipalities", "provinces", "waterauthorities"]
+# organization type
+SDG_ORGANIZATION_TYPE = config(
+    "SDG_ORGANIZATION_TYPE", default="municipality", transform=str.lower
+)
+if SDG_ORGANIZATION_TYPE not in available_org_types:
+    raise OrganizationTypeException(
+        f"SDG_ORGANIZATION_TYPE must be one of {', '.join(available_org_types)}"
+    )
+
 
 SDG_CMS_ENABLED = config("SDG_CMS_ENABLED", default=True)
 SDG_CMS_PRODUCTS_DISABLED = config("SDG_CMS_PRODUCTS_DISABLED", default=False)

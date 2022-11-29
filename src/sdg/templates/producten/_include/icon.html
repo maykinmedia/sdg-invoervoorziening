@@ -7,8 +7,12 @@
     <i class="fas fa-exclamation accent"
        title="{% trans "De standaardtekst is gewijzigd, controleer uw specifieke tekst." %}"></i>
 {% elif name == "minus" %}
-    <i class="fas fa-minus green" title="{% trans "Mijn gemeente voert dit product niet." %}"></i>
+    {% blocktrans %}
+        <i class="fas fa-minus green" title="Mijn {{ org_type_cfg.name }} voert dit product niet."></i>
+    {% endblocktrans %}
 {% elif name == "check" %}
-    <i class="fas fa-check green" title="{% trans "Mijn gemeente heeft dit product beschikbaar." %}"></i>
+    {% blocktrans %}
+        <i class="fas fa-check green" title="Mijn {{ org_type_cfg.name }} heeft dit product beschikbaar."></i>
+    {% endblocktrans %}
 {% endif %}
 

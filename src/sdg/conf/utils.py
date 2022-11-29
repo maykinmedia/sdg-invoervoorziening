@@ -7,8 +7,11 @@ from subprocess import CalledProcessError, check_output
 
 from django.conf import settings
 
+import pydantic
 from decouple import Csv, config as _config, undefined
 from sentry_sdk.integrations import DidNotEnable, django, redis
+
+from sdg.conf.types.organization import OrganizationTypeConfiguration
 
 logger = logging.getLogger(__name__)
 
@@ -23,13 +26,16 @@ def config(option: str, default=undefined, *args, **kwargs):
 
     Pass ``split=True`` to split the comma-separated input into a list.
     """
+    transform = kwargs.pop("transform", lambda x: x)
+
     if "split" in kwargs:
         kwargs.pop("split")
         kwargs["cast"] = Csv()
 
     if default is not undefined and default is not None:
         kwargs.setdefault("cast", type(default))
-    return _config(option, default=default, *args, **kwargs)
+
+    return transform(_config(option, default=default, *args, **kwargs))
 
 
 def get_sentry_integrations() -> list:
@@ -124,3 +130,15 @@ def clean_rst(text: str) -> str:
     text = re.sub(r"[|:][\w-]+[|:]", "", text)
     text = re.sub(r"(.)\1{4,}", "", text)
     return text
+
+
+@pydantic.tools.lru_cache
+def org_type_cfg():
+    """
+    Get the organization type configuration for the current environment.
+    """
+    from sdg.conf.types.organization import available_org_types
+
+    return OrganizationTypeConfiguration(
+        **available_org_types[settings.SDG_ORGANIZATION_TYPE]
+    )

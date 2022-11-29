@@ -32,10 +32,14 @@ class BevoegdeOrganisatieUpdateView(OverheidMixin, UpdateView):
     def form_valid(self, form):
         organisatie = self.object
         response = super().form_valid(form)
+        context = super().get_context_data()
         messages.success(
             self.request,
             _(
-                "De bevoegde organisaties van gemeente {organisatie} zijn succesvol gewijzigd."
-            ).format(organisatie=organisatie),
+                "De bevoegde organisaties van {org_type_name} {organisatie} zijn succesvol gewijzigd."
+            ).format(
+                org_type_name=context["org_type_cfg"].name,
+                organisatie=organisatie,
+            ),
         )
         return response

@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.views.generic.base import ContextMixin
 
+from sdg.conf.utils import org_type_cfg
+
 
 class SDGSettingsMixin(ContextMixin):
     """
@@ -13,5 +15,6 @@ class SDGSettingsMixin(ContextMixin):
             SDG_CMS_PRODUCTS_DISABLED=getattr(
                 settings, "SDG_CMS_PRODUCTS_DISABLED", False
             ),
+            org_type_cfg=org_type_cfg(),
         )
         return context

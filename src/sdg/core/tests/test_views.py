@@ -1,8 +1,10 @@
+from django.test import override_settings
 from django.urls import reverse
 
 from django_webtest import WebTest
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.conf.utils import org_type_cfg
 
 HOME_URL = "core:home"
 CARD_SELECTOR = ".cards__card"
@@ -14,6 +16,7 @@ class HomeViewTests(WebTest):
 
         self.user = UserFactory.create()
         self.app.set_user(self.user)
+        org_type_cfg.cache_clear()
 
     def test_only_allowed_municipalities_are_displayed(self):
         role1, role2 = RoleFactory.create_batch(2, user=self.user, is_redacteur=True)
@@ -49,3 +52,13 @@ class HomeViewTests(WebTest):
         RoleFactory.create(user=self.user, is_raadpleger=True)
         response = self.app.get(reverse(HOME_URL), auto_follow=True)
         self.assertEqual(200, response.status_code)
+
+    @override_settings(SDG_ORGANIZATION_TYPE="waterauthority")
+    def test_organization_type_link_is_displayed(self):
+        response = self.app.get(reverse(HOME_URL))
+        self.assertIn("https://www.hetwaterschapshuis.nl/", response.text)
+
+    @override_settings(SDG_ORGANIZATION_TYPE="waterauthority")
+    def test_organization_type_logo_is_displayed(self):
+        response = self.app.get(reverse(HOME_URL))
+        self.assertIn("hwh_logo.png", response.text)

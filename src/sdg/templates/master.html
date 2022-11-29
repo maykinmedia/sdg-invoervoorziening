@@ -13,6 +13,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
     <link href="{% static 'ico/favicon.png' %}" rel="shortcut icon">
     <link href="{% static 'hijack/hijack-styles.css' %}" rel="stylesheet" type="text/css"/>
+    <style>
+        :root {
+            --org-theme-hue: {{ org_type_cfg.color_hue }};
+        }
+    </style>
     {% block extra_css %}{% endblock %}
     <link href="{% static 'bundles/sdg-css.css' %}" media="all" rel="stylesheet"/>
     <script type="text/javascript">
