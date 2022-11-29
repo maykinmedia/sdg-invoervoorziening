@@ -145,7 +145,7 @@
 
                                 {% if product.product_aanwezig == False and field.name == "product_aanwezig_toelichting" %}
                                     {% if field.configuration %}
-                                        <h3><b>{% trans field.configuration.0.0 %}</b></h3>
+                                        <h3><b>{% trans field.configuration.label %}</b></h3>
                                     {% else %}
                                         <h3><b>{% trans field.verbose_name|capfirst }}</b></h3>
                                     {% endif %}
@@ -154,7 +154,7 @@
 
                                 {% if product.product_valt_onder and product.product_aanwezig != False and field.name == "product_valt_onder_toelichting" %}
                                     {% if field.configuration %}
-                                        <h3><b>{% trans field.configuration.0.0 %}</b></h3>
+                                        <h3><b>{% trans field.configuration.label %}</b></h3>
                                     {% else %}
                                         <h3><b>{% trans field.verbose_name|capfirst %}</b></h3>
                                     {% endif %}
@@ -202,7 +202,7 @@
                                         <div class="tabs__table">
                                             <div class="tabs__table-body">
                                                 {% if field.configuration %}
-                                                    <h3><b>{% trans field.configuration.0.0 %}</b></h3>
+                                                    <h3><b>{% trans field.configuration.label %}</b></h3>
                                                 {% else %}
                                                     <h3><b>{% trans field.verbose_name|capfirst %}</b></h3>
                                                 {% endif %}

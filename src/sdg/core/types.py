@@ -75,3 +75,9 @@ class Event(metaclass=EventMeta):
             self._template,
             **_data,
         )
+
+
+@dataclass
+class LabeledTooltip:
+    label: str
+    tooltip: str

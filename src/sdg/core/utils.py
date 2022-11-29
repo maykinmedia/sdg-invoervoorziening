@@ -19,7 +19,7 @@ def string_to_date(string: str, date_format: str):
     return timezone.make_aware(date, tz)
 
 
-def unpack(item):
+def unpack(item, default=empty):
     """
     Ensure and return the first item exists if it is a list.
     :returns: The first item of the list, otherwise the object itself.
@@ -27,10 +27,10 @@ def unpack(item):
     if not isinstance(item, list):
         return item
 
-    if len(item) != 1:
+    if len(item) != 1 and default is empty:
         raise FieldError("Cached item list must be equal to 1")
 
-    return item[0]
+    return item[0] if item else default
 
 
 def get_from_cache(instance, name, manager_methods: List = None):

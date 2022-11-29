@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Any, List, Optional
 
+from sdg.core.types import LabeledTooltip
+
 FLAG_MAPPING = {"en": "gb"}
 
 
@@ -9,13 +11,13 @@ def _code_to_flag(country_code):
 
 
 @dataclass
-class ProductFieldInfo:
+class ProductFieldMetadata:
     name: str
     verbose_name: str
     value: Any
     help_text: str
     type: str
-    configuration: Optional[List[str]] = None
+    configuration: Optional[LabeledTooltip] = None
 
     def __str__(self):
         return self.value
