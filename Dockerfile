@@ -66,8 +66,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         procps \
         vim \
         postgresql-client \
-        # lxml deps
-        # libxslt \
+        libxml2-dev \
+        libxmlsec1-dev \
+        libxmlsec1-openssl \
+        gettext \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
