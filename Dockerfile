@@ -105,6 +105,7 @@ ARG SECRET_KEY=dummy
 
 # Run collectstatic, so the result is already included in the image
 RUN python src/manage.py collectstatic --noinput
+RUN python src/manage.py compilemessages
 
 LABEL org.label-schema.vcs-ref=$COMMIT_HASH \
       org.label-schema.vcs-url="https://github.com/maykinmedia/sdg-invoervoorziening" \
