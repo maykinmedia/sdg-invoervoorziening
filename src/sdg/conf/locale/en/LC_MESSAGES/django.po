@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-30 11:59+0100\n"
+"POT-Creation-Date: 2022-11-30 12:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1168,7 +1168,7 @@ msgid "Dit wachtwoord is te algemeen."
 msgstr ""
 
 #: sdg/organisaties/tests/test_overheden.py:90
-#: sdg/producten/tests/test_product.py:872 sdg/templates/core/base.html:43
+#: sdg/producten/tests/test_product.py:873 sdg/templates/core/base.html:43
 msgid ""
 "Je kan producten niet beheren in het CMS maar enkel via de API. Je kan wel "
 "via het menu bovenin de organisatie gegevens, locaties en bevoegde "
@@ -1751,28 +1751,28 @@ msgstr ""
 msgid "Dit referentieproduct moet in een referentiecatalogus staan."
 msgstr ""
 
-#: sdg/producten/tests/test_product.py:191
-#: sdg/producten/tests/test_product.py:306
-#: sdg/producten/tests/test_product.py:342 sdg/producten/views/product.py:441
+#: sdg/producten/tests/test_product.py:192
+#: sdg/producten/tests/test_product.py:307
+#: sdg/producten/tests/test_product.py:343 sdg/producten/views/product.py:441
 msgid ""
 "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder "
 "gemarkeerde fouten."
 msgstr ""
 
-#: sdg/producten/tests/test_product.py:213 sdg/producten/views/product.py:427
+#: sdg/producten/tests/test_product.py:214 sdg/producten/views/product.py:427
 #, python-brace-format
 msgid "Product {product} is opgeslagen."
 msgstr ""
 
-#: sdg/producten/tests/test_product.py:262
-#: sdg/producten/tests/test_product.py:278
-#: sdg/producten/tests/test_product.py:974
-#: sdg/producten/tests/test_product.py:990 sdg/producten/views/product.py:379
+#: sdg/producten/tests/test_product.py:263
+#: sdg/producten/tests/test_product.py:279
+#: sdg/producten/tests/test_product.py:975
+#: sdg/producten/tests/test_product.py:991 sdg/producten/views/product.py:379
 msgid "De huidige gegevens bevatten placeholder tekst."
 msgstr ""
 
-#: sdg/producten/tests/test_product.py:311
-#: sdg/producten/tests/test_product.py:347
+#: sdg/producten/tests/test_product.py:312
+#: sdg/producten/tests/test_product.py:348
 msgid "De tekst mag geen placeholders bevatten."
 msgstr ""
 

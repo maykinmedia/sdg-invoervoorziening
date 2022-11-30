@@ -1,3 +1,4 @@
+import html
 from typing import Optional
 
 from django.test import override_settings
@@ -1151,6 +1152,6 @@ class ProductUpdateViewTests(WebTest):
             response.text,
         )
         self.assertIn(
-            f"In the water authority of {municipality}, {localized_generic_product_en} falls under [product].",
-            response.text,
+            f"The water authority of {municipality} doesn't offer {localized_generic_product_en}.",
+            html.unescape(response.text),
         )
