@@ -340,7 +340,7 @@ class ProductenTests(APITestCase):
     def test_list_producten_with_api_visibility_hidden(self):
         list_url = reverse("api:product-list")
 
-        self.product.api_zichtbaarheid = False
+        self.product.api_verborgen = True
         self.product.save()
         self.product_versie.refresh_from_db()
 
@@ -363,7 +363,7 @@ class ProductenTests(APITestCase):
     def test_retrieve_product_by_uuid_with_visibility_hidden(self):
         detail_url = reverse("api:product-detail", args=[self.product.uuid])
 
-        self.product.api_zichtbaarheid = False
+        self.product.api_verborgen = True
         self.product.save()
         self.product_versie.refresh_from_db()
 

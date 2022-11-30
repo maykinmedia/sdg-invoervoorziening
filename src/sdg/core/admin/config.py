@@ -79,7 +79,7 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                     "productversie_publicatie_datum",
                     "product_product_valt_onder",
                     "product_heeft_kosten",
-                    "product_api_zichtbaarheid",
+                    "product_api_verborgen",
                 ],
             },
         )

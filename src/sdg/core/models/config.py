@@ -43,8 +43,8 @@ class ProductFieldConfiguration(SingletonModel):
     productversie_interne_opmerkingen = LabeledTooltipField(
         verbose_name=_("Interne opmerkingen"),
     )
-    product_api_zichtbaarheid = LabeledTooltipField(
-        verbose_name=_("Zichtbaarheid"),
+    product_api_verborgen = LabeledTooltipField(
+        verbose_name=_("Verborgen"),
     )
 
     def for_field(self, prefix, name):

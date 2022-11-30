@@ -120,8 +120,8 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         widget=CheckboxSelectMultiple(),
     )
     heeft_kosten = BooleanChoiceField()
-    api_zichtbaarheid = BooleanChoiceField(
-        label=_("zichtbaarheid"),
+    api_verborgen = BooleanChoiceField(
+        label=_("verborgen"),
     )
 
     class Meta:
@@ -132,7 +132,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "bevoegde_organisatie",
             "locaties",
             "heeft_kosten",
-            "api_zichtbaarheid",
+            "api_verborgen",
         )
 
     def _help_text(self, field):
