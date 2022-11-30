@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-11 16:05+0100\n"
+"POT-Creation-Date: 2022-11-30 11:59+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,125 +70,130 @@ msgid ""
 "toegankelijk."
 msgstr ""
 
-#: sdg/accounts/models.py:27
+#: sdg/accounts/models.py:28
 msgid "voornaam"
 msgstr ""
 
-#: sdg/accounts/models.py:28
+#: sdg/accounts/models.py:29
 msgid "achternaam"
 msgstr ""
 
-#: sdg/accounts/models.py:29
+#: sdg/accounts/models.py:30
 msgid "e-mailadres"
 msgstr ""
 
-#: sdg/accounts/models.py:31
+#: sdg/accounts/models.py:32
 msgid "staff status"
 msgstr ""
 
-#: sdg/accounts/models.py:33
+#: sdg/accounts/models.py:34
 msgid "Geeft aan of de gebruiker kan inloggen op deze beheerdersite."
 msgstr ""
 
-#: sdg/accounts/models.py:36
+#: sdg/accounts/models.py:37
 msgid "active"
 msgstr ""
 
-#: sdg/accounts/models.py:39
+#: sdg/accounts/models.py:40
 msgid ""
 "Geeft aan of deze gebruiker als actief moet worden behandeld. Deselecteer "
 "dit in plaats van accounts te verwijderen."
 msgstr ""
 
-#: sdg/accounts/models.py:43
+#: sdg/accounts/models.py:44
 msgid "date joined"
 msgstr ""
 
-#: sdg/accounts/models.py:50 sdg/accounts/models.py:74
+#: sdg/accounts/models.py:51 sdg/accounts/models.py:75
 msgid "gebruiker"
 msgstr ""
 
-#: sdg/accounts/models.py:51
+#: sdg/accounts/models.py:52
 msgid "gebruikers"
 msgstr ""
 
-#: sdg/accounts/models.py:78 sdg/api/models.py:11
+#: sdg/accounts/models.py:79 sdg/api/models.py:11
 msgid "key"
 msgstr ""
 
-#: sdg/accounts/models.py:80
+#: sdg/accounts/models.py:81
 msgid "geaccepteerd"
 msgstr ""
 
-#: sdg/accounts/models.py:82 sdg/api/models.py:49
+#: sdg/accounts/models.py:83 sdg/api/models.py:49
 msgid "aangemaakt"
 msgstr ""
 
-#: sdg/accounts/models.py:83
+#: sdg/accounts/models.py:84
 msgid "verzonden"
 msgstr ""
 
-#: sdg/accounts/models.py:130
+#: sdg/accounts/models.py:136
 msgid "Uitnodiging met succes aanvaard."
 msgstr ""
 
-#: sdg/accounts/models.py:142
+#: sdg/accounts/models.py:148
 msgid "uitnodiging"
 msgstr ""
 
-#: sdg/accounts/models.py:143
+#: sdg/accounts/models.py:149
 msgid "uitnodigingen"
 msgstr ""
 
-#: sdg/accounts/models.py:157 sdg/organisaties/admin.py:26
+#: sdg/accounts/models.py:163 sdg/organisaties/admin.py:26
 #: sdg/templates/organisaties/roles/list.html:25
 msgid "Beheerder"
 msgstr ""
 
-#: sdg/accounts/models.py:158 sdg/templates/organisaties/roles/list.html:26
+#: sdg/accounts/models.py:164 sdg/templates/organisaties/roles/list.html:26
 msgid "Redacteur"
 msgstr ""
 
-#: sdg/accounts/models.py:159 sdg/templates/organisaties/roles/list.html:27
+#: sdg/accounts/models.py:165 sdg/templates/organisaties/roles/list.html:27
 msgid "Raadpleger"
 msgstr ""
 
-#: sdg/accounts/models.py:173
+#: sdg/accounts/models.py:179
 msgid "beheerder"
 msgstr ""
 
-#: sdg/accounts/models.py:176
+#: sdg/accounts/models.py:182
 msgid ""
 "Designates whether this user is a manager of a specific "
 "overheidsorganisatie. "
 msgstr ""
 
-#: sdg/accounts/models.py:180
+#: sdg/accounts/models.py:186
 msgid "redacteur"
 msgstr ""
 
-#: sdg/accounts/models.py:183
+#: sdg/accounts/models.py:189
 msgid ""
 "Designates whether this is an editor of a specific overheidsorganisatie. "
 msgstr ""
 
-#: sdg/accounts/models.py:187
+#: sdg/accounts/models.py:193
 msgid "raadpleger"
 msgstr ""
 
-#: sdg/accounts/models.py:190
+#: sdg/accounts/models.py:196
 msgid ""
 "Designates whether this user is a consultant of a specific "
 "overheidsorganisatie. "
 msgstr ""
 
-#: sdg/accounts/models.py:195
+#: sdg/accounts/models.py:201
 msgid "rol"
 msgstr ""
 
-#: sdg/accounts/models.py:196
+#: sdg/accounts/models.py:202
 msgid "rollen"
 msgstr ""
+
+#: sdg/accounts/tests/test_admin.py:40
+#: sdg/organisaties/tests/test_invitation.py:117
+msgid "gemeenten"
+msgstr "municipalities"
 
 #: sdg/api/filters/constants.py:7 sdg/producten/constants.py:12
 msgid "Ja"
@@ -412,47 +417,23 @@ msgstr ""
 msgid "Gebruik standaardtekst"
 msgstr ""
 
-#: sdg/conf/types/organization.py:30 sdg/core/models/logius.py:160
-msgid "gemeente"
-msgstr "municipality"
-
-#: sdg/conf/types/organization.py:31
-msgid "gemeenten"
-msgstr "municipalities"
-
-#: sdg/conf/types/organization.py:43 sdg/core/models/logius.py:158
-msgid "provincie"
-msgstr "province"
-
-#: sdg/conf/types/organization.py:44
-msgid "provincies"
-msgstr "provinces"
-
-#: sdg/conf/types/organization.py:56 sdg/core/models/logius.py:159
-msgid "waterschap"
-msgstr "water authority"
-
-#: sdg/conf/types/organization.py:57
-msgid "waterschappen"
-msgstr "water authorities"
-
-#: sdg/core/admin/config.py:13 sdg/core/admin/config.py:71
+#: sdg/core/admin/config.py:13 sdg/core/admin/config.py:72
 msgid "Algemene gegevens"
 msgstr ""
 
-#: sdg/core/admin/config.py:23 sdg/templates/producten/update.html:296
+#: sdg/core/admin/config.py:23 sdg/templates/producten/update.html:289
 msgid "Generieke gegevens"
 msgstr ""
 
-#: sdg/core/admin/config.py:37 sdg/templates/producten/update.html:316
+#: sdg/core/admin/config.py:37 sdg/templates/producten/update.html:309
 msgid "Specifieke gegevens"
 msgstr ""
 
-#: sdg/core/admin/config.py:93
+#: sdg/core/admin/config.py:94
 msgid "Documentatie configuratie"
 msgstr ""
 
-#: sdg/core/admin/config.py:102
+#: sdg/core/admin/config.py:103
 msgid "Analytics configuratie"
 msgstr ""
 
@@ -552,7 +533,7 @@ msgstr ""
 msgid "Een afkorting die wordt gebruikt om het domein aan te duiden."
 msgstr ""
 
-#: sdg/core/models/catalogus.py:55 sdg/producten/models/product.py:383
+#: sdg/core/models/catalogus.py:55 sdg/producten/models/product.py:384
 msgid "versie"
 msgstr ""
 
@@ -575,13 +556,13 @@ msgstr ""
 
 #: sdg/core/models/catalogus.py:67 sdg/organisaties/models.py:21
 #: sdg/organisaties/models.py:105 sdg/organisaties/models.py:264
-#: sdg/producten/models/product.py:138
+#: sdg/producten/models/product.py:139
 msgid "UUID"
 msgstr ""
 
 #: sdg/core/models/catalogus.py:72 sdg/organisaties/models.py:26
 #: sdg/organisaties/models.py:110 sdg/organisaties/models.py:269
-#: sdg/producten/models/product.py:143
+#: sdg/producten/models/product.py:144
 msgid "De identificatie die binnen deze API gebruikt wordt voor de resource."
 msgstr ""
 
@@ -617,19 +598,19 @@ msgstr ""
 msgid "Bevoegde organisatie"
 msgstr ""
 
-#: sdg/core/models/config.py:35 sdg/templates/core/base.html:23
+#: sdg/core/models/config.py:35 sdg/templates/core/base.html:25
 #: sdg/templates/core/base_home.html:40
 #: sdg/templates/organisaties/locaties.html:4
 msgid "Locaties"
 msgstr ""
 
-#: sdg/core/models/config.py:38 sdg/organisaties/views/catalogi.py:51
+#: sdg/core/models/config.py:38 sdg/organisaties/views/catalogi.py:47
 msgid "Heeft kosten"
 msgstr ""
 
-#: sdg/core/models/config.py:41 sdg/organisaties/views/catalogi.py:48
-#: sdg/templates/producten/update.html:226
-#: sdg/templates/producten/update.html:376
+#: sdg/core/models/config.py:41 sdg/organisaties/views/catalogi.py:53
+#: sdg/templates/producten/update.html:219
+#: sdg/templates/producten/update.html:369
 msgid "Publicatie datum"
 msgstr ""
 
@@ -762,11 +743,15 @@ msgstr ""
 msgid "Decentrale procedure link"
 msgstr ""
 
-#: sdg/core/models/localized_config.py:92
+#: sdg/core/models/localized_config.py:87
+msgid "Decentrale procedure label"
+msgstr ""
+
+#: sdg/core/models/localized_config.py:95
 msgid "Vertaalde configuratie"
 msgstr ""
 
-#: sdg/core/models/localized_config.py:93
+#: sdg/core/models/localized_config.py:96
 msgid "Vertaalde configuraties"
 msgstr ""
 
@@ -886,6 +871,18 @@ msgstr ""
 #: sdg/core/models/logius.py:157
 msgid "rijk"
 msgstr ""
+
+#: sdg/core/models/logius.py:158
+msgid "provincie"
+msgstr "province"
+
+#: sdg/core/models/logius.py:159
+msgid "waterschap"
+msgstr "water authority"
+
+#: sdg/core/models/logius.py:160
+msgid "gemeente"
+msgstr "municipality"
 
 #: sdg/core/models/logius.py:161
 msgid "burger"
@@ -1062,7 +1059,7 @@ msgid ""
 "organisatie."
 msgstr ""
 
-#: sdg/organisaties/models.py:143 sdg/producten/models/product.py:198
+#: sdg/organisaties/models.py:143 sdg/producten/models/product.py:199
 msgid "bevoegde organisatie"
 msgstr ""
 
@@ -1154,20 +1151,24 @@ msgstr ""
 msgid "locatie"
 msgstr ""
 
-#: sdg/organisaties/models.py:278 sdg/producten/models/product.py:188
+#: sdg/organisaties/models.py:278 sdg/producten/models/product.py:189
 msgid "locaties"
 msgstr ""
 
-#: sdg/organisaties/tests/test_invitation.py:188
+#: sdg/organisaties/tests/test_invitation.py:139
+msgid "waterschappen"
+msgstr "water authorities"
+
+#: sdg/organisaties/tests/test_invitation.py:222
 msgid "Dit wachtwoord is te kort. De minimale lengte is 8 tekens."
 msgstr ""
 
-#: sdg/organisaties/tests/test_invitation.py:192
+#: sdg/organisaties/tests/test_invitation.py:226
 msgid "Dit wachtwoord is te algemeen."
 msgstr ""
 
 #: sdg/organisaties/tests/test_overheden.py:90
-#: sdg/producten/tests/test_views.py:706 sdg/templates/core/base.html:41
+#: sdg/producten/tests/test_product.py:872 sdg/templates/core/base.html:43
 msgid ""
 "Je kan producten niet beheren in het CMS maar enkel via de API. Je kan wel "
 "via het menu bovenin de organisatie gegevens, locaties en bevoegde "
@@ -1191,7 +1192,7 @@ msgid "Zoek op productnaam"
 msgstr ""
 
 #: sdg/organisaties/views/catalogi.py:30
-#: sdg/templates/producten/update.html:263
+#: sdg/templates/producten/update.html:256
 msgid "Informatiegebied"
 msgstr ""
 
@@ -1204,7 +1205,7 @@ msgid "Aangeboden"
 msgstr ""
 
 #: sdg/organisaties/views/catalogi.py:42
-#: sdg/templates/producten/update.html:115
+#: sdg/templates/producten/update.html:108
 msgid "Doelgroep"
 msgstr ""
 
@@ -1222,9 +1223,7 @@ msgstr ""
 
 #: sdg/organisaties/views/overheden.py:28
 #, python-brace-format
-msgid ""
-"De organisatie instellingen van gemeente {organisatie} zijn succesvol "
-"gewijzigd."
+msgid "De organisatie instellingen van {organisatie} zijn succesvol gewijzigd."
 msgstr ""
 
 #: sdg/organisaties/views/roles.py:42
@@ -1241,12 +1240,34 @@ msgid ""
 msgstr ""
 
 #: sdg/producten/admin/filters.py:8
-msgid "Is SDG product"
+msgid "is SDG product"
 msgstr ""
 
 #: sdg/producten/admin/product.py:21
-msgid "Is Referentie"
+msgid "is referentie"
 msgstr ""
+
+#: sdg/producten/admin/product.py:27
+msgid "organisatie type"
+msgstr ""
+
+#: sdg/producten/admin/product.py:32
+#, fuzzy
+#| msgid "gemeente"
+msgid "Gemeente"
+msgstr "municipality"
+
+#: sdg/producten/admin/product.py:33
+#, fuzzy
+#| msgid "provincie"
+msgid "Provincie"
+msgstr "province"
+
+#: sdg/producten/admin/product.py:34
+#, fuzzy
+#| msgid "waterschap"
+msgid "Waterschap"
+msgstr "water authority"
 
 #: sdg/producten/constants.py:7
 msgid "Opslaan en publiceren"
@@ -1256,8 +1277,8 @@ msgstr ""
 msgid "Opslaan als concept"
 msgstr ""
 
-#: sdg/producten/models/localized.py:23 sdg/producten/models/product.py:109
-#: sdg/producten/models/product.py:150
+#: sdg/producten/models/localized.py:23 sdg/producten/models/product.py:110
+#: sdg/producten/models/product.py:151
 msgid "generiek product"
 msgstr ""
 
@@ -1471,7 +1492,7 @@ msgstr ""
 msgid "vertaalde producten"
 msgstr ""
 
-#: sdg/producten/models/localized.py:333 sdg/producten/models/product.py:515
+#: sdg/producten/models/localized.py:333 sdg/producten/models/product.py:516
 msgid "productuitvoering"
 msgstr ""
 
@@ -1527,7 +1548,7 @@ msgid ""
 "te leveren."
 msgstr ""
 
-#: sdg/producten/models/product.py:69
+#: sdg/producten/models/product.py:70
 msgid ""
 "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of "
 "burgers en bedrijven. Wordt gebruikt wanneer een portaal informatie over het "
@@ -1535,162 +1556,162 @@ msgid ""
 "de ondernemersvariant en de burgerportalen de burgervariant. "
 msgstr ""
 
-#: sdg/producten/models/product.py:75
+#: sdg/producten/models/product.py:76
 msgid "Eind datum"
 msgstr ""
 
-#: sdg/producten/models/product.py:76
+#: sdg/producten/models/product.py:77
 msgid "De datum wanneer het product komt te vervallen."
 msgstr ""
 
-#: sdg/producten/models/product.py:110
+#: sdg/producten/models/product.py:111
 msgid "generieke producten"
 msgstr ""
 
-#: sdg/producten/models/product.py:133
+#: sdg/producten/models/product.py:134
 msgid "Gepubliceerd"
 msgstr ""
 
-#: sdg/producten/models/product.py:134
+#: sdg/producten/models/product.py:135
 msgid "Gepland"
 msgstr ""
 
-#: sdg/producten/models/product.py:135
+#: sdg/producten/models/product.py:136
 msgid "Concept"
 msgstr ""
 
-#: sdg/producten/models/product.py:151
+#: sdg/producten/models/product.py:152
 msgid "Het generiek product gekoppeld aan dit product."
 msgstr ""
 
-#: sdg/producten/models/product.py:157
+#: sdg/producten/models/product.py:158
 msgid "referentie product"
 msgstr ""
 
-#: sdg/producten/models/product.py:159
+#: sdg/producten/models/product.py:160
 msgid ""
 "Een referentie naar een product. Het toewijzen van een referentieproduct "
 "veronderstelt automatisch dat dit product specifiek is."
 msgstr ""
 
-#: sdg/producten/models/product.py:169
+#: sdg/producten/models/product.py:170
 msgid "catalogus"
 msgstr ""
 
-#: sdg/producten/models/product.py:170
+#: sdg/producten/models/product.py:171
 msgid "De catalogus waartoe dit product behoort."
 msgstr ""
 
-#: sdg/producten/models/product.py:173
+#: sdg/producten/models/product.py:174
 msgid "aanwezig"
 msgstr ""
 
-#: sdg/producten/models/product.py:174
+#: sdg/producten/models/product.py:175
 msgid "Voert u dit product?"
 msgstr ""
 
-#: sdg/producten/models/product.py:181
+#: sdg/producten/models/product.py:182
 msgid "product valt onder"
 msgstr ""
 
-#: sdg/producten/models/product.py:182
+#: sdg/producten/models/product.py:183
 msgid "Een verwijzing naar een product waarvan dit product valt onder."
 msgstr ""
 
-#: sdg/producten/models/product.py:191
+#: sdg/producten/models/product.py:192
 msgid "De locaties die zijn toegewezen aan de product."
 msgstr ""
 
-#: sdg/producten/models/product.py:200
+#: sdg/producten/models/product.py:201
 msgid "De bevoegde organisatie van de producten."
 msgstr ""
 
-#: sdg/producten/models/product.py:204
+#: sdg/producten/models/product.py:205
 msgid "heeft kosten"
 msgstr ""
 
-#: sdg/producten/models/product.py:205
+#: sdg/producten/models/product.py:206
 msgid "Heeft dit product kosten?"
 msgstr ""
 
-#: sdg/producten/models/product.py:330 sdg/producten/models/product.py:369
-#: sdg/producten/models/product.py:510
+#: sdg/producten/models/product.py:331 sdg/producten/models/product.py:370
+#: sdg/producten/models/product.py:511
 msgid "product"
 msgstr ""
 
-#: sdg/producten/models/product.py:331
+#: sdg/producten/models/product.py:332
 msgid "producten"
 msgstr ""
 
-#: sdg/producten/models/product.py:370
+#: sdg/producten/models/product.py:371
 msgid "Het product voor het product versie."
 msgstr ""
 
-#: sdg/producten/models/product.py:377
+#: sdg/producten/models/product.py:378
 msgid "gemaakt door"
 msgstr ""
 
-#: sdg/producten/models/product.py:378
+#: sdg/producten/models/product.py:379
 msgid "De maker van deze productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:384
+#: sdg/producten/models/product.py:385
 msgid "Het versienummer van het product."
 msgstr ""
 
-#: sdg/producten/models/product.py:390
+#: sdg/producten/models/product.py:391
 msgid "publicatie datum"
 msgstr ""
 
-#: sdg/producten/models/product.py:391
+#: sdg/producten/models/product.py:392
 msgid "De datum van publicatie van de productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:396
+#: sdg/producten/models/product.py:397
 msgid "gemaakt op"
 msgstr ""
 
-#: sdg/producten/models/product.py:397
+#: sdg/producten/models/product.py:398
 msgid "De oorspronkelijke aanmaakdatum voor deze productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:401
+#: sdg/producten/models/product.py:402
 msgid "gewijzigd op"
 msgstr ""
 
-#: sdg/producten/models/product.py:402
+#: sdg/producten/models/product.py:403
 msgid "De wijzigingsdatum voor deze productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:407
+#: sdg/producten/models/product.py:408
 msgid "bewerkte_velden"
 msgstr ""
 
-#: sdg/producten/models/product.py:412
+#: sdg/producten/models/product.py:413
 msgid "interne opmerkingen"
 msgstr ""
 
-#: sdg/producten/models/product.py:414
+#: sdg/producten/models/product.py:415
 msgid "Interne opmerkingen die niet zichtbaar zijn buiten deze omgeving."
 msgstr ""
 
-#: sdg/producten/models/product.py:480
+#: sdg/producten/models/product.py:481
 msgid "product versie"
 msgstr ""
 
-#: sdg/producten/models/product.py:481
+#: sdg/producten/models/product.py:482
 msgid "product versies"
 msgstr ""
 
-#: sdg/producten/models/product.py:494
+#: sdg/producten/models/product.py:495
 msgid "De publicatiedatum kan niet in het verleden liggen."
 msgstr ""
 
-#: sdg/producten/models/product.py:511
+#: sdg/producten/models/product.py:512
 msgid "Het product voor het productuitvoering."
 msgstr ""
 
-#: sdg/producten/models/product.py:516
+#: sdg/producten/models/product.py:517
 msgid "productuitvoeringen"
 msgstr ""
 
@@ -1730,21 +1751,44 @@ msgstr ""
 msgid "Dit referentieproduct moet in een referentiecatalogus staan."
 msgstr ""
 
-#: sdg/producten/views/product.py:242 sdg/producten/views/product.py:258
+#: sdg/producten/tests/test_product.py:191
+#: sdg/producten/tests/test_product.py:306
+#: sdg/producten/tests/test_product.py:342 sdg/producten/views/product.py:441
+msgid ""
+"Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder "
+"gemarkeerde fouten."
+msgstr ""
+
+#: sdg/producten/tests/test_product.py:213 sdg/producten/views/product.py:427
+#, python-brace-format
+msgid "Product {product} is opgeslagen."
+msgstr ""
+
+#: sdg/producten/tests/test_product.py:262
+#: sdg/producten/tests/test_product.py:278
+#: sdg/producten/tests/test_product.py:974
+#: sdg/producten/tests/test_product.py:990 sdg/producten/views/product.py:379
+msgid "De huidige gegevens bevatten placeholder tekst."
+msgstr ""
+
+#: sdg/producten/tests/test_product.py:311
+#: sdg/producten/tests/test_product.py:347
+msgid "De tekst mag geen placeholders bevatten."
+msgstr ""
+
+#: sdg/producten/views/product.py:250
 #, python-brace-format
 msgid ""
 "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
 msgstr ""
 "In the {org_type_name} of {lokale_overheid}, {product} falls under [product]."
 
-#: sdg/producten/views/product.py:249 sdg/producten/views/product.py:265
+#: sdg/producten/views/product.py:257
 #, python-brace-format
-msgid ""
-"De {org_type_name} {lokale_overheid} levert het product {product} niet."
-msgstr ""
-"The {org_type_name} of {lokale_overheid} doesn't offer {product}."
+msgid "De {org_type_name} {lokale_overheid} levert het product {product} niet."
+msgstr "The {org_type_name} of {lokale_overheid} doesn't offer {product}."
 
-#: sdg/producten/views/product.py:320
+#: sdg/producten/views/product.py:313
 msgid ""
 "'Opslaan als concept' slaat het product op zonder te publiceren zodat u er "
 "later nog aan kan werken.\n"
@@ -1815,8 +1859,8 @@ msgstr ""
 #: sdg/templates/account/email_confirm.html:27
 #, python-format
 msgid ""
-"Deze e-mailbevestigingslink is verlopen of ongeldig. Gelieve <a href="
-"\"%(email_url)s\">een nieuwe bevestigingsmail aan te vragen</a>."
+"Deze e-mailbevestigingslink is verlopen of ongeldig. Gelieve <a "
+"href=\"%(email_url)s\">een nieuwe bevestigingsmail aan te vragen</a>."
 msgstr ""
 
 #: sdg/templates/account/login.html:7 sdg/templates/account/login.html:10
@@ -1833,33 +1877,35 @@ msgid ""
 msgstr ""
 
 #: sdg/templates/account/login_dashboard.html:9
-msgid "SDG voor gemeenten"
-msgstr ""
-
-#: sdg/templates/account/login_dashboard.html:10
-msgid ""
-"Welkom bij de Single Digital Gateway (SDG) Invoervoorziening van VNG "
-"Realisatie."
-msgstr ""
-
-#: sdg/templates/account/login_dashboard.html:11
 #, python-format
 msgid ""
-"\"Hier beheert u %(org_type_cfg.name)s specifieke teksten voor "
-"%(org_type_cfg.name)slijke producten.\" "
+"\n"
+"        <h3 class=\"login__container-title\">SDG voor "
+"%(org_type_cfg.name_plural)s</h3>\n"
+"    "
 msgstr ""
 
 #: sdg/templates/account/login_dashboard.html:12
+msgid "Welkom bij de Single Digital Gateway (SDG) PDC"
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:13
+#, python-format
+msgid ""
+"\"Hier beheert u %(org_type_cfg.name)s specifieke productbeschrijvingen\" "
+msgstr ""
+
+#: sdg/templates/account/login_dashboard.html:14
 msgid ""
 "Deze informatie wordt gepresenteerd op <a href=\"#\">Rijksoverheid.nl</a> en "
 "<a href=\"#\">Digitaalondernemersplein.nl</a>."
 msgstr ""
 
-#: sdg/templates/account/login_dashboard.html:13
+#: sdg/templates/account/login_dashboard.html:15
 msgid "Log in om verder te gaan."
 msgstr ""
 
-#: sdg/templates/account/login_dashboard.html:14
+#: sdg/templates/account/login_dashboard.html:16
 msgid "Inloggen"
 msgstr ""
 
@@ -1983,24 +2029,24 @@ msgstr ""
 msgid "Wissel naar andere organisatie"
 msgstr ""
 
-#: sdg/templates/core/_notifications.html:7 sdg/templates/core/index.html:38
+#: sdg/templates/core/_notifications.html:15 sdg/templates/core/index.html:38
 #: sdg/templates/producten/_include/availability_warnings.html:8
 #: sdg/templates/producten/_include/availability_warnings.html:14
 #: sdg/templates/producten/_include/edit_warnings.html:15
 msgid "Sluiten"
 msgstr ""
 
-#: sdg/templates/core/base.html:11
+#: sdg/templates/core/base.html:13
 msgid "Homepage"
 msgstr ""
 
-#: sdg/templates/core/base.html:17
+#: sdg/templates/core/base.html:19
 #: sdg/templates/organisaties/catalogi/base.html:5
 #: sdg/templates/organisaties/catalogi/list.html:4
 msgid "Productenlijst"
 msgstr ""
 
-#: sdg/templates/core/base.html:21
+#: sdg/templates/core/base.html:23
 msgid "Gebruikers"
 msgstr ""
 
@@ -2056,7 +2102,8 @@ msgid ""
 "        <p>Beste %(user_full_name)s,</p>\n"
 "\n"
 "        <p>Hartelijk dank voor het aanmelden bij de invoervoorziening Single "
-"Digital Gateway (SDG) voor gemeenten. Je hebt zojuist toegang gekregen.</p>\n"
+"Digital Gateway (SDG) voor %(org_type_name_plural)s. Je hebt zojuist toegang "
+"gekregen.</p>\n"
 "\n"
 "        <br>\n"
 "        <p><strong>Activeer nu jouw account</strong></p>\n"
@@ -2069,16 +2116,16 @@ msgid ""
 "activeren.</i></strong></p>\n"
 "\n"
 "        <p>Met jouw account heb je toegang tot de invoervoorziening. Ook kun "
-"je hier de teksten controleren en aanvullen met informatie van jouw gemeente."
-"</p>\n"
+"je hier de teksten controleren en aanvullen met informatie van jouw "
+"%(org_type_name)s.</p>\n"
 "\n"
 "        <br>\n"
 "        <p><strong>Heb je vragen?</strong></p>\n"
 "        <p>Op de <a href=\"https://werkenaaneenoverheid.pleio.nl/groups/view/"
 "ed87e451-f6fc-49b0-aec4-41f2358426f7/single-digital-gateway\">Pleio omgeving "
 "van SDG</a> vind je informatie en handleidingen voor de invoervoorziening. "
-"Heb je andere vragen? Stuur een e-mail naar <a href=\"mailto:sdg@vng.nl"
-"\">sdg@vng.nl</a>.</p>\n"
+"Heb je andere vragen? Stuur een e-mail naar <a href=\"mailto:"
+"%(org_type_email)s\">%(org_type_email)s</a>.</p>\n"
 "\n"
 "        <br>\n"
 "        <p>Met vriendelijke groet,</p>\n"
@@ -2131,31 +2178,35 @@ msgstr ""
 msgid "Contact municipality"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:268
+#: sdg/templates/mocks/kvk.html:272
 msgid "phone"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:273
+#: sdg/templates/mocks/kvk.html:280
+msgid "formulier"
+msgstr ""
+
+#: sdg/templates/mocks/kvk.html:287
 msgid "Where to get this product"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:274
+#: sdg/templates/mocks/kvk.html:288
 msgid "Handled by"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:291
+#: sdg/templates/mocks/kvk.html:305
 msgid "Opening hours"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:304
+#: sdg/templates/mocks/kvk.html:318
 msgid "uur"
 msgstr " "
 
-#: sdg/templates/mocks/kvk.html:307
+#: sdg/templates/mocks/kvk.html:321
 msgid "closed"
 msgstr ""
 
-#: sdg/templates/mocks/kvk.html:324
+#: sdg/templates/mocks/kvk.html:338
 msgid "Last updated on"
 msgstr ""
 
@@ -2197,7 +2248,7 @@ msgstr ""
 #: sdg/templates/organisaties/roles/delete.html:22
 #: sdg/templates/organisaties/roles/update.html:29
 #: sdg/templates/organisaties/update.html:27
-#: sdg/templates/producten/update.html:388
+#: sdg/templates/producten/update.html:381
 msgid "Annuleren"
 msgstr ""
 
@@ -2444,25 +2495,19 @@ msgstr ""
 msgid "Alles bewerken"
 msgstr ""
 
-#: sdg/templates/producten/update.html:80
-msgid ""
-"Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder "
-"gemarkeerde fouten."
-msgstr ""
-
-#: sdg/templates/producten/update.html:103
+#: sdg/templates/producten/update.html:96
 msgid "Algemene Gegevens"
 msgstr ""
 
-#: sdg/templates/producten/update.html:227
+#: sdg/templates/producten/update.html:220
 msgid "Publicatiedatum van de productversie"
 msgstr ""
 
-#: sdg/templates/producten/update.html:264
+#: sdg/templates/producten/update.html:257
 msgid "Informatiegebied in verband met dit product."
 msgstr ""
 
-#: sdg/templates/producten/update.html:343
+#: sdg/templates/producten/update.html:336
 msgid "Geschiedenis"
 msgstr ""
 
@@ -2660,15 +2705,18 @@ msgstr ""
 msgid "Alleen voorziene cache wissen"
 msgstr ""
 
-#: sdg/utils/validators.py:22
+#: sdg/utils/validators.py:24
 #, python-format
 msgid "Uw invoer bevat een ongeldig teken: %s"
 msgstr ""
 
-#: sdg/utils/validators.py:30
+#: sdg/utils/validators.py:32
 msgid "Het opgegeven mobiele telefoonnummer is ongeldig."
 msgstr ""
 
-#: sdg/utils/validators.py:50
+#: sdg/utils/validators.py:52
 msgid "Ongeldige postcode"
 msgstr ""
+
+#~ msgid "provincies"
+#~ msgstr "provinces"

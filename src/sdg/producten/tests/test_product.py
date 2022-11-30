@@ -1147,7 +1147,7 @@ class ProductUpdateViewTests(WebTest):
             response.text,
         )
         self.assertIn(
-            f"De waterschap {municipality} levert het product {localized_generic_product_nl} niet omdat...",
+            f"De waterschap {municipality} levert het product {localized_generic_product_nl} niet.",
             response.text,
         )
         self.assertIn(
