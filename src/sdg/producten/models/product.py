@@ -207,7 +207,7 @@ class Product(ProductFieldMixin, models.Model):
         default=False,
     )
     api_verborgen = models.BooleanField(
-        _("verbogen"),
+        _("verborgen"),
         help_text=_("Verbergen voor Nationale Portalen."),
         default=False,
     )

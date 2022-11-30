@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             field=models.BooleanField(
                 default=False,
                 help_text="Verbergen voor Nationale Portalen.",
-                verbose_name="verbogen",
+                verbose_name="verborgen",
             ),
         ),
     ]
