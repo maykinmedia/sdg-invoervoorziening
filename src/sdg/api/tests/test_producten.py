@@ -789,10 +789,24 @@ class ProductenTests(APITestCase):
     def test_update_product_without_upn(self):
         list_url = reverse("api:product-list")
 
-        body = self.get_product_post_body({"publicatieDatum": str(NOW_DATE)})
-
         body = self.body
         body.pop("upnUri")
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_empty_string_for_catalogus(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body({"catalogus": ""})
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
 
