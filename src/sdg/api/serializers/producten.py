@@ -160,7 +160,7 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ProductLocatieSerializer(LocatieBaseSerializer):
-    openingstijden = OpeningstijdenSerializer(read_only=True)
+    openingstijden = OpeningstijdenSerializer(source="*", read_only=True)
 
     class Meta(LocatieBaseSerializer.Meta):
         read_only_fields = (
@@ -172,7 +172,7 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
             "land",
             "openingstijden_opmerking",
         )
-        fields = (
+        fields = LocatieBaseSerializer.Meta.fields + (
             "openingstijden",
             "url",
             "naam",

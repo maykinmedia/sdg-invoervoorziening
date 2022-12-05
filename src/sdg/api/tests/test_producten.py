@@ -322,6 +322,41 @@ class ProductenTests(APITestCase):
                 expired_org.owms_identifier,
             )
 
+    def test_list_producten_with_location(self):
+        list_url = reverse("api:product-list")
+
+        location = LocatieFactory.create(
+            lokale_overheid=self.referentie_lokale_overheid,
+        )
+        self.referentie_product.locaties.add(location)
+        response = self.client.get(list_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        product_data = response.json()["results"][3]
+        locations = product_data["locaties"]
+        self.assertEqual(1, len(locations))
+
+        location_data = locations[0]
+        self.assertEqual(location_data["naam"], location.naam)
+        self.assertEqual(location_data["straat"], location.straat)
+        self.assertEqual(location_data["nummer"], location.nummer)
+        self.assertEqual(location_data["postcode"], location.postcode)
+        self.assertEqual(location_data["plaats"], location.plaats)
+        self.assertEqual(location_data["land"], location.land)
+        self.assertEqual(
+            location_data["openingstijdenOpmerking"], location.openingstijden_opmerking
+        )
+
+        opening_times = location_data["openingstijden"]
+        self.assertEqual(opening_times["maandag"], ["09:00 - 17:00"])
+        self.assertEqual(opening_times["dinsdag"], ["09:00 - 17:00"])
+        self.assertEqual(opening_times["woensdag"], ["09:00 - 17:00"])
+        self.assertEqual(opening_times["donderdag"], ["09:00 - 17:00"])
+        self.assertEqual(opening_times["vrijdag"], ["09:00 - 17:00"])
+        self.assertEqual(opening_times["zaterdag"], [])
+        self.assertEqual(opening_times["zondag"], [])
+
     def test_list_producten_with_deleted_product_not_shown(self):
         self.generiek_product.product_status = GenericProductStatus.DELETED
         self.generiek_product.save()
