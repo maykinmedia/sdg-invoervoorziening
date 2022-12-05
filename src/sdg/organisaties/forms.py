@@ -93,8 +93,10 @@ class BevoegdeOrganisatieForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        if not cleaned_data["naam"] and cleaned_data["organisatie"]:
+
+        if not cleaned_data["naam"] and cleaned_data.get("organisatie"):
             cleaned_data["naam"] = cleaned_data["organisatie"].owms_pref_label
+
         return cleaned_data
 
 
