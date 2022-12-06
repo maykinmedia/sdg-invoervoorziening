@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.http import Http404
 
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
@@ -29,22 +30,23 @@ from sdg.producten.models.localized import LocalizedProduct
         """,
         parameters=[
             OpenApiParameter(
-                name="uuid",
-                description="De UUID van het product die u wilt ophalen.",
+                name="versie",
+                description="Het versie nummer van het product die u wilt ophalen.",
                 required=True,
-                type=OpenApiTypes.UUID,
+                type=OpenApiTypes.NUMBER,
                 location=OpenApiParameter.PATH,
             ),
         ],
     ),
 )
-class ProductVersieViewSet(
+class ProductVersiesViewset(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
     GenericViewSet,
 ):
-    lookup_field = "uuid"
-    lookup_url_kwarg = "uuid"
+    lookup_field = "versie"
+    lookup_url_kwarg = "versie"
 
     serializer_class = ProductVersieSingleSerializer
     permission_classes = [OrganizationPermissions, WhitelistedPermission]
@@ -64,67 +66,21 @@ class ProductVersieViewSet(
         .order_by("generiek_product__upn__upn_label")
     )
 
-    def get_organisatie(self, request, view, obj=None):
-        if request.method == "POST":
-            print(view.kwargs)
-            versies_uuid = view.kwargs["versies_uuid"]
+    def get_object(self):
+        product_uuid = self.kwargs["product_uuid"]
+        version = self.kwargs["versie"]
+
+        if self.request.method == "RETRIEVE":
             try:
-                product = Product.objects.get(uuid=versies_uuid)
+                return Product.object.get(uuid=product_uuid, versies=version)
             except Product.DoesNotExist:
-                return None
-            except ValidationError:
-                return None
-
-            return product.catalogus.lokale_overheid.organisatie
-
-        return None
-
-
-@extend_schema_view(
-    create=extend_schema(
-        description="""Maak/update een productversie concept. Om de productversie correct aan te maken,moet u in de url het 'productUuid' opgeven.
-        """,
-        parameters=[
-            OpenApiParameter(
-                name="versies_uuid",
-                description="De UUID van het product die u wilt updaten.",
-                required=True,
-                type=OpenApiTypes.UUID,
-                location=OpenApiParameter.PATH,
-            ),
-            OpenApiParameter(
-                name="versie",
-                description="Het versie nummer van het product die u wilt updaten.",
-                required=True,
-                type=OpenApiTypes.INT,
-                location=OpenApiParameter.PATH,
-            ),
-        ],
-    ),
-)
-@extend_schema(
-    parameters=[
-        OpenApiParameter(
-            name="versies_uuid",
-            description="De UUID van het product die u wilt updaten.",
-            required=True,
-            type=OpenApiTypes.UUID,
-            location=OpenApiParameter.PATH,
-        ),
-    ]
-)
-class ProductVersieCreateViewSet(
-    mixins.CreateModelMixin,
-    GenericViewSet,
-):
-    serializer_class = ProductVersieSingleSerializer
-    permission_classes = [OrganizationPermissions, WhitelistedPermission]
+                raise Http404
 
     def get_organisatie(self, request, view, obj=None):
         if request.method == "POST":
-            versies_uuid = view.kwargs["versies_uuid"]
+            product_uuid = view.kwargs["product_uuid"]
             try:
-                product = Product.objects.get(uuid=versies_uuid)
+                product = Product.objects.get(uuid=product_uuid)
             except Product.DoesNotExist:
                 return None
             except ValidationError:
@@ -137,9 +93,10 @@ class ProductVersieCreateViewSet(
     @action(
         detail=False,
         methods=["post"],
+        url_path=r"(?P<versie>[0-9]+)/publiceer",
         serializer_class=ProductVersiePublishSerializer,
     )
-    def publish(self, request, *args, **kwargs):
+    def publiceren(self, request, product_uuid=None, versie=None):
         """
         Publiseer het concept.
 
@@ -147,21 +104,19 @@ class ProductVersieCreateViewSet(
         Letop een gepubliseerde product kan niet meer worden aangepast, er kan wel een nieuwe product versie worden aangemaakt.
         """
 
-        versies_uuid = kwargs.pop("versies_uuid", None)
-        versie = kwargs.pop("versie", None)
         try:
-            product = Product.objects.get(uuid=versies_uuid)
+            product = Product.objects.get(uuid=product_uuid)
         except Product.DoesNotExist:
-            raise serializers.ValidationError("De gegeven versies_uuid bestaat niet.")
+            raise serializers.ValidationError("De gegeven product_uuid bestaat niet.")
         except ValidationError:
-            raise serializers.ValidationError("De gegeven versies_uuid bestaat niet.")
+            raise serializers.ValidationError("De gegeven product_uuid bestaat niet.")
 
         try:
             product_versie = ProductVersie.objects.get(product=product, versie=versie)
         except Product.DoesNotExist:
-            raise serializers.ValidationError("De gegeven versies_uuid bestaat niet.")
+            raise serializers.ValidationError("De gegeven product_uuid bestaat niet.")
         except ValidationError:
-            raise serializers.ValidationError("De gegeven versies_uuid bestaat niet.")
+            raise serializers.ValidationError("De gegeven product_uuid bestaat niet.")
 
         serializer = ProductVersiePublishSerializer(
             product_versie,
@@ -189,24 +144,24 @@ class ProductVersieCreateViewSet(
 
 
 @extend_schema_view(
-    create=extend_schema(
-        description="""Update 1 specifieke vertaling van een productversie concept. Om de productversie correct aan te maken,moet u in de url het 'productUuid' opgeven.
+    retrieve=extend_schema(
+        description="""Haal de specifieke vertaling op per taal.
         """,
         parameters=[
             OpenApiParameter(
-                name="versies_uuid",
-                description="De UUID van het product die u wilt updaten.",
+                name="taal",
+                description="De taal van de text die u wilt ophalen.",
                 required=True,
-                type=OpenApiTypes.UUID,
+                type=OpenApiTypes.STR,
                 location=OpenApiParameter.PATH,
+                enum=TaalChoices.labels,
             ),
-            OpenApiParameter(
-                name="versie",
-                description="Het versie nummer van het product die u wilt updaten.",
-                required=True,
-                type=OpenApiTypes.INT,
-                location=OpenApiParameter.PATH,
-            ),
+        ],
+    ),
+    update=extend_schema(
+        description="""Update 1 specifieke vertaling van een productversie concept. Om de productversie correct aan te maken, moet u in de url het 'productUuid' opgeven.
+        """,
+        parameters=[
             OpenApiParameter(
                 name="taal",
                 description="De taal van de tekst die u wilt updaten.",
@@ -218,82 +173,67 @@ class ProductVersieCreateViewSet(
         ],
     ),
 )
-class ProductVersieTranslationCreateViewSet(
-    mixins.CreateModelMixin,
-    GenericViewSet,
-):
-
-    serializer_class = ProductVersieVertalingenSerializer
-    permission_classes = [OrganizationPermissions, WhitelistedPermission]
-
-    def get_organisatie(self, request, view, obj=None):
-        if request.method == "POST":
-            versies_uuid = view.kwargs["versies_uuid"]
-            try:
-                product = Product.objects.get(uuid=versies_uuid)
-            except Product.DoesNotExist:
-                return None
-            except ValidationError:
-                return None
-
-            return product.catalogus.lokale_overheid.organisatie
-
-        return None
-
-
-@extend_schema_view(
-    list=extend_schema(
-        description="""Een lijst met alle vertalingen van de specifieke `versie` van een `product`.
-        """,
-        parameters=[
-            OpenApiParameter(
-                name="versies_uuid",
-                description="De UUID van het `product` die u wilt ophalen.",
-                required=True,
-                type=OpenApiTypes.UUID,
-                location=OpenApiParameter.PATH,
-            ),
-            OpenApiParameter(
-                name="versie",
-                description="Het versie nummer van het `product` die u wilt ophalen.",
-                required=True,
-                type=OpenApiTypes.INT,
-                location=OpenApiParameter.PATH,
-            ),
-        ],
-    ),
-)
-class ProductVersieTranslationListViewSet(
+class ProductVersiesTranslationViewset(
     mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
     GenericViewSet,
 ):
 
     serializer_class = ProductVersieVertalingenSerializer
     permission_classes = [OrganizationPermissions, WhitelistedPermission]
+
+    lookup_field = "taal"
+    lookup_url_kwarg = "taal"
 
     def get_queryset(self):
+        product_uuid = self.kwargs["product_uuid"]
+        version = self.kwargs["versie"]
+
         try:
-            return LocalizedProduct.objects.filter(
-                product_versie__product__uuid=self.kwargs["versies_uuid"],
-                product_versie__versie=self.kwargs["versie"],
+            product = Product.objects.get(uuid=product_uuid)
+        except Product.DoesNotExist:
+            raise Http404
+        try:
+            product_versie = ProductVersie.objects.get(product=product, versie=version)
+        except ProductVersie.DoesNotExist:
+            raise Http404
+
+        try:
+            return LocalizedProduct.objects.filter(product_versie=product_versie)
+        except LocalizedProduct.DoesNotExist:
+            raise Http404
+
+    def get_object(self):
+        product_uuid = self.kwargs["product_uuid"]
+        version = self.kwargs["versie"]
+        taal = self.kwargs["taal"]
+
+        try:
+            product = Product.objects.get(uuid=product_uuid)
+        except Product.DoesNotExist:
+            raise Http404
+        try:
+            product_versie = ProductVersie.objects.get(product=product, versie=version)
+        except ProductVersie.DoesNotExist:
+            raise Http404
+
+        try:
+            return LocalizedProduct.objects.get(
+                product_versie=product_versie, taal=taal
             )
-        except ValidationError:
-            return LocalizedProduct.objects.none()
-        except ValueError:
-            return LocalizedProduct.objects.none()
-        except KeyError:
-            return LocalizedProduct.objects.none()
+        except LocalizedProduct.DoesNotExist:
+            raise Http404
 
     def get_organisatie(self, request, view, obj=None):
-        if request.method == "POST":
-            versies_uuid = view.kwargs["versies_uuid"]
-            try:
-                product = Product.objects.get(uuid=versies_uuid)
-            except Product.DoesNotExist:
-                return None
-            except ValidationError:
-                return None
+        print(view.kwargs["product_uuid"])
 
-            return product.catalogus.lokale_overheid.organisatie
+        product_uuid = view.kwargs["product_uuid"]
+        try:
+            product = Product.objects.get(uuid=product_uuid)
+        except Product.DoesNotExist:
+            return None
+        except ValidationError:
+            return None
 
-        return None
+        return product.catalogus.lokale_overheid.organisatie

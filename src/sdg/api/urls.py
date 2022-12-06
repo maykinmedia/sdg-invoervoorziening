@@ -17,10 +17,8 @@ from sdg.api.views import (
     ProductViewSet,
 )
 from sdg.api.views.versies import (
-    ProductVersieCreateViewSet,
-    ProductVersieTranslationCreateViewSet,
-    ProductVersieTranslationListViewSet,
-    ProductVersieViewSet,
+    ProductVersiesTranslationViewset,
+    ProductVersiesViewset,
 )
 
 app_name = "api"
@@ -30,31 +28,21 @@ router.register("catalogi", CatalogusViewSet)
 router.register(
     "producten",
     ProductViewSet,
-)
-router.register("organisaties", LokaleOverheidViewSet)
-router.register("locaties", LocatieViewSet, basename="locatie")
-router.register(
-    prefix="versies",
-    viewset=ProductVersieViewSet,
-    basename="versies",
     nested=[
         routers.nested(
-            prefix=r"(?P<versie>[0-9]+)",
-            viewset=ProductVersieCreateViewSet,
-            basename="versies-create",
+            prefix=r"versies",
+            viewset=ProductVersiesViewset,
+            basename="versies",
         ),
         routers.nested(
-            prefix=r"(?P<versie>[0-9]+)/vertalingen/(?P<taal>[a-z]+)",
-            viewset=ProductVersieTranslationCreateViewSet,
-            basename="versies-vertalingen-create",
-        ),
-        routers.nested(
-            prefix=r"(?P<versie>[0-9]+)/vertalingen",
-            viewset=ProductVersieTranslationListViewSet,
-            basename="versies-vertalingen-list",
+            prefix=r"versies/(?P<versie>[^/.]+)/vertalingen",
+            viewset=ProductVersiesTranslationViewset,
+            basename="vertalingen",
         ),
     ],
 )
+router.register("organisaties", LokaleOverheidViewSet)
+router.register("locaties", LocatieViewSet, basename="locatie")
 
 product_history_router = routers.NestedSimpleRouter(
     router, "producten", lookup="product"

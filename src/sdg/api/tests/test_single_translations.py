@@ -190,10 +190,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_withBody(self):
         list_url = reverse(
-            "api:versies-create-list",
+            "api:versies-list",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
-                "versie": str(self.product_versie.versie),
+                "product_uuid": str(self.product.uuid),
             },
         )
 
@@ -233,10 +232,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_without_body(self):
         list_url = reverse(
-            "api:versies-create-list",
+            "api:versies-list",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
-                "versie": str(self.product_versie.versie),
+                "product_uuid": str(self.product.uuid),
             },
         )
 
@@ -275,10 +273,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_future_published(self):
         list_url = reverse(
-            "api:versies-create-list",
+            "api:versies-list",
             kwargs={
-                "versies_uuid": str(self.future_published_product.uuid),
-                "versie": str(self.future_published_product_versie.versie),
+                "product_uuid": str(self.future_published_product.uuid),
             },
         )
 
@@ -317,9 +314,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_vertaling_with_body(self):
         list_url = reverse(
-            "api:versies-vertalingen-create-list",
+            "api:vertalingen-detail",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
+                "product_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -346,14 +343,14 @@ class SingleProductenTests(APITestCase):
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
-        response = self.client.post(
+        response = self.client.put(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
             **headers,
         )
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()
 
@@ -383,9 +380,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_vertaling_without_body(self):
         list_url = reverse(
-            "api:versies-vertalingen-create-list",
+            "api:vertalingen-detail",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
+                "product_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -393,19 +390,19 @@ class SingleProductenTests(APITestCase):
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
-        response = self.client.post(
+        response = self.client.put(
             list_url,
             content_type="application/json",
             **headers,
         )
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_single_product_vertaling_future_published(self):
         list_url = reverse(
-            "api:versies-vertalingen-create-list",
+            "api:vertalingen-detail",
             kwargs={
-                "versies_uuid": str(self.future_published_product.uuid),
+                "product_uuid": str(self.future_published_product.uuid),
                 "versie": str(self.future_published_product_versie.versie),
                 "taal": "nl",
             },
@@ -432,14 +429,14 @@ class SingleProductenTests(APITestCase):
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
-        response = self.client.post(
+        response = self.client.put(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
             **headers,
         )
 
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data = response.json()
 
@@ -469,10 +466,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_vertaling_toelichting_wrongly_filled_in(self):
         list_url = reverse(
-            "api:versies-create-list",
+            "api:versies-list",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
-                "versie": str(self.product_versie.versie),
+                "product_uuid": str(self.product.uuid),
             },
         )
 
@@ -492,9 +488,9 @@ class SingleProductenTests(APITestCase):
         )
 
         list_url = reverse(
-            "api:versies-vertalingen-create-list",
+            "api:vertalingen-detail",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
+                "product_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -507,7 +503,7 @@ class SingleProductenTests(APITestCase):
                 "productValtOnderToelichting": "",
             }
 
-            response = self.client.post(
+            response = self.client.put(
                 list_url,
                 data=json.dumps(body),
                 content_type="application/json",
@@ -535,7 +531,7 @@ class SingleProductenTests(APITestCase):
                 "productValtOnderToelichting": "test",
             }
 
-            response = self.client.post(
+            response = self.client.put(
                 list_url,
                 data=json.dumps(body),
                 content_type="application/json",
@@ -558,10 +554,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_vertaling_toelichting_wrongly_forgotten(self):
         list_url = reverse(
-            "api:versies-create-list",
+            "api:versies-list",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
-                "versie": str(self.product_versie.versie),
+                "product_uuid": str(self.product.uuid),
             },
         )
 
@@ -583,9 +578,9 @@ class SingleProductenTests(APITestCase):
         )
 
         list_url = reverse(
-            "api:versies-vertalingen-create-list",
+            "api:vertalingen-detail",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
+                "product_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
                 "taal": "nl",
             },
@@ -600,7 +595,7 @@ class SingleProductenTests(APITestCase):
 
             headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
-            response = self.client.post(
+            response = self.client.put(
                 list_url,
                 data=json.dumps(body),
                 content_type="application/json",
@@ -630,7 +625,7 @@ class SingleProductenTests(APITestCase):
 
             headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
-            response = self.client.post(
+            response = self.client.put(
                 list_url,
                 data=json.dumps(body),
                 content_type="application/json",
@@ -653,9 +648,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_vertaling_on_published_product(self):
         list_url = reverse(
-            "api:versies-vertalingen-create-list",
+            "api:vertalingen-detail",
             kwargs={
-                "versies_uuid": str(self.seccond_product.uuid),
+                "product_uuid": str(self.seccond_product.uuid),
                 "versie": str(self.second_product_versie.versie),
                 "taal": "nl",
             },
@@ -682,7 +677,7 @@ class SingleProductenTests(APITestCase):
 
         headers = {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
 
-        response = self.client.post(
+        response = self.client.put(
             list_url,
             data=json.dumps(body),
             content_type="application/json",
@@ -705,9 +700,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_publish(self):
         list_url = reverse(
-            "api:versies-create-publish",
+            "api:versies-publiceren",
             kwargs={
-                "versies_uuid": str(self.product.uuid),
+                "product_uuid": str(self.product.uuid),
                 "versie": str(self.product_versie.versie),
             },
         )
@@ -724,9 +719,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_publish_already_published_product(self):
         list_url = reverse(
-            "api:versies-create-publish",
+            "api:versies-publiceren",
             kwargs={
-                "versies_uuid": str(self.seccond_product.uuid),
+                "product_uuid": str(self.seccond_product.uuid),
                 "versie": str(self.second_product_versie.versie),
             },
         )
@@ -753,13 +748,12 @@ class SingleProductenTests(APITestCase):
             ],
         )
 
-    def test_single_product_with_not_correctly_filled_out_product(self):
+    def test_publish_product_with_not_correctly_filled_out_product(self):
         with self.subTest("wrongly_filled_out_productAanwezig"):
             list_url = reverse(
-                "api:versies-create-list",
+                "api:versies-list",
                 kwargs={
-                    "versies_uuid": str(self.product.uuid),
-                    "versie": str(self.product_versie.versie),
+                    "product_uuid": str(self.product.uuid),
                 },
             )
 
@@ -781,9 +775,9 @@ class SingleProductenTests(APITestCase):
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
             list_url = reverse(
-                "api:versies-create-publish",
+                "api:versies-publiceren",
                 kwargs={
-                    "versies_uuid": str(self.product.uuid),
+                    "product_uuid": str(self.product.uuid),
                     "versie": str(self.product_versie.versie),
                 },
             )
@@ -811,10 +805,9 @@ class SingleProductenTests(APITestCase):
 
         with self.subTest("wrongly_filled_out_productValtOnder"):
             list_url = reverse(
-                "api:versies-create-list",
+                "api:versies-list",
                 kwargs={
-                    "versies_uuid": str(self.product.uuid),
-                    "versie": str(self.product_versie.versie),
+                    "product_uuid": str(self.product.uuid),
                 },
             )
 
@@ -835,14 +828,12 @@ class SingleProductenTests(APITestCase):
                 **headers,
             )
 
-            print(response.json())
-
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
             list_url = reverse(
-                "api:versies-create-publish",
+                "api:versies-publiceren",
                 kwargs={
-                    "versies_uuid": str(self.product.uuid),
+                    "product_uuid": str(self.product.uuid),
                     "versie": str(self.product_versie.versie),
                 },
             )
@@ -901,9 +892,9 @@ class SingleProductenTests(APITestCase):
             )
 
             url = reverse(
-                "api:versies-create-publish",
+                "api:versies-publiceren",
                 kwargs={
-                    "versies_uuid": str(product.uuid),
+                    "product_uuid": str(product.uuid),
                     "versie": str(product_versie.versie),
                 },
             )
@@ -962,9 +953,9 @@ class SingleProductenTests(APITestCase):
             )
 
             url = reverse(
-                "api:versies-create-publish",
+                "api:versies-publiceren",
                 kwargs={
-                    "versies_uuid": str(product.uuid),
+                    "product_uuid": str(product.uuid),
                     "versie": str(product_versie.versie),
                 },
             )
@@ -991,9 +982,9 @@ class SingleProductenTests(APITestCase):
 
     def test_single_product_publish_future_date(self):
         list_url = reverse(
-            "api:versies-create-publish",
+            "api:versies-publiceren",
             kwargs={
-                "versies_uuid": str(self.future_published_product.uuid),
+                "product_uuid": str(self.future_published_product.uuid),
                 "versie": str(self.future_published_product_versie.versie),
             },
         )

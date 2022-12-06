@@ -16,6 +16,29 @@ from sdg.organisaties.models import Lokatie as Locatie
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
 
 
+from rest_framework.reverse import reverse
+
+
+class CustomVertalingenHyperLink(serializers.HyperlinkedRelatedField):
+    view_name = "api:vertalingen-list"
+
+    def get_url(self, obj, view_name, request, format):
+        url_kwargs = {
+            "product_uuid": obj.product_versie.product.uuid,
+            "versie": obj.product_versie.versie,
+            "taal": obj.taal,
+        }
+        return reverse(view_name, kwargs=url_kwargs, request=request, format=format)
+
+    def get_object(self, view_name, view_args, view_kwargs):
+        lookup_kwargs = {
+            "product_verise__product__uuid": view_kwargs["product_uuid"],
+            "product_versie__versie": view_kwargs["versie"],
+            "taal": view_kwargs["taal"],
+        }
+        return self.get_queryset().get(**lookup_kwargs)
+
+
 class ProductVersieSingleSerializer(ProductBaseSerializer):
     product_valt_onder = ProductBaseSerializer(
         allow_null=True,
@@ -30,6 +53,16 @@ class ProductVersieSingleSerializer(ProductBaseSerializer):
     versie = SerializerMethodField(
         method_name="get_versie", help_text="De huidige versie van dit product."
     )
+    publicatie_datum = SerializerMethodField(
+        method_name="get_datum",
+        help_text="De datum wanneer dit product gepubliseerd is/wordt.",
+    )
+    talen = CustomVertalingenHyperLink(
+        source="most_recent_version.vertalingen",
+        view_name="api:vertalingen-detail",
+        read_only=True,
+        many=True,
+    )
 
     class Meta:
         model = Product
@@ -39,6 +72,8 @@ class ProductVersieSingleSerializer(ProductBaseSerializer):
             "product_valt_onder",
             "locaties",
             "versie",
+            "publicatie_datum",
+            "talen",
         )
         extra_kwargs = {
             "product_aanwezig": {"required": True},
@@ -60,31 +95,8 @@ class ProductVersieSingleSerializer(ProductBaseSerializer):
     def get_versie(self, obj: Product) -> int:
         return self._get_most_recent_version(obj, "versie", default=0)
 
-    def validate(self, attrs):
-        versies_uuid = self.context["view"].kwargs["versies_uuid"]
-        versie = int(self.context["view"].kwargs["versie"])
-        product = Product.objects.get(uuid=versies_uuid)
-
-        most_recent_version = product.most_recent_version
-        if (
-            most_recent_version.publicatie_datum is not None
-            and most_recent_version.publicatie_datum <= datetime.date.today()
-        ):
-            if most_recent_version.versie + 1 is not versie:
-                raise serializers.ValidationError(
-                    {
-                        "": f"De meegegeven versie nummer is verkeerd, het nummer moet '{most_recent_version.versie + 1}' zijn"
-                    }
-                )
-        else:
-            if most_recent_version.versie is not versie:
-                raise serializers.ValidationError(
-                    {
-                        "": f"De meegegeven versie nummer is verkeerd, het nummer moet '{most_recent_version.versie}' zijn"
-                    }
-                )
-
-        return super().validate(attrs)
+    def get_datum(self, obj: Product) -> int:
+        return self._get_most_recent_version(obj, "publicatie_datum", default=0)
 
     def get_product(self, product_valt_onder, catalogus, doelgroep):
         try:
@@ -138,20 +150,20 @@ class ProductVersieSingleSerializer(ProductBaseSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        versies_uuid = self.context["view"].kwargs["versies_uuid"]
-        versie = int(self.context["view"].kwargs["versie"])
+        product_uuid = self.context["view"].kwargs["product_uuid"]
         product_valt_onder = validated_data.pop("product_valt_onder", None)
         locaties = validated_data.pop("locaties", None)
 
-        product = Product.objects.get(uuid=versies_uuid)
+        product = Product.objects.get(uuid=product_uuid)
         most_recent_version = product.most_recent_version
+        versie = most_recent_version.versie
 
         if (
             most_recent_version.publicatie_datum is not None
             and most_recent_version.publicatie_datum <= datetime.date.today()
         ):
             product_versie = ProductVersie.objects.create(
-                versie=versie, product=product, publicatie_datum=None
+                versie=versie + 1, product=product, publicatie_datum=None
             )
             for taal in TaalChoices.values:
                 LocalizedProduct.objects.create(
@@ -258,11 +270,11 @@ class ProductVersieVertalingenSerializer(ProductBaseSerializer):
         }
 
     def validate(self, attrs):
-        versies_uuid = self.context["view"].kwargs["versies_uuid"]
+        product_uuid = self.context["view"].kwargs["product_uuid"]
         versie = int(self.context["view"].kwargs["versie"])
         taal = self.context["view"].kwargs["taal"]
 
-        product = Product.objects.get(uuid=versies_uuid)
+        product = Product.objects.get(uuid=product_uuid)
         try:
             product_versie = ProductVersie.objects.get(product=product, versie=versie)
         except ProductVersie.DoesNotExist:
@@ -292,15 +304,6 @@ class ProductVersieVertalingenSerializer(ProductBaseSerializer):
                 {"taal": f"Taal moet een instantie van {TaalChoices.values} zijn."}
             )
 
-        if product.product_aanwezig is True:
-            if "product_aanwezig_toelichting" in attrs:
-                if attrs["product_aanwezig_toelichting"]:
-                    raise serializers.ValidationError(
-                        {
-                            "productAanwezigToelichting": "ProductAanwezigToelichting moet niet ingevult zijn zolang productAanwezig op 'true' staat."
-                        }
-                    )
-
         if product.product_aanwezig is False:
             try:
                 if not attrs["product_aanwezig_toelichting"]:
@@ -315,6 +318,15 @@ class ProductVersieVertalingenSerializer(ProductBaseSerializer):
                         "productAanwezigToelichting": "productAanwezigToelichting is verplicht zolang productAanwezig op 'false' staat."
                     }
                 )
+
+        if product.product_aanwezig is True:
+            if "product_aanwezig_toelichting" in attrs:
+                if attrs["product_aanwezig_toelichting"]:
+                    raise serializers.ValidationError(
+                        {
+                            "productAanwezigToelichting": "ProductAanwezigToelichting moet niet ingevult zijn zolang productAanwezig op 'true' staat."
+                        }
+                    )
 
         if product.product_valt_onder is not None:
             try:
@@ -343,20 +355,7 @@ class ProductVersieVertalingenSerializer(ProductBaseSerializer):
         return super().validate(attrs)
 
     @transaction.atomic
-    def create(self, validated_data):
-        versies_uuid = self.context["view"].kwargs["versies_uuid"]
-        versie = int(self.context["view"].kwargs["versie"])
-        taal = self.context["view"].kwargs["taal"]
-
-        product = Product.objects.get(
-            uuid=versies_uuid,
-        )
-        localized_product = LocalizedProduct.objects.get(
-            product_versie__product=product,
-            product_versie__versie=versie,
-            taal=taal,
-        )
-
+    def update(self, instance, validated_data):
         verwijzing_links = []
         if "verwijzing_links" in validated_data:
             for verwijzing_link in validated_data["verwijzing_links"]:
@@ -364,9 +363,7 @@ class ProductVersieVertalingenSerializer(ProductBaseSerializer):
 
         validated_data["verwijzing_links"] = verwijzing_links
 
-        record = super().update(localized_product, validated_data)
-
-        return record
+        return super().update(instance, validated_data)
 
 
 class ProductVersiePublishSerializer(ProductBaseSerializer):
@@ -384,7 +381,12 @@ class ProductVersiePublishSerializer(ProductBaseSerializer):
 
     class Meta:
         model = ProductVersie
-        fields = ("publicatie_datum", "product_valt_onder", "locaties", "versie")
+        fields = (
+            "publicatie_datum",
+            "product_valt_onder",
+            "locaties",
+            "versie",
+        )
         extra_kwargs = {
             "publicatie_datum": {"required": False},
             "versie": {"read_only": True},
@@ -409,6 +411,11 @@ class ProductVersiePublishSerializer(ProductBaseSerializer):
                 {
                     "": "Een gepubliceerde product kan niet nog een keer gepubliseerd worden."
                 }
+            )
+
+        if product.product_aanwezig is None:
+            raise serializers.ValidationError(
+                {"": "productAanwezig moet op 'true' of op 'false' staan."}
             )
 
         if product.product_aanwezig is True:
