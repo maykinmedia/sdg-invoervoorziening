@@ -4,6 +4,7 @@ from django.db import transaction
 
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
+from rest_framework.reverse import reverse
 
 from sdg.api.serializers.fields import LabeledUrlListField
 from sdg.api.serializers.producten import (
@@ -14,9 +15,6 @@ from sdg.api.serializers.producten import (
 from sdg.core.constants.product import TaalChoices
 from sdg.organisaties.models import Lokatie as Locatie
 from sdg.producten.models import LocalizedProduct, Product, ProductVersie
-
-
-from rest_framework.reverse import reverse
 
 
 class CustomVertalingenHyperLink(serializers.HyperlinkedRelatedField):
