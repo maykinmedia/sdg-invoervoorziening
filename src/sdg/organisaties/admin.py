@@ -85,3 +85,12 @@ class LocatieAdmin(admin.ModelAdmin):
     model = Locatie
     autocomplete_fields = ("lokale_overheid",)
     search_fields = ("naam",)
+    list_display = (
+        "naam",
+        "lokale_overheid",
+        "address",
+    )
+    list_filter = ("lokale_overheid",)
+
+    def address(self, obj):
+        return f"{obj.straat} {obj.nummer}, {obj.postcode} {obj.plaats}"

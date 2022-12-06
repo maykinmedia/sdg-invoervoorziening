@@ -1,6 +1,4 @@
 from django.core.exceptions import FieldDoesNotExist
-from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 from sdg.core.models import ProductFieldConfiguration
 

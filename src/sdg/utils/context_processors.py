@@ -1,5 +1,7 @@
 from django.conf import settings as django_settings
 
+from sdg.conf.utils import org_type_cfg
+
 
 def settings(request):
     public_settings = (
@@ -19,5 +21,7 @@ def settings(request):
 
     if hasattr(django_settings, "SENTRY_CONFIG"):
         context.update(dsn=django_settings.SENTRY_CONFIG.get("public_dsn", ""))
+
+    context.update(org_type_cfg=org_type_cfg())
 
     return context

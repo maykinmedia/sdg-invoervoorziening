@@ -158,7 +158,8 @@ class ProductViewSet(
 
     lookup_field = "uuid"
     queryset = (
-        Product.objects.select_related(
+        Product.objects.active_organization()
+        .select_related(
             "catalogus",
             "catalogus__lokale_overheid",
             "generiek_product",
@@ -171,6 +172,7 @@ class ProductViewSet(
         )
         .active()
         .order_by("generiek_product__upn__upn_label")
+        .exclude_generic_status(api=True)
     )
     filterset_class = ProductFilterSet
     serializer_class = ProductSerializer

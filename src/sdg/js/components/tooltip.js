@@ -7,13 +7,15 @@ class InfoTooltip {
     constructor(node) {
         this.node = node;
         const text = this.node.firstChild.textContent;
-        this.node.firstChild.remove();
-        tippy(this.node, {
-            content: text,
-            placement: "right",
-            animation: "scale",
-            theme: "sdg",
-        });
+        if (text) {
+            this.node.firstChild.remove();
+            tippy(this.node, {
+                content: text,
+                placement: "right",
+                animation: "scale",
+                theme: "sdg",
+            });
+        }
     }
 }
 

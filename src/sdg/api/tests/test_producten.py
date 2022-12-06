@@ -1,6 +1,8 @@
 import json
+from datetime import timedelta
 
 from django.test import override_settings
+from django.utils.timezone import now
 
 from freezegun import freeze_time
 from rest_framework import status
@@ -8,6 +10,7 @@ from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
 from sdg.api.tests.factories.token import TokenAuthorizationFactory
+from sdg.core.constants import GenericProductStatus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import (
     OverheidsorganisatieFactory,
@@ -40,7 +43,6 @@ class ProductenTests(APITestCase):
         self.referentie_organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="https://www.referentie.com",
             owms_pref_label="referentie",
-            owms_end_date=None,
         )
         self.referentie_lokale_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False,
@@ -107,7 +109,6 @@ class ProductenTests(APITestCase):
         self.organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="https://www.setup.com",
             owms_pref_label="set up",
-            owms_end_date=None,
         )
         self.lokale_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False,
@@ -159,7 +160,6 @@ class ProductenTests(APITestCase):
         self.test_organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="https://www.organisatie.com",
             owms_pref_label="organisatie",
-            owms_end_date=None,
         )
         self.test_lokale_overheid = LokaleOverheidFactory.create(
             automatisch_catalogus_aanmaken=False,
@@ -274,6 +274,68 @@ class ProductenTests(APITestCase):
 
         data = response.json()["results"]
         self.assertEqual(6, len(data))
+
+    def test_list_producten_expired_organization(self):
+        expired_org = OverheidsorganisatieFactory.create(
+            owms_identifier="https://www.setup-expired.com",
+            owms_pref_label="set up expired",
+            owms_end_date=now() - timedelta(days=1),
+        )
+        lokale_overheid = LokaleOverheidFactory.create(
+            automatisch_catalogus_aanmaken=False,
+            organisatie=expired_org,
+            contact_telefoonnummer="12317238712",
+        )
+        TokenAuthorizationFactory.create(lokale_overheid=lokale_overheid)
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            organisatie=expired_org, lokale_overheid=lokale_overheid
+        )
+        catalogus = ProductenCatalogusFactory.create(
+            lokale_overheid=lokale_overheid,
+            is_referentie_catalogus=False,
+            is_default_catalogus=True,
+            naam="set_up_catalogus",
+        )
+        product = SpecifiekProductFactory.create(
+            generiek_product=self.generiek_product,
+            referentie_product=self.referentie_product,
+            catalogus=catalogus,
+            product_aanwezig=True,
+            bevoegde_organisatie=bevoegde_organisatie,
+        )
+        product_versie = ProductVersieFactory.create(
+            product=product,
+            publicatie_datum=None,
+        )
+        LocalizedProductFactory.create_batch(2, product_versie=product_versie)
+        list_url = reverse("api:product-list")
+
+        response = self.client.get(list_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+        self.assertEqual(6, len(data))
+        for product in data:
+            self.assertNotEqual(
+                product["verantwoordelijkeOrganisatie"]["owmsIdentifier"],
+                expired_org.owms_identifier,
+            )
+
+    def test_list_producten_with_deleted_product_not_shown(self):
+        self.generiek_product.product_status = GenericProductStatus.DELETED
+        self.generiek_product.save()
+
+        list_url = reverse("api:product-list")
+
+        response = self.client.get(list_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+        self.assertEqual(3, len(data))
+        for product in data:
+            self.assertNotEqual(product["upnLabel"], str(self.generiek_product))
 
     def test_retrieve_product_by_uuid(self):
         detail_url = reverse("api:product-detail", args=[self.product.uuid])

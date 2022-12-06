@@ -3,9 +3,11 @@
 
 {% block inner %}
     {% with namespace=request.resolver_match.namespaces|last pk=lokaleoverheid.pk %}
-        <div class="notifications">
-            {% include "core/_notifications.html" %}
-        </div>
+        {% block notifications %}
+            <div class="notifications">
+                {% include "core/_notifications.html" %}
+            </div>
+        {% endblock %}
         <div class="breadcrumbs">
             <div>
                 <a href="{% url 'core:home' %}">{% trans 'Homepage' %}</a>
@@ -36,7 +38,12 @@
         {% block page_intro %}{% endblock %}
 
         <hr class="divider">
-        {% block inner_content %}
-        {% endblock inner_content %}
+
+        {% if SDG_CMS_PRODUCTS_DISABLED %}
+            {% trans "Je kan producten niet beheren in het CMS maar enkel via de API. Je kan wel via het menu bovenin de organisatie gegevens, locaties en bevoegde organisaties beheren." %}
+        {% else %}
+            {% block inner_content %}
+            {% endblock inner_content %}
+        {% endif %}
     {% endwith %}
 {% endblock inner %}

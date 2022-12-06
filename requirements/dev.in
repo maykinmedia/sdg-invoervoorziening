@@ -3,6 +3,7 @@
 # Helpers
 pip-tools
 pre-commit
+bump2version
 
 # Documentation
 sphinx

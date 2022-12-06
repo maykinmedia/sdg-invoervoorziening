@@ -1,0 +1,16 @@
+# Data
+url: https://www.hetwaterschapshuis.nl/
+accessibility_url: "#"
+privacy_policy_url: "#"
+more_info_url: "#"
+email: servicedesk@hetwaterschapshuis.nl
+
+# Style
+overlay: images/rain.svg
+overlay_size: 260px
+footer_logo: images/hwh_logo.png
+color_hue: 186
+
+# Text
+name: waterschap
+name_plural: waterschappen

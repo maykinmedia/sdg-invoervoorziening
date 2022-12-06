@@ -65,6 +65,7 @@ class GeneriekProduct(models.Model):
     doelgroep = models.CharField(
         max_length=32,
         choices=DoelgroepChoices.choices,
+        blank=True,
         help_text=_(
             "Geeft aan voor welke doelgroep het product is bedoeld: burgers, bedrijven of burgers en bedrijven. Wordt "
             "gebruikt wanneer een portaal informatie over het product ophaalt uit de invoervoorziening. Zo krijgen de "
@@ -275,6 +276,16 @@ class Product(ProductFieldMixin, models.Model):
         """:returns: The most recent active `ProductVersie`."""
         return get_from_cache(
             self, "active_version", manager_methods=[ProductQuerySet.active]
+        )
+
+    def get_areas(self):
+        """
+        :returns: A list of areas matching the UPN's "sdg" codes.
+        """
+        from sdg.core.models import Thema
+
+        return Thema.objects.filter(code__in=self.upn.sdg).values_list(
+            "informatiegebied__informatiegebied", flat=True
         )
 
     def get_municipality_locations(self):

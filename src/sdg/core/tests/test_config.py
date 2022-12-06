@@ -1,6 +1,12 @@
+from django.test import TestCase
+
 from django_webtest import WebTest
 
 from sdg.accounts.tests.factories import UserFactory
+from sdg.conf.types.organization import (
+    OrganizationTypeConfiguration,
+    available_org_types,
+)
 from sdg.core.models import SiteConfiguration
 
 
@@ -39,3 +45,10 @@ class SiteConfigurationTests(WebTest):
             '<script data-goatcounter="https://example.com/count" async src="//example.com/count.js"></script>',
             response.text,
         )
+
+
+class OrganizationTypeConfigurationTests(TestCase):
+    def test_validate_all_available_organization_types(self):
+        for org, data in available_org_types.items():
+            with self.subTest(org=org):
+                OrganizationTypeConfiguration(**data)

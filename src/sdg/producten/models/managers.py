@@ -1,7 +1,10 @@
 from datetime import date
 
 from django.db import models
-from django.db.models import Case, F, Max, OuterRef, Prefetch, Subquery, When
+from django.db.models import F, Max, OuterRef, Prefetch, Q, Subquery
+from django.utils.timezone import now
+
+from sdg.core.constants import GenericProductStatus
 
 
 class ProductQuerySet(models.QuerySet):
@@ -40,6 +43,15 @@ class ProductQuerySet(models.QuerySet):
                     "vertalingen"
                 ),
             )
+        )
+
+    def active_organization(self):
+        """
+        Filter the products to only include products from active organizations.
+        """
+        return self.filter(
+            Q(catalogus__lokale_overheid__organisatie__owms_end_date__gte=now())
+            | Q(catalogus__lokale_overheid__organisatie__owms_end_date__isnull=True)
         )
 
     def most_recent(self):
@@ -82,16 +94,6 @@ class ProductQuerySet(models.QuerySet):
             _name=F("generiek_product__upn__upn_label"),
         )
 
-    def annotate_area(self):
-        """
-        Annotate the area for the product.
-        The field is filled with the data from the specific or reference product depending on
-        whether `referentie_product` exists.
-        """
-        return self.annotate(
-            _area=F("generiek_product__upn__thema__informatiegebied__informatiegebied"),
-        )
-
     def annotate_latest_publication_date(self):
         return self.annotate(_latest_publication_date=Max("versies__publicatie_datum"))
 
@@ -104,6 +106,27 @@ class ProductQuerySet(models.QuerySet):
             "generiek_product__upn",
             "referentie_product",
         )
+
+    def exclude_generic_status(self, api=False):
+        """
+        Exclude products with certain generic product status.
+        """
+        if not api:
+            return self.exclude(
+                Q(
+                    catalogus__is_referentie_catalogus=False,
+                    generiek_product__product_status__in=GenericProductStatus.get_cms_excluded(),
+                )
+                | Q(
+                    catalogus__is_referentie_catalogus=True,
+                    generiek_product__product_status__in=GenericProductStatus.get_cms_excluded(
+                        reference=True
+                    ),
+                ),
+            )
+
+        excluded = GenericProductStatus.get_api_excluded()
+        return self.exclude(generiek_product__product_status__in=excluded)
 
 
 class ProductVersieQuerySet(models.QuerySet):

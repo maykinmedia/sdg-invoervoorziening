@@ -5,6 +5,9 @@ pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
 lxml
+glom
+pydantic
+email-validator
 
 # Framework libraries
 django < 3.3

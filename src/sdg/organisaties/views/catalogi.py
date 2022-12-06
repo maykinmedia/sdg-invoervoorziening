@@ -8,12 +8,17 @@ from rijkshuisstijl.views.generic import ListView as RHListView
 from sdg.accounts.mixins import OverheidMixin
 from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.models import ProductenCatalogus
+from sdg.core.views.mixins import SDGSettingsMixin
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.constants import BooleanChoices
 from sdg.producten.models import Product
 
 
-class CatalogListView(OverheidMixin, RHListView):
+class CatalogListView(
+    SDGSettingsMixin,
+    OverheidMixin,
+    RHListView,
+):
     fields = [
         {
             "key": "_name",
@@ -39,13 +44,13 @@ class CatalogListView(OverheidMixin, RHListView):
             "lookup": "doelgroep",
         },
         {
-            "key": "_latest_publication_date",
-            "label": _("Publicatie datum"),
-        },
-        {
             "label": _("Heeft kosten"),
             "key": "heeft_kosten",
             "filter_label": " ",
+        },
+        {
+            "key": "_latest_publication_date",
+            "label": _("Publicatie datum"),
         },
     ]
     filterable_columns = [
@@ -106,5 +111,6 @@ class CatalogListView(OverheidMixin, RHListView):
             # FIXME: We have to annotate doelgroep to fix the RHS-component.
             .annotate(doelgroep=F("generiek_product__doelgroep"))
             .exclude(generiek_product__eind_datum__lte=datetime.date.today())
+            .exclude_generic_status()
             .order_by("_name")
         )

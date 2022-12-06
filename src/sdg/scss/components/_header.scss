@@ -5,7 +5,7 @@
 
   width: 100%;
   background: rgb(57, 106, 136);
-  background: linear-gradient(353.15deg, #002337 -68.3%, #4C85A6 179.94%);
+  background: linear-gradient(353.15deg, var(--org-theme-bg-darkest) -68.3%, var(--org-theme-bg) 179.94%);
   padding: 24px 0 0;
   justify-content: space-between;
   display: flex;
@@ -44,7 +44,7 @@
   }
 
   .header__username {
-    background-color: $color_primary_darker;
+    background-color: var(--org-theme-bg-darker);
     border: 1px solid transparent;
     position: relative;
     right: 30px;

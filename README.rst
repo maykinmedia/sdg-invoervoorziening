@@ -2,9 +2,9 @@
 PDC voor de SDG
 ===============
 
-:Version: 1.4.0
+:Version: 1.5.1
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
-:Keywords: vng, ipo, sdg, pdc, gemeenten, provincies
+:Keywords: vng, ipo, waterschapshuis, sdg, pdc, gemeenten, provincies, waterschappen
 :PythonVersion: 3.8
 
 |build-status| |coverage| |docker| |black| |python-versions|
@@ -12,8 +12,8 @@ PDC voor de SDG
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
 (SDG) via het CMS en/of de API.
 
-Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_ en 
-`IPO`_.
+Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_, 
+`IPO`_ en `Het Waterschapshuis`_.
 
 
 Introductie
@@ -119,5 +119,6 @@ Licensed under the `EUPL`_.
 .. _`Maykin Media B.V.`: https://www.maykinmedia.nl
 .. _`VNG Realisatie`: https://www.vngrealisatie.nl/
 .. _`IPO`: https://www.ipo.nl/
+.. _`Het Waterschapshuis`: https://www.hetwaterschapshuis.nl/
 .. _`Single Digital Gateway`: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ:L:2018:295:TOC
 .. _`EUPL`: LICENSE.md

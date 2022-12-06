@@ -1,3 +1,13 @@
+:root {
+  --s: 50%;
+  --l: 50%;
+
+  --org-theme-bg: hsl(var(--org-theme-hue), var(--s), var(--l));
+  --org-theme-bg-dark: hsl(var(--org-theme-hue), calc(var(--s) + 50%), calc(var(--l) - 25%));
+  --org-theme-bg-darker: hsl(var(--org-theme-hue), calc(var(--s) + 30%), calc(var(--l) - 30%));
+  --org-theme-bg-darkest: hsl(var(--org-theme-hue), calc(var(--s) + 20%), calc(var(--l) - 40%));
+}
+
 $color_primary_lightest: #D5E2EA;
 $color_primary_lighter: #549bc4;
 $color_primary_light: #3b82ab;
@@ -25,6 +35,13 @@ $color_grey: #c5c5c9;
 $color_grey_dark: #b5b6bb;
 $color_grey_darker: #717277;
 $color_grey_darkest: #212121;
+
+$color_success_light: #b2ff7a;
+$color_success: #b2ff7a;
+$color_success_dark: #8bc75f;
+$color_success_darker: #8bc75f;
+$color_success_darkest: #59803d;
+$color_success_notification-bg: #9fcb6266;
 
 $color_red: #c74a4a;
 $color_green: #39885d;

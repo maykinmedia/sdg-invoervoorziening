@@ -1,9 +1,7 @@
-from django.db import transaction
-from django.http import Http404
+from django.db import IntegrityError, transaction
 
 from rest_framework import serializers
 
-from sdg.api.serializers.logius import OverheidsorganisatieSerializer
 from sdg.organisaties.models import (
     BevoegdeOrganisatie,
     LokaleOverheid,
@@ -204,7 +202,14 @@ class LocatieSerializer(LocatieBaseSerializer):
                 }
             )
 
-        record = super().create(validated_data)
+        try:
+            record = super().create(validated_data)
+        except IntegrityError:
+            raise serializers.ValidationError(
+                {
+                    "": f"Er bestaat al een locatie met de naam '{ validated_data.get('naam') }' voor de ingevoerde organisatie."
+                }
+            )
 
         return record
 

@@ -6,19 +6,43 @@ from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from sdg.core.admin.mixins import BaseProductFilter
-from sdg.producten.models import (
+
+from ..models import (
     GeneriekProduct,
     LocalizedGeneriekProduct,
     LocalizedProduct,
     Product,
     ProductVersie,
 )
+from .filters import IsSDGProductFilter
 
 
 class IsReferenceProductFilter(BaseProductFilter):
-    title = _("Is Referentie")
+    title = _("is referentie")
     parameter_name = "referentie_product"
     filter_field = "referentie_product__isnull"
+
+
+class OrganisationTypeFilter(admin.SimpleListFilter):
+    title = _("organisatie type")
+    parameter_name = "organisation_type"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("municipality", _("Gemeente")),
+            ("province", _("Provincie")),
+            ("waterauthority", _("Waterschap")),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() in dict(self.lookup_choices).keys():
+            if self.value() == "municipality":
+                return queryset.filter(upn__gemeente=1)
+            elif self.value() == "province":
+                return queryset.filter(upn__provincie=1)
+            elif self.value() == "waterauthority":
+                return queryset.filter(upn__waterschap=1)
+        return queryset
 
 
 class LocalizedGeneriekProductInline(admin.StackedInline):
@@ -37,13 +61,15 @@ class GeneriekProductAdmin(admin.ModelAdmin):
         "upn_label",
         "doelgroep",
         "verplicht_product",
-        "verantwoordelijke_organisatie",
         "eind_datum",
         "product_status",
         "is_sdg_product",
     )
     list_filter = (
+        IsSDGProductFilter,
+        OrganisationTypeFilter,
         "doelgroep",
+        "product_status",
         "verplicht_product",
     )
     inlines = (LocalizedGeneriekProductInline,)
@@ -86,14 +112,22 @@ class ProductVersieForm(forms.ModelForm):
 @admin.register(ProductVersie)
 class ProductVersieAdmin(admin.ModelAdmin):
     list_display = (
-        "versie",
         "product",
-        "lokale_overheid",
+        "doelgroep",
+        "catalogus",
+        "versie",
         "gemaakt_door",
         "publicatie_datum",
         "gemaakt_op",
         "gewijzigd_op",
     )
+    list_filter = (
+        "product__generiek_product__doelgroep",
+        "product__catalogus",
+        "product__generiek_product__upn",
+    )
+    search_fields = ("product__generiek_product__upn__upn_label",)
+
     form = ProductVersieForm
 
     inlines = (LocalizedProductInline,)
@@ -112,26 +146,33 @@ class ProductVersieAdmin(admin.ModelAdmin):
             )
         )
 
-    def lokale_overheid(self, obj):
-        return obj.product.catalogus.lokale_overheid
+    def doelgroep(self, obj):
+        return obj.product.generiek_product.doelgroep
 
-    lokale_overheid.admin_order_field = "product__catalogus__lokale_overheid"
+    doelgroep.admin_order_field = "product__generiek_product__doelgroep"
+
+    def catalogus(self, obj):
+        return obj.product.catalogus
+
+    catalogus.admin_order_field = "product__catalogus__lokale_overheid"
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "is_referentie",
-        "lokale_overheid",
+        "doelgroep",
         "catalogus",
-        "product_aanwezig",
         "latest_version",
+        "is_referentie",
+        "product_aanwezig",
         "latest_publication_date",
     )
     list_filter = (
         IsReferenceProductFilter,
-        "catalogus__lokale_overheid",
+        "generiek_product__doelgroep",
+        "catalogus",
+        "generiek_product__upn",
     )
     inlines = (ProductVersieInlineAdmin,)
     autocomplete_fields = (
@@ -171,6 +212,11 @@ class ProductAdmin(admin.ModelAdmin):
 
     def latest_publication_date(self, obj):
         return obj.publication_date
+
+    def doelgroep(self, obj):
+        return obj.generiek_product.doelgroep
+
+    doelgroep.admin_order_field = "generiek_product__doelgroep"
 
     def lokale_overheid(self, obj):
         return obj.catalogus.lokale_overheid

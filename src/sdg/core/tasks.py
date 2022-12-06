@@ -9,6 +9,8 @@ if settings.SDG_ORGANIZATION_TYPE == "municipalities":
     organization = PublicData.MUNICIPALITY
 elif settings.SDG_ORGANIZATION_TYPE == "provinces":
     organization = PublicData.PROVINCE
+elif settings.SDG_ORGANIZATION_TYPE == "waterauthorities":
+    organization = PublicData.WATERAUTHORITY
 else:
     organization = None
 

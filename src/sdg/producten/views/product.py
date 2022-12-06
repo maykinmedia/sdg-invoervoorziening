@@ -2,12 +2,15 @@ import datetime
 from itertools import chain, zip_longest
 from typing import Tuple
 
+from django.conf import settings
+from django.contrib import messages
 from django.db import transaction
 from django.db.models import Prefetch
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils import translation
+from django.utils.translation import gettext as _
 from django.views.generic import DetailView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
@@ -16,6 +19,7 @@ from sdg.accounts.utils import user_has_valid_roles
 from sdg.accounts.views.decorators import municipality_role_required
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
+from sdg.core.views.mixins import SDGSettingsMixin
 from sdg.producten.forms import (
     LocalizedProductForm,
     LocalizedProductFormSet,
@@ -32,6 +36,13 @@ from sdg.producten.utils import (
 
 
 class ProductPreviewView(OverheidMixin, DetailView):
+    """
+    Preview a product.
+
+    This view is used to produce a preview example as it is
+    used in the municipality website.
+    """
+
     template_name = "mocks/kvk.html"
     context_object_name = "product"
     pk_url_kwarg = "product_pk"
@@ -170,7 +181,16 @@ class ProductPreviewView(OverheidMixin, DetailView):
         return context
 
 
-class ProductUpdateView(OverheidMixin, UpdateView):
+class ProductUpdateView(
+    SDGSettingsMixin,
+    OverheidMixin,
+    UpdateView,
+):
+    """
+    Update a product.
+    This view is used for both the product form and the product preview.
+    """
+
     template_name = "producten/update.html"
     context_object_name = "product_versie"
     pk_url_kwarg = "product_pk"
@@ -181,7 +201,11 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             Product.objects.most_recent()
             .exclude(generiek_product__eind_datum__lte=datetime.date.today())
             .active()
-            .select_related("catalogus__lokale_overheid")
+            .select_related(
+                "catalogus__lokale_overheid",
+                "generiek_product__upn",
+            )
+            .exclude_generic_status()
         )
 
     def _save_version_form(
@@ -209,23 +233,37 @@ class ProductUpdateView(OverheidMixin, UpdateView):
         return new_version, created
 
     def _generate_version_formset(self, version: ProductVersie):
-        product_nl = self.product.generiek_product.vertalingen.get(taal="nl")
-        product_en = self.product.generiek_product.vertalingen.get(taal="en")
+        """
+        TODO: Clean up further .i.e. move translation to template
+        """
+        default_explanation_mapping = {}
+        default_aanwezig_toelichting_explanation_mapping = {}
 
-        # TODO: Apply cleaner implementation for these mappings
-        default_explanation_mapping = {
-            "nl": f"In de gemeente {self.lokale_overheid} is {product_nl} onderdeel van [product].",
-            "en": f"In the municipality of {self.lokale_overheid}, {product_en} falls under [product].",
-        }
-        default_aanwezig_toelichting_explanation_mapping = {
-            "nl": f"De gemeente {self.lokale_overheid} levert het product {product_nl} niet omdat...",
-            "en": f"The municipality of {self.lokale_overheid} doesn't offer {product_en} because...",
-        }
+        for language in TaalChoices.get_available_languages():
+            localized_generic_product = self.product.generiek_product.vertalingen.get(
+                taal=language
+            )
+            with translation.override(language):
+                default_explanation_mapping[language] = _(
+                    "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
+                ).format(
+                    org_type_name=self.org_type_cfg.name,
+                    lokale_overheid=self.lokale_overheid,
+                    product=localized_generic_product,
+                )
+                default_aanwezig_toelichting_explanation_mapping[language] = _(
+                    "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
+                ).format(
+                    org_type_name=self.org_type_cfg.name,
+                    lokale_overheid=self.lokale_overheid,
+                    product=localized_generic_product,
+                )
 
         formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(instance=version)
         formset.title = f"Standaardtekst v{version.versie} ({version.publicatie_datum if version.publicatie_datum else 'concept'})"
+
         for form in formset:
             form.default_toelichting = default_explanation_mapping.get(
                 form.instance.taal
@@ -263,6 +301,8 @@ class ProductUpdateView(OverheidMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        self.org_type_cfg = context["org_type_cfg"]
+
         generic_information = self.product.generiek_product.vertalingen.all()
 
         context["generic_products"] = self._get_generieke_taal_producten()
@@ -303,21 +343,9 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             | self.product.reference_product.get_all_versions()
         )
 
-        # FIXME: Optimize?
-        context["localized_form_fields"] = [
-            "product_titel_decentraal",
-            "specifieke_tekst",
-            "verwijzing_links",
-            "procedure_beschrijving",
-            "vereisten",
-            "bewijs",
-            "bezwaar_en_beroep",
-            "kosten_en_betaalmethoden",
-            "uiterste_termijn",
-            "wtd_bij_geen_reactie",
-            "decentrale_procedure_link",
-            "decentrale_procedure_label",
-        ]
+        context["areas"] = self.product.get_areas()
+
+        context["localized_form_fields"] = settings.SDG_LOCALIZED_FORM_FIELDS
 
         context["user_can_edit"] = user_has_valid_roles(
             self.request.user,
@@ -357,19 +385,35 @@ class ProductUpdateView(OverheidMixin, UpdateView):
             new_version, created = self._save_version_form(
                 product_form, version_form, form
             )
+
             if created:
                 Event.create_and_log(self.request, self.object, Event.CREATE)
                 duplicate_localized_products(form, new_version)
             else:
                 Event.create_and_log(self.request, self.object, Event.UPDATE)
                 form.save()
+
+            messages.add_message(
+                self.request,
+                messages.SUCCESS,
+                _("Product {product} is opgeslagen.").format(product=self.product),
+            )
+
             return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, product_form, version_form, form):
         context = self.get_context_data(
             form=form, version_form=version_form, product_form=product_form
         )
-        context["form_invalid"] = True
+
+        messages.add_message(
+            self.request,
+            messages.ERROR,
+            _(
+                "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten."
+            ),
+        )
+
         return self.render_to_response(context)
 
     def get_success_url(self):

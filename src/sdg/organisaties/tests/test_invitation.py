@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core import mail
+from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
@@ -8,6 +9,7 @@ from django_webtest import WebTest
 
 from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.conf.utils import org_type_cfg
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 INVITATION_URL = "organisaties:roles:invitation_create"
@@ -29,6 +31,8 @@ class InvitationTests(WebTest):
             is_beheerder=True,
         )
         self.app.set_user(self.manager_user)
+
+        org_type_cfg.cache_clear()
 
     @staticmethod
     def _fill_invitation_form(form, extra_kwargs=None):
@@ -98,6 +102,7 @@ class InvitationTests(WebTest):
 
         self.assertEqual(len(mail.outbox), 1)
 
+    @override_settings(SDG_ORGANIZATION_TYPE="municipality")
     def test_invitation_template_is_correct(self):
         response = self.app.get(
             reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
@@ -107,13 +112,42 @@ class InvitationTests(WebTest):
         response.form.submit()
 
         invite = UserInvitation.objects.get()
-        self.assertEqual(mail.outbox[0].subject, settings.INVITATION_SUBJECT)
+        self.assertEqual(
+            mail.outbox[0].subject,
+            settings.INVITATION_SUBJECT.format(org_type_name_plural=_("gemeenten")),
+        )
         self.assertIn(
             "Arthur Dent",
             mail.outbox[0].body,
         )
         self.assertIn(
             invite.key,
+            mail.outbox[0].body,
+        )
+
+    @override_settings(SDG_ORGANIZATION_TYPE="waterauthority")
+    def test_invitation_template_is_correct_for_organization_type(self):
+        response = self.app.get(
+            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+        )
+
+        self._fill_invitation_form(response.form)
+        response.form.submit()
+
+        self.assertEqual(
+            mail.outbox[0].subject,
+            settings.INVITATION_SUBJECT.format(org_type_name_plural=_("waterschappen")),
+        )
+        self.assertIn(
+            "Single Digital Gateway (SDG) voor waterschappen",
+            mail.outbox[0].body,
+        )
+        self.assertIn(
+            "Ook kun je hier de teksten controleren en aanvullen met informatie van jouw waterschap",
+            mail.outbox[0].body,
+        )
+        self.assertIn(
+            "servicedesk@hetwaterschapshuis.nl",
             mail.outbox[0].body,
         )
 

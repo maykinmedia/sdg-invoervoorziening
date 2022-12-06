@@ -32,12 +32,14 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         help_text=_(
             "De titel van het decentrale product, die immers kan afwijken van de landelijke titel."
         ),
+        blank=True,
     )
     generieke_tekst = MarkdownxField(
         _("generieke tekst"),
         help_text=_(
             "De Nationale Portalen schrijven een inleidende, algemene tekst over het product. Dit veld ondersteund Markdown."
         ),
+        blank=True,
     )
     korte_omschrijving = models.CharField(
         _("korte omschrijving"),
@@ -47,6 +49,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             'name="description"). Deze tekst wordt gebruikt om te tonen wanneer de pagina wordt gevonden in een '
             "zoekmachine. "
         ),
+        blank=True,
     )
     datum_check = models.DateTimeField(
         _("datum check"),
@@ -83,6 +86,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "en het kunnen bekijken van de generieke productinformatie (bv door gebruikers van de organisatie "
             "invoervoorziening) "
         ),
+        blank=True,
     )
 
     objects = LocalizedManager()

@@ -1,35 +1,33 @@
 {% load i18n %}
 
-{% autoescape off %}
-    {% blocktrans %}
-        <div style="font-family: arial; sans-serif; font-size: 11px;">
-            <p>Beste {{ user_full_name }},</p>
+{% blocktrans %}
+    <div style="font-family: arial; sans-serif; font-size: 11px;">
+        <p>Beste {{ user_full_name }},</p>
 
-            <p>Hartelijk dank voor het aanmelden bij de invoervoorziening Single Digital Gateway (SDG) voor gemeenten. Je hebt zojuist toegang gekregen.</p>
-    
-            <br>
-            <p><strong>Activeer nu jouw account</strong></p>
-            <p>Met de onderstaande link stel je jouw account in en lees je de instructies op onze website.</p>
+        <p>Hartelijk dank voor het aanmelden bij de invoervoorziening Single Digital Gateway (SDG) voor {{ org_type_name_plural }}. Je hebt zojuist toegang gekregen.</p>
 
-            <p><a href="{{ invite_url }}">{{ invite_url }}</a></p>
+        <br>
+        <p><strong>Activeer nu jouw account</strong></p>
+        <p>Met de onderstaande link stel je jouw account in en lees je de instructies op onze website.</p>
 
-            <p><strong><i>Let op: je hebt 8 weken de tijd om je account te activeren.</i></strong></p>
+        <p><a href="{{ invite_url }}">{{ invite_url }}</a></p>
 
-            <p>Met jouw account heb je toegang tot de invoervoorziening. Ook kun je hier de teksten controleren en aanvullen met informatie van jouw gemeente.</p>
+        <p><strong><i>Let op: je hebt 8 weken de tijd om je account te activeren.</i></strong></p>
 
-            <br>
-            <p><strong>Heb je vragen?</strong></p>
-            <p>Op de <a href="https://werkenaaneenoverheid.pleio.nl/groups/view/ed87e451-f6fc-49b0-aec4-41f2358426f7/single-digital-gateway">Pleio omgeving van SDG</a> vind je informatie en handleidingen voor de invoervoorziening. Heb je andere vragen? Stuur een e-mail naar <a href="mailto:sdg@vng.nl">sdg@vng.nl</a>.</p>
+        <p>Met jouw account heb je toegang tot de invoervoorziening. Ook kun je hier de teksten controleren en aanvullen met informatie van jouw {{ org_type_name }}.</p>
 
-            <br>
-            <p>Met vriendelijke groet,</p>
+        <br>
+        <p><strong>Heb je vragen?</strong></p>
+        <p>Op de <a href="https://werkenaaneenoverheid.pleio.nl/groups/view/ed87e451-f6fc-49b0-aec4-41f2358426f7/single-digital-gateway">Pleio omgeving van SDG</a> vind je informatie en handleidingen voor de invoervoorziening. Heb je andere vragen? Stuur een e-mail naar <a href="mailto:{{ org_type_email }}">{{ org_type_email }}</a>.</p>
 
-            <p>
-            Programmateam Single Digital Gateway<br>
-            VNG Realisatie<br>
-            </p>
+        <br>
+        <p>Met vriendelijke groet,</p>
 
-            <p><small>Dit bericht is automatisch aangemaakt en verstuurd. Je kunt hier niet op antwoorden.</small></p>
-        </div>
-    {% endblocktrans %}
-{% endautoescape %}
+        <p>
+        Programmateam Single Digital Gateway<br>
+        VNG Realisatie<br>
+        </p>
+
+        <p><small>Dit bericht is automatisch aangemaakt en verstuurd. Je kunt hier niet op antwoorden.</small></p>
+    </div>
+{% endblocktrans %}

@@ -1,6 +1,8 @@
 import json
+from datetime import timedelta
 
 from django.test import override_settings
+from django.utils.timezone import now
 
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -26,6 +28,22 @@ class OrganisatiesTests(APITestCase):
         data = response.json()["results"]
         self.assertEqual(len(data), 2)
 
+    def test_list_organizations_expired_organization(self):
+        LokaleOverheidFactory.create_batch(2)
+        expired_org = LokaleOverheidFactory.create(
+            organisatie__owms_end_date=now() - timedelta(days=1)
+        )
+        list_url = reverse("api:lokaleoverheid-list")
+
+        response = self.client.get(list_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+        self.assertEqual(len(data), 2)
+        for org in data:
+            self.assertNotEqual(org["uuid"], expired_org.uuid)
+
     def test_retrieve_organization_by_uuid(self):
         municipality = LokaleOverheidFactory.create()
         detail_url = reverse("api:lokaleoverheid-detail", args=[municipality.uuid])
@@ -42,7 +60,7 @@ class OrganisatiesTests(APITestCase):
                 "uuid": str(municipality.uuid),
                 "owmsIdentifier": municipality.organisatie.owms_identifier,
                 "owmsPrefLabel": municipality.organisatie.owms_pref_label,
-                "owmsEndDate": municipality.organisatie.owms_end_date.isoformat(),
+                "owmsEndDate": None,
                 "locaties": [],
                 "catalogi": [],
                 "contactWebsite": municipality.contact_website,

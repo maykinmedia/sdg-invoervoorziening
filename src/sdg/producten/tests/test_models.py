@@ -280,7 +280,7 @@ class LocalizedProductTests(TestCase):
         ]
         self.localized_product.full_clean()
 
-    def test_unable_to_save_labeled_urls_without_label(self):
+    def test_unable_to_clean_labeled_urls_without_label(self):
         with self.assertRaises(ValidationError):
             self.localized_product.verwijzing_links = [
                 ["label1", "https://example.com"],
@@ -289,21 +289,21 @@ class LocalizedProductTests(TestCase):
             ]
             self.localized_product.full_clean()
 
-    def test_unable_to_save_labeled_urls_with_invalid_url(self):
+    def test_unable_to_clean_labeled_urls_with_invalid_url(self):
         with self.assertRaises(ValidationError):
             self.localized_product.verwijzing_links = [
                 ["label1", "examplecom"],
             ]
             self.localized_product.full_clean()
 
-    def test_unable_to_save_labeled_urls_with_extra_items(self):
+    def test_unable_to_clean_labeled_urls_with_extra_items(self):
         with self.assertRaises(ValidationError):
             self.localized_product.verwijzing_links = [
                 ["label1", "https://example.com", "extra1"],
             ]
             self.localized_product.full_clean()
 
-    def test_unable_to_save_markdown_with_invaled_h_elements(self):
+    def test_unable_to_clean_markdown_with_invaled_h_elements(self):
         with self.assertRaises(ValidationError):
             self.localized_product.specifieke_tekst = "# example text."
 
@@ -324,7 +324,7 @@ class LocalizedProductTests(TestCase):
 
             self.localized_product.full_clean()
 
-    def test_unable_to_save_markdown_with_img_element(self):
+    def test_unable_to_clean_markdown_with_img_element(self):
         with self.assertRaises(ValidationError):
             self.localized_product.specifieke_tekst = (
                 "![alt](/path/to/image.jpg 'title') example text."
@@ -332,7 +332,7 @@ class LocalizedProductTests(TestCase):
 
             self.localized_product.full_clean()
 
-    def test_unable_to_save_markdown_with_hr_element(self):
+    def test_unable_to_clean_markdown_with_hr_element(self):
         with self.assertRaises(ValidationError):
             self.localized_product.specifieke_tekst = "___"
 
@@ -348,13 +348,13 @@ class LocalizedProductTests(TestCase):
 
             self.localized_product.full_clean()
 
-    def test_unable_to_save_markdown_with_code_element(self):
+    def test_unable_to_clean_markdown_with_code_element(self):
         with self.assertRaises(ValidationError):
             self.localized_product.specifieke_tekst = "`example text` example text."
 
             self.localized_product.full_clean()
 
-    def test_able_to_save_markdown_with_angle_brackets(self):
+    def test_able_to_clean_markdown_with_angle_brackets(self):
         self.localized_product.specifieke_tekst = (
             "### example text\n * example text\n * example text\n * example "
             "text\n 1. example text\n 2. example text\n 3. example text\n "
@@ -376,7 +376,7 @@ class LocalizedProductTests(TestCase):
         )
         self.localized_product.full_clean()
 
-    def test_unable_to_save_markdown_with_basic_html(self):
+    def test_unable_to_clean_markdown_with_basic_html(self):
         with self.assertRaises(ValidationError):
             self.localized_product.specifieke_tekst = (
                 "### example text\n * example text\n * example text\n * example "
@@ -401,7 +401,7 @@ class LocalizedProductTests(TestCase):
             )
             self.localized_product.full_clean()
 
-    def test_able_to_save_markdown(self):
+    def test_able_to_clean_markdown(self):
         self.localized_product.specifieke_tekst = (
             "### example text\n * example text\n * example text\n * example "
             "text\n 1. example text\n 2. example text\n 3. example text\n "

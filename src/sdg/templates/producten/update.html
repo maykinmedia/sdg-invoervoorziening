@@ -74,16 +74,9 @@
 </div>
 
 <div class="notifications">
-    {% if form_invalid %}
-    <div class="notifications__notification notification__error">
-        <i class="fas fa-times-circle"></i>
-        <span>{% trans "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten." %}</span>
-        <span></span>
-    </div>
-    {% endif %}
-    {% include "core/_notifications.html" %}
     {% if not product.is_referentie_product %}{% include 'producten/_include/availability_warnings.html' %}{% endif %}
     {% include 'producten/_include/edit_warnings.html' %}
+    {% include "core/_notifications.html" %}
 </div>
 
 
@@ -113,7 +106,7 @@
                                 <header class="form__control-header">
                                     <label class="form__label">
                                         {{ _("Doelgroep")|capfirst }}
-                                        <i class="fas fa-info-circle fa-xs dark" title="{{ doelgroep.help_text }}"></i>
+                                        <i class="fa fa-info-circle fa-xs dark" title="{{ doelgroep.help_text }}"></i>
                                     </label>
                                 </header>
                                 <div class="form__control-body">
@@ -130,7 +123,7 @@
                                 <header class="form__control-header">
                                     <label class="form__label">
                                         {{ field.label|capfirst }}
-                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                                     </label>
                                 </header>
                                 <div class="form__control-body">
@@ -156,7 +149,7 @@
                                 <header class="form__control-header">
                                     <label class="form__label">
                                         {{ field.label|capfirst }}
-                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                                     </label>
                                 </header>
                                 <div class="form__control-body">
@@ -182,7 +175,7 @@
                                 <header class="form__control-header">
                                     <label class="form__label">
                                         {{ field.label|capfirst }}
-                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                                     </label>
                                 </header>
                                 <div class="form__control-body">
@@ -197,14 +190,13 @@
                 {% endif %}
 
                 {% with field=product_form.bevoegde_organisatie %}
-                    {% with configuration=field.configuration.0 %}
                         <tr>
                             <td>
                                 <div class="form__control">
                                     <header class="form__control-header">
                                         <label class="form__label">
-                                            {{ configuration.0|default:field.label|capfirst }}
-                                            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:field.help_text }}"></i>
+                                            {{ field.label }}
+                                            <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                                         </label>
                                     </header>
                                     <div class="form__control-body">
@@ -215,7 +207,6 @@
                                 </div>
                             </td>
                         </tr>
-                    {% endwith %}
                 {% endwith %}
 
                 {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
@@ -226,7 +217,7 @@
                                     <header class="form__control-header">
                                         <label class="form__label">
                                             {{ configuration.0|default:_("Publicatie datum")|capfirst }}
-                                            <i class="fas fa-info-circle fa-xs dark" title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
+                                            <i class="fa fa-info-circle fa-xs dark" title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
                                         </label>
                                     </header>
                                     <div class="form__control-body">
@@ -245,7 +236,7 @@
                                 <header class="form__control-header">
                                     <label class="form__label">
                                         {{ field.label|capfirst }}
-                                        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
                                     </label>
                                 </header>
                                 <div class="form__control-body">
@@ -257,6 +248,23 @@
                         </td>
                     </tr>
                 {% endwith %}
+                <tr>
+                    <td>
+                        <div class="form__control">
+                            <header class="form__control-header">
+                                <label class="form__label">
+                                    {% trans "Informatiegebied" %}
+                                    <i class="fa fa-info-circle fa-xs dark" title="{% trans 'Informatiegebied in verband met dit product.' %}"></i>
+                                </label>
+                            </header>
+                            <div class="form__control-body">
+                                <div class="tabs__table-cell--versions"></div>
+                                <span class="tabs__table-cell--value">{{ areas|join:", " }}</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
                 <tr>
                     <td>
                         {% nonlocalized_form version_form include_form=False fields="interne_opmerkingen" %}
@@ -366,7 +374,7 @@
                 <div class="toolbar__section">
                     <div class="button-group">
                         <label class="toolbar toolbar--centered">
-                            <i class="fas fa-info-circle fa-lg dark" title="{{ button_information }}"></i>
+                            <i class="fa fa-info-circle fa-lg dark" title="{{ button_information }}"></i>
                         </label>
                         <a
                             href="{% url 'organisaties:catalogi:producten:edit' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}">
