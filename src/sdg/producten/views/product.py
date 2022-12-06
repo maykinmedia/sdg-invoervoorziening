@@ -31,6 +31,7 @@ from sdg.producten.models.product import GeneriekProduct
 from sdg.producten.utils import (
     build_url_kwargs,
     duplicate_localized_products,
+    get_placeholder_mappings,
     parse_changed_data,
 )
 from sdg.utils.validators import validate_placeholders
@@ -238,41 +239,23 @@ class ProductUpdateView(
         return new_version, created
 
     def _generate_version_formset(self, version: ProductVersie):
-        default_explanation_mapping = {}
-        default_aanwezig_toelichting_explanation_mapping = {}
-
-        for language in TaalChoices.get_available_languages():
-            localized_generic_product = self.product.generiek_product.vertalingen.get(
-                taal=language
-            )
-            with translation.override(language):
-                default_explanation_mapping[language] = _(
-                    "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
-                ).format(
-                    org_type_name=self.org_type_cfg.name,
-                    lokale_overheid=self.lokale_overheid,
-                    product=localized_generic_product,
-                )
-                default_aanwezig_toelichting_explanation_mapping[language] = _(
-                    "De {org_type_name} {lokale_overheid} levert het product {product} niet."
-                ).format(
-                    org_type_name=self.org_type_cfg.name,
-                    lokale_overheid=self.lokale_overheid,
-                    product=localized_generic_product,
-                )
+        """
+        TODO: Clean up further .i.e. move translation to template
+        """
+        explanation_mapping, availability_mapping = get_placeholder_mappings(
+            self.lokale_overheid, self.product.generiek_product
+        )
 
         formset = inlineformset_factory(
             ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
         )(instance=version)
-        formset.title = f"Standaardtekst v{version.versie} ({version.publicatie_datum if version.publicatie_datum else 'concept'})"
+
+        formset.title = f"Standaardtekst v{version.versie} ({version.publicatie_datum or 'concept'})"
 
         for form in formset:
-            form.default_toelichting = default_explanation_mapping.get(
+            form.default_toelichting = explanation_mapping.get(form.instance.taal)
+            form.default_product_aanwezig_toelichting = availability_mapping.get(
                 form.instance.taal
-            )
-
-            form.default_product_aanwezig_toelichting = (
-                default_aanwezig_toelichting_explanation_mapping.get(form.instance.taal)
             )
 
         return formset
