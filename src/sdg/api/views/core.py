@@ -78,4 +78,5 @@ class CatalogusViewSet(viewsets.ReadOnlyModelViewSet):
                 queryset=Product.objects.select_related("generiek_product__upn"),
             )
         )
+        .distinct()
     )

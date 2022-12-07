@@ -180,6 +180,7 @@ class ProductViewSet(
         .active()
         .order_by("generiek_product__upn__upn_label")
         .exclude_generic_status(api=True)
+        .distinct()
     )
     filterset_class = ProductFilterSet
     serializer_class = ProductSerializer

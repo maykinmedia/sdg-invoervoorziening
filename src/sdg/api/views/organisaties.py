@@ -99,6 +99,7 @@ class LokaleOverheidViewSet(
             "catalogi",
             "bevoegde_organisaties__organisatie",
         )
+        .distinct()
     )
     filterset_class = LokaleOverheidFilterSet
     permission_classes = [OrganizationPermissions, WhitelistedPermission]
@@ -210,7 +211,7 @@ class LocatieViewSet(viewsets.ModelViewSet):
     lookup_field = "uuid"
     queryset = Locatie.objects.select_related(
         "lokale_overheid", "lokale_overheid__organisatie"
-    )
+    ).distinct()
     filterset_class = LocatieFilterSet
     serializer_class = LocatieSerializer
     permission_classes = [OrganizationPermissions, WhitelistedPermission]
