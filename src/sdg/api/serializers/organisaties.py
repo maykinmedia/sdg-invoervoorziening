@@ -233,7 +233,6 @@ class LokaleOverheidSerializer(LokaleOverheidBaseSerializer):
         required=False,
         read_only=True,
     )
-
     bevoegde_organisaties = BevoegdeOrganisatieSerializer(
         many=True,
         help_text="De bevoegde organisaties. In de lijst van bevoegde organisaties staat minimaal altijd de verantwoordelijke organisatie.",

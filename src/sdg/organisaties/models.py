@@ -80,6 +80,7 @@ class LokaleOverheid(models.Model):
     class Meta:
         verbose_name = _("lokale overheid")
         verbose_name_plural = _("lokale overheden")
+        ordering = ("organisatie__owms_identifier",)
 
     def __str__(self):
         if self.organisatie.owms_end_date:
@@ -280,6 +281,7 @@ class Lokatie(models.Model):
             "naam",
             "lokale_overheid",
         )
+        ordering = ("naam",)
 
     def __str__(self):
         return self.naam

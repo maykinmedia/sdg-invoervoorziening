@@ -97,7 +97,7 @@ class LokaleOverheidViewSet(
         .prefetch_related(
             "locaties",
             "catalogi",
-            "bevoegde_organisaties",
+            "bevoegde_organisaties__organisatie",
         )
     )
     filterset_class = LokaleOverheidFilterSet
@@ -208,7 +208,9 @@ class LocatieViewSet(viewsets.ModelViewSet):
     """Viewset for a location, retrieved by UUID"""
 
     lookup_field = "uuid"
-    queryset = Locatie.objects.select_related("lokale_overheid")
+    queryset = Locatie.objects.select_related(
+        "lokale_overheid", "lokale_overheid__organisatie"
+    )
     filterset_class = LocatieFilterSet
     serializer_class = LocatieSerializer
     permission_classes = [OrganizationPermissions, WhitelistedPermission]

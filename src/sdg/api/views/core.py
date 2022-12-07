@@ -69,6 +69,8 @@ class CatalogusViewSet(viewsets.ReadOnlyModelViewSet):
         ProductenCatalogus.objects.active_organization()
         .select_related(
             "lokale_overheid",
+            "lokale_overheid__organisatie",
+            "referentie_catalogus",
         )
         .prefetch_related(
             Prefetch(
