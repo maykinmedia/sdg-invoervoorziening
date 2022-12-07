@@ -205,24 +205,24 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
         help_text="De unieke URL van dit object binnen deze API."
     )
     owms_identifier = serializers.URLField(
-        source="catalogus.lokale_overheid.organisatie.owms_identifier",
+        source="organisatie.owms_identifier",
         help_text="De OWMS Identifier van de hoofdorganisatie van deze lokale overheid.",
         required=True,
     )
     owms_pref_label = serializers.CharField(
-        source="catalogus.lokale_overheid.organisatie.owms_pref_label",
+        source="organisatie.owms_pref_label",
         help_text="OWMS label van de hoofdorganisatie van deze lokale overheid.",
         required=False,
     )
     owms_end_date = serializers.DateTimeField(
-        source="catalogus.lokale_overheid.organisatie.owms_end_date",
+        source="organisatie.owms_end_date",
         help_text="De einddatum, zoals gevonden in het OWMS-model.",
         read_only=True,
         required=False,
     )
 
     class Meta:
-        model = Product
+        model = LokaleOverheid
         fields = (
             "url",
             "owms_identifier",
@@ -234,7 +234,7 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
     def get_url(self, instance):
         return reverse(
             "api:lokaleoverheid-detail",
-            [str(instance.catalogus.lokale_overheid.uuid)],
+            [str(instance.uuid)],
             request=self.context["request"],
         )
 
@@ -242,9 +242,11 @@ class ProductLokaleOverheidSerializer(serializers.HyperlinkedModelSerializer):
 class ProductSerializer(ProductBaseSerializer):
     """Serializer for a product, including UPN, availability, locations and latest version translations."""
 
-    verantwoordelijke_organisatie = ProductLokaleOverheidSerializer(source="*")
+    verantwoordelijke_organisatie = ProductLokaleOverheidSerializer(
+        source="catalogus.lokale_overheid"
+    )
     publicatie_datum = serializers.DateField(
-        source="most_recent_version.publicatie_datum",
+        source="active_version.publicatie_datum",
         allow_null=True,
         help_text="De datum die aangeeft wanneer het product gepubliceerd is/wordt.",
     )
@@ -254,7 +256,11 @@ class ProductSerializer(ProductBaseSerializer):
         help_text="Een boolean die aangeeft of de organisatie dit product levert of niet. Als de verantwoordelijke organisatie niet expliciet heeft aangegeven dat een product aanwezig of afwezig is, dan is deze waarde `null`. Als een product afwezig is, dan moet er een toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde velden kunnen dan leeg blijven.",
     )
     vertalingen = LocalizedProductSerializer(
-        source="most_recent_version.vertalingen",
+        source="active_version.vertalingen",
+        # In case there is no active version, there are no available
+        # translations. Hence, we allow null here (which affect the GET
+        # operation to actually work).
+        allow_null=True,
         many=True,
         help_text="Een lijst met specifieke teksten op basis van taal.",
     )
@@ -328,29 +334,23 @@ class ProductSerializer(ProductBaseSerializer):
         }
 
     @staticmethod
-    def _get_most_recent_version(product: Product, field_name, default=None):
+    def _get_active_version(product: Product, field_name, default=None):
         """Get the value of a field from the product's active version."""
-        most_recent_version = getattr(product, "most_recent_version", None)
-        return (
-            getattr(most_recent_version, field_name) if most_recent_version else default
-        )
-
-    def get_vertalingen(self, obj: Product):
-        return LocalizedProduct.objects.filter(
-            product_versie=getattr(obj, "most_recent_version", None)
-        )
+        active_version = getattr(product, "active_version", None)
+        return getattr(active_version, field_name) if active_version else default
 
     def get_versie(self, obj: Product) -> int:
-        return self._get_most_recent_version(obj, "versie", default=0)
+        return self._get_active_version(obj, "versie", default=0)
 
     def get_talen(self, obj: Product) -> list:
         return TaalChoices.get_available_languages()
 
     def to_representation(self, instance):
         data = super(ProductBaseSerializer, self).to_representation(instance)
-        translations = self.get_vertalingen(instance)
+        active_version = getattr(instance, "active_version", None)
 
-        if translations and getattr(instance, "_filter_taal", None):
+        if active_version and getattr(instance, "_filter_taal", None):
+            translations = active_version.vertalingen.all()
             filtered_translations = [
                 i for i in translations if i.taal == instance._filter_taal
             ]

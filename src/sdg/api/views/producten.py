@@ -163,6 +163,11 @@ class ProductViewSet(
         .select_related(
             "catalogus",
             "catalogus__lokale_overheid",
+            "catalogus__lokale_overheid__organisatie",
+            "bevoegde_organisatie",
+            "bevoegde_organisatie__organisatie",
+            "product_valt_onder",
+            "product_valt_onder__generiek_product__upn",
             "generiek_product",
             "generiek_product__upn",
         )
@@ -171,6 +176,7 @@ class ProductViewSet(
             "versies",
             "versies__vertalingen",
         )
+        .exclude(versies__publicatie_datum__isnull=True)
         .active()
         .order_by("generiek_product__upn__upn_label")
         .exclude_generic_status(api=True)
