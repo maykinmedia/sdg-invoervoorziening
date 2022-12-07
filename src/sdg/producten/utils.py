@@ -55,25 +55,28 @@ def parse_changed_data(changed_data, *, form, language=None) -> List[dict]:
 
 
 @lru_cache
-def get_placeholder_mappings(municipality, generic_product):
+def get_placeholder_maps(product):
     """
-    Get placeholder text mappings for a municipality and generic product.
+    Get placeholder text mappings for a municipality's product.
     """
-    explanation_mapping = {}
-    availability_mapping = {}
+    available_explanation_map = {}
+    falls_under_explanation_map = {}
+
+    generic_product = product.generiek_product
+    municipality = product.catalogus.lokale_overheid
 
     for language in TaalChoices.get_available_languages():
         localized_generic_product = generic_product.vertalingen.get(taal=language)
 
         with translation.override(language):
-            explanation_mapping[language] = _(
+            available_explanation_map[language] = _(
                 "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
             ).format(
                 org_type_name=org_type_cfg().name,
                 lokale_overheid=municipality,
                 product=localized_generic_product,
             )
-            availability_mapping[language] = _(
+            falls_under_explanation_map[language] = _(
                 "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
             ).format(
                 org_type_name=org_type_cfg().name,
@@ -81,4 +84,4 @@ def get_placeholder_mappings(municipality, generic_product):
                 product=localized_generic_product,
             )
 
-    return explanation_mapping, availability_mapping
+    return available_explanation_map, falls_under_explanation_map

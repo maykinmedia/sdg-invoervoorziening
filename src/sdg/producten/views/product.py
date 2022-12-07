@@ -31,7 +31,7 @@ from sdg.producten.models.product import GeneriekProduct
 from sdg.producten.utils import (
     build_url_kwargs,
     duplicate_localized_products,
-    get_placeholder_mappings,
+    get_placeholder_maps,
     parse_changed_data,
 )
 from sdg.utils.validators import validate_placeholders
@@ -242,8 +242,8 @@ class ProductUpdateView(
         """
         TODO: Clean up further .i.e. move translation to template
         """
-        explanation_mapping, availability_mapping = get_placeholder_mappings(
-            self.lokale_overheid, self.product.generiek_product
+        available_explanation_map, falls_under_explanation_map = get_placeholder_maps(
+            self.product
         )
 
         formset = inlineformset_factory(
@@ -253,8 +253,8 @@ class ProductUpdateView(
         formset.title = f"Standaardtekst v{version.versie} ({version.publicatie_datum or 'concept'})"
 
         for form in formset:
-            form.default_toelichting = explanation_mapping.get(form.instance.taal)
-            form.default_product_aanwezig_toelichting = availability_mapping.get(
+            form.default_toelichting = available_explanation_map.get(form.instance.taal)
+            form.default_product_aanwezig_toelichting = falls_under_explanation_map.get(
                 form.instance.taal
             )
 
