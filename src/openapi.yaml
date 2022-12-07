@@ -630,6 +630,9 @@ paths:
         name: productUuid
         schema:
           type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
         required: true
       tags:
       - producten
@@ -644,11 +647,16 @@ paths:
           description: ''
     post:
       operationId: productenVersiesCreate
+      description: "Maak een nieuwe product versie aan of update een nog niet gepubliceerde\
+        \ product.\n        "
       parameters:
       - in: path
         name: productUuid
         schema:
           type: string
+          format: uuid
+        description: De UUID van een het product waar u een nieuwe versie van aan
+          wilt maken of bewerken.
         required: true
       tags:
       - producten
@@ -676,6 +684,9 @@ paths:
         name: productUuid
         schema:
           type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
         required: true
       - in: path
         name: versie
@@ -697,22 +708,22 @@ paths:
   /api/v1/producten/{productUuid}/versies/{versie}/publiceer:
     post:
       operationId: productenVersiesPubliceerCreate
-      description: |-
-        Publiseer het concept.
-
-        Door het publiseren van het concept krijgt het product de publicatie datum van vandaag de dag.
-        Letop een gepubliseerde product kan niet meer worden aangepast, er kan wel een nieuwe product versie worden aangemaakt.
+      description: "Publiceer de product versie met de bijgewerkte vertalingen doormiddel\
+        \ van:\n        `product_uuid`, `versie`\n        "
       parameters:
       - in: path
         name: productUuid
         schema:
           type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          publiceren.
         required: true
       - in: path
         name: versie
         schema:
-          type: string
-          pattern: ^[0-9]+$
+          type: number
+        description: Het versie nummer van het product die u wilt publiceren.
         required: true
       tags:
       - producten
@@ -733,6 +744,8 @@ paths:
   /api/v1/producten/{productUuid}/versies/{versie}/vertalingen:
     get:
       operationId: productenVersiesVertalingenList
+      description: "Haal alle product vertalingen doormiddle van:\n        `product_uuid`,\
+        \ `versie`\n        "
       parameters:
       - name: page
         required: false
@@ -744,11 +757,15 @@ paths:
         name: productUuid
         schema:
           type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
         required: true
       - in: path
         name: versie
         schema:
-          type: string
+          type: number
+        description: Het versie nummer van het product die u wilt ophalen.
         required: true
       tags:
       - producten
@@ -764,12 +781,16 @@ paths:
   /api/v1/producten/{productUuid}/versies/{versie}/vertalingen/{taal}:
     get:
       operationId: productenVersiesVertalingenRetrieve
-      description: "Haal de specifieke vertaling op per taal.\n        "
+      description: "Haal de specifieke producten vertaling doormiddle van:\n     \
+        \   `product_uuid`, `versie`, `taal`\n        "
       parameters:
       - in: path
         name: productUuid
         schema:
           type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
         required: true
       - in: path
         name: taal
@@ -783,7 +804,8 @@ paths:
       - in: path
         name: versie
         schema:
-          type: string
+          type: number
+        description: Het versie nummer van het product die u wilt ophalen.
         required: true
       tags:
       - producten
@@ -806,6 +828,8 @@ paths:
         name: productUuid
         schema:
           type: string
+          format: uuid
+        description: De UUID van het product die u wilt bewerken.
         required: true
       - in: path
         name: taal
@@ -819,7 +843,8 @@ paths:
       - in: path
         name: versie
         schema:
-          type: string
+          type: number
+        description: Het versie nummer van het product die u wilt bewerken.
         required: true
       tags:
       - producten
@@ -828,40 +853,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ProductVersieVertalingen'
-      security:
-      - tokenAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductVersieVertalingen'
-          description: ''
-    patch:
-      operationId: productenVersiesVertalingenPartialUpdate
-      parameters:
-      - in: path
-        name: productUuid
-        schema:
-          type: string
-        required: true
-      - in: path
-        name: taal
-        schema:
-          type: string
-        required: true
-      - in: path
-        name: versie
-        schema:
-          type: string
-        required: true
-      tags:
-      - producten
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedProductVersieVertalingen'
       security:
       - tokenAuth: []
       responses:
@@ -1510,80 +1501,6 @@ components:
           title: Contact formulier
           description: De webpagina van het contact formulier van de organisatie.
           maxLength: 200
-    PatchedProductVersieVertalingen:
-      type: object
-      properties:
-        taal:
-          allOf:
-          - $ref: '#/components/schemas/TaalEnum'
-          readOnly: true
-          description: De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
-        titel:
-          type: string
-          description: De titel van het product. Als deze afwijkt van de generieke
-            titel kunt u dat hier aangeven.
-          maxLength: 100
-        tekst:
-          type: string
-          description: De inleidende tekst voor het product. Hierin kunt u het product
-            beschrijven en komt direct na de generieke productbeschrijving. Dit veld
-            ondersteund Markdown.
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/LabeledUrl'
-          description: Dit zijn de verwijzing links voor burgers en ondernemers naar
-            relevante organisatie informatie.
-        procedureBeschrijving:
-          type: string
-          description: De beschrijving van hoe het product wordt aangevraagd. Dit
-            veld ondersteund Markdown.
-        bewijs:
-          type: string
-          description: Dit bevat de bewijsstukken die de burger of ondernemer nodig
-            heeft om dit product aan te vragen. Dit veld ondersteund Markdown.
-        vereisten:
-          type: string
-          description: Dit zijn de voorwaarden voor het aanvragen van het product.
-            Dit veld ondersteund Markdown.
-        bezwaarEnBeroep:
-          type: string
-          description: Beschrijft hoe de burger of ondernemer bezwaar kan maken. Dit
-            veld ondersteund Markdown.
-        kostenEnBetaalmethoden:
-          type: string
-          description: Beschrijft hoe de burger of ondernemer kan betalen en wat de
-            kosten zijn. Dit veld ondersteund Markdown.
-        uitersteTermijn:
-          type: string
-          description: De informatie over hoe hoelang het duurt voor het aanvragen
-            van dit product. Dit doet u aan de hand van werkdagen/weken. Dit veld
-            ondersteund Markdown.
-        wtdBijGeenReactie:
-          type: string
-          description: Beschrijft wat de aanvrager moet doen bij geen reactie. Dit
-            veld ondersteund Markdown.
-        procedureLink:
-          allOf:
-          - $ref: '#/components/schemas/ProcedureLink'
-          description: Het label en de link naar de procedure.
-        productAanwezigToelichting:
-          type: string
-          title: Aanwezig toelichting
-          description: Een optioneel veld om uit te leggen waarom het product niet
-            aanwezig is. Deze moet u alleen invullen als u het product niet levert
-            en dan is dit veld verplicht! Dit veld ondersteund Markdown.
-        productValtOnderToelichting:
-          type: string
-          description: Een optioneel veld om uit te leggen waarom dit product onder
-            een andere product valt. Deze moet u alleen invullen als dit product onder
-            een andere product valt en dan is dit veld verplicht! Dit veld ondersteund
-            Markdown.
-        datumWijziging:
-          type: string
-          format: date-time
-          readOnly: true
-          description: Datum wanneer dit product voor het laatst is gewijzigd.
     ProcedureLink:
       type: object
       properties:

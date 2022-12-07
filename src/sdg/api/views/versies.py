@@ -21,20 +21,66 @@ from sdg.producten.models.localized import LocalizedProduct
 
 
 @extend_schema_view(
+    publiceren=extend_schema(
+        description="""Publiceer de product versie met de bijgewerkte vertalingen doormiddel van:
+        `product_uuid`, `versie`
+        """,
+        parameters=[
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="De UUID van een product om aan te geven welke product u wilt publiceren.",
+            ),
+            OpenApiParameter(
+                name="versie",
+                description="Het versie nummer van het product die u wilt publiceren.",
+                required=True,
+                type=OpenApiTypes.NUMBER,
+                location=OpenApiParameter.PATH,
+            ),
+        ],
+    ),
     list=extend_schema(
         description="""Krijg een lijst met alle product versies te zien.
-        """
+        """,
+        parameters=[
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="De UUID van een product om aan te geven welke product u wilt ophalen.",
+            ),
+        ],
     ),
     retrieve=extend_schema(
         description="""Krijg een specifieke product versie te zien.
         """,
         parameters=[
             OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="De UUID van een product om aan te geven welke product u wilt ophalen.",
+            ),
+            OpenApiParameter(
                 name="versie",
                 description="Het versie nummer van het product die u wilt ophalen.",
                 required=True,
                 type=OpenApiTypes.NUMBER,
                 location=OpenApiParameter.PATH,
+            ),
+        ],
+    ),
+    create=extend_schema(
+        description="""Maak een nieuwe product versie aan of update een nog niet gepubliceerde product.
+        """,
+        parameters=[
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="De UUID van een het product waar u een nieuwe versie van aan wilt maken of bewerken.",
             ),
         ],
     ),
@@ -144,10 +190,44 @@ class ProductVersiesViewset(
 
 
 @extend_schema_view(
-    retrieve=extend_schema(
-        description="""Haal de specifieke vertaling op per taal.
+    list=extend_schema(
+        description="""Haal alle product vertalingen doormiddle van:
+        `product_uuid`, `versie`
         """,
         parameters=[
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="De UUID van een product om aan te geven welke product u wilt ophalen.",
+            ),
+            OpenApiParameter(
+                name="versie",
+                description="Het versie nummer van het product die u wilt ophalen.",
+                required=True,
+                type=OpenApiTypes.NUMBER,
+                location=OpenApiParameter.PATH,
+            ),
+        ],
+    ),
+    retrieve=extend_schema(
+        description="""Haal de specifieke producten vertaling doormiddle van:
+        `product_uuid`, `versie`, `taal`
+        """,
+        parameters=[
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="De UUID van een product om aan te geven welke product u wilt ophalen.",
+            ),
+            OpenApiParameter(
+                name="versie",
+                description="Het versie nummer van het product die u wilt ophalen.",
+                required=True,
+                type=OpenApiTypes.NUMBER,
+                location=OpenApiParameter.PATH,
+            ),
             OpenApiParameter(
                 name="taal",
                 description="De taal van de text die u wilt ophalen.",
@@ -162,6 +242,19 @@ class ProductVersiesViewset(
         description="""Update 1 specifieke vertaling van een productversie concept. Om de productversie correct aan te maken, moet u in de url het 'productUuid' opgeven.
         """,
         parameters=[
+            OpenApiParameter(
+                "product_uuid",
+                OpenApiTypes.UUID,
+                OpenApiParameter.PATH,
+                description="De UUID van het product die u wilt bewerken.",
+            ),
+            OpenApiParameter(
+                name="versie",
+                description="Het versie nummer van het product die u wilt bewerken.",
+                required=True,
+                type=OpenApiTypes.NUMBER,
+                location=OpenApiParameter.PATH,
+            ),
             OpenApiParameter(
                 name="taal",
                 description="De taal van de tekst die u wilt updaten.",
@@ -185,6 +278,8 @@ class ProductVersiesTranslationViewset(
 
     lookup_field = "taal"
     lookup_url_kwarg = "taal"
+    http_method_names = ["get", "retrieve", "put"]
+    queryset = LocalizedProduct.objects.none()
 
     def get_queryset(self):
         product_uuid = self.kwargs["product_uuid"]
