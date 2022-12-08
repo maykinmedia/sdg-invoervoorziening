@@ -101,7 +101,8 @@ class ProductenVersieTest(APITestCase):
         )
         self.token_authorization_publicatie_datum_none = (
             TokenAuthorizationFactory.create(
-                lokale_overheid=self.lokale_overheid_publicatie_datum_none
+                lokale_overheid=self.lokale_overheid_publicatie_datum_none,
+                token__api_default_most_recent=True,
             )
         )
         self.bevoegde_organisatie_publicatie_datum_none = (
@@ -146,7 +147,8 @@ class ProductenVersieTest(APITestCase):
         )
         self.token_authorization_publicatie_datum_today = (
             TokenAuthorizationFactory.create(
-                lokale_overheid=self.lokale_overheid_publicatie_datum_today
+                lokale_overheid=self.lokale_overheid_publicatie_datum_today,
+                token__api_default_most_recent=True,
             )
         )
         self.bevoegde_organisatie_publicatie_datum_today = (
@@ -191,7 +193,8 @@ class ProductenVersieTest(APITestCase):
         )
         self.token_authorization_publicatie_datum_future = (
             TokenAuthorizationFactory.create(
-                lokale_overheid=self.lokale_overheid_publicatie_datum_future
+                lokale_overheid=self.lokale_overheid_publicatie_datum_future,
+                token__api_default_most_recent=True,
             )
         )
         self.bevoegde_organisatie_publicatie_datum_future = (
@@ -236,7 +239,8 @@ class ProductenVersieTest(APITestCase):
         )
         self.token_authorization_publicatie_datum_past = (
             TokenAuthorizationFactory.create(
-                lokale_overheid=self.lokale_overheid_publicatie_datum_past
+                lokale_overheid=self.lokale_overheid_publicatie_datum_past,
+                token__api_default_most_recent=True,
             )
         )
         self.bevoegde_organisatie_publicatie_datum_past = (
@@ -267,6 +271,10 @@ class ProductenVersieTest(APITestCase):
             LocalizedProductFactory.create_batch(
                 2, product_versie=self.product_versie_publicatie_datum_past
             )
+        )
+        self.token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=self.referentie_lokale_overheid,
+            token__api_default_most_recent=True,
         )
 
         self.body = {
@@ -324,6 +332,9 @@ class ProductenVersieTest(APITestCase):
             ],
             "gerelateerdeProducten": [],
         }
+        self.client.defaults.update(
+            {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+        )
 
     @freeze_time(NOW_DATE)
     def test_product_version_none_to_today(self):

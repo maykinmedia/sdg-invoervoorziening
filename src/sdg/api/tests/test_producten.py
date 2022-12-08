@@ -116,7 +116,8 @@ class ProductenTests(APITestCase):
             contact_telefoonnummer="12317238712",
         )
         self.token_authorization = TokenAuthorizationFactory.create(
-            lokale_overheid=self.lokale_overheid
+            lokale_overheid=self.lokale_overheid,
+            token__api_default_most_recent=True,
         )
         self.bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
             organisatie=self.organisatie, lokale_overheid=self.lokale_overheid
@@ -167,7 +168,8 @@ class ProductenTests(APITestCase):
             contact_telefoonnummer="123456789",
         )
         self.test_token_authorization = TokenAuthorizationFactory.create(
-            lokale_overheid=self.test_lokale_overheid
+            lokale_overheid=self.test_lokale_overheid,
+            token__api_default_most_recent=True,
         )
         self.test_bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
             lokale_overheid=self.test_lokale_overheid,
@@ -264,6 +266,9 @@ class ProductenTests(APITestCase):
                 },
             ],
         }
+        self.client.defaults.update(
+            {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+        )
 
     def test_list_producten(self):
         list_url = reverse("api:product-list")
@@ -1041,6 +1046,7 @@ class ProductenTests(APITestCase):
         )
 
     def test_update_product_with_product_valt_onder_without_toelichting(self):
+        self.client.defaults = {}
         organisatie = OverheidsorganisatieFactory.create(
             owms_identifier="https://www.test_update_product_with_product_valt_onder_without_toelichting.com",
             owms_pref_label="test_update_product_with_product_valt_onder_without_toelichting",

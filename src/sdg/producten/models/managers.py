@@ -1,14 +1,14 @@
 from datetime import date
 
 from django.db import models
-from django.db.models import F, Max, OuterRef, Prefetch, Q, Subquery
+from django.db.models import Exists, F, Max, OuterRef, Prefetch, Q, Subquery
 from django.utils.timezone import now
 
 from sdg.core.constants import GenericProductStatus
 
 
 class ProductQuerySet(models.QuerySet):
-    def active(self, active_on=None):
+    def active(self, active_on=None, exclude_inactive_products=False):
         """
         An active product is a product with its product version and its
         translations as it was most recently published.
@@ -35,7 +35,22 @@ class ProductQuerySet(models.QuerySet):
             .values_list("pk", flat=True)[:1]
         )
 
-        return self.prefetch_related(
+        queryset = self
+
+        # First, filter out products that do not have active versions at
+        # all, if so needed.
+        if exclude_inactive_products:
+            queryset = self.filter(
+                Exists(
+                    ProductVersie.objects.exclude(publicatie_datum=None).filter(
+                        publicatie_datum__lte=active_on, product=OuterRef("pk")
+                    )
+                )
+            )
+
+        # Second, make sure we prefetch the correct active version for
+        # performance.
+        return queryset.prefetch_related(
             Prefetch(
                 "versies",
                 to_attr="_active_version",
@@ -124,9 +139,10 @@ class ProductQuerySet(models.QuerySet):
                     ),
                 ),
             )
-
-        excluded = GenericProductStatus.get_api_excluded()
-        return self.exclude(generiek_product__product_status__in=excluded)
+        else:
+            return self.exclude(
+                generiek_product__product_status__in=GenericProductStatus.get_api_excluded(),
+            )
 
 
 class ProductVersieQuerySet(models.QuerySet):

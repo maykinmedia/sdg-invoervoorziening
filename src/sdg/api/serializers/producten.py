@@ -6,7 +6,6 @@ from django.utils.dateparse import parse_date
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
 from rest_framework.reverse import reverse
 
 from sdg.api.serializers.fields import LabeledUrlListField
@@ -246,7 +245,6 @@ class ProductSerializer(ProductBaseSerializer):
         source="catalogus.lokale_overheid"
     )
     publicatie_datum = serializers.DateField(
-        source="active_version.publicatie_datum",
         allow_null=True,
         help_text="De datum die aangeeft wanneer het product gepubliceerd is/wordt.",
     )
@@ -256,20 +254,20 @@ class ProductSerializer(ProductBaseSerializer):
         help_text="Een boolean die aangeeft of de organisatie dit product levert of niet. Als de verantwoordelijke organisatie niet expliciet heeft aangegeven dat een product aanwezig of afwezig is, dan is deze waarde `null`. Als een product afwezig is, dan moet er een toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde velden kunnen dan leeg blijven.",
     )
     vertalingen = LocalizedProductSerializer(
-        source="active_version.vertalingen",
+        many=True,
         # In case there is no active version, there are no available
         # translations. Hence, we allow null here (which affect the GET
         # operation to actually work).
         allow_null=True,
-        many=True,
         help_text="Een lijst met specifieke teksten op basis van taal.",
     )
     beschikbare_talen = serializers.SerializerMethodField(
         method_name="get_talen",
         help_text="Alle beschikbare talen.",
     )
-    versie = SerializerMethodField(
-        method_name="get_versie", help_text="De huidige versie van dit product."
+    versie = serializers.IntegerField(
+        help_text="De huidige versie van dit product.",
+        default=0,
     )
     doelgroep = serializers.ChoiceField(
         source="generiek_product.doelgroep",
@@ -332,25 +330,48 @@ class ProductSerializer(ProductBaseSerializer):
                 "view_name": "api:product-detail",
             },
         }
+        version_fields = (
+            "vertalingen",
+            "publicatie_datum",
+            "versie",
+        )
 
-    @staticmethod
-    def _get_active_version(product: Product, field_name, default=None):
-        """Get the value of a field from the product's active version."""
-        active_version = getattr(product, "active_version", None)
-        return getattr(active_version, field_name) if active_version else default
+    def get_fields(self):
+        """
+        Dynamically bind the source of certain fields based on the version of the product.
+        """
+        fields = super().get_fields()
 
-    def get_versie(self, obj: Product) -> int:
-        return self._get_active_version(obj, "versie", default=0)
+        for field in self.Meta.version_fields:
+            fields[field].source = f"{self.version_property_name}.{field}"
+
+        return fields
+
+    @property
+    def version_property_name(self):
+        """
+        Return the appropriate version property based on the meta headers.
+
+        If the token type is designed for editors, return the most recent version.
+        In other cases return the active version.
+        """
+        request = self.context.get("request", object)
+        auth = getattr(request, "auth", None)
+
+        if auth and auth.api_default_most_recent:
+            return "most_recent_version"
+
+        return "active_version"
 
     def get_talen(self, obj: Product) -> list:
         return TaalChoices.get_available_languages()
 
     def to_representation(self, instance):
         data = super(ProductBaseSerializer, self).to_representation(instance)
-        active_version = getattr(instance, "active_version", None)
+        version = getattr(instance, self.version_property_name, None)
 
-        if active_version and getattr(instance, "_filter_taal", None):
-            translations = active_version.vertalingen.all()
+        if version and getattr(instance, "_filter_taal", None):
+            translations = version.vertalingen.all()
             filtered_translations = [
                 i for i in translations if i.taal == instance._filter_taal
             ]
@@ -369,44 +390,40 @@ class ProductSerializer(ProductBaseSerializer):
                 {"generiekProduct": "Het veld 'product' is verplicht."}
             )
 
-        most_recent_version = attrs["most_recent_version"]
+        version = attrs[self.version_property_name]
 
-        required_taalen = [taal[0] for taal in TaalChoices]
-        for version in most_recent_version["vertalingen"]:
-            if version["taal"] in required_taalen:
-                required_taalen.remove(version["taal"])
-
-        if required_taalen:
+        languages = [t["taal"] for t in version["vertalingen"]]
+        required_languages = TaalChoices.get_available_languages()
+        if any(lang not in languages for lang in required_languages):
             raise serializers.ValidationError(
                 {
-                    "vertalingen": f"Het veld 'taal' is verplicht. Geldige waarden zijn: {required_taalen}"
+                    "vertalingen": f"Het veld 'taal' is verplicht. Geldige waarden zijn: {required_languages}"
                 }
             )
 
-        if most_recent_version["vertalingen"]:
-            if not attrs["product_aanwezig"]:
-                for vertaling in most_recent_version["vertalingen"]:
-                    if (
-                        not vertaling["product_aanwezig_toelichting"]
-                        or vertaling["product_aanwezig_toelichting"] == ""
-                    ):
-                        raise serializers.ValidationError(
-                            {
-                                "productAanwezigToelichting": "Het veld 'productAanwezigToelichting' is verplicht als het product niet aanwezig is."
-                            }
-                        )
+        if not attrs["product_aanwezig"]:
+            for translation in version["vertalingen"]:
+                if (
+                    not translation["product_aanwezig_toelichting"]
+                    or translation["product_aanwezig_toelichting"] == ""
+                ):
+                    raise serializers.ValidationError(
+                        {
+                            "productAanwezigToelichting": "Het veld 'productAanwezigToelichting' is verplicht als het product niet aanwezig is."
+                        }
+                    )
 
-            if attrs["product_valt_onder"]:
-                for vertaling in most_recent_version["vertalingen"]:
-                    if (
-                        not vertaling["product_valt_onder_toelichting"]
-                        or vertaling["product_valt_onder_toelichting"] == ""
-                    ):
-                        raise serializers.ValidationError(
-                            {
-                                "productValtOnderToelichting": "Het veld 'productValtOnderToelichting' is verplicht als het product onder een ander product valt."
-                            }
-                        )
+        if attrs["product_valt_onder"]:
+            for translation in version["vertalingen"]:
+                if (
+                    not translation["product_valt_onder_toelichting"]
+                    or translation["product_valt_onder_toelichting"] == ""
+                ):
+                    raise serializers.ValidationError(
+                        {
+                            "productValtOnderToelichting": "Het veld 'productValtOnderToelichting' is verplicht als het product onder een ander product valt."
+                        }
+                    )
 
         return attrs
 
@@ -594,8 +611,7 @@ class ProductSerializer(ProductBaseSerializer):
         bevoegde_organisatie = validated_data.pop("bevoegde_organisatie", [])
         locaties = validated_data.pop("locaties", [])
 
-        most_recent_version = validated_data.pop("most_recent_version")
-        vertalingen = most_recent_version.pop("vertalingen", [])
+        version = validated_data.get(self.version_property_name, {})
         publicatie_datum = data.get("publicatie_datum", None)
 
         if publicatie_datum:
@@ -683,28 +699,26 @@ class ProductSerializer(ProductBaseSerializer):
             defaults={"publicatie_datum": publicatie_datum},
         )
 
-        if vertalingen:
-            for vertaling in vertalingen:
+        for translation in version.get("vertalingen", []):
+            verwijzing_links = []
+            if "verwijzing_links" in translation:
+                for verwijzing_link in translation["verwijzing_links"]:
+                    verwijzing_links.append(list(verwijzing_link.values()))
 
-                verwijzing_links = []
-                if "verwijzing_links" in vertaling:
-                    for verwijzing_link in vertaling["verwijzing_links"]:
-                        verwijzing_links.append(list(verwijzing_link.values()))
+            translation["verwijzing_links"] = verwijzing_links
 
-                vertaling["verwijzing_links"] = verwijzing_links
+            if product_versie_created:
 
-                if product_versie_created:
+                LocalizedProduct.objects.create(
+                    **translation,
+                    product_versie=product_versie,
+                )
 
-                    LocalizedProduct.objects.create(
-                        **vertaling,
-                        product_versie=product_versie,
-                    )
-
-                else:
-                    vertaling["product_versie"] = product_versie
-
-                    LocalizedProduct.objects.filter(
-                        taal=vertaling["taal"], product_versie=product_versie
-                    ).update(**vertaling)
+            else:
+                translation["product_versie"] = product_versie
+                localized_product_qs = LocalizedProduct.objects.filter(
+                    product_versie=product_versie, taal=translation["taal"]
+                )
+                localized_product_qs.update(**translation)
 
         return product
