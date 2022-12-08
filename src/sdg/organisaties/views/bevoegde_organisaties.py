@@ -5,6 +5,7 @@ from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
+from sdg.conf.utils import org_type_cfg
 from sdg.organisaties.forms import BevoegdeOrganisatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 
@@ -20,8 +21,8 @@ class BevoegdeOrganisatieUpdateView(OverheidMixin, UpdateView):
         return {**kwargs, "instance": self.object, "prefix": "form"}
 
     def get_lokale_overheid(self):
-        self.object = self.get_object()
-        return self.object
+        self.object = self.lokale_overheid = self.get_object()
+        return self.lokale_overheid
 
     def get_success_url(self):
         return reverse_lazy(
@@ -30,16 +31,14 @@ class BevoegdeOrganisatieUpdateView(OverheidMixin, UpdateView):
         )
 
     def form_valid(self, form):
-        organisatie = self.object
         response = super().form_valid(form)
-        context = super().get_context_data()
         messages.success(
             self.request,
             _(
                 "De bevoegde organisaties van {org_type_name} {organisatie} zijn succesvol gewijzigd."
             ).format(
-                org_type_name=context["org_type_cfg"].name,
-                organisatie=organisatie,
+                org_type_name=org_type_cfg().name,
+                organisatie=self.lokale_overheid,
             ),
         )
         return response
