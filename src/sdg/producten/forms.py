@@ -48,41 +48,37 @@ class LocalizedProductFormSet(
         """
         cleaned_data = super().clean()
 
+        falls_under = self._product_form.cleaned_data.get("product_valt_onder")
+        available = self._product_form.cleaned_data.get("product_aanwezig")
+
         available_explanation_map, falls_under_explanation_map = get_placeholder_maps(
             self.instance.product
         )
 
-        if self._product_form.cleaned_data.get("product_valt_onder"):
-            for form in self.forms:
-                language = form.cleaned_data["taal"]
-                available_explanation = form.cleaned_data.get(
-                    "product_aanwezig_toelichting"
+        for form in self.forms:
+            language = form.cleaned_data["taal"]
+
+            available_explanation = form.cleaned_data.get(
+                "product_aanwezig_toelichting"
+            )
+            falls_under_explanation = form.cleaned_data.get(
+                "product_valt_onder_toelichting"
+            )
+
+            if falls_under and not falls_under_explanation:
+                form.add_error(
+                    "product_valt_onder_toelichting",
+                    "Vul de toelichting in als het product valt onder.",
                 )
-                falls_under_explanation = form.cleaned_data.get(
-                    "product_valt_onder_toelichting"
-                )
 
-                if not falls_under_explanation:
-                    form.add_error(
-                        "product_valt_onder_toelichting",
-                        "Vul de toelichting in als het product valt onder.",
-                    )
+            if falls_under_explanation == falls_under_explanation_map.get(language):
+                form.cleaned_data["product_valt_onder_toelichting"] = "1"
 
-                if falls_under_explanation == falls_under_explanation_map.get(language):
-                    form.cleaned_data["product_valt_onder_toelichting"] = ""
+            if available_explanation == available_explanation_map.get(language):
+                form.cleaned_data["product_aanwezig_toelichting"] = "1"
 
-                if available_explanation == available_explanation_map.get(language):
-                    form.cleaned_data["product_aanwezig_toelichting"] = ""
-
-        if self._product_form.cleaned_data is not None:
-            for form in self.forms:
-                available = self._product_form.cleaned_data.get("product_aanwezig")
-                explanation = form.cleaned_data.get("product_aanwezig_toelichting")
-
-                if available is False and not explanation:
-                    form.add_error(
-                        "product_aanwezig_toelichting", "Dit veld is verplicht."
-                    )
+            if available is False and not available_explanation:
+                form.add_error("product_aanwezig_toelichting", "Dit veld is verplicht.")
 
         if not self.instance.product.is_referentie_product:
             self._validate_specific(self.forms)
