@@ -33,6 +33,7 @@ from sdg.producten.utils import (
     duplicate_localized_products,
     parse_changed_data,
 )
+from sdg.utils.validators import validate_placeholders
 
 
 class ProductPreviewView(OverheidMixin, DetailView):
@@ -205,7 +206,11 @@ class ProductUpdateView(
                 "catalogus__lokale_overheid",
                 "generiek_product__upn",
             )
+            .prefetch_related(
+                "generiek_product__vertalingen",
+            )
             .exclude_generic_status()
+            .annotate_name()
         )
 
     def _save_version_form(
@@ -233,9 +238,6 @@ class ProductUpdateView(
         return new_version, created
 
     def _generate_version_formset(self, version: ProductVersie):
-        """
-        TODO: Clean up further .i.e. move translation to template
-        """
         default_explanation_mapping = {}
         default_aanwezig_toelichting_explanation_mapping = {}
 
@@ -252,7 +254,7 @@ class ProductUpdateView(
                     product=localized_generic_product,
                 )
                 default_aanwezig_toelichting_explanation_mapping[language] = _(
-                    "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
+                    "De {org_type_name} {lokale_overheid} levert het product {product} niet."
                 ).format(
                     org_type_name=self.org_type_cfg.name,
                     lokale_overheid=self.lokale_overheid,
@@ -282,8 +284,7 @@ class ProductUpdateView(
             "datum_check",
             "verwijzing_links",
         ]
-        nl = self.product.generiek_product.vertalingen.filter(taal="nl").first()
-        en = self.product.generiek_product.vertalingen.filter(taal="en").first()
+        nl, en = self.product.generiek_product.vertalingen.all()
 
         if nl:
             setattr(nl, "template_fields", nl.get_fields(required_fields))
@@ -297,6 +298,7 @@ class ProductUpdateView(
         self.product = self.get_object()
         self.lokale_overheid = self.product.catalogus.lokale_overheid
         self.object = self.product.most_recent_version
+        self.product_nl, self.product_en = self.object.vertalingen.all()
         return self.lokale_overheid
 
     def get_context_data(self, **kwargs):
@@ -357,8 +359,34 @@ class ProductUpdateView(
         )
         return context
 
+    def _add_placeholder_warning(self):
+        """
+        Check for any placeholder texts in the current data.
+        Add a warning if any are found.
+        """
+        current_data = chain(
+            self.object.__dict__.values(),
+            self.product.__dict__.values(),
+            self.product_en.__dict__.values(),
+            self.product_nl.__dict__.values(),
+        )
+
+        for value in current_data:
+            if validate_placeholders(value):
+                messages.add_message(
+                    self.request,
+                    messages.WARNING,
+                    _("De huidige gegevens bevatten placeholder tekst."),
+                )
+                return
+
     def get(self, request, *args, **kwargs):
-        return self.render_to_response(self.get_context_data())
+        ctx = self.get_context_data()
+
+        if not self.product.is_referentie_product:
+            self._add_placeholder_warning()
+
+        return self.render_to_response(ctx)
 
     @municipality_role_required([Role.choices.MANAGER, Role.choices.EDITOR])
     def post(self, request, *args, **kwargs):

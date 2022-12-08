@@ -64,6 +64,7 @@
       }
     }
 
+    &.notification__warning,
     &.notification__accent {
       border-left: 5px solid $color_accent;
       background-color: $color_accent_notification-bg;

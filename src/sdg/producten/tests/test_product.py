@@ -1,3 +1,4 @@
+import html
 from typing import Optional
 
 from django.test import override_settings
@@ -97,13 +98,20 @@ class ProductUpdateViewTests(WebTest):
                 "date": FUTURE_DATE,
             },
         }
+        _submit_value = "date"
+
         if status_data := _form_data.get(publish_choice):
             for date_field in form.fields["date"]:
                 date_field.value = status_data["date"]
+            _submit_value = status_data["publish"]
 
         form["vertalingen-0-product_titel_decentraal"] = DUMMY_TITLE
 
-        return form.submit(name="publish", value="date", **kwargs)
+        return form.submit(
+            name="publish",
+            value=_submit_value,
+            **kwargs,
+        )
 
     @freeze_time(NOW_DATE)
     def test_concept_save_concept(self):
@@ -235,6 +243,121 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(latest_nl.product_titel_decentraal, DUMMY_TITLE)
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
         self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
+        self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
+    def test_product_with_placeholder_warning_displayed(self):
+        self._change_product_status(Product.status.CONCEPT)
+        self.product.most_recent_version.vertalingen.all().update(
+            product_titel_decentraal="[[titel]]"
+        )
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            _("De huidige gegevens bevatten placeholder tekst."),
+            response.text,
+        )
+
+        self.product.most_recent_version.vertalingen.all().update(
+            product_titel_decentraal="title XXX"
+        )
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(
+            _("De huidige gegevens bevatten placeholder tekst."),
+            response.text,
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_unable_to_save_product_with_placeholder(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        for date_field in response.form.fields["date"]:
+            date_field.value = NOW_DATE
+
+        response.form[
+            "vertalingen-0-product_titel_decentraal"
+        ] = "Title [[placeholder]]"
+
+        response = response.form.submit(name="publish", value="date")
+        self.assertEqual(response.status_code, 200)
+
+        self.assertIn(
+            _(
+                "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten."
+            ),
+            response.text,
+        )
+        self.assertIn(
+            _("De tekst mag geen placeholders bevatten."),
+            response.text,
+        )
+
+        self.product_version.refresh_from_db()
+        self.assertEqual(self.product.versies.count(), 1)
+
+    @freeze_time(NOW_DATE)
+    def test_able_to_save_product_concept_with_placeholder(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        for date_field in response.form.fields["date"]:
+            date_field.value = None
+
+        response.form[
+            "vertalingen-0-product_titel_decentraal"
+        ] = "Title [[placeholder]]"
+
+        response = response.form.submit(name="publish", value="concept")
+        self.assertEqual(response.status_code, 302)
+
+        self.assertNotIn(
+            _(
+                "Wijzigingen konden niet worden opgeslagen. Corrigeer de hieronder gemarkeerde fouten."
+            ),
+            response.text,
+        )
+        self.assertNotIn(
+            _("De tekst mag geen placeholders bevatten."),
+            response.text,
+        )
+
+        self.product_version.refresh_from_db()
+        self.assertEqual(self.product.versies.count(), 1)
+
+        latest_version = self.product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_nl.product_titel_decentraal, "Title [[placeholder]]")
+        self.assertEqual(latest_version.publicatie_datum, None)
+        self.assertEqual(latest_version.current_status, Product.status.CONCEPT)
         self.assertEqual(latest_version.versie, 1)
 
     @freeze_time(NOW_DATE)
@@ -826,6 +949,97 @@ class ProductUpdateViewTests(WebTest):
         )
 
     @freeze_time(NOW_DATE)
+    def test_reference_product_with_placeholder_warning_not_displayed(self):
+        self.role = RoleFactory.create(
+            user=self.user,
+            lokale_overheid=self.reference_product.catalogus.lokale_overheid,
+            is_beheerder=True,
+        )
+        self._change_product_status(Product.status.CONCEPT)
+        self.reference_product.generiek_product.product_status = (
+            GenericProductStatus.READY_FOR_ADMIN
+        )
+        self.reference_product.generiek_product.save()
+        self.reference_product.most_recent_version.vertalingen.all().update(
+            product_titel_decentraal="[[titel]]"
+        )
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.reference_product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(
+            _("De huidige gegevens bevatten placeholder tekst."),
+            response.text,
+        )
+
+        self.reference_product.most_recent_version.vertalingen.all().update(
+            product_titel_decentraal="title XXX"
+        )
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.reference_product),
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn(
+            _("De huidige gegevens bevatten placeholder tekst."),
+            response.text,
+        )
+
+    @freeze_time(NOW_DATE)
+    def test_able_to_save_reference_product_with_placeholder(self):
+        self.role = RoleFactory.create(
+            user=self.user,
+            lokale_overheid=self.reference_product.catalogus.lokale_overheid,
+            is_beheerder=True,
+        )
+        self._change_product_status(Product.status.CONCEPT)
+        self.reference_product.generiek_product.product_status = (
+            GenericProductStatus.READY_FOR_ADMIN
+        )
+        self.reference_product.generiek_product.save()
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.reference_product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        for date_field in response.form.fields["date"]:
+            date_field.value = NOW_DATE
+
+        response.form[
+            "vertalingen-0-product_titel_decentraal"
+        ] = "Title [[placeholder]]"
+
+        response = response.form.submit(name="publish", value="date")
+        self.assertEqual(response.status_code, 302)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.reference_product.versies.count(), 1)
+
+        latest_active_version = self.reference_product.active_version
+        latest_version = self.reference_product.most_recent_version
+        latest_nl = latest_version.vertalingen.get(taal="nl")
+
+        self.assertEqual(latest_active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_active_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_active_version.versie, 1)
+
+        self.assertEqual(latest_nl.product_titel_decentraal, "Title [[placeholder]]")
+        self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
+        self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
     def test_reference_product_is_editable_if_generic_status_ready_for_admin(self):
         self.role = RoleFactory.create(
             user=self.user,
@@ -934,10 +1148,10 @@ class ProductUpdateViewTests(WebTest):
             response.text,
         )
         self.assertIn(
-            f"De waterschap {municipality} levert het product {localized_generic_product_nl} niet omdat...",
+            f"De waterschap {municipality} levert het product {localized_generic_product_nl} niet.",
             response.text,
         )
         self.assertIn(
-            f"In the water authority of {municipality}, {localized_generic_product_en} falls under [product].",
-            response.text,
+            f"The water authority of {municipality} doesn't offer {localized_generic_product_en}.",
+            html.unescape(response.text),
         )

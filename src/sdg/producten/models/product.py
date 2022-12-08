@@ -316,7 +316,7 @@ class Product(ProductFieldMixin, models.Model):
 
     def get_all_versions(self, active=False, exclude_concept=False):
         """:returns: The versions for this product."""
-        queryset = self.versies.all().order_by("-versie")
+        queryset = self.versies.all().order_by("-versie").select_related("gemaakt_door")
 
         if active:
             queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
