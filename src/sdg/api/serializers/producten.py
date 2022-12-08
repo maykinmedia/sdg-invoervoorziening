@@ -607,6 +607,13 @@ class ProductSerializer(ProductBaseSerializer):
                 bevoegde_organisatie, verantwoordelijke_organisatie
             )
 
+        if not catalogus:
+            raise serializers.ValidationError(
+                {
+                    "catalogus": "Dit is geen geldige URL. U dient een URL op te geven naar de gewenste catalogus of null te gebruiken om automatisch de juiste catalogus te selecteren."
+                }
+            )
+
         if isinstance(catalogus, dict):
             validated_data["catalogus"] = self.get_default_catalogus(
                 verantwoordelijke_organisatie
