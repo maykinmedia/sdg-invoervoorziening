@@ -5,11 +5,11 @@ from sdg.celery import app
 from sdg.core.constants.logius import PublicData
 from sdg.core.types import LoadCommand
 
-if settings.SDG_ORGANIZATION_TYPE == "municipalities":
+if settings.SDG_ORGANIZATION_TYPE == "municipality":
     organization = PublicData.MUNICIPALITY
-elif settings.SDG_ORGANIZATION_TYPE == "provinces":
+elif settings.SDG_ORGANIZATION_TYPE == "province":
     organization = PublicData.PROVINCE
-elif settings.SDG_ORGANIZATION_TYPE == "waterauthorities":
+elif settings.SDG_ORGANIZATION_TYPE == "waterauthority":
     organization = PublicData.WATERAUTHORITY
 else:
     organization = None
