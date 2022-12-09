@@ -1343,10 +1343,6 @@ components:
     ProductLocatie:
       type: object
       properties:
-        openingstijden:
-          allOf:
-          - $ref: '#/components/schemas/Openingstijden'
-          readOnly: true
         url:
           type: string
           format: uri
@@ -1356,8 +1352,42 @@ components:
           type: string
           description: De naam van de locatie.
           maxLength: 100
+        straat:
+          type: string
+          readOnly: true
+          description: De straatnaam van de locatie.
+        nummer:
+          type: string
+          readOnly: true
+          description: Het huisnummer van de locatie.
+        postcode:
+          type: string
+          readOnly: true
+          description: De postcode van de locatie.
+        plaats:
+          type: string
+          readOnly: true
+          description: De plaatsnaam van de locatie.
+        land:
+          type: string
+          readOnly: true
+          description: Het land van de locatie.
+        openingstijdenOpmerking:
+          type: string
+          readOnly: true
+          description: Opmerking over de openingstijden.
+        openingstijden:
+          allOf:
+          - $ref: '#/components/schemas/Openingstijden'
+          readOnly: true
       required:
+      - land
+      - nummer
       - openingstijden
+      - openingstijdenOpmerking
+      - plaats
+      - postcode
+      - straat
       - url
     ProductLokaleOverheid:
       type: object
