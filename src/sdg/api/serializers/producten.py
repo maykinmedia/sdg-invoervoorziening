@@ -165,6 +165,7 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
     class Meta(LocatieBaseSerializer.Meta):
         read_only_fields = (
             "url",
+            "uuid",
             "straat",
             "nummer",
             "postcode",
@@ -172,10 +173,17 @@ class ProductLocatieSerializer(LocatieBaseSerializer):
             "land",
             "openingstijden_opmerking",
         )
-        fields = LocatieBaseSerializer.Meta.fields + (
-            "openingstijden",
+        fields = (
             "url",
+            "uuid",
             "naam",
+            "straat",
+            "nummer",
+            "postcode",
+            "plaats",
+            "land",
+            "openingstijden_opmerking",
+            "openingstijden",
         )
 
         extra_kwargs = {
