@@ -1,8 +1,13 @@
 from datetime import datetime
+from functools import lru_cache
 from typing import List
 
+from django.utils import translation
 from django.utils.timezone import now
+from django.utils.translation import gettext as _
 
+from sdg.conf.utils import org_type_cfg
+from sdg.core.constants import TaalChoices
 from sdg.producten.types import _code_to_flag
 
 
@@ -47,3 +52,36 @@ def parse_changed_data(changed_data, *, form, language=None) -> List[dict]:
         }
         for field in changed_data
     ]
+
+
+@lru_cache
+def get_placeholder_maps(product):
+    """
+    Get placeholder text mappings for a municipality's product.
+    """
+    available_explanation_map = {}
+    falls_under_explanation_map = {}
+
+    generic_product = product.generiek_product
+    municipality = product.catalogus.lokale_overheid
+
+    for language in TaalChoices.get_available_languages():
+        localized_generic_product = generic_product.vertalingen.get(taal=language)
+
+        with translation.override(language):
+            available_explanation_map[language] = _(
+                "In de {org_type_name} {lokale_overheid} is {product} onderdeel van [product]."
+            ).format(
+                org_type_name=org_type_cfg().name,
+                lokale_overheid=municipality,
+                product=localized_generic_product,
+            )
+            falls_under_explanation_map[language] = _(
+                "De {org_type_name} {lokale_overheid} levert het product {product} niet."
+            ).format(
+                org_type_name=org_type_cfg().name,
+                lokale_overheid=municipality,
+                product=localized_generic_product,
+            )
+
+    return available_explanation_map, falls_under_explanation_map

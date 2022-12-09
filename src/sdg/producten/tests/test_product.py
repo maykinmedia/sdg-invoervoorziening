@@ -11,8 +11,12 @@ from freezegun import freeze_time
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
 from sdg.core.constants import GenericProductStatus, TaalChoices
+from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.core.tests.utils import hard_refresh_from_db
-from sdg.organisaties.tests.factories.overheid import LocatieFactory
+from sdg.organisaties.tests.factories.overheid import (
+    BevoegdeOrganisatieFactory,
+    LocatieFactory,
+)
 from sdg.producten.models import Product
 from sdg.producten.tests.constants import (
     DUMMY_TITLE,
@@ -29,7 +33,7 @@ from sdg.producten.tests.factories.product import (
     ReferentieProductVersieFactory,
     SpecifiekProductVersieFactory,
 )
-from sdg.producten.utils import build_url_kwargs
+from sdg.producten.utils import build_url_kwargs, get_placeholder_maps
 
 
 class ProductUpdateViewTests(WebTest):
@@ -41,6 +45,8 @@ class ProductUpdateViewTests(WebTest):
 
         self.product_version = SpecifiekProductVersieFactory.create(versie=1)
         self.product = self.product_version.product
+        self.catalog = self.product.catalogus
+        self.municipality = self.product.catalogus.lokale_overheid
 
         self.reference_product = self.product_version.product.referentie_product
         self.reference_product_version = ProductVersieFactory.create(
@@ -173,6 +179,61 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.publicatie_datum, NOW_DATE)
         self.assertEqual(latest_version.current_status, Product.status.PUBLISHED)
         self.assertEqual(latest_version.versie, 1)
+
+    @freeze_time(NOW_DATE)
+    def test_concept_save_now_with_default_explanation_placeholder(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        org = OverheidsorganisatieFactory.create()
+        authorized_org = BevoegdeOrganisatieFactory.create(
+            organisatie=org, lokale_overheid=self.municipality
+        )
+        product_version = SpecifiekProductVersieFactory.create(
+            versie=1,
+            product__catalogus=self.catalog,
+            product__bevoegde_organisatie=authorized_org,
+        )
+        product = product_version.product
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        available_explanation_map, falls_under_explanation_map = get_placeholder_maps(
+            self.product,
+        )
+
+        response.form["product_valt_onder"] = str(product.pk)
+        response.form["product_aanwezig"] = "true"
+
+        for idx, language in enumerate(TaalChoices.get_available_languages()):
+            response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
+            response.form[
+                f"vertalingen-{idx}-product_valt_onder_toelichting"
+            ] = falls_under_explanation_map.get(language)
+
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 1)
+
+        most_recent_version = self.product.most_recent_version
+
+        nl, en = most_recent_version.vertalingen.all()
+
+        self.assertEqual(most_recent_version.publicatie_datum, NOW_DATE)
+
+        self.assertEqual(en.product_aanwezig_toelichting, "test")
+        self.assertEqual(en.product_valt_onder_toelichting, "")
+
+        self.assertEqual(nl.product_aanwezig_toelichting, "test")
+        self.assertEqual(nl.product_valt_onder_toelichting, "")
 
     @freeze_time(NOW_DATE)
     def test_error_notification_is_displayed(self):

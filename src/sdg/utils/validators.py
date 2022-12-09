@@ -59,7 +59,7 @@ def validate_placeholders(value, form=None, field_name=None):
 
     i.e. [placeholder] or XXX
     """
-    placeholder_re = re.compile(r"\[.*?]|X{3}")
+    placeholder_re = re.compile(r"\[.*?]|X{2,}")
 
     if (form and not field_name) or (not form and field_name):
         raise ValueError("Both form and field_name or neither must be provided")

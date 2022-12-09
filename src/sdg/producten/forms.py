@@ -14,7 +14,7 @@ from ..organisaties.models import BevoegdeOrganisatie
 from ..utils.validators import validate_placeholders
 from .constants import PublishChoices
 from .models import LocalizedProduct, Product, ProductVersie
-from .utils import parse_changed_data
+from .utils import get_placeholder_maps, parse_changed_data
 from .widgets import CheckboxSelectMultiple
 
 
@@ -42,6 +42,21 @@ class LocalizedProductFormSet(
         self._product_form = kwargs.pop("product_form", None)
         super().__init__(*args, **kwargs)
 
+        if self._product_form:
+            (
+                available_explanation_map,
+                falls_under_explanation_map,
+            ) = get_placeholder_maps(self._product_form.instance)
+
+            self.title = f"Standaardtekst v{self.instance.versie} ({self.instance.publicatie_datum or 'concept'})"
+            for form in self.forms:
+                form.default_toelichting = available_explanation_map.get(
+                    form.instance.taal
+                )
+                form.default_product_aanwezig_toelichting = (
+                    falls_under_explanation_map.get(form.instance.taal)
+                )
+
     def clean(self):
         """
         - Ensure all localized `product_valt_onder_toelichting` fields are filled
@@ -49,39 +64,52 @@ class LocalizedProductFormSet(
         """
         cleaned_data = super().clean()
 
-        if self._product_form.cleaned_data.get("product_valt_onder"):
-            for form in self.forms:
-                if not form.cleaned_data.get("product_valt_onder_toelichting"):
-                    form.add_error(
-                        "product_valt_onder_toelichting",
-                        "Vul de toelichting in als het product valt onder.",
-                    )
+        is_reference = self.instance.product.is_referentie_product
 
-        if self._product_form.cleaned_data is not None:
-            for form in self.forms:
-                if self._product_form.cleaned_data.get(
-                    "product_aanwezig"
-                ) is False and not form.cleaned_data.get(
-                    "product_aanwezig_toelichting"
-                ):
-                    form.add_error(
-                        "product_aanwezig_toelichting", "Dit veld is verplicht."
-                    )
+        falls_under = self._product_form.cleaned_data.get("product_valt_onder")
+        available = self._product_form.cleaned_data.get("product_aanwezig")
 
-        if not self.instance.product.is_referentie_product:
-            self._validate_specific(self.forms)
+        available_explanation_map, falls_under_explanation_map = get_placeholder_maps(
+            self.instance.product
+        )
+
+        for form in self.forms:
+            cleaned_data = form.cleaned_data
+            language = cleaned_data["taal"]
+
+            available_explanation = cleaned_data.get("product_aanwezig_toelichting")
+            falls_under_explanation = cleaned_data.get("product_valt_onder_toelichting")
+
+            if falls_under and not falls_under_explanation:
+                form.add_error(
+                    "product_valt_onder_toelichting",
+                    "Vul de toelichting in als het product valt onder.",
+                )
+
+            if available is False and not available_explanation:
+                form.add_error("product_aanwezig_toelichting", "Dit veld is verplicht.")
+
+            if falls_under_explanation == falls_under_explanation_map.get(language):
+                form.instance.product_valt_onder_toelichting = ""
+
+            if available_explanation == available_explanation_map.get(language):
+                form.instance.product_aanwezig_toelichting = ""
+
+            if not is_reference:
+                self._validate_specific(form)
 
         return cleaned_data
 
-    def _validate_specific(self, forms_):
+    def _validate_specific(self, form):
         """
         Validate only for localized specific product.
         """
-        for form in forms_:
-            cleaned_data = list(form.cleaned_data.items())
-            for name, value in cleaned_data:
-                if self.data.get("publish") == PublishChoices.date:  # only published
-                    validate_placeholders(value, form=form, field_name=name)
+        if self.data.get("publish") != PublishChoices.date:  # only published
+            return
+
+        cleaned_data = list(form.cleaned_data.items())
+        for name, value in cleaned_data:
+            validate_placeholders(value, form=form, field_name=name)
 
     @property
     def changed_data_localized(self):
