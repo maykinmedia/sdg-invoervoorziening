@@ -1,3 +1,6 @@
+from django.utils.translation import gettext as _
+
+from rest_framework import exceptions
 from rest_framework.authentication import TokenAuthentication as _TokenAuthentication
 
 
@@ -10,10 +13,18 @@ class TokenAuthentication(_TokenAuthentication):
 
         from sdg.api.models import Token
 
-        anon, model = AnonymousUser(), Token
+        anon = AnonymousUser()
 
-        try:
-            token = model.objects.get(key=key)
-            return anon, token
-        except model.DoesNotExist:
-            return anon, None  # optional
+        if key:
+            try:
+                token = Token.objects.get(key=key)
+                # Authenticated token
+                return anon, token
+            except Token.DoesNotExist:
+                # Invalid token
+                raise exceptions.AuthenticationFailed(
+                    _("Ongeldig token. Controleer uw token en probeer het opnieuw.")
+                )
+
+        # Anonymous usage
+        return anon, None
