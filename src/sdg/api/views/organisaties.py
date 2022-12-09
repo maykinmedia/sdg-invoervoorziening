@@ -219,14 +219,13 @@ class LocatieViewSet(viewsets.ModelViewSet):
             if not organisatie:
                 return None
 
-            for field in ["owms_pref_label", "owms_identifier"]:
-                if field in organisatie:
-                    try:
-                        return Overheidsorganisatie.objects.get(
-                            **{field: organisatie.get(field)}
-                        )
-                    except Overheidsorganisatie.DoesNotExist:
-                        return None
+            if "owms_identifier" in organisatie:
+                try:
+                    return Overheidsorganisatie.objects.get(
+                        owms_identifier=organisatie.get("owms_identifier")
+                    )
+                except Overheidsorganisatie.DoesNotExist:
+                    return None
 
         if obj is None:
             return None

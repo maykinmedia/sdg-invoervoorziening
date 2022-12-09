@@ -121,6 +121,7 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
         model = Locatie
         fields = (
             "url",
+            "uuid",
             "naam",
             "straat",
             "nummer",
@@ -135,6 +136,7 @@ class LocatieBaseSerializer(serializers.HyperlinkedModelSerializer):
                 "lookup_field": "uuid",
                 "help_text": "De unieke URL van dit object binnen deze API.",
             },
+            "uuid": {"read_only": True},
             "naam": {"required": False, "help_text": "De naam van de locatie."},
             "straat": {"help_text": "De straatnaam van de locatie."},
             "nummer": {

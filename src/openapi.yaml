@@ -772,6 +772,12 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van dit object binnen deze API.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -817,6 +823,7 @@ components:
       - postcode
       - straat
       - url
+      - uuid
     LocatieBase:
       type: object
       properties:
@@ -825,6 +832,12 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van dit object binnen deze API.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -862,6 +875,7 @@ components:
       - postcode
       - straat
       - url
+      - uuid
     LokaleOverheid:
       type: object
       properties:
@@ -1152,6 +1166,12 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van dit object binnen deze API.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -1348,6 +1368,12 @@ components:
           format: uri
           readOnly: true
           description: De unieke URL van dit object binnen deze API.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
         naam:
           type: string
           description: De naam van de locatie.
@@ -1389,6 +1415,7 @@ components:
       - postcode
       - straat
       - url
+      - uuid
     ProductLokaleOverheid:
       type: object
       description: De organisatie die dit product levert en de teksten hiervan beheert.
