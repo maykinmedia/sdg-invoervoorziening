@@ -41,6 +41,21 @@ class LocalizedProductFormSet(
         self._product_form = kwargs.pop("product_form", None)
         super().__init__(*args, **kwargs)
 
+        if self._product_form:
+            (
+                available_explanation_map,
+                falls_under_explanation_map,
+            ) = get_placeholder_maps(self._product_form.instance)
+
+            self.title = f"Standaardtekst v{self.instance.versie} ({self.instance.publicatie_datum or 'concept'})"
+            for form in self.forms:
+                form.default_toelichting = available_explanation_map.get(
+                    form.instance.taal
+                )
+                form.default_product_aanwezig_toelichting = (
+                    falls_under_explanation_map.get(form.instance.taal)
+                )
+
     def clean(self):
         """
         - Ensure all localized `product_valt_onder_toelichting` fields are filled

@@ -215,9 +215,10 @@ class ProductUpdateView(
         )
 
     def _save_version_form(
-        self, product_form, version_form, form
+        self, product_form, version_form, localized_formset
     ) -> Tuple[ProductVersie, bool]:
-        """Save the version form.
+        """
+        Save the version form.
         Return a tuple of (version object, created), where created is a boolean
         specifying whether an object was created.
         """
@@ -230,35 +231,13 @@ class ProductUpdateView(
         new_version.bewerkte_velden = list(
             chain.from_iterable(
                 [
-                    form.changed_data_localized,
+                    localized_formset.changed_data_localized,
                     parse_changed_data(product_form.changed_data, form=product_form),
                 ]
             )
         )
         new_version.save()
         return new_version, created
-
-    def _generate_version_formset(self, version: ProductVersie):
-        """
-        TODO: Clean up further .i.e. move translation to template
-        """
-        available_explanation_map, falls_under_explanation_map = get_placeholder_maps(
-            self.product
-        )
-
-        formset = inlineformset_factory(
-            ProductVersie, LocalizedProduct, form=LocalizedProductForm, extra=0
-        )(instance=version)
-
-        formset.title = f"Standaardtekst v{version.versie} ({version.publicatie_datum or 'concept'})"
-
-        for form in formset:
-            form.default_toelichting = available_explanation_map.get(form.instance.taal)
-            form.default_product_aanwezig_toelichting = falls_under_explanation_map.get(
-                form.instance.taal
-            )
-
-        return formset
 
     def _get_generieke_taal_producten(self):
         required_fields = [
@@ -304,12 +283,6 @@ class ProductUpdateView(
         }
         context["lokaleoverheid"] = self.product.catalogus.lokale_overheid
 
-        context["reference_formset"] = self._generate_version_formset(
-            version=self.product.reference_product.most_recent_version
-        )
-        context["previous_reference_formset"] = self._generate_version_formset(
-            self.product.reference_product.get_latest_versions(2)[-1]  # TODO: optimize
-        )
         context["formset"] = context["form"]
         context["informatie_forms"] = zip_longest(
             generic_information, context["form"].forms
@@ -321,6 +294,16 @@ class ProductUpdateView(
         )
         context["product_form"] = kwargs.get(
             "product_form", ProductForm(instance=self.product)
+        )
+        context["reference_formset"] = self.form_class(
+            product_form=context["product_form"],
+            instance=self.product.reference_product.most_recent_version,
+        )
+        context["previous_reference_formset"] = self.form_class(
+            product_form=context["product_form"],
+            instance=self.product.reference_product.get_latest_versions(2)[
+                -1
+            ],  # TODO: optimize
         )
 
         context["history"] = (
@@ -377,44 +360,46 @@ class ProductUpdateView(
         version_form = VersionForm(
             request.POST, instance=self.object, product_instance=self.product
         )
-        form = self.form_class(
+        localized_formset = self.form_class(
             request.POST,
             instance=self.object,
             product_form=product_form,
         )
 
-        forms = (product_form, version_form, form)
+        forms = (product_form, version_form, localized_formset)
         forms_valid = [f.is_valid() for f in forms]
         if not all(forms_valid):
             return self.form_invalid(*forms)
 
         return self.form_valid(*forms)
 
-    def form_valid(self, product_form, version_form, form):
-        with transaction.atomic():
-            product_form.save()
-            new_version, created = self._save_version_form(
-                product_form, version_form, form
-            )
+    @transaction.atomic
+    def form_valid(self, product_form, version_form, localized_formset):
+        product_form.save()
+        new_version, created = self._save_version_form(
+            product_form, version_form, localized_formset
+        )
 
-            if created:
-                Event.create_and_log(self.request, self.object, Event.CREATE)
-                duplicate_localized_products(form, new_version)
-            else:
-                Event.create_and_log(self.request, self.object, Event.UPDATE)
-                form.save()
+        if created:
+            Event.create_and_log(self.request, self.object, Event.CREATE)
+            duplicate_localized_products(localized_formset, new_version)
+        else:
+            Event.create_and_log(self.request, self.object, Event.UPDATE)
+            localized_formset.save()
 
-            messages.add_message(
-                self.request,
-                messages.SUCCESS,
-                _("Product {product} is opgeslagen.").format(product=self.product),
-            )
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            _("Product {product} is opgeslagen.").format(product=self.product),
+        )
 
-            return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, product_form, version_form, form):
+    def form_invalid(self, product_form, version_form, localized_formset):
         context = self.get_context_data(
-            form=form, version_form=version_form, product_form=product_form
+            localized_formset=localized_formset,
+            version_form=version_form,
+            product_form=product_form,
         )
 
         messages.add_message(

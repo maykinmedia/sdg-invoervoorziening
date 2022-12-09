@@ -207,7 +207,7 @@ class ProductUpdateViewTests(WebTest):
             self.product,
         )
 
-        response.form["product_valt_onder"] = product.pk
+        response.form["product_valt_onder"] = str(product.pk)
         response.form["product_aanwezig"] = "true"
 
         for idx, language in enumerate(TaalChoices.get_available_languages()):
@@ -225,11 +225,11 @@ class ProductUpdateViewTests(WebTest):
 
         self.assertEqual(self.product.versies.count(), 1)
 
-        active_version = self.product.active_version
+        most_recent_version = self.product.most_recent_version
 
-        nl, en = active_version.vertalingen.all()
+        nl, en = most_recent_version.vertalingen.all()
 
-        self.assertEqual(active_version.publicatie_datum, NOW_DATE)
+        self.assertEqual(most_recent_version.publicatie_datum, NOW_DATE)
 
         self.assertEqual(en.product_aanwezig_toelichting, "")
         self.assertEqual(en.product_valt_onder_toelichting, "")
