@@ -71,14 +71,11 @@ class LocalizedProductFormSet(
         )
 
         for form in self.forms:
-            language = form.cleaned_data["taal"]
+            cleaned_data = form.cleaned_data
+            language = cleaned_data["taal"]
 
-            available_explanation = form.cleaned_data.get(
-                "product_aanwezig_toelichting"
-            )
-            falls_under_explanation = form.cleaned_data.get(
-                "product_valt_onder_toelichting"
-            )
+            available_explanation = cleaned_data.get("product_aanwezig_toelichting")
+            falls_under_explanation = cleaned_data.get("product_valt_onder_toelichting")
 
             if falls_under and not falls_under_explanation:
                 form.add_error(
@@ -86,14 +83,14 @@ class LocalizedProductFormSet(
                     "Vul de toelichting in als het product valt onder.",
                 )
 
-            if falls_under_explanation == falls_under_explanation_map.get(language):
-                form.cleaned_data["product_valt_onder_toelichting"] = "1"
-
-            if available_explanation == available_explanation_map.get(language):
-                form.cleaned_data["product_aanwezig_toelichting"] = "1"
-
             if available is False and not available_explanation:
                 form.add_error("product_aanwezig_toelichting", "Dit veld is verplicht.")
+
+            if falls_under_explanation == falls_under_explanation_map.get(language):
+                form.instance.product_valt_onder_toelichting = ""
+
+            if available_explanation == available_explanation_map.get(language):
+                form.instance.product_aanwezig_toelichting = ""
 
         if not self.instance.product.is_referentie_product:
             self._validate_specific(self.forms)
