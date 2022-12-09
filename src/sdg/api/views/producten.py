@@ -1,5 +1,3 @@
-from django.core.exceptions import MultipleObjectsReturned
-
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import mixins
@@ -186,16 +184,13 @@ class ProductViewSet(
             if not organisatie:
                 return None
 
-            for field in ["owms_identifier", "owms_pref_label"]:
-                if field in organisatie:
-                    try:
-                        return Overheidsorganisatie.objects.get(
-                            **{field: organisatie.get(field)}
-                        )
-                    except Overheidsorganisatie.DoesNotExist:
-                        return None
-                    except MultipleObjectsReturned:
-                        return None
+            if "owms_identifier" in organisatie:
+                try:
+                    return Overheidsorganisatie.objects.get(
+                        owms_identifier=organisatie.get("owms_identifier")
+                    )
+                except Overheidsorganisatie.DoesNotExist:
+                    return None
 
         return None
 
