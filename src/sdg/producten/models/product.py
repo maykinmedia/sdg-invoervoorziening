@@ -206,6 +206,11 @@ class Product(ProductFieldMixin, models.Model):
         help_text=_("Heeft dit product kosten?"),
         default=False,
     )
+    api_verborgen = models.BooleanField(
+        _("verborgen"),
+        help_text=_("Verbergen voor Nationale Portalen."),
+        default=False,
+    )
 
     objects = ProductQuerySet.as_manager()
 

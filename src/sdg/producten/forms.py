@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db.models import Case, CharField, Count, F, Q, Value, When
 from django.db.models.functions import Concat
 from django.forms import inlineformset_factory
+from django.utils.translation import gettext_lazy as _
 
 from ..core.forms import BooleanChoiceField
 from ..core.models.mixins import FieldConfigurationMixin
@@ -119,6 +120,9 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         widget=CheckboxSelectMultiple(),
     )
     heeft_kosten = BooleanChoiceField()
+    api_verborgen = BooleanChoiceField(
+        label=_("verborgen"),
+    )
 
     class Meta:
         model = Product
@@ -128,6 +132,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "bevoegde_organisatie",
             "locaties",
             "heeft_kosten",
+            "api_verborgen",
         )
 
     def _help_text(self, field):

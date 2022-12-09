@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-30 12:21+0100\n"
+"POT-Creation-Date: 2022-12-09 14:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -421,19 +421,19 @@ msgstr ""
 msgid "Algemene gegevens"
 msgstr ""
 
-#: sdg/core/admin/config.py:23 sdg/templates/producten/update.html:289
+#: sdg/core/admin/config.py:23 sdg/templates/producten/update.html:309
 msgid "Generieke gegevens"
 msgstr ""
 
-#: sdg/core/admin/config.py:37 sdg/templates/producten/update.html:309
+#: sdg/core/admin/config.py:37 sdg/templates/producten/update.html:329
 msgid "Specifieke gegevens"
 msgstr ""
 
-#: sdg/core/admin/config.py:94
+#: sdg/core/admin/config.py:95
 msgid "Documentatie configuratie"
 msgstr ""
 
-#: sdg/core/admin/config.py:103
+#: sdg/core/admin/config.py:104
 msgid "Analytics configuratie"
 msgstr ""
 
@@ -533,7 +533,7 @@ msgstr ""
 msgid "Een afkorting die wordt gebruikt om het domein aan te duiden."
 msgstr ""
 
-#: sdg/core/models/catalogus.py:55 sdg/producten/models/product.py:384
+#: sdg/core/models/catalogus.py:55 sdg/producten/models/product.py:389
 msgid "versie"
 msgstr ""
 
@@ -609,8 +609,8 @@ msgid "Heeft kosten"
 msgstr ""
 
 #: sdg/core/models/config.py:41 sdg/organisaties/views/catalogi.py:53
-#: sdg/templates/producten/update.html:219
-#: sdg/templates/producten/update.html:369
+#: sdg/templates/producten/update.html:239
+#: sdg/templates/producten/update.html:389
 msgid "Publicatie datum"
 msgstr ""
 
@@ -619,38 +619,42 @@ msgstr ""
 msgid "Interne opmerkingen"
 msgstr ""
 
-#: sdg/core/models/config.py:52 sdg/core/models/config.py:53
+#: sdg/core/models/config.py:47
+msgid "Verborgen"
+msgstr ""
+
+#: sdg/core/models/config.py:55 sdg/core/models/config.py:56
 msgid "Product field configuratie"
 msgstr ""
 
-#: sdg/core/models/config.py:66
+#: sdg/core/models/config.py:69
 msgid "Documentatietitel"
 msgstr ""
 
-#: sdg/core/models/config.py:67
+#: sdg/core/models/config.py:70
 msgid "De titel voor de documentatie link."
 msgstr ""
 
-#: sdg/core/models/config.py:72
+#: sdg/core/models/config.py:75
 msgid "Documentatielink"
 msgstr ""
 
-#: sdg/core/models/config.py:73
+#: sdg/core/models/config.py:76
 msgid "Link naar de documentatie van de API."
 msgstr ""
 
-#: sdg/core/models/config.py:78
+#: sdg/core/models/config.py:81
 msgid "GoatCounter domain"
 msgstr ""
 
-#: sdg/core/models/config.py:80
+#: sdg/core/models/config.py:83
 msgid ""
 "Het domein waar goatcounter wordt gehost, bijvoorbeeld: example.com. Zorg "
 "ervoor dat het is toegestaan in het Content Security Policy als u het "
 "gebruikt."
 msgstr ""
 
-#: sdg/core/models/config.py:93 sdg/core/models/config.py:94
+#: sdg/core/models/config.py:96 sdg/core/models/config.py:97
 msgid "Siteconfiguratie"
 msgstr ""
 
@@ -1175,7 +1179,7 @@ msgid ""
 "organisaties beheren."
 msgstr ""
 
-#: sdg/organisaties/views/bevoegde_organisaties.py:39
+#: sdg/organisaties/views/bevoegde_organisaties.py:38
 #, python-brace-format
 msgid ""
 "De bevoegde organisaties van {org_type_name} {organisatie} zijn succesvol "
@@ -1192,7 +1196,7 @@ msgid "Zoek op productnaam"
 msgstr ""
 
 #: sdg/organisaties/views/catalogi.py:30
-#: sdg/templates/producten/update.html:256
+#: sdg/templates/producten/update.html:276
 msgid "Informatiegebied"
 msgstr ""
 
@@ -1269,6 +1273,10 @@ msgstr ""
 
 #: sdg/producten/constants.py:8
 msgid "Opslaan als concept"
+msgstr ""
+
+#: sdg/producten/forms.py:124
+msgid "verborgen"
 msgstr ""
 
 #: sdg/producten/models/localized.py:23 sdg/producten/models/product.py:110
@@ -1486,7 +1494,7 @@ msgstr ""
 msgid "vertaalde producten"
 msgstr ""
 
-#: sdg/producten/models/localized.py:333 sdg/producten/models/product.py:516
+#: sdg/producten/models/localized.py:333 sdg/producten/models/product.py:521
 msgid "productuitvoering"
 msgstr ""
 
@@ -1628,84 +1636,92 @@ msgstr ""
 msgid "Heeft dit product kosten?"
 msgstr ""
 
-#: sdg/producten/models/product.py:331 sdg/producten/models/product.py:370
-#: sdg/producten/models/product.py:511
+#: sdg/producten/models/product.py:210
+msgid "verbogen"
+msgstr ""
+
+#: sdg/producten/models/product.py:211
+msgid "Verbergen voor Nationale Portalen."
+msgstr ""
+
+#: sdg/producten/models/product.py:336 sdg/producten/models/product.py:375
+#: sdg/producten/models/product.py:516
 msgid "product"
 msgstr ""
 
-#: sdg/producten/models/product.py:332
+#: sdg/producten/models/product.py:337
 msgid "producten"
 msgstr ""
 
-#: sdg/producten/models/product.py:371
+#: sdg/producten/models/product.py:376
 msgid "Het product voor het product versie."
 msgstr ""
 
-#: sdg/producten/models/product.py:378
+#: sdg/producten/models/product.py:383
 msgid "gemaakt door"
 msgstr ""
 
-#: sdg/producten/models/product.py:379
+#: sdg/producten/models/product.py:384
 msgid "De maker van deze productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:385
+#: sdg/producten/models/product.py:390
 msgid "Het versienummer van het product."
 msgstr ""
 
-#: sdg/producten/models/product.py:391
+#: sdg/producten/models/product.py:396
 msgid "publicatie datum"
 msgstr ""
 
-#: sdg/producten/models/product.py:392
+#: sdg/producten/models/product.py:397
 msgid "De datum van publicatie van de productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:397
+#: sdg/producten/models/product.py:402
 msgid "gemaakt op"
 msgstr ""
 
-#: sdg/producten/models/product.py:398
+#: sdg/producten/models/product.py:403
 msgid "De oorspronkelijke aanmaakdatum voor deze productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:402
+#: sdg/producten/models/product.py:407
 msgid "gewijzigd op"
 msgstr ""
 
-#: sdg/producten/models/product.py:403
+#: sdg/producten/models/product.py:408
 msgid "De wijzigingsdatum voor deze productversie."
 msgstr ""
 
-#: sdg/producten/models/product.py:408
+#: sdg/producten/models/product.py:413
 msgid "bewerkte_velden"
 msgstr ""
 
-#: sdg/producten/models/product.py:413
+#: sdg/producten/models/product.py:418
 msgid "interne opmerkingen"
 msgstr ""
 
-#: sdg/producten/models/product.py:415
+#: sdg/producten/models/product.py:420
 msgid "Interne opmerkingen die niet zichtbaar zijn buiten deze omgeving."
 msgstr ""
 
-#: sdg/producten/models/product.py:481
+#: sdg/producten/models/product.py:486
 msgid "product versie"
 msgstr ""
 
-#: sdg/producten/models/product.py:482
+#: sdg/producten/models/product.py:487
 msgid "product versies"
 msgstr ""
 
-#: sdg/producten/models/product.py:495
+#: sdg/producten/models/product.py:500
 msgid "De publicatiedatum kan niet in het verleden liggen."
 msgstr ""
 
-#: sdg/producten/models/product.py:512
+#: sdg/producten/models/product.py:517
 msgid "Het product voor het productuitvoering."
 msgstr ""
 
-#: sdg/producten/models/product.py:517
+#: sdg/producten/models/product.py:522
 msgid "productuitvoeringen"
 msgstr ""
 
@@ -1852,8 +1868,8 @@ msgstr ""
 #: sdg/templates/account/email_confirm.html:27
 #, python-format
 msgid ""
-"Deze e-mailbevestigingslink is verlopen of ongeldig. Gelieve <a "
-"href=\"%(email_url)s\">een nieuwe bevestigingsmail aan te vragen</a>."
+"Deze e-mailbevestigingslink is verlopen of ongeldig. Gelieve <a href="
+"\"%(email_url)s\">een nieuwe bevestigingsmail aan te vragen</a>."
 msgstr ""
 
 #: sdg/templates/account/login.html:7 sdg/templates/account/login.html:10
@@ -2241,7 +2257,7 @@ msgstr ""
 #: sdg/templates/organisaties/roles/delete.html:22
 #: sdg/templates/organisaties/roles/update.html:29
 #: sdg/templates/organisaties/update.html:27
-#: sdg/templates/producten/update.html:381
+#: sdg/templates/producten/update.html:401
 msgid "Annuleren"
 msgstr ""
 
@@ -2492,15 +2508,15 @@ msgstr ""
 msgid "Algemene Gegevens"
 msgstr ""
 
-#: sdg/templates/producten/update.html:220
+#: sdg/templates/producten/update.html:240
 msgid "Publicatiedatum van de productversie"
 msgstr ""
 
-#: sdg/templates/producten/update.html:257
+#: sdg/templates/producten/update.html:277
 msgid "Informatiegebied in verband met dit product."
 msgstr ""
 
-#: sdg/templates/producten/update.html:336
+#: sdg/templates/producten/update.html:356
 msgid "Geschiedenis"
 msgstr ""
 

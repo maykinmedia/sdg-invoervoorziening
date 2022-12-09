@@ -337,6 +337,19 @@ class ProductenTests(APITestCase):
         for product in data:
             self.assertNotEqual(product["upnLabel"], str(self.generiek_product))
 
+    def test_list_producten_with_api_visibility_hidden(self):
+        list_url = reverse("api:product-list")
+
+        self.product.api_verborgen = True
+        self.product.save()
+        self.product_versie.refresh_from_db()
+
+        response = self.client.get(list_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        data = response.json()["results"]
+        self.assertEqual(5, len(data))
+
     def test_retrieve_product_by_uuid(self):
         detail_url = reverse("api:product-detail", args=[self.product.uuid])
 
@@ -346,6 +359,17 @@ class ProductenTests(APITestCase):
         data = response.json()
 
         self.assertEqual(str(self.product.uuid), data["uuid"])
+
+    def test_retrieve_product_by_uuid_with_visibility_hidden(self):
+        detail_url = reverse("api:product-detail", args=[self.product.uuid])
+
+        self.product.api_verborgen = True
+        self.product.save()
+        self.product_versie.refresh_from_db()
+
+        response = self.client.get(detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_product(self):
         list_url = reverse("api:product-list")
