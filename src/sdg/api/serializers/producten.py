@@ -481,20 +481,6 @@ class ProductSerializer(ProductBaseSerializer):
             )
 
     def get_bevoegde_organisatie(self, organisatie, verantwoordelijke_organisatie):
-        if "naam" in organisatie and organisatie["naam"]:
-            try:
-                return BevoegdeOrganisatie.objects.get(
-                    naam=organisatie["naam"],
-                    lokale_overheid=verantwoordelijke_organisatie,
-                )
-            except BevoegdeOrganisatie.DoesNotExist:
-
-                raise serializers.ValidationError(
-                    {
-                        "verantwoordelijkeOrganisatie.naam": "De waarde van het veld 'naam' is ongeldig. Het object met deze waarde bestaat niet."
-                    }
-                )
-
         if (
             "owms_identifier" in organisatie["organisatie"]
             and organisatie["organisatie"]["owms_identifier"]
@@ -510,6 +496,20 @@ class ProductSerializer(ProductBaseSerializer):
                 raise serializers.ValidationError(
                     {
                         "verantwoordelijkeOrganisatie.owmsIdentifier": "De waarde van het veld 'owmsIdentifier' is ongeldig. Het object met deze waarde bestaat niet."
+                    }
+                )
+
+        if "naam" in organisatie and organisatie["naam"]:
+            try:
+                return BevoegdeOrganisatie.objects.get(
+                    naam=organisatie["naam"],
+                    lokale_overheid=verantwoordelijke_organisatie,
+                )
+            except BevoegdeOrganisatie.DoesNotExist:
+
+                raise serializers.ValidationError(
+                    {
+                        "verantwoordelijkeOrganisatie.naam": "De waarde van het veld 'naam' is ongeldig. Het object met deze waarde bestaat niet."
                     }
                 )
 
@@ -559,12 +559,12 @@ class ProductSerializer(ProductBaseSerializer):
                         f"De 'locatie' die u meegegeven heeft bestaat niet in de catalogus: {catalogus.lokale_overheid.organisatie}."
                     )
             if "naam" in locatie:
-                overheid_locatie = Locatie.objects.get(
-                    naam=locatie["naam"],
-                    lokale_overheid__organisatie=catalogus.lokale_overheid.organisatie,
-                )
-
-                if not overheid_locatie:
+                try:
+                    overheid_locatie = Locatie.objects.get(
+                        naam=locatie["naam"],
+                        lokale_overheid__organisatie=catalogus.lokale_overheid.organisatie,
+                    )
+                except Locatie.DoesNotExist:
                     raise serializers.ValidationError(
                         {
                             "locaties.naam": f"De 'locatie' die u meegegeven heeft bestaat niet in de catalogus: {catalogus.lokale_overheid.organisatie}."
