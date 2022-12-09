@@ -77,7 +77,7 @@ def get_placeholder_maps(product):
                 product=localized_generic_product,
             )
             falls_under_explanation_map[language] = _(
-                "De {org_type_name} {lokale_overheid} levert het product {product} niet omdat..."
+                "De {org_type_name} {lokale_overheid} levert het product {product} niet."
             ).format(
                 org_type_name=org_type_cfg().name,
                 lokale_overheid=municipality,

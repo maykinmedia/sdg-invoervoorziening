@@ -63,6 +63,8 @@ class LocalizedProductFormSet(
         """
         cleaned_data = super().clean()
 
+        is_reference = self.instance.product.is_referentie_product
+
         falls_under = self._product_form.cleaned_data.get("product_valt_onder")
         available = self._product_form.cleaned_data.get("product_aanwezig")
 
@@ -92,20 +94,21 @@ class LocalizedProductFormSet(
             if available_explanation == available_explanation_map.get(language):
                 form.instance.product_aanwezig_toelichting = ""
 
-        if not self.instance.product.is_referentie_product:
-            self._validate_specific(self.forms)
+            if not is_reference:
+                self._validate_specific(form)
 
         return cleaned_data
 
-    def _validate_specific(self, forms_):
+    def _validate_specific(self, form):
         """
         Validate only for localized specific product.
         """
-        for form in forms_:
-            cleaned_data = list(form.cleaned_data.items())
-            for name, value in cleaned_data:
-                if self.data.get("publish") == PublishChoices.date:  # only published
-                    validate_placeholders(value, form=form, field_name=name)
+        if self.data.get("publish") != PublishChoices.date:  # only published
+            return
+
+        cleaned_data = list(form.cleaned_data.items())
+        for name, value in cleaned_data:
+            validate_placeholders(value, form=form, field_name=name)
 
     @property
     def changed_data_localized(self):

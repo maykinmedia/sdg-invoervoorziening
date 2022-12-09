@@ -397,7 +397,7 @@ class ProductUpdateView(
 
     def form_invalid(self, product_form, version_form, localized_formset):
         context = self.get_context_data(
-            localized_formset=localized_formset,
+            form=localized_formset,
             version_form=version_form,
             product_form=product_form,
         )

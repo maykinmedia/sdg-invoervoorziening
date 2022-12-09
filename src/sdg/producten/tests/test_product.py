@@ -211,9 +211,7 @@ class ProductUpdateViewTests(WebTest):
         response.form["product_aanwezig"] = "true"
 
         for idx, language in enumerate(TaalChoices.get_available_languages()):
-            response.form[
-                f"vertalingen-{idx}-product_aanwezig_toelichting"
-            ] = available_explanation_map.get(language)
+            response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
             response.form[
                 f"vertalingen-{idx}-product_valt_onder_toelichting"
             ] = falls_under_explanation_map.get(language)
@@ -231,10 +229,10 @@ class ProductUpdateViewTests(WebTest):
 
         self.assertEqual(most_recent_version.publicatie_datum, NOW_DATE)
 
-        self.assertEqual(en.product_aanwezig_toelichting, "")
+        self.assertEqual(en.product_aanwezig_toelichting, "test")
         self.assertEqual(en.product_valt_onder_toelichting, "")
 
-        self.assertEqual(nl.product_aanwezig_toelichting, "")
+        self.assertEqual(nl.product_aanwezig_toelichting, "test")
         self.assertEqual(nl.product_valt_onder_toelichting, "")
 
     @freeze_time(NOW_DATE)
