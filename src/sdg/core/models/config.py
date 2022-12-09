@@ -8,6 +8,7 @@ from solo.models import SingletonModel
 
 from sdg.core.db.fields import DynamicArrayField
 from sdg.core.forms import LabeledTooltipWidget
+from sdg.core.models.base import ProductFieldConfigurationMixin
 from sdg.core.models.validators import DomainValidator
 
 LabeledTooltipField = partial(
@@ -21,7 +22,10 @@ LabeledTooltipField = partial(
 )
 
 
-class ProductFieldConfiguration(SingletonModel):
+class ProductFieldConfiguration(
+    ProductFieldConfigurationMixin,
+    SingletonModel,
+):
     product_product_aanwezig = LabeledTooltipField(
         verbose_name=_("Product aanwezig"),
     )
@@ -46,10 +50,6 @@ class ProductFieldConfiguration(SingletonModel):
     product_api_verborgen = LabeledTooltipField(
         verbose_name=_("Verborgen"),
     )
-
-    def for_field(self, prefix, name):
-        if name != "config":
-            return getattr(self, f"{prefix}_{name}", None)
 
     class Meta:
         verbose_name = _("Product field configuratie")

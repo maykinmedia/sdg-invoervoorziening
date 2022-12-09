@@ -55,7 +55,7 @@
                                     <tr>
                                         {% if object.product_titel %}
                                             <td class="tabs__table-cell">
-                                                <h1>{{ object.product_titel }}</h1>
+                                                <h1>{{ object.product_titel|capfirst }}</h1>
                                             </td>
                                         {% endif %}
                                     </tr>
@@ -145,18 +145,18 @@
 
                                 {% if product.product_aanwezig == False and field.name == "product_aanwezig_toelichting" %}
                                     {% if field.configuration %}
-                                        <h3><b>{{ field.configuration.0.0 }}</b></h3>
+                                        <h3><b>{% trans field.configuration.label|capfirst %}</b></h3>
                                     {% else %}
-                                        <h3><b>{{ field.verbose_name|capfirst }}</b></h3>
+                                        <h3><b>{% trans field.verbose_name|capfirst }}</b></h3>
                                     {% endif %}
                                     <p>{% field_info field %}</p>
                                 {% endif %}
 
                                 {% if product.product_valt_onder and product.product_aanwezig != False and field.name == "product_valt_onder_toelichting" %}
                                     {% if field.configuration %}
-                                        <h3><b>{{ field.configuration.0.0 }}</b></h3>
+                                        <h3><b>{% trans field.configuration.label %}</b></h3>
                                     {% else %}
-                                        <h3><b>{{ field.verbose_name|capfirst }}</b></h3>
+                                        <h3><b>{% trans field.verbose_name|capfirst %}</b></h3>
                                     {% endif %}
                                     <p>{% field_info field %}</p>
                                 {% endif %}
@@ -169,6 +169,7 @@
                 {% if not product.product_valt_onder and product.product_aanwezig != False %}
 
                     {% for object in specifieke_producten %}
+                        {% language object.taal %}
                         <div class="specifiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %}
                              aria-hidden="true"{% endif %}>
 
@@ -177,7 +178,7 @@
                                     <div class="tabs__table-body">
                                         <div class="tabs__table-cell--version">
                                             {% if object.product_titel_decentraal %}
-                                                <h3>{{ object.product_titel_decentraal }}</h3>
+                                                <h3>{{ object.product_titel_decentraal|capfirst }}</h3>
                                             {% endif %}
 
                                             {% if object.product_titel_decentraal and object.specifieke_tekst %}
@@ -201,9 +202,9 @@
                                         <div class="tabs__table">
                                             <div class="tabs__table-body">
                                                 {% if field.configuration %}
-                                                    <h3><b>{{ field.configuration.0.0 }}</b></h3>
+                                                    <h3><b>{% trans field.configuration.label|capfirst %}</b></h3>
                                                 {% else %}
-                                                    <h3><b>{{ field.verbose_name|capfirst }}</b></h3>
+                                                    <h3><b>{% trans field.verbose_name|capfirst %}</b></h3>
                                                 {% endif %}
 
                                                 <div class="divider"></div>
@@ -217,8 +218,8 @@
                                     {% endif %}
                                 {% endfor %}
                             </div>
-
                         </div>
+                        {% endlanguage %}
                     {% endfor %}
 
                 {% endif %}

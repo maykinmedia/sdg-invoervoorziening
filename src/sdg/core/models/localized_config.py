@@ -2,10 +2,15 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from sdg.core.models import LabeledTooltipField
+from sdg.core.models.base import ProductFieldConfigurationMixin
 from sdg.producten.models.mixins import TaalMixin
 
 
-class LocalizedProductFieldConfiguration(TaalMixin, models.Model):
+class LocalizedProductFieldConfiguration(
+    ProductFieldConfigurationMixin,
+    TaalMixin,
+    models.Model,
+):
     """
     Configuration for the CMS product fields.
     Field format: [lowercase model]_[field]
@@ -86,10 +91,6 @@ class LocalizedProductFieldConfiguration(TaalMixin, models.Model):
     localizedproduct_decentrale_procedure_label = LabeledTooltipField(
         verbose_name=_("Decentrale procedure label"),
     )
-
-    def for_field(self, prefix, name):
-        if name != "config":
-            return getattr(self, "{}_{}".format(prefix, name), None)
 
     class Meta:
         verbose_name = _("Vertaalde configuratie")

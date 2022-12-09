@@ -1,6 +1,6 @@
 from django import template
 
-from sdg.producten.types import Language, ProductFieldInfo
+from sdg.producten.types import Language, ProductFieldMetadata
 
 register = template.Library()
 
@@ -65,5 +65,5 @@ def flag(language: Language, **kwargs):
 
 
 @register.inclusion_tag("producten/_include/field_info.html")
-def field_info(field: ProductFieldInfo, **kwargs):
+def field_info(field: ProductFieldMetadata, **kwargs):
     return {**kwargs, "field": field}

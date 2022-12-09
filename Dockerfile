@@ -66,8 +66,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         procps \
         vim \
         postgresql-client \
-        # lxml deps
-        # libxslt \
+        libxml2-dev \
+        libxmlsec1-dev \
+        libxmlsec1-openssl \
+        gettext \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -105,6 +107,7 @@ ARG SECRET_KEY=dummy
 
 # Run collectstatic, so the result is already included in the image
 RUN python src/manage.py collectstatic --noinput
+RUN python src/manage.py compilemessages
 
 LABEL org.label-schema.vcs-ref=$COMMIT_HASH \
       org.label-schema.vcs-url="https://github.com/maykinmedia/sdg-invoervoorziening" \

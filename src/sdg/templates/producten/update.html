@@ -230,14 +230,14 @@
                 {% endwith %}
 
                 {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
-                    {% with configuration=publication_date.configuration.0 %}
+                    {% with configuration=publication_date.configuration.label %}
                         <tr>
                             <td>
                                 <div class="form__control">
                                     <header class="form__control-header">
                                         <label class="form__label">
-                                            {{ configuration.0|default:_("Publicatie datum")|capfirst }}
-                                            <i class="fa fa-info-circle fa-xs dark" title="{{ configuration.1|default:_('Publicatiedatum van de productversie') }}"></i>
+                                            {{ configuration.label|default:_("Publicatie datum")|capfirst }}
+                                            <i class="fa fa-info-circle fa-xs dark" title="{{ configuration.tooltip|default:_('Publicatiedatum van de productversie') }}"></i>
                                         </label>
                                     </header>
                                     <div class="form__control-body">
