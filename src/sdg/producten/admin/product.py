@@ -103,10 +103,11 @@ class ProductVersieInlineAdmin(admin.StackedInline):
 class ProductVersieForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        product_versie = kwargs["instance"]
-        self.fields["product"].queryset = Product.objects.filter(
-            catalogus__lokale_overheid=product_versie.product.catalogus.lokale_overheid
-        )
+        product_versie = kwargs.get("instance")
+        if product_versie:
+            self.fields["product"].queryset = Product.objects.filter(
+                catalogus__lokale_overheid=product_versie.product.catalogus.lokale_overheid
+            )
 
 
 @admin.register(ProductVersie)
