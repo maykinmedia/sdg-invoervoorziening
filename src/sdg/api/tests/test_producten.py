@@ -406,6 +406,94 @@ class ProductenTests(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_retrieve_product_by_uuid_product_falls_under_explanation_is_displayed_if_product_falls_under_is_not_set(
+        self,
+    ):
+        self.product.product_valt_onder = SpecifiekProductFactory()
+        self.product.save()
+        self.product.most_recent_version.vertalingen.update(
+            product_valt_onder_toelichting="test explanation"
+        )
+
+        detail_url = reverse("api:product-detail", args=[self.product.uuid])
+
+        response = self.client.get(detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+
+        self.assertEqual(str(self.product.uuid), data["uuid"])
+        data_nl, data_en = data["vertalingen"]
+        self.assertIsNotNone(data["productValtOnder"])
+        self.assertEqual(data_nl["productValtOnderToelichting"], "test explanation")
+        self.assertEqual(data_en["productValtOnderToelichting"], "test explanation")
+
+    def test_retrieve_product_by_uuid_product_falls_under_explanation_is_hidden_if_product_falls_under_is_not_set(
+        self,
+    ):
+        self.product.product_valt_onder = None
+        self.product.save()
+        self.product.most_recent_version.vertalingen.update(
+            product_valt_onder_toelichting="test explanation"
+        )
+
+        detail_url = reverse("api:product-detail", args=[self.product.uuid])
+
+        response = self.client.get(detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+
+        self.assertEqual(str(self.product.uuid), data["uuid"])
+        data_nl, data_en = data["vertalingen"]
+        self.assertIsNone(data["productValtOnder"])
+        self.assertEqual(data_nl["productValtOnderToelichting"], "")
+        self.assertEqual(data_en["productValtOnderToelichting"], "")
+
+    def test_retrieve_product_by_uuid_product_availability_explanation_is_hidden_if_product_availability_is_true(
+        self,
+    ):
+        self.product.product_aanwezig = True
+        self.product.save()
+        self.product.most_recent_version.vertalingen.update(
+            product_aanwezig_toelichting="test explanation"
+        )
+
+        detail_url = reverse("api:product-detail", args=[self.product.uuid])
+
+        response = self.client.get(detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+
+        self.assertEqual(str(self.product.uuid), data["uuid"])
+        data_nl, data_en = data["vertalingen"]
+        self.assertIsNone(data["productValtOnder"])
+        self.assertEqual(data_nl["productValtOnderToelichting"], "")
+        self.assertEqual(data_en["productValtOnderToelichting"], "")
+
+    def test_retrieve_product_by_uuid_product_availability_explanation_is_displayed_if_product_availability_is_false(
+        self,
+    ):
+        self.product.product_aanwezig = False
+        self.product.save()
+        self.product.most_recent_version.vertalingen.update(
+            product_aanwezig_toelichting="test explanation"
+        )
+
+        detail_url = reverse("api:product-detail", args=[self.product.uuid])
+
+        response = self.client.get(detail_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.json()
+
+        self.assertEqual(str(self.product.uuid), data["uuid"])
+        data_nl, data_en = data["vertalingen"]
+        self.assertIsNone(data["productValtOnder"])
+        self.assertEqual(data_nl["productAanwezigToelichting"], "test explanation")
+        self.assertEqual(data_en["productAanwezigToelichting"], "test explanation")
+
     def test_update_product(self):
         list_url = reverse("api:product-list")
 
