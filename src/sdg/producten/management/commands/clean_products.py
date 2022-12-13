@@ -5,8 +5,8 @@ from sdg.producten.models import LocalizedProduct
 previous_placeholder_texts = {
     "product_aanwezig_toelichting": {
         "en": [
-            "The municipality of {lokale_overheid} doesn't offer {product}."
-            "The municipality of {lokale_overheid} doesn't offer {product} because..."
+            "The municipality of {lokale_overheid} doesn't offer {product}.",
+            "The municipality of {lokale_overheid} doesn't offer {product} because...",
         ],
         "nl": [
             "De gemeente {lokale_overheid} levert het product {product} niet.",
@@ -15,10 +15,10 @@ previous_placeholder_texts = {
     },
     "product_valt_onder_toelichting": {
         "en": [
-            "In de gemeente {lokale_overheid} is {product} onderdeel van [product]."
+            "In the municipality of {lokale_overheid}, {product} falls under [product]."
         ],
         "nl": [
-            "In the municipality of {lokale_overheid}, {product} falls under [product]."
+            "In de gemeente {lokale_overheid} is {product} onderdeel van [product]."
         ],
     },
 }
