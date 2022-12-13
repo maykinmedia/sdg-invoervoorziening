@@ -45,6 +45,23 @@ class Token(models.Model):
         blank=True,
         null=True,
     )
+    whitelisted_ips = ArrayField(
+        models.CharField(
+            max_length=15,
+            validators=[validate_ipv4_address],
+        ),
+        help_text=_("Whitelisted IP adressen van deze token."),
+        blank=True,
+        default=list,
+    )
+    api_default_most_recent = models.BooleanField(
+        _("Standaard meest recent"),
+        help_text=_(
+            "Toon standaard de meest recente productbeschrijvingen in de API. Dit kunnen dus ook concept en toekomstige productbeschrijvingen zijn. Dit moet aan staan indien schrijfrechten op de API worden gegeven."
+        ),
+        default=False,
+    )
+
     created = models.DateTimeField(
         _("aangemaakt"),
         auto_now_add=True,
@@ -54,16 +71,6 @@ class Token(models.Model):
         _("aangepast"),
         auto_now=True,
         help_text=_("Wanneer het token voor het laatst is gewijzigd."),
-    )
-
-    whitelisted_ips = ArrayField(
-        models.CharField(
-            max_length=15,
-            validators=[validate_ipv4_address],
-        ),
-        help_text=_("Whitelisted IP adressen van deze token."),
-        blank=True,
-        default=list,
     )
 
     class Meta:

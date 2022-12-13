@@ -1272,7 +1272,7 @@ components:
           description: De UPN URI van het specifieke product.
         versie:
           type: integer
-          readOnly: true
+          default: 0
           description: De huidige versie van dit product.
         publicatieDatum:
           type: string
@@ -1323,6 +1323,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LocalizedProduct'
+          nullable: true
           description: Een lijst met specifieke teksten op basis van taal.
         beschikbareTalen:
           type: array
@@ -1340,7 +1341,6 @@ components:
       - url
       - uuid
       - verantwoordelijkeOrganisatie
-      - versie
       - vertalingen
     ProductBase:
       type: object

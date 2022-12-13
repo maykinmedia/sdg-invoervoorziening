@@ -20,7 +20,9 @@ class TokenAdmin(admin.ModelAdmin, DynamicArrayMixin):
         "last_seen",
         "created",
         "whitelisted_ips",
+        "api_default_most_recent",
     )
+
     readonly_fields = ("key", "last_seen")
     ordering = ("organization",)
     inlines = (TokenAuthorizationInline,)

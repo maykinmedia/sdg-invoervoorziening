@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from djchoices import ChoiceItem, DjangoChoices
@@ -31,8 +32,9 @@ class GenericProductStatus(DjangoChoices):
         """
         Get excluded statuses for the CMS.
 
-        - For reference products: only show products that are READY_FOR_ADMIN.
-        - For specific products: only show products that are READY_FOR_PUBLICATION.
+        - Onlt show: EXPIRED, EOL and...
+            - For reference products: READY_FOR_ADMIN.
+            - For specific products: READY_FOR_PUBLICATION.
 
         :param reference: Whether to exclude for reference products or not.
         """
@@ -52,4 +54,24 @@ class GenericProductStatus(DjangoChoices):
         """
         Get excluded statuses for the API.
         """
-        return [cls.DELETED]
+        """
+        Get excluded statuses for the CMS.
+
+        - For reference products: only show products that are READY_FOR_ADMIN.
+        - For specific products: only show products that are READY_FOR_ADMIN as
+          well. The API does not require products to have a standard text to be
+          present.
+
+        NOTE: The CMS typically only shows products that contain a
+        "standard text" (ie. READY_FOR_ADMIN) but the API does not have this
+        requirement.
+
+        :param reference: Whether to exclude for reference products or not.
+        """
+        exclude = [
+            cls.NEW,
+            cls.DELETED,
+            cls.MISSING,
+        ]
+
+        return exclude

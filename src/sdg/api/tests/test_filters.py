@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
+from sdg.api.tests.factories.token import TokenAuthorizationFactory
 from sdg.core.constants import TaalChoices
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
@@ -12,7 +13,6 @@ from sdg.organisaties.tests.factories.overheid import (
     LokaleOverheidFactory,
 )
 from sdg.producten.models import Product
-from sdg.producten.models.product import ProductVersie
 from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.localized import LocalizedProductFactory
 from sdg.producten.tests.factories.product import (
@@ -24,6 +24,16 @@ from sdg.producten.tests.factories.product import (
 
 class ProductenCatalogusFilterTests(APITestCase):
     url = reverse("api:productencatalogus-list")
+
+    def setUp(self):
+        self.lokale_overheid = LokaleOverheidFactory.create()
+        self.token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=self.lokale_overheid,
+            token__api_default_most_recent=True,
+        )
+        self.client.defaults.update(
+            {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+        )
 
     def test_filter_organisatie(self):
         catalog, *_ = ProductenCatalogusFactory.create_batch(5)
@@ -76,6 +86,16 @@ class ProductenCatalogusFilterTests(APITestCase):
 
 class ProductFilterTests(APITestCase):
     url = reverse("api:product-list")
+
+    def setUp(self):
+        self.lokale_overheid = LokaleOverheidFactory.create()
+        self.token_authorization = TokenAuthorizationFactory.create(
+            lokale_overheid=self.lokale_overheid,
+            token__api_default_most_recent=True,
+        )
+        self.client.defaults.update(
+            {"HTTP_AUTHORIZATION": f"Token {self.token_authorization.token}"}
+        )
 
     def test_filter_organisatie(self):
         (

@@ -163,6 +163,11 @@ class ProductViewSet(
         .select_related(
             "catalogus",
             "catalogus__lokale_overheid",
+            "catalogus__lokale_overheid__organisatie",
+            "bevoegde_organisatie",
+            "bevoegde_organisatie__organisatie",
+            "product_valt_onder",
+            "product_valt_onder__generiek_product__upn",
             "generiek_product",
             "generiek_product__upn",
         )
@@ -171,13 +176,27 @@ class ProductViewSet(
             "versies",
             "versies__vertalingen",
         )
-        .active()
         .order_by("generiek_product__upn__upn_label")
         .exclude_generic_status(api=True)
+        .distinct()
     )
     filterset_class = ProductFilterSet
     serializer_class = ProductSerializer
     permission_classes = [OrganizationPermissions, WhitelistedPermission]
+
+    def get_queryset(self):
+        """
+        Check for the editors, if present, return all products.
+
+        If not, only return active products.
+        """
+        if self.request.auth and self.request.auth.api_default_most_recent:
+            return self.queryset.most_recent()
+        else:
+            # We need to explicitly exclude active products, otherwise we get
+            # a list of all products, of which some have 0 active product
+            # versions.
+            return self.queryset.active(exclude_inactive_products=True)
 
     def get_organisatie(self, request, view, obj=None):
         if request.method == "POST":
