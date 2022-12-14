@@ -2,6 +2,35 @@
 Change history
 ==============
 
+1.6.0
+
+**December 14, 2022*
+
+* [#838] Fixed preview labels not being translated
+* [#868] Fixed crash in rare cases when a known "bevoegde organisatie" was added
+* [#854] Removed the "..." suffix from the default reasons
+* [#845] Added visibility option to hide products from the national portals
+* [#841] Added validation for unchanged "product valt onder toelichting"
+* [#843] Added validation for unchanged "product aanwezig toelichting"
+* [#856] Added placeholder validation. You can no longer publish texts with "[" or "XX" in them.
+* [#827] Added different layout styles for different layers of government.
+* Fixed creating a new product version in the admin (although you typically should not do this)
+* Added ability to admins to enable concepts/future product publications for API clients
+
+API changes
+
+* [#859] Fixed showing duplicates when going over paginated lists
+* [#857] Fixed uncatched error when passing an empty string as catalog
+* [#875] Fixed uncatched error when providing an invalid location name
+* [#866] Fixed missing location address details for products (they are re-added)
+* [#879] Added UUID-attribute to locations
+* [#861] Providing an invalid API-token now gives an error instead of continuing as anonymous
+* Fixed the product translations-attribute to show as nullable in the API schema
+* Fixed the product version-attribute to show up as read-only in the API schema
+* Concept products are no longer returned in API responses unless you have write-permission.
+* Several major performance improvements
+
+
 1.5.1
 =====
 

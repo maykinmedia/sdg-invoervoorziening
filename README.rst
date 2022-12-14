@@ -2,7 +2,7 @@
 PDC voor de SDG
 ===============
 
-:Version: 1.5.1
+:Version: 1.6.0
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: vng, ipo, waterschapshuis, sdg, pdc, gemeenten, provincies, waterschappen
 :PythonVersion: 3.8
@@ -46,7 +46,8 @@ API specificatie
 ================
 
 De API specificatie is beschikbaar in het Open API Specification (OAS) versie 3
-formaat.
+formaat. If a version is missing, it means there are no changes compared to the
+previous version.
 
 ==============  ==============  =============================
 Versie          Release datum   API specificatie
@@ -54,6 +55,9 @@ Versie          Release datum   API specificatie
 latest          n/a             `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/master/src/openapi.yaml>`_,
                                 (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.4.0..master#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
+1.6.0           2022-12-14      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.6.0/src/openapi.yaml>`_,
+                                `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.6.0/src/openapi.yaml>`_,
+                                (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.6.0..1.4.0#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
 1.4.0           2022-09-22      `ReDoc <https://redocly.github.io/redoc/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.4.0/src/openapi.yaml>`_,
                                 `Swagger <https://petstore.swagger.io/?url=https://raw.githubusercontent.com/maykinmedia/sdg-invoervoorziening/1.4.0/src/openapi.yaml>`_,
                                 (`verschillen <https://github.com/maykinmedia/sdg-invoervoorziening/compare/1.3.0..1.4.0#diff-b9c28fec6c3f3fa5cff870d24601d6ab7027520f3b084cc767aefd258cb8c40a>`_)
