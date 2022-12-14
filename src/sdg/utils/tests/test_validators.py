@@ -100,10 +100,12 @@ class ValidatorsTestCase(TestCase):
         invalid_texts = [
             "test [name]",
             "test [example_placeholder]",
+            "test [example_placeholder] test",
             "test [[placeholder]]",
             "test XX",
             "test with XXX",
             "test XXXXXX placeholder",
+            "test\n[markdown link](https://example.com)\n[name]",
         ]
         for text in invalid_texts:
             with self.subTest(invalid_text=text):
@@ -111,6 +113,10 @@ class ValidatorsTestCase(TestCase):
 
         valid_texts = [
             "[markdown link](https://example.com)",
+            "test [markdown link](https://example.com) here",
+            "test\n[markdown link](https://example.com)",
+            "example\n[markdown link](https://example.com)\n",
+            "example\n[markdown link](https://example.com)\nexample",
         ]
         for text in valid_texts:
             with self.subTest(invalid_text=text):
