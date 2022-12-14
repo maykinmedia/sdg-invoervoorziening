@@ -4,6 +4,7 @@ from django.test import TestCase
 from sdg.utils.validators import (
     validate_charfield_entry,
     validate_phone_number,
+    validate_placeholders,
     validate_postal_code,
 )
 
@@ -91,3 +92,26 @@ class ValidatorsTestCase(TestCase):
         self.assertEqual(validate_phone_number("00695959595"), "00695959595")
         self.assertEqual(validate_phone_number("00-69-59-59-59-5"), "00-69-59-59-59-5")
         self.assertEqual(validate_phone_number("00 69 59 59 59 5"), "00 69 59 59 59 5")
+
+    def test_validate_placeholders(self):
+        """
+        Test all valid placeholders and also test invalid ones.
+        """
+        invalid_texts = [
+            "test [name]",
+            "test [example_placeholder]",
+            "test [[placeholder]]",
+            "test XX",
+            "test with XXX",
+            "test XXXXXX placeholder",
+        ]
+        for text in invalid_texts:
+            with self.subTest(invalid_text=text):
+                self.assertTrue(validate_placeholders(text))
+
+        valid_texts = [
+            "[markdown link](https://example.com)",
+        ]
+        for text in valid_texts:
+            with self.subTest(invalid_text=text):
+                self.assertFalse(validate_placeholders(text))
