@@ -123,6 +123,6 @@ Licensed under the `EUPL`_.
 .. _`Maykin Media B.V.`: https://www.maykinmedia.nl
 .. _`VNG Realisatie`: https://www.vngrealisatie.nl/
 .. _`IPO`: https://www.ipo.nl/
-.. _`Unie van Waterschappen`: https://www.hetwaterschapshuis.nl/
+.. _`Unie van Waterschappen`: https://unievanwaterschappen.nl/
 .. _`Single Digital Gateway`: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ:L:2018:295:TOC
 .. _`EUPL`: LICENSE.md
