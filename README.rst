@@ -12,30 +12,30 @@ PDC voor de SDG
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
 (SDG) via het CMS en/of de API.
 
-Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_, 
-`IPO`_ en `Het Waterschapshuis`_.
+Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_,
+`IPO`_ en `Unie van Waterschappen`_.
 
 
 Introductie
 ===========
 
-De applicatie bestaat uit een CMS en een API. Het CMS stelt redacteuren in 
-staat productbeschrijvingen direct te beheren, voorbeelden te zien en te 
-publiceren. De API stelt externe systemen in staat om productbeschrijvingen 
-geautomatiseerd bij te werken vanuit een eigen CMS. De API is tevens het 
+De applicatie bestaat uit een CMS en een API. Het CMS stelt redacteuren in
+staat productbeschrijvingen direct te beheren, voorbeelden te zien en te
+publiceren. De API stelt externe systemen in staat om productbeschrijvingen
+geautomatiseerd bij te werken vanuit een eigen CMS. De API is tevens het
 centrale punt waar de nationale portalen de productbeschrijvingen ophalen.
 
 Speerpunten zijn (afhankelijk van de installatie en autorisaties):
 
-* Ontzorging: Organisaties hoeven voor de SDG hun eigen website niet aan te 
+* Ontzorging: Organisaties hoeven voor de SDG hun eigen website niet aan te
   passen.
-* Uniformeren productbeschrijvingen: Het CMS maakt het mogelijk om organisaties 
-  te ondersteunen met een standaard-productencatalogus. 
-  Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen 
-  hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit op 
-  de generieke teksten die met de specifieke teksten worden getoond op de 
-  nationale portalen. 
-* Hergebruik van SDG productbeschrijvingen: Teksten die in deze applicatie 
+* Uniformeren productbeschrijvingen: Het CMS maakt het mogelijk om organisaties
+  te ondersteunen met een standaard-productencatalogus.
+  Organisaties kunnen een standaard-productbeschrijving overnemen of kunnen
+  hiervan afwijken en hun eigen beschrijving maken, zo lang deze aansluit op
+  de generieke teksten die met de specifieke teksten worden getoond op de
+  nationale portalen.
+* Hergebruik van SDG productbeschrijvingen: Teksten die in deze applicatie
   beheerd worden, kunnen ook opgenomen worden in de eigen website via de API.
 * Hergebruik van eigen productbeschrijvingen: Teksten die in het CMS van de
   organisatie staan kunnen aangeleverd worden aan de API  zodat er geen
@@ -80,7 +80,7 @@ Zie: `Alle versies en wijzigingen <https://github.com/maykinmedia/sdg-invoervoor
 Documentatie
 ============
 
-Zie ``INSTALL.rst`` voor installatie instructies, beschikbare configuratie 
+Zie ``INSTALL.rst`` voor installatie instructies, beschikbare configuratie
 mogelijkheden en commando's.
 
 
@@ -123,6 +123,6 @@ Licensed under the `EUPL`_.
 .. _`Maykin Media B.V.`: https://www.maykinmedia.nl
 .. _`VNG Realisatie`: https://www.vngrealisatie.nl/
 .. _`IPO`: https://www.ipo.nl/
-.. _`Het Waterschapshuis`: https://www.hetwaterschapshuis.nl/
+.. _`Unie van Waterschappen`: https://www.hetwaterschapshuis.nl/
 .. _`Single Digital Gateway`: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=uriserv:OJ.L_.2018.295.01.0001.01.ENG&toc=OJ:L:2018:295:TOC
 .. _`EUPL`: LICENSE.md

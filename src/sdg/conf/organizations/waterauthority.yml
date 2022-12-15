@@ -1,15 +1,15 @@
 # Data
-url: https://www.hetwaterschapshuis.nl/
+url: https://unievanwaterschappen.nl/
 accessibility_url: "#"
 privacy_policy_url: "#"
 more_info_url: "#"
-email: servicedesk@hetwaterschapshuis.nl
+email: info@uvw.nl
 
 # Style
 overlay: images/rain.svg
-overlay_size: 260px
-footer_logo: images/hwh_logo.png
-color_hue: 186
+overlay_size: 800px
+footer_logo: images/uvw_logo.png
+color_hue: 194
 
 # Text
 name: waterschap
