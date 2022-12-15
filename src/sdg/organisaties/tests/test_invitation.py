@@ -147,7 +147,7 @@ class InvitationTests(WebTest):
             mail.outbox[0].body,
         )
         self.assertIn(
-            "servicedesk@hetwaterschapshuis.nl",
+            org_type_cfg().email,
             mail.outbox[0].body,
         )
 
