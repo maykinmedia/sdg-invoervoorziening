@@ -9,7 +9,7 @@ from sdg.api.filters import ProductAanwezigChoices
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
-from sdg.producten.models import Product
+from sdg.producten.models import GeneriekProduct, Product
 
 
 class ProductenCatalogusFilterSet(FilterSet):
@@ -38,7 +38,11 @@ class ProductenCatalogusFilterSet(FilterSet):
 
 
 class ProductFilterSet(FilterSet):
-    """Filter for products. Allows filtering by organization, target-group, catalog, publication date."""
+    """
+    Filter for products.
+
+    Allows filtering by organization, target-group, catalog, publication date.
+    """
 
     organisatie = filters.UUIDFilter(
         field_name="catalogus__lokale_overheid__uuid",
@@ -179,3 +183,25 @@ class LokaleOverheidFilterSet(FilterSet):
     class Meta:
         model = LokaleOverheid
         fields = ("owmsIdentifier", "owmsPrefLabel")
+
+
+class GeneriekProductFilterSet(FilterSet):
+    taal = filters.ChoiceFilter(
+        field_name="taal",
+        choices=TaalChoices.choices,
+        help_text=_("Toont producten die overeenkomen met de opgegeven taal."),
+    )
+    doelgroep = filters.ChoiceFilter(
+        field_name="generiek_product__doelgroep",
+        choices=DoelgroepChoices.choices,
+        help_text=_("Toont producten die overeenkomen met de opgegeven doelgroepen."),
+        lookup_expr="icontains",
+    )
+    upnLabel = filters.CharFilter(
+        field_name="generiek_product__upn__upn_label",
+        help_text=_("Toont producten met een UPN label"),
+    )
+    upnUri = filters.CharFilter(
+        field_name="generiek_product__upn__upn_uri",
+        help_text=_("Toont producten met een UPN URI"),
+    )

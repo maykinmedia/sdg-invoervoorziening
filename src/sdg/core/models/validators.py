@@ -1,4 +1,5 @@
 import re
+from functools import partial
 
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, URLValidator, _lazy_re_compile
@@ -58,15 +59,18 @@ def validate_openingstijden(value):
     return openingstijden_validator(value)
 
 
-def validate_labeled_url(array):
+def validate_labeled_url(array, length=2):
     """Ensure the array length equals two and the second item is a valid URL."""
     for sub_array in array:
-        if len(sub_array) != 2:
+        if len(sub_array) != length:
             raise ValidationError(
                 _("De link moet een label en een URL bevatten."), code="invalid"
             )
 
         url_validator(sub_array[1])
+
+
+validate_labeled_url_with_category = partial(validate_labeled_url, length=3)
 
 
 def validate_reference_catalog(catalog):

@@ -9,6 +9,7 @@ from sdg.core.admin.mixins import BaseProductFilter
 
 from ..models import (
     GeneriekProduct,
+    GeneriekProductOverheidsorganisatieRol,
     LocalizedGeneriekProduct,
     LocalizedProduct,
     Product,
@@ -55,6 +56,12 @@ class LocalizedProductInline(admin.StackedInline):
     extra = 0
 
 
+class GeneriekProductOverheidsorganisatieRolInline(admin.StackedInline):
+    model = GeneriekProductOverheidsorganisatieRol
+    extra = 0
+    autocomplete_fields = ("overheidsorganisatie",)
+
+
 @admin.register(GeneriekProduct)
 class GeneriekProductAdmin(admin.ModelAdmin):
     list_display = (
@@ -72,9 +79,12 @@ class GeneriekProductAdmin(admin.ModelAdmin):
         "product_status",
         "verplicht_product",
     )
-    inlines = (LocalizedGeneriekProductInline,)
+    inlines = (
+        LocalizedGeneriekProductInline,
+        GeneriekProductOverheidsorganisatieRolInline,
+    )
     readonly_fields = ("product_status", "is_sdg_product")
-    autocomplete_fields = ("verantwoordelijke_organisatie", "upn")
+    autocomplete_fields = ("upn",)
     search_fields = ("upn__upn_label",)
 
     # Turns boolean into icon

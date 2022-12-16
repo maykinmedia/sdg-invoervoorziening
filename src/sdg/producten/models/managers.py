@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Exists, F, Max, OuterRef, Prefetch, Q, Subquery
 from django.utils.timezone import now
@@ -145,6 +146,19 @@ class ProductQuerySet(models.QuerySet):
             )
 
 
+class GeneriekProductQuerySet(models.QuerySet):
+    def exclude_generic_status(self, api=False):
+        """
+        Exclude generic products with certain product status.
+        """
+        if not api:
+            return self
+        else:
+            return self.exclude(
+                product_status__in=GenericProductStatus.get_api_excluded(),
+            )
+
+
 class ProductVersieQuerySet(models.QuerySet):
     def published(self):
         """
@@ -176,3 +190,30 @@ class LocalizedManager(models.Manager):
                 ],
             )
         return self.bulk_create(create_list, ignore_conflicts=True)
+
+
+class LocalizedGeneriekProductManager(LocalizedManager):
+    def sdg(self, org_type=None):
+        from sdg.core.models import UniformeProductnaam
+
+        if org_type is None:
+            mapping = {
+                "municipality": "gemeente",
+                "province": "provincie",
+                "waterauthority": "waterschap",
+            }
+            org_type = mapping[settings.SDG_ORGANIZATION_TYPE]
+
+        if org_type in UniformeProductnaam.ORGANIZATION_FIELDS:
+            return self.filter(
+                **{
+                    "generiek_product__upn__sdg__len__gt": 0,
+                    "generiek_product__upn__{}".format(org_type): True,
+                }
+            )
+
+        raise ValueError(
+            "Parameter 'org_type' is '{}' but it must be in {}".format(
+                org_type, ", ".join(UniformeProductnaam.ORGANIZATION_FIELDS)
+            )
+        )

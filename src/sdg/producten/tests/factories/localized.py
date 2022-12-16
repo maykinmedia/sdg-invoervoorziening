@@ -11,9 +11,11 @@ from sdg.producten.tests.factories.product import (
 
 
 class LocalizedGeneriekProductFactory(DjangoModelFactory):
+    uuid = factory.Faker("uuid4")
     generiek_product = factory.SubFactory(GeneriekProductFactory)
 
     datum_check = factory.Faker("date_this_month", before_today=True)
+    laatst_gewijzigd = factory.Faker("date_this_month", before_today=True)
 
     product_titel = factory.Faker("word")
 

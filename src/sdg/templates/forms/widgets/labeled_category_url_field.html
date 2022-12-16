@@ -1,0 +1,17 @@
+{% load static %}
+{% load i18n %}
+
+{% spaceless %}
+    <input type="text" name="{{ widget.name }}" class="form__input form__input--left" placeholder="Label"
+        {% if widget.label_value != None %} value="{{ widget.label_value|stringformat:'s' }}"{% endif %}
+        {% include "django/forms/widgets/attrs.html" %}
+    >
+    <input type="url" name="{{ widget.name }}" class="form__input form__input--right" placeholder="URL"
+        {% if widget.field_value != None %} value="{{ widget.field_value|stringformat:'s' }}"{% endif %}
+        {% include "django/forms/widgets/attrs.html" %}
+    >
+    <input type="url" name="{{ widget.name }}" class="form__input form__input--right" placeholder="Category"
+        {% if widget.field_value != None %} value="{{ widget.field_value|stringformat:'s' }}"{% endif %}
+        {% include "django/forms/widgets/attrs.html" %}
+    >
+{% endspaceless %}

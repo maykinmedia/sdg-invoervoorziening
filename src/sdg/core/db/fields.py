@@ -19,6 +19,7 @@ class DynamicArrayField(ArrayField):
     def __init__(self, base_field, size=None, **kwargs):
         self.subwidget_form = kwargs.pop("subwidget_form", None)
         self.single = kwargs.pop("single", False)
+        self.elements = kwargs.pop("elements", 2)
         super().__init__(base_field, size, **kwargs)
 
     def formfield(self, **kwargs):
@@ -30,5 +31,5 @@ class DynamicArrayField(ArrayField):
 
     def clean(self, value, model_instance):
         if getattr(self.subwidget_form, "chunk", False):
-            value = self.subwidget_form.chunk(value, 2)
+            value = self.subwidget_form.chunk(value, self.elements)
         return super().clean(value, model_instance)

@@ -4,10 +4,16 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from sdg.core.db.fields import DynamicArrayField
-from sdg.core.forms import LabeledURLWidget
-from sdg.core.models.validators import validate_labeled_url
+from sdg.core.forms import LabeledCategoryURLWidget, LabeledURLWidget
+from sdg.core.models.validators import (
+    validate_labeled_url,
+    validate_labeled_url_with_category,
+)
 from sdg.producten.models.fields import MarkdownxField
-from sdg.producten.models.managers import LocalizedManager
+from sdg.producten.models.managers import (
+    LocalizedGeneriekProductManager,
+    LocalizedManager,
+)
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
 
 
@@ -15,6 +21,16 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
     """
     Localized information for a generic product.
     """
+
+    uuid = models.UUIDField(
+        _("UUID"),
+        unique=True,
+        null=True,
+        editable=False,
+        help_text=_(
+            "De identificatie die binnen deze API gebruikt wordt voor de resource."
+        ),
+    )
 
     generiek_product = models.ForeignKey(
         "producten.GeneriekProduct",
@@ -51,6 +67,12 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
         blank=True,
     )
+    laatst_gewijzigd = models.DateTimeField(
+        _("laatst gewijzigd"),
+        help_text=_("Laatst gewijzigd datum. Datum heeft het formaat [datum]T[tijd]"),
+        blank=True,
+        null=True,
+    )
     datum_check = models.DateTimeField(
         _("datum check"),
         help_text=_(
@@ -65,8 +87,9 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         ArrayField(
             models.CharField(max_length=512),
         ),
-        subwidget_form=LabeledURLWidget,
-        validators=[validate_labeled_url],
+        elements=3,
+        subwidget_form=LabeledCategoryURLWidget,
+        validators=[validate_labeled_url_with_category],
         help_text=_(
             "Zowel de Nationale Portalen als de decentrale overheden kunnen een x-tal 'verwijzingen' opnemen bij een "
             "product. Voorstel hierbij om zo'n 'verwijzing' te laten bestaan uit een -bij elkaar horende-  "
@@ -89,7 +112,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
     )
 
-    objects = LocalizedManager()
+    objects = LocalizedGeneriekProductManager()
 
     class Meta:
         verbose_name = _("Vertaald generiek product")

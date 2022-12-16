@@ -17,7 +17,6 @@ from sdg.producten.models import GeneriekProduct, Product, ProductVersie
 
 class GeneriekProductFactory(DjangoModelFactory):
     upn = factory.SubFactory(UniformeProductnaamFactory)
-    verantwoordelijke_organisatie = factory.SubFactory(OverheidsorganisatieFactory)
     verplicht_product = factory.Faker("pybool")
     product_status = GenericProductStatus.READY_FOR_PUBLICATION
 

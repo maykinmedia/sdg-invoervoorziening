@@ -21,7 +21,7 @@ from sdg.organisaties.tests.factories.overheid import (
     LocatieFactory,
     LokaleOverheidFactory,
 )
-from sdg.producten.tests.constants import FUTURE_DATE, NOW_DATE, PAST_DATE
+from sdg.producten.tests.constants import NOW_DATE, PAST_DATE
 from sdg.producten.tests.factories.localized import LocalizedProductFactory
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,

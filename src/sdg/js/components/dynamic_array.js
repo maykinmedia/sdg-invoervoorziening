@@ -11,6 +11,9 @@ function addRemoveEventListener(widgetElement) {
 }
 
 function initializeDynamicWidget(widgetElement) {
+    if (widgetElement.dataset.initialized) // Skip if already initialized
+        return;
+
     const initialElement = widgetElement.querySelector('.dynamic__container-item');
     const elementTemplate = initialElement.cloneNode(true);
     const parentElement = initialElement.parentElement;
@@ -33,7 +36,29 @@ function initializeDynamicWidget(widgetElement) {
         addRemoveEventListener(newElement);
         parentElement.appendChild(newElement);
     });
+
+    widgetElement.dataset.initialized = true;
 }
+
+const observer = new MutationObserver(function (mutations) {
+
+    mutations.forEach(function (mutation) {
+        const element = mutation.target;
+
+        if (!element.matches('fieldset.module'))
+            return;
+
+        const arrayWidgets = element.querySelectorAll(".dynamic__container");
+        [...arrayWidgets].forEach(element => {
+            initializeDynamicWidget(element)
+        });
+    });
+
+});
+
+// Ensure admin inline elements (dynamically added) are also initialized
+const mainElement = document.querySelector('#content-main');
+observer.observe(mainElement, {childList: true, subtree: true});
 
 [...arrayWidgets].forEach(element => {
     initializeDynamicWidget(element)
