@@ -48,16 +48,30 @@
         {% toggle '' icon_before='flag-icon flag-icon-nl' icon_after='flag-icon flag-icon-gb' id='toggle-language' %}
     </div>
 
-    <div class="toolbox__item">
-        {% trans "Toon voorbeeld" %}:
-        {% if product.active_version %}
-            <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
-               class="preview"
-               target="_blank">
-                {% trans "Huidige gepubliceerde tekst" %}
-            </a>
-        {% endif %}
-    </div>
+    {% with most_recent_is_concept=product.most_recent_version.publicatie_datum|notbool %}
+        <div class="toolbox__item">
+            {% trans "Toon voorbeeld" %}:
+            {% if product.active_version %}
+                <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
+                   id="preview-current"
+                   class="preview"
+                   target="_blank">
+                    {% trans "Huidige gepubliceerde" %}
+                </a>
+            {% endif %}
+            {% if product.active_version and most_recent_is_concept %}
+                |
+            {% endif %}
+            {% if most_recent_is_concept %}
+                <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept"
+                   id="preview-concept"
+                   class="preview"
+                   target="_blank">
+                    {% trans "Concept" %}
+                </a>
+            {% endif %}
+        </div>
+    {% endwith %}
 
     {# Notifications. #}
     <div class="toolbox__item">
