@@ -2,7 +2,18 @@
 Change history
 ==============
 
+1.6.1
+=====
+
+**December 19, 2022*
+
+* Changed "Het Waterschapshuis" to "Unie van Waterschappen" per request
+* Changed error message for issue #856 to be more clear per request
+* Visually removed feature #845 (hide products) per request
+
+
 1.6.0
+=====
 
 **December 14, 2022*
 
