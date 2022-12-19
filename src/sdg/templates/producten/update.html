@@ -189,8 +189,9 @@
                     {% endwith %}
                 {% endif %}
 
+                {# DISABLED PER REQUEST VNG #}
                 {% with field=product_form.api_verborgen %}
-                    <tr>
+                    <tr style="display: none">
                         <td>
                             <div class="form__control">
                                 <header class="form__control-header">
