@@ -119,6 +119,8 @@ class UniformeProductnaam(models.Model):
     The base for every product.
     """
 
+    ORGANIZATION_FIELDS = ("gemeente", "provincie", "waterschap")
+
     thema = models.ForeignKey(
         "Thema",
         on_delete=models.PROTECT,

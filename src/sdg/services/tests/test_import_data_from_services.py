@@ -6,7 +6,10 @@ from unittest.mock import patch
 from zgw_consumers.models import Service
 
 from sdg.core.constants import DoelgroepChoices
-from sdg.core.tests.factories.logius import UniformeProductnaamFactory
+from sdg.core.tests.factories.logius import (
+    OverheidsorganisatieFactory,
+    UniformeProductnaamFactory,
+)
 from sdg.core.tests.test_management_commands import CommandTestCase
 from sdg.producten.tests.factories.localized import LocalizedGeneriekProductFactory
 from sdg.services.models import ServiceConfiguration
@@ -43,6 +46,10 @@ class TestImportDataFromServices(CommandTestCase):
             taal="nl",
             generiek_product__doelgroep=DoelgroepChoices.burger,
         )
+        OverheidsorganisatieFactory.create(
+            owms_pref_label="Rijksdienst voor Ondernemend Nederland",
+            owms_identifier="http://standaarden.overheid.nl/owms/terms/RVO",
+        )
 
     @patch("sdg.services.models.ServiceConfiguration.retrieve_products")
     def test_import_data_from_services(self, retrieve_mock):
@@ -66,30 +73,37 @@ class TestImportDataFromServices(CommandTestCase):
                 [
                     "Regelgeving geluid (Kenniscentrum InfoMil)",
                     "http://www.infomil.nl/onderwerpen/geluid/regelgeving/",
+                    "extern",
                 ],
                 [
                     "Akoestisch rapport (Kenniscentrum InfoMil)",
                     "http://www.infomil.nl/onderwerpen/geluid/thema/akoestisch-rapport-0/",
+                    "extern",
                 ],
                 [
                     "Wet algemene bepalingen omgevingsrecht (Wabo) (Overheid.nl)",
                     "http://wetten.overheid.nl/1.0:c:BWBR0024779",
+                    "wetgeving",
                 ],
                 [
                     "Wet geluidhinder (Wgh) (Overheid.nl)",
                     "http://wetten.overheid.nl/1.0:c:BWBR0003227",
+                    "wetgeving",
                 ],
                 [
                     "Activiteitenbesluit milieubeheer (Barim) (Overheid.nl)",
                     "http://wetten.overheid.nl/1.0:c:BWBR0022762",
+                    "wetgeving",
                 ],
                 [
                     "Activiteitenbesluit milieubeheer (Barim), Artikel 1.11. Akoestisch rapport (Overheid.nl)",
                     "http://wetten.overheid.nl/BWBR0022762/#Hoofdstuk1_Afdeling1.2_Artikel1.11",
+                    "wetgeving",
                 ],
                 [
                     "Lokale wet- en regelgeving (Overheid.nl)",
                     "https://www.overheid.nl/lokale-wet-en-regelgeving",
+                    "wetgeving",
                 ],
             ],
             self.localized_1.verwijzing_links,
@@ -101,6 +115,13 @@ class TestImportDataFromServices(CommandTestCase):
         self.assertEqual(
             datetime(2020, 11, 27, 15, 1, 59), self.localized_1.datum_check
         )
+        self.assertEqual(
+            self.localized_1.generiek_product.verantwoordelijke_organisaties.count(), 1
+        )
+        org = (
+            self.localized_1.generiek_product.generiekproductoverheidsorganisatierol_set.all().first()
+        )
+        self.assertEqual(org.rol, "Ondersteuningsorganisatie")
 
     @patch("zgw_consumers.client.ZGWClient.retrieve")
     def test_import_data_from_services_unreachable_api(self, retrieve_mock):

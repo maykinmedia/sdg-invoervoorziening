@@ -11,6 +11,7 @@ from vng_api_common import routers
 
 from sdg.api.views import (
     CatalogusViewSet,
+    GeneriekProductViewSet,
     LocatieViewSet,
     LokaleOverheidViewSet,
     ProductHistoryViewSet,
@@ -31,6 +32,11 @@ router.register(
             basename="product-history",
         ),
     ],
+)
+router.register(
+    "generieke-productteksten",
+    GeneriekProductViewSet,
+    basename="generic-product",
 )
 router.register("organisaties", LokaleOverheidViewSet)
 router.register("locaties", LocatieViewSet, basename="locatie")

@@ -103,6 +103,10 @@ class LabeledURLWidget(LabeledWidget):
     template_name = "forms/widgets/labeled_url_field.html"
 
 
+class LabeledCategoryURLWidget(LabeledWidget):
+    template_name = "forms/widgets/labeled_category_url_field.html"
+
+
 class LabeledTooltipWidget(LabeledWidget):
     template_name = "forms/widgets/labeled_tooltip_field.html"
     single = True

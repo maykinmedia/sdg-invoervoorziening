@@ -25,11 +25,25 @@ from sdg.producten.models import (
     LocalizedProduct,
     ProductFieldMixin,
 )
-from sdg.producten.models.managers import ProductQuerySet, ProductVersieQuerySet
+from sdg.producten.models.managers import (
+    GeneriekProductQuerySet,
+    ProductQuerySet,
+    ProductVersieQuerySet,
+)
 from sdg.producten.types import Language
 from sdg.producten.utils import build_url_kwargs, is_past_date
 
 User = get_user_model()
+
+
+class GeneriekProductOverheidsorganisatieRol(models.Model):
+    generiek_product = models.ForeignKey(
+        "producten.GeneriekProduct", on_delete=models.CASCADE
+    )
+    overheidsorganisatie = models.ForeignKey(
+        "core.Overheidsorganisatie", on_delete=models.CASCADE
+    )
+    rol = models.CharField(_("rol"), max_length=100, blank=True)
 
 
 class GeneriekProduct(models.Model):
@@ -46,14 +60,12 @@ class GeneriekProduct(models.Model):
         related_name="generieke_producten",
         help_text=_("De uniforme productnaam met betrekking tot dit product."),
     )
-    verantwoordelijke_organisatie = models.ForeignKey(
+    verantwoordelijke_organisaties = models.ManyToManyField(
         "core.Overheidsorganisatie",
-        on_delete=models.PROTECT,
-        related_name="generiek_informatie",
-        verbose_name=_("verantwoordelijke organisatie"),
-        help_text=_("Organisatie verantwoordelijk voor de landelijke informatie"),
+        through="producten.GeneriekProductOverheidsorganisatieRol",
+        verbose_name=_("verantwoordelijke organisaties"),
+        help_text=_("Organisaties verantwoordelijk voor de landelijke informatie"),
         blank=True,
-        null=True,
     )
     verplicht_product = models.BooleanField(
         _("verplicht product"),
@@ -83,6 +95,8 @@ class GeneriekProduct(models.Model):
         choices=GenericProductStatus.choices,
         default=GenericProductStatus.NEW,
     )
+
+    objects = GeneriekProductQuerySet.as_manager()
 
     @property
     def upn_uri(self):

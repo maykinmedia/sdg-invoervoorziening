@@ -191,6 +191,80 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProductenCatalogus'
           description: ''
+  /api/v1/generieke-productteksten:
+    get:
+      operationId: generiekeProducttekstenList
+      description: Viewset for a generic product retrieved by UUID
+      parameters:
+      - in: query
+        name: doelgroep
+        schema:
+          type: string
+          enum:
+          - eu-bedrijf
+          - eu-burger
+        description: Toont producten die overeenkomen met de opgegeven doelgroepen.
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - in: query
+        name: taal
+        schema:
+          type: string
+          enum:
+          - en
+          - nl
+        description: Toont producten die overeenkomen met de opgegeven taal.
+      - in: query
+        name: upnLabel
+        schema:
+          type: string
+        description: Toont producten met een UPN label
+      - in: query
+        name: upnUri
+        schema:
+          type: string
+        description: Toont producten met een UPN URI
+      tags:
+      - generieke-productteksten
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGeneriekProductList'
+          description: ''
+  /api/v1/generieke-productteksten/{uuid}:
+    get:
+      operationId: generiekeProducttekstenRetrieve
+      description: Viewset for a generic product retrieved by UUID
+      parameters:
+      - in: path
+        name: uuid
+        schema:
+          type: string
+          format: uuid
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        required: true
+      tags:
+      - generieke-productteksten
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneriekProduct'
+          description: ''
   /api/v1/locaties:
     get:
       operationId: locatiesList
@@ -673,6 +747,90 @@ components:
       - eu-burger
       - eu-bedrijf
       type: string
+    GeneriekProduct:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van dit object binnen deze API.
+        uuid:
+          type: string
+          format: uuid
+          readOnly: true
+          description: De identificatie die binnen deze API gebruikt wordt voor de
+            resource.
+        upnUri:
+          type: string
+          format: uri
+        upnLabel:
+          type: string
+        doelgroep:
+          type: string
+        taal:
+          allOf:
+          - $ref: '#/components/schemas/TaalEnum'
+          description: De taal waarin de betreffende tekst is geschreven.ISO 639-1
+            (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+        titel:
+          type: string
+        tekst:
+          type: string
+        landelijkeLink:
+          type: string
+          format: uri
+          description: 'URL van de productpagina wanneer het een landelijk product
+            betreft of de pagina met enkel generieke beschrijving van een decentraal
+            product, bijvoorbeeld : https://ondernemersplein.kvk.nl/terrasvergunning.
+            gebruikt voor o.a. notificeren, feedback & statistics en het kunnen bekijken
+            van de generieke productinformatie (bv door gebruikers van de organisatie
+            invoervoorziening) '
+          maxLength: 200
+        links:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        organisaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneriekProductOrganisatie'
+        laatstGecheckt:
+          type: string
+          format: date-time
+        laatstGewijzigd:
+          type: string
+          format: date-time
+          nullable: true
+          description: Laatst gewijzigd datum. Datum heeft het formaat [datum]T[tijd]
+      required:
+      - doelgroep
+      - laatstGecheckt
+      - links
+      - organisaties
+      - taal
+      - tekst
+      - titel
+      - upnLabel
+      - upnUri
+      - url
+      - uuid
+    GeneriekProductOrganisatie:
+      type: object
+      properties:
+        rol:
+          type: string
+          maxLength: 100
+        owmsPrefLabel:
+          type: string
+          format: uri
+        owmsUri:
+          type: string
+          format: uri
+      required:
+      - owmsPrefLabel
+      - owmsUri
     LabeledUrl:
       type: object
       description: Default serializer for labeled URLs.
@@ -1058,6 +1216,26 @@ components:
             maxLength: 32
           description: 'De openingstijden op zondag. Tijden dienen als volgt opgegeven
             te worden: `["9:00 - 18:00"]`'
+    PaginatedGeneriekProductList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeneriekProduct'
     PaginatedLocatieList:
       type: object
       properties:

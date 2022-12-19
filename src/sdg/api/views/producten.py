@@ -3,11 +3,42 @@ from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
 
-from sdg.api.filters import ProductFilterSet
+from sdg.api.filters import GeneriekProductFilterSet, ProductFilterSet
 from sdg.api.permissions import OrganizationPermissions, WhitelistedPermission
-from sdg.api.serializers import ProductSerializer, ProductVersieSerializer
+from sdg.api.serializers import (
+    GeneriekProductSerializer,
+    ProductSerializer,
+    ProductVersieSerializer,
+)
 from sdg.core.models.logius import Overheidsorganisatie
-from sdg.producten.models import Product, ProductVersie
+from sdg.producten.models import LocalizedGeneriekProduct, Product, ProductVersie
+
+
+class GeneriekProductViewSet(
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    GenericViewSet,
+):
+    """
+    Viewset for a generic product retrieved by UUID
+    """
+
+    lookup_field = "uuid"
+    queryset = (
+        LocalizedGeneriekProduct.objects.sdg()
+        .select_related(
+            "generiek_product",
+            "generiek_product__upn",
+        )
+        .prefetch_related(
+            "generiek_product__generiekproductoverheidsorganisatierol_set",
+            "generiek_product__generiekproductoverheidsorganisatierol_set__overheidsorganisatie",
+        )
+        .order_by("generiek_product__upn__upn_label")
+        .distinct()
+    )
+    filterset_class = GeneriekProductFilterSet
+    serializer_class = GeneriekProductSerializer
 
 
 @extend_schema_view(
