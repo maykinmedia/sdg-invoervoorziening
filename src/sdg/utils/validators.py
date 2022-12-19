@@ -73,5 +73,5 @@ def validate_placeholders(value, form=None, field_name=None):
 
         form.add_error(
             field_name,
-            "De tekst mag geen placeholders bevatten.",
+            'De Nederlandse en Engelse teksten mogen geen placeholders zoals "[" , "]" of "XX" bevatten. Graag deze tekens in beide talen verwijderen in de teksten en opnieuw opslaan.',
         )
