@@ -370,7 +370,9 @@ class ProductUpdateViewTests(WebTest):
             response.text,
         )
         self.assertIn(
-            _("De tekst mag geen placeholders bevatten."),
+            _(
+                "De Nederlandse en Engelse teksten mogen geen placeholders zoals &quot;[&quot; , &quot;]&quot; of &quot;XX&quot; bevatten. Graag deze tekens in beide talen verwijderen in de teksten en opnieuw opslaan."
+            ),
             response.text,
         )
 
@@ -406,7 +408,9 @@ class ProductUpdateViewTests(WebTest):
             response.text,
         )
         self.assertNotIn(
-            _("De tekst mag geen placeholders bevatten."),
+            _(
+                'De Nederlandse en Engelse teksten mogen geen placeholders zoals "[" , "]" of "XX" bevatten. Graag deze tekens in beide talen verwijderen in de teksten en opnieuw opslaan.'
+            ),
             response.text,
         )
 
