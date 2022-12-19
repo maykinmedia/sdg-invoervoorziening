@@ -119,6 +119,10 @@ De catalogi van de oude gemeente kan omgehangen worden naar de nieuwe gemeente.
 3. In het detail scherm, selecteer bij **Lokale overheid** de juiste/nieuwe
    lokale overheid om de catalogus te verplaatsen naar deze gemeente.
 
+4. Indien de nieuwe **Lokale overheid** al bestaat resulteert dit in een foutmelding. verwijder in dit geval eerst de catalogus van de nieuwe **Lokale overheid**.
+
+5. Pas de **Naam** van de catalogus aan zodat deze weer overeenkomt met de naam van de nieuwe **Lokale overheid**.
+
 ### Tweestapsauthenticatie herstellen
 
 Als functioneel beheerder kunt u de tweestapsauthenticatie van een andere 
