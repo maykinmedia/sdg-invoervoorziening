@@ -38,3 +38,5 @@ local.py
 # Static files
 src/sdg/static/bundles/
 src/sdg/fonts/
+
+products.json
