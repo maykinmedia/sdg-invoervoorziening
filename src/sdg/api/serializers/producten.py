@@ -125,6 +125,26 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             },
         }
 
+    def to_representation(self, instance):
+        """
+        Extend ``to_representation`` to add aditional logic:
+
+        Hide data from ``product_valt_onder_toelichting`` if ``product_valt_onder`` is empty.
+        Hide data from ``product_aanwezig_toelichting`` if ``product_aanwezig`` is True.
+        """
+
+        data = super().to_representation(instance)
+
+        product = instance.product_versie.product
+
+        if not product.product_valt_onder:
+            data["product_valt_onder_toelichting"] = ""
+
+        if product.product_aanwezig:
+            data["product_aanwezig_toelichting"] = ""
+
+        return data
+
 
 class ProductVersieSerializer(serializers.ModelSerializer):
     vertalingen = LocalizedProductSerializer(many=True)
