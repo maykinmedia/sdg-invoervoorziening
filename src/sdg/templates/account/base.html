@@ -9,7 +9,7 @@
 {% block outer_content %}
     <div class="login">
         <div class="login__left"
-             style="background-image: url({% static org_type_cfg.overlay %}); background-size: {{ org_type_cfg.overlay_size }}">
+             {% if org_type_cfg.overlay %}style="background-image: url({% static org_type_cfg.overlay %}); background-size: {{ org_type_cfg.overlay_size }}"{% endif %}>
             {% block login_left %}
                 <div class="logo">
                     <h1 class="logo__title logo__title-large"><a href="{% url 'core:home' %}">

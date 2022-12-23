@@ -334,7 +334,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Allow logging in with both username+password and email+password
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesBackend",
-    "sdg.accounts.backends.UserModelEmailBackend",
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -477,6 +476,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 56
 ACCOUNT_PREVENT_ENUMERATION = False
+ACCOUNT_PRESERVE_USERNAME_CASING = False
 
 # SDG Invitations
 INVITATION_TEMPLATE = "core/email/invitation.html"
