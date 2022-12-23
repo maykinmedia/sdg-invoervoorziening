@@ -66,7 +66,9 @@ def get_placeholder_maps(product):
     municipality = product.catalogus.lokale_overheid
 
     for language in TaalChoices.get_available_languages():
-        localized_generic_product = generic_product.vertalingen.get(taal=language)
+        generic_languages = generic_product.vertalingen.all()
+        result = [i for i in generic_languages if i.taal == language]  # avoid query
+        localized_generic_product = result[0]
 
         with translation.override(language):
             available_explanation_map[language] = _(
