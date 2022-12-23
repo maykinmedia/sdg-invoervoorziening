@@ -236,6 +236,36 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(nl.product_valt_onder_toelichting, "")
 
     @freeze_time(NOW_DATE)
+    def test_concept_product_preview_link_is_shown_and_working(self):
+        self._change_product_status(Product.status.CONCEPT)
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        preview_url = reverse(
+            "organisaties:catalogi:producten:preview",
+            kwargs={
+                "pk": self.product.catalogus.lokale_overheid.pk,
+                "catalog_pk": self.product.catalogus.pk,
+                "product_pk": self.product.pk,
+            },
+        )
+
+        page_preview_current_url = response.pyquery("#preview-current")
+        self.assertEqual(page_preview_current_url.length, 0)
+
+        page_preview_concept_url = response.pyquery("#preview-concept").attr("href")
+        self.assertEqual(page_preview_concept_url, f"{preview_url}?status=concept")
+
+        response = self.app.get(page_preview_concept_url)
+        self.assertEqual(response.status_code, 200)
+
+    @freeze_time(NOW_DATE)
     def test_error_notification_is_displayed(self):
         self._change_product_status(Product.status.CONCEPT)
 
@@ -520,6 +550,48 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(latest_version.publicatie_datum, FUTURE_DATE)
         self.assertEqual(latest_version.current_status, Product.status.SCHEDULED)
         self.assertEqual(latest_version.versie, 2)
+
+    @freeze_time(NOW_DATE)
+    def test_published_preview_links_are_shown_and_working(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        concept_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=None,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(
+            2,
+            product_versie=concept_version,
+        )
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        preview_url = reverse(
+            "organisaties:catalogi:producten:preview",
+            kwargs={
+                "pk": self.product.catalogus.lokale_overheid.pk,
+                "catalog_pk": self.product.catalogus.pk,
+                "product_pk": self.product.pk,
+            },
+        )
+
+        page_preview_current_url = response.pyquery("#preview-current").attr("href")
+        self.assertEqual(page_preview_current_url, preview_url)
+
+        page_preview_concept_url = response.pyquery("#preview-concept").attr("href")
+        self.assertEqual(page_preview_concept_url, f"{preview_url}?status=concept")
+
+        response = self.app.get(page_preview_concept_url)
+        self.assertEqual(response.status_code, 200)
+
+        response = self.app.get(page_preview_current_url)
+        self.assertEqual(response.status_code, 200)
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_concept(self):

@@ -190,7 +190,7 @@ class ProductUpdateView(
 ):
     """
     Update a product.
-    This view is used for both the product form and the product preview.
+    This view is used for both specific product and concept products.
     """
 
     template_name = "producten/update.html"

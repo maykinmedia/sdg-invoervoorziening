@@ -82,6 +82,11 @@ def template_dir(value):
     return dir(value)
 
 
+@register.filter(name="notbool")
+def notbool(true_value):
+    return not true_value
+
+
 @register.inclusion_tag("forms/field.html")
 def field(field, **kwargs):
     return {**kwargs, "field": field}
