@@ -588,16 +588,16 @@ if SDG_API_URL_PROD:
 SDG_LOCALIZED_FORM_FIELDS = [
     "product_titel_decentraal",
     "specifieke_tekst",
-    "verwijzing_links",
-    "procedure_beschrijving",
     "vereisten",
     "bewijs",
-    "bezwaar_en_beroep",
+    "procedure_beschrijving",
     "kosten_en_betaalmethoden",
     "uiterste_termijn",
+    "bezwaar_en_beroep",
     "wtd_bij_geen_reactie",
     "decentrale_procedure_link",
     "decentrale_procedure_label",
+    "verwijzing_links",
 ]
 
 SPECTACULAR_SETTINGS["SERVERS"] = SDG_API_SERVER_INSTANCES
