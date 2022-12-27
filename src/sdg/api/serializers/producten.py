@@ -171,10 +171,25 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
         required=True,
         help_text="De UPN URI van het specifieke product.",
     )
+    # The doelgroep is an essential part to identify a product with well-known
+    # properties (organisation, UPN and doelgroep) but this would lead to the
+    # question if we also need this to identify "productValtOnder".
+    #
+    # doelgroep = serializers.ChoiceField(
+    #     source="generiek_product.doelgroep",
+    #     choices=DoelgroepChoices.choices,
+    #     required=True,
+    #     help_text="De doelgroep van dit product.",
+    # )
 
     class Meta:
         model = Product
-        fields = ("url", "upn_uri", "upn_label")
+        fields = (
+            "url",
+            "upn_uri",
+            "upn_label",
+            # "doelgroep",
+        )
         extra_kwargs = {
             "url": {
                 "view_name": "api:product-detail",
