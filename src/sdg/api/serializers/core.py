@@ -1,3 +1,5 @@
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from sdg.api.serializers.organisaties import LokaleOverheidBaseSerializer
@@ -11,8 +13,7 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
     organisatie = LokaleOverheidBaseSerializer(
         source="lokale_overheid", help_text="De organisatie die deze catalogus beheert."
     )
-    producten = ProductBaseSerializer(
-        many=True,
+    producten = serializers.SerializerMethodField(
         help_text="Alle producten binnen deze catalogus.",
     )
 
@@ -56,3 +57,30 @@ class ProductenCatalogusSerializer(serializers.HyperlinkedModelSerializer):
                 "help_text": "De versie van deze catalogus. Op dit moment heeft de waarde geen betekenis."
             },
         }
+
+    @extend_schema_field(ProductBaseSerializer(many=True))
+    def get_producten(self, obj):
+        queryset = (
+            obj.producten.filter(api_verborgen=False)
+            .select_related(
+                "generiek_product",
+                "generiek_product__upn",
+            )
+            .order_by("generiek_product__upn__upn_label")
+            .exclude_generic_status(api=True)
+            .distinct()
+        )
+
+        request = self.context["request"]
+
+        if request.auth and request.auth.api_default_most_recent:
+            queryset = queryset.most_recent()
+        else:
+            # We need to explicitly exclude active products, otherwise we get
+            # a list of all products, of which some have 0 active product
+            # versions.
+            queryset = queryset.active(exclude_inactive_products=True)
+
+        return ProductBaseSerializer(
+            queryset, many=True, read_only=True, context={"request": request}
+        ).data

@@ -39,7 +39,6 @@ class GenericProductStatus(DjangoChoices):
         :param reference: Whether to exclude for reference products or not.
         """
         exclude = [
-            cls.NEW,
             cls.DELETED,
             cls.MISSING,
         ]
@@ -47,7 +46,7 @@ class GenericProductStatus(DjangoChoices):
         if reference:
             return exclude
         else:
-            return exclude + [cls.READY_FOR_ADMIN]
+            return exclude + [cls.NEW, cls.READY_FOR_ADMIN]
 
     @classmethod
     def get_api_excluded(cls):
@@ -69,7 +68,6 @@ class GenericProductStatus(DjangoChoices):
         :param reference: Whether to exclude for reference products or not.
         """
         exclude = [
-            cls.NEW,
             cls.DELETED,
             cls.MISSING,
         ]

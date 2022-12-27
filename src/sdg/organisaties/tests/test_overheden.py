@@ -206,7 +206,7 @@ class CatalogListViewTests(WebTest):
         for product in specific_products:
             self.assertIn(str(product), response_text)
 
-    def test_reference_products_are_displayed_only_if_ready_for_admin_or_publication(
+    def test_reference_products_are_displayed_only_if_new_ready_for_admin_or_publication(
         self,
     ):
         organisatie = OverheidsorganisatieFactory.create(
@@ -287,10 +287,10 @@ class CatalogListViewTests(WebTest):
         response_text = response.text.lower()
 
         self.assertEqual(response.pyquery(CATALOG_SELECTOR).length, 1)
-        self.assertEqual(response.pyquery(PRODUCT_SELECTOR).length, 2)
+        self.assertEqual(response.pyquery(PRODUCT_SELECTOR).length, 3)
         self.assertIn(str(reference_ready_for_admin), response_text)
         self.assertIn(str(reference_ready_for_publication), response_text)
-        self.assertNotIn(str(reference_new), response_text)
+        self.assertIn(str(reference_new), response_text)
         self.assertNotIn(str(reference_deleted), response_text)
 
     def test_specific_products_are_displayed_only_if_ready_for_publication(self):

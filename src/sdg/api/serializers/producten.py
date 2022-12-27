@@ -171,10 +171,25 @@ class ProductBaseSerializer(serializers.HyperlinkedModelSerializer):
         required=True,
         help_text="De UPN URI van het specifieke product.",
     )
+    # The doelgroep is an essential part to identify a product with well-known
+    # properties (organisation, UPN and doelgroep) but this would lead to the
+    # question if we also need this to identify "productValtOnder".
+    #
+    # doelgroep = serializers.ChoiceField(
+    #     source="generiek_product.doelgroep",
+    #     choices=DoelgroepChoices.choices,
+    #     required=True,
+    #     help_text="De doelgroep van dit product.",
+    # )
 
     class Meta:
         model = Product
-        fields = ("url", "upn_uri", "upn_label")
+        fields = (
+            "url",
+            "upn_uri",
+            "upn_label",
+            # "doelgroep",
+        )
         extra_kwargs = {
             "url": {
                 "view_name": "api:product-detail",
@@ -750,27 +765,32 @@ class ProductSerializer(ProductBaseSerializer):
         return product
 
 
-class GeneriekProductLinkSerializer(serializers.DictField):
+class GeneriekProductLinkSerializer(serializers.ModelSerializer):
+    label = serializers.CharField(help_text="Linktekst")
+    url = serializers.URLField(help_text="Link URL")
+    categorie = serializers.URLField(
+        help_text="Link categorie. Dit zijn de mogelijke categorieën: intern, extern, wetgeving en wetswijziging"
+    )
+
     class Meta:
         model = LocalizedGeneriekProduct
+        fields = ("label", "url", "categorie")
 
     def to_representation(self, value):
-        labels = ("label", "url", "categorie")
         return dict(
             zip(
-                labels,
-                [
-                    self.child.to_representation(item) if item is not None else None
-                    for item in value
-                ],
+                self.Meta.fields,
+                value,
             )
         )
 
 
 class GeneriekProductOrganisatieSerializer(serializers.ModelSerializer):
-    owms_uri = serializers.URLField(source="overheidsorganisatie.owms_identifier")
+    owms_uri = serializers.URLField(
+        source="overheidsorganisatie.owms_identifier", help_text="OWMS URI"
+    )
     owms_pref_label = serializers.URLField(
-        source="overheidsorganisatie.owms_pref_label"
+        source="overheidsorganisatie.owms_pref_label", help_text="OWMS PrefLabel"
     )
 
     class Meta:
@@ -780,22 +800,43 @@ class GeneriekProductOrganisatieSerializer(serializers.ModelSerializer):
             "owms_pref_label",
             "owms_uri",
         )
+        extra_kwargs = {
+            "rol": {
+                "help_text": "Rol van organisatie",
+            },
+        }
 
 
 class GeneriekProductSerializer(serializers.ModelSerializer):
-    titel = serializers.CharField(source="product_titel")
-    tekst = serializers.CharField(source="generieke_tekst")
+    titel = serializers.CharField(
+        source="product_titel", help_text="Titel van het product"
+    )
+    tekst = serializers.CharField(
+        source="generieke_tekst", help_text="Tekst van het product"
+    )
     links = serializers.ListField(
-        source="verwijzing_links", child=GeneriekProductLinkSerializer()
+        source="verwijzing_links",
+        child=GeneriekProductLinkSerializer(),
+        help_text="Linkverwijzingen",
     )
     organisaties = serializers.ListField(
         source="generiek_product.generiekproductoverheidsorganisatierol_set.all",
         child=GeneriekProductOrganisatieSerializer(),
+        help_text="Organisaties",
     )
-    laatst_gecheckt = serializers.DateTimeField(source="datum_check")
-    upn_uri = serializers.URLField(source="generiek_product.upn_uri")
-    upn_label = serializers.CharField(source="generiek_product.upn_label")
-    doelgroep = serializers.CharField(source="generiek_product.doelgroep")
+    laatst_gecheckt = serializers.DateTimeField(
+        source="datum_check",
+        help_text="Laatst gecheckt datum. Datum heeft het formaat {datum}T{tijd}",
+    )
+    upn_uri = serializers.URLField(
+        source="generiek_product.upn_uri", help_text="UPN URI van het product"
+    )
+    upn_label = serializers.CharField(
+        source="generiek_product.upn_label", help_text="UPN label van het product"
+    )
+    doelgroep = serializers.CharField(
+        source="generiek_product.doelgroep", help_text="De SDG doelgroep indicatie"
+    )
 
     class Meta:
         model = LocalizedGeneriekProduct
@@ -819,5 +860,11 @@ class GeneriekProductSerializer(serializers.ModelSerializer):
                 "view_name": "api:generic-product-detail",
                 "lookup_field": "uuid",
                 "help_text": "De unieke URL van dit object binnen deze API.",
+            },
+            "laatst_gewijzigd": {
+                "help_text": "Laatst gewijzigd datum. Datum heeft het formaat {datum}T{tijd}"
+            },
+            "landelijke_link": {
+                "help_text": "URL van het product op de nationale portalen website"
             },
         }

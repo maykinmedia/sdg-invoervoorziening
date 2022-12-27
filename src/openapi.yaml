@@ -194,7 +194,10 @@ paths:
   /api/v1/generieke-productteksten:
     get:
       operationId: generiekeProducttekstenList
-      description: Viewset for a generic product retrieved by UUID
+      description: |-
+        Lijst van alle generieke productteksten zoals aangeleverd door de nationale portalen.
+
+        De UUID is overgenomen van de nationale portalen.
       parameters:
       - in: query
         name: doelgroep
@@ -243,7 +246,10 @@ paths:
   /api/v1/generieke-productteksten/{uuid}:
     get:
       operationId: generiekeProducttekstenRetrieve
-      description: Viewset for a generic product retrieved by UUID
+      description: |-
+        Generieke producttekst zoals aangeleverd door de nationale portalen.
+
+        De UUID is overgenomen van de nationale portalen.
       parameters:
       - in: path
         name: uuid
@@ -764,10 +770,13 @@ components:
         upnUri:
           type: string
           format: uri
+          description: UPN URI van het product
         upnLabel:
           type: string
+          description: UPN label van het product
         doelgroep:
           type: string
+          description: De SDG doelgroep indicatie
         taal:
           allOf:
           - $ref: '#/components/schemas/TaalEnum'
@@ -775,35 +784,34 @@ components:
             (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
         titel:
           type: string
+          description: Titel van het product
         tekst:
           type: string
+          description: Tekst van het product
         landelijkeLink:
           type: string
           format: uri
-          description: 'URL van de productpagina wanneer het een landelijk product
-            betreft of de pagina met enkel generieke beschrijving van een decentraal
-            product, bijvoorbeeld : https://ondernemersplein.kvk.nl/terrasvergunning.
-            gebruikt voor o.a. notificeren, feedback & statistics en het kunnen bekijken
-            van de generieke productinformatie (bv door gebruikers van de organisatie
-            invoervoorziening) '
+          description: URL van het product op de nationale portalen website
           maxLength: 200
         links:
           type: array
           items:
-            type: object
-            additionalProperties: {}
+            $ref: '#/components/schemas/GeneriekProductLink'
+          description: Linkverwijzingen
         organisaties:
           type: array
           items:
             $ref: '#/components/schemas/GeneriekProductOrganisatie'
+          description: Organisaties
         laatstGecheckt:
           type: string
           format: date-time
+          description: Laatst gecheckt datum. Datum heeft het formaat {datum}T{tijd}
         laatstGewijzigd:
           type: string
           format: date-time
           nullable: true
-          description: Laatst gewijzigd datum. Datum heeft het formaat [datum]T[tijd]
+          description: Laatst gewijzigd datum. Datum heeft het formaat {datum}T{tijd}
       required:
       - doelgroep
       - laatstGecheckt
@@ -816,18 +824,40 @@ components:
       - upnUri
       - url
       - uuid
+    GeneriekProductLink:
+      type: object
+      properties:
+        label:
+          type: string
+          description: Linktekst
+        url:
+          type: string
+          format: uri
+          description: Link URL
+        categorie:
+          type: string
+          format: uri
+          description: 'Link categorie. Dit zijn de mogelijke categorieën: intern,
+            extern, wetgeving en wetswijziging'
+      required:
+      - categorie
+      - label
+      - url
     GeneriekProductOrganisatie:
       type: object
       properties:
         rol:
           type: string
+          description: Rol van organisatie
           maxLength: 100
         owmsPrefLabel:
           type: string
           format: uri
+          description: OWMS PrefLabel
         owmsUri:
           type: string
           format: uri
+          description: OWMS URI
       required:
       - owmsPrefLabel
       - owmsUri
@@ -1701,6 +1731,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductBase'
+          readOnly: true
           description: Alle producten binnen deze catalogus.
       required:
       - domein

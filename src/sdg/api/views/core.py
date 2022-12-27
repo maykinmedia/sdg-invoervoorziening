@@ -72,11 +72,5 @@ class CatalogusViewSet(viewsets.ReadOnlyModelViewSet):
             "lokale_overheid__organisatie",
             "referentie_catalogus",
         )
-        .prefetch_related(
-            Prefetch(
-                "producten",
-                queryset=Product.objects.select_related("generiek_product__upn"),
-            )
-        )
         .distinct()
     )
