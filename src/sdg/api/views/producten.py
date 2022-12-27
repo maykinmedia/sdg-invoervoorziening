@@ -46,6 +46,8 @@ class GeneriekProductViewSet(
             "generiek_product__generiekproductoverheidsorganisatierol_set",
             "generiek_product__generiekproductoverheidsorganisatierol_set__overheidsorganisatie",
         )
+        # Remove invalid product texts.
+        .filter(uuid__isnull=False)
         .order_by("generiek_product__upn__upn_label")
         .distinct()
     )
