@@ -31,7 +31,15 @@ class Command(BaseCommand):
 
         # NOTE: New languages are not created automatically. There's no need
         # for this feature at the moment.
-        for upn in UniformeProductnaam.objects.annotate(Count("generieke_producten")):
+        upn_qs = UniformeProductnaam.objects.annotate(Count("generieke_producten"))
+        upn_qs = upn_qs.prefetch_related(
+            "generieke_producten",
+            "generieke_producten__producten",
+        )
+        for upn in upn_qs:
+            if upn.sdg:
+                self.clean_upn_data(upn)
+
             if upn.generieke_producten__count == 0:
                 generic_product = GeneriekProduct.objects.create(upn=upn)
                 LocalizedGeneriekProduct.objects.localize(
@@ -87,3 +95,23 @@ class Command(BaseCommand):
                             self.stdout.write(
                                 f'Created new product "{upn}" in catalog "{catalog}".'
                             )
+
+    def clean_upn_data(self, upn):
+        """
+        Delete the related Generic Product objects that do not match the UPN requirements:
+
+        - If there are SDG-codes: delete the Generic Product that does not have doelgroep.
+        - If there are no SDG-codes: delete the Generic Product that have a doelgroep.
+
+        * If there are any related products they must be deleted manually.
+        """
+        generic_products = [i for i in upn.generieke_producten.all() if not i.doelgroep]
+
+        for generic_product in generic_products:
+            if generic_product.producten.all():
+                self.stdout.write(
+                    self.style.WARNING(
+                        f"Generic product '{generic_product}' has related products. They have been deleted."
+                    )
+                )
+            generic_product.delete()
