@@ -5,7 +5,7 @@ from io import StringIO
 from django.core.management import call_command
 from django.test import TestCase
 
-from sdg.core.constants import TaalChoices
+from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models import (
     Informatiegebied,
     Overheidsorganisatie,
@@ -185,6 +185,36 @@ class TestAutofill(CommandTestCase):
         reference_version = reference_product.versies.get()
         self.assertEqual(2, reference_version.vertalingen.count())
         self.assertIn("Created new product", out)
+
+    def test_autofill_matching_with_generic__clean_up(self):
+        ProductenCatalogusFactory.create(
+            autofill=True,
+            autofill_upn_filter=["provincie", "waterschap"],
+            is_referentie_catalogus=True,
+        )
+        upn = UniformeProductnaamFactory.create(
+            provincie=True, waterschap=True, sdg=["A1", "B2"]
+        )
+        generic_product = GeneriekProductFactory.create(
+            upn=upn, doelgroep=DoelgroepChoices.burger
+        )
+        GeneriekProductFactory.create(upn=upn)
+
+        self.assertEqual(2, upn.generieke_producten.count())
+        self.assertEqual(0, generic_product.producten.count())
+        out = self.call_command("autofill")
+
+        self.assertEqual(1, generic_product.producten.count())
+        reference_product = generic_product.producten.get(
+            referentie_product__isnull=True
+        )
+        self.assertEqual(1, reference_product.versies.count())
+        reference_version = reference_product.versies.get()
+        self.assertEqual(2, reference_version.vertalingen.count())
+        self.assertIn("Created new product", out)
+
+        upn.refresh_from_db()
+        self.assertEqual(1, upn.generieke_producten.count())
 
     def test_autofill_matching_without_generic(self):
         ProductenCatalogusFactory.create(
