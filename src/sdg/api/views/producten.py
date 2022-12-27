@@ -14,6 +14,18 @@ from sdg.core.models.logius import Overheidsorganisatie
 from sdg.producten.models import LocalizedGeneriekProduct, Product, ProductVersie
 
 
+@extend_schema_view(
+    list=extend_schema(
+        description="""Lijst van alle generieke productteksten zoals aangeleverd door de nationale portalen.
+
+De UUID is overgenomen van de nationale portalen.""",
+    ),
+    retrieve=extend_schema(
+        description="""Generieke producttekst zoals aangeleverd door de nationale portalen.
+
+De UUID is overgenomen van de nationale portalen.""",
+    ),
+)
 class GeneriekProductViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
