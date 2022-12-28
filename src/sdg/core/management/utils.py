@@ -151,19 +151,6 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
         )
         upn_updated_list.append(upn.pk)
 
-        groups = [doelgroep for i in sdg_list if (doelgroep := _get_group(i))]
-        # Create generic product (and localize) for each target group
-        for group in groups:
-            generic, g_created = GeneriekProduct.objects.get_or_create(
-                upn=upn,
-                doelgroep=group,
-            )
-            if g_created:
-                LocalizedGeneriekProduct.objects.localize(
-                    instance=generic,
-                    languages=TaalChoices.get_available_languages(),
-                )
-
         if created:
             count += 1
 
@@ -172,15 +159,3 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
     )
 
     return count
-
-
-def _get_group(sdg_code: str) -> str:
-    """Get the target group from a given SDG code.
-    - The range A-I equals "burger".
-    - The range J+ equals "bedrijf".
-    """
-    letter = sdg_code[0]
-    if letter in string.ascii_uppercase[:9]:
-        return "eu-burger"
-    elif letter in string.ascii_uppercase[9:]:
-        return "eu-bedrijf"
