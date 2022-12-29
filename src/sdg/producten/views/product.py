@@ -6,10 +6,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Prefetch
-from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
+from django.template.defaultfilters import capfirst
 from django.urls import reverse
-from django.utils import translation
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView, UpdateView
 
@@ -19,19 +18,13 @@ from sdg.accounts.utils import user_has_valid_roles
 from sdg.accounts.views.decorators import municipality_role_required
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
-from sdg.core.views.mixins import SDGSettingsMixin
-from sdg.producten.forms import (
-    LocalizedProductForm,
-    LocalizedProductFormSet,
-    ProductForm,
-    VersionForm,
-)
-from sdg.producten.models import LocalizedProduct, Product, ProductVersie
+from sdg.core.views.mixins import BreadcrumbsMixin, SDGSettingsMixin
+from sdg.producten.forms import LocalizedProductFormSet, ProductForm, VersionForm
+from sdg.producten.models import Product, ProductVersie
 from sdg.producten.models.product import GeneriekProduct
 from sdg.producten.utils import (
     build_url_kwargs,
     duplicate_localized_products,
-    get_placeholder_maps,
     parse_changed_data,
 )
 from sdg.utils.validators import validate_placeholders
@@ -184,6 +177,7 @@ class ProductPreviewView(OverheidMixin, DetailView):
 
 
 class ProductUpdateView(
+    BreadcrumbsMixin,
     SDGSettingsMixin,
     OverheidMixin,
     UpdateView,
@@ -213,6 +207,21 @@ class ProductUpdateView(
             .exclude_generic_status()
             .annotate_name()
         )
+
+    def get_breadcrumbs_title(self):
+        name = capfirst(self.object)
+
+        if self.product.is_referentie_product:
+            return f"{name} (referentie)"
+
+        return name
+
+    def get_lokale_overheid(self):
+        self.product = self.get_object()
+        self.lokale_overheid = self.product.catalogus.lokale_overheid
+        self.object = self.product.most_recent_version
+        self.product_nl, self.product_en = self.object.vertalingen.all()
+        return self.lokale_overheid
 
     def _save_version_form(
         self, product_form, version_form, localized_formset
@@ -255,13 +264,6 @@ class ProductUpdateView(
             setattr(en, "template_fields", en.get_fields(required_fields))
 
         return [nl, en]
-
-    def get_lokale_overheid(self):
-        self.product = self.get_object()
-        self.lokale_overheid = self.product.catalogus.lokale_overheid
-        self.object = self.product.most_recent_version
-        self.product_nl, self.product_en = self.object.vertalingen.all()
-        return self.lokale_overheid
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -6,15 +6,21 @@ from django.views.generic import UpdateView
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
 from sdg.conf.utils import org_type_cfg
+from sdg.core.views.mixins import BreadcrumbsMixin
 from sdg.organisaties.forms import BevoegdeOrganisatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 
 
-class BevoegdeOrganisatieUpdateView(OverheidMixin, UpdateView):
+class BevoegdeOrganisatieUpdateView(
+    BreadcrumbsMixin,
+    OverheidMixin,
+    UpdateView,
+):
     template_name = "organisaties/bevoegde_organisaties.html"
     model = LokaleOverheid
     required_roles = [Role.choices.MANAGER]
     form_class = BevoegdeOrganisatieInlineFormSet
+    breadcrumbs_title = _("Bevoegde organisaties")
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
