@@ -13,10 +13,7 @@ from sdg.conf.utils import org_type_cfg
 from sdg.core.constants import GenericProductStatus, TaalChoices
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.core.tests.utils import hard_refresh_from_db
-from sdg.organisaties.tests.factories.overheid import (
-    BevoegdeOrganisatieFactory,
-    LocatieFactory,
-)
+from sdg.organisaties.tests.factories.overheid import BevoegdeOrganisatieFactory
 from sdg.producten.models import Product
 from sdg.producten.tests.constants import (
     DUMMY_TITLE,
@@ -829,9 +826,6 @@ class ProductUpdateViewTests(WebTest):
     @freeze_time(NOW_DATE)
     def test_can_update_product_information(self):
         self._change_product_status(Product.status.CONCEPT)
-        LocatieFactory.create_batch(
-            3, lokale_overheid=self.product.catalogus.lokale_overheid
-        )
 
         locations = list(self.product.get_municipality_locations())
         self.assertEqual(len(locations), 3)
@@ -957,9 +951,6 @@ class ProductUpdateViewTests(WebTest):
         self.role.is_raadpleger = True
         self.role.save()
         self._change_product_status(Product.status.CONCEPT)
-        LocatieFactory.create_batch(
-            3, lokale_overheid=self.product.catalogus.lokale_overheid
-        )
 
         locations = list(self.product.get_municipality_locations())
         self.assertEqual(len(locations), 3)
@@ -990,9 +981,6 @@ class ProductUpdateViewTests(WebTest):
         self.role.is_raadpleger = True
         self.role.save()
         self._change_product_status(Product.status.CONCEPT)
-        LocatieFactory.create_batch(
-            3, lokale_overheid=self.product.catalogus.lokale_overheid
-        )
 
         locations = list(self.product.get_municipality_locations())
         self.assertEqual(len(locations), 3)
