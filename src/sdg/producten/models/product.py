@@ -6,7 +6,6 @@ from functools import partialmethod
 from typing import Any, List, Optional
 
 from django.contrib.auth import get_user_model
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import BooleanField, Case, Q, Value, When
@@ -423,7 +422,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
         auto_now=True,
     )
 
-    bewerkte_velden = JSONField(
+    bewerkte_velden = models.JSONField(
         verbose_name=_("bewerkte_velden"),
         blank=True,
         default=dict,

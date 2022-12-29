@@ -5,10 +5,13 @@
 
 # Stage 1 - Backend build environment
 # includes compilers and build tooling to create the environment
-FROM python:3.8-buster AS backend-build
+FROM python:3.10-slim-bullseye AS backend-build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libpq-dev \
+        build-essential \
+        python3-dev \
+        git \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -58,16 +61,17 @@ RUN npm run build
 
 
 # Stage 3 - Build docker image suitable for production
-FROM python:3.8-buster
+FROM python:3.10-slim-bullseye
 
 # Stage 3.1 - Set up the needed production dependencies
 # install all the dependencies for GeoDjango
 RUN apt-get update && apt-get install -y --no-install-recommends \
         procps \
         vim \
+        mime-support \
         postgresql-client \
-        libxml2-dev \
-        libxmlsec1-dev \
+        libxml2 \
+        libxmlsec1 \
         libxmlsec1-openssl \
         gettext \
     && rm -rf /var/lib/apt/lists/*
@@ -80,7 +84,7 @@ RUN mkdir /app/log
 RUN mkdir /app/media
 
 # copy backend build deps
-COPY --from=backend-build /opt/venv/lib/python3.8 /usr/local/lib/python3.8
+COPY --from=backend-build /opt/venv/lib/python3.10 /usr/local/lib/python3.10
 COPY --from=backend-build /opt/venv/bin/uwsgi /usr/local/bin/uwsgi
 COPY --from=backend-build /app/src/ /app/src/
 

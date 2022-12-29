@@ -685,10 +685,7 @@ typing-extensions==4.4.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-    #   astroid
-    #   black
     #   pydantic
-    #   pylint
 uritemplate==4.1.1
     # via
     #   -c requirements/base.txt

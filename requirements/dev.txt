@@ -805,10 +805,7 @@ typing-extensions==4.4.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   astroid
-    #   black
     #   pydantic
-    #   pylint
 uritemplate==4.1.1
     # via
     #   -c requirements/ci.txt
