@@ -1,4 +1,4 @@
-const forms = document.querySelectorAll('#bevoegde_organisaties_form .form__subforms');
+const forms = document.querySelectorAll('#bevoegde_organisaties_form .form__subforms--form');
 
 
 class BevoegdeOrganisatiesForm {
