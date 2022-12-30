@@ -1,11 +1,6 @@
 {% extends 'organisaties/base.html' %}
 {% load static i18n utils l10n %}
 
-{% block notifications %}
-    <div class="notifications">
-        {% include "core/_notifications.html" %}
-    </div>
-{% endblock %}
 {% block page_title %}{% trans "Bevoegde organisaties" %}{% endblock %}
 {% block page_intro %}
     <p class="subheading">
