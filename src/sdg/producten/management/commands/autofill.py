@@ -30,6 +30,60 @@ class Command(BaseCommand):
         elif letter in string.ascii_uppercase[9:]:
             return "eu-bedrijf"
 
+    def _get_or_create_valid_generic_products(self, upn):
+        """
+        Retrieve a list of all generic products that belong to this UPN. At the
+        moment this can be 0, 1 or 2. If a UPN is not meant for the SDG, the
+        result will be 0. If the UPN contains 2 SDG codes that belong to
+        different target groups (eu-burger or eu-bedrijf), the result will be
+        2 generic products.
+
+        Missing generic products will be created.
+        """
+        # NOTE: This part is really SDG specific and deviates from the
+        # generic feature of the autofill-fields. We need the SDG code(s)
+        # to decide which generic product(s) to create.
+
+        # Create generic product (and localize) for each target group
+        groups = [doelgroep for i in upn.sdg if (doelgroep := self._get_group(i))]
+
+        generic_products = []
+        for group in groups:
+            (generic_product, g_created,) = GeneriekProduct.objects.get_or_create(
+                upn=upn,
+                doelgroep=group,
+            )
+            generic_products.append(generic_product)
+
+            if g_created:
+                self.stdout.write(f'Created new generic product for "{upn} ({group})".')
+                LocalizedGeneriekProduct.objects.localize(
+                    instance=generic_product,
+                    languages=TaalChoices.get_available_languages(),
+                )
+
+        return generic_products
+
+    def _clean_other_generic_products(self, upn, valid_generic_products):
+        """
+        Set an end date on generic products (attached to given UPN) that are
+        not in the list of `valid_generic_products`
+
+        It's possible existing generic products were created when the UPN had
+        different properties (like an SDG code that was later removed). These
+        generic products need to be cleaned up. We cannot just delete them,
+        since they have relations and we should not delete anything that could
+        have user data.
+        """
+        correct_gp_pks = [gp_i.pk for gp_i in valid_generic_products]
+        for existing_gp in list(upn.generieke_producten.all()):
+            if existing_gp.pk not in correct_gp_pks:
+                self.stdout.write(
+                    f'Marking old generic product for "{upn} ({existing_gp.pk}) as removed".'
+                )
+                existing_gp.eind_datum = datetime.date.today()
+                existing_gp.save()
+
     def handle(self, **options):
         # Get all catalogs that can be filled and store matching fields.
         catalogs = []
@@ -63,45 +117,10 @@ class Command(BaseCommand):
 
                 if all(f in active_fields for f in autofill_fields):
 
-                    # NOTE: This part is really SDG specific and deviates from the
-                    # generic feature of the autofill-fields. We need the SDG code(s)
-                    # to decide which generic product(s) to create.
-
-                    # Create generic product (and localize) for each target group
-                    groups = [
-                        doelgroep for i in upn.sdg if (doelgroep := self._get_group(i))
-                    ]
-
-                    generic_products = []
-                    for group in groups:
-                        (
-                            generic_product,
-                            g_created,
-                        ) = GeneriekProduct.objects.get_or_create(
-                            upn=upn,
-                            doelgroep=group,
-                        )
-                        generic_products.append(generic_product)
-
-                        if g_created:
-                            self.stdout.write(
-                                f'Created new generic product for "{upn} ({group})".'
-                            )
-                            LocalizedGeneriekProduct.objects.localize(
-                                instance=generic_product,
-                                languages=TaalChoices.get_available_languages(),
-                            )
-                    # End SDG-specific.
-
-                    # Clean up old generieke producten
-                    correct_gp_pks = [gp_i.pk for gp_i in generic_products]
-                    for existing_gp in list(upn.generieke_producten.all()):
-                        if existing_gp.pk not in correct_gp_pks:
-                            self.stdout.write(
-                                f'Marking old generic product for "{upn} ({existing_gp.pk}) as removed".'
-                            )
-                            existing_gp.eind_datum = datetime.date.today()
-                            existing_gp.save()
+                    # NOTE: The function below uses SDG specific logic,
+                    # ingoring the more generic "autofill_fields" feature.
+                    generic_products = self._get_or_create_valid_generic_products(upn)
+                    self._clean_other_generic_products(upn, generic_products)
 
                     for generic_product in generic_products:
                         # Typically, if a generic product was created with this
