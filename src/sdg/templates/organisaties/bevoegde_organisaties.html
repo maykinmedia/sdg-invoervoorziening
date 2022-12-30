@@ -1,5 +1,5 @@
 {% extends 'organisaties/base.html' %}
-{% load static i18n utils%}
+{% load static i18n utils l10n %}
 
 {% block notifications %}
     <div class="notifications">
@@ -34,7 +34,7 @@
                             </h3>
                             <div class="form__block-group">
                                 <div>
-                                    <input type="hidden" name="{{ subform.organisatie.html_name }}" value="{{ lokaleoverheid.organisatie.pk }}">
+                                    <input type="hidden" name="{{ subform.organisatie.html_name }}" value="{% localize off %}{{ lokaleoverheid.organisatie.pk }}{% endlocalize %}">
                                     <label for="id_form-{{ forloop.counter }}-naam" class="form__label">{% trans "Standaard bevoegde organisatie" %}</label>
                                     <p id="form-{{ forloop.counter }}-naam">{{ subform.instance.organisatie }}</p>
                                 </div>
