@@ -58,7 +58,8 @@ const observer = new MutationObserver(function (mutations) {
 
 // Ensure admin inline elements (dynamically added) are also initialized
 const mainElement = document.querySelector('#content-main');
-observer.observe(mainElement, {childList: true, subtree: true});
+if (mainElement)
+    observer.observe(mainElement, {childList: true, subtree: true});
 
 [...arrayWidgets].forEach(element => {
     initializeDynamicWidget(element)

@@ -1,6 +1,11 @@
 {% extends 'organisaties/base.html' %}
 {% load static i18n utils%}
 
+{% block notifications %}
+    <div class="notifications">
+        {% include "core/_notifications.html" %}
+    </div>
+{% endblock %}
 {% block page_title %}{% trans "Bevoegde organisaties" %}{% endblock %}
 {% block page_intro %}
     <p class="subheading">
@@ -36,7 +41,7 @@
                             </div>
                         </div>
                     {% else %}
-                        <div class="form__subforms">
+                        <div class="form__subforms form__subforms--form">
                             {{ subform.non_field_errors }}
                             {% for hidden in subform.hidden_fields %}
                                 {{ hidden }}

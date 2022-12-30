@@ -1,13 +1,19 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.timezone import now
+from django.utils.translation import gettext as _
 from django.views.generic import ListView
 
 from dateutil.relativedelta import relativedelta
 
+from sdg.core.views.mixins import BreadcrumbsMixin
 from sdg.producten.models import ProductVersie
 
 
-class ProductVersieListView(LoginRequiredMixin, ListView):
+class ProductVersieListView(
+    BreadcrumbsMixin,
+    LoginRequiredMixin,
+    ListView,
+):
     """
     Product version list view. Referred to as "notifications".
 
@@ -20,6 +26,7 @@ class ProductVersieListView(LoginRequiredMixin, ListView):
     context_object_name = "versions"
     limit = 25
     max_months_old = 12
+    breadcrumbs_title = _("Notificaties")
 
     def get_queryset(self):
         """

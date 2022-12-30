@@ -19,14 +19,14 @@
                         <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{% trans 'Productenlijst' %}</a>
                     {% endif %}
                 {% endwith %}
-                {% if namespace == "roles" %}
+                {% if breadcrumbs_title %}
+                    <span>{{ breadcrumbs_title }}</span>
+                {% elif namespace == "roles" %}
                     <span>{% trans "Gebruikers" %}</span>
                 {% elif namespace == "organisaties" %}
                     <span>{% trans "Locaties" %}</span>
                 {% else %}
-                    {% block breadcrumbs_page_title %}
-                        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
-                    {% endblock %}
+                    <span>{{ object|capfirst|default:namespace|capfirst }}</span>
                 {% endif %}
             </div>
         </div>
