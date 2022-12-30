@@ -137,11 +137,7 @@ class TestImportData(CommandTestCase):
 
         # ensure target groups are correct
         self.assertFalse(upn.is_verwijderd)
-        self.assertEqual(2, upn.generieke_producten.count())
-        first_generic = upn.generieke_producten.get(doelgroep="eu-burger")
-        self.assertEqual("eu-burger", first_generic.doelgroep)
-        self.assertEqual("eu-bedrijf", upn.generieke_producten.last().doelgroep)
-        self.assertEqual(len(TaalChoices), first_generic.vertalingen.count())
+        self.assertListEqual(upn.sdg, ["A1", "L2"])
 
         with self.subTest("test_load_upn_is_verwijderd"):
             self.call_command(
@@ -166,12 +162,14 @@ class TestAutofill(CommandTestCase):
     def test_autofill_matching_with_generic(self):
         ProductenCatalogusFactory.create(
             autofill=True,
-            autofill_upn_filter=["provincie", "waterschap"],
+            autofill_upn_filter=["sdg", "waterschap"],
             is_referentie_catalogus=True,
         )
         generic_product = GeneriekProductFactory.create(
             upn__provincie=True,
             upn__waterschap=True,
+            upn__sdg=["L2"],
+            doelgroep="eu-bedrijf",
         )
 
         self.assertEqual(0, generic_product.producten.count())
@@ -189,19 +187,20 @@ class TestAutofill(CommandTestCase):
     def test_autofill_matching_without_generic(self):
         ProductenCatalogusFactory.create(
             autofill=True,
-            autofill_upn_filter=["provincie", "waterschap"],
+            autofill_upn_filter=["sdg", "waterschap"],
             is_referentie_catalogus=True,
         )
         upn = UniformeProductnaamFactory.create(
             provincie=True,
             waterschap=True,
+            sdg=["A1", "L2"],
         )
 
         self.assertEqual(0, upn.generieke_producten.count())
         out = self.call_command("autofill")
 
-        self.assertEqual(1, upn.generieke_producten.count())
-        generic_product = upn.generieke_producten.get()
+        self.assertEqual(2, upn.generieke_producten.count())
+        generic_product = upn.generieke_producten.first()
         self.assertEqual(2, generic_product.vertalingen.count())
         self.assertIn("Created new generic product", out)
 
@@ -217,32 +216,67 @@ class TestAutofill(CommandTestCase):
     def test_autofill_catalog_not_matching(self):
         ProductenCatalogusFactory.create(
             autofill=True,
-            autofill_upn_filter=["provincie", "waterschap"],
+            autofill_upn_filter=["sdg", "waterschap"],
             is_referentie_catalogus=True,
         )
         upn = UniformeProductnaamFactory.create(
             provincie=True,
             waterschap=False,
+            sdg=["A1", "L2"],
         )
 
         self.call_command("autofill")
-        self.assertEqual(1, upn.generieke_producten.count())
-
-        generic_product = upn.generieke_producten.get()
-        self.assertEqual(0, generic_product.producten.count())
+        self.assertEqual(0, upn.generieke_producten.count())
 
     def test_non_autofill_catalog(self):
         ProductenCatalogusFactory.create(
             autofill=False,
+            autofill_upn_filter=["sdg", "waterschap"],
             is_referentie_catalogus=True,
         )
         upn = UniformeProductnaamFactory.create(
             provincie=True,
-            waterschap=False,
+            waterschap=True,
+            sdg=["A1", "L2"],
         )
 
         self.call_command("autofill")
-        self.assertEqual(1, upn.generieke_producten.count())
+        self.assertEqual(0, upn.generieke_producten.count())
 
-        generic_product = upn.generieke_producten.get()
-        self.assertEqual(0, generic_product.producten.count())
+    def test_mark_gp_as_removed(self):
+        ProductenCatalogusFactory.create(
+            autofill=True,
+            autofill_upn_filter=["sdg", "waterschap"],
+            is_referentie_catalogus=True,
+        )
+        upn = UniformeProductnaamFactory.create(
+            provincie=True,
+            waterschap=True,
+            sdg=["L2"],  # eu-bedrijf only
+        )
+        gp_burger = GeneriekProductFactory.create(
+            upn=upn,
+            doelgroep="eu-burger",
+        )
+        gp_bedrijf = GeneriekProductFactory.create(
+            upn=upn,
+            doelgroep="eu-bedrijf",
+        )
+        gp_unknown = GeneriekProductFactory.create(
+            upn=upn,
+            doelgroep="",
+        )
+
+        self.assertIsNone(gp_burger.eind_datum)
+        self.assertIsNone(gp_bedrijf.eind_datum)
+        self.assertIsNone(gp_unknown.eind_datum)
+
+        self.call_command("autofill")
+
+        gp_burger.refresh_from_db()
+        gp_bedrijf.refresh_from_db()
+        gp_unknown.refresh_from_db()
+
+        self.assertIsNotNone(gp_burger.eind_datum)
+        self.assertIsNone(gp_bedrijf.eind_datum)
+        self.assertIsNotNone(gp_unknown.eind_datum)

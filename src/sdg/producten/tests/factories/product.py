@@ -33,7 +33,11 @@ class GeneriekProductFactory(DjangoModelFactory):
 
 class ProductFactory(DjangoModelFactory):
     product_aanwezig = True
-    locaties = factory.RelatedFactoryList(LocatieFactory, size=3)
+    locaties = factory.RelatedFactoryList(
+        LocatieFactory,
+        size=3,
+        lokale_overheid=factory.SelfAttribute("..catalogus.lokale_overheid"),
+    )
 
     class Meta:
         model = Product

@@ -13,6 +13,7 @@ class UpdateGenericProductStatusTests(TestCase):
         generic = GeneriekProductFactory.create(
             upn__is_verwijderd=True,
             eind_datum=None,
+            product_status=GenericProductStatus.NEW,
         )
         self.assertEqual(generic.product_status, GenericProductStatus.NEW)
 
@@ -22,9 +23,15 @@ class UpdateGenericProductStatusTests(TestCase):
         self.assertEqual(generic.product_status, GenericProductStatus.EXPIRED)
 
     def test_update_generic_product_status_eol_deleted(self):
-        generic_1 = GeneriekProductFactory.create(eind_datum=now() - timedelta(days=1))
+        generic_1 = GeneriekProductFactory.create(
+            eind_datum=now() - timedelta(days=1),
+            product_status=GenericProductStatus.NEW,
+        )
 
-        generic_2 = GeneriekProductFactory.create(eind_datum=now() + timedelta(days=1))
+        generic_2 = GeneriekProductFactory.create(
+            eind_datum=now() + timedelta(days=1),
+            product_status=GenericProductStatus.NEW,
+        )
 
         self.assertEqual(generic_1.product_status, GenericProductStatus.NEW)
         self.assertEqual(generic_2.product_status, GenericProductStatus.NEW)
@@ -37,7 +44,9 @@ class UpdateGenericProductStatusTests(TestCase):
         self.assertEqual(generic_2.product_status, GenericProductStatus.EOL)
 
     def test_update_generic_product_status_missing(self):
-        generic = GeneriekProductFactory.create(localized=True)
+        generic = GeneriekProductFactory.create(
+            localized=True, product_status=GenericProductStatus.NEW
+        )
         self.assertEqual(generic.product_status, GenericProductStatus.NEW)
 
         call_command("update_generic_product_status")
