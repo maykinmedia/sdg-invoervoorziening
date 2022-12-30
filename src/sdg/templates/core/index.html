@@ -5,7 +5,6 @@
 
 {% block head_title %}{% trans "Home" %}{% endblock %}
 
-{% block notifications %}{% endblock %}
 {% block container_title %}
     <div class="header__title">
         <b>SDG</b> {% trans "Invoervoorziening" %}
@@ -14,9 +13,6 @@
 
 {% block inner %}
     <div class="tabs">
-        <div class="notifications">
-            {% include "core/_notifications.html" %}
-        </div>
         <div class="products">
             {% if lokale_overheden %}
                 <div class="cards">
