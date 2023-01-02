@@ -4,6 +4,7 @@
 pip-tools
 pre-commit
 bump2version
+gitpython
 
 # Documentation
 sphinx

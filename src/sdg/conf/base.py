@@ -8,7 +8,7 @@ import sentry_sdk
 from .api import *  # noqa
 from .types.exceptions import OrganizationTypeException
 from .types.organization import available_org_types
-from .utils import config, get_current_version, get_sentry_integrations
+from .utils import config, get_sentry_integrations
 
 # Build paths inside the project, so further paths can be defined relative to
 # the code root.
@@ -368,6 +368,22 @@ PROJECT_NAME = "sdg"
 ENVIRONMENT = config("ENVIRONMENT", "")
 SHOW_ALERT = True
 
+if "GIT_SHA" in os.environ:
+    GIT_SHA = config("GIT_SHA", "")
+# in docker (build) context, there is no .git directory
+elif os.path.exists(os.path.join(BASE_DIR, ".git")):
+    try:
+        import git
+    except ImportError:
+        GIT_SHA = None
+    else:
+        repo = git.Repo(search_parent_directories=True)
+        GIT_SHA = repo.head.object.hexsha
+else:
+    GIT_SHA = None
+
+RELEASE = config("RELEASE", GIT_SHA)
+
 ##############################
 #                            #
 # 3RD PARTY LIBRARY SETTINGS #
@@ -434,7 +450,6 @@ HIJACK_ALLOW_GET_REQUESTS = True
 # SENTRY - error monitoring
 #
 SENTRY_DSN = config("SENTRY_DSN", None)
-RELEASE = get_current_version()
 
 #
 # Maykin fork of DJANGO-TWO-FACTOR-AUTH

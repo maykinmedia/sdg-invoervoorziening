@@ -5,7 +5,7 @@ PDC voor de SDG
 :Version: 1.6.1
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: vng, ipo, waterschapshuis, sdg, pdc, gemeenten, provincies, waterschappen
-:PythonVersion: 3.8
+:PythonVersion: 3.10
 
 |build-status| |coverage| |docker| |black| |python-versions|
 
