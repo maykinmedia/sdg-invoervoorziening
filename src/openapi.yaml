@@ -892,7 +892,7 @@ components:
           type: string
           description: De inleidende tekst voor het product. Hierin kunt u het product
             beschrijven en komt direct na de generieke productbeschrijving. Dit veld
-            ondersteund Markdown.
+            ondersteunt Markdown.
         links:
           type: array
           items:
@@ -902,32 +902,32 @@ components:
         procedureBeschrijving:
           type: string
           description: De beschrijving van hoe het product wordt aangevraagd. Dit
-            veld ondersteund Markdown.
+            veld ondersteunt Markdown.
         bewijs:
           type: string
           description: Dit bevat de bewijsstukken die de burger of ondernemer nodig
-            heeft om dit product aan te vragen. Dit veld ondersteund Markdown.
+            heeft om dit product aan te vragen. Dit veld ondersteunt Markdown.
         vereisten:
           type: string
           description: Dit zijn de voorwaarden voor het aanvragen van het product.
-            Dit veld ondersteund Markdown.
+            Dit veld ondersteunt Markdown.
         bezwaarEnBeroep:
           type: string
           description: Beschrijft hoe de burger of ondernemer bezwaar kan maken. Dit
-            veld ondersteund Markdown.
+            veld ondersteunt Markdown.
         kostenEnBetaalmethoden:
           type: string
           description: Beschrijft hoe de burger of ondernemer kan betalen en wat de
-            kosten zijn. Dit veld ondersteund Markdown.
+            kosten zijn. Dit veld ondersteunt Markdown.
         uitersteTermijn:
           type: string
           description: De informatie over hoe hoelang het duurt voor het aanvragen
             van dit product. Dit doet u aan de hand van werkdagen/weken. Dit veld
-            ondersteund Markdown.
+            ondersteunt Markdown.
         wtdBijGeenReactie:
           type: string
           description: Beschrijft wat de aanvrager moet doen bij geen reactie. Dit
-            veld ondersteund Markdown.
+            veld ondersteunt Markdown.
         procedureLink:
           allOf:
           - $ref: '#/components/schemas/ProcedureLink'
@@ -937,12 +937,12 @@ components:
           title: Aanwezig toelichting
           description: Een optioneel veld om uit te leggen waarom het product niet
             aanwezig is. Deze moet u alleen invullen als u het product niet levert
-            en dan is dit veld verplicht! Dit veld ondersteund Markdown.
+            en dan is dit veld verplicht! Dit veld ondersteunt Markdown.
         productValtOnderToelichting:
           type: string
           description: Een optioneel veld om uit te leggen waarom dit product onder
             een andere product valt. Deze moet u alleen invullen als dit product onder
-            een andere product valt en dan is dit veld verplicht! Dit veld ondersteund
+            een andere product valt en dan is dit veld verplicht! Dit veld ondersteunt
             Markdown.
         datumWijziging:
           type: string
