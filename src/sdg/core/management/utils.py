@@ -1,9 +1,11 @@
+import datetime
+import logging
 import string
 from typing import Any, Dict, List
 
 from django.db.models import Q
 
-from sdg.core.constants import TaalChoices
+from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models import (
     Informatiegebied,
     Overheidsorganisatie,
@@ -12,7 +14,13 @@ from sdg.core.models import (
 )
 from sdg.core.utils import string_to_date
 from sdg.organisaties.models import BevoegdeOrganisatie, LokaleOverheid
-from sdg.producten.models import GeneriekProduct, LocalizedGeneriekProduct
+from sdg.producten.models import (
+    GeneriekProduct,
+    LocalizedGeneriekProduct,
+    ProductVersie,
+)
+
+logger = logging.getLogger(__name__)
 
 
 def load_government_organisations(data: List[Dict[str, Any]]) -> int:
@@ -158,4 +166,99 @@ def load_upn(data: List[Dict[str, Any]]) -> int:
         is_verwijderd=True
     )
 
+    # Update generic products.
+    for upn in UniformeProductnaam.objects.all():
+        update_generic_products(upn)
+
     return count
+
+
+def update_generic_products(upn):
+    """
+    Update all generic products that belong to this UPN. At the moment this can
+    be 0, 1 or 2. If a UPN is not meant for the SDG, the result will be 0. If
+    the UPN contains 2 SDG codes that belong to different target groups
+    (eu-burger or eu-bedrijf), the result will be 2 generic products.
+
+    Missing generic products will be created.
+
+    Obsolete generic products will be deleted or, if this is not possible, it
+    will be marked as end of life.
+    """
+
+    def _get_group(sdg_code: str) -> str:
+        """Get the target group from a given SDG code.
+        - The range A-I equals "burger".
+        - The range J+ equals "bedrijf".
+        """
+        letter = sdg_code[0]
+        if letter in string.ascii_uppercase[:9]:
+            return DoelgroepChoices.burger
+        elif letter in string.ascii_uppercase[9:]:
+            return DoelgroepChoices.bedrijf
+
+    def _clean_other_generic_products(upn, valid_generic_products):
+        """
+        Set an end date on generic products (attached to given UPN) that are
+        not in the list of `valid_generic_products`
+
+        It's possible existing generic products were created when the UPN had
+        different properties (like an SDG code that was later removed). These
+        generic products need to be cleaned up. We cannot just delete them,
+        since they have relations and we should not delete anything that could
+        have user data.
+        """
+        correct_gp_pks = [gp_i.pk for gp_i in valid_generic_products]
+        for existing_gp in list(upn.generieke_producten.exclude(pk__in=correct_gp_pks)):
+            if existing_gp.eind_datum is not None:
+                # This generic product is marked as end of life. Leave it
+                # alone.
+                continue
+
+            # Attempt to delete the generic product...
+            if not _try_delete_generic_product(existing_gp):
+                # If that fails, mark it as end of life.
+                logger.info(
+                    f'Marking generic product "{upn} ({existing_gp.pk}) as end of life".'
+                )
+                existing_gp.eind_datum = datetime.date.today()
+                existing_gp.save()
+
+    def _try_delete_generic_product(generic_product):
+        active_versions = ProductVersie.objects.filter(
+            product__generiek_product=generic_product, publicatie_datum__isnull=False
+        ).count()
+
+        if active_versions == 0:
+            logger.info(
+                f"Deleting generic product {generic_product.upn} ({generic_product.pk}) since there are no active specific products."
+            )
+            generic_product.producten.exclude(referentie_product=None).delete()
+            generic_product.producten.filter(referentie_product=None).delete()
+            generic_product.delete()
+            return True
+
+        logger.warning(
+            f"Cannot delete generic product {generic_product.upn} ({generic_product.pk}) since there are active specific products."
+        )
+        return False
+
+    # Create generic product (and localize) for each target group
+    groups = [doelgroep for i in upn.sdg if (doelgroep := _get_group(i))]
+
+    generic_products = []
+    for group in groups:
+        (generic_product, g_created,) = GeneriekProduct.objects.get_or_create(
+            upn=upn,
+            doelgroep=group,
+        )
+        generic_products.append(generic_product)
+
+        if g_created:
+            logger.info(f'Created new generic product for "{upn} ({group})".')
+            LocalizedGeneriekProduct.objects.localize(
+                instance=generic_product,
+                languages=TaalChoices.get_available_languages(),
+            )
+    # Now that we have the proper generic products, we can clean any others.
+    _clean_other_generic_products(upn, generic_products)
