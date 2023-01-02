@@ -1320,7 +1320,7 @@ msgstr ""
 #: sdg/producten/models/localized.py:40
 msgid ""
 "De Nationale Portalen schrijven een inleidende, algemene tekst over het "
-"product. Dit veld ondersteund Markdown."
+"product. Dit veld ondersteunt Markdown."
 msgstr ""
 
 #: sdg/producten/models/localized.py:45

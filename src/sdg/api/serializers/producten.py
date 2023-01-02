@@ -91,34 +91,34 @@ class LocalizedProductSerializer(serializers.ModelSerializer):
             },
             "tekst": {
                 "source": "specifieke_tekst",
-                "help_text": "De inleidende tekst voor het product. Hierin kunt u het product beschrijven en komt direct na de generieke productbeschrijving. Dit veld ondersteund Markdown.",
+                "help_text": "De inleidende tekst voor het product. Hierin kunt u het product beschrijven en komt direct na de generieke productbeschrijving. Dit veld ondersteunt Markdown.",
             },
             "procedure_beschrijving": {
-                "help_text": "De beschrijving van hoe het product wordt aangevraagd. Dit veld ondersteund Markdown."
+                "help_text": "De beschrijving van hoe het product wordt aangevraagd. Dit veld ondersteunt Markdown."
             },
             "bewijs": {
-                "help_text": "Dit bevat de bewijsstukken die de burger of ondernemer nodig heeft om dit product aan te vragen. Dit veld ondersteund Markdown."
+                "help_text": "Dit bevat de bewijsstukken die de burger of ondernemer nodig heeft om dit product aan te vragen. Dit veld ondersteunt Markdown."
             },
             "vereisten": {
-                "help_text": "Dit zijn de voorwaarden voor het aanvragen van het product. Dit veld ondersteund Markdown."
+                "help_text": "Dit zijn de voorwaarden voor het aanvragen van het product. Dit veld ondersteunt Markdown."
             },
             "bezwaar_en_beroep": {
-                "help_text": "Beschrijft hoe de burger of ondernemer bezwaar kan maken. Dit veld ondersteund Markdown."
+                "help_text": "Beschrijft hoe de burger of ondernemer bezwaar kan maken. Dit veld ondersteunt Markdown."
             },
             "kosten_en_betaalmethoden": {
-                "help_text": "Beschrijft hoe de burger of ondernemer kan betalen en wat de kosten zijn. Dit veld ondersteund Markdown."
+                "help_text": "Beschrijft hoe de burger of ondernemer kan betalen en wat de kosten zijn. Dit veld ondersteunt Markdown."
             },
             "uiterste_termijn": {
-                "help_text": "De informatie over hoe hoelang het duurt voor het aanvragen van dit product. Dit doet u aan de hand van werkdagen/weken. Dit veld ondersteund Markdown."
+                "help_text": "De informatie over hoe hoelang het duurt voor het aanvragen van dit product. Dit doet u aan de hand van werkdagen/weken. Dit veld ondersteunt Markdown."
             },
             "wtd_bij_geen_reactie": {
-                "help_text": "Beschrijft wat de aanvrager moet doen bij geen reactie. Dit veld ondersteund Markdown."
+                "help_text": "Beschrijft wat de aanvrager moet doen bij geen reactie. Dit veld ondersteunt Markdown."
             },
             "product_aanwezig_toelichting": {
-                "help_text": "Een optioneel veld om uit te leggen waarom het product niet aanwezig is. Deze moet u alleen invullen als u het product niet levert en dan is dit veld verplicht! Dit veld ondersteund Markdown."
+                "help_text": "Een optioneel veld om uit te leggen waarom het product niet aanwezig is. Deze moet u alleen invullen als u het product niet levert en dan is dit veld verplicht! Dit veld ondersteunt Markdown."
             },
             "product_valt_onder_toelichting": {
-                "help_text": "Een optioneel veld om uit te leggen waarom dit product onder een andere product valt. Deze moet u alleen invullen als dit product onder een andere product valt en dan is dit veld verplicht! Dit veld ondersteund Markdown."
+                "help_text": "Een optioneel veld om uit te leggen waarom dit product onder een andere product valt. Deze moet u alleen invullen als dit product onder een andere product valt en dan is dit veld verplicht! Dit veld ondersteunt Markdown."
             },
             "datum_wijziging": {
                 "help_text": "Datum wanneer dit product voor het laatst is gewijzigd."
