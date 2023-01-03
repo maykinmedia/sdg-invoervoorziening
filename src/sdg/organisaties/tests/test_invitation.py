@@ -98,7 +98,9 @@ class InvitationTests(WebTest):
         )
 
         self._fill_invitation_form(response.form)
-        response.form.submit()
+        response = response.form.submit()
+
+        self.assertEqual(response.status_code, 302)
 
         self.assertEqual(len(mail.outbox), 1)
 
@@ -125,7 +127,9 @@ class InvitationTests(WebTest):
             mail.outbox[0].body,
         )
 
-    @override_settings(SDG_ORGANIZATION_TYPE="waterauthority")
+    @override_settings(
+        SDG_ORGANIZATION_TYPE="waterauthority", SDG_CMS_PRODUCTS_DISABLED=False
+    )
     def test_invitation_template_is_correct_for_organization_type(self):
         response = self.app.get(
             reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
@@ -143,7 +147,7 @@ class InvitationTests(WebTest):
             mail.outbox[0].body,
         )
         self.assertIn(
-            "Ook kun je hier de teksten controleren en aanvullen met informatie van jouw waterschap",
+            "Je kunt hier de teksten controleren en aanvullen met informatie van jouw waterschap",
             mail.outbox[0].body,
         )
         self.assertIn(

@@ -2,7 +2,7 @@
 url: https://vng.nl
 accessibility_url: "#"
 privacy_policy_url: "#"
-more_info_url: "https://www.vngrealisatie.nl/onderwerpen/single-digital-gateway"
+more_info_url: "https://werkenaaneenoverheid.pleio.nl/groups/view/ed87e451-f6fc-49b0-aec4-41f2358426f7/single-digital-gateway"
 email: sdg@vng.nl
 
 # Style
@@ -12,5 +12,6 @@ footer_logo: images/vng_logo.svg
 color_hue: 202
 
 # Text
+organisation_name: VNG Realisatie
 name: gemeente
 name_plural: gemeenten
