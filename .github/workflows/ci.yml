@@ -33,11 +33,11 @@ jobs:
         ports:
           - 6379:6379
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.10.8'
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/setup-node@v3
         with:
           node-version: '12'
 
@@ -112,7 +112,7 @@ jobs:
     name: Build Docker image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Set tag
         id: vars
@@ -155,7 +155,7 @@ jobs:
     name:  Check for unexpected OAS changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Download generated OAS
         uses: actions/download-artifact@v2
         with:
@@ -174,7 +174,7 @@ jobs:
         with:
           name: sdg-oas
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '12'
       - name: Install spectral
@@ -192,7 +192,7 @@ jobs:
         with:
           name: sdg-oas
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '12'
       - name: Install dependencies
@@ -212,7 +212,7 @@ jobs:
         with:
           name: sdg-oas
       - name: Use Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: '12'
       - name: Install dependencies
@@ -245,7 +245,7 @@ jobs:
     if: github.event_name == 'push'  # Exclude PRs
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Download built image
         uses: actions/download-artifact@v2
