@@ -12,7 +12,7 @@ PDC voor de SDG
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
 (SDG) via het CMS en/of de API.
 
-Ontwikkeld door `Maykin Media B.V.`_ in opdracht van `VNG Realisatie`_,
+Ontwikkeld door `Maykin`_ in opdracht van `VNG Realisatie`_,
 `IPO`_ en `Unie van Waterschappen`_.
 
 
@@ -95,7 +95,7 @@ Links
 Licentie
 ========
 
-Copyright © `Maykin Media B.V.`_, 2021 - 2022
+Copyright © `Maykin`_ 2021
 
 Licensed under the `EUPL`_.
 
@@ -120,7 +120,7 @@ Licensed under the `EUPL`_.
     :alt: Supported Python version
 
 
-.. _`Maykin Media B.V.`: https://www.maykinmedia.nl
+.. _`Maykin`: https://www.maykinmedia.nl
 .. _`VNG Realisatie`: https://www.vngrealisatie.nl/
 .. _`IPO`: https://www.ipo.nl/
 .. _`Unie van Waterschappen`: https://unievanwaterschappen.nl/
