@@ -2,6 +2,32 @@
 Change history
 ==============
 
+
+1.7.0
+=====
+
+**January 6, 2022*
+
+* [#905] Fixed adding bevoegde organisaties that wasn't functioning in some cases
+* [#895] Added preview of concept texts
+* [#844] Added command to correct explanation fields that are unmodified from the template
+* [#871] Added logic to remove generic products if they are no longer used
+* Fixed notifications that were sometimes missing after saving
+* Fixed field ordering to match between the CMS and the preview
+* Changed that products without a generic text are now visible in the reference catalog
+* Changed email addresses to be case-insensitive
+* Added "dump" command for product, to generate a full list of all products
+* Updated to Python 3.10 and Debian 11 slim image
+* Various small changes
+
+**API changes**
+
+* [#847] Added generic product texts resource to the API
+* [#824] Remove explanation texts (in the API output) if they are not needed
+* Changed product detail and list resources to also show products that have no generic text
+* Changed the list of products shown nested in the catalog resource to use the same logic as the product list resource
+
+
 1.6.1
 =====
 
@@ -28,7 +54,7 @@ Change history
 * Fixed creating a new product version in the admin (although you typically should not do this)
 * Added ability to admins to enable concepts/future product publications for API clients
 
-API changes
+**API changes**
 
 * [#859] Fixed showing duplicates when going over paginated lists
 * [#857] Fixed uncatched error when passing an empty string as catalog

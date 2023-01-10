@@ -14,7 +14,7 @@ Prerequisites
 
 You need the following libraries and/or programs:
 
-* `Python`_ 3.8 or above
+* `Python`_ 3.10 or above
 * Python `Virtualenv`_ and `Pip`_
 * `PostgreSQL`_ 10 or above
 * `Node.js`_
