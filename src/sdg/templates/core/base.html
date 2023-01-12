@@ -19,7 +19,11 @@
                 {% elif namespace == "roles" %}
                     <span>{% trans "Gebruikers" %}</span>
                 {% elif namespace == "organisaties" %}
-                    <span>{% trans "Locaties" %}</span>
+                    {% if view.template_name == "organisaties/update.html" %}
+                        <span>{% trans "Organisatie instellingen" %}</span>
+                    {% else %}
+                        <span>{% trans "Locaties" %}</span>
+                    {% endif %}
                 {% else %}
                     <span>{{ object|capfirst|default:namespace|capfirst }}</span>
                 {% endif %}
