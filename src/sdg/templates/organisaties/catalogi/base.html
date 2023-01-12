@@ -2,3 +2,13 @@
 {% load i18n %}
 
 {% block title %}SDG | {% trans "Productenlijst" %}{% endblock %}
+
+{% block inner_content %}
+
+    {% if settings.SDG_CMS_PRODUCTS_DISABLED %}
+        {% trans "Je kan producten niet beheren in het CMS maar enkel via de API. Je kan wel via het menu bovenin de organisatie gegevens, locaties en bevoegde organisaties beheren." %}
+    {% else %}
+        {% block page_content %}{% endblock %}
+    {% endif %}
+
+{% endblock inner_content %}

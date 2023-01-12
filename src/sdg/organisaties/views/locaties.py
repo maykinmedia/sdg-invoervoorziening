@@ -5,13 +5,12 @@ from django.views.generic import UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
-from sdg.core.views.mixins import SDGSettingsMixin
+from sdg.conf.utils import org_type_cfg
 from sdg.organisaties.forms import LocatieInlineFormSet
 from sdg.organisaties.models import LokaleOverheid
 
 
 class LocatieUpdateView(
-    SDGSettingsMixin,
     OverheidMixin,
     UpdateView,
 ):
@@ -35,14 +34,16 @@ class LocatieUpdateView(
 
     def form_valid(self, form):
         organisatie = self.object
-        context = super().get_context_data()
+
         response = super().form_valid(form)
+        cfg = org_type_cfg()
+
         messages.success(
             self.request,
             _(
                 "De locatie instellingen van {org_type_name} {organisatie} zijn succesvol gewijzigd."
             ).format(
-                org_type_name=context["org_type_cfg"].name,
+                org_type_name=cfg.name,
                 organisatie=organisatie,
             ),
         )

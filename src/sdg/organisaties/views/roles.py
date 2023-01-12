@@ -5,7 +5,7 @@ from django.views.generic import DeleteView, ListView, UpdateView
 
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
-from sdg.core.views.mixins import SDGSettingsMixin
+from sdg.conf.utils import org_type_cfg
 from sdg.organisaties.views.mixins import DisallowOwnRoleMixin, RoleBaseMixin
 
 User = get_user_model()
@@ -20,7 +20,6 @@ class RoleListView(RoleBaseMixin, OverheidMixin, ListView):
 
 
 class RoleDeleteView(
-    SDGSettingsMixin,
     DisallowOwnRoleMixin,
     RoleBaseMixin,
     OverheidMixin,
@@ -33,15 +32,17 @@ class RoleDeleteView(
 
     def delete(self, request, *args, **kwargs):
         response = super().delete(request, *args, **kwargs)
-        context = super().get_context_data()
+
         name = str(self.object).split(" — ")[0]
         organisation = str(self.object).split(" — ")[-1]
+        cfg = org_type_cfg()
+
         messages.success(
             self.request,
             _(
                 "De gebruiker {role} is niet meer gekoppeld aan {org_type_name} {organisatie}."
             ).format(
-                org_type_name=context["org_type_cfg"].name,
+                org_type_name=cfg.name,
                 organisatie=organisation,
                 role=name,
             ),
@@ -50,7 +51,6 @@ class RoleDeleteView(
 
 
 class RoleUpdateView(
-    SDGSettingsMixin,
     DisallowOwnRoleMixin,
     RoleBaseMixin,
     OverheidMixin,
@@ -63,16 +63,18 @@ class RoleUpdateView(
     required_roles = [Role.choices.MANAGER]
 
     def form_valid(self, form, *args, **kwargs):
-        context = super().get_context_data()
         response = super().form_valid(form)
+
         name = str(self.object).split(" — ")[0]
         organisation = str(self.object).split(" — ")[-1]
+        cfg = org_type_cfg()
+
         messages.success(
             self.request,
             _(
                 "De gebruikersrol van {role} voor {org_type_name} {organisatie} is succesvol gewijzigd."
             ).format(
-                org_type_name=context["org_type_cfg"].name,
+                org_type_name=cfg.name,
                 organisatie=organisation,
                 role=name,
             ),

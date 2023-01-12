@@ -9,9 +9,7 @@
 {% endblock %}
 
 
-
-{% block inner_content %}
-    {{ block.super }}
+{% block page_content %}
     {% datagrid config=datagrid_config %}
     <script src="{% static 'rijkshuisstijl/bundles/rh-js.js' %}" defer></script>
-{% endblock inner_content %}
+{% endblock page_content %}

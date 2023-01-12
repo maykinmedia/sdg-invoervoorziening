@@ -11,17 +11,17 @@ def settings(request):
         "PROJECT_NAME",
         "RELEASE",
         "SUBPATH",
+        "SDG_CMS_PRODUCTS_DISABLED",
     )
 
     context = {
         "settings": dict(
             [(k, getattr(django_settings, k, None)) for k in public_settings]
         ),
+        "org_type_cfg": org_type_cfg(),
     }
 
     if hasattr(django_settings, "SENTRY_CONFIG"):
         context.update(dsn=django_settings.SENTRY_CONFIG.get("public_dsn", ""))
-
-    context.update(org_type_cfg=org_type_cfg())
 
     return context

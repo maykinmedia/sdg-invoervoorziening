@@ -18,7 +18,7 @@ from sdg.accounts.utils import user_has_valid_roles
 from sdg.accounts.views.decorators import municipality_role_required
 from sdg.core.constants import TaalChoices
 from sdg.core.types import Event
-from sdg.core.views.mixins import BreadcrumbsMixin, SDGSettingsMixin
+from sdg.core.views.mixins import BreadcrumbsMixin
 from sdg.producten.forms import LocalizedProductFormSet, ProductForm, VersionForm
 from sdg.producten.models import Product, ProductVersie
 from sdg.producten.models.product import GeneriekProduct
@@ -178,7 +178,6 @@ class ProductPreviewView(OverheidMixin, DetailView):
 
 class ProductUpdateView(
     BreadcrumbsMixin,
-    SDGSettingsMixin,
     OverheidMixin,
     UpdateView,
 ):
@@ -267,7 +266,6 @@ class ProductUpdateView(
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.org_type_cfg = context["org_type_cfg"]
 
         generic_information = self.product.generiek_product.vertalingen.all()
 
