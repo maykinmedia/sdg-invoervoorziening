@@ -477,7 +477,7 @@ class ProductSerializer(ProductBaseSerializer):
             except GeneriekProduct.DoesNotExist:
                 raise serializers.ValidationError(
                     {
-                        "upnUri": "De waarde van het veld 'upnUri' is ongeldig. Het object met deze waarde bestaat niet."
+                        "": "De combinatie van waarden in de velden 'upnUri' en 'doelgroep' is ongeldig. Het object met deze waarden bestaat niet."
                     }
                 )
             except KeyError:
@@ -522,7 +522,7 @@ class ProductSerializer(ProductBaseSerializer):
         except Product.DoesNotExist:
             raise serializers.ValidationError(
                 {
-                    "upnUri": "De waarde van het veld 'upnUri' is ongeldig. Het object met deze waarde bestaat niet."
+                    "productValtOnder": "De waarde van het veld 'upnUri' is ongeldig binnen deze 'catalogus' en 'doelgroep'. Het object met deze waarde bestaat niet."
                 }
             )
         except KeyError:
