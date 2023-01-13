@@ -14,7 +14,8 @@ from django.utils.translation import gettext_lazy as _
 from allauth.account.models import EmailAddress
 from djchoices import ChoiceItem, DjangoChoices
 
-from ..conf.utils import org_type_cfg
+from sdg.conf.utils import org_type_cfg
+
 from .managers import UserInvitationManager, UserManager
 
 
@@ -95,13 +96,16 @@ class UserInvitation(models.Model):
         cfg = org_type_cfg()
         ctx.update(
             {
+                "org_name": cfg.organisation_name,
                 "org_type_name": cfg.name,
                 "org_type_name_plural": cfg.name_plural,
                 "org_type_email": cfg.email,
+                "more_info_url": cfg.more_info_url,
                 "invite_url": invite_url,
                 "user_full_name": self.user.get_full_name(),
                 "key": self.key,
                 "inviter": self.inviter,
+                "products_disabled": settings.SDG_CMS_PRODUCTS_DISABLED,
             }
         )
         subject = settings.INVITATION_SUBJECT.format(

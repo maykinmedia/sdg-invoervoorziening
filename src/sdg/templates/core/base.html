@@ -19,7 +19,11 @@
                 {% elif namespace == "roles" %}
                     <span>{% trans "Gebruikers" %}</span>
                 {% elif namespace == "organisaties" %}
-                    <span>{% trans "Locaties" %}</span>
+                    {% if view.template_name == "organisaties/update.html" %}
+                        <span>{% trans "Organisatie instellingen" %}</span>
+                    {% else %}
+                        <span>{% trans "Locaties" %}</span>
+                    {% endif %}
                 {% else %}
                     <span>{{ object|capfirst|default:namespace|capfirst }}</span>
                 {% endif %}
@@ -34,11 +38,7 @@
 
         <hr class="divider">
 
-        {% if SDG_CMS_PRODUCTS_DISABLED %}
-            {% trans "Je kan producten niet beheren in het CMS maar enkel via de API. Je kan wel via het menu bovenin de organisatie gegevens, locaties en bevoegde organisaties beheren." %}
-        {% else %}
-            {% block inner_content %}
-            {% endblock inner_content %}
-        {% endif %}
+        {% block inner_content %}
+        {% endblock inner_content %}
     {% endwith %}
 {% endblock inner %}

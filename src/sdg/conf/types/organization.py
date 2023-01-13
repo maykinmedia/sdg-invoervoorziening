@@ -29,6 +29,7 @@ class OrganizationTypeConfiguration(BaseModel):
     footer_logo: str
     color_hue: int = Field(gte=0, lte=360)
 
+    organisation_name: str
     name: str
     name_plural: str
 
