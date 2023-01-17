@@ -2,11 +2,23 @@
 Change history
 ==============
 
+1.7.1
+=====
+
+*January 17, 2022*
+
+* Fixed access to locations in the CMS when products are disabled
+* Fixed breadcrumb to show correctly on the organisation page
+* Changed invite mail to adhere to organisation style
+* Changed error message when providing invalid product-identifying products in API to be more clear.
+* Changed sync process to continue when some Logius imports fail
+* Fixed incorrect organisation type shown as label in the preview page.
+
 
 1.7.0
 =====
 
-**January 6, 2022*
+*January 6, 2022*
 
 * [#905] Fixed adding bevoegde organisaties that wasn't functioning in some cases
 * [#895] Added preview of concept texts
@@ -31,7 +43,7 @@ Change history
 1.6.1
 =====
 
-**December 19, 2022*
+*December 19, 2022*
 
 * Changed "Het Waterschapshuis" to "Unie van Waterschappen" per request
 * Changed error message for issue #856 to be more clear per request
@@ -41,7 +53,7 @@ Change history
 1.6.0
 =====
 
-**December 14, 2022*
+*December 14, 2022*
 
 * [#838] Fixed preview labels not being translated
 * [#868] Fixed crash in rare cases when a known "bevoegde organisatie" was added
