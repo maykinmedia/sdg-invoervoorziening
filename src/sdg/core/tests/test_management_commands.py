@@ -46,7 +46,7 @@ class TestImportData(CommandTestCase):
             os.path.join(TESTS_DIR, "data/Overheidsorganisatie.xml"),
         )
 
-        self.assertIn("Successfully imported", out)
+        self.assertIn("Done", out)
         self.assertIn("(8 objects)", out)
         self.assertEqual(8, Overheidsorganisatie.objects.count())
         self.assertEqual(0, LokaleOverheid.objects.count())
@@ -64,7 +64,7 @@ class TestImportData(CommandTestCase):
             "load_organisation_subset", os.path.join(TESTS_DIR, "data/Gemeente.xml")
         )
 
-        self.assertIn("Successfully imported", out)
+        self.assertIn("Done", out)
         self.assertIn("(0 objects)", out)
         self.assertEqual(0, Overheidsorganisatie.objects.count())
 
@@ -78,7 +78,7 @@ class TestImportData(CommandTestCase):
             "load_organisation_subset", os.path.join(TESTS_DIR, "data/Gemeente.xml")
         )
 
-        self.assertIn("Successfully imported", out)
+        self.assertIn("Done", out)
         self.assertIn("(5 objects)", out)
         self.assertEqual(5, LokaleOverheid.objects.count())
 
@@ -96,7 +96,7 @@ class TestImportData(CommandTestCase):
             os.path.join(TESTS_DIR, "data/SDG-Informatiegebieden.csv"),
         )
 
-        self.assertIn("Successfully imported", out)
+        self.assertIn("Done", out)
         self.assertIn("(24 objects)", out)
         self.assertEqual(4, Informatiegebied.objects.count())
         self.assertEqual(24, Thema.objects.count())
@@ -123,7 +123,7 @@ class TestImportData(CommandTestCase):
             "load_upn", os.path.join(TESTS_DIR, "data/UPL-actueel.csv")
         )
 
-        self.assertIn("Successfully imported", out)
+        self.assertIn("Done", out)
         self.assertIn("(16 objects)", out)
         self.assertEqual(UniformeProductnaam.objects.count(), 16)
 
