@@ -161,7 +161,7 @@ SPECTACULAR_SETTINGS = {
         "description": "Meer informatie over de SDG",
         "url": "https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/europa/single-digitale-gateway/",
     },
-    "VERSION": "1.4.0",
+    "VERSION": "1.7.1",
     "SERVE_INCLUDE_SCHEMA": False,
     "CAMELIZE_NAMES": True,
     "POSTPROCESSING_HOOKS": [

@@ -2198,8 +2198,8 @@ msgid "Information from"
 msgstr "Informatie van"
 
 #: sdg/templates/mocks/kvk.html:256
-msgid "Contact municipality"
-msgstr "Neem contact op met de gemeente"
+msgid "Contact"
+msgstr "Neem contact op met"
 
 #: sdg/templates/mocks/kvk.html:273
 msgid "phone"
