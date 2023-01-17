@@ -1,4 +1,5 @@
 import csv
+import logging
 import os
 from tempfile import NamedTemporaryFile
 from typing import Any, Dict, List
@@ -7,6 +8,8 @@ from django.core.management import BaseCommand, CommandError
 
 import requests
 from lxml import etree
+
+logger = logging.getLogger(__name__)
 
 
 class ParserException(Exception):
@@ -80,14 +83,16 @@ class ParserCommand(BaseCommand):
     def handle(self, handler_function, **options):
         filename = options.pop("filename")
 
-        data = self.parse(filename)
-        created_count = handler_function(data)
+        self.stdout.write(f"Importing {self.plural_object_name} from {filename}...")
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"Successfully imported {self.plural_object_name} from {filename} ({created_count} objects)."
-            )
-        )
+        try:
+            data = self.parse(filename)
+            created_count = handler_function(data)
+        except Exception as e:
+            self.stderr.write(f"Error: {e}")
+            logger.exception(e)
+        else:
+            self.stdout.write(self.style.SUCCESS(f"Done ({created_count} objects)."))
 
     def parse(self, filename) -> List[Dict[str, Any]]:
         try:
