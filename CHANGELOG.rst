@@ -2,10 +2,19 @@
 Change history
 ==============
 
+1.7.2
+=====
+
+*January 23, 2023*
+
+* Changed product title field to hold upto 150 characters. This is for both the
+  CMS as the API.
+
+
 1.7.1
 =====
 
-*January 17, 2022*
+*January 17, 2023*
 
 * Fixed access to locations in the CMS when products are disabled
 * Fixed breadcrumb to show correctly on the organisation page
@@ -18,7 +27,7 @@ Change history
 1.7.0
 =====
 
-*January 6, 2022*
+*January 6, 2023*
 
 * [#905] Fixed adding bevoegde organisaties that wasn't functioning in some cases
 * [#895] Added preview of concept texts

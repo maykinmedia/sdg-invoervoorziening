@@ -887,7 +887,7 @@ components:
           type: string
           description: De titel van het product. Als deze afwijkt van de generieke
             titel kunt u dat hier aangeven.
-          maxLength: 100
+          maxLength: 150
         tekst:
           type: string
           description: De inleidende tekst voor het product. Hierin kunt u het product
