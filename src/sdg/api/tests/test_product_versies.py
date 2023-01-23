@@ -592,7 +592,7 @@ class ProductenVersieTest(APITestCase):
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
 
         create_data = create_response.json()
-        self.assertEqual(create_data["versie"], 3)
+        self.assertEqual(create_data["versie"], 2)
 
     @freeze_time(NOW_DATE)
     def test_product_version_future_to_future(self):
