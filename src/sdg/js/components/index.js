@@ -13,3 +13,4 @@ import './generic';
 import './tooltip';
 import './choices';
 import './bevoegde_organisaties';
+import './prevent_submit_twice';
