@@ -57,7 +57,7 @@ class TestImportDataFromServices(CommandTestCase):
             retrieve_mock.return_value = json.load(f)["results"]
 
         out = self.call_command("import_data_from_services")
-        self.assertIn("Successfully updated 2 localized generic products.", out)
+        self.assertIn("Successfully updated localized generic products.", out)
 
         self.localized_1.refresh_from_db()
         self.assertEqual(
