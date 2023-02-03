@@ -579,7 +579,11 @@ class ProductSerializer(ProductBaseSerializer):
                     }
                 )
 
-        return None
+        raise serializers.ValidationError(
+            {
+                "verantwoordelijkeOrganisatie": "De gegeven waarde was incorect de mogelijke veld opties zijn 'naam' en 'owmsIdentifier'."
+            }
+        )
 
     def get_version_number(self, previous_date, new_date, version):
         if not previous_date:
@@ -668,8 +672,14 @@ class ProductSerializer(ProductBaseSerializer):
             )
 
         if bevoegde_organisatie:
-            bevoegde_organisatie = self.get_bevoegde_organisatie(
+            validated_data["bevoegde_organisatie"] = self.get_bevoegde_organisatie(
                 bevoegde_organisatie, verantwoordelijke_organisatie
+            )
+
+        else:
+            validated_data["bevoegde_organisatie"] = BevoegdeOrganisatie.objects.get(
+                lokale_overheid=verantwoordelijke_organisatie,
+                organisatie=verantwoordelijke_organisatie.organisatie,
             )
 
         if not catalogus:
@@ -699,13 +709,6 @@ class ProductSerializer(ProductBaseSerializer):
                     product_valt_onder["generiek_product"],
                     validated_data["catalogus"],
                 )
-
-        if bevoegde_organisatie:
-            validated_data["bevoegde_organisatie"] = bevoegde_organisatie
-        else:
-            validated_data["bevoegde_organisatie"] = BevoegdeOrganisatie.objects.get(
-                lokale_overheid=verantwoordelijke_organisatie
-            )
 
         product = Product.objects.get(
             referentie_product=validated_data["referentie_product"],

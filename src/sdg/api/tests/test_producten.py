@@ -1408,6 +1408,138 @@ class ProductenTests(APITestCase):
 
         self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_update_product_with_multiple_bevoegde_organisaties_available(self):
+        BevoegdeOrganisatieFactory.create(
+            lokale_overheid=self.test_lokale_overheid,
+            organisatie=self.organisatie,
+        )
+
+        list_url = reverse("api:product-list")
+
+        body = self.body
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+
+        create_data = create_response.json()
+
+        self.assertEqual(
+            create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "organisatie"
+        )
+        self.assertEqual(
+            create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
+            "https://www.organisatie.com",
+        )
+
+    def test_update_product_with_different_bevoegde_organisatie(self):
+        bevoede_org = BevoegdeOrganisatieFactory.create(
+            lokale_overheid=self.test_lokale_overheid,
+            organisatie=self.organisatie,
+        )
+
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body(
+            {
+                "bevoegdeOrganisatie": {
+                    "owmsIdentifier": bevoede_org.organisatie.owms_identifier,
+                }
+            }
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+
+        create_data = create_response.json()
+
+        self.assertEqual(create_data["bevoegdeOrganisatie"]["owmsPrefLabel"], "set up")
+        self.assertEqual(
+            create_data["bevoegdeOrganisatie"]["owmsIdentifier"],
+            "https://www.setup.com",
+        )
+
+    def test_update_product_with_incorrect_bevoegde_organisatie_identifier(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body(
+            {
+                "bevoegdeOrganisatie": {
+                    "owmsIdentifier": "incorrect indentifier",
+                }
+            }
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_product_with_incorrect_bevoegde_organisatie_naam(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body(
+            {
+                "bevoegdeOrganisatie": {
+                    "naam": "incorrect naam",
+                }
+            }
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_update_product_with_incorrect_bevoegde_organisatie_field(self):
+        list_url = reverse("api:product-list")
+
+        body = self.get_product_post_body(
+            {
+                "bevoegdeOrganisatie": {
+                    "test": "???",
+                }
+            }
+        )
+
+        headers = {"HTTP_AUTHORIZATION": f"Token {self.test_token_authorization.token}"}
+
+        create_response = self.client.post(
+            list_url,
+            data=json.dumps(body),
+            content_type="application/json",
+            **headers,
+        )
+
+        self.assertEqual(create_response.status_code, status.HTTP_400_BAD_REQUEST)
+
     @freeze_time(NOW_DATE)
     def test_list_product_history(self):
         product_versie = ReferentieProductVersieFactory.create(
