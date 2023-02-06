@@ -513,10 +513,11 @@ class ProductSerializer(ProductBaseSerializer):
                 }
             )
 
-    def get_product(self, product_valt_onder, catalogus):
+    def get_product(self, product_valt_onder, catalogus, doelgroep):
         try:
             return Product.objects.get(
                 generiek_product__upn__upn_uri=product_valt_onder["upn_uri"],
+                generiek_product__doelgroep=doelgroep,
                 catalogus=catalogus,
             )
         except Product.DoesNotExist:
@@ -708,6 +709,7 @@ class ProductSerializer(ProductBaseSerializer):
                 validated_data["product_valt_onder"] = self.get_product(
                     product_valt_onder["generiek_product"],
                     validated_data["catalogus"],
+                    doelgroep,
                 )
 
         product = Product.objects.get(
