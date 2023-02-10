@@ -1749,7 +1749,8 @@ msgstr ""
 msgid "product versies"
 msgstr ""
 
-#: sdg/producten/models/product.py:513
+#: sdg/producten/forms.py:275
+#: sdg/producten/models/product.py:500
 msgid "De publicatiedatum kan niet in het verleden liggen."
 msgstr ""
 
