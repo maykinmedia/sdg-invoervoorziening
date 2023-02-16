@@ -60,7 +60,7 @@ class Command(BaseCommand):
                         item["url"],
                         item["categorie"],
                     ]
-                    for item in product["links"]
+                    for item in product.get("links", [])
                 ]
                 localized_generic_product.landelijke_link = product["url"]
                 localized_generic_product.datum_check = datetime.fromisoformat(
