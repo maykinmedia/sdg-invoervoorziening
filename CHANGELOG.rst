@@ -2,6 +2,20 @@
 Change history
 ==============
 
+1.7.3
+=====
+
+*February 16, 2023*
+
+* [#918] Fixed the possibility (data model) to create products with duplicate version numbers via the CMS.
+* [#924] Added function to prevent double-clicks on the "save" button in the CMS.
+* [#922] Fixed identifying "bevoegde organisaties", in the (create) API, when there are multiple using the same name.
+* Added cleanup of obsolete generic product texts to prevent duplicate UUIDs when GT API reuses them.
+* Added explanation of the "raadpleger" rol to introduction text in the CMS
+* Fixed issue when loading the GT API and some products in the API response lacked the "links"-attribute.
+* Fixed "productValtOnder" in the (create) API to only search for products by their "upnUri" within the same doelgroep.
+
+
 1.7.2
 =====
 
