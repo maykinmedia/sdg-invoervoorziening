@@ -437,6 +437,25 @@ class ProductVersie(ProductFieldMixin, models.Model):
 
     objects = ProductVersieQuerySet.as_manager()
 
+    class Meta:
+        verbose_name = _("product versie")
+        verbose_name_plural = _("product versies")
+        ordering = ("-versie",)
+        unique_together = (("versie", "product"),)
+
+    def __str__(self):
+        return self.get_pretty_name()
+
+    def clean(self):
+        super().clean()
+
+        if not self.pk:
+            # Validators for new instances
+            if self.publicatie_datum and is_past_date(self.publicatie_datum):
+                raise ValidationError(
+                    _("De publicatiedatum kan niet in het verleden liggen.")
+                )
+
     @property
     def current_status(self) -> Any[Product.status]:
         """:returns: The current publishing status for this product version."""
@@ -494,24 +513,6 @@ class ProductVersie(ProductFieldMixin, models.Model):
             return f"{self.product} — versie {self.get_pretty_version()}"
         except self._meta.model.product.RelatedObjectDoesNotExist:
             return f"Unknown product - versie {self.get_pretty_version()}"
-
-    class Meta:
-        verbose_name = _("product versie")
-        verbose_name_plural = _("product versies")
-        ordering = ("-versie",)
-
-    def __str__(self):
-        return self.get_pretty_name()
-
-    def clean(self):
-        super().clean()
-
-        if not self.pk:
-            # Validators for new instances
-            if self.publicatie_datum and is_past_date(self.publicatie_datum):
-                raise ValidationError(
-                    _("De publicatiedatum kan niet in het verleden liggen.")
-                )
 
 
 class Productuitvoering(models.Model):

@@ -396,6 +396,7 @@ class ProductSerializer(ProductBaseSerializer):
         If the token type is designed for editors, return the most recent version.
         In other cases return the active version.
         """
+
         request = self.context.get("request", object)
         auth = getattr(request, "auth", None)
 
@@ -586,33 +587,29 @@ class ProductSerializer(ProductBaseSerializer):
             }
         )
 
-    def get_version_number(self, previous_date, new_date, version):
-        if not previous_date:
-            return version
+    def should_create_new_version(self, previous_date, new_date):
+        today = datetime.date.today()
 
-        if not new_date and previous_date <= datetime.date.today():
-            return version + 1
+        if previous_date is None:
+            return False
 
-        if not new_date:
-            return version
+        if new_date is None and previous_date <= today:
+            return True
 
-        if new_date < previous_date and new_date < datetime.date.today():
+        if new_date is None and previous_date > today:
+            return False
+
+        if new_date < previous_date and new_date < today:
             raise serializers.ValidationError(
                 {
                     "publicatieDatum": "Het product kan niet een vroegere publicatiedatum krijgen dan een voorgaande versie."
                 }
             )
 
-        if new_date <= datetime.date.today():
-            return version + 1
+        if previous_date <= today:
+            return True
 
-        if previous_date > datetime.date.today() and new_date > datetime.date.today():
-            return version
-
-        if previous_date < new_date and new_date > datetime.date.today():
-            return version + 1
-
-        return version
+        return False
 
     def get_locaties(self, locaties, catalogus):
         organisatie_locaties = []
@@ -732,18 +729,22 @@ class ProductSerializer(ProductBaseSerializer):
 
         previous_publicatie_datum = product.most_recent_version.publicatie_datum
 
-        versie = self.get_version_number(
+        if self.should_create_new_version(
             previous_publicatie_datum,
             publicatie_datum,
-            product.most_recent_version.versie,
-        )
+        ):
+            product_versie = ProductVersie.objects.create(
+                product=product,
+                versie=product.most_recent_version.versie + 1,
+                publicatie_datum=publicatie_datum,
+            )
+            product_versie_created = True
+        else:
+            product_versie = product.most_recent_version
+            product_versie.publicatie_datum = publicatie_datum
+            product_versie.save()
 
-        product_versie, product_versie_created = ProductVersie.objects.update_or_create(
-            product=product,
-            versie=versie,
-            publicatie_datum=None,
-            defaults={"publicatie_datum": publicatie_datum},
-        )
+            product_versie_created = False
 
         for translation in version.get("vertalingen", []):
             verwijzing_links = []

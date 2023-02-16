@@ -259,7 +259,20 @@ class VersionForm(forms.ModelForm):
         if not self.cleaned_data["product"] and self.product_instance:
             self.cleaned_data["product"] = self.product_instance
 
+        if (
+            self.product_instance.most_recent_version.publicatie_datum
+            and self.product_instance.most_recent_version.publicatie_datum
+            <= date.today()
+        ):
+            cleaned_data["versie"] = (
+                self.product_instance.most_recent_version.versie + 1
+            )
+
         if cleaned_data["publish"] == PublishChoices.date:
+            if cleaned_data["date"].date() < date.today():
+                raise forms.ValidationError(
+                    _("De publicatiedatum kan niet in het verleden liggen.")
+                )
             cleaned_data["publicatie_datum"] = cleaned_data["date"]
         else:
             cleaned_data["publicatie_datum"] = None
