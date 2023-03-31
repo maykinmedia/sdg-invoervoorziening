@@ -138,23 +138,33 @@ class OrganisatiesTests(APITestCase):
         self.assertEqual(
             [
                 {
-                    "name": "contactWebsite",
                     "code": "invalid",
+                    "name": "contactWebsite",
+                    "reason": "Het url moet een geldige https adress zijn.",
+                },
+                {
+                    "code": "invalid",
+                    "name": "contactWebsite",
                     "reason": "Voer een geldige URL in.",
                 },
                 {
-                    "name": "contactEmailadres",
                     "code": "invalid",
+                    "name": "contactEmailadres",
                     "reason": "Voer een geldig e-mailadres in.",
                 },
                 {
-                    "name": "contactTelefoonnummer",
                     "code": "invalid",
+                    "name": "contactTelefoonnummer",
                     "reason": "Not a valid string.",
                 },
                 {
-                    "name": "contactFormulierLink",
                     "code": "invalid",
+                    "name": "contactFormulierLink",
+                    "reason": "Het url moet een geldige https adress zijn.",
+                },
+                {
+                    "code": "invalid",
+                    "name": "contactFormulierLink",
                     "reason": "Voer een geldige URL in.",
                 },
             ],
