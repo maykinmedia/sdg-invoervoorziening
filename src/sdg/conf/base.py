@@ -611,9 +611,9 @@ SDG_LOCALIZED_FORM_FIELDS = [
     "uiterste_termijn",
     "bezwaar_en_beroep",
     "wtd_bij_geen_reactie",
+    "verwijzing_links",
     "decentrale_procedure_link",
     "decentrale_procedure_label",
-    "verwijzing_links",
 ]
 
 # check if both decentrale_procedure_label and decentrale_procedure_link are in the SDG_LOCALIZED_FORM_FIELDS or neither are.
