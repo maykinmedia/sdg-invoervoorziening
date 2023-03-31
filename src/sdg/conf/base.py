@@ -600,6 +600,7 @@ if SDG_API_URL_PROD:
             "description": "Productie",
         }
     )
+
 SDG_LOCALIZED_FORM_FIELDS = [
     "product_titel_decentraal",
     "specifieke_tekst",
@@ -614,6 +615,14 @@ SDG_LOCALIZED_FORM_FIELDS = [
     "decentrale_procedure_label",
     "verwijzing_links",
 ]
+
+# check if both decentrale_procedure_label and decentrale_procedure_link are in the SDG_LOCALIZED_FORM_FIELDS or neither are.
+assert (
+    "decentrale_procedure_link" in SDG_LOCALIZED_FORM_FIELDS
+    and "decentrale_procedure_label" in SDG_LOCALIZED_FORM_FIELDS
+    or "decentrale_procedure_link" not in SDG_LOCALIZED_FORM_FIELDS
+    and "decentrale_procedure_label" not in SDG_LOCALIZED_FORM_FIELDS
+)
 
 SPECTACULAR_SETTINGS["SERVERS"] = SDG_API_SERVER_INSTANCES
 

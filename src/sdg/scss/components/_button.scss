@@ -44,6 +44,10 @@
     font-weight: bold;
   }
 
+  &--inactive {
+    font-weight: normal !important;
+  }
+
   &--small {
     --3d-active: 1px;
     --padding-h: 2px;
