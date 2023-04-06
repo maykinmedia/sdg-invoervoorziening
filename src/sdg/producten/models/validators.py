@@ -62,7 +62,9 @@ def validate_markdown(value):
 
 def validate_https(value):
     if not value.startswith("https"):
-        raise ValidationError(_("Het url moet een geldige https adress zijn."))
+        raise ValidationError(
+            _("De URL moet beginnen met 'https://'. Let op de 's' achter 'http'.")
+        )
 
 
 def validate_product(localized):
