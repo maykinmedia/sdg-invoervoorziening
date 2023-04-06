@@ -227,7 +227,9 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
 
                 self.add_error(
                     "product_aanwezig",
-                    "Veld mag niet op onbekend staan.",
+                    "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
+                    Geef dit aan met Ja of Nee. Let op! \
+                    Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
                 )
 
 
