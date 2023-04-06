@@ -17,11 +17,7 @@ from sdg.accounts.models import Role, User
 class RoleForm(forms.ModelForm):
     class Meta:
         model = Role
-        fields = (
-            "is_beheerder",
-            "is_redacteur",
-            "is_raadpleger",
-        )
+        fields = ("is_beheerder", "is_redacteur", "is_raadpleger", "ontvangt_mail")
 
 
 class RoleInlineFormSet(

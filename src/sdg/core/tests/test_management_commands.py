@@ -2,9 +2,13 @@ import os
 from datetime import date, datetime
 from io import StringIO
 
+from django.core import mail
 from django.core.management import call_command
 from django.test import TestCase
 
+from dateutil.relativedelta import relativedelta
+
+from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.constants import DoelgroepChoices
 from sdg.core.management.utils import update_generic_products
 from sdg.core.models import (
@@ -14,12 +18,14 @@ from sdg.core.models import (
     UniformeProductnaam,
 )
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
+from sdg.core.tests.factories.config import SiteConfigurationFactory
 from sdg.core.tests.factories.logius import ThemaFactory, UniformeProductnaamFactory
 from sdg.organisaties.models import LokaleOverheid
 from sdg.organisaties.tests.factories.overheid import BevoegdeOrganisatieFactory
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,
     ReferentieProductFactory,
+    ReferentieProductVersieFactory,
     SpecifiekProductVersieFactory,
 )
 
@@ -397,3 +403,53 @@ class TestAutofill(CommandTestCase):
 
         bos = self.reference_catalog.lokale_overheid.bevoegde_organisaties.all()
         self.assertEqual(bos.count(), 2)
+
+
+class TestSendNotificationMail(CommandTestCase):
+    def setUp(self):
+        self.yesterday = date.today() - relativedelta(days=1)
+        self.config = SiteConfigurationFactory.create(
+            mail_text_changes_last_sent=self.yesterday
+        )
+        self.user1, self.user2, self.user3 = UserFactory.create_batch(3)
+        RoleFactory.create(user=self.user1, ontvangt_mail=True, is_beheerder=True)
+        RoleFactory.create(user=self.user2, ontvangt_mail=True, is_redacteur=True)
+        RoleFactory.create(user=self.user3, ontvangt_mail=False, is_raadpleger=True)
+
+        self.ref_product1, self.ref_product2 = ReferentieProductFactory.create_batch(2)
+        self._ref_product1_versie1 = ReferentieProductVersieFactory.create(
+            product=self.ref_product1, versie=1
+        )
+        self._ref_product2_versie1 = ReferentieProductVersieFactory.create(
+            product=self.ref_product2, versie=1
+        )
+
+    def test_send_no_mail_when_no_changes(self):
+        out = self.call_command("send_notification_mail")
+        self.assertIn("", out)
+        self.assertEqual(len(mail.outbox), 0)
+        self.assertEqual(self.config.mail_text_changes_last_sent, self.yesterday)
+
+    def test_subscribed_users_get_mail(self):
+        ReferentieProductVersieFactory.create(
+            product=self.ref_product1,
+            versie=2,
+            gewijzigd_op=date.today(),
+            publicatie_datum=date.today(),
+        )
+        ReferentieProductVersieFactory.create(
+            product=self.ref_product2,
+            versie=2,
+            gewijzigd_op=date.today(),
+            publicatie_datum=date.today(),
+        )
+
+        out = self.call_command("send_notification_mail")
+
+        self.config.refresh_from_db()
+
+        self.assertIn("Successfully send emails to 2 user(s)", out)
+        self.assertEqual(len(mail.outbox), 2)
+        self.assertEqual(mail.outbox[0].to[0], self.user1.email)
+        self.assertEqual(mail.outbox[1].to[0], self.user2.email)
+        self.assertEqual(self.config.mail_text_changes_last_sent, date.today())

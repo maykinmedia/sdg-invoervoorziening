@@ -32,6 +32,8 @@ class RoleFactory(DjangoModelFactory):
     lokale_overheid = factory.SubFactory(LokaleOverheidFactory)
     is_beheerder = False
     is_redacteur = False
+    is_raadpleger = False
+    ontvangt_mail = False
 
     class Meta:
         model = Role
