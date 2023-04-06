@@ -365,6 +365,17 @@ class Product(ProductFieldMixin, models.Model):
             validate_specific_product,
         )
 
+        if self.product_valt_onder:
+            if (
+                self.product_valt_onder.generiek_product.doelgroep
+                != self.generiek_product.doelgroep
+            ):
+                raise ValidationError(
+                    _(
+                        f"Het product kan niet onder een product vallen met het doelgroep: '{self.product_valt_onder.generiek_product.doelgroep}'."
+                    )
+                )
+
         super().clean()
 
         if self.is_referentie_product:
