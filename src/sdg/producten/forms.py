@@ -57,6 +57,15 @@ class LocalizedProductFormSet(
                     falls_under_explanation_map.get(form.instance.taal)
                 )
 
+        else:
+            for form in self.forms:
+                if not form.initial["product_titel_decentraal"]:
+                    form.initial[
+                        "product_titel_decentraal"
+                    ] = self.instance.product.generiek_product.vertalingen.get(
+                        taal=form.instance.taal
+                    ).product_titel
+
     def clean(self):
         """
         - Ensure all localized `product_valt_onder_toelichting` fields are filled
