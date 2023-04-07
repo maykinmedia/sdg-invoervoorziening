@@ -221,16 +221,18 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         cleaned_data = super().clean()
 
         available = cleaned_data.get("product_aanwezig")
+        is_reference = self.instance.is_referentie_product
 
-        if "date" in self.data.get("publish"):
-            if available is None:
+        if not is_reference:
+            if "date" in self.data.get("publish"):
+                if available is None:
 
-                self.add_error(
-                    "product_aanwezig",
-                    "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
-                    Geef dit aan met Ja of Nee. Let op! \
-                    Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
-                )
+                    self.add_error(
+                        "product_aanwezig",
+                        "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
+                        Geef dit aan met Ja of Nee. Let op! \
+                        Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
+                    )
 
 
 class VersionForm(forms.ModelForm):
