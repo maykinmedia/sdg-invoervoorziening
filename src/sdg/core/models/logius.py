@@ -4,6 +4,8 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from compat import slugify
+
 from sdg.core.models.managers import OrganisatieQuerySet
 
 
@@ -30,6 +32,24 @@ class Overheidsorganisatie(models.Model):
         blank=True,
         null=True,
     )
+    dpc_slug = models.SlugField(
+        _("??? slug field"),
+        help_text=_(
+            "De gemeente slug voor de ??? website gebaseerd op het OWMS pref label."
+        ),
+        max_length=220,
+        blank=True,
+        null=False,
+    )
+    dop_slug = models.SlugField(
+        _("Ondernemersplein slug field"),
+        help_text=_(
+            "De gemeente slug voor de ondernemersplein website gebaseerd op het OWMS pref label."
+        ),
+        max_length=220,
+        blank=True,
+        null=False,
+    )
 
     objects = OrganisatieQuerySet.as_manager()
 
@@ -44,6 +64,16 @@ class Overheidsorganisatie(models.Model):
                 end_date=self.owms_end_date.date(),
             )
         return self.owms_pref_label
+
+    def save(self, *args, **kwargs):
+        if self.owms_pref_label:
+            if not self.dpc_slug:
+                self.dpc_slug = slugify(self.owms_pref_label)
+
+            if not self.dop_slug:
+                self.dop_slug = slugify(self.owms_pref_label)
+
+        super().save(*args, **kwargs)
 
 
 class Informatiegebied(models.Model):

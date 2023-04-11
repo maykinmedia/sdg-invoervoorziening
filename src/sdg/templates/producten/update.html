@@ -49,27 +49,33 @@
     </div>
 
     {% with most_recent_is_concept=product.most_recent_version.publicatie_datum|notbool %}
-        <div class="toolbox__item">
-            {% trans "Toon voorbeeld" %}:
-            {% if product.active_version %}
-                <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}"
-                   id="preview-current"
-                   class="preview"
-                   target="_blank">
-                    {% trans "Huidige gepubliceerde" %}
-                </a>
-            {% endif %}
-            {% if product.active_version and most_recent_is_concept %}
-                |
-            {% endif %}
-            {% if most_recent_is_concept %}
-                <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept"
-                   id="preview-concept"
-                   class="preview"
-                   target="_blank">
-                    {% trans "Concept" %}
-                </a>
-            {% endif %}
+        <div class="toolbox__item toolbox__language_div">
+            {% trans "Toon" %}:
+            {% for taal, url in published_product_language_links.items %}
+                {% if product.active_version %}
+                    <a href="{{ url }}"
+                    id="preview-current"
+                    class="toolbox__language_item preview"
+                    target="_blank"
+                    lang="{{ taal }}"
+                    {% if not forloop.first %} aria-hidden="true" {% endif %}
+                    >{% trans "gepubliceerde tekst op Nationaal Portaal" %}
+                    </a>
+                {% endif %}
+                {% if product.active_version and most_recent_is_concept %}
+                    |
+                {% endif %}
+                {% if most_recent_is_concept %}
+                    <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept&taal={{ taal }}"
+                    id="preview-concept"
+                    class="toolbox__language_item preview"
+                    target="_blank"
+                    lang="{{ taal }}"
+                    {% if not forloop.first %} aria-hidden="true" {% endif %}
+                    >{% trans "concepttekst in de invoervoorziening" %}
+                    </a>
+                {% endif %}
+            {% endfor %}
         </div>
     {% endwith %}
 

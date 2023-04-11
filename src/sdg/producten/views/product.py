@@ -12,11 +12,14 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView, UpdateView
 
+from compat import slugify
+
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
 from sdg.accounts.utils import user_has_valid_roles
 from sdg.accounts.views.decorators import municipality_role_required
 from sdg.core.constants import TaalChoices
+from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.types import Event
 from sdg.core.views.mixins import BreadcrumbsMixin
 from sdg.producten.forms import LocalizedProductFormSet, ProductForm, VersionForm
@@ -264,6 +267,37 @@ class ProductUpdateView(
 
         return [nl, en]
 
+    def _get_published_taal_product_links(self):
+        doelgroep = self.product.generiek_product.doelgroep
+
+        nl_product_title = slugify(
+            self.product.generiek_product.vertalingen.get(
+                taal=TaalChoices.nl
+            ).product_titel
+        )
+        en_product_title = slugify(
+            self.product.generiek_product.vertalingen.get(
+                taal=TaalChoices.en
+            ).product_titel
+        )
+
+        dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
+        dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
+
+        if doelgroep == DoelgroepChoices.bedrijf:
+            return {
+                "nl": f"https://ondernemersplein.kvk.nl/{nl_product_title}/gemeente/{dop}/",
+                "en": f"https://business.gov.nl/regulation/{en_product_title}/municipality/{dop}/",
+            }
+
+        if doelgroep == DoelgroepChoices.burger:
+            return {
+                "nl": f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{nl_product_title}/gemeente-{dpc}",
+                "en": f"https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{en_product_title}/gemeente-{dpc}",
+            }
+
+        return None
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -305,6 +339,10 @@ class ProductUpdateView(
                 -1
             ],  # TODO: optimize
         )
+
+        context[
+            "published_product_language_links"
+        ] = self._get_published_taal_product_links()
 
         context["history"] = (
             self.product.get_all_versions()
