@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from sdg.core.db.fields import DynamicArrayField
 from sdg.core.models.validators import validate_openingstijden, validate_postcode
 from sdg.organisaties.managers import LokaleOverheidManager
+from sdg.producten.models.validators import validate_https
 
 User = get_user_model()
 
@@ -30,6 +31,7 @@ class LokaleOverheid(models.Model):
         _("contact website"),
         blank=True,
         help_text=_("Website van de organisatie."),
+        validators=[validate_https],
     )
     contact_telefoonnummer = models.CharField(
         _("contact telefoonnummer"),
@@ -51,6 +53,7 @@ class LokaleOverheid(models.Model):
         _("contact formulier"),
         blank=True,
         help_text=("De webpagina van het contact formulier van de organisatie."),
+        validators=[validate_https],
     )
     organisatie = models.ForeignKey(
         "core.Overheidsorganisatie",

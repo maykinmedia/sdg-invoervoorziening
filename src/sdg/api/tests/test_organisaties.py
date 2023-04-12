@@ -140,6 +140,11 @@ class OrganisatiesTests(APITestCase):
                 {
                     "name": "contactWebsite",
                     "code": "invalid",
+                    "reason": "De URL moet beginnen met 'https://'. Let op de 's' achter 'http'.",
+                },
+                {
+                    "name": "contactWebsite",
+                    "code": "invalid",
                     "reason": "Voer een geldige URL in.",
                 },
                 {
@@ -151,6 +156,11 @@ class OrganisatiesTests(APITestCase):
                     "name": "contactTelefoonnummer",
                     "code": "invalid",
                     "reason": "Not a valid string.",
+                },
+                {
+                    "name": "contactFormulierLink",
+                    "code": "invalid",
+                    "reason": "De URL moet beginnen met 'https://'. Let op de 's' achter 'http'.",
                 },
                 {
                     "name": "contactFormulierLink",

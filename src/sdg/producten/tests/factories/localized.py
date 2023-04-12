@@ -21,7 +21,7 @@ class LocalizedGeneriekProductFactory(DjangoModelFactory):
 
     generieke_tekst = factory.Faker("paragraph")
     korte_omschrijving = factory.Faker("sentence")
-    landelijke_link = factory.Faker("url")
+    landelijke_link = factory.Faker("url", schemes=["https"])
 
     taal = factory.Sequence(lambda n: TaalChoices.get_available_languages()[n % 2])
 
@@ -38,7 +38,7 @@ class LocalizedProductFactory(DjangoModelFactory):
     datum_wijziging = factory.Faker("paragraph")
 
     decentrale_procedure_label = factory.Faker("word")
-    decentrale_procedure_link = factory.Faker("url")
+    decentrale_procedure_link = factory.Faker("url", schemes=["https"])
 
     kosten_en_betaalmethoden = factory.Faker("paragraph")
     procedure_beschrijving = factory.Faker("paragraph")
