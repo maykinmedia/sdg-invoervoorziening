@@ -141,7 +141,12 @@
                                 </header>
                                 <div class="form__control-body">
                                     <div class="tabs__table-cell--versions"></div>
-                                    {% select field %}
+                                    {% comment %} Didn't use template because error msg would render in the select element {% endcomment %}
+                                    <fieldset class="form__group--nopad">
+                                        <div class="select">
+                                            {{ field }}
+                                        </div>
+                                    </fieldset>
                                     {{ field.errors }}
                                 </div>
                             </div>

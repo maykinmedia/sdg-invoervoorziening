@@ -209,10 +209,30 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
 
+        if self.initial["product_aanwezig"] is None:
+            self.initial["product_aanwezig"] = True
+
         for field in self.fields:
             self.fields[field].help_text = self._help_text(field)
 
         self.configure_fields()
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        available = cleaned_data.get("product_aanwezig")
+        is_reference = self.instance.is_referentie_product
+
+        if not is_reference:
+            if "date" in self.data.get("publish"):
+                if available is None:
+
+                    self.add_error(
+                        "product_aanwezig",
+                        "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
+                        Geef dit aan met Ja of Nee. Let op! \
+                        Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
+                    )
 
 
 class VersionForm(forms.ModelForm):
