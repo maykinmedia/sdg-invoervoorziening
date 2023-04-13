@@ -169,9 +169,9 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.product_valt_onder:
-            selected_doelgroep = self.instance.product_valt_onder.generiek_product
+            selected_product = self.instance.product_valt_onder.generiek_product
         else:
-            selected_doelgroep = None
+            selected_product = None
 
         locations = self.instance.get_municipality_locations()
         duplicates_generiek_product_upn_labels = (
@@ -191,7 +191,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             self.fields["product_valt_onder"]
             .queryset.filter(
                 Q(
-                    generiek_product=selected_doelgroep,
+                    generiek_product=selected_product,
                     catalogus=self.instance.catalogus,
                 )
                 | Q(

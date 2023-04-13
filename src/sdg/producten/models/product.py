@@ -372,7 +372,7 @@ class Product(ProductFieldMixin, models.Model):
             ):
                 raise ValidationError(
                     _(
-                        f"Het product kan niet onder een product vallen met het doelgroep: '{self.product_valt_onder.generiek_product.doelgroep}'."
+                        "Het product kan niet onder een product vallen met een andere doelgroep."
                     )
                 )
 
