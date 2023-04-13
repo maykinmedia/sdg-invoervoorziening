@@ -11,7 +11,7 @@ from sdg.core.models.config import SiteConfiguration
 def send_notifications():
     """Automatically sends notification emails."""
 
-    last_send = SiteConfiguration.objects.first().mail_text_changes_last_sent
+    last_send = SiteConfiguration.get_solo().mail_text_changes_last_sent
     send_every_x_days = datetime.timedelta(
         days=settings.SDG_MAIL_TEXT_CHANGES_EVERY_DAYS
     )

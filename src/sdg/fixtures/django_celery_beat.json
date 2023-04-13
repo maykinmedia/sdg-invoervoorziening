@@ -68,18 +68,6 @@
     }
 },
 {
-    "model": "django_celery_beat.crontabschedule",
-    "pk": 6,
-    "fields": {
-        "minute": "0",
-        "hour": "0",
-        "day_of_week": "1",
-        "day_of_month": "*",
-        "month_of_year": "*",
-        "timezone": "UTC"
-    }
-},
-{
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
@@ -252,34 +240,6 @@
         "total_run_count": 0,
         "date_changed": "2022-09-29T10:29:06.729",
         "description": "Update the status for all generic products based on defined logic.\r\n\r\nNote: crontab runs every 5 minutes."
-    }
-},
-{
-    "model": "django_celery_beat.periodictask",
-    "pk": 7,
-    "fields": {
-        "name": "Send localized products notification email",
-        "task": "sdg.organisaties.tasks.send_notifications",
-        "interval": null,
-        "crontab": 6,
-        "solar": null,
-        "clocked": null,
-        "args": "[]",
-        "kwargs": "{}",
-        "queue": null,
-        "exchange": null,
-        "routing_key": null,
-        "headers": "{}",
-        "priority": null,
-        "expires": null,
-        "expire_seconds": null,
-        "one_off": false,
-        "start_time": null,
-        "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
-        "date_changed": "2023-04-06T12:22:36.304",
-        "description": "Send reference product update notification emails to all subscribed every (x) amount of days."
     }
 }
 ]
