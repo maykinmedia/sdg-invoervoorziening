@@ -3,6 +3,9 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from compat import slugify
+
+from sdg.core.constants.product import DoelgroepChoices, TaalChoices
 from sdg.core.db.fields import DynamicArrayField
 from sdg.core.forms import LabeledCategoryURLWidget, LabeledURLWidget
 from sdg.core.models.validators import (
@@ -111,6 +114,12 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
         blank=True,
     )
+    published_url = models.URLField(
+        _("Gepubliceerde url link"),
+        help_text=_("De gepubliceerde website url."),
+        blank=True,
+        null=False,
+    )
 
     objects = LocalizedGeneriekProductManager()
 
@@ -124,6 +133,22 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
                 name="unique_language_per_generiekproduct",
             )
         ]
+
+    def save(self, *args, **kwargs):
+        if not self.published_url and self.product_titel:
+            doelgroep = self.generiek_product.doelgroep
+            if doelgroep == DoelgroepChoices.bedrijf:
+                if self.taal == TaalChoices.nl:
+                    self.published_url = f"https://ondernemersplein.kvk.nl/{slugify(self.product_titel)}/gemeente/"
+                elif self.taal == TaalChoices.en:
+                    self.published_url = f"https://business.gov.nl/regulation/{slugify(self.product_titel)}/municipality/"
+
+            elif doelgroep == DoelgroepChoices.burger:
+                if self.taal == TaalChoices.nl:
+                    self.published_url = f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{slugify(self.product_titel)}/gemeente-"
+                elif self.taal == TaalChoices.en:
+                    self.published_url = f"https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{slugify(self.product_titel)}/gemeente-"
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.product_titel

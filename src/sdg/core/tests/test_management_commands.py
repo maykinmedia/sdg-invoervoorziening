@@ -228,7 +228,7 @@ class TestUpdateGenericProductsTests(CommandTestCase):
             upn=self.upn_1, doelgroep=DoelgroepChoices.bedrijf
         )
         GeneriekProductFactory.create(upn=self.upn_1, doelgroep=DoelgroepChoices.burger)
-        GeneriekProductFactory.create(upn=self.upn_1)
+        GeneriekProductFactory.create(upn=self.upn_1, doelgroep="")
 
         self.assertEqual(self.upn_1.generieke_producten.count(), 3)
 

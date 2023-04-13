@@ -269,34 +269,28 @@ class ProductUpdateView(
 
     def _get_published_taal_product_links(self):
         doelgroep = self.product.generiek_product.doelgroep
+        if not doelgroep:
+            return None
 
-        nl_product_title = slugify(
-            self.product.generiek_product.vertalingen.get(
-                taal=TaalChoices.nl
-            ).product_titel
+        product_language_urls = (
+            self.product.generiek_product.vertalingen.all().values_list(
+                "taal", "published_url"
+            )
         )
-        en_product_title = slugify(
-            self.product.generiek_product.vertalingen.get(
-                taal=TaalChoices.en
-            ).product_titel
-        )
+        if not product_language_urls:
+            return None
 
         dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
         dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
 
-        if doelgroep == DoelgroepChoices.bedrijf:
-            return {
-                "nl": f"https://ondernemersplein.kvk.nl/{nl_product_title}/gemeente/{dop}/",
-                "en": f"https://business.gov.nl/regulation/{en_product_title}/municipality/{dop}/",
-            }
+        urls = {}
+        for language, url in product_language_urls:
+            if doelgroep == DoelgroepChoices.bedrijf:
+                urls[language] = f"{url}{dop}"
+            elif doelgroep == DoelgroepChoices.burger:
+                urls[language] = f"{url}{dpc}"
 
-        if doelgroep == DoelgroepChoices.burger:
-            return {
-                "nl": f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{nl_product_title}/gemeente-{dpc}",
-                "en": f"https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{en_product_title}/gemeente-{dpc}",
-            }
-
-        return None
+        return urls
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

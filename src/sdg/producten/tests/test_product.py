@@ -5,12 +5,14 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from compat import slugify
 from django_webtest import WebTest
 from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
 from sdg.core.constants import GenericProductStatus, TaalChoices
+from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.core.tests.utils import hard_refresh_from_db
 from sdg.organisaties.tests.factories.overheid import BevoegdeOrganisatieFactory
@@ -265,14 +267,32 @@ class ProductUpdateViewTests(WebTest):
             },
         )
 
-        page_preview_current_url = response.pyquery("#preview-current")
-        self.assertEqual(page_preview_current_url.length, 0)
+        page_preview_current_url_nl = response.pyquery("#preview-current[lang=nl]")
+        self.assertEqual(page_preview_current_url_nl.length, 0)
 
-        page_preview_concept_url = response.pyquery("#preview-concept").attr("href")
-        self.assertEqual(page_preview_concept_url, f"{preview_url}?status=concept")
+        page_preview_concept_url_nl = response.pyquery(
+            "#preview-concept[lang=nl]"
+        ).attr("href")
+        self.assertEqual(
+            page_preview_concept_url_nl, f"{preview_url}?status=concept&taal=nl"
+        )
 
-        response = self.app.get(page_preview_concept_url)
-        self.assertEqual(response.status_code, 200)
+        preview_response_nl = self.app.get(page_preview_concept_url_nl)
+        self.assertEqual(preview_response_nl.status_code, 200)
+
+        page_preview_current_url_en = response.pyquery("#preview-current[lang=en]")
+        self.assertEqual(page_preview_current_url_en.length, 0)
+
+        page_preview_concept_url_en = response.pyquery(
+            "#preview-concept[lang=en]"
+        ).attr("href")
+
+        self.assertEqual(
+            page_preview_concept_url_en, f"{preview_url}?status=concept&taal=en"
+        )
+
+        preview_response_en = self.app.get(page_preview_concept_url_en)
+        self.assertEqual(preview_response_en.status_code, 200)
 
     @freeze_time(NOW_DATE)
     def test_error_notification_is_displayed(self):
@@ -731,26 +751,110 @@ class ProductUpdateViewTests(WebTest):
         )
         self.assertEqual(response.status_code, 200)
 
-        preview_url = reverse(
-            "organisaties:catalogi:producten:preview",
-            kwargs={
-                "pk": self.product.catalogus.lokale_overheid.pk,
-                "catalog_pk": self.product.catalogus.pk,
-                "product_pk": self.product.pk,
-            },
+        product_title_nl = slugify(
+            self.product.generiek_product.vertalingen.get(
+                taal=TaalChoices.nl
+            ).product_titel
+        )
+        dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
+
+        published_product_url_nl = (
+            f"https://ondernemersplein.kvk.nl/{product_title_nl}/gemeente/{dop}"
         )
 
-        page_preview_current_url = response.pyquery("#preview-current").attr("href")
-        self.assertEqual(page_preview_current_url, preview_url)
+        page_preview_published_url_nl = response.pyquery(
+            "#preview-current[lang=nl]"
+        ).attr("href")
 
-        page_preview_concept_url = response.pyquery("#preview-concept").attr("href")
-        self.assertEqual(page_preview_concept_url, f"{preview_url}?status=concept")
+        self.assertEqual(published_product_url_nl, page_preview_published_url_nl)
 
-        response = self.app.get(page_preview_concept_url)
+    @freeze_time(NOW_DATE)
+    def test_published_bedrijf_preview_links_are_shown_and_working(self):
+        self._change_product_status(Product.status.PUBLISHED)
+        concept_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=None,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(
+            2,
+            product_versie=concept_version,
+        )
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
         self.assertEqual(response.status_code, 200)
 
-        response = self.app.get(page_preview_current_url)
+        product_title = slugify(
+            self.product.generiek_product.vertalingen.get(
+                taal=TaalChoices.nl
+            ).product_titel
+        )
+        dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
+
+        published_product_url = (
+            f"https://ondernemersplein.kvk.nl/{product_title}/gemeente/{dop}"
+        )
+
+        page_preview_published_url = response.pyquery("#preview-current[lang=nl]").attr(
+            "href"
+        )
+
+        self.assertEqual(published_product_url, page_preview_published_url)
+
+    @freeze_time(NOW_DATE)
+    def test_published_burger_preview_links_are_shown_and_working(self):
+        self._change_product_status(Product.status.PUBLISHED)
+
+        # update the doelgroep of the generiek_product to 'eu-burger'
+        self.product.generiek_product.doelgroep = DoelgroepChoices.burger
+        self.product.generiek_product.save()
+        self.product.generiek_product.refresh_from_db()
+
+        # let the model save function on LocalizedGeneriekProduct update the published_url with the new doelgroep.
+        for (
+            generic_localized_product
+        ) in self.product.generiek_product.vertalingen.all():
+            generic_localized_product.published_url = ""
+            generic_localized_product.save()
+            generic_localized_product.refresh_from_db()
+
+        concept_version = ProductVersieFactory.create(
+            product=self.product,
+            publicatie_datum=None,
+            versie=2,
+        )
+        LocalizedProductFactory.create_batch(
+            2,
+            product_versie=concept_version,
+        )
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
         self.assertEqual(response.status_code, 200)
+
+        product_title = slugify(
+            self.product.generiek_product.vertalingen.get(
+                taal=TaalChoices.nl
+            ).product_titel
+        )
+        dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
+
+        published_product_url = f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{product_title}/gemeente-{dpc}"
+
+        page_preview_published_url = response.pyquery("#preview-current[lang=nl]").attr(
+            "href"
+        )
+
+        self.assertEqual(published_product_url, page_preview_published_url)
 
     @freeze_time(NOW_DATE)
     def test_published_and_scheduled_save_concept(self):

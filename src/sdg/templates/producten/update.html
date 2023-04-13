@@ -62,9 +62,11 @@
                     >{% trans "gepubliceerde tekst op Nationaal Portaal" %}
                     </a>
                 {% endif %}
+            {% endfor %}
                 {% if product.active_version and most_recent_is_concept %}
                     |
                 {% endif %}
+            {% for taal in languages %}
                 {% if most_recent_is_concept %}
                     <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept&taal={{ taal }}"
                     id="preview-concept"

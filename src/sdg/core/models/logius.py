@@ -33,9 +33,9 @@ class Overheidsorganisatie(models.Model):
         null=True,
     )
     dpc_slug = models.SlugField(
-        _("??? slug field"),
+        _("Nederland wereldwijd slug field"),
         help_text=_(
-            "De gemeente slug voor de ??? website gebaseerd op het OWMS pref label."
+            "De gemeente slug voor de Nederland wereldwijd website gebaseerd op het OWMS pref label."
         ),
         max_length=220,
         blank=True,
