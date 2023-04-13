@@ -29,20 +29,20 @@
         <div class="form__control-body" lang="{{ taal }}">
             <div class="tabs__table-cell--versions"></div>
             <div class="tabs__table-cell">
-                <div class="dynamic">
-                    <div class="dynamic__container" data-initialized="true">
+                <div class="url_label_field">
+                    <div class="url_label_field__container" data-initialized="true">
                         <div>
-                            <div class="dynamic__container-item">
+                            <div class="url_label_field__container-item">
                                 {{ label|addlabelclass:"form__input lockable form__input--left" }}{{ link|addlinkclass:"form__input lockable form__input--right" }}
                             </div>
                             {% if label.errors or link.errors %}
-                            <div class="dynamic__container-item">
+                            <div class="url_label_field__container-item">
                                 {{ label.errors }}{{ link.errors}}
                             </div>
                             {% endif %}
                         </div>
                     </div>
-                    <div class="dynamic__container">
+                    <div class="url_label_field__container">
                         <div class="toolbar">
                             <div></div>
                             {% toggle _('Aanpassen') hide_label=True icon_before='fa fa-lock fa-xs' icon_after='fa fa-lock-open fa-xs' %}
