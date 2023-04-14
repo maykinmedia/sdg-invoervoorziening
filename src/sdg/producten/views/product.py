@@ -313,7 +313,14 @@ class ProductUpdateView(
 
         context["areas"] = self.product.get_areas()
 
-        context["localized_form_fields"] = settings.SDG_LOCALIZED_FORM_FIELDS
+        # removing label + link field from the localized_form_fields, because we render them seperately
+        localized_form_fields = [
+            field
+            for field in settings.SDG_LOCALIZED_FORM_FIELDS
+            if field not in ["decentrale_procedure_label", "decentrale_procedure_link"]
+        ]
+
+        context["localized_form_fields"] = localized_form_fields
 
         context["user_can_edit"] = user_has_valid_roles(
             self.request.user,

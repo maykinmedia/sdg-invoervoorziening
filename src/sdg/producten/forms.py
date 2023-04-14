@@ -79,6 +79,12 @@ class LocalizedProductFormSet(
 
             available_explanation = cleaned_data.get("product_aanwezig_toelichting")
             falls_under_explanation = cleaned_data.get("product_valt_onder_toelichting")
+            decentrale_procedure_label = cleaned_data.get(
+                "decentrale_procedure_label", None
+            )
+            decentrale_procedure_link = cleaned_data.get(
+                "decentrale_procedure_link", None
+            )
 
             if falls_under and not falls_under_explanation:
                 form.add_error(
@@ -94,6 +100,12 @@ class LocalizedProductFormSet(
 
             if available_explanation == available_explanation_map.get(language):
                 form.instance.product_aanwezig_toelichting = ""
+
+            if bool(decentrale_procedure_label) is not bool(decentrale_procedure_link):
+                form.add_error(
+                    "decentrale_procedure_link",
+                    "De link moet een label en een URL bevatten.",
+                )
 
             if not is_reference:
                 self._validate_specific(form)

@@ -77,6 +77,16 @@ def addclass(field, class_attr):
     return field.as_widget(attrs={"class": class_attr})
 
 
+@register.filter(name="addlabelclass")
+def addlabelclass(field, class_attr):
+    return field.as_widget(attrs={"class": class_attr, "placeholder": "Label"})
+
+
+@register.filter(name="addlinkclass")
+def addlinkclass(field, class_attr):
+    return field.as_widget(attrs={"class": class_attr, "placeholder": "URL"})
+
+
 @register.simple_tag
 def template_dir(value):
     return dir(value)
@@ -115,6 +125,17 @@ def table_grid_field(field, **kwargs):
 @register.inclusion_tag("forms/table_row.html")
 def table_row(products, **kwargs):
     return {**kwargs, "products": products}
+
+
+@register.inclusion_tag("forms/localized_url_label_field.html")
+def localized_url_label_field(label, link, taal, languages, **kwargs):
+    return {
+        **kwargs,
+        "label": label,
+        "link": link,
+        "taal": taal,
+        "languages": languages,
+    }
 
 
 @register.inclusion_tag("forms/select.html")
