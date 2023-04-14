@@ -759,7 +759,7 @@ class ProductUpdateViewTests(WebTest):
         dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
 
         published_product_url_nl = (
-            f"https://ondernemersplein.kvk.nl/{product_title_nl}/gemeente/{dop}"
+            f"https://ondernemersplein.kvk.nl/{product_title_nl}/gemeente/{dop}/"
         )
 
         page_preview_published_url_nl = response.pyquery(
@@ -797,7 +797,7 @@ class ProductUpdateViewTests(WebTest):
         dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
 
         published_product_url = (
-            f"https://ondernemersplein.kvk.nl/{product_title}/gemeente/{dop}"
+            f"https://ondernemersplein.kvk.nl/{product_title}/gemeente/{dop}/"
         )
 
         page_preview_published_url = response.pyquery("#preview-current[lang=nl]").attr(

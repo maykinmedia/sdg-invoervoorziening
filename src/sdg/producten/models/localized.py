@@ -114,9 +114,10 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         ),
         blank=True,
     )
-    published_url = models.URLField(
-        _("Gepubliceerde url link"),
-        help_text=_("De gepubliceerde website url."),
+    slug = models.SlugField(
+        _("Product titel slug field"),
+        help_text=_("De product title slug van dit gelokaliseerde generieke product"),
+        max_length=170,
         blank=True,
         null=False,
     )
@@ -135,19 +136,8 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         ]
 
     def save(self, *args, **kwargs):
-        if not self.published_url and self.product_titel:
-            doelgroep = self.generiek_product.doelgroep
-            if doelgroep == DoelgroepChoices.bedrijf:
-                if self.taal == TaalChoices.nl:
-                    self.published_url = f"https://ondernemersplein.kvk.nl/{slugify(self.product_titel)}/gemeente/"
-                elif self.taal == TaalChoices.en:
-                    self.published_url = f"https://business.gov.nl/regulation/{slugify(self.product_titel)}/municipality/"
-
-            elif doelgroep == DoelgroepChoices.burger:
-                if self.taal == TaalChoices.nl:
-                    self.published_url = f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{slugify(self.product_titel)}/gemeente-"
-                elif self.taal == TaalChoices.en:
-                    self.published_url = f"https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{slugify(self.product_titel)}/gemeente-"
+        if not self.slug and self.product_titel:
+            self.slug = slugify(self.product_titel)
         super().save(*args, **kwargs)
 
     def __str__(self):

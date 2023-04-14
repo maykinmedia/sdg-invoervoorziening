@@ -273,9 +273,7 @@ class ProductUpdateView(
             return None
 
         product_language_urls = (
-            self.product.generiek_product.vertalingen.all().values_list(
-                "taal", "published_url"
-            )
+            self.product.generiek_product.vertalingen.all().values_list("taal", "slug")
         )
         if not product_language_urls:
             return None
@@ -284,11 +282,25 @@ class ProductUpdateView(
         dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
 
         urls = {}
-        for language, url in product_language_urls:
+        for language, product_slug in product_language_urls:
             if doelgroep == DoelgroepChoices.bedrijf:
-                urls[language] = f"{url}{dop}"
+                if language == TaalChoices.nl:
+                    urls[
+                        language
+                    ] = f"https://ondernemersplein.kvk.nl/{product_slug}/gemeente/{dop}/"
+                elif language == TaalChoices.en:
+                    urls[
+                        language
+                    ] = f"https://business.gov.nl/regulation/{product_slug}/municipality/{dop}"
             elif doelgroep == DoelgroepChoices.burger:
-                urls[language] = f"{url}{dpc}"
+                if language == TaalChoices.nl:
+                    urls[
+                        language
+                    ] = f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{product_slug}/gemeente-{dpc}"
+                elif language == TaalChoices.en:
+                    urls[
+                        language
+                    ] = f"https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{product_slug}/gemeente-{dpc}"
 
         return urls
 
