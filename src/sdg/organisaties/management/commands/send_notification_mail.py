@@ -22,29 +22,9 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--user",
-            metavar=["email", "username"],
-            help="Send to email to one specific user instead based on 'email' or 'username'.",
+            metavar="email",
+            help="Send to email to one specific user instead based on email.",
         )
-
-    def get_user_by_email(self, user):
-        return (
-            User.objects.filter(email=user, roles__ontvangt_mail=True)
-            .order_by("email")
-            .distinct("email")
-        )
-
-    def get_user_by_username(self, user):
-        user_qs = (
-            User.objects.filter(roles__ontvangt_mail=True)
-            .order_by("email")
-            .distinct("email")
-        )
-        if user_qs:
-            for search_term in user.split():
-                user_qs = user_qs.filter(
-                    Q(first_name__iexact=search_term) | Q(last_name__iexact=search_term)
-                )
-        return user_qs
 
     def handle(self, user, **options):
         x_days_ago = now() - relativedelta(
@@ -60,9 +40,11 @@ class Command(BaseCommand):
         )
         if product_versies:
             if user:
-                user_qs = self.get_user_by_email(user)
-                if not user_qs:
-                    user_qs = self.get_user_by_username(user)
+                user_qs = (
+                    User.objects.filter(email=user, roles__ontvangt_mail=True)
+                    .order_by("email")
+                    .distinct("email")
+                )
             else:
                 user_qs = (
                     User.objects.filter(roles__ontvangt_mail=True)
@@ -98,6 +80,15 @@ class Command(BaseCommand):
                         f"Successfully send emails to {len(user_qs)} user(s)"
                     )
                 )
+            else:
+                self.stdout.write(self.style.SUCCESS("No eligable users found."))
+
+        else:
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"No changed products found in the past {settings.SDG_MAIL_TEXT_CHANGES_EVERY_DAYS} days."
+                )
+            )
 
         config = SiteConfiguration.get_solo()
         config.mail_text_changes_last_sent = datetime.date.today()

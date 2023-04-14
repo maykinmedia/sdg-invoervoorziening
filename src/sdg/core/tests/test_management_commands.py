@@ -2,6 +2,7 @@ import os
 from datetime import date, datetime
 from io import StringIO
 
+from django.conf import settings
 from django.core import mail
 from django.core.management import call_command
 from django.test import TestCase
@@ -426,7 +427,10 @@ class TestSendNotificationMail(CommandTestCase):
 
     def test_send_no_mail_when_no_changes(self):
         out = self.call_command("send_notification_mail")
-        self.assertIn("", out)
+        self.assertIn(
+            f"No changed products found in the past {settings.SDG_MAIL_TEXT_CHANGES_EVERY_DAYS} days.",
+            out,
+        )
         self.assertEqual(len(mail.outbox), 0)
         self.assertEqual(self.config.mail_text_changes_last_sent, self.yesterday)
 
@@ -453,3 +457,49 @@ class TestSendNotificationMail(CommandTestCase):
         self.assertEqual(mail.outbox[0].to[0], self.user1.email)
         self.assertEqual(mail.outbox[1].to[0], self.user2.email)
         self.assertEqual(self.config.mail_text_changes_last_sent, date.today())
+
+    def test_user_flag(self):
+        ReferentieProductVersieFactory.create(
+            product=self.ref_product1,
+            versie=2,
+            gewijzigd_op=date.today(),
+            publicatie_datum=date.today(),
+        )
+        ReferentieProductVersieFactory.create(
+            product=self.ref_product2,
+            versie=2,
+            gewijzigd_op=date.today(),
+            publicatie_datum=date.today(),
+        )
+
+        out = self.call_command("send_notification_mail", "--user", self.user1.email)
+
+        self.config.refresh_from_db()
+
+        self.assertIn("Successfully send emails to 1 user(s)", out)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to[0], self.user1.email)
+        self.assertEqual(self.config.mail_text_changes_last_sent, date.today())
+
+    def test_user_flag_with_eligable_user(self):
+        ReferentieProductVersieFactory.create(
+            product=self.ref_product1,
+            versie=2,
+            gewijzigd_op=date.today(),
+            publicatie_datum=date.today(),
+        )
+        ReferentieProductVersieFactory.create(
+            product=self.ref_product2,
+            versie=2,
+            gewijzigd_op=date.today(),
+            publicatie_datum=date.today(),
+        )
+
+        out = self.call_command(
+            "send_notification_mail", "--user", f"wrong{self.user1.email}"
+        )
+
+        self.config.refresh_from_db()
+
+        self.assertIn("No eligable users found.", out)
+        self.assertEqual(len(mail.outbox), 0)
