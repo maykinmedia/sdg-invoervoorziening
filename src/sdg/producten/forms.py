@@ -79,6 +79,12 @@ class LocalizedProductFormSet(
 
             available_explanation = cleaned_data.get("product_aanwezig_toelichting")
             falls_under_explanation = cleaned_data.get("product_valt_onder_toelichting")
+            decentrale_procedure_label = cleaned_data.get(
+                "decentrale_procedure_label", None
+            )
+            decentrale_procedure_link = cleaned_data.get(
+                "decentrale_procedure_link", None
+            )
 
             if falls_under and not falls_under_explanation:
                 form.add_error(
@@ -94,6 +100,12 @@ class LocalizedProductFormSet(
 
             if available_explanation == available_explanation_map.get(language):
                 form.instance.product_aanwezig_toelichting = ""
+
+            if bool(decentrale_procedure_label) is not bool(decentrale_procedure_link):
+                form.add_error(
+                    "decentrale_procedure_link",
+                    "De link moet een label en een URL bevatten.",
+                )
 
             if not is_reference:
                 self._validate_specific(form)
@@ -168,6 +180,11 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.instance.product_valt_onder:
+            selected_product = self.instance.product_valt_onder.generiek_product
+        else:
+            selected_product = None
+
         locations = self.instance.get_municipality_locations()
         duplicates_generiek_product_upn_labels = (
             Product.objects.filter(
@@ -184,7 +201,16 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         self.fields["locaties"].initial = locations.filter(is_product_location=True)
         self.fields["product_valt_onder"].queryset = (
             self.fields["product_valt_onder"]
-            .queryset.filter(catalogus=self.instance.catalogus)
+            .queryset.filter(
+                Q(
+                    generiek_product=selected_product,
+                    catalogus=self.instance.catalogus,
+                )
+                | Q(
+                    generiek_product__doelgroep=self.instance.generiek_product.doelgroep,
+                    catalogus=self.instance.catalogus,
+                )
+            )
             .annotate(
                 _name=Case(
                     When(
@@ -209,10 +235,30 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
 
+        if self.initial["product_aanwezig"] is None:
+            self.initial["product_aanwezig"] = True
+
         for field in self.fields:
             self.fields[field].help_text = self._help_text(field)
 
         self.configure_fields()
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        available = cleaned_data.get("product_aanwezig")
+        is_reference = self.instance.is_referentie_product
+
+        if not is_reference:
+            if "date" in self.data.get("publish"):
+                if available is None:
+
+                    self.add_error(
+                        "product_aanwezig",
+                        "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
+                        Geef dit aan met Ja of Nee. Let op! \
+                        Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
+                    )
 
 
 class VersionForm(forms.ModelForm):

@@ -1,0 +1,36 @@
+@import 'colors';
+
+.url_label_field {
+
+  .url_label_field__container {
+
+    .form__input {
+      width: 93%;
+
+      &--left {
+        width: 32% !important;
+      }
+
+      &--right {
+        width: 68% !important;
+      }
+
+    }
+
+    .url_label_field__container__button {
+      border: none;
+      padding: 6px;
+      cursor: pointer;
+
+      &--side {
+        @extend .url_label_field__container__button;
+        background-color: transparent;
+        position: relative;
+        right: 24px;
+        color: $color_secondary_darkest;
+      }
+    }
+
+  }
+
+}

@@ -149,7 +149,12 @@
                                 </header>
                                 <div class="form__control-body">
                                     <div class="tabs__table-cell--versions"></div>
-                                    {% select field %}
+                                    {% comment %} Didn't use template because error msg would render in the select element {% endcomment %}
+                                    <fieldset class="form__group--nopad">
+                                        <div class="select">
+                                            {{ field }}
+                                        </div>
+                                    </fieldset>
                                     {{ field.errors }}
                                 </div>
                             </div>
@@ -361,7 +366,15 @@
                         {{ form.id.as_hidden }}
                         {{ form.taal.as_hidden }}
                         {% endfor %}
-                        {% localized_form formset include_form=False fields=localized_form_fields %}
+
+                        {% localized_form formset include_form=False fields=localized_form_fields  %}
+
+                    {% comment %} loop though from to get decentrale_procedure_label and decentrale_procedure_link form instances to combine them in the localized_url_label_field template {% endcomment %}
+                        {% for form in form.forms %}
+                            {% if form.decentrale_procedure_label and form.decentrale_procedure_link %}
+                                {% localized_url_label_field label=form.decentrale_procedure_label link=form.decentrale_procedure_link taal=form.taal.value languages=languages %}
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </td>
             </tbody>

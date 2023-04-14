@@ -18,6 +18,7 @@ from sdg.producten.models.managers import (
     LocalizedManager,
 )
 from sdg.producten.models.mixins import ProductFieldMixin, TaalMixin
+from sdg.producten.models.validators import validate_https
 
 
 class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
@@ -113,6 +114,7 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
             "invoervoorziening) "
         ),
         blank=True,
+        validators=[validate_https],
     )
     slug = models.SlugField(
         _("Product titel slug field"),
@@ -252,6 +254,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         _("decentrale procedure link"),
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
         blank=True,
+        validators=[validate_https],
     )
 
     product_valt_onder_toelichting = models.TextField(

@@ -40,6 +40,9 @@ openingstijden_validator = RegexValidator(
 url_validator = URLValidator(
     message=_("Voer een geldige URL in."),
     code="invalid",
+    schemes=[
+        "https",
+    ],
 )
 
 
