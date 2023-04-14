@@ -180,6 +180,11 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        if self.instance.product_valt_onder:
+            selected_product = self.instance.product_valt_onder.generiek_product
+        else:
+            selected_product = None
+
         locations = self.instance.get_municipality_locations()
         duplicates_generiek_product_upn_labels = (
             Product.objects.filter(
@@ -196,7 +201,16 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         self.fields["locaties"].initial = locations.filter(is_product_location=True)
         self.fields["product_valt_onder"].queryset = (
             self.fields["product_valt_onder"]
-            .queryset.filter(catalogus=self.instance.catalogus)
+            .queryset.filter(
+                Q(
+                    generiek_product=selected_product,
+                    catalogus=self.instance.catalogus,
+                )
+                | Q(
+                    generiek_product__doelgroep=self.instance.generiek_product.doelgroep,
+                    catalogus=self.instance.catalogus,
+                )
+            )
             .annotate(
                 _name=Case(
                     When(
