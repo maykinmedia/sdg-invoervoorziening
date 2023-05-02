@@ -630,3 +630,31 @@ SDG_API_WHITELISTING_ENABLED = config("SDG_API_WHITELISTING_ENABLED", default=Tr
 CLIENT_IP_HTTP_HEADER = config("CLIENT_IP_HTTP_HEADER", default="X-Real-IP")
 
 SDG_MAIL_TEXT_CHANGES_EVERY_DAYS = config("SDG_MAIL_TEXT_CHANGES_EVERY_DAYS", default=7)
+
+# Published Product Links make sure to include [product] and {organisation} in the template instead of the product and organisation name.
+
+SDG_DOP_URL_TEMPLATE_NL = config(
+    "SDG_DOP_URL_TEMPLATE_NL",
+    default="https://ondernemersplein.kvk.nl/{product}/gemeente/{organisation}/",
+)
+SDG_DOP_URL_TEMPLATE_EN = config(
+    "SDG_DOP_URL_TEMPLATE_EN",
+    default="https://business.gov.nl/regulation/{product}/municipality/{organisation}/",
+)
+SDG_DPC_URL_TEMPLATE_NL = config(
+    "SDG_DPC_URL_TEMPLATE_NL",
+    default="https://www.nederlandwereldwijd.nl/regelen-in-nederland/{product}/gemeente-{organisation}",
+)
+SDG_DPC_URL_TEMPLATE_EN = config(
+    "SDG_DPC_URL_TEMPLATE_EN",
+    default="https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{product}/gemeente-{organisation}",
+)
+
+for template in [
+    SDG_DOP_URL_TEMPLATE_NL,
+    SDG_DOP_URL_TEMPLATE_EN,
+    SDG_DPC_URL_TEMPLATE_NL,
+    SDG_DPC_URL_TEMPLATE_EN,
+]:
+    assert "{product}" in template
+    assert "{organisation}" in template

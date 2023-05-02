@@ -29,6 +29,12 @@
       border-left: 2px solid $color_primary;
     }
 
+    .preview[aria-hidden="true"],
+    .svg-inline--fa[aria-hidden="true"] {
+      display: none;
+      visibility: hidden;
+    }
+
     &--countries {
       position: relative;
       bottom: 5px;

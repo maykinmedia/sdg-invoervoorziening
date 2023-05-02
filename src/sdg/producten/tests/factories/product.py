@@ -3,6 +3,7 @@ from factory.django import DjangoModelFactory
 
 from sdg.accounts.tests.factories import UserFactory
 from sdg.core.constants import GenericProductStatus
+from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import UniformeProductnaamFactory
 from sdg.organisaties.tests.factories.overheid import (
@@ -16,6 +17,7 @@ class GeneriekProductFactory(DjangoModelFactory):
     upn = factory.SubFactory(UniformeProductnaamFactory)
     verplicht_product = factory.Faker("pybool")
     product_status = GenericProductStatus.READY_FOR_PUBLICATION
+    doelgroep = DoelgroepChoices.bedrijf
 
     class Meta:
         model = GeneriekProduct
@@ -35,6 +37,7 @@ class ProductFactory(DjangoModelFactory):
         size=3,
         lokale_overheid=factory.SelfAttribute("..catalogus.lokale_overheid"),
     )
+    generiek_product = factory.SubFactory(GeneriekProductFactory)
 
     class Meta:
         model = Product

@@ -17,6 +17,7 @@ from sdg.accounts.models import Role
 from sdg.accounts.utils import user_has_valid_roles
 from sdg.accounts.views.decorators import municipality_role_required
 from sdg.core.constants import TaalChoices
+from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.types import Event
 from sdg.core.views.mixins import BreadcrumbsMixin
 from sdg.producten.forms import LocalizedProductFormSet, ProductForm, VersionForm
@@ -264,6 +265,42 @@ class ProductUpdateView(
 
         return [nl, en]
 
+    def _get_published_taal_product_links(self):
+        doelgroep = self.product.generiek_product.doelgroep
+        if not doelgroep:
+            return None
+
+        product_language_urls = (
+            self.product.generiek_product.vertalingen.all().values_list("taal", "slug")
+        )
+        if not product_language_urls:
+            return None
+
+        urls = {}
+        for language, product_slug in product_language_urls:
+            if doelgroep == DoelgroepChoices.bedrijf:
+                dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
+                if language == TaalChoices.nl:
+                    urls[language] = settings.SDG_DOP_URL_TEMPLATE_NL.format(
+                        product=product_slug, organisation=dop
+                    )
+                elif language == TaalChoices.en:
+                    urls[language] = settings.SDG_DOP_URL_TEMPLATE_EN.format(
+                        product=product_slug, organisation=dop
+                    )
+            elif doelgroep == DoelgroepChoices.burger:
+                dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
+                if language == TaalChoices.nl:
+                    urls[language] = settings.SDG_DPC_URL_TEMPLATE_NL.format(
+                        product=product_slug, organisation=dpc
+                    )
+                elif language == TaalChoices.en:
+                    urls[language] = settings.SDG_DPC_URL_TEMPLATE_EN.format(
+                        product=product_slug, organisation=dpc
+                    )
+
+        return urls
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -305,6 +342,10 @@ class ProductUpdateView(
                 -1
             ],  # TODO: optimize
         )
+
+        context[
+            "published_product_language_links"
+        ] = self._get_published_taal_product_links()
 
         context["history"] = (
             self.product.get_all_versions()
