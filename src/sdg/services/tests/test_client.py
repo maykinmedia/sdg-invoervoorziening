@@ -11,7 +11,7 @@ class SDGClientTests(TestCase):
         self.service = Service.objects.create(
             label="test",
             api_type="ztc",
-            api_root="https://a-api.nederlandwereldwijd.nl/sdg/gt/v1/",
+            api_root="https://api.nederlandwereldwijd.nl/sdg/gt/v1/",
             auth_type="no_auth",
         )
         self.service_config = ServiceConfiguration.objects.create(
@@ -21,7 +21,7 @@ class SDGClientTests(TestCase):
         client = self.service.build_client()
         self.assertIsNotNone(client.schema)
         self.assertEqual(
-            client.base_url, "https://a-api.nederlandwereldwijd.nl/sdg/gt/v1/"
+            client.base_url, "https://api.nederlandwereldwijd.nl/sdg/gt/v1/"
         )
         self.assertEqual(client.base_path, "/sdg/gt/v1/")
         self.assertEqual(client.products_url, "/sdg/gt/v1/producten")
