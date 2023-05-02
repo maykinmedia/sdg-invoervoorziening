@@ -2,6 +2,7 @@ from django import forms
 from django.forms import inlineformset_factory
 from django.utils.translation import gettext_lazy as _
 
+from sdg.accounts.models import Role
 from sdg.core.forms import DynamicArrayField
 from sdg.organisaties.constants import opening_times_error_messages
 from sdg.organisaties.models import (
@@ -70,6 +71,23 @@ class LocatieForm(forms.ModelForm):
 LocatieInlineFormSet = inlineformset_factory(
     LokaleOverheid, Locatie, form=LocatieForm, extra=0
 )
+
+
+class RoleUpdateEmailForm(forms.ModelForm):
+    class Meta:
+        model = Role
+        fields = ("ontvangt_mail",)
+
+
+class RoleUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Role
+        fields = (
+            "is_beheerder",
+            "is_redacteur",
+            "is_raadpleger",
+            "ontvangt_mail",
+        )
 
 
 class BevoegdeOrganisatieForm(forms.ModelForm):
