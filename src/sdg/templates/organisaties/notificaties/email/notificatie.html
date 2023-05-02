@@ -1,0 +1,40 @@
+<div style="font-family: arial; sans-serif; font-size: 12px;">
+    <p>Beste {{ user_full_name }},</p>
+
+    <p>Je krijgt deze mail omdat jij een account hebt van de SDG-invoervoorziening. Recent is er een aanpassing geweest in de teksten in de invoervoorziening. Het gaat om de volgende wijziging(en):</p>
+
+    <table style="border-spacing: 0;margin-bottom: 48px;width: 100%;text-indent: 0; border-color: inherit;">
+        <thead style="display: table-header-group;vertical-align: middle;border-color: inherit;">
+            <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Datum</th>
+                <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Product</th>
+                <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Velden</th>
+                <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Opmerkingen bij standaardtekst</th>
+            </tr>
+        </thead>
+        <tbody style="display: table-row-group;vertical-align: middle;border-color: inherit;">
+            {% for version in product_versions %}
+            <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
+                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ version.gewijzigd_op }}</td>
+                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ version.product }}</td>
+                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">
+                    {% for field in version.bewerkte_velden %}
+                        <code>
+                        {% if field.flag %}{{ field.flag }} - {% endif %}{{ field.label }}<br>
+                        </code>
+                    {% endfor %}
+                </td>
+                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ version.interne_opmerkingen }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p>Mogelijk moet je naar aanleiding hiervan je eigen gemeentetekst ook aanpassen. Of misschien moet je jouw tekst opnieuw publiceren zodat bovenstaande wijziging zichtbaar is op de nationale portalen.</p>
+
+    <p>In de invoervoorziening zie je om welke aanpassing het gaat en of er van jou een actie nodig is.</p>
+
+    <p>Alvast bedankt voor de medewerking!</p>
+
+    <p>SDG-team<br>{{ org_name }}</p>
+</div>

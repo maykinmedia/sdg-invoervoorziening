@@ -109,4 +109,13 @@ class SiteConfigurationAdmin(SingletonModelAdmin):
                 ],
             },
         ),
+        (
+            _("Product update notificatie email ."),
+            {
+                "classes": ("collapse",),
+                "fields": [
+                    "mail_text_changes_last_sent",
+                ],
+            },
+        ),
     ]

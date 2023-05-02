@@ -1,3 +1,4 @@
+import datetime
 from functools import partial
 
 from django.contrib.postgres.fields import ArrayField
@@ -87,6 +88,14 @@ class SiteConfiguration(SingletonModel):
         validators=[
             DomainValidator(),
         ],
+    )
+
+    mail_text_changes_last_sent = models.DateField(
+        verbose_name=_("Mail text changes last send"),
+        help_text=_(
+            "De aantal dagen since de laatse product update notificatie email task is getriggerd."
+        ),
+        default=datetime.date.today(),
     )
 
     def __str__(self):

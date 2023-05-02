@@ -10,15 +10,19 @@
     <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
     <td class="tabs__table-cell">{% status_icon role.is_redacteur %}</td>
     <td class="tabs__table-cell">{% status_icon role.is_raadpleger %}</td>
+    <td class="tabs__table-cell">{% status_icon role.ontvangt_mail %}</td>
     <td class="tabs__table-cell">
     {% if role %}
-        {% if request.user|is_manager:lokaleoverheid and user != request.user %}
-            <a class="button--small button--light"
-               href="
-                   {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
-            <a class="button--small button--light"
-               href="
-                   {% url 'organisaties:roles:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+        {% if request.user|is_manager:lokaleoverheid %}
+            <a class="button--small button--light" href="
+                {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
+            {% if user != request.user %}
+                <a class="button--small button--light" href="
+                    {% url 'organisaties:roles:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
+            {% endif %}
+        {% elif user == request.user %}
+            <a class="button--small button--light"href="
+                {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
         {% endif %}
     {% endif %}
     </td>

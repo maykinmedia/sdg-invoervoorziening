@@ -17,11 +17,7 @@ from sdg.accounts.models import Role, User
 class RoleForm(forms.ModelForm):
     class Meta:
         model = Role
-        fields = (
-            "is_beheerder",
-            "is_redacteur",
-            "is_raadpleger",
-        )
+        fields = ("is_beheerder", "is_redacteur", "is_raadpleger", "ontvangt_mail")
 
 
 class RoleInlineFormSet(
@@ -32,13 +28,13 @@ class RoleInlineFormSet(
     def clean(self):
         super().clean()
 
-        errors = [
-            _("U moet ten minste één rol selecteren.")
-            for form in self.forms
-            if not form.cleaned_data
-        ]
-        if errors:
-            raise forms.ValidationError(errors)
+        for form in self.forms:
+            is_beheerder = form.cleaned_data.get("is_beheerder", False)
+            is_redacteur = form.cleaned_data.get("is_redacteur", False)
+            is_raadpleger = form.cleaned_data.get("is_raadpleger", False)
+
+            if sum([is_beheerder, is_redacteur, is_raadpleger]) == 0:
+                raise forms.ValidationError(_("U moet ten minste één rol selecteren."))
 
 
 class InvitationAcceptForm(PasswordVerificationMixin, forms.Form):

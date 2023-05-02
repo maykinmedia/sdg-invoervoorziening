@@ -179,6 +179,14 @@ class Role(models.Model):
         related_name="roles",
     )
 
+    ontvangt_mail = models.BooleanField(
+        _("ontvangt e-mails"),
+        default=False,
+        help_text=_(
+            "Designates whether this user receives emails on product changes for this organisation."
+        ),
+    )
+
     is_beheerder = models.BooleanField(
         _("beheerder"),
         default=False,

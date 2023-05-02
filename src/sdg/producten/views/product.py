@@ -276,12 +276,10 @@ class ProductUpdateView(
         if not product_language_urls:
             return None
 
-        dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
-        dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
-
         urls = {}
         for language, product_slug in product_language_urls:
             if doelgroep == DoelgroepChoices.bedrijf:
+                dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
                 if language == TaalChoices.nl:
                     urls[language] = settings.SDG_DOP_URL_TEMPLATE_NL.format(
                         product=product_slug, organisation=dop
@@ -291,6 +289,7 @@ class ProductUpdateView(
                         product=product_slug, organisation=dop
                     )
             elif doelgroep == DoelgroepChoices.burger:
+                dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
                 if language == TaalChoices.nl:
                     urls[language] = settings.SDG_DPC_URL_TEMPLATE_NL.format(
                         product=product_slug, organisation=dpc

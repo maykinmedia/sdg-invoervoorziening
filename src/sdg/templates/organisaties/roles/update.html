@@ -14,9 +14,9 @@
         {{ form.non_field_errors }}
         <div class="form__block">
             <div class="form__block-inline">
-                {% checkbox form.is_beheerder %}
-                {% checkbox form.is_redacteur %}
-                {% checkbox form.is_raadpleger %}
+                {% for field in form %}
+                    {% checkbox field %}
+                {% endfor %}
             </div>
         </div>
         <input type="hidden" name="next" value="{{ redirect_field_value }}">

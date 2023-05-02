@@ -629,6 +629,8 @@ SPECTACULAR_SETTINGS["SERVERS"] = SDG_API_SERVER_INSTANCES
 SDG_API_WHITELISTING_ENABLED = config("SDG_API_WHITELISTING_ENABLED", default=True)
 CLIENT_IP_HTTP_HEADER = config("CLIENT_IP_HTTP_HEADER", default="X-Real-IP")
 
+SDG_MAIL_TEXT_CHANGES_EVERY_DAYS = config("SDG_MAIL_TEXT_CHANGES_EVERY_DAYS", default=7)
+
 # Published Product Links make sure to include [product] and {organisation} in the template instead of the product and organisation name.
 
 SDG_DOP_URL_TEMPLATE_NL = config(
