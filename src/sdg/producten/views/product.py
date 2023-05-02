@@ -12,8 +12,6 @@ from django.urls import reverse
 from django.utils.translation import gettext as _
 from django.views.generic import DetailView, UpdateView
 
-from compat import slugify
-
 from sdg.accounts.mixins import OverheidMixin
 from sdg.accounts.models import Role
 from sdg.accounts.utils import user_has_valid_roles
@@ -285,22 +283,22 @@ class ProductUpdateView(
         for language, product_slug in product_language_urls:
             if doelgroep == DoelgroepChoices.bedrijf:
                 if language == TaalChoices.nl:
-                    urls[
-                        language
-                    ] = f"https://ondernemersplein.kvk.nl/{product_slug}/gemeente/{dop}/"
+                    urls[language] = settings.SDG_DOP_URL_TEMPLATE_NL.format(
+                        product=product_slug, organisation=dop
+                    )
                 elif language == TaalChoices.en:
-                    urls[
-                        language
-                    ] = f"https://business.gov.nl/regulation/{product_slug}/municipality/{dop}"
+                    urls[language] = settings.SDG_DOP_URL_TEMPLATE_EN.format(
+                        product=product_slug, organisation=dop
+                    )
             elif doelgroep == DoelgroepChoices.burger:
                 if language == TaalChoices.nl:
-                    urls[
-                        language
-                    ] = f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{product_slug}/gemeente-{dpc}"
+                    urls[language] = settings.SDG_DPC_URL_TEMPLATE_NL.format(
+                        product=product_slug, organisation=dpc
+                    )
                 elif language == TaalChoices.en:
-                    urls[
-                        language
-                    ] = f"https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{product_slug}/gemeente-{dpc}"
+                    urls[language] = settings.SDG_DPC_URL_TEMPLATE_EN.format(
+                        product=product_slug, organisation=dpc
+                    )
 
         return urls
 
