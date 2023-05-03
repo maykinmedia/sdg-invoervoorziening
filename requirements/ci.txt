@@ -110,7 +110,7 @@ coreschema==0.0.4
     #   drf-yasg
 coverage==4.5.4
     # via -r requirements/test-tools.in
-cryptography==38.0.4
+cryptography==40.0.2
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -125,14 +125,9 @@ defusedxml==0.7.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   python3-openid
-deprecated==1.2.13
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   redis
 dill==0.3.4
     # via pylint
-django==3.2.16
+django==3.2.18
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -176,7 +171,7 @@ django-admin-index==2.0.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
-django-allauth==0.50.0
+django-allauth==0.54.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -480,7 +475,6 @@ packaging==21.3
     #   -r requirements/base.txt
     #   bleach
     #   drf-yasg
-    #   redis
 pathspec==0.9.0
     # via black
 pep8==1.7.1
@@ -535,7 +529,7 @@ pyjwt[crypto]==2.6.0
     #   vng-api-common
 pylint==2.13.7
     # via -r requirements/test-tools.in
-pyopenssl==22.0.0
+pyopenssl==23.1.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -598,7 +592,7 @@ qrcode==6.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   maykin-django-two-factor-auth
-redis==4.2.2
+redis==4.5.4
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -638,7 +632,7 @@ ruamel-yaml-clib==0.2.6
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   ruamel-yaml
-sentry-sdk==1.5.10
+sentry-sdk==1.21.1
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -659,7 +653,7 @@ soupsieve==2.3.2.post1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   beautifulsoup4
-sqlparse==0.4.2
+sqlparse==0.4.4
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -683,7 +677,7 @@ uritemplate==4.1.1
     #   coreapi
     #   drf-spectacular
     #   drf-yasg
-urllib3==1.26.9
+urllib3==1.26.15
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
@@ -722,11 +716,7 @@ webob==1.8.7
 webtest==3.0.0
     # via django-webtest
 wrapt==1.14.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   astroid
-    #   deprecated
+    # via astroid
 zgw-consumers==0.18.0
     # via
     #   -c requirements/base.txt

@@ -128,7 +128,7 @@ coverage==4.5.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-cryptography==38.0.4
+cryptography==40.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -148,11 +148,6 @@ defusedxml==0.7.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   python3-openid
-deprecated==1.2.13
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   redis
 dill==0.3.4
     # via
     #   -c requirements/ci.txt
@@ -160,7 +155,7 @@ dill==0.3.4
     #   pylint
 distlib==0.3.4
     # via virtualenv
-django==3.2.16
+django==3.2.18
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -204,7 +199,7 @@ django-admin-index==2.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-django-allauth==0.50.0
+django-allauth==0.54.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -549,7 +544,6 @@ packaging==21.3
     #   bleach
     #   build
     #   drf-yasg
-    #   redis
     #   sphinx
 pathspec==0.9.0
     # via
@@ -572,7 +566,7 @@ pillow==9.3.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-markdownx
-pip-tools==6.12.1
+pip-tools==6.13.0
     # via -r requirements/dev.in
 platformdirs==2.5.2
     # via
@@ -629,7 +623,7 @@ pylint==2.13.7
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-pyopenssl==22.0.0
+pyopenssl==23.1.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -696,7 +690,7 @@ qrcode==6.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   maykin-django-two-factor-auth
-redis==4.2.2
+redis==4.5.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -736,7 +730,7 @@ ruamel-yaml-clib==0.2.6
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   ruamel-yaml
-sentry-sdk==1.5.10
+sentry-sdk==1.21.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -780,7 +774,7 @@ sphinxcontrib-qthelp==1.0.3
     # via sphinx
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinx
-sqlparse==0.4.2
+sqlparse==0.4.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -811,7 +805,7 @@ uritemplate==4.1.1
     #   coreapi
     #   drf-spectacular
     #   drf-yasg
-urllib3==1.26.9
+urllib3==1.26.15
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -860,14 +854,13 @@ webtest==3.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-webtest
-wheel==0.37.1
+wheel==0.40.0
     # via pip-tools
 wrapt==1.14.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   astroid
-    #   deprecated
 zgw-consumers==0.18.0
     # via
     #   -c requirements/ci.txt
