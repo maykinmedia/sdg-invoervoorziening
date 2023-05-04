@@ -95,7 +95,7 @@ class SiteConfiguration(SingletonModel):
         help_text=_(
             "De aantal dagen since de laatse product update notificatie email task is getriggerd."
         ),
-        default=datetime.date.today(),
+        default=datetime.date.today,
     )
 
     def __str__(self):

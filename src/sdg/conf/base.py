@@ -635,19 +635,19 @@ SDG_MAIL_TEXT_CHANGES_EVERY_DAYS = config("SDG_MAIL_TEXT_CHANGES_EVERY_DAYS", de
 
 SDG_DOP_URL_TEMPLATE_NL = config(
     "SDG_DOP_URL_TEMPLATE_NL",
-    default="https://ondernemersplein.kvk.nl/{product}/gemeente/{organisation}/",
+    default="{product_url}gemeente/{organisation}/",
 )
 SDG_DOP_URL_TEMPLATE_EN = config(
     "SDG_DOP_URL_TEMPLATE_EN",
-    default="https://business.gov.nl/regulation/{product}/municipality/{organisation}/",
+    default="{product_url}municipality/{organisation}/",
 )
 SDG_DPC_URL_TEMPLATE_NL = config(
     "SDG_DPC_URL_TEMPLATE_NL",
-    default="https://www.nederlandwereldwijd.nl/regelen-in-nederland/{product}/gemeente-{organisation}",
+    default="{product_url}/gemeente-{organisation}",
 )
 SDG_DPC_URL_TEMPLATE_EN = config(
     "SDG_DPC_URL_TEMPLATE_EN",
-    default="https://www.netherlandsworldwide.nl/government-services-in-the-netherlands/{product}/gemeente-{organisation}",
+    default="{product_url}/municipality-{organisation}",
 )
 
 for template in [
@@ -656,5 +656,5 @@ for template in [
     SDG_DPC_URL_TEMPLATE_NL,
     SDG_DPC_URL_TEMPLATE_EN,
 ]:
-    assert "{product}" in template
+    assert "{product_url}" in template
     assert "{organisation}" in template

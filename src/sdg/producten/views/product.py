@@ -271,32 +271,34 @@ class ProductUpdateView(
             return None
 
         product_language_urls = (
-            self.product.generiek_product.vertalingen.all().values_list("taal", "slug")
+            self.product.generiek_product.vertalingen.all().values_list(
+                "taal", "landelijke_link"
+            )
         )
         if not product_language_urls:
             return None
 
         urls = {}
-        for language, product_slug in product_language_urls:
+        for language, product_url in product_language_urls:
             if doelgroep == DoelgroepChoices.bedrijf:
                 dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
                 if language == TaalChoices.nl:
                     urls[language] = settings.SDG_DOP_URL_TEMPLATE_NL.format(
-                        product=product_slug, organisation=dop
+                        product_url=product_url, organisation=dop
                     )
                 elif language == TaalChoices.en:
                     urls[language] = settings.SDG_DOP_URL_TEMPLATE_EN.format(
-                        product=product_slug, organisation=dop
+                        product_url=product_url, organisation=dop
                     )
             elif doelgroep == DoelgroepChoices.burger:
                 dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
                 if language == TaalChoices.nl:
                     urls[language] = settings.SDG_DPC_URL_TEMPLATE_NL.format(
-                        product=product_slug, organisation=dpc
+                        product_url=product_url, organisation=dpc
                     )
                 elif language == TaalChoices.en:
                     urls[language] = settings.SDG_DPC_URL_TEMPLATE_EN.format(
-                        product=product_slug, organisation=dpc
+                        product_url=product_url, organisation=dpc
                     )
 
         return urls
