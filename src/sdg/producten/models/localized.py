@@ -1,10 +1,8 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.functional import cached_property
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from sdg.core.constants.product import DoelgroepChoices, TaalChoices
 from sdg.core.db.fields import DynamicArrayField
 from sdg.core.forms import LabeledCategoryURLWidget, LabeledURLWidget
 from sdg.core.models.validators import (
@@ -115,13 +113,6 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
         blank=True,
         validators=[validate_https],
     )
-    slug = models.SlugField(
-        _("Product titel slug field"),
-        help_text=_("De product title slug van dit gelokaliseerde generieke product"),
-        max_length=170,
-        blank=True,
-        null=False,
-    )
 
     objects = LocalizedGeneriekProductManager()
 
@@ -135,11 +126,6 @@ class LocalizedGeneriekProduct(ProductFieldMixin, TaalMixin, models.Model):
                 name="unique_language_per_generiekproduct",
             )
         ]
-
-    def save(self, *args, **kwargs):
-        if not self.slug and self.product_titel:
-            self.slug = slugify(self.product_titel)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.product_titel

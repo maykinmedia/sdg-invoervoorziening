@@ -3,7 +3,6 @@ from typing import Optional
 
 from django.test import override_settings
 from django.urls import reverse
-from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
 from django_webtest import WebTest
@@ -751,16 +750,12 @@ class ProductUpdateViewTests(WebTest):
         )
         self.assertEqual(response.status_code, 200)
 
-        product_title_nl = slugify(
-            self.product.generiek_product.vertalingen.get(
-                taal=TaalChoices.nl
-            ).product_titel
-        )
+        product_url = self.product.generiek_product.vertalingen.get(
+            taal=TaalChoices.nl
+        ).landelijke_link
         dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
 
-        published_product_url_nl = (
-            f"https://ondernemersplein.kvk.nl/{product_title_nl}/gemeente/{dop}/"
-        )
+        published_product_url_nl = f"{product_url}gemeente/{dop}/"
 
         page_preview_published_url_nl = response.pyquery(
             "#preview-current[lang=nl]"
@@ -789,16 +784,12 @@ class ProductUpdateViewTests(WebTest):
         )
         self.assertEqual(response.status_code, 200)
 
-        product_title = slugify(
-            self.product.generiek_product.vertalingen.get(
-                taal=TaalChoices.nl
-            ).product_titel
-        )
+        product_url = self.product.generiek_product.vertalingen.get(
+            taal=TaalChoices.nl
+        ).landelijke_link
         dop = self.product.catalogus.lokale_overheid.organisatie.dop_slug
 
-        published_product_url = (
-            f"https://ondernemersplein.kvk.nl/{product_title}/gemeente/{dop}/"
-        )
+        published_product_url = f"{product_url}gemeente/{dop}/"
 
         page_preview_published_url = response.pyquery("#preview-current[lang=nl]").attr(
             "href"
@@ -841,14 +832,12 @@ class ProductUpdateViewTests(WebTest):
         )
         self.assertEqual(response.status_code, 200)
 
-        product_title = slugify(
-            self.product.generiek_product.vertalingen.get(
-                taal=TaalChoices.nl
-            ).product_titel
-        )
+        product_url = self.product.generiek_product.vertalingen.get(
+            taal=TaalChoices.nl
+        ).landelijke_link
         dpc = self.product.catalogus.lokale_overheid.organisatie.dpc_slug
 
-        published_product_url = f"https://www.nederlandwereldwijd.nl/regelen-in-nederland/{product_title}/gemeente-{dpc}"
+        published_product_url = f"{product_url}/gemeente-{dpc}"
 
         page_preview_published_url = response.pyquery("#preview-current[lang=nl]").attr(
             "href"
