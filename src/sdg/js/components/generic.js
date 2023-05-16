@@ -36,11 +36,19 @@ class GenericForm {
     }
 
     displayHidden(dependency) {
+        const formSpecific = document.querySelector(".form__specific").classList;
+
         dependency.style.display = "none";
+        formSpecific.remove("tabs__table--hidden")
+        formSpecific.remove("form__specific--hidden")
     }
 
     displayBlock(dependency) {
+        const formSpecific = document.querySelector(".form__specific").classList;
+
         dependency.style.display = "block";
+        formSpecific.add("tabs__table--hidden")
+        formSpecific.add("form__specific--hidden")
     }
 
     emptyFieldValues(fields) {
