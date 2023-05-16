@@ -56,14 +56,20 @@ class ClearForm {
         const input = this.node.querySelector("[name=product_aanwezig]");
 
         if (input) {
+            let prev = input.selectedIndex;
             const clearFunc = () => {
                 if (input.selectedIndex === 2) {
-                    this.resetSpecefiekeGegevens()
+                    if (confirm("Weet u zeker dat u dit product niet aanbiedt?\nAls u 'Ja' antwoord worden alle teksten leeggemaakt.")) {
+                        this.resetSpecefiekeGegevens();
+                    } else {
+                        input.selectedIndex = prev;
+                    }
                 }
+
+                prev = input.selectedIndex;
             }
 
-            clearFunc();
-            input.addEventListener("change", () => {
+            input.addEventListener("change", (event) => {
                 clearFunc();
             });
         }
@@ -73,13 +79,19 @@ class ClearForm {
         const input = this.node.querySelector("[name=product_valt_onder]");
 
         if (input) {
+            let prev = input.selectedIndex;
             const clearFunc = () => {
-                if (input.selectedIndex > 1) {
-                    this.resetSpecefiekeGegevens()
+                if (input.selectedIndex > 0) {
+                    if (confirm("Weet u zeker dat u dit product niet aanbiedt?\nAls u 'OK' antwoord worden alle teksten leeggemaakt.")) {
+                        this.resetSpecefiekeGegevens();
+                    } else {
+                        input.selectedIndex = prev;
+                    }
                 }
+
+                prev = input.selectedIndex;
             }
 
-            clearFunc();
             input.addEventListener("change", () => {
                 clearFunc();
             });
