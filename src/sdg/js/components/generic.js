@@ -8,6 +8,10 @@ class GenericForm {
     constructor(node) {
         /** @type {HTMLFormElement} */
         this.node = node;
+        this.display = {
+            "valtOnder": false,
+            "aanwezig": false
+        }
 
         if(!this.isGenericForm()) {
             return;  // Not a generic form.
@@ -35,20 +39,33 @@ class GenericForm {
         return this.node.querySelector('[id$="product_aanwezig_toelichting"]');
     }
 
-    displayHidden(dependency) {
-        const formSpecific = document.querySelector(".form__specific").classList;
+    collapseExpand() {
+        const formSpecific = document.querySelector(".form__specific");
+        const formSpecificClassList = formSpecific.classList
 
-        dependency.style.display = "none";
-        formSpecific.remove("tabs__table--hidden")
-        formSpecific.remove("form__specific--hidden")
+        if (!this.display.valtOnder || !this.display.aanwezig) {
+            formSpecific.style.pointerEvents = "none";
+            formSpecificClassList.add("tabs__table--hidden")
+            formSpecificClassList.add("form__specific--hidden")
+        }
+
+        if (this.display.valtOnder  && this.display.aanwezig) {
+            formSpecific.style.pointerEvents = "all";
+            formSpecificClassList.remove("tabs__table--hidden")
+            formSpecificClassList.remove("form__specific--hidden")
+        }
     }
 
-    displayBlock(dependency) {
-        const formSpecific = document.querySelector(".form__specific").classList;
+    displayHidden(dependency, field) {
+        dependency.style.display = "none";
+        this.display[field] = true
+        this.collapseExpand()
+    }
 
+    displayBlock(dependency, field) {
         dependency.style.display = "block";
-        formSpecific.add("tabs__table--hidden")
-        formSpecific.add("form__specific--hidden")
+        this.display[field] = false
+        this.collapseExpand()
     }
 
     emptyFieldValues(fields) {
@@ -83,7 +100,7 @@ class GenericForm {
 
             const displayFunc = (displayDependency) => {
                 if (input.selectedIndex === 2) {
-                    this.displayBlock(displayDependency)
+                    this.displayBlock(displayDependency, "aanwezig")
                     const controls = displayDependency.querySelectorAll(".form__control")
                     controls.forEach(element => {
                         const textarea = element.querySelector("textarea");
@@ -104,12 +121,12 @@ class GenericForm {
                         }
 
                         if (emptyOrDefault == 2) {
-                            this.displayHidden(dependency)
+                            this.displayHidden(dependency, "aanwezig")
                             this.emptyFieldValues([array[index - 1], element])
                             return
                         }
 
-                        this.displayBlock(dependency)
+                        this.displayBlock(dependency, "aanwezig")
                     })
                 };
             };
@@ -128,7 +145,7 @@ class GenericForm {
             let previousSelectedProduct = null;
             const displayFunc = async (select, displayDependency) => {
                 if (select.selectedIndex > 0) {
-                    this.displayBlock(displayDependency)
+                    this.displayBlock(displayDependency, "valtOnder")
                     const controls = displayDependency.querySelectorAll(".form__control");
                     for (const element of controls) {
                         previousSelectedProduct = select.value;
@@ -152,15 +169,15 @@ class GenericForm {
                             }
 
                             if (emptyOrDefault == 2) {
-                                this.displayHidden(dependency)
+                                this.displayHidden(dependency, "valtOnder")
                                 this.emptyFieldValues([controls[index - 1], element])
                                 previousSelectedProduct = null
                                 return
                             }
 
-                            this.displayBlock(dependency)
+                            this.displayBlock(dependency, "valtOnder")
                         } else if (previousSelectedProduct == null && textarea.value == "") {
-                            this.displayHidden(dependency)
+                            this.displayHidden(dependency, "valtOnder")
                         }
                         index++
                     }
