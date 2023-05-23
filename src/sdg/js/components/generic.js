@@ -1,3 +1,4 @@
+import {availableEditors} from './markdown'
 const form = document.querySelector('.form');
 
 class GenericForm {
@@ -67,23 +68,69 @@ class GenericForm {
         return ""
     }
 
+    resetSpecefiekeGegevens() {
+        const none_markdown_editor_fields = [
+            "[name=vertalingen-0-product_titel_decentraal]",
+            "[name=vertalingen-1-product_titel_decentraal]",
+            "[name=vertalingen-0-decentrale_procedure_link]",
+            "[name=vertalingen-1-decentrale_procedure_link]",
+            "[name=vertalingen-0-decentrale_procedure_label]",
+            "[name=vertalingen-1-decentrale_procedure_label]"
+        ]
+        const array_fields = [
+            "[name=vertalingen-0-verwijzing_links]",
+            "[name=vertalingen-1-verwijzing_links]",
+        ]
+        const markdown_editor_fields = document.querySelectorAll('.markdownx textarea');
+
+        none_markdown_editor_fields.forEach((field) => {
+            let input_field = this.node.querySelector(field);
+            if (input_field) {
+                input_field.value = ''
+            }
+        })
+
+        array_fields.forEach((field) => {
+            let input_fields = this.node.querySelectorAll(field);
+            input_fields.forEach((input_field) => {
+                if (input_field) {
+                    input_field.value = ''
+                }
+            })
+        })
+
+        markdown_editor_fields.forEach((field) => {
+            field.value = ''
+        })
+
+        Object.values(availableEditors).forEach((instance) => {
+            instance.editor.setData("")
+        })
+    }
+
     setUpDynamicProductAanwezig() {
         const input = this.node.querySelector("[name=product_aanwezig]");
         const dependency = this.getClarificationField().closest(".form__language-wrapper");
 
         if (input) {
+            let previousIndex = input.selectedIndex;
 
-            const displayFunc = (displayDependency) => {
+            const displayFunc = async (displayDependency) => {
                 if (input.selectedIndex === 2) {
-                    this.displayBlock(displayDependency)
-                    const controls = displayDependency.querySelectorAll(".form__control")
-                    controls.forEach(element => {
-                        const textarea = element.querySelector("textarea");
-                        if (!textarea.value) {
-                            const defaultExplanation = document.querySelector(`.form__reference-${element.lang}`).dataset.productAanwezigToelichting;
-                            textarea.value = defaultExplanation;
-                        }
-                    });
+                    if (confirm("Weet u zeker dat u dit product niet aanbiedt?\nAls u 'OK' antwoordt worden alle teksten leeggemaakt.")) {
+                        const controls = displayDependency.querySelectorAll(".form__control")
+                        this.resetSpecefiekeGegevens();
+                        this.displayBlock(displayDependency)
+                        controls.forEach(element => {
+                            const textarea = element.querySelector("textarea");
+                            if (!textarea.value) {
+                                const defaultExplanation = document.querySelector(`.form__reference-${element.lang}`).dataset.productAanwezigToelichting;
+                                textarea.value = defaultExplanation;
+                            }
+                        });
+                    } else {
+                        input.selectedIndex = previousIndex;
+                    }
                 } else {
                     const controls = displayDependency.querySelectorAll(".form__control")
                     let emptyOrDefault = 0
@@ -98,12 +145,15 @@ class GenericForm {
                         if (emptyOrDefault == 2) {
                             this.displayHidden(dependency)
                             this.emptyFieldValues([array[index - 1], element])
+                            previousIndex = 0;
                             return
                         }
 
                         this.displayBlock(dependency)
                     })
                 };
+
+                previousIndex = input.selectedIndex;
             };
 
             displayFunc(dependency);
@@ -116,12 +166,24 @@ class GenericForm {
     setUpDynamicProductValtOnder() {
         const select = document.querySelector("#id_product_valt_onder");
         const dependency = document.querySelector('[id$="product_valt_onder_toelichting"]').closest(".form__language-wrapper");
+
         if (select) {
             let previousSelectedProduct = null;
             const displayFunc = async (select, displayDependency) => {
                 if (select.selectedIndex > 0) {
-                    this.displayBlock(displayDependency)
                     const controls = displayDependency.querySelectorAll(".form__control");
+
+                    if (previousSelectedProduct == null) {
+                        if (confirm("Weet u zeker dat dit product onder een ander product valt?\nAls u 'OK' antwoordt worden alle teksten leeggemaakt.")) {
+                            this.resetSpecefiekeGegevens();
+                            this.displayBlock(displayDependency)
+                        } else {
+                            previousSelectedProduct = null;
+                            select.selectedIndex = 0;
+                            return
+                        }
+                    }
+
                     for (const element of controls) {
                         previousSelectedProduct = select.value;
                         const textarea = element.querySelector("textarea");
