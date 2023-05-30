@@ -29,8 +29,7 @@
       border-left: 2px solid $color_primary;
     }
 
-    .preview[aria-hidden="true"],
-    .svg-inline--fa[aria-hidden="true"] {
+    .preview[aria-hidden="true"] {
       display: none;
       visibility: hidden;
     }
