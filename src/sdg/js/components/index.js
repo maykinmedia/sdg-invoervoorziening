@@ -15,4 +15,3 @@ import './choices';
 import './bevoegde_organisaties';
 import './prevent_submit_twice';
 import './toolbox_language';
-import './clear_form';
