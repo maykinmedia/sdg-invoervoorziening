@@ -20,7 +20,7 @@
                 <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">
                     {% for field in version.bewerkte_velden %}
                         <code>
-                        {% if field.flag %}{{ field.flag }} - {% endif %}{{ field.label }}<br>
+                        {% if field.flag == "gb" %}en - {% elif field.flag == "nl" %}nl - {% endif %}{{ field.label }}<br>
                         </code>
                     {% endfor %}
                 </td>
