@@ -9,6 +9,10 @@ class GenericForm {
     constructor(node) {
         /** @type {HTMLFormElement} */
         this.node = node;
+        this.display = {
+            "valtOnder": false,
+            "aanwezig": false
+        }
 
         if(!this.isGenericForm()) {
             return;  // Not a generic form.
@@ -36,12 +40,33 @@ class GenericForm {
         return this.node.querySelector('[id$="product_aanwezig_toelichting"]');
     }
 
-    displayHidden(dependency) {
-        dependency.style.display = "none";
+    collapseExpand() {
+        const formSpecific = document.querySelector(".form__specific");
+        const formSpecificClassList = formSpecific.classList
+
+        if (!this.display.valtOnder || !this.display.aanwezig) {
+            formSpecific.style.pointerEvents = "none";
+            formSpecificClassList.add("tabs__table--hidden")
+            formSpecificClassList.add("form__specific--hidden")
+        }
+
+        if (this.display.valtOnder  && this.display.aanwezig) {
+            formSpecific.style.pointerEvents = "all";
+            formSpecificClassList.remove("tabs__table--hidden")
+            formSpecificClassList.remove("form__specific--hidden")
+        }
     }
 
-    displayBlock(dependency) {
+    displayHidden(dependency, field) {
+        dependency.style.display = "none";
+        this.display[field] = true
+        this.collapseExpand()
+    }
+
+    displayBlock(dependency, field) {
         dependency.style.display = "block";
+        this.display[field] = false
+        this.collapseExpand()
     }
 
     emptyFieldValues(fields) {
@@ -117,20 +142,26 @@ class GenericForm {
 
             const displayFunc = async (displayDependency) => {
                 if (input.selectedIndex === 2) {
-                    if (confirm("Weet u zeker dat u dit product niet aanbiedt?\nAls u 'OK' antwoordt worden alle teksten leeggemaakt.")) {
-                        const controls = displayDependency.querySelectorAll(".form__control")
-                        this.resetSpecefiekeGegevens();
-                        this.displayBlock(displayDependency)
-                        controls.forEach(element => {
-                            const textarea = element.querySelector("textarea");
-                            if (!textarea.value) {
-                                const defaultExplanation = document.querySelector(`.form__reference-${element.lang}`).dataset.productAanwezigToelichting;
-                                textarea.value = defaultExplanation;
-                            }
-                        });
-                    } else {
-                        input.selectedIndex = previousIndex;
+                    const controls = displayDependency.querySelectorAll(".form__control")
+
+                    if (input.selectedIndex != previousIndex) {
+                        if (confirm("Weet u zeker dat u dit product niet aanbiedt?\nAls u 'OK' antwoordt worden alle teksten leeggemaakt.")) {
+                            this.resetSpecefiekeGegevens();
+                            this.displayBlock(displayDependency, "aanwezig")
+                        }
+                        else {
+                            input.selectedIndex = previousIndex;
+                            return
+                        }
                     }
+
+                    controls.forEach(element => {
+                        const textarea = element.querySelector("textarea");
+                        if (!textarea.value) {
+                            const defaultExplanation = document.querySelector(`.form__reference-${element.lang}`).dataset.productAanwezigToelichting;
+                            textarea.value = defaultExplanation;
+                        }
+                    });
                 } else {
                     const controls = displayDependency.querySelectorAll(".form__control")
                     let emptyOrDefault = 0
@@ -143,13 +174,13 @@ class GenericForm {
                         }
 
                         if (emptyOrDefault == 2) {
-                            this.displayHidden(dependency)
+                            this.displayHidden(dependency, "aanwezig")
                             this.emptyFieldValues([array[index - 1], element])
                             previousIndex = 0;
                             return
                         }
 
-                        this.displayBlock(dependency)
+                        this.displayBlock(dependency, "aanwezig")
                     })
                 };
 
@@ -168,7 +199,8 @@ class GenericForm {
         const dependency = document.querySelector('[id$="product_valt_onder_toelichting"]').closest(".form__language-wrapper");
 
         if (select) {
-            let previousSelectedProduct = null;
+            let previousSelectedProduct = select.value;
+
             const displayFunc = async (select, displayDependency) => {
                 if (select.selectedIndex > 0) {
                     const controls = displayDependency.querySelectorAll(".form__control");
@@ -176,7 +208,7 @@ class GenericForm {
                     if (previousSelectedProduct == null) {
                         if (confirm("Weet u zeker dat dit product onder een ander product valt?\nAls u 'OK' antwoordt worden alle teksten leeggemaakt.")) {
                             this.resetSpecefiekeGegevens();
-                            this.displayBlock(displayDependency)
+                            this.displayBlock(displayDependency, "valtOnder")
                         } else {
                             previousSelectedProduct = null;
                             select.selectedIndex = 0;
@@ -206,15 +238,15 @@ class GenericForm {
                             }
 
                             if (emptyOrDefault == 2) {
-                                this.displayHidden(dependency)
+                                this.displayHidden(dependency, "valtOnder")
                                 this.emptyFieldValues([controls[index - 1], element])
                                 previousSelectedProduct = null
                                 return
                             }
 
-                            this.displayBlock(dependency)
+                            this.displayBlock(dependency, "valtOnder")
                         } else if (previousSelectedProduct == null && textarea.value == "") {
-                            this.displayHidden(dependency)
+                            this.displayHidden(dependency, "valtOnder")
                         }
                         index++
                     }
