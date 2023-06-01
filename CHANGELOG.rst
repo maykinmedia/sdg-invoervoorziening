@@ -2,6 +2,24 @@
 Change history
 ==============
 
+1.8.0
+=====
+
+*June 1, 2023*
+
+* [#958] Added placeholder hint for URL-fields
+* [#956] Collapse "specifieke tekst" based on "product aanwezig/valt onder" flags.
+* [#954] Added popup to warn users about clearing user data
+* [#932/#950] Added preview links to national portals.
+* [#213] Added email notifications for changed standard texts.
+* [#934] Changed existing explanation texts for all relevant products ending in " omdat..." to ".".
+* [#929] Removed the posibility to link eu-burger products to eu-bedrijf products (and vice versa).
+* [#839] Made the layout for links consistent.
+* [#933] Placeholders no longer prevent saving products that are not offered or linked to another product.
+* [#786] Set product title to standard text title if empty.
+* [#931] Prevent publication of products that have the initial offered status of "unknown".
+* [#930] URLs are now validated to start with "https://" to prevent insecure URLs.
+
 1.7.3
 =====
 
