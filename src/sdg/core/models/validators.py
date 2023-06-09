@@ -38,7 +38,7 @@ openingstijden_validator = RegexValidator(
 )
 
 url_validator = URLValidator(
-    message=_("Voer een geldige URL in."),
+    message=_("De URL moet beginnen met 'https://'. Let op de 's' achter 'http'."),
     code="invalid",
     schemes=[
         "https",

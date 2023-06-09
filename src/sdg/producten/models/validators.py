@@ -82,6 +82,17 @@ def validate_product(localized):
             )
         )
 
+    if bool(localized.decentrale_procedure_label) is not bool(
+        localized.decentrale_procedure_link
+    ):
+        raise ValidationError(
+            {
+                "decentrale_procedure_link": _(
+                    "De link moet een label en een URL bevatten.",
+                )
+            }
+        )
+
 
 def validate_specific_product(product):
     """Validate a specific product.
