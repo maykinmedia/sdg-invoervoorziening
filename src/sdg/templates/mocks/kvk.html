@@ -222,6 +222,39 @@
                         {% endlanguage %}
                     {% endfor %}
 
+
+                    {% for object in decentrale_procedure %}
+                        {% language object.taal %}
+                            <div class="specifiek" lang="{{ object.taal }}" {% if object.taal != languages.0 %}
+                                aria-hidden="true"{% endif %}>
+
+                                <div class="tabs tabs--inline">
+                                    {% if object.template_fields.decentrale_procedure_label.value %}
+                                        <div class="tabs__table-body">
+                                            <div class="tabs__table-body">
+                                                {% if object.template_fields.decentrale_procedure_link.configuration %}
+                                                    <h3><b>{% trans object.template_fields.decentrale_procedure_link.configuration.label|capfirst %}</b></h3>
+                                                {% else %}
+                                                    <h3><b>{% trans object.template_fields.decentrale_procedure_link.verbose_name|capfirst %}</b></h3>
+                                                {% endif %}
+
+                                                {% if object.template_fields.decentrale_procedure_label %}
+                                                    <div class="divider"></div>
+                                                {% endif %}
+
+                                                <div class="tabs__table-cell">
+                                                    <a href="{{ object.template_fields.decentrale_procedure_link.value }}" target="_blank">{{ object.template_fields.decentrale_procedure_label.value }}</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        {% endlanguage %}
+
+                    {% endfor %}
+
                 {% endif %}
             </div>
         </div>

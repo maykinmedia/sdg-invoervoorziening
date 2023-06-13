@@ -134,7 +134,6 @@ class ProductPreviewView(OverheidMixin, DetailView):
             "uiterste_termijn",
             "bezwaar_en_beroep",
             "wtd_bij_geen_reactie",
-            "decentrale_procedure_link",
         ]
 
         if self.is_concept():
@@ -152,6 +151,35 @@ class ProductPreviewView(OverheidMixin, DetailView):
 
         return [nl, en]
 
+    def _get_decentrale_procedure_link(self):
+        required_fields = [
+            "decentrale_procedure_label",
+            "decentrale_procedure_link",
+        ]
+
+        if self.is_concept():
+            nl = self.object.most_recent_version.vertalingen.filter(taal="nl").first()
+            en = self.object.most_recent_version.vertalingen.filter(taal="en").first()
+        else:
+            nl = self.object.active_version.vertalingen.filter(taal="nl").first()
+            en = self.object.active_version.vertalingen.filter(taal="en").first()
+
+        if nl:
+            setattr(
+                nl,
+                "template_fields",
+                {field: nl._get_field(field) for field in required_fields},
+            )
+
+        if en:
+            setattr(
+                en,
+                "template_fields",
+                {field: en._get_field(field) for field in required_fields},
+            )
+
+        return [nl, en]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["languages"] = list(TaalChoices.labels.keys())
@@ -163,6 +191,7 @@ class ProductPreviewView(OverheidMixin, DetailView):
         context["generieke_producten"] = self._get_generieke_taal_producten()
         context["algemene_producten"] = self._get_algemene_taal_producten()
         context["specifieke_producten"] = self._get_specifieke_taal_producten()
+        context["decentrale_procedure"] = self._get_decentrale_procedure_link()
 
         context["days"] = [
             "maandag",
