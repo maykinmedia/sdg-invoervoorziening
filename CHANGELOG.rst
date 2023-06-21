@@ -2,6 +2,14 @@
 Change history
 ==============
 
+1.8.1
+=====
+
+*June 21, 2023*
+
+* [#963] Added label "decentrale link" in preview page.
+* [#964] Improved "decentrale link" validation error messages.
+
 1.8.0
 =====
 
