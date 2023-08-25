@@ -218,7 +218,7 @@ class ProductUpdateViewTests(WebTest):
         )
 
         response.form["product_valt_onder"] = str(product.pk)
-        response.form["product_aanwezig"] = "true"
+        response.form["product_aanwezig"] = "false"
 
         for idx, language in enumerate(TaalChoices.get_available_languages()):
             response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
@@ -1523,3 +1523,49 @@ class ProductUpdateViewTests(WebTest):
             f"The water authority of {municipality} doesn't offer {localized_generic_product_en}.",
             html.unescape(response.text),
         )
+
+    @freeze_time(NOW_DATE)
+    def test_reference_product_save_product_aanwezig_true_does_not_have_toelichting_when_saved(
+        self,
+    ):
+        self._change_product_status(Product.status.CONCEPT)
+
+        org = OverheidsorganisatieFactory.create()
+        authorized_org = BevoegdeOrganisatieFactory.create(
+            organisatie=org, lokale_overheid=self.municipality
+        )
+        SpecifiekProductVersieFactory.create(
+            versie=1,
+            product__catalogus=self.catalog,
+            product__bevoegde_organisatie=authorized_org,
+        )
+
+        response = self.app.get(
+            reverse(
+                PRODUCT_EDIT_URL,
+                kwargs=build_url_kwargs(self.product),
+            )
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response.form["product_aanwezig"] = "true"
+
+        for idx, _lang in enumerate(TaalChoices.get_available_languages()):
+            response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
+
+        response = self._submit_product_form(response.form, Product.status.PUBLISHED)
+        self.assertEqual(response.status_code, 302)
+
+        self.product_version.refresh_from_db()
+
+        self.assertEqual(self.product.versies.count(), 1)
+
+        most_recent_version = self.product.most_recent_version
+
+        nl, en = most_recent_version.vertalingen.all()
+
+        self.assertEqual(most_recent_version.publicatie_datum, NOW_DATE)
+
+        self.assertEqual(en.product_aanwezig_toelichting, "")
+
+        self.assertEqual(nl.product_aanwezig_toelichting, "")

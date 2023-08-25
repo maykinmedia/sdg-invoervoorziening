@@ -21,6 +21,7 @@ class CleanProductsTests(TestCase):
             product=localized_generic_product,
         )
         localized_product.product_aanwezig_toelichting = formatted_text
+        localized_product.product_versie.product.product_aanwezig = False
         localized_product.save()
         self.assertEqual(localized_product.product_aanwezig_toelichting, formatted_text)
 
@@ -42,6 +43,7 @@ class CleanProductsTests(TestCase):
             product=localized_generic_product,
         )
         localized_product.product_aanwezig_toelichting = formatted_text
+        localized_product.product_versie.product.product_aanwezig = False
         localized_product.save()
         self.assertEqual(localized_product.product_aanwezig_toelichting, formatted_text)
 
@@ -63,6 +65,7 @@ class CleanProductsTests(TestCase):
             product=localized_generic_product,
         )
         localized_product.product_aanwezig_toelichting = formatted_text
+        localized_product.product_versie.product.product_aanwezig = False
         localized_product.save()
         self.assertEqual(localized_product.product_aanwezig_toelichting, formatted_text)
 
@@ -84,6 +87,7 @@ class CleanProductsTests(TestCase):
             product=localized_generic_product,
         )
         localized_product.product_aanwezig_toelichting = formatted_text
+        localized_product.product_versie.product.product_aanwezig = False
         localized_product.save()
         self.assertEqual(localized_product.product_aanwezig_toelichting, formatted_text)
 
