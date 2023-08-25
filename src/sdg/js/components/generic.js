@@ -69,11 +69,13 @@ class GenericForm {
         this.collapseExpand()
     }
 
-    emptyFieldValues(fields) {
-        fields.forEach((item) => {
-            const textarea = item.querySelector("textarea");
-            textarea.value = ""
-        })
+    async emptyFieldValues(fields) {
+        if (await fields === []) {
+            fields.forEach((item) => {
+                const textarea = item.querySelector("textarea");
+                textarea.value = "";
+            })
+        }
     }
 
     async getProductTranslationName(productId, language) {
@@ -84,7 +86,6 @@ class GenericForm {
             .then(data => data.results[0])
 
         if (translationJsonResults) {
-
             if (translationJsonResults.productTitel) {
                 return translationJsonResults.productTitel
             }
@@ -141,9 +142,8 @@ class GenericForm {
             let previousIndex = input.selectedIndex;
 
             const displayFunc = async (displayDependency) => {
+                const controls = await displayDependency.querySelectorAll(".form__control")
                 if (input.selectedIndex === 2) {
-                    const controls = displayDependency.querySelectorAll(".form__control")
-
                     if (input.selectedIndex != previousIndex) {
                         if (confirm("Weet u zeker dat u dit product niet aanbiedt?\nAls u 'OK' antwoordt worden alle teksten leeggemaakt.")) {
                             this.resetSpecefiekeGegevens();
@@ -163,25 +163,10 @@ class GenericForm {
                         }
                     });
                 } else {
-                    const controls = displayDependency.querySelectorAll(".form__control")
-                    let emptyOrDefault = 0
-                    controls.forEach((element, index, array) => {
-                        const textarea = element.querySelector("textarea");
-                        const defaultExplanation = document.querySelector(`.form__reference-${element.lang}`).dataset.productAanwezigToelichting;
-
-                        if (!textarea.value || textarea.value === defaultExplanation) {
-                            emptyOrDefault += 1
-                        }
-
-                        if (emptyOrDefault == 2) {
-                            this.displayHidden(dependency, "aanwezig")
-                            this.emptyFieldValues([array[index - 1], element])
-                            previousIndex = 0;
-                            return
-                        }
-
-                        this.displayBlock(dependency, "aanwezig")
-                    })
+                    controls.forEach(async (fields) => {
+                        this.displayHidden(dependency, "aanwezig");
+                        this.emptyFieldValues(fields);
+                    });
                 };
 
                 previousIndex = input.selectedIndex;
