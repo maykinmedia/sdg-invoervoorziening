@@ -2,6 +2,14 @@
 Change history
 ==============
 
+1.8.2
+=====
+
+*September 13, 2023*
+
+* [#967] Clear "toelichting" when product availability is set to unknown or yes.
+
+
 1.8.1
 =====
 
@@ -9,6 +17,7 @@ Change history
 
 * [#963] Added label "decentrale link" in preview page.
 * [#964] Improved "decentrale link" validation error messages.
+
 
 1.8.0
 =====
@@ -27,6 +36,7 @@ Change history
 * [#786] Set product title to standard text title if empty.
 * [#931] Prevent publication of products that have the initial offered status of "unknown".
 * [#930] URLs are now validated to start with "https://" to prevent insecure URLs.
+
 
 1.7.3
 =====
