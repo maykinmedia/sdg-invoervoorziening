@@ -316,6 +316,11 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
     def save(self, *args, **kwargs):
         # FIXME: Remove adding logic. Too magical.
         adding = self._state.adding
+
+        product = self.product_versie.product
+        if product.product_aanwezig is not False:
+            self.product_aanwezig_toelichting = ""
+
         super().save(*args, **kwargs)
         if adding:
             self.localize_specific_products()
