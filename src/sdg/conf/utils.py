@@ -1,13 +1,8 @@
-import codecs
 import logging
-import os
-import re
-from shutil import which
-from subprocess import CalledProcessError, check_output
+from functools import lru_cache
 
 from django.conf import settings
 
-import pydantic
 from decouple import Csv, config as _config, undefined
 from sentry_sdk.integrations import DidNotEnable, django, redis
 
@@ -58,7 +53,7 @@ def get_sentry_integrations() -> list:
     return [*default, *extra]
 
 
-@pydantic.tools.lru_cache
+@lru_cache
 def org_type_cfg():
     """
     Get the organization type configuration for the current environment.

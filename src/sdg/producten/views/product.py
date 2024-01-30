@@ -374,9 +374,9 @@ class ProductUpdateView(
             ],  # TODO: optimize
         )
 
-        context[
-            "published_product_language_links"
-        ] = self._get_published_taal_product_links()
+        context["published_product_language_links"] = (
+            self._get_published_taal_product_links()
+        )
 
         context["history"] = (
             self.product.get_all_versions()

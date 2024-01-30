@@ -56,7 +56,7 @@ class HomeViewTests(WebTest):
     @override_settings(SDG_ORGANIZATION_TYPE="waterauthority")
     def test_organization_type_link_is_displayed(self):
         response = self.app.get(reverse(HOME_URL))
-        self.assertIn(org_type_cfg().url, response.text)
+        self.assertIn(str(org_type_cfg().url), response.text)
 
     @override_settings(SDG_ORGANIZATION_TYPE="waterauthority")
     def test_organization_type_logo_is_displayed(self):

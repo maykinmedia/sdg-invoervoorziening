@@ -26,9 +26,11 @@ class DynamicArrayField(forms.Field):
 
         kwargs.setdefault(
             "widget",
-            DynamicArrayWidget(subwidget_form=subwidget_form)
-            if subwidget_form
-            else DynamicArrayWidget,
+            (
+                DynamicArrayWidget(subwidget_form=subwidget_form)
+                if subwidget_form
+                else DynamicArrayWidget
+            ),
         )
         super().__init__(**kwargs)
 

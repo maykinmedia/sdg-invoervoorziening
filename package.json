@@ -34,6 +34,10 @@
         "text-diff": "^1.0.1",
         "tippy.js": "^6.3.7"
     },
+    "nyc": {
+        "sourceMap": false,
+        "instrument": false
+      },
     "devDependencies": {
         "@babel/core": "latest",
         "@babel/polyfill": "latest",
@@ -50,20 +54,20 @@
         "@ckeditor/ckeditor5-heading": "^34.0.0",
         "@ckeditor/ckeditor5-link": "^34.0.0",
         "@ckeditor/ckeditor5-list": "^34.0.1",
-        "@ckeditor/ckeditor5-markdown-gfm": "^34.0.0",
+        "@ckeditor/ckeditor5-markdown-gfm": "^41.0.0",
         "@ckeditor/ckeditor5-paragraph": "^34.0.0",
         "@ckeditor/ckeditor5-table": "^34.0.0",
         "@ckeditor/ckeditor5-theme-lark": "^34.0.0",
         "arrayify": "^1.0.0",
         "autoprefixer": "^10.4.5",
         "babel-loader": "latest",
+        "babel-plugin-istanbul": "^6.1.1",
         "bem.js": "^1.0.10",
         "chai": "latest",
         "css-loader": "latest",
         "cssnano": "^5.1.7",
         "engine.io": ">=6.2.0",
         "follow-redirects": ">=1.14.9",
-        "istanbul-instrumenter-loader": "^2.0.0",
         "karma": "latest",
         "karma-chrome-launcher": "latest",
         "karma-coverage": "latest",

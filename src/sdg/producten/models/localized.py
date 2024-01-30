@@ -239,6 +239,7 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         _("decentrale procedure link"),
         help_text=_("Link naar de procedure voor burgers en / of bedrijven."),
         blank=True,
+        max_length=1000,
         validators=[validate_https],
     )
 

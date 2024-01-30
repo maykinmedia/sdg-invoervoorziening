@@ -49,6 +49,6 @@ class AuthenticationForm(_AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.error_messages[
-            "invalid_login"
-        ] = "Voer een juist e-mailadres en wachtwoord in."
+        self.error_messages["invalid_login"] = (
+            "Voer een juist e-mailadres en wachtwoord in."
+        )

@@ -23,7 +23,9 @@ class Command(BaseCommand):
             retrieved_upn_uris = [p["upnUri"] for p in products]
             LocalizedGeneriekProduct.objects.filter(
                 generiek_product__doelgroep=service_config.doelgroep,
-            ).exclude(generiek_product__upn__upn_uri__in=retrieved_upn_uris,).update(
+            ).exclude(
+                generiek_product__upn__upn_uri__in=retrieved_upn_uris,
+            ).update(
                 # Don't clean everything to prevent manually entered texts from
                 # being wiped.
                 #

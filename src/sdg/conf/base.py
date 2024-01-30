@@ -131,6 +131,7 @@ INSTALLED_APPS = [
     "django_filters",
     "vng_api_common",
     "vng_api_common.authorizations",
+    "simple_certmanager",
     "drf_spectacular",
     "rest_framework",
     "timeline_logger",
@@ -159,6 +160,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "axes.middleware.AxesMiddleware",
     "django_otp.middleware.OTPMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "sdg.urls"

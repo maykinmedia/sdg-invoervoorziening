@@ -10,7 +10,7 @@ pydantic
 email-validator
 
 # Framework libraries
-django < 3.3
+django ~= 3.2
 django-admin-index
 django-better-admin-arrayfield
 django-axes
