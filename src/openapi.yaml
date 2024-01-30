@@ -206,7 +206,11 @@ paths:
           enum:
           - eu-bedrijf
           - eu-burger
-        description: Toont producten die overeenkomen met de opgegeven doelgroepen.
+        description: |-
+          Toont producten die overeenkomen met de opgegeven doelgroepen.
+
+          * `eu-burger` - EU Burger
+          * `eu-bedrijf` - EU Bedrijf
       - name: page
         required: false
         in: query
@@ -220,7 +224,11 @@ paths:
           enum:
           - en
           - nl
-        description: Toont producten die overeenkomen met de opgegeven taal.
+        description: |-
+          Toont producten die overeenkomen met de opgegeven taal.
+
+          * `nl` - Nederlands
+          * `en` - Engels
       - in: query
         name: upnLabel
         schema:
@@ -753,6 +761,9 @@ components:
       - eu-burger
       - eu-bedrijf
       type: string
+      description: |-
+        * `eu-burger` - EU Burger
+        * `eu-bedrijf` - EU Bedrijf
     GeneriekProduct:
       type: object
       properties:
@@ -780,8 +791,11 @@ components:
         taal:
           allOf:
           - $ref: '#/components/schemas/TaalEnum'
-          description: De taal waarin de betreffende tekst is geschreven.ISO 639-1
-            (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+          description: |-
+            De taal waarin de betreffende tekst is geschreven.ISO 639-1 (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
+
+            * `nl` - Nederlands
+            * `en` - Engels
         titel:
           type: string
           description: Titel van het product
@@ -882,7 +896,11 @@ components:
         taal:
           allOf:
           - $ref: '#/components/schemas/TaalEnum'
-          description: De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+          description: |-
+            De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+
+            * `nl` - Nederlands
+            * `en` - Engels
         titel:
           type: string
           description: De titel van het product. Als deze afwijkt van de generieke
@@ -1454,7 +1472,7 @@ components:
           format: uri
           description: De URL waar de burger of ondernemer het product bij de organisatie
             kan aanvragen.
-          maxLength: 200
+          maxLength: 1000
     Product:
       type: object
       description: Serializer for a product, including UPN, availability, locations
@@ -1526,7 +1544,11 @@ components:
         doelgroep:
           allOf:
           - $ref: '#/components/schemas/DoelgroepEnum'
-          description: De doelgroep van dit product.
+          description: |-
+            De doelgroep van dit product.
+
+            * `eu-burger` - EU Burger
+            * `eu-bedrijf` - EU Bedrijf
         vertalingen:
           type: array
           items:
@@ -1745,6 +1767,9 @@ components:
       - nl
       - en
       type: string
+      description: |-
+        * `nl` - Nederlands
+        * `en` - Engels
   securitySchemes:
     tokenAuth:
       type: apiKey
