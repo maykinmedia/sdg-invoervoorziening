@@ -2,6 +2,15 @@
 Change history
 ==============
 
+1.8.3
+=====
+
+*January 30, 2024*
+
+* [#974] Updated maximum length on procedureLink to 1000 characters.
+* Updated dependecies
+
+
 1.8.2
 =====
 
