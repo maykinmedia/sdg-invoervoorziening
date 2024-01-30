@@ -36,9 +36,11 @@ def load_government_organisations(data: List[Dict[str, Any]]) -> int:
             owms_identifier=resource_id,
             defaults={
                 "owms_pref_label": obj.get("prefLabel"),
-                "owms_end_date": string_to_date(obj.get("endDate"), "%Y-%m-%d")
-                if obj.get("endDate")
-                else None,
+                "owms_end_date": (
+                    string_to_date(obj.get("endDate"), "%Y-%m-%d")
+                    if obj.get("endDate")
+                    else None
+                ),
             },
         )
         if created:
@@ -248,7 +250,10 @@ def update_generic_products(upn):
 
     generic_products = []
     for group in groups:
-        (generic_product, g_created,) = GeneriekProduct.objects.get_or_create(
+        (
+            generic_product,
+            g_created,
+        ) = GeneriekProduct.objects.get_or_create(
             upn=upn,
             doelgroep=group,
         )

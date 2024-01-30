@@ -222,9 +222,9 @@ class ProductUpdateViewTests(WebTest):
 
         for idx, language in enumerate(TaalChoices.get_available_languages()):
             response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
-            response.form[
-                f"vertalingen-{idx}-product_valt_onder_toelichting"
-            ] = falls_under_explanation_map.get(language)
+            response.form[f"vertalingen-{idx}-product_valt_onder_toelichting"] = (
+                falls_under_explanation_map.get(language)
+            )
 
         response = self._submit_product_form(response.form, Product.status.PUBLISHED)
         self.assertEqual(response.status_code, 302)
@@ -435,9 +435,9 @@ class ProductUpdateViewTests(WebTest):
         for date_field in response.form.fields["date"]:
             date_field.value = NOW_DATE
 
-        response.form[
-            "vertalingen-0-product_titel_decentraal"
-        ] = "Title [[placeholder]]"
+        response.form["vertalingen-0-product_titel_decentraal"] = (
+            "Title [[placeholder]]"
+        )
 
         response = response.form.submit(name="publish", value="date")
         self.assertEqual(response.status_code, 200)
@@ -473,9 +473,9 @@ class ProductUpdateViewTests(WebTest):
         for date_field in response.form.fields["date"]:
             date_field.value = None
 
-        response.form[
-            "vertalingen-0-product_titel_decentraal"
-        ] = "Title [[placeholder]]"
+        response.form["vertalingen-0-product_titel_decentraal"] = (
+            "Title [[placeholder]]"
+        )
 
         response = response.form.submit(name="publish", value="concept")
         self.assertEqual(response.status_code, 302)
@@ -1395,9 +1395,9 @@ class ProductUpdateViewTests(WebTest):
         for date_field in response.form.fields["date"]:
             date_field.value = NOW_DATE
 
-        response.form[
-            "vertalingen-0-product_titel_decentraal"
-        ] = "Title [[placeholder]]"
+        response.form["vertalingen-0-product_titel_decentraal"] = (
+            "Title [[placeholder]]"
+        )
 
         response = response.form.submit(name="publish", value="date")
         self.assertEqual(response.status_code, 302)
