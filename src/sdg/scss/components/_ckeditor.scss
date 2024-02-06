@@ -2,6 +2,8 @@
 
 .ck {
   --ck-color-toolbar-background: $color_grey_lightest;
+
+  .ck-sticky-panel .ck-sticky-panel__content_sticky{ position: static !important; }
 }
 
 .ck-content {
