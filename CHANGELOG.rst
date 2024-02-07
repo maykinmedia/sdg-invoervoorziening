@@ -2,6 +2,14 @@
 Change history
 ==============
 
+1.8.4
+=====
+
+*February 6, 2024*
+
+* Updated CK-editor
+
+
 1.8.3
 =====
 
