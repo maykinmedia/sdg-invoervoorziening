@@ -703,6 +703,253 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedProductVersieList'
           description: ''
+  /api/v1/producten/{productUuid}/versies:
+    get:
+      operationId: productenVersiesList
+      description: "Krijg een lijst met alle product versies te zien.\n        "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductVersieSingleList'
+          description: ''
+    post:
+      operationId: productenVersiesCreate
+      description: "Maak een nieuwe product versie aan of update een nog niet gepubliceerde\
+        \ product.\n        "
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een het product waar u een nieuwe versie van aan
+          wilt maken of bewerken.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVersieSingle'
+        required: true
+      security:
+      - tokenAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersieSingle'
+          description: ''
+  /api/v1/producten/{productUuid}/versies/{versie}:
+    get:
+      operationId: productenVersiesRetrieve
+      description: "Krijg een specifieke product versie te zien.\n        "
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
+        required: true
+      - in: path
+        name: versie
+        schema:
+          type: number
+        description: Het versie nummer van het product die u wilt ophalen.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersieSingle'
+          description: ''
+  /api/v1/producten/{productUuid}/versies/{versie}/publiceer:
+    post:
+      operationId: productenVersiesPubliceerCreate
+      description: "Publiceer de product versie met de bijgewerkte vertalingen doormiddel\
+        \ van:\n        `product_uuid`, `versie`\n        "
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          publiceren.
+        required: true
+      - in: path
+        name: versie
+        schema:
+          type: number
+        description: Het versie nummer van het product die u wilt publiceren.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVersiePublish'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersiePublish'
+          description: ''
+  /api/v1/producten/{productUuid}/versies/{versie}/vertalingen:
+    get:
+      operationId: productenVersiesVertalingenList
+      description: "Haal alle product vertalingen doormiddle van:\n        `product_uuid`,\
+        \ `versie`\n        "
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: Een pagina binnen de gepagineerde set resultaten.
+        schema:
+          type: integer
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
+        required: true
+      - in: path
+        name: versie
+        schema:
+          type: number
+        description: Het versie nummer van het product die u wilt ophalen.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductVersieVertalingenList'
+          description: ''
+  /api/v1/producten/{productUuid}/versies/{versie}/vertalingen/{taal}:
+    get:
+      operationId: productenVersiesVertalingenRetrieve
+      description: "Haal de specifieke producten vertaling doormiddle van:\n     \
+        \   `product_uuid`, `versie`, `taal`\n        "
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van een product om aan te geven welke product u wilt
+          ophalen.
+        required: true
+      - in: path
+        name: taal
+        schema:
+          type: string
+          enum:
+          - en
+          - nl
+        description: De taal van de text die u wilt ophalen.
+        required: true
+      - in: path
+        name: versie
+        schema:
+          type: number
+        description: Het versie nummer van het product die u wilt ophalen.
+        required: true
+      tags:
+      - producten
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersieVertalingen'
+          description: ''
+    put:
+      operationId: productenVersiesVertalingenUpdate
+      description: "Update 1 specifieke vertaling van een productversie concept. Om\
+        \ de productversie correct aan te maken, moet u in de url het 'productUuid'\
+        \ opgeven.\n        "
+      parameters:
+      - in: path
+        name: productUuid
+        schema:
+          type: string
+          format: uuid
+        description: De UUID van het product die u wilt bewerken.
+        required: true
+      - in: path
+        name: taal
+        schema:
+          type: string
+          enum:
+          - en
+          - nl
+        description: De taal van de tekst die u wilt updaten.
+        required: true
+      - in: path
+        name: versie
+        schema:
+          type: number
+        description: Het versie nummer van het product die u wilt bewerken.
+        required: true
+      tags:
+      - producten
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductVersieVertalingen'
+      security:
+      - tokenAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductVersieVertalingen'
+          description: ''
   /api/v1/producten/{uuid}:
     get:
       operationId: productenRetrieve
@@ -1364,6 +1611,46 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductVersie'
+    PaginatedProductVersieSingleList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVersieSingle'
+    PaginatedProductVersieVertalingenList:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductVersieVertalingen'
     PaginatedProductenCatalogusList:
       type: object
       properties:
@@ -1703,6 +1990,164 @@ components:
       - gemaaktOp
       - gewijzigdOp
       - vertalingen
+    ProductVersiePublish:
+      type: object
+      properties:
+        publicatieDatum:
+          type: string
+          format: date
+          nullable: true
+          description: De datum van publicatie van de productversie.
+        productValtOnder:
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          readOnly: true
+          description: Als een product valt onder een ander product (het product wordt
+            bijvoorbeeld geleverd middels een ander product), dan staat deze hier
+            vermeld. Als een product onder een ander product valt, dan moet er een
+            toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde
+            velden kunnen dan leeg blijven.
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLocatie'
+          readOnly: true
+          description: Een lijst met locaties waarop dit product beschikbaar is.
+        versie:
+          type: integer
+          readOnly: true
+          description: Het versienummer van het product.
+      required:
+      - locaties
+      - productValtOnder
+      - versie
+    ProductVersieSingle:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+          description: De unieke URL van dit object binnen deze API.
+        productAanwezig:
+          type: boolean
+          nullable: true
+          title: Aanwezig
+          description: Voert u dit product?
+        productValtOnder:
+          allOf:
+          - $ref: '#/components/schemas/ProductBase'
+          nullable: true
+          description: Als een product valt onder een ander product (het product wordt
+            bijvoorbeeld geleverd middels een ander product), dan staat deze hier
+            vermeld. Als een product onder een ander product valt, dan moet er een
+            toelichting worden gegeven in alle beschikbare talen. Alle andere vertaalde
+            velden kunnen dan leeg blijven.
+        locaties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductLocatie'
+          nullable: true
+          description: Een lijst met locaties waarop dit product beschikbaar is.
+        versie:
+          type: integer
+          readOnly: true
+          description: De huidige versie van dit product.
+        publicatieDatum:
+          type: integer
+          readOnly: true
+          description: De datum wanneer dit product gepubliseerd is/wordt.
+        talen:
+          type: array
+          items:
+            type: string
+            format: uri
+          readOnly: true
+      required:
+      - locaties
+      - productAanwezig
+      - productValtOnder
+      - publicatieDatum
+      - talen
+      - url
+      - versie
+    ProductVersieVertalingen:
+      type: object
+      properties:
+        taal:
+          allOf:
+          - $ref: '#/components/schemas/TaalEnum'
+          readOnly: true
+          description: De taal van de onderstaande gegevens volgens formaat [ISO 639-1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
+        titel:
+          type: string
+          description: De titel van het product. Als deze afwijkt van de generieke
+            titel kunt u dat hier aangeven.
+          maxLength: 100
+        tekst:
+          type: string
+          description: De inleidende tekst voor het product. Hierin kunt u het product
+            beschrijven en komt direct na de generieke productbeschrijving. Dit veld
+            ondersteund Markdown.
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabeledUrl'
+          description: Dit zijn de verwijzing links voor burgers en ondernemers naar
+            relevante organisatie informatie.
+        procedureBeschrijving:
+          type: string
+          description: De beschrijving van hoe het product wordt aangevraagd. Dit
+            veld ondersteund Markdown.
+        bewijs:
+          type: string
+          description: Dit bevat de bewijsstukken die de burger of ondernemer nodig
+            heeft om dit product aan te vragen. Dit veld ondersteund Markdown.
+        vereisten:
+          type: string
+          description: Dit zijn de voorwaarden voor het aanvragen van het product.
+            Dit veld ondersteund Markdown.
+        bezwaarEnBeroep:
+          type: string
+          description: Beschrijft hoe de burger of ondernemer bezwaar kan maken. Dit
+            veld ondersteund Markdown.
+        kostenEnBetaalmethoden:
+          type: string
+          description: Beschrijft hoe de burger of ondernemer kan betalen en wat de
+            kosten zijn. Dit veld ondersteund Markdown.
+        uitersteTermijn:
+          type: string
+          description: De informatie over hoe hoelang het duurt voor het aanvragen
+            van dit product. Dit doet u aan de hand van werkdagen/weken. Dit veld
+            ondersteund Markdown.
+        wtdBijGeenReactie:
+          type: string
+          description: Beschrijft wat de aanvrager moet doen bij geen reactie. Dit
+            veld ondersteund Markdown.
+        procedureLink:
+          allOf:
+          - $ref: '#/components/schemas/ProcedureLink'
+          description: Het label en de link naar de procedure.
+        productAanwezigToelichting:
+          type: string
+          title: Aanwezig toelichting
+          description: Een optioneel veld om uit te leggen waarom het product niet
+            aanwezig is. Deze moet u alleen invullen als u het product niet levert
+            en dan is dit veld verplicht! Dit veld ondersteund Markdown.
+        productValtOnderToelichting:
+          type: string
+          description: Een optioneel veld om uit te leggen waarom dit product onder
+            een andere product valt. Deze moet u alleen invullen als dit product onder
+            een andere product valt en dan is dit veld verplicht! Dit veld ondersteund
+            Markdown.
+        datumWijziging:
+          type: string
+          format: date-time
+          readOnly: true
+          description: Datum wanneer dit product voor het laatst is gewijzigd.
+      required:
+      - datumWijziging
+      - taal
     ProductenCatalogus:
       type: object
       description: Serializer for ProductenCatalogus details, including organizations
