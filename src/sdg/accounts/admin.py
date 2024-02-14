@@ -8,7 +8,6 @@ from django.utils.translation import gettext_lazy as _
 from allauth.account.models import EmailAddress
 from compat import format_html
 from django_otp.plugins.otp_totp.admin import TOTPDeviceAdmin
-from hijack_admin.admin import HijackUserAdminMixin
 
 from ..core.events import post_event
 from .models import Role, UserInvitation
@@ -102,7 +101,7 @@ class UserCreationForm(forms.ModelForm):
 
 
 @admin.register(User)
-class UserAdmin(_UserAdmin, HijackUserAdminMixin):
+class UserAdmin(_UserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
@@ -145,7 +144,6 @@ class UserAdmin(_UserAdmin, HijackUserAdminMixin):
         "last_name",
         "organisaties",
         "is_staff",
-        "hijack_field",
     )
     ordering = ("email",)
     inlines = (RoleInline, UserInvitationInline, EmailaddressInline)

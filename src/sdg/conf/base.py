@@ -122,7 +122,7 @@ INSTALLED_APPS = [
     "sniplates",
     "compat",  # Part of hijack
     "hijack",
-    "hijack_admin",
+    "hijack.contrib.admin",
     "markdownx",
     "markdownify",
     "allauth",
@@ -158,6 +158,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "hijack.middleware.HijackUserMiddleware",
     "axes.middleware.AxesMiddleware",
     "django_otp.middleware.OTPMiddleware",
     "allauth.account.middleware.AccountMiddleware",
@@ -437,16 +438,6 @@ IPWARE_META_PRECEDENCE_ORDER = (
     "HTTP_VIA",
     "REMOTE_ADDR",
 )
-
-#
-# DJANGO-HIJACK
-#
-HIJACK_LOGIN_REDIRECT_URL = "/"
-HIJACK_LOGOUT_REDIRECT_URL = reverse_lazy("admin:accounts_user_changelist")
-HIJACK_REGISTER_ADMIN = False
-# This is a CSRF-security risk.
-# See: http://django-hijack.readthedocs.io/en/latest/configuration/#allowing-get-method-for-hijack-views
-HIJACK_ALLOW_GET_REQUESTS = True
 
 #
 # SENTRY - error monitoring

@@ -10,14 +10,13 @@ pydantic
 email-validator
 
 # Framework libraries
-django ~= 3.2
+django==4.2.0
 django-admin-index
 django-better-admin-arrayfield
-django-axes
+django-axes[ipware]
 django-choices
 django-decorator-include
-django-hijack ~= 2.3.0
-django-hijack-admin
+django-hijack
 django-redis
 django-rosetta
 django-sniplates
