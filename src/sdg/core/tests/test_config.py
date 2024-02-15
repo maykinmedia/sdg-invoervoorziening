@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from django_webtest import WebTest
+from sdg.core.tests.utils import WebTest
 
 from sdg.accounts.tests.factories import UserFactory
 from sdg.conf.types.organization import (

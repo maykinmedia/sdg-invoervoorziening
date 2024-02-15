@@ -4,7 +4,7 @@ from django.core import mail
 from django.urls import reverse
 from django.utils.timezone import now
 
-from django_webtest import WebTest
+from sdg.core.tests.utils import WebTest
 
 from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory

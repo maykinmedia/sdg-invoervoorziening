@@ -21,7 +21,12 @@ asgiref==3.7.2
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django
-astroid==3.0.2
+asn1crypto==1.5.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   webauthn
+astroid==3.0.3
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -51,7 +56,7 @@ billiard==4.2.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   celery
-black==24.1.1
+black==24.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -71,13 +76,18 @@ build==1.0.3
     # via pip-tools
 bump2version==1.0.1
     # via -r requirements/dev.in
+cbor2==5.6.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   webauthn
 celery==5.3.6
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-celery-beat
     #   notifications-api-common
-certifi==2023.11.17
+certifi==2024.2.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -131,13 +141,14 @@ cron-descriptor==1.4.3
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-celery-beat
-cryptography==42.0.1
+cryptography==42.0.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-simple-certmanager
     #   pyjwt
     #   pyopenssl
+    #   webauthn
 cssselect==1.2.0
     # via
     #   -c requirements/ci.txt
@@ -159,7 +170,7 @@ dill==0.3.8
     #   pylint
 distlib==0.3.8
     # via virtualenv
-django==3.2.23
+django==3.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -193,10 +204,11 @@ django==3.2.23
     #   django-solo
     #   django-timeline-logger
     #   django-timezone-field
+    #   django-two-factor-auth
     #   djangorestframework
     #   drf-nested-routers
     #   drf-spectacular
-    #   maykin-django-two-factor-auth
+    #   maykin-2fa
     #   notifications-api-common
     #   vng-api-common
     #   zgw-consumers
@@ -204,7 +216,7 @@ django-admin-index==3.1.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-django-allauth==0.60.1
+django-allauth==0.61.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -213,10 +225,11 @@ django-appconf==1.0.6
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-timeline-logger
-django-axes==6.3.0
+django-axes[ipware]==6.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-axes
 django-better-admin-arrayfield==1.4.2
     # via
     #   -c requirements/ci.txt
@@ -230,12 +243,7 @@ django-choices==2.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   vng-api-common
-django-compat==1.0.15
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   django-hijack-admin
-django-debug-toolbar==4.2.0
+django-debug-toolbar==3.5.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -256,16 +264,16 @@ django-formtools==2.5.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   maykin-django-two-factor-auth
-django-hijack==2.3.0
+    #   django-two-factor-auth
+django-hijack==3.4.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   django-hijack-admin
-django-hijack-admin==2.1.10
+django-ipware==6.0.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+    #   django-axes
 django-jenkins==0.110.0
     # via
     #   -c requirements/ci.txt
@@ -287,12 +295,12 @@ django-otp==1.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   maykin-django-two-factor-auth
-django-phonenumber-field==5.2.0
+    #   django-two-factor-auth
+django-phonenumber-field==7.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   maykin-django-two-factor-auth
+    #   django-two-factor-auth
 django-privates==2.0.0.post0
     # via
     #   -c requirements/ci.txt
@@ -355,6 +363,12 @@ django-timezone-field==6.1.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-celery-beat
+django-two-factor-auth[phonenumberslite,webauthn]==1.16.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-two-factor-auth
+    #   maykin-2fa
 django-webtest==1.9.11
     # via
     #   -c requirements/ci.txt
@@ -414,7 +428,7 @@ factory-boy==3.3.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-faker==22.6.0
+faker==23.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -445,7 +459,7 @@ glom==23.5.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-identify==2.5.33
+identify==2.5.34
     # via pre-commit
 idna==3.6
     # via
@@ -503,13 +517,12 @@ markdown==3.5.2
     #   -r requirements/ci.txt
     #   django-markdownify
     #   django-markdownx
-markupsafe==2.1.4
+markupsafe==2.1.5
     # via jinja2
-maykin-django-two-factor-auth[phonenumbers]==2.0.4
+maykin-2fa==1.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   maykin-django-two-factor-auth
 mccabe==0.7.0
     # via
     #   -c requirements/ci.txt
@@ -554,11 +567,11 @@ pep8==1.7.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-phonenumbers==8.13.29
+phonenumberslite==8.13.30
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   maykin-django-two-factor-auth
+    #   django-two-factor-auth
 pillow==10.2.0
     # via
     #   -c requirements/ci.txt
@@ -566,7 +579,7 @@ pillow==10.2.0
     #   django-markdownx
 pip-tools==7.3.0
     # via -r requirements/dev.in
-platformdirs==4.1.0
+platformdirs==4.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -578,7 +591,7 @@ polib==1.2.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-rosetta
-pre-commit==3.6.0
+pre-commit==3.6.1
     # via -r requirements/dev.in
 prompt-toolkit==3.0.43
     # via
@@ -599,11 +612,11 @@ pycparser==2.21
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   cffi
-pydantic==2.6.0
+pydantic==2.6.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-pydantic-core==2.16.1
+pydantic-core==2.16.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -632,7 +645,13 @@ pyopenssl==24.0.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-simple-certmanager
+    #   webauthn
     #   zgw-consumers
+pypng==0.20220715.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   qrcode
 pyproject-hooks==1.0.0
     # via build
 pyquery==2.0.0
@@ -661,12 +680,17 @@ python-dotenv==1.0.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
+python-ipware==2.0.1
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-ipware
 python3-openid==3.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-allauth
-pytz==2023.4
+pytz==2024.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -680,11 +704,11 @@ pyyaml==6.0.1
     #   oyaml
     #   pre-commit
     #   vng-api-common
-qrcode==6.1
+qrcode==7.4.2
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-    #   maykin-django-two-factor-auth
+    #   django-two-factor-auth
 redis==5.0.1
     # via
     #   -c requirements/ci.txt
@@ -720,13 +744,13 @@ requests-oauthlib==1.3.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   django-allauth
-rpds-py==0.17.1
+rpds-py==0.18.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   jsonschema
     #   referencing
-sentry-sdk==1.39.2
+sentry-sdk==1.40.4
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -735,10 +759,8 @@ six==1.16.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   bleach
-    #   django-compat
     #   isodate
     #   python-dateutil
-    #   qrcode
     #   requests-mock
 smmap==5.0.1
     # via gitdb
@@ -808,7 +830,8 @@ typing-extensions==4.9.0
     #   black
     #   pydantic
     #   pydantic-core
-tzdata==2023.4
+    #   qrcode
+tzdata==2024.1
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -819,14 +842,14 @@ uritemplate==4.1.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   drf-spectacular
-urllib3==2.1.0
+urllib3==2.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   elastic-apm
     #   requests
     #   sentry-sdk
-uwsgi==2.0.23
+uwsgi==2.0.24
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -843,7 +866,7 @@ vng-api-common==2.0.5
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
-waitress==2.1.2
+waitress==3.0.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
@@ -853,6 +876,11 @@ wcwidth==0.2.13
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   prompt-toolkit
+webauthn==2.0.0
+    # via
+    #   -c requirements/ci.txt
+    #   -r requirements/ci.txt
+    #   django-two-factor-auth
 webencodings==0.5.1
     # via
     #   -c requirements/ci.txt

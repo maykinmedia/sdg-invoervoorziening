@@ -6,8 +6,8 @@ from django.core.management import BaseCommand
 from django.db.models import Q
 from django.utils.html import strip_tags
 from django.utils.timezone import now
+from django.template.loader import render_to_string
 
-from compat import render_to_string
 from dateutil.relativedelta import relativedelta
 
 from sdg.accounts.models import User
