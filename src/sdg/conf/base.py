@@ -119,7 +119,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     # 'django.contrib.sitemaps',
     # External applications.
-    "django_better_admin_arrayfield",
+    "django_jsonform",  # django_better_admin_arrayfield replacement
     "axes",
     "sniplates",
     "hijack",

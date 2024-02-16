@@ -2,7 +2,7 @@
 
 import django.core.validators
 from django.db import migrations, models
-import django_better_admin_arrayfield.models.fields
+import django_jsonform.models.fields
 
 
 class Migration(migrations.Migration):
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="token",
             name="whitelisted_ips",
-            field=django_better_admin_arrayfield.models.fields.ArrayField(
+            field=django_jsonform.models.fields.ArrayField(
                 base_field=models.CharField(
                     max_length=15,
                     validators=[django.core.validators.validate_ipv4_address],
