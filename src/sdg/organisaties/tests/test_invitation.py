@@ -5,11 +5,10 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from sdg.core.tests.utils import WebTest
-
 from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
+from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 INVITATION_URL = "organisaties:roles:invitation_create"

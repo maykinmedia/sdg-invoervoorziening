@@ -1,13 +1,12 @@
 from django.test import TestCase
 
-from sdg.core.tests.utils import WebTest
-
 from sdg.accounts.tests.factories import UserFactory
 from sdg.conf.types.organization import (
     OrganizationTypeConfiguration,
     available_org_types,
 )
 from sdg.core.models import SiteConfiguration
+from sdg.core.tests.utils import WebTest
 
 
 class SiteConfigurationTests(WebTest):

@@ -1,5 +1,4 @@
 import os
-import sys
 
 from django.urls import reverse_lazy
 

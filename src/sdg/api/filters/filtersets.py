@@ -9,7 +9,7 @@ from sdg.api.filters import ProductAanwezigChoices
 from sdg.core.constants import DoelgroepChoices, TaalChoices
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid, Lokatie as Locatie
-from sdg.producten.models import GeneriekProduct, Product
+from sdg.producten.models import Product
 
 
 class ProductenCatalogusFilterSet(FilterSet):

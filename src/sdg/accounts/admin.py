@@ -3,8 +3,8 @@ from django.conf import settings
 from django.contrib import admin, messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as _UserAdmin
-from django.utils.translation import gettext_lazy as _
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from allauth.account.models import EmailAddress
 from django_otp.plugins.otp_totp.admin import TOTPDeviceAdmin

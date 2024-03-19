@@ -776,6 +776,7 @@ components:
           type: string
           format: uuid
           readOnly: true
+          nullable: true
           description: De identificatie die binnen deze API gebruikt wordt voor de
             resource.
         upnUri:
@@ -952,6 +953,7 @@ components:
           description: Het label en de link naar de procedure.
         productAanwezigToelichting:
           type: string
+          default: ''
           title: Aanwezig toelichting
           description: Een optioneel veld om uit te leggen waarom het product niet
             aanwezig is. Deze moet u alleen invullen als u het product niet levert
@@ -1266,6 +1268,9 @@ components:
             te worden: `["9:00 - 18:00"]`'
     PaginatedGeneriekProductList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1286,6 +1291,9 @@ components:
             $ref: '#/components/schemas/GeneriekProduct'
     PaginatedLocatieList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1306,6 +1314,9 @@ components:
             $ref: '#/components/schemas/Locatie'
     PaginatedLokaleOverheidList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1326,6 +1337,9 @@ components:
             $ref: '#/components/schemas/LokaleOverheid'
     PaginatedProductList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1346,6 +1360,9 @@ components:
             $ref: '#/components/schemas/Product'
     PaginatedProductVersieList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1366,6 +1383,9 @@ components:
             $ref: '#/components/schemas/ProductVersie'
     PaginatedProductenCatalogusList:
       type: object
+      required:
+      - count
+      - results
       properties:
         count:
           type: integer
@@ -1679,6 +1699,7 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          default: 1
           description: Het versienummer van het product.
         gemaaktOp:
           type: string
@@ -1732,6 +1753,7 @@ components:
           description: De organisatie die deze catalogus beheert.
         isReferentieCatalogus:
           type: boolean
+          default: false
           description: Een boolean die aangeeft of de catalogus een referentie catalogus
             betreft. Een referentie catalogus bevat geen echte productbeschrijvingen.
         referentieCatalogus:
@@ -1747,6 +1769,7 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+          default: 1
           description: De versie van deze catalogus. Op dit moment heeft de waarde
             geen betekenis.
         producten:

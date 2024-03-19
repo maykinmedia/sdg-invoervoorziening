@@ -8,9 +8,9 @@ from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 
 from decorator_include import decorator_include
-from two_factor.urls import urlpatterns as tf_urls
 from maykin_2fa import monkeypatch_admin
 from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
+from two_factor.urls import urlpatterns as tf_urls
 
 from sdg import miscellaneous_urls
 from sdg.accounts.views.password_reset import PasswordResetView, ResendInventation

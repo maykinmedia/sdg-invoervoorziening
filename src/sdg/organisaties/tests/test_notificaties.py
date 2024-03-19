@@ -1,13 +1,9 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core import mail
 from django.urls import reverse
 from django.utils.timezone import now
 
-from sdg.core.tests.utils import WebTest
-
-from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
+from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 from sdg.producten.tests.factories.product import (
     ProductVersieFactory,

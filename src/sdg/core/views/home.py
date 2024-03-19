@@ -1,4 +1,4 @@
-from django.db.models import Q, Subquery
+from django.db.models import Subquery
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 

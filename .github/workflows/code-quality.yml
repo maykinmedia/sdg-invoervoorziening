@@ -8,11 +8,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - name: Set up environment
+        uses: maykinmedia/setup-django-backend@v1
         with:
-          python-version: '3.8'
-      - uses: isort/isort-action@v0.1.0
+          python-version: '3.10'
+          setup-node: 'no'
+      - uses: isort/isort-action@v1.1.0
         with:
           requirementsFiles: requirements/ci.txt
           sortPaths: "src"
@@ -23,13 +25,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - name: Set up environment
+        uses: maykinmedia/setup-django-backend@v1
         with:
-          python-version: '3.8'
-      - name: Install dependencies
-        run: |
-          pip install -r requirements/ci.txt
+          python-version: '3.10'
+          setup-node: 'no'
       - name: Run black
         run: |
           black --check src
@@ -39,13 +40,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - name: Set up environment
+        uses: maykinmedia/setup-django-backend@v1
         with:
-          python-version: '3.8'
-      - name: Install dependencies
-        run: |
-          pip install -r requirements/ci.txt
+          python-version: '3.10'
+          setup-node: 'no'
       - name: Run flake8
+        id: flake8
         run: |
-          flake8 src --ignore=E501,F405,W503,F401
+          flake8 src 2>&1 | tee flake8_output.txt
+          result_code=${PIPESTATUS[0]}
+          report="$(cat flake8_output.txt)"
+          report="${report//$'\n'/'%0A'}"  # escape newlines
+          echo "FLAKE8_REPORT=${report}" >> $GITHUB_OUTPUT
+          exit $result_code
+      - name: Emit flake8 flake8 output
+        if: ${{ failure() }}
+        run: |
+          echo "${{ steps.flake8.outputs.FLAKE8_REPORT }}"
+
+          echo 'flake8 found some issues' >> $GITHUB_STEP_SUMMARY
+          echo '' >> $GITHUB_STEP_SUMMARY
+          echo '| File | Line | Column | Issue |' >> $GITHUB_STEP_SUMMARY
+          echo '| :--- | ---- | ------ | :---- |' >> $GITHUB_STEP_SUMMARY
+          python ./bin/flake8_summary.py "${{ steps.flake8.outputs.FLAKE8_REPORT }}" >> $GITHUB_STEP_SUMMARY

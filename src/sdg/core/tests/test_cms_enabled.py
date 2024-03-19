@@ -3,11 +3,10 @@ import uuid
 from django.test import override_settings
 from django.urls import reverse
 
-from sdg.core.tests.utils import WebTest
-
 from sdg.accounts.tests.factories import RoleFactory, SuperUserFactory
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
+from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 

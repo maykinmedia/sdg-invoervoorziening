@@ -2,8 +2,6 @@ from django import template
 from django.conf import settings
 from django.utils.html import format_html
 
-from sdg.producten.types import Language
-
 register = template.Library()
 
 

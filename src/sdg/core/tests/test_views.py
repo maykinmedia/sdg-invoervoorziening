@@ -1,10 +1,9 @@
 from django.test import override_settings
 from django.urls import reverse
 
-from sdg.core.tests.utils import WebTest
-
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
+from sdg.core.tests.utils import WebTest
 
 HOME_URL = "core:home"
 CARD_SELECTOR = ".cards__card"
