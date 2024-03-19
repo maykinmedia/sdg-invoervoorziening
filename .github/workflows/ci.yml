@@ -110,11 +110,12 @@ jobs:
 
   docker_build:
     name: Build Docker image
+    needs: tests
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
-
-      - name: Set tag
+      - name: Determine tag/commit hash
         id: vars
         run: |
           # Strip git ref prefix from version
@@ -126,25 +127,17 @@ jobs:
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
 
-          echo ::set-output name=tag::${VERSION}
-          echo ::set-output name=git_hash::${GITHUB_SHA}
-
+          echo "tag=${VERSION}" >> $GITHUB_OUTPUT
+          echo "git_hash=${GITHUB_SHA}" >> $GITHUB_OUTPUT
       - name: Build the Docker image
         run: |
           docker build . \
-            --tag $IMAGE_NAME:$RELEASE_VERSION \
+            --tag $IMAGE_NAME:${{ steps.vars.outputs.tag }} \
             --build-arg COMMIT_HASH=${{ steps.vars.outputs.git_hash }} \
-            --build-arg RELEASE=${RELEASE_VERSION}
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-
-      - name: Save Docker image
-        if: github.event_name == 'push'  # Only needed for docker-push job
-        run: docker image save -o image.tar $IMAGE_NAME:${{ steps.vars.outputs.tag }}
-
-      - name: Store Docker image artifact
-        if: github.event_name == 'push'  # Only needed for docker-push job
-        uses: actions/upload-artifact@v2
+            --build-arg RELEASE=${{ steps.vars.outputs.tag }} \
+      - run: docker image save -o image.tar $IMAGE_NAME:${{ steps.vars.outputs.tag }}
+      - name: Store image artifact
+        uses: actions/upload-artifact@v3
         with:
           name: docker-image
           path: image.tar
@@ -229,7 +222,7 @@ jobs:
         run: openapi-generator-cli generate -i ./openapi.yaml --global-property=modelTests=false,apiTests=false,modelDocs=false,apiDocs=false \
           -o ./sdks/python -g python --additional-properties=optionalProjectFile=false,optionalAssemblyInfo=false+
 
-  docker_push:
+  publish:
     needs:
       - tests
       - docker_build
@@ -242,14 +235,13 @@ jobs:
     if: github.event_name == 'push'  # Exclude PRs
 
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v4
       - name: Download built image
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: docker-image
 
-      - name: Set tag
+      - name: Determine tag/commit hash
         id: vars
         run: |
           # Strip git ref prefix from version
@@ -261,7 +253,7 @@ jobs:
           # Use Docker `latest` tag convention
           [ "$VERSION" == "master" ] && VERSION=latest
 
-          echo ::set-output name=tag::${VERSION}
+          echo "tag=${VERSION}" >> $GITHUB_OUTPUT
 
       - name: Load image
         run: |
@@ -271,19 +263,4 @@ jobs:
         run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Push the Docker image
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: docker push $IMAGE_NAME:$RELEASE_VERSION
-
-      - uses: actions-ecosystem/action-regex-match@v2
-        id: regex-match
-        with:
-          text: ${{ steps.vars.outputs.tag  }}
-          regex: '^\d\.\d\.\d$'
-
-      - name: Trigger deployment
-        env:
-          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
-        run: |
-          curl -XPOST -u "${{ secrets.SDG_DEPLOYMENT_REPO_ACCESS_TOKEN }}" -H "Accept:application/vnd.github" -H "Content-Type:application/json" ${{ secrets.SDG_DEPLOYMENT_REPO_URL }} --data "{\"ref\": \"main\", \"inputs\": {\"version\": \"$RELEASE_VERSION\"}}"
-        if: ${{ steps.regex-match.outputs.match != '' }}
+        run: docker push $IMAGE_NAME:${{ steps.vars.outputs.tag }}

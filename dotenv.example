@@ -8,3 +8,6 @@ DB_USER="sdg"
 DB_PASSWORD=""
 DB_HOST=""
 DB_PORT=""
+
+# Applies to dev settings module only!
+DISABLE_2FA=yes

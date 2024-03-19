@@ -1,4 +1,4 @@
-{% load static hijack_tags %}<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en"
       class="view {% block view_class %}view--{{ request.resolver_match.namespaces|join:'-' }}-{{ request.resolver_match.url_name }}{% endblock %}">
 <head>
@@ -19,8 +19,6 @@
 </head>
 
 <body class="view__body">
-  {% hijack_notification %}
-
   <div class="title">
     <h1 class="title__header">PDC API voor producten in de SDG</h1>
     <p class="title__description">Beheer de teksten van producten en diensten t.b.v. de Single Digital Gateway (SDG)</p>

@@ -1,5 +1,4 @@
 import os
-import sys
 
 from django.urls import reverse_lazy
 
@@ -109,6 +108,8 @@ INSTALLED_APPS = [
     "django_otp.plugins.otp_totp",
     "rijkshuisstijl",
     "two_factor",
+    "two_factor.plugins.webauthn",  # USB key/hardware token support
+    "maykin_2fa",
     # Optional applications.
     "ordered_model",
     "django_admin_index",
@@ -117,12 +118,11 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     # 'django.contrib.sitemaps',
     # External applications.
-    "django_better_admin_arrayfield",
+    "django_jsonform",  # django_better_admin_arrayfield replacement
     "axes",
     "sniplates",
-    "compat",  # Part of hijack
     "hijack",
-    "hijack_admin",
+    "hijack.contrib.admin",
     "markdownx",
     "markdownify",
     "allauth",
@@ -158,8 +158,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "hijack.middleware.HijackUserMiddleware",
     "axes.middleware.AxesMiddleware",
-    "django_otp.middleware.OTPMiddleware",
+    "maykin_2fa.middleware.OTPMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -336,6 +337,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Allow logging in with both username+password and email+password
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesBackend",
+    "sdg.accounts.backends.UserModelEmailBackend",
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -439,27 +441,28 @@ IPWARE_META_PRECEDENCE_ORDER = (
 )
 
 #
-# DJANGO-HIJACK
-#
-HIJACK_LOGIN_REDIRECT_URL = "/"
-HIJACK_LOGOUT_REDIRECT_URL = reverse_lazy("admin:accounts_user_changelist")
-HIJACK_REGISTER_ADMIN = False
-# This is a CSRF-security risk.
-# See: http://django-hijack.readthedocs.io/en/latest/configuration/#allowing-get-method-for-hijack-views
-HIJACK_ALLOW_GET_REQUESTS = True
-
-#
 # SENTRY - error monitoring
 #
 SENTRY_DSN = config("SENTRY_DSN", None)
 
 #
-# Maykin fork of DJANGO-TWO-FACTOR-AUTH
+# MAYKIN-2FA
 #
-TWO_FACTOR_FORCE_OTP_ADMIN = config("TWO_FACTOR_FORCE_OTP_ADMIN", default=not DEBUG)
-TWO_FACTOR_PATCH_ADMIN = config("TWO_FACTOR_PATCH_ADMIN", default=True)
-if "test" in sys.argv:  # Allow testing with 2FA
-    TWO_FACTOR_FORCE_OTP = False
+
+# Uses django-two-factor-auth under the hood, so relevant upstream package settings
+# apply too.
+#
+
+# we run the admin site monkeypatch instead.
+TWO_FACTOR_PATCH_ADMIN = False
+# Relying Party name for WebAuthn (hardware tokens)
+TWO_FACTOR_WEBAUTHN_RP_NAME = "SDG Invoervoorziening - admin"
+# use platform for fingerprint readers etc., or remove the setting to allow any.
+# cross-platform would limit the options to devices like phones/yubikeys
+TWO_FACTOR_WEBAUTHN_AUTHENTICATOR_ATTACHMENT = "cross-platform"
+# add entries from AUTHENTICATION_BACKENDS that already enforce their own two-factor
+# auth, avoiding having some set up MFA again in the project.
+MAYKIN_2FA_ALLOW_MFA_BYPASS_BACKENDS = []
 
 if SENTRY_DSN:
     SENTRY_CONFIG = {
