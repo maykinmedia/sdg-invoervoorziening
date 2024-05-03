@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, List, Optional
+from typing import Any, Optional
 
 from sdg.core.types import LabeledTooltip
 

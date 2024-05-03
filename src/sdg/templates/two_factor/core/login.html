@@ -1,5 +1,5 @@
 {% extends "account/base.html" %}
-{% load i18n two_factor utils static %}
+{% load i18n utils static %}
 
 {% block nav-global %}{% endblock %}
 {% block django_admin_index_menu %}{% endblock %}
@@ -35,16 +35,6 @@
             {# hidden submit button to enable [enter] key #}
             <input type="submit" value="" class="d-none"/>
 
-            {% if other_devices %}
-                <p>{% trans "Or, alternatively, use one of your backup phones:" %}</p>
-                <p>
-                    {% for other in other_devices %}
-                        <button name="challenge_device" value="{{ other.persistent_id }}"
-                                class="btn btn-secondary btn-block" type="submit">
-                            {{ other|device_action }}
-                        </button>
-                    {% endfor %}</p>
-            {% endif %}
             {% if backup_tokens %}
             <div class="login__backup">
                 <p>{% trans "As a last resort, you can use a backup token:" %}</p>

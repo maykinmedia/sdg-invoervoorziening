@@ -1,5 +1,3 @@
-from django.db.models import Prefetch
-
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import viewsets
@@ -7,7 +5,6 @@ from rest_framework import viewsets
 from sdg.api.filters import ProductenCatalogusFilterSet
 from sdg.api.serializers import ProductenCatalogusSerializer
 from sdg.core.models import ProductenCatalogus
-from sdg.producten.models import Product
 
 
 @extend_schema_view(
