@@ -1,6 +1,6 @@
 {
     "name": "sdg",
-    "version": "1.8.4",
+    "version": "1.8.5",
     "description": "sdg project",
     "main": "src/static/sdg/js/sdg.js",
     "directories": {
@@ -17,7 +17,7 @@
         "type": "git",
         "url": "git+ssh://git@bitbucket.org/maykinmedia/sdg.git"
     },
-    "author": "Maykin Media",
+    "author": "Maykin",
     "license": "UNLICENSED",
     "homepage": "https://maykinmedia.nl",
     "dependencies": {

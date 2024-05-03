@@ -2,6 +2,14 @@
 Change history
 ==============
 
+1.8.5
+=====
+
+*May 3, 2024*
+
+* [#981] Fix showing product explanation field-logic.
+
+
 1.8.4
 =====
 
