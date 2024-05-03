@@ -210,29 +210,12 @@ class GenericForm {
                     };
                 } else {
                     const controls = displayDependency.querySelectorAll(".form__control")
-                    let emptyOrDefault = 0
                     let index = 0
                     for (const element of controls) {
                         const textarea = element.querySelector("textarea");
-                        const defaultExplanation = document.querySelector(`.form__reference-${element.lang}`).dataset.defaultToelichting;
-                        if (previousSelectedProduct != null) {
-                            const explanation = defaultExplanation.replace(/\[product\]/g, await this.getProductTranslationName(previousSelectedProduct, element.lang));
-
-                            if (!textarea.value || textarea.value === explanation) {
-                                emptyOrDefault += 1
-                            }
-
-                            if (emptyOrDefault == 2) {
-                                this.displayHidden(dependency, "valtOnder")
-                                this.emptyFieldValues([controls[index - 1], element])
-                                previousSelectedProduct = null
-                                return
-                            }
-
-                            this.displayBlock(dependency, "valtOnder")
-                        } else if (previousSelectedProduct == null && textarea.value == "") {
-                            this.displayHidden(dependency, "valtOnder")
-                        }
+                        this.displayHidden(dependency, "valtOnder")
+                        this.emptyFieldValues([controls[index], element])
+                        previousSelectedProduct = null
                         index++
                     }
                 };
