@@ -223,6 +223,7 @@
       li:before {
         content: "—";
         display: inline-block;
+        vertical-align: top;
         margin-left: -16px;
         width: 16px;
       }
