@@ -103,8 +103,11 @@ class ValidatorsTestCase(TestCase):
             "test [example_placeholder] test",
             "test [[placeholder]]",
             "test XX",
+            "test xx",
             "test with XXX",
+            "test with xxx",
             "test XXXXXX placeholder",
+            "test xxxxxx placeholder",
             "test\n[markdown link](https://example.com)\n[name]",
         ]
         for text in invalid_texts:
@@ -112,6 +115,14 @@ class ValidatorsTestCase(TestCase):
                 self.assertTrue(validate_placeholders(text))
 
         valid_texts = [
+            "test X",
+            "test x",
+            "test X not-a-placeholder",
+            "test x not-a-placeholder",
+            "test YY",
+            "test yy",
+            "test YYYYYY not-a-placeholder",
+            "test yyyyyy not-a-placeholder",
             "[markdown link](https://example.com)",
             "test [markdown link](https://example.com) here",
             "test\n[markdown link](https://example.com)",

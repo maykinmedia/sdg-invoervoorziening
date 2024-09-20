@@ -208,23 +208,36 @@
     }
 
     ol {
+      counter-reset: li;
+      list-style: none;
+
       li {
-        margin: 5px 0px 5px 16px;
+        counter-increment: li;
+        display:table-row;
+      }
+
+      li:before {
+        content: counter(li) '.';
+        color: #777;
+        width: 16px;
+        display: table-cell;
+        vertical-align: top;
       }
     }
 
     ul {
+      list-style: none;
 
       li {
-        list-style-type: none;
-        padding-left: 16px;
+        display:table-row;
       }
 
       li:before {
         content: "—";
-        display: inline-block;
-        margin-left: -16px;
+        color: #777;
         width: 16px;
+        display: table-cell;
+        vertical-align: top;
       }
 
     }
