@@ -22,7 +22,7 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Ensure we use the latest version of pip
-RUN pip install pip -U
+RUN pip install "pip<24" -U
 COPY ./requirements /app/requirements
 RUN pip install -r requirements/setuptools.txt
 RUN pip install -r requirements/production.txt

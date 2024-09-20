@@ -48,6 +48,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          pip install "pip<24" -U  
           pip install -r requirements/setuptools.txt
           pip install -r requirements/ci.txt
 
