@@ -2,6 +2,14 @@
 Change history
 ==============
 
+1.8.6
+=====
+
+*September 23, 2024*
+
+* [#984] Fixes list bullets properly aligned at the top.
+* Consider "xx" and "xX" as placeholders (lowercase Xs).
+
 1.8.5
 =====
 
