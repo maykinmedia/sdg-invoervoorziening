@@ -55,5 +55,9 @@ def field_info(field: ProductFieldMetadata, **kwargs):
 
 
 @register.inclusion_tag("producten/_include/publications.html")
-def publications(product, publication_links, concept_url, **kwargs):
-    return {**kwargs, "product": product, "publication_links": publication_links, "concept_url": concept_url}
+def publications(product, publication_links, concept_url):
+    return {
+        "product": product, 
+        "publication_links": publication_links, 
+        "concept_url": concept_url
+    }
