@@ -269,29 +269,16 @@ class ProductUpdateViewTests(WebTest):
         page_preview_current_url_nl = response.pyquery("#preview-current[lang=nl]")
         self.assertEqual(page_preview_current_url_nl.length, 0)
 
-        page_preview_concept_url_nl = response.pyquery(
-            "#preview-concept[lang=nl]"
-        ).attr("href")
-        self.assertEqual(
-            page_preview_concept_url_nl, f"{preview_url}?status=concept&taal=nl"
-        )
-
-        preview_response_nl = self.app.get(page_preview_concept_url_nl)
-        self.assertEqual(preview_response_nl.status_code, 200)
-
         page_preview_current_url_en = response.pyquery("#preview-current[lang=en]")
         self.assertEqual(page_preview_current_url_en.length, 0)
 
-        page_preview_concept_url_en = response.pyquery(
-            "#preview-concept[lang=en]"
-        ).attr("href")
-
+        page_preview_concept_url = response.pyquery("#preview-concept").attr("href")
         self.assertEqual(
-            page_preview_concept_url_en, f"{preview_url}?status=concept&taal=en"
+            page_preview_concept_url, f"{preview_url}?status=concept"
         )
 
-        preview_response_en = self.app.get(page_preview_concept_url_en)
-        self.assertEqual(preview_response_en.status_code, 200)
+        preview_response = self.app.get(page_preview_concept_url)
+        self.assertEqual(preview_response.status_code, 200)
 
     @freeze_time(NOW_DATE)
     def test_error_notification_is_displayed(self):
