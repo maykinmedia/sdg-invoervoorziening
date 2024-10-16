@@ -1,12 +1,10 @@
-import {FormComponent} from './abstract/form_component';
-
+import { FormComponent } from "./abstract/form_component";
 
 /**
  * @type {NodeListOf<HTMLElement>}
  * TODO: All toggles within a form a considered to control editable for now.
  **/
-const FORM_TOGGLES = document.querySelectorAll('.form .toggle, .global-edit-toggle .toggle');
-
+const FORM_TOGGLES = document.querySelectorAll(".form .toggle");
 
 /**
  * Contains logic for a form to contain a toggle which controls whether fields should be editable.
@@ -20,17 +18,19 @@ class FormToggle extends FormComponent {
      */
     constructor(node, initialState = {}) {
         super(node, initialState);
-        this.node = this.node.querySelector('input');
-    };
+        this.node = this.node.querySelector("input");
+    }
 
     /**
      * Binds events to callbacks.
      * Use this to define EventListeners, MutationObservers etc.
      */
     bindEvents() {
-        this.node.addEventListener('change', (e) => this.setState({
-            editable: e.target.checked,
-        }));
+        this.node.addEventListener("change", (e) =>
+            this.setState({
+                editable: e.target.checked,
+            })
+        );
     }
 
     /**
@@ -43,7 +43,7 @@ class FormToggle extends FormComponent {
         try {
             return [this.getFormControl()];
         } catch (e) {
-            return document.querySelectorAll('.form__control');
+            return document.querySelectorAll(".form__control");
         }
     }
 
@@ -54,9 +54,11 @@ class FormToggle extends FormComponent {
      * @param {Object} state Read only state.
      */
     render(state) {
-        const {editable} = state;
+        const { editable } = state;
         const elementScope = this.getElementScope();
-        [...elementScope].forEach((formControl) => this.setFormControlDisabled(!editable, formControl));
+        [...elementScope].forEach((formControl) =>
+            this.setFormControlDisabled(!editable, formControl)
+        );
     }
 }
 

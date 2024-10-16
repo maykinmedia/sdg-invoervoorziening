@@ -52,3 +52,7 @@ def exclude(field_list: list, excluded_fields: str) -> list:
 @register.inclusion_tag("producten/_include/field_info.html")
 def field_info(field: ProductFieldMetadata, **kwargs):
     return {**kwargs, "field": field}
+
+@register.inclusion_tag("producten/_include/publications.html")
+def publications(product, publication_links, concept_url, **kwargs):
+    return {**kwargs, "product": product, "publication_links": publication_links, "concept_url": concept_url}
