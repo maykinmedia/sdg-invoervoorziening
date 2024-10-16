@@ -107,11 +107,6 @@ def field_readonly(field, **kwargs):
     return {**kwargs, "field": field}
 
 
-@register.inclusion_tag("forms/table_field.html")
-def table_field(field, **kwargs):
-    return {**kwargs, "field": field}
-
-
 @register.inclusion_tag("forms/choices_field.html")
 def choices_field(field, **kwargs):
     return {**kwargs, "field": field}

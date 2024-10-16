@@ -49,21 +49,6 @@ def exclude(field_list: list, excluded_fields: str) -> list:
     return result
 
 
-@register.inclusion_tag("producten/_include/icon.html")
-def icon(name: str):
-    return {"name": name}
-
-
-@register.inclusion_tag("producten/_include/product_icon.html")
-def product_icon(product, **kwargs):
-    return {**kwargs, "product": product}
-
-
-@register.inclusion_tag("producten/_include/flag.html")
-def flag(language: Language, **kwargs):
-    return {**kwargs, "language": language}
-
-
 @register.inclusion_tag("producten/_include/field_info.html")
 def field_info(field: ProductFieldMetadata, **kwargs):
     return {**kwargs, "field": field}
