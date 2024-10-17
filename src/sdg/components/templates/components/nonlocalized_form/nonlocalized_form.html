@@ -33,7 +33,7 @@
 
                 {# Field. #}
                 <div class="tabs__table-cell">
-                    {{ field|addclass:"form__input lockable" }}
+                    {{ field|addclass:"form__input" }}
                     {{ field.errors }}
                 </div>
             </div>
@@ -44,7 +44,6 @@
             <footer class="form__control-footer">
                 <aside class="toolbar">
                     <div></div>
-                    {% toggle _('Bewerken') hide_label=True icon_before='fa fa-lock fa-xs' icon_after='fa fa-lock-open fa-xs' %}
                 </aside>
                 <div class="form__control-body"></div>
             </footer>
