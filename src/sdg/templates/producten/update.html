@@ -1,5 +1,5 @@
 {% extends 'producten/base.html' %}
-{% load utils static i18n producten toggle localized_form nonlocalized_form %}
+{% load utils static i18n producten localized_form nonlocalized_form %}
 
 {% block page_intro %}
     <p class="subheading">
@@ -45,7 +45,6 @@
 <div class="toolbox">
 
     <div class="toolbox__item toolbox__item--countries global-language-switch" title="{% trans 'Selecteer de te bewerken taal' %}">
-        {% toggle '' icon_before='flag-icon flag-icon-nl' icon_after='flag-icon flag-icon-gb' id='toggle-language' %}
     </div>
 
     {% with most_recent_is_concept=product.most_recent_version.publicatie_datum|notbool %}
@@ -91,7 +90,6 @@
 
     {# (Global) edit togggle. #}
     <div class="toolbox__item global-edit-toggle" title="{% trans 'Alles bewerken' %}">
-        {% toggle "" icon_before='fa fa-lock' icon_after='fa fa-lock-open' id='toggle-edit' %}
     </div>
 </div>
 
