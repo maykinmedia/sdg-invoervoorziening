@@ -273,9 +273,7 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(page_preview_current_url_en.length, 0)
 
         page_preview_concept_url = response.pyquery("#preview-concept").attr("href")
-        self.assertEqual(
-            page_preview_concept_url, f"{preview_url}?status=concept"
-        )
+        self.assertEqual(page_preview_concept_url, f"{preview_url}?status=concept")
 
         preview_response = self.app.get(page_preview_concept_url)
         self.assertEqual(preview_response.status_code, 200)
