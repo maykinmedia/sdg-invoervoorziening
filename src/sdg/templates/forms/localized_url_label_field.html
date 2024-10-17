@@ -1,4 +1,4 @@
-{% load i18n toggle utils %}
+{% load i18n utils %}
 
 <div class="form__language-wrapper" lang="{{ taal }}">
     <div class="form__control" {% if taal != languages.0 %} aria-hidden="true" {% endif %} lang="{{ taal }}">
@@ -33,19 +33,13 @@
                     <div class="url_label_field__container" data-initialized="true">
                         <div>
                             <div class="url_label_field__container-item">
-                                {{ label|addlabelclass:"form__input lockable form__input--left" }}{{ link|addlinkclass:"form__input lockable form__input--right" }}
+                                {{ label|addlabelclass:"form__input form__input--left" }}{{ link|addlinkclass:"form__input form__input--right" }}
                             </div>
                             {% if label.errors or link.errors %}
                             <div class="url_label_field__container-item">
                                 {{ label.errors }}{{ link.errors}}
                             </div>
                             {% endif %}
-                        </div>
-                    </div>
-                    <div class="url_label_field__container">
-                        <div class="toolbar">
-                            <div></div>
-                            {% toggle _('Aanpassen') hide_label=True icon_before='fa fa-lock fa-xs' icon_after='fa fa-lock-open fa-xs' %}
                         </div>
                     </div>
                 </div>
