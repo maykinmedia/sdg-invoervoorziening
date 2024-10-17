@@ -1,6 +1,6 @@
 from django import template
 
-from sdg.producten.types import Language, ProductFieldMetadata
+from sdg.producten.types import ProductFieldMetadata
 
 register = template.Library()
 
@@ -45,9 +45,7 @@ def exclude(field_list: list, excluded_fields: str) -> list:
                 available=", ".join([f.name.lower() for f in field_list]),
             )
         )
-
     return result
-
 
 @register.inclusion_tag("producten/_include/field_info.html")
 def field_info(field: ProductFieldMetadata, **kwargs):
@@ -56,8 +54,4 @@ def field_info(field: ProductFieldMetadata, **kwargs):
 
 @register.inclusion_tag("producten/_include/publications.html")
 def publications(product, publication_links, concept_url):
-    return {
-        "product": product, 
-        "publication_links": publication_links, 
-        "concept_url": concept_url
-    }
+    return { "product": product, "publication_links": publication_links, "concept_url": concept_url }
