@@ -131,9 +131,6 @@ def update_form_general(context) -> dict:
     nonlocalized_field_names = ["interne_opmerkingen"]
     nonlocalized_fields = get_fields(version_form, nonlocalized_field_names)
 
-    # Get publication date
-    publication_date = product.active_version.publicatie_datum
-
     def get_localized_object_dict(formset: BaseFormSet, fields: list) -> dict:
         object_list = {}
         for field in fields:
@@ -166,5 +163,5 @@ def update_form_general(context) -> dict:
             version_form, nonlocalized_fields
         ),
         "product_form": product_form,
-        "publication_date": publication_date,
+        "product": product,
     }
