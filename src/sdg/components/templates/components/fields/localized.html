@@ -46,12 +46,19 @@
 
             {% if inline != True and 'dynamic_array' not in field.field.widget.template_name %}
             <footer class="form__control-footer reference" aria-hidden="true">
+                <p class="form__control-hint">Standaardtekst {% if field.language == 'nl' %}{% trans 'Nederlands' %}{% else %}{% trans 'Engels' %}{% endif %}</p>
                 <div class="reference__versions" aria-hidden="true">
                     <del></del>
                     <ins></ins>
                 </div>
                 <div class="form__input form__input--preview reference__preview">
                     <p class="italic">Geen standaardtekst beschikbaar</p>
+                </div>
+                <div class="button-group">
+                    <button class="button button--light button--small form__reference-btn" type="button" lang="{{field.language}}">
+                        <i class="fa fa-undo fa-xs"></i>
+                        {% trans 'Gebruik standaardtekst' %} {% if field.language == 'nl' %}{% trans 'Nederlands' %}{% else %}{% trans 'Engels' %}{% endif %}
+                    </button>
                 </div>
             </footer>
             {% endif %}
@@ -62,29 +69,22 @@
 {% block footer %}
     {% for field in object.bound_fields %}
         {% if forloop.counter == 1 and inline != True and 'dynamic_array' not in field.field.widget.template_name %}
-        <footer class="form__field-footer">
-            <section class="form__field-toolbar" aria-hidden="true">
-                <div class="button-group">
-                    <button class="button button--light button--small form__diff-btn" type="button" title="{% trans "Toon de verschillen tussen mijn tekst en de standaardtekst" %}">
-                        <i class="fa fa-eye fa-xs"></i>
-                        {% trans 'Vergelijk met mijn teksten' %}
-                    </button>
-                    <button class="button button--light button--small reference__diff-btn" type="button" 
-                    title="{% trans "Toon de verschillen tussen mijn tekst en de standaardtekst" %}">
-                        <i class="fa fa-eye fa-xs"></i>
-                        {% trans 'Vergelijk met vorige versie' %}
-                    </button>
-                    <button class="button button--light button--small form__reference-btn" type="button">
-                        <i class="fa fa-undo fa-xs"></i>
-                        {% trans 'Gebruik standaardteksten' %}
-                    </button>
-                </div>
-            </section>
-        
+        <footer class="form__field-footer button-group">
             <button class="button button--light button--small form__display-btn" type="button">
                 <i class="fa fa-chevron-right"></i>
                 {% trans 'Toon standaardtekst' %}
             </button>
+            <section class="form__field-toolbar button-group" aria-hidden="true">
+                <button class="button button--light button--small form__diff-btn" type="button" title="{% trans "Toon de verschillen tussen mijn tekst en de standaardtekst" %}">
+                    <i class="fa fa-eye fa-xs"></i>
+                    {% trans 'Vergelijk met mijn teksten' %}
+                </button>
+                <button class="button button--light button--small reference__diff-btn" type="button" 
+                    title="{% trans "Toon de verschillen tussen mijn tekst en de standaardtekst" %}">
+                    <i class="fa fa-eye fa-xs"></i>
+                    {% trans 'Vergelijk met vorige versie' %}
+                </button>
+            </section>
         </footer>
         {% endif %}
     {% endfor %}

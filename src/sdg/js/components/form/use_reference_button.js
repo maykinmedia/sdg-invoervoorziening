@@ -14,10 +14,41 @@ class UseReferenceButton extends ReferenceTextComponent {
     onClick(event) {
         event.preventDefault();
 
-        Object.values(this.getCurrentVersionData()).forEach(({ input }) => {
-            // Set the value on both inputs at the same time (if there is a value availible)
-            if (input.value) this.setValue(input.id, input.value);
-        });
+        Object.entries(this.getCurrentVersionData()).forEach(
+            ([language, { input }]) => {
+                if (language == this.getControlLanguage() && input.value)
+                    this.setValue(input.id, input.value);
+            }
+        );
+    }
+
+    /**
+     * Updates the disabled state based on whether reference HTML is available.
+     */
+    updateDisabled() {
+        const referenceHTML = this.getCurrentReferenceHTML();
+
+        if (!referenceHTML || !referenceHTML[this.getControlLanguage()]) {
+            this.setState({ disabled: true });
+        }
+    }
+
+    /**
+     * Updates the label state based on disabled attribute.
+     */
+    updateLabel() {
+        // Make sure we keep track of the original label.
+        if (!this.state.originalLabel) {
+            this.setState({ originalLabel: this.node.textContent });
+        }
+
+        const referenceHTML = this.getCurrentReferenceHTML();
+        // Show custom label if no reference text is available.
+        if (!referenceHTML || !referenceHTML[this.getControlLanguage()]) {
+            this.setState({ label: "Geen standaardtekst beschikbaar" });
+        } else if (this.state.originalLabel) {
+            this.setState({ label: this.state.originalLabel });
+        }
     }
 }
 
