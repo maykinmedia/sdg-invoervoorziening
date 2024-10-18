@@ -4,6 +4,7 @@
 {% block inner %}
     {% with namespace=request.resolver_match.namespaces|last pk=lokaleoverheid.pk %}
         <div class="breadcrumbs">
+            {{product}}
             <div>
                 <a href="{% url 'core:home' %}">{% trans 'Homepage' %}</a>
                 {% with kwargs=request.resolver_match.kwargs %}
@@ -14,6 +15,7 @@
                         <a href="{% url 'organisaties:catalogi:list' pk=kwargs.pk %}">{% trans 'Productenlijst' %}</a>
                     {% endif %}
                 {% endwith %}
+
                 {% if breadcrumbs_title %}
                     <span>{{ breadcrumbs_title }}</span>
                 {% elif namespace == "roles" %}
@@ -31,7 +33,7 @@
         </div>
         <h2 class="products__title primary">
             {% block page_title %}
-                <span>{{ object|capfirst|default:namespace|capfirst }}</span>
+                <span>{{ product|capfirst|default:namespace|capfirst }}</span>
             {% endblock %}
         </h2>
         {% block page_intro %}{% endblock %}

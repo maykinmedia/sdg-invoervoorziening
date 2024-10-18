@@ -24,11 +24,6 @@ class CatalogListView(
             "filter_label": _("Zoek op productnaam"),
         },
         {
-            "key": "generiek_product__upn__thema__informatiegebied",
-            "label": _("Informatiegebied"),
-            "filter_label": _("Selecteer thema"),
-        },
-        {
             "label": _("Aangeboden"),
             "key": "product_aanwezig",
             "filter_label": " ",
