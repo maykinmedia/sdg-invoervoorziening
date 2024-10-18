@@ -22,11 +22,6 @@ export class ReferenceTextComponent extends FormComponent {
      */
     bindEvents() {
         super.bindEvents();
-
-        // Hide the references if the reference copied and used.
-        this.getReferenceTextToolbar()
-            .querySelector(".form__reference-btn")
-            .addEventListener("click", () => this.setState({ active: false }));
     }
 
     /**

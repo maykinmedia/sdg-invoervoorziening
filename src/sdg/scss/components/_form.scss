@@ -2,6 +2,7 @@
 
 .form {
   $form-gap: $grid-margin-2;
+  $form-gap--small: $grid-margin-1;
   $form-label-row-gap: $grid-margin-0;
   --field-border-color: #{$color_grey_light};
 
@@ -34,6 +35,11 @@
       gap: $form-gap;
       grid-area: bdy;
     }
+
+    &-footer{
+      gap: 8px;
+      margin-top: $form-gap;
+    }
     
     &-label {
       gap: $grid-margin-0;
@@ -41,9 +47,13 @@
       display: flex;
     }
 
-    &-toolbar[aria-hidden=true] {
-      display: none;
-      visibility: hidden;
+    &-toolbar {
+      // display: contents;
+
+      &[aria-hidden=true] {
+        display: none;
+        visibility: hidden;
+      }
     }
   }
 
@@ -171,7 +181,10 @@
     }
   
     &-footer {
-      grid-area: ftr;
+      margin-top: $form-gap--small;
+      display: flex;
+      flex-direction: column;
+      gap:$form-label-row-gap;
     }
 
   }
