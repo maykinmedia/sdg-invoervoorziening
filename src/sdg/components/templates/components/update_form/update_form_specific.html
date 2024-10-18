@@ -1,0 +1,23 @@
+{% extends 'components/update_form/base.html' %}
+
+{% load i18n fields utils %}
+
+{% block title %}
+    <span>
+        3. {% trans "Specifieke gegevens" %}
+    </span>
+{% endblock %}
+
+{% block form %}
+    {% for form in form.forms %}
+        {{ form.non_field_errors }}
+        {{ form.id.as_hidden }}
+        {{ form.taal.as_hidden }}
+    {% endfor %}
+
+    {% for object in object_list %}
+        {% localized object=object %}
+    {% endfor %}
+        
+    {% localized_url form=form %}
+{% endblock %}

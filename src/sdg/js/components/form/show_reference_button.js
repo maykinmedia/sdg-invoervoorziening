@@ -1,52 +1,39 @@
-import {ReferenceTextComponent} from './abstract/reference_text_component';
-
+import { ReferenceTextComponent } from "./abstract/reference_text_component";
+import { hideElement, showElement } from "./utils";
 
 /** @type {NodeListOf<HTMLAnchorElement>} */
-const SHOW_REFERENCE_BUTTONS = document.querySelectorAll('.form__display-btn');
-
+const SHOW_REFERENCE_BUTTONS = document.querySelectorAll(".form__display-btn");
 
 /**
  * Button allow the user to use the reference text.
  */
 class ShowReferenceButton extends ReferenceTextComponent {
-    onMount() {
-        super.onMount();
-        if(this.getInputOrTextarea()?.id === 'id_vertalingen-0-specifieke_tekst') {
-            window.showref=this;
-        }
-    }
-
     /**
      * Gets called when this.node gets clicked.
      * @param {MouseEvent} event
      */
     onClick(event) {
         event.preventDefault();
-        this.setState({active: !this.state.active, referenceHTML: this.getReferenceHTML()});
-    }
-
-    /**
-     * Returns the icon.
-     * @return {SVGSVGElement}
-     */
-    getIcon() {
-        return this.node.querySelector('svg');
+        this.setState({
+            active: !this.state.active,
+            referenceHTML: this.getCurrentReferenceHTML(),
+        });
     }
 
     /**
      * Shows the reference text.
      */
     showReferenceText() {
-        this.getReferenceTextContainer().removeAttribute('aria-hidden');
-        this.getReferenceTextToolbar().removeAttribute('aria-hidden');
+        showElement(this.getReferenceTextToolbar());
+        Object.values(this.getReferenceElements()).forEach(showElement);
     }
 
     /**
      * Hide the refence text.
      */
     hideReferenceText() {
-        this.getReferenceTextContainer().setAttribute('aria-hidden', true);
-        this.getReferenceTextToolbar().setAttribute('aria-hidden', true);
+        hideElement(this.getReferenceTextToolbar());
+        Object.values(this.getReferenceElements()).forEach(hideElement);
     }
 
     /**
@@ -57,14 +44,10 @@ class ShowReferenceButton extends ReferenceTextComponent {
      */
     render(state) {
         super.render(state);
+        const { active } = state;
 
-        const {active, referenceHTML} = state;
-        const iconRotation = (active) ? 90 : 0;
-
-        this.getIcon().style.transform = `rotate(${iconRotation}deg)`;
-
+        this.createCurrentReferences();
         if (active) {
-            this.getReferenceTextContainer().innerHTML = referenceHTML;
             this.showReferenceText();
         } else {
             this.hideReferenceText();

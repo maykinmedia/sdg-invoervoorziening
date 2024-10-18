@@ -1,0 +1,43 @@
+{% extends 'components/fields/base.html' %}
+{% load producten fields i18n %}
+
+{% block header %}
+    {% for field in object.bound_fields %}
+        {% if field.language == 'nl' %}
+            <label class="form__field-label">
+                {{field.configuration.label|default:field.verbose_name|capfirst}}
+                <i class="fas fa-info-circle fa-xs dark" title="{{ field.configuration.tooltip|default:field.help_text }}"></i>
+            </label>
+        {% endif %}
+    {% endfor %}
+{% endblock %}    
+
+
+{% block body %}
+    {% for field in object.bound_fields %}
+        <section class="form__control" lang={{field.language}}>
+            <header class="form__control-header">
+                <p class="form__control-hint">
+                    {% if field.language == 'nl' %}
+                        {% trans 'Nederlands' %}
+                    {% else %}
+                        {% trans 'Engels' %}
+                    {% endif %}
+                
+                    <i class="fas fa-info-circle fa-xs dark" title="{% trans 'De waarde voor deze taal is aangepast.' %}" aria-hidden="true"></i>
+                </p>
+            </header>
+            <div class="form__control-body">
+                <section class="form__input form__input--preview">
+                    {% if field.name == "product_titel" and field.landelijke_link  %}
+                    <a href="{{ field.landelijke_link }}" target="_blank">
+                        {% field_info field %}
+                    </a>
+                    {% else %} 
+                        {% field_info field %}
+                    {% endif %}
+                </section>
+            </div>
+        </section>
+    {% endfor %}
+{% endblock %}

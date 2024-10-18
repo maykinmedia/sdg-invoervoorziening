@@ -1,0 +1,23 @@
+{% extends 'components/fields/base.html' %}
+{% load fields utils %}
+
+{% block header %}
+    {% for field in object.bound_fields %}
+        <label class="form__field-label">
+            {{field.label|capfirst}}
+            <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+        </label>
+    {% endfor %}
+{% endblock %}    
+
+{% block body %}
+    {% for field in object.bound_fields %}
+    {# Field. #}
+    <div class="form__control">
+        <div class="form__control-body">
+            {{ field|addclass:"form__input" }}
+            {{ field.errors }}
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}    

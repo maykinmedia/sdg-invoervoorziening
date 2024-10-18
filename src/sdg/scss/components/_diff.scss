@@ -1,13 +1,49 @@
 @import 'colors';
 
-.diff:hover {
-  cursor: pointer;
+.diff, .reference {
+  &[aria-hidden='true'] {
+    visibility: hidden;
+    display: none;
+  }
 
-  & > svg {
-    color: $color_primary_light !important;
+  &__versions {
+    display: flex;
+    justify-content: end;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6px;
+    right: 0;
+    top: 0;
+
+    &[aria-hidden='true'] {
+      visibility: hidden;
+      display: none;
+    }
+
+    ins, del {
+      padding: 4px;
+      width: 200px;
+      border-radius: 16px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: bold;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
+  }
+
+  &__preview {
+    table, th, td {
+      border: 1px solid $color_grey;
+      border-collapse: collapse;
+      padding: 6px;
+    }
+  
+    th {
+      background: #0000000d;
+    }
   }
 }
-
 
 del {
   background-color: #ead5d5;

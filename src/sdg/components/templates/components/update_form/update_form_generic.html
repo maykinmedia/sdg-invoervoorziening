@@ -1,0 +1,15 @@
+{% extends 'components/update_form/base.html' %}
+
+{% load i18n fields %}
+
+{% block title %}
+    <span>
+        2. {% trans "Generieke gegevens" %}
+    </span>
+{% endblock %}
+
+{% block form %}
+    {% for object in object_list %}
+        {% readonly object=object %}
+    {% endfor %}
+{% endblock %}
