@@ -4,7 +4,7 @@ import { ReferenceTextComponent } from "./abstract/reference_text_component";
 const USE_REFERENCE_BUTTONS = document.querySelectorAll(".form__reference-btn");
 
 /**
- * Button allow the user to use the reference text.
+ * Button allow the user to take over the reference text in all localized fields at the same time.
  */
 class UseReferenceButton extends ReferenceTextComponent {
     /**
@@ -13,20 +13,11 @@ class UseReferenceButton extends ReferenceTextComponent {
      */
     onClick(event) {
         event.preventDefault();
-        this.setValue(this.getCurrentVersionData().input.value);
-    }
 
-    /**
-     * Updates the label state based on disabled attribute.
-     */
-    updateLabel() {
-        super.updateLabel();
-
-        if (this.getFormControlDisabled()) {
-            this.setState({ label: "Bewerken uitgeschakeld", disabled: true });
-        } else {
-            this.setState({ label: this.state.originalLabel, disabled: false });
-        }
+        Object.values(this.getCurrentVersionData()).forEach(({ input }) => {
+            // Set the value on both inputs at the same time (if there is a value availible)
+            if (input.value) this.setValue(input.id, input.value);
+        });
     }
 }
 

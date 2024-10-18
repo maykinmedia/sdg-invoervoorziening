@@ -1,11 +1,8 @@
-import Diff from 'text-diff';
-import showdown from 'showdown';
-
-import {ReferenceTextComponent} from './abstract/reference_text_component';
-
+import { ReferenceTextComponent } from "./abstract/reference_text_component";
+import { hideElement, returnDiffHTML, showElement } from "./utils";
 
 /** @type {NodeListOf<HTMLAnchorElement>} */
-const DIFF_BUTTONS = document.querySelectorAll('.reference__diff-btn');
+const DIFF_BUTTONS = document.querySelectorAll(".reference__diff-btn");
 
 /**
  * Button showing diffs between reference and previous reference.
@@ -17,46 +14,77 @@ class ReferenceDiffButton extends ReferenceTextComponent {
      */
     onClick(event) {
         event.preventDefault();
-        this.setState({active: !this.state.active, diffHTML: this.getDiffHTML()});
+        this.setState({
+            active: !this.state.active,
+            diffHTML: this.getDiffHTML(),
+        });
     }
 
     /**
-     * Updates the diff.
-     * @return {string} HTML string containing diff.
+     * Get the diff HTML containing ins and del elements.
+     * @return {{ [language: string]: string }} Object with each key as a language and a property of the string containing the diff.
      */
     getDiffHTML() {
         const previousVersionData = this.getPreviousVersionData();
-        const previousVersionValue = previousVersionData.input.value;
         const currentVersionData = this.getCurrentVersionData();
-        const currentVersionValue = currentVersionData.input.value;
 
-        const diff = new Diff({timeout: 0, editCost: 4});
-        const textDiff = diff.main(previousVersionValue, currentVersionValue);
-        diff.cleanupEfficiency(textDiff)
-        const prettyHtml =  diff.prettyHtml(textDiff).replace(/<\/?span[^>]*>/g,"").replace(/<br\/>/g, "\n");
-        return new showdown.Converter({tables: true}).makeHtml(prettyHtml);
+        return Object.entries(previousVersionData).reduce(
+            (acc, [language, { input }]) => {
+                const previousVersionValue = input.value;
+                const currentVersionValue =
+                    currentVersionData[language].input.value;
+
+                acc[language] = returnDiffHTML(
+                    previousVersionValue,
+                    currentVersionValue
+                );
+                return acc;
+            },
+            {}
+        );
     }
 
     /**
-     * Renders the diff element.
+     * Shows the reference version containers
      */
-    renderVersionContainer() {
-        const referenceTextContainer = this.getReferenceTextContainer().parentElement;
-        const versionsContainer = document.createElement('div');
-        versionsContainer.classList.add('tabs__table-cell--versions');
-        referenceTextContainer.prepend(versionsContainer);
+    showReferenceVerions() {
+        Object.values(this.getReferenceVersionElements()).forEach(showElement);
+    }
 
-        const previousVersionData = this.getPreviousVersionData();
-        const currentVersionData = this.getCurrentVersionData();
+    /**
+     * Hides the reference version containers
+     */
+    hideReferenceVerions() {
+        Object.values(this.getReferenceVersionElements()).forEach(hideElement);
+    }
 
-        const previousVersionTopElement = document.createElement('del');
-        const currentVersionTopElement = document.createElement('ins');
+    /**
+     * Render diffHTMl into the preview element
+     * @param {{ [language: string]: string } | undefined} diffHTML
+     */
+    renderReferencePreview(diffHTML) {
+        if (!diffHTML) return;
+        Object.entries(this.getReferencePreviewElements()).forEach(
+            ([language, node]) => {
+                if (diffHTML[language]) node.innerHTML = diffHTML[language];
+            }
+        );
+    }
 
-        previousVersionTopElement.innerText = previousVersionData.title;
-        currentVersionTopElement.innerText = currentVersionData.title;
-
-        versionsContainer.append(previousVersionTopElement);
-        versionsContainer.append(currentVersionTopElement);
+    /**
+     * Renders the reference version elements.
+     */
+    renderReferenceVersions() {
+        Object.entries(this.getReferenceVersionElements()).forEach(
+            ([language, node]) => {
+                const previousVersionData = this.getPreviousVersionData();
+                const currentVersionData = this.getCurrentVersionData();
+                node.querySelector("del").innerText =
+                    previousVersionData[language].title;
+                node.querySelector("ins").innerText =
+                    currentVersionData[language].title;
+            }
+        );
     }
 
     /**
@@ -67,19 +95,16 @@ class ReferenceDiffButton extends ReferenceTextComponent {
      */
     render(state) {
         super.render(state);
-        const {active, diffHTML} = state;
+        const { active, diffHTML } = state;
 
-        const referenceTextContainer = this.getReferenceTextContainer();
+        this.renderReferenceVersions();
 
-        if(active) {
-            referenceTextContainer.innerHTML = diffHTML;
-            this.renderVersionContainer();
+        if (active) {
+            this.renderReferencePreview(diffHTML);
+            this.showReferenceVerions();
         } else {
-            referenceTextContainer.innerHTML = this.getReferenceHTML();
-            const version = referenceTextContainer.parentNode.getElementsByClassName("tabs__table-cell--versions")
-            if (version !== undefined && version.length > 0) {
-                referenceTextContainer.parentNode.removeChild(version[0])
-            }
+            this.createCurrentReferences();
+            this.hideReferenceVerions();
         }
     }
 }

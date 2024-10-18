@@ -1,36 +1,57 @@
-@import 'colors';
+@import "colors";
 
 .dynamic {
+  // Reset error border if the field is empty
+  &:has(+ .errorlist) .form__input:placeholder-shown {
+    --field-border-color: #{$color_grey_light};
+  }
 
-  .dynamic__container {
-
+  &__container {
     .form__input {
-      width: 93%;
-
       &--left {
-        width: 32% !important;
+        width: 32%;
       }
-
       &--right {
-        width: 68% !important;
+        width: 68%;
+      }
+    }
+
+    &-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.375rem;
+    }
+
+    &-item {
+      position: relative;
+
+      &:first-of-type button {
+        display: none;
       }
 
+      &:not(:first-of-type) .form__input--right {
+        padding-right: 42px;
+      }
     }
 
     .dynamic__container__button {
       border: none;
-      padding: 6px;
+      padding: 0.75rem;
       cursor: pointer;
+
+      .svg-inline--fa {
+        display: block;
+        visibility: visible;
+      }
 
       &--side {
         @extend .dynamic__container__button;
         background-color: transparent;
-        position: relative;
-        right: 24px;
+        height: 100%;
+        position: absolute;
+        right: 0;
         color: $color_secondary_darkest;
       }
     }
-
   }
-
 }

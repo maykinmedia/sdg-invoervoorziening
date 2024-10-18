@@ -1,74 +1,198 @@
 @import 'colors';
 
 .form {
-  &__control {
-    border-bottom: 1px solid #e0e0e0;
+  $form-gap: $grid-margin-2;
+  $form-label-row-gap: $grid-margin-0;
+  --field-border-color: #{$color_grey_light};
+
+  &__field {
+    border-bottom: 1px solid $color_grey_light;
+    padding: $form-gap 0;
     display: grid;
-    grid-template-areas: "hdr bdy"
-                         "hdr ftr";
-    grid-template-columns: 28% auto;
+    grid-template-areas: "hdr"
+                         "bdy";
     grid-template-rows: auto auto;
-    padding: 12px 0;
+    gap: $form-label-row-gap;
+    width: 100%;
+     
+    &--inline {
+      padding: 12px 0;
+      grid-template-areas: "hdr bdy";
+      grid-template-rows: auto;
+      grid-template-columns: 28% auto;
+      gap: 0;
+    }
+
+    &-header {
+      grid-area: hdr;
+    }
+
+    &-body {
+      display: grid;
+      grid-auto-columns: minmax(0, 1fr);
+      grid-auto-flow: column;
+      gap: $form-gap;
+      grid-area: bdy;
+    }
+    
+    &-label {
+      gap: $grid-margin-0;
+      align-items: center;
+      display: flex;
+    }
+
+    &-toolbar[aria-hidden=true] {
+      display: none;
+      visibility: hidden;
+    }
   }
 
-  &__control[aria-hidden="true"],
+  &__input {
+    border: 1px solid var(--field-border-color);
+    color: #212121;  
+    font-size: 16px;
+    line-height: 1.5;
+    min-height: 57px;
+    outline: none;
+    padding: .75rem;
+    vertical-align: top;
+    width: 100%;
+
+    // Input states
+    &[disabled],
+    &[readonly]:not(.flatpickr-input),
+    &--disabled {
+      background-color: $color_grey_lightest;
+    }
+
+    &[disabled]::placeholder,
+    &[readonly]::placeholder {
+      color: transparent;
+    }
+
+    // Modifiers
+    &--preview {
+      --field-border-color: #{$color_grey_light};
+      background-color: $color_grey_lightest;
+      cursor: default;
+      min-height: auto;
+
+      &:empty{
+        min-height: 50px;
+      }
+    }
+
+    &--wrapper {
+      padding: 0;
+      border: 0;
+    }
+
+    // Nested elements
+    ol {
+      counter-reset: li;
+      list-style: none;
+  
+      li {
+        counter-increment: li;
+        display:table-row;
+      }
+  
+      li:before {
+        content: counter(li) '.';
+        color: #777;
+        width: 16px;
+        display: table-cell;
+        vertical-align: top;
+      }
+    }
+  
+    ul {
+      list-style: none;
+  
+      li {
+        display:table-row;
+      }
+  
+      li:before {
+        content: "—";
+        color: #777;
+        width: 16px;
+        display: table-cell;
+        vertical-align: top;
+      }
+  
+    }
+
+    // All elements inside `.form__input` has a margin-bottom of 1rem except the last one.
+    & > *:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+  }  
+
+  &__control {
+    display: flex;
+    flex-direction: column;
+    gap: $form-label-row-gap;
+
+    
+  
+    &-hint {
+      font-size: .875rem;
+      color: $color_secondary_darkest;
+    }
+
+    &-body {
+      display: flex;
+      flex-direction: column;
+      grid-area: bdy;
+      position: relative;
+      width: 100%;
+
+      // Field error indication as a border.
+      &:has(.errorlist) {
+        --ck-color-base-border: #{$color-red};
+        --field-border-color: #{$color-red};
+  
+        .ck .ck-insert-table-dropdown-grid-box {
+          // reset error border in the insertable table option from CKEditor
+          --ck-color-base-border: #ccced1; 
+        }
+      }
+    }
+
+    // Apply error styling to the the border of the input on error.
+    &-body:has(.errorlist) {
+      --ck-color-base-border: #{$color-red};
+      --field-border-color: #{$color-red};
+
+      .ck .ck-insert-table-dropdown-grid-box {
+        --ck-color-base-border: #ccced1; // reset error border in the insertable table option from CKEditor
+      }
+    }
+  
+    &-footer {
+      grid-area: ftr;
+    }
+
+  }
+
+  // Control states
+  .form__control[aria-hidden="true"],
   .svg-inline--fa[aria-hidden="true"] {
     display: none;
     visibility: hidden;
   }
 
-  &__control-header {
-    grid-area: hdr;
-  }
-
-  &__control-header &__label {
-    align-items: center;
-    display: flex;
-  }
-
-  &__control-header .svg-inline--fa {
-    margin: 0 4px;
-  }
-
-  &__language-switch {
-    white-space: nowrap;
-
-    .svg-inline--fa {
-      color: $color_accent!important;
-    }
-  }
-
-  &__control-body {
-    display: flex;
-    flex-direction: column;
-    grid-area: bdy;
-    position: relative;
-    width: 100%;
-  }
-
-  &__control-footer {
-    grid-area: ftr;
-  }
-}
-
-// DEPRECATED
-.form {
-
-  .form__cell {
-
-    ol,
-    ul,
-    li {
-      margin: 1em 1em;
-    }
-  }
-
-  .form__group {
+  &__group {
     display: flex;
     flex-direction: column;
     border: 0;
     margin-bottom: 24px;
     transition: opacity 0.3s ease;
+
+    &:has(.errorlist) {
+      --field-border-color: #{$color-red};
+    }
 
     &--pad {
       border: 0;
@@ -83,57 +207,36 @@
       opacity: 0;
       pointer-events: none;
     }
-
   }
 
-  .form__label {
+  &__label {
     margin-bottom: 8px;
     font-size: 16px;
   }
 
-  .form__input {
-    border: 1px solid #dfdfdf;
-    padding: 12px;
-    outline: none;
-    font-size: 16px;
-    width: 100%;
-    min-height: 57px;
-
-    &[disabled],
-    &[readonly]:not(.flatpickr-input),
-    &--disabled {
-      background-color: $color_grey_lightest;
-    }
-
-    &[disabled]::placeholder,
-    &[readonly]::placeholder {
-      color: transparent;
-    }
-  }
-
-  .form__block {
+  &__block {
     width: 425px;
-  }
 
-  .form__block-inline {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
+    &-inline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
 
-  .form__block-group {
-    border: 1px solid $color_secondary;
-    background-color: $color_secondary_lightest;
-    border-radius: 15px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin-bottom: 24px;
-
-    & > div {
-      padding: 24px;
+    &-group {
+      border: 1px solid $color_secondary;
+      background-color: $color_secondary_lightest;
+      border-radius: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-bottom: 24px;
+  
+      & > div {
+        padding: 24px;
+      }
     }
   }
 
-  .form__table {
+  &__table {
     display: grid;
     grid-template-columns: 95px 1fr;
     grid-gap: 8px;
@@ -143,39 +246,38 @@
       border-left: 1px solid $color_secondary;
     }
 
-    &.form__special-group {
+    .form__special-group {
       .form__help-text {
         display: none;
       }
     }
 
-  }
+    &-header {
+      text-transform: uppercase;
+      font-weight: bold;
 
-  .form__table-header {
-    text-transform: uppercase;
-    font-weight: bold;
-  }
+      &-left {
+          text-transform: uppercase;
+          font-weight: bold;
+          margin-bottom: 16px;
+          min-height: 18px;
+        }
+      }
+    } 
 
-  .form__table-header-left {
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-bottom: 16px;
-    min-height: 18px;
-  }
-
-  .form__subtitle {
+  &__subtitle {
     padding: 16px 16px;
     font-size: 16px;
     display: flex;
     justify-content: space-between;
   }
 
-  .form__forms {
+  &__forms {
     width: 62%;
     padding: 8px 0;
   }
 
-  .form__subforms {
+  &__subforms {
     margin-bottom: 32px;
     color: $color_secondary_darkest;
 
@@ -186,48 +288,29 @@
     .formset__remove {
       text-decoration: none;
     }
-
   }
 
-  .form__help-text {
+  &__help-text {
     margin-top: 4px;
     font-size: 14px;
     color: #666;
   }
 
-  .form__delete {
-    color: #396a88;
-  }
-
-  .form__add-subform {
+  &__add-subform {
     color: #0B71A1;
     cursor: pointer;
     margin-bottom: 42px;
     margin-left: 16px;
   }
 
-  .form__actions {
-    display: flex;
-    align-items: center;
-  }
-
-  .form__action-help {
-    font-size: 14px;
-    color: #666;
-  }
-
-  .form__action-button {
-    margin-right: 16px;
-  }
-
-  .form__buttons {
+  &__buttons {
 
     &-link {
       margin-left: 16px;
     }
   }
 
-  .form__checkbox {
+  &__checkbox {
     transition: opacity 400ms;
 
     &--invisible {
@@ -251,5 +334,9 @@
         content: "" !important;
       }
     }
+  }
+
+  textarea {
+    resize: none;
   }
 }
