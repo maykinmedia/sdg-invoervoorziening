@@ -1,7 +1,7 @@
 from django import template
-from django.forms import BaseFormSet, BaseForm
+from django.forms import BaseForm, BaseFormSet
 
-from sdg.producten.utils import get_languages, get_fields
+from sdg.producten.utils import get_fields, get_languages
 
 register = template.Library()
 

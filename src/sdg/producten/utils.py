@@ -2,10 +2,10 @@ from datetime import datetime
 from functools import lru_cache
 from typing import List
 
+from django.forms import BaseFormSet
 from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
-from django.forms import BaseFormSet
 
 from sdg.conf.utils import org_type_cfg
 from sdg.core.constants import TaalChoices
