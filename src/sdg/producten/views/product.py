@@ -238,7 +238,7 @@ class ProductUpdateView(
         )
 
     def get_breadcrumbs_title(self):
-        name = capfirst(self.object)
+        name = capfirst(self.product)
 
         if self.product.is_referentie_product:
             return f"{name} (referentie)"
