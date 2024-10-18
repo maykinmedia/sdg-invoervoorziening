@@ -30,8 +30,10 @@
 
     {% select inline=True field=product_form.bevoegde_organisatie %}
 
-    {% with configuration=publication_date.configuration.label %}
-        {% core inline=True label=configuration.label|default:_("Publicatie datum")|capfirst tooltip=configuration.tooltip|default:_('Publicatiedatum van de productversie') value=publication_date.value|default:"Concept" %}
+    {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
+        {% with configuration=publication_date.configuration.label %}
+            {% core inline=True label=configuration.label|default:_("Publicatie datum")|capfirst tooltip=configuration.tooltip|default:_('Publicatiedatum van de productversie') value=publication_date.value|default:"Concept" %}
+        {% endwith %}
     {% endwith %}
 
     {% select inline=True field=product_form.heeft_kosten %}
