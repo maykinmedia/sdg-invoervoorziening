@@ -1,11 +1,8 @@
-import Diff from 'text-diff';
-import showdown from 'showdown';
+import { ReferenceTextComponent } from "./abstract/reference_text_component";
+import { hideElement, returnDiffHTML, showElement } from "./utils";
 
-import {ReferenceTextComponent} from './abstract/reference_text_component';
-
-
-/** @type {NodeListOf<HTMLAnchorElement>} */
-const DIFF_BUTTONS = document.querySelectorAll('.form__diff-btn');
+/** @type {NodeListOf<HTMLButtonElement>} */
+const DIFF_BUTTONS = document.querySelectorAll(".form__diff-btn");
 
 /**
  * Button showing diffs between user and stored value of an input.
@@ -17,105 +14,88 @@ class FormDiffButton extends ReferenceTextComponent {
      */
     onClick(event) {
         event.preventDefault();
-        this.setState({active: !this.state.active, diffHTML: this.getDiffHTML()});
+        this.setState({
+            active: !this.state.active,
+            diffHTML: this.getDiffHTML(),
+        });
+    }
+
+    /**
+     * Get the diff HTML containing ins and del elements.
+     * @return {{ [language: string]: string }} Object with each key as a language and a property of the string containing the diff.
+     */
+    getDiffHTML() {
+        const currentVersionData = this.getCurrentVersionData();
+
+        return Object.entries(currentVersionData).reduce(
+            (acc, [language, { input }]) => {
+                const values = this.getValues();
+                console.log(values);
+                const currentVersionValue = input.value;
+                const currentValue = values[language];
+                acc[language] = returnDiffHTML(
+                    currentVersionValue,
+                    currentValue
+                );
+                return acc;
+            },
+            {}
+        );
     }
 
     /**
      * Shows input or textarea.
      */
     showInputOrTextarea() {
-        const visibleInputOrTextarea = this.getVisibleInputOrTextarea();
-        visibleInputOrTextarea?.style.removeProperty('display');
+        Object.values(this.getVisibleInputOrTextareas()).forEach(showElement);
     }
 
     /**
      * Hides input or textarea.
      */
     hideInputOrTextarea() {
-        const visibleInputOrTextarea = this.getVisibleInputOrTextarea();
-        if (visibleInputOrTextarea)
-            visibleInputOrTextarea.style.display = 'none';
+        Object.values(this.getVisibleInputOrTextareas()).forEach(hideElement);
     }
 
     /**
      * Shows the diff.
      */
     showDiff() {
-        const fieldContainer = this.getFieldContainer();
-        const versionsContainer = this.getVersionsContainer();
-        const diffElement = fieldContainer.querySelector('.diff');
-        versionsContainer.style.removeProperty('display');
-
-        if (diffElement) {
-            diffElement.style.removeProperty('display');
-        }
+        Object.values(this.getDiffElements()).forEach(showElement);
     }
 
     /**
      * Hides the diff.
      */
     hideDiff() {
-        const fieldContainer = this.getFieldContainer();
-        const versionsContainer = this.getVersionsContainer();
-        const diffElement = fieldContainer.querySelector('.diff');
-        versionsContainer.style.display = 'none';
-
-        if (diffElement) {
-            diffElement.style.display = 'none';
-        }
+        Object.values(this.getDiffElements()).forEach(hideElement);
     }
 
     /**
-     * Updates the diff.
-     * @return {string} HTML string containing diff.
+     * Render diffHTMl into the preview element
+     * @param {{ [language: string]: string } | undefined} diffHTML
      */
-    getDiffHTML() {
-        const currentVersionData = this.getCurrentVersionData();
-        let referenceValue = currentVersionData.input.value;
-        let ownValue = this.getValue();
-
-        const diff = new Diff({timeout: 0, editCost: 4});
-        const textDiff = diff.main(referenceValue, ownValue);
-        diff.cleanupEfficiency(textDiff)
-        const prettyHtml = diff.prettyHtml(textDiff).replace(/<\/?span[^>]*>/g,"").replace(/<br\/>/g, "\n");
-        return new showdown.Converter({tables: true}).makeHtml(prettyHtml)
+    renderDiffPreview(diffHTML) {
+        console.log(diffHTML);
+        if (!diffHTML) return;
+        Object.entries(this.getDiffPreviewElements()).forEach(
+            ([language, node]) => (node.innerHTML = diffHTML[language])
+        );
     }
 
     /**
-     * Renders the diff element.
-     * @param {Object} state Read only state.
+     * Render the diff versions into the versions element
+     * @param {{ [language: string]: string } | undefined} diffHTML
      */
-    renderDiffElement(state) {
-        const {diffHTML} = state;
-
-        if (!this.diffElement) {
-            const fieldContainer = this.getFieldContainer();
-            this.diffElement = document.createElement('div');
-            this.diffElement.classList.add('form__input', 'diff', 'tabs__table-cell', 'tabs__table-cell--value');
-            fieldContainer.append(this.diffElement);
-        }
-
-        this.diffElement.innerHTML = diffHTML;
-    }
-
-    /**
-     * Renders the diff element.
-     */
-    renderVersionContainer() {
-        const versionsContainer = this.getVersionsContainer();
-
-        if (!versionsContainer.children.length) {
-            const currentVersionData = this.getCurrentVersionData();
-
-            const currentVersionTopElement = document.createElement('ins');
-            const previousVersionTopElement = document.createElement('del');
-
-            currentVersionTopElement.innerText = "Mijn tekst";
-            previousVersionTopElement.innerText = currentVersionData.title;
-
-            versionsContainer.append(currentVersionTopElement);
-            versionsContainer.append(previousVersionTopElement);
-        }
+    renderDiffVersions() {
+        Object.entries(this.getDiffVersionElements()).forEach(
+            ([language, node]) => {
+                const currentVersionData = this.getCurrentVersionData();
+                node.querySelector("ins").innerText = "Mijn text";
+                node.querySelector("del").innerText =
+                    currentVersionData[language].title;
+            }
+        );
     }
 
     /**
@@ -127,12 +107,12 @@ class FormDiffButton extends ReferenceTextComponent {
     render(state) {
         super.render(state);
 
-        const {active} = state;
+        const { active, diffHTML } = state;
 
-        this.renderDiffElement(state);
-        this.renderVersionContainer();
+        this.renderDiffVersions();
 
         if (active) {
+            this.renderDiffPreview(diffHTML);
             this.hideInputOrTextarea();
             this.showDiff();
         } else {

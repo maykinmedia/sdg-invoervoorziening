@@ -1,0 +1,44 @@
+
+{% extends 'components/update_form/base.html' %}
+{% load utils static i18n producten fields %}
+
+{% block title %}
+    <span>
+        1. {% trans "Algemene gegevens" %}
+    </span>
+{% endblock %}
+
+{% block form %}
+    {% if not product.is_referentie_product %}
+
+        {% core inline=True label=_("Doelgroep")|capfirst tooltip=doelgroep.help_text value=doelgroep.value %}
+
+        {% select inline=True field=product_form.product_aanwezig %}
+
+        {% localized inline=True object=localized_object_dict.product_aanwezig_toelichting %}
+
+        {% select inline=True field=product_form.product_valt_onder %}
+
+        {% localized inline=True object=localized_object_dict.product_valt_onder_toelichting %}
+
+        {% checkbox inline=True field=product_form.locaties %}
+        
+    {% endif %}
+
+    {# DISABLED PER REQUEST VNG #}
+    {% select hide_element=True inline=True field=product_form.api_verborgen %}
+
+    {% select inline=True field=product_form.bevoegde_organisatie %}
+
+    {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
+        {% with configuration=publication_date.configuration.label %}
+            {% core inline=True label=configuration.label|default:_("Publicatie datum")|capfirst tooltip=configuration.tooltip|default:_('Publicatiedatum van de productversie') value=publication_date.value|default:"Concept" %}
+        {% endwith %}
+    {% endwith %}
+
+    {% select inline=True field=product_form.heeft_kosten %}
+
+    {% core inline=True label=_("Informatiegebied") tooltip=_("Informatiegebied in verband met dit product.") value=areas|join:", " %}
+
+    {% nonlocalized inline=True object=nonlocalized_object_dict.interne_opmerkingen  %}
+{% endblock %}

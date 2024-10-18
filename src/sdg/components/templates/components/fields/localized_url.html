@@ -1,0 +1,51 @@
+{% extends 'components/fields/base.html' %}
+{% load utils fields i18n %}
+
+{% block header %}
+    {% for field in bound_fields %}
+        {% if field.link and field.label and field.language == 'nl' %}
+            <label class="form__field-label">
+                {{field.link.label|capfirst}}
+                <i class="fas fa-info-circle fa-xs dark" title="{{ field.link.help_text }}"></i>
+            </label>    
+        {% endif %}
+    {% endfor %}
+{% endblock %}  
+
+{% block body %}
+    {% for field in bound_fields %}
+        {% if field.link and field.label %}
+            <section class="form__control">
+                <header class="form__control-header">
+                    <p class="form__control-hint">
+                        {% if field.language == 'nl' %}
+                            {% trans 'Nederlands' %}
+                        {% else %}
+                            {% trans 'Engels' %}
+                        {% endif %}
+                        
+                        <i class="fas fa-info-circle fa-xs dark" title="{% trans 'De waarde voor deze taal is aangepast.' %}" aria-hidden="true"></i>
+                    </p>
+                </header>
+                <div class="form__control-body">
+                    <div class="url_label_field">
+                        <div
+                            class="url_label_field__container"
+                            data-initialized="true"
+                        >
+                            <div class="url_label_field__container-item">
+                                {{ field.label|addlabelclass:"form__input form__input--left" }} 
+                                {{ field.link|addlinkclass:"form__input form__input--right" }}
+                            </div>
+                            {% if field.label.errors or field.link.errors %}
+                            <div class="url_label_field__container-item url_label_field__container-item--errorlist">
+                                {{ field.label.errors }}{{ field.link.errors}}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
+    {% endfor %}
+{% endblock %}

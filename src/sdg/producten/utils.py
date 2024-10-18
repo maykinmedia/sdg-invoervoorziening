@@ -2,6 +2,7 @@ from datetime import datetime
 from functools import lru_cache
 from typing import List
 
+from django.forms import BaseFormSet
 from django.utils import translation
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
@@ -87,3 +88,23 @@ def get_placeholder_maps(product):
             )
 
     return available_explanation_map, falls_under_explanation_map
+
+
+def get_languages(formset: BaseFormSet) -> list:
+    """Get all the languages availible in the formset or TaalChoices as fallback"""
+    languages = [
+        form.initial.get("taal") for form in formset.forms if form.initial.get("taal")
+    ]
+    return languages or list(TaalChoices.labels.keys())
+
+
+def get_fields(base_form, fields=None):
+    """Get all the fields from the base_form or get only the specified ones."""
+    try:
+        base_form_fields = base_form.fields
+    except IndexError:
+        return []
+
+    if fields:
+        return [field for field in base_form_fields if field in fields]
+    return base_form_fields
