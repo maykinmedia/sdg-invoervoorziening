@@ -1,0 +1,23 @@
+{% load i18n %}
+<div class="user-dropdown">
+    <div class="user-dropdown__icon">
+        <i class="fas fa-user"></i>
+    </div>
+
+    <p class="user-dropdown__username">{{ request.user }}</p>
+
+    <div class="user-dropdown__list">
+        {% if lokaleoverheid.pk %}
+        <a
+            class="user-dropdown__action"
+            href="{% url 'organisaties:roles:update' role_pk=role_pk pk=lokaleoverheid.pk %}"
+        >
+            <i class="fas fa-user"></i> {% trans "Mijn instellingen" %}
+        </a>
+        <hr />
+        {% endif %}
+        <a class="user-dropdown__action" href="{% url 'account_logout' %}">
+            <i class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}
+        </a>
+    </div>
+</div>

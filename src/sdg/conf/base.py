@@ -183,6 +183,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "sdg.utils.context_processors.settings",
+                "sdg.utils.context_processors.has_new_notifications",
             ],
             "loaders": TEMPLATE_LOADERS,
         },

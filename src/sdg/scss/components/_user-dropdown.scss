@@ -1,0 +1,86 @@
+.user-dropdown {
+  --shadow-color: rgba(0, 0, 0, 0.121722);
+  --border-color: #{$color_grey_dark};
+
+  align-items: center;
+  background-color: var(--org-theme-bg-darker);
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: $color-white;
+  display: flex;
+  gap: $grid-margin-0;
+  height: 40px;
+  text-decoration: none;
+  padding-right: $grid-margin-2;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+
+  &:hover &__list,
+  & > *:hover ~ &__list,
+  &__list:hover {
+    opacity: 1;
+    transition-delay: 0s;
+    visibility: visible;
+  }
+
+  &:hover {
+    background-color: $color_grey_light;
+    border-color: var(--border-color);
+    color: #212121;
+  }
+
+  &__icon {
+    background-color: $color_primary_lightest;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    color: $color_primary;
+    flex-shrink: 0;
+    height: 50px;
+    left: -4px;
+    overflow: hidden;
+    padding-top: 4px;
+    position: relative;
+    width: 50px;
+
+    > .svg-inline--fa {
+      color: $color_primary;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  &__list {
+    background-color: $color_grey_light;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px var(--shadow-color);
+    color: #fff;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 1rem);
+    transition: all 0.3s ease-in-out;
+    transition-delay: 0s;
+    visibility: hidden;
+    z-index: 20;
+  }
+
+  &__action {
+    align-items: center;
+    color: $color_primary_dark;
+    display: flex;
+    gap: 0.5rem;
+    padding: 12px;
+    text-align: left;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  hr {
+    border: 0.5px solid var(--border-color);
+  }
+}
