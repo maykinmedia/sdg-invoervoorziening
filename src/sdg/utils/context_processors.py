@@ -29,7 +29,7 @@ def settings(request):
 
 
 def has_new_notifications(request):
-    if request.user and request.user.is_anonymous != True:
+    if request.user and request.user.is_anonymous is not True:
         # Get the user's NotificationViewed instance
         notification_viewed = NotificationViewed.objects.get(gebruiker=request.user)
 
