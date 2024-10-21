@@ -2,8 +2,6 @@ from django import template
 from django.conf import settings
 from django.utils.html import format_html
 
-from sdg.producten.types import Language
-
 register = template.Library()
 
 
@@ -141,3 +139,99 @@ def is_manager(user, local_government):
             ]
         )
     return None
+
+
+@register.inclusion_tag("navigation/navigation.html", takes_context=True)
+def navigation(context):
+    """
+    Navigation element.
+
+    Args:
+        - context
+    """
+
+    lokaleoverheid = context.get("lokaleoverheid")
+    request = context.get("request")
+    siteconfig = context.get("siteconfig")
+    has_new_notifications = context.get("has_new_notifications")
+
+    return {
+        "context": context,
+        "lokaleoverheid": lokaleoverheid,
+        "request": request,
+        "siteconfig": siteconfig,
+        "has_new_notifications": has_new_notifications,
+    }
+
+
+@register.inclusion_tag("navigation/nav_item.html", takes_context=True)
+def nav_item(context, href, title, **kwargs):
+    """
+    Generic nav_item element, built for the navigation component.
+
+    Args:
+        - context
+        - link, href of the link
+        - title, label of the link (can also be an <i> element)
+
+    Kwargs:
+        - icon, can be an <i> element.
+        - id, set an id on the <a> element
+        - blank_target, set the target to `_blank`
+    """
+
+    request = context.get("request")
+
+    def check_active_link():
+        if href == "/":
+            # Equality operator instead of partial check (disables always true on home route)
+            return href == request.path
+        else:
+            return href in request.path
+
+    # Validate if the link is active.
+    active_link = check_active_link()
+
+    # Get kwargs vars.
+    icon = kwargs.get("icon", None)
+    id = kwargs.get("id", None)
+    blank_target = kwargs.get("blank_target", False)
+
+    return {
+        **kwargs,
+        "context": context,
+        "href": href,
+        "title": title,
+        "icon": icon,
+        "blank_target": blank_target,
+        "id": id,
+        "active_link": active_link,
+    }
+
+
+@register.inclusion_tag("navigation/user_dropdown.html", takes_context=True)
+def user_dropdown(context):
+    """
+    Dropdown element inside the header.
+
+    Args:
+        - context
+    """
+
+    lokaleoverheid = context.get("lokaleoverheid")
+    request = context.get("request")
+
+    role_pk = None
+    if lokaleoverheid:
+        role_pk = (
+            request.user.roles.all()
+            .get(lokale_overheid=lokaleoverheid, user=request.user)
+            .pk
+        )
+
+    return {
+        "context": context,
+        "lokaleoverheid": lokaleoverheid,
+        "request": request,
+        "role_pk": role_pk,
+    }
