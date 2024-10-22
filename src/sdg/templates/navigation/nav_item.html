@@ -1,0 +1,11 @@
+<li class="nav__item {% if active_link %}nav__item--active{% endif %}">
+    <a 
+      class="nav__link" 
+      href="{{href}}"
+      {% if id %}id="{{id}}"{% endif %}
+      {% if blank_target %}target="_blank" rel="noopener"{% endif %}
+    >
+        {{title}}
+        {% if icon %}{{icon}}{% endif %}
+    </a>
+</li>
