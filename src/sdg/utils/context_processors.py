@@ -1,9 +1,10 @@
 from django.conf import settings as django_settings
+from django.utils.timezone import now
+
+from dateutil.relativedelta import relativedelta
 
 from sdg.conf.utils import org_type_cfg
 from sdg.producten.models import NotificationViewed, ProductVersie
-from django.utils.timezone import now
-from dateutil.relativedelta import relativedelta
 
 
 def settings(request):
@@ -38,14 +39,12 @@ def has_new_notifications(request):
         except NotificationViewed.DoesNotExist:
             notification_viewed = None
 
-
         # Get the last_viewed_date from data
         try:
             last_viewed_date = notification_viewed.last_viewed_date
         except AttributeError:
             # default last_viewed_date is 12 months ago
             last_viewed_date = now() - relativedelta(months=12)
-
 
         # Get the latest product version after the last_viewed_date else None.
         latest_notification = (
