@@ -2,6 +2,14 @@
 Change history
 ==============
 
+1.8.7
+=====
+
+*November 1, 2024*
+
+* [#1009] Fixed button shown as disabled on Safari/Chrome inconistantly.
+
+
 1.8.6
 =====
 
