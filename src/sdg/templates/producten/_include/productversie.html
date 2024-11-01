@@ -8,17 +8,24 @@
         </strong>
     </td>
     <td class="tabs__table-cell">
+
+
+        <p>
+            {{version.product}}
+            {{version.reference_product}}
+        </p>
             <li class="revision-list__item">
                 <span class="tabs__table-cell--value">
                     <strong>{{ version.gewijzigd_op }} </strong>
                     <span>—</span>
                     <strong>{% trans "versie" %} {{version.versie}} {% if not version.publicatie_datum %}(concept){% endif %}</strong>
+                    <span>{% trans "gewijzigd" %}</span>
                     {% if version.publicatie_datum %}
                     <span>—</span>
                     <span>Gepubliceerd op </span>
                     {% blocktrans with publication_date=version.publicatie_datum %}
                         <strong>{{ publication_date }}.</strong>
-                    {% endblocktrans %}
+                        {% endblocktrans %}
                     {% endif %}
                 </span>
                 

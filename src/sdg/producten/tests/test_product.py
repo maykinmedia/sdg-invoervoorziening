@@ -1197,7 +1197,7 @@ class ProductUpdateViewTests(WebTest):
 
         revisions = response.pyquery(".revision-list")
         self.assertEqual(len(revisions), 2)
-        self.assertIn(str(self.product), revisions[0].text_content())
+        self.assertIn(str(self.product.gemaakt_door), revisions[0].text_content())
         self.assertIn(str(self.reference_product), revisions[1].text_content())
 
     @freeze_time(NOW_DATE)
