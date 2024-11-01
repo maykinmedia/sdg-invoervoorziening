@@ -1,9 +1,7 @@
-import {ReferenceTextComponent} from './abstract/reference_text_component';
-
+import { ReferenceTextComponent } from "./abstract/reference_text_component";
 
 /** @type {NodeListOf<HTMLAnchorElement>} */
-const USE_REFERENCE_BUTTONS = document.querySelectorAll('.form__reference-btn');
-
+const USE_REFERENCE_BUTTONS = document.querySelectorAll(".form__reference-btn");
 
 /**
  * Button allow the user to use the reference text.
@@ -24,10 +22,10 @@ class UseReferenceButton extends ReferenceTextComponent {
     updateLabel() {
         super.updateLabel();
 
-        if(this.getFormControlDisabled()) {
-            this.setState({label: 'Bewerken uitgeschakeld'});
+        if (this.getFormControlDisabled()) {
+            this.setState({ label: "Bewerken uitgeschakeld", disabled: true });
         } else {
-            this.setState({label: this.state.originalLabel});
+            this.setState({ label: this.state.originalLabel, disabled: false });
         }
     }
 }
