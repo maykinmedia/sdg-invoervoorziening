@@ -323,7 +323,7 @@ class Product(ProductFieldMixin, models.Model):
     ):
         """:returns: The latest N versions for this product."""
         step_slice = 1 if reverse_order else 1
-        queryset = self.versies.all().order_by("-versie")
+        queryset = self.versies.all().order_by("-gewijzigd_op")
 
         if active:
             queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
@@ -334,7 +334,9 @@ class Product(ProductFieldMixin, models.Model):
 
     def get_all_versions(self, active=False, exclude_concept=False):
         """:returns: The versions for this product."""
-        queryset = self.versies.all().order_by("-versie").select_related("gemaakt_door")
+        queryset = (
+            self.versies.all().order_by("-gewijzigd_op").select_related("gemaakt_door")
+        )
 
         if active:
             queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
@@ -451,7 +453,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
     class Meta:
         verbose_name = _("product versie")
         verbose_name_plural = _("product versies")
-        ordering = ("-versie",)
+        ordering = ("-gewijzigd_op",)
         unique_together = (("versie", "product"),)
 
     def __str__(self):
