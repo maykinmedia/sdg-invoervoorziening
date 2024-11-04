@@ -73,6 +73,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libxml2 \
         libxmlsec1 \
         libxmlsec1-openssl \
+        libexpat1 \
         gettext \
     && rm -rf /var/lib/apt/lists/*
 
