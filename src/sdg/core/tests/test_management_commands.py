@@ -1,6 +1,7 @@
 import os
 from datetime import date, datetime
 from io import StringIO
+from unittest.mock import MagicMock, patch
 
 from django.conf import settings
 from django.core import mail
@@ -23,6 +24,9 @@ from sdg.core.tests.factories.config import SiteConfigurationFactory
 from sdg.core.tests.factories.logius import ThemaFactory, UniformeProductnaamFactory
 from sdg.organisaties.models import LokaleOverheid
 from sdg.organisaties.tests.factories.overheid import BevoegdeOrganisatieFactory
+from sdg.producten.management.commands.check_broken_links import (
+    Command as CheckBrokenLinksCommand,
+)
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,
     ReferentieProductFactory,
@@ -503,3 +507,223 @@ class TestSendNotificationMail(CommandTestCase):
 
         self.assertIn("No eligable users found.", out)
         self.assertEqual(len(mail.outbox), 0)
+
+
+class TestCommandCheckBrokenLinks(CommandTestCase):
+    def setUp(self):
+        super().setUp()
+        self.command = CheckBrokenLinksCommand
+
+    def test_handle_response_code_successful(self):
+        out = self.call_command("check_broken_links")
+        self.assertIn("Deleted 0 old BrokenLinks.", out)
+
+    def test_request_head_redirect_handling(self):
+        # Simuleer response met een redirect en een relatieve locatie
+        # Test case 1 - Successful request with default response
+        sample_url_1 = "https://example.com"
+        response_1 = self.command.request_head(self=self.command, url=sample_url_1)
+        self.assertEqual(response_1.status_code, 200)
+
+        # Test case 2 - Successful request to Google
+        sample_url_2 = "https://google.com"
+        response_2 = self.command.request_head(self=self.command, url=sample_url_2)
+        self.assertEqual(response_2.status_code, 200)
+
+        # Test case 3 - Multiple redirects, final status 200
+        sample_url_3 = "https://digid.nl/inloggen"
+        response_3 = self.command.request_head(self=self.command, url=sample_url_3)
+        self.assertEqual(response_3.status_code, 200)
+
+        # Test case 4 - 301 Redirect
+        sample_url_4 = "https://httpbin.org/status/301"
+        response_4 = self.command.request_head(self=self.command, url=sample_url_4)
+        self.assertEqual(response_4.status_code, 200)
+
+        # Test case 5 - 302 Redirect
+        sample_url_5 = "https://httpbin.org/status/302"
+        response_5 = self.command.request_head(self=self.command, url=sample_url_5)
+        self.assertEqual(response_5.status_code, 200)
+
+        # Test case 6 - 303 Redirect
+        sample_url_6 = "https://httpbin.org/status/303"
+        response_6 = self.command.request_head(self=self.command, url=sample_url_6)
+        self.assertEqual(response_6.status_code, 200)
+
+        # Test case 7 - 307 Redirect
+        sample_url_7 = "https://httpbin.org/status/307"
+        response_7 = self.command.request_head(self=self.command, url=sample_url_7)
+        self.assertEqual(response_7.status_code, 200)
+
+        # Test case 8 - 308 Redirect
+        sample_url_8 = (
+            "https://www.zoetermeer.nl/verhuizen-naar-het-buitenland-emigreren/"
+        )
+        response_8 = self.command.request_head(self=self.command, url=sample_url_8)
+        self.assertEqual(response_8.status_code, 200)
+
+        # Test case 9 - Invalid or unknown status code 309
+        sample_url_9 = "https://httpbin.org/status/309"
+        response_9 = self.command.request_head(self=self.command, url=sample_url_9)
+        self.assertNotEqual(
+            response_9.status_code, 200
+        )  # Expect not 200 for unknown redirect status
+
+        # Test case 10 - 404 Not Found
+        sample_url_10 = "https://www.google.com/404"
+        response_10 = self.command.request_head(self=self.command, url=sample_url_10)
+        self.assertEqual(response_10.status_code, 404)
+
+        # Test case 11 - URL without protocol (should raise an error or handle gracefully)
+        sample_url_11 = "www.google.com"
+        response_11 = self.command.request_head(self=self.command, url=sample_url_11)
+        self.assertEqual(response_11.status_code, 200)
+
+        # Test case 12 - Server Error 500
+        sample_url_12 = "https://httpbin.org/status/500"
+        response_12 = self.command.request_head(self=self.command, url=sample_url_12)
+        self.assertEqual(response_12.status_code, 500)
+
+        # Test case 13 - Client Error 403
+        sample_url_13 = "https://httpbin.org/status/403"
+        response_13 = self.command.request_head(self=self.command, url=sample_url_13)
+        self.assertEqual(response_13.status_code, 403)
+
+    def test_check_broken_links_handle(self):
+        out = self.call_command("check_broken_links")
+        # This should be a test that validates if the broken links are created and the handle is executed correctly.
+        self.assertIn("Deleted 0 old BrokenLinks.", out)
+
+    def test_extract_urls(self):
+        # Multiple test to make sure the regex used to extract URLs is valid and works in every case.
+        # Test case 1: Simple URLs with HTTP
+        sample_text_1 = "Check out the site at [http://example.com](http://example.com) and also visit [http://anotherexample.com](http://anotherexample.com)."
+        result_1 = ["http://example.com", "http://anotherexample.com"]
+        extracted_urls_1 = self.command.extract_urls(
+            self=self.command, value=sample_text_1
+        )
+        self.assertListEqual(sorted(result_1), sorted(list(extracted_urls_1)))
+
+        # Test case 2: URLs with HTTPS
+        sample_text_2 = "Visit [https://google.com](https://google.com) for all the available info, otherwise visit some external sources [https://www.test.com](https://www.test.com)"
+        result_2 = ["https://google.com", "https://www.test.com"]
+        extracted_urls_2 = self.command.extract_urls(
+            self=self.command, value=sample_text_2
+        )
+        self.assertListEqual(sorted(result_2), sorted(list(extracted_urls_2)))
+
+        # Test case 3: URLs without a protocol (missing 'http://')
+        sample_text_3 = "You can find me at [www.example.com](www.example.com), or at [example.org](example.org)."
+        result_3 = ["www.example.com", "example.org"]
+        extracted_urls_3 = self.command.extract_urls(
+            self=self.command, value=sample_text_3
+        )
+        self.assertListEqual(sorted(result_3), sorted(list(extracted_urls_3)))
+
+        # Test case 4: URLs with query parameters
+        sample_text_4 = "For more information, check [https://example.com/search?q=test](https://example.com/search?q=test). Also, check [https://anotherexample.com/page?item=123](https://anotherexample.com/page?item=123)."
+        result_4 = [
+            "https://example.com/search?q=test",
+            "https://anotherexample.com/page?item=123",
+        ]
+        extracted_urls_4 = self.command.extract_urls(
+            self=self.command, value=sample_text_4
+        )
+        self.assertListEqual(sorted(result_4), sorted(list(extracted_urls_4)))
+
+        # Test case 5: URLs with fragments
+        sample_text_5 = "See the section on [http://example.com#section1](http://example.com#section1) and [https://anotherexample.com#top](https://anotherexample.com#top)."
+        result_5 = ["http://example.com#section1", "https://anotherexample.com#top"]
+        extracted_urls_5 = self.command.extract_urls(
+            self=self.command, value=sample_text_5
+        )
+        self.assertListEqual(sorted(result_5), sorted(list(extracted_urls_5)))
+
+        # Test case 6: URLs with ports
+        sample_text_6 = "My website is [http://localhost:8000](http://localhost:8000), and another server is running at [https://localhost:8080](https://localhost:8080)."
+        result_6 = ["http://localhost:8000", "https://localhost:8080"]
+        extracted_urls_6 = self.command.extract_urls(
+            self=self.command, value=sample_text_6
+        )
+        self.assertListEqual(sorted(result_6), sorted(list(extracted_urls_6)))
+
+        # Test case 7: URLs with subdomains
+        sample_text_7 = "The main site is [https://www.example.com](https://www.example.com), but the blog is at [https://blog.example.com](https://blog.example.com)."
+        result_7 = ["https://www.example.com", "https://blog.example.com"]
+        extracted_urls_7 = self.command.extract_urls(
+            self=self.command, value=sample_text_7
+        )
+        self.assertListEqual(sorted(result_7), sorted(list(extracted_urls_7)))
+
+        # Test case 8: URLs with paths
+        sample_text_8 = "Visit [http://example.com/path/to/page](http://example.com/path/to/page) and also try [https://anotherexample.com/blog/article](https://anotherexample.com/blog/article)."
+        result_8 = [
+            "http://example.com/path/to/page",
+            "https://anotherexample.com/blog/article",
+        ]
+        extracted_urls_8 = self.command.extract_urls(
+            self=self.command, value=sample_text_8
+        )
+        self.assertListEqual(sorted(result_8), sorted(list(extracted_urls_8)))
+
+        # Test case 9: Mixed URL formats (some with protocol, some without)
+        sample_text_9 = "The main site is [http://www.mainwebsite.com](http://www.mainwebsite.com), and the forum is [forum.example.com](forum.example.com)."
+        result_9 = ["http://www.mainwebsite.com", "forum.example.com"]
+        extracted_urls_9 = self.command.extract_urls(
+            self=self.command, value=sample_text_9
+        )
+        self.assertListEqual(sorted(result_9), sorted(list(extracted_urls_9)))
+
+        # Test case 10: URL with query parameters
+        sample_text_10 = "For more details, visit [https://example.com/search?q=python](https://example.com/search?q=python), or check out [https://anotherexample.com/articles?category=tech&sort=asc](https://anotherexample.com/articles?category=tech&sort=asc)."
+        result_10 = [
+            "https://example.com/search?q=python",
+            "https://anotherexample.com/articles?category=tech&sort=asc",
+        ]
+        extracted_urls_10 = self.command.extract_urls(
+            self=self.command, value=sample_text_10
+        )
+        self.assertListEqual(sorted(result_10), sorted(list(extracted_urls_10)))
+
+        # Test case 11: localhost server
+        sample_text_11 = "For more details visit [http://localhost:8000](http://localhost:8000), [localhost:8000](localhost:8000), [http://127.0.0.1:8000](http://127.0.0.1:8000) or check out [127.0.0.1:8000](127.0.0.1:8000)."
+        result_11 = ["http://localhost:8000", "http://127.0.0.1:8000"]
+        extracted_urls_11 = self.command.extract_urls(
+            self=self.command, value=sample_text_11
+        )
+        self.assertListEqual(sorted(result_11), sorted(list(extracted_urls_11)))
+
+    # ! Test does what it should do - Working correctly
+    @patch("sdg.producten.models.BrokenLinks.objects.exclude")
+    def test_clean_up_removed_urls(self, mock_exclude):
+        # Simuleer oude broken links die niet meer voorkomen
+        mock_queryset = MagicMock()
+        mock_exclude.return_value = mock_queryset
+        mock_queryset.__len__.return_value = 2  # Twee items om te verwijderen
+
+        out = self.call_command("check_broken_links", "--test")
+        self.assertIn("Deleted 2 old BrokenLinks", out)
+
+    @patch("sdg.producten.models.Product.objects.exclude_generic_status")
+    @patch("sdg.producten.models.LocalizedProduct.objects.filter")
+    def test_handle_method(self, mock_localized_filter, mock_product_queryset):
+        # Simuleer een Product queryset en LocalizedProduct queryset
+        mock_product = MagicMock()
+        mock_product_queryset.return_value = [mock_product]
+        mock_localized = MagicMock()
+        mock_localized_filter.return_value = [mock_localized]
+
+        # Roep handle aan met een reset
+        with patch(
+            "sdg.producten.models.BrokenLinks.objects.all"
+        ) as mock_broken_links_all:
+            mock_broken_links = MagicMock()
+            mock_broken_links_all.return_value = [mock_broken_links]
+
+            out = self.call_command("check_broken_links", "--reset")
+            self.assertIn(
+                "Succesfully cleared the error_count of every BrokenLink.", out
+            )
+
+            # Controleer dat de reset werd uitgevoerd
+            mock_broken_links.reset_error_count.assert_called_once()

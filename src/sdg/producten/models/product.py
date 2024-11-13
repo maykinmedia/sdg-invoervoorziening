@@ -550,3 +550,27 @@ class Productuitvoering(models.Model):
 
     def __str__(self):
         return f"{self.product} (uitvoering)"
+
+
+class BrokenLinks(models.Model):
+    """
+    Broken Links
+
+    Model that keeps track of each link with a One-To-One relationship to the product this link is present.
+    The model has different columns that keep track of data that is used to determine if a monthly must be email send.
+    """
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    url = models.URLField(default="", max_length=2000)
+    error_count = models.PositiveIntegerField(default=0)
+    last_checked = models.DateTimeField(auto_now=True)
+    occuring_field = models.TextField(default="")
+
+    def increment_error_count(self):
+        self.error_count += 1
+        self.save()
+
+    def reset_error_count(self):
+        self.error_count = 0
+        self.occuring_field = ""
+        self.save()
