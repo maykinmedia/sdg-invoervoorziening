@@ -112,7 +112,7 @@ class Command(BaseCommand):
             # Receiver (every redactor with ontvangt_email=True)
             receiver_roles = roles.filter(Q(is_redacteur=True, ontvangt_mail=True))
 
-            if len(receiver_roles) is 0:
+            if len(receiver_roles) == 0:
                 # Receiver (every admin with ontvangt_email=True)
                 receiver_roles = roles.filter(Q(is_beheerder=True, ontvangt_mail=True))
 
