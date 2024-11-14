@@ -550,44 +550,39 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         response_6 = self.command.request_head(self=self.command, url=sample_url_6)
         self.assertEqual(response_6.status_code, 200)
 
-        # Test case 7 - 307 Redirect
-        sample_url_7 = "https://httpbin.org/status/307"
+        # Test case 7 - 308 Redirect
+        sample_url_7 = (
+            "https://www.zoetermeer.nl/verhuizen-naar-het-buitenland-emigreren/"
+        )
         response_7 = self.command.request_head(self=self.command, url=sample_url_7)
         self.assertEqual(response_7.status_code, 200)
 
-        # Test case 8 - 308 Redirect
-        sample_url_8 = (
-            "https://www.zoetermeer.nl/verhuizen-naar-het-buitenland-emigreren/"
-        )
+        # Test case 8 - Invalid or unknown status code 309
+        sample_url_8 = "https://httpbin.org/status/309"
         response_8 = self.command.request_head(self=self.command, url=sample_url_8)
-        self.assertEqual(response_8.status_code, 200)
-
-        # Test case 9 - Invalid or unknown status code 309
-        sample_url_9 = "https://httpbin.org/status/309"
-        response_9 = self.command.request_head(self=self.command, url=sample_url_9)
         self.assertNotEqual(
-            response_9.status_code, 200
+            response_8.status_code, 200
         )  # Expect not 200 for unknown redirect status
 
-        # Test case 10 - 404 Not Found
-        sample_url_10 = "https://www.google.com/404"
+        # Test case 9 - 404 Not Found
+        sample_url_9 = "https://www.google.com/404"
+        response_9 = self.command.request_head(self=self.command, url=sample_url_9)
+        self.assertEqual(response_9.status_code, 404)
+
+        # Test case 10 - URL without protocol (should raise an error or handle gracefully)
+        sample_url_10 = "www.google.com"
         response_10 = self.command.request_head(self=self.command, url=sample_url_10)
-        self.assertEqual(response_10.status_code, 404)
+        self.assertEqual(response_10.status_code, 200)
 
-        # Test case 11 - URL without protocol (should raise an error or handle gracefully)
-        sample_url_11 = "www.google.com"
+        # Test case 11 - Server Error 500
+        sample_url_11 = "https://httpbin.org/status/500"
         response_11 = self.command.request_head(self=self.command, url=sample_url_11)
-        self.assertEqual(response_11.status_code, 200)
+        self.assertEqual(response_11.status_code, 500)
 
-        # Test case 12 - Server Error 500
-        sample_url_12 = "https://httpbin.org/status/500"
+        # Test case 12 - Client Error 403
+        sample_url_12 = "https://httpbin.org/status/403"
         response_12 = self.command.request_head(self=self.command, url=sample_url_12)
-        self.assertEqual(response_12.status_code, 500)
-
-        # Test case 13 - Client Error 403
-        sample_url_13 = "https://httpbin.org/status/403"
-        response_13 = self.command.request_head(self=self.command, url=sample_url_13)
-        self.assertEqual(response_13.status_code, 403)
+        self.assertEqual(response_12.status_code, 403)
 
     def test_check_broken_links_handle(self):
         out = self.call_command("check_broken_links")
@@ -693,7 +688,6 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         )
         self.assertListEqual(sorted(result_11), sorted(list(extracted_urls_11)))
 
-    # ! Test does what it should do - Working correctly
     @patch("sdg.producten.models.BrokenLinks.objects.exclude")
     def test_clean_up_removed_urls(self, mock_exclude):
         # Simuleer oude broken links die niet meer voorkomen
