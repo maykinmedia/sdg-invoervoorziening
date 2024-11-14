@@ -3,7 +3,7 @@ import threading
 from collections import defaultdict
 from urllib import parse
 
-from django.core.management.base import BaseCommand
+from django.core.management import BaseCommand
 
 import requests
 from zgw_consumers.concurrent import parallel
