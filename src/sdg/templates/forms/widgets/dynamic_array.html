@@ -1,4 +1,4 @@
-{% load i18n static toggle %}
+{% load i18n static %}
 
 {% spaceless %}
     <div class="dynamic">
@@ -24,9 +24,6 @@
                         <i class="fa fa-plus fa-xs"></i>
                         {% trans "Toevoegen" %}
                     </button>
-                    {% if lockable %}
-                        {% toggle _('Aanpassen') hide_label=True icon_before='fa fa-lock fa-xs' icon_after='fa fa-lock-open fa-xs' %}
-                    {% endif %}
                 </div>
             {% endif %}
         </div>
