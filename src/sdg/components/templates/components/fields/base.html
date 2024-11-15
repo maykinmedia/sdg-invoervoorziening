@@ -1,0 +1,21 @@
+{% if as_row %}
+<tr {% if hide_element %}style="display: none"{% endif %}>
+    <td>
+{% endif %}
+
+<div class="form__field {% if inline %}form__field--inline{% endif %}">
+    <header class="form__field-header">
+        {% block header %}{% endblock %}    
+    </header>
+
+    <div class="form__field-body">
+        {% block body %}{% endblock %}    
+    </div>
+
+    {% block footer %}{% endblock %}    
+</div>
+
+{% if as_row %}        
+    </td>
+</tr>
+{% endif %}

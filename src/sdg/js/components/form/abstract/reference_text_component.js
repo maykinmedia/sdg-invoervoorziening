@@ -2,8 +2,8 @@
  * Base class for implementing components within the update form.
  * @abstract
  */
-import showdown from 'showdown';
-import {FormComponent} from './form_component';
+import showdown from "showdown";
+import { FormComponent } from "./form_component";
 
 export class ReferenceTextComponent extends FormComponent {
     /**
@@ -14,7 +14,7 @@ export class ReferenceTextComponent extends FormComponent {
      */
     static options = {
         observe: true,
-    }
+    };
 
     /**
      * Binds events to callbacks.
@@ -22,7 +22,6 @@ export class ReferenceTextComponent extends FormComponent {
      */
     bindEvents() {
         super.bindEvents();
-        this.getReferenceTextToolbar().querySelector('.form__reference-btn').addEventListener('click', () => this.setState({active: false}));
     }
 
     /**
@@ -45,8 +44,10 @@ export class ReferenceTextComponent extends FormComponent {
     onMutation(mutationRecord) {
         super.onMutation(mutationRecord);
 
-        const disabled = Boolean(mutationRecord.target[mutationRecord.attributeName]);
-        this.setState({disabled: disabled});
+        const disabled = Boolean(
+            mutationRecord.target[mutationRecord.attributeName]
+        );
+        this.setState({ disabled: disabled });
 
         this.updateDisabled();
         this.updateLabel();
@@ -56,8 +57,13 @@ export class ReferenceTextComponent extends FormComponent {
      * Updates the disabled state based on whether reference HTML is available.
      */
     updateDisabled() {
-        if (!this.getReferenceHTML()) {
-            this.setState({disabled: true})
+        const referenceHTML = this.getCurrentReferenceHTML();
+
+        if (
+            !referenceHTML ||
+            Object.values(referenceHTML).every((value) => !value)
+        ) {
+            this.setState({ disabled: true });
         }
     }
 
@@ -67,104 +73,103 @@ export class ReferenceTextComponent extends FormComponent {
     updateLabel() {
         // Make sure we keep track of the original label.
         if (!this.state.originalLabel) {
-            this.setState({originalLabel: this.node.textContent});
+            this.setState({ originalLabel: this.node.textContent });
         }
 
+        const referenceHTML = this.getCurrentReferenceHTML();
         // Show custom label if no reference text is available.
-        if (!this.getReferenceHTML()) {
-            this.setState({label: 'Geen standaardtekst beschikbaar'});
+        if (!referenceHTML || Object.values(referenceHTML).every((v) => !v)) {
+            this.setState({ label: "Geen standaardteksten beschikbaar" });
         } else if (this.state.originalLabel) {
-            this.setState({label: this.state.originalLabel});
+            this.setState({ label: this.state.originalLabel });
         }
     }
 
     /**
-     * Returns the current version data.
-     * @return {{input: (HTMLInputElement|HTMLTextAreaElement), title: string}}
+     * Returns an array containing the current version data for each language
+     * @return {{
+     *      [language: string]: {
+     *          input: HTMLElement,
+     *          title: string
+     *      }
+     * }}
      */
     getCurrentVersionData() {
-        const inputOrTextarea = this.getInputOrTextarea();
-        const currentReferenceForm = this.getCurrentReferenceForm();
-        const currentReferenceInput = currentReferenceForm.content.querySelector(`#${inputOrTextarea?.id}`);
+        return Object.entries(this.getInputOrTextareas()).reduce(
+            (acc, [language, node]) => {
+                const currentReferenceForm =
+                    this.getCurrentReferenceForm(language);
+                const referenceField =
+                    currentReferenceForm.content.getElementById(node.id);
+                acc[language] = {
+                    input: referenceField,
+                    title: currentReferenceForm.dataset.title,
+                };
 
-        return {
-            'title': currentReferenceForm.dataset.title,
-            'input': currentReferenceInput,
-        };
+                return acc;
+            },
+            {}
+        );
     }
 
     /**
-     * Returns the previous version data.
-     * @return {{input: (HTMLInputElement|HTMLTextAreaElement), title: string}}
+     * Returns an array containing the previous version data for each language
+     * @return {{
+     *      [language: string]: {
+     *          input: HTMLElement,
+     *          title: string
+     *      }
+     * }}
      */
     getPreviousVersionData() {
-        const inputOrTextarea = this.getInputOrTextarea();
-        const previousReferenceForm = this.getPreviousReferenceForm();
-        const previousReferenceInput = previousReferenceForm.content.querySelector(`#${inputOrTextarea?.id}`);
+        const inputOrTextareas = this.getInputOrTextareas();
 
-        return {
-            'title': previousReferenceForm.dataset.title,
-            'input': previousReferenceInput,
-        };
-    }
+        return Object.entries(inputOrTextareas).reduce(
+            (acc, [language, node]) => {
+                const previousFormReference =
+                    this.getPreviousReferenceForm(language);
+                const referenceField =
+                    previousFormReference.content.getElementById(node.id);
+                acc[language] = {
+                    input: referenceField,
+                    title: previousFormReference.dataset.title,
+                };
 
-    /**
-     * Returen the reference form.
-     * @return {HTMLTemplateElement}
-     */
-    getCurrentReferenceForm() {
-        return document.querySelector(`.form__reference-${this.getLanguage()}`);
-    }
-
-    /**
-     * Returen the previous reference form.
-     * @return {HTMLTemplateElement}
-     */
-    getPreviousReferenceForm() {
-        return document.querySelector(`.form__previousreference-${this.getLanguage()}`);
-    }
-
-    /**
-     * Returns the reference topbar.
-     * @return {HTMLElement}
-     */
-    getReferenceTopbar() {
-        return this.getFormControl().querySelector('.reference__display--topbar');
-    }
-
-    /**
-     * Returns the reference container.
-     * @return {HTMLElement}
-     */
-    getReferenceTextContainer() {
-        return this.getFormControl().querySelector('.form__reference');
-    }
-
-    /**
-     * Returns the reference text template.
-     * @return {HTMLTemplateElement}
-     */
-    getReferenceTemplate() {
-        return document.querySelector(".form__reference--display-template");
-    }
-
-    /**
-     * Returns the reference toolbar.
-     * @return {HTMLElement}
-     */
-    getReferenceTextToolbar() {
-        return this.getFormControl().querySelector('.form__reference + .toolbar');
+                return acc;
+            },
+            {}
+        );
     }
 
     /**
      * Returns the reference HTML.
-     * @return {string}
+     * @return {{[language: string]: any}}
      */
-    getReferenceHTML() {
-        const inputOrTextarea = this.getInputOrTextarea();
-        const referenceForm = this.getCurrentReferenceForm();
-        const referenceField = referenceForm.content.getElementById(inputOrTextarea?.id);
-        return new showdown.Converter({tables: true}).makeHtml(referenceField?.value);
+    getCurrentReferenceHTML() {
+        return Object.entries(this.getCurrentVersionData()).reduce(
+            (acc, [language, { input }]) => {
+                acc[language] = new showdown.Converter({
+                    tables: true,
+                }).makeHtml(input.value);
+                return acc;
+            },
+            {}
+        );
+    }
+
+    /**
+     * Create the references below each field
+     * @param {{[language: string]: any}} referenceHTML
+     */
+    createCurrentReferences() {
+        const referenceHTML = this.getCurrentReferenceHTML();
+
+        Object.entries(this.getReferencePreviewElements()).forEach(
+            ([language, node]) => {
+                if (referenceHTML[language])
+                    node.innerHTML = referenceHTML[language];
+            }
+        );
     }
 
     /**
@@ -174,16 +179,16 @@ export class ReferenceTextComponent extends FormComponent {
      * @param {Object} state Read only state.
      */
     render(state) {
-        const {active, disabled, label} = state;
+        const { active, disabled, label } = state;
 
         super.render(state);
 
-        this.node.classList.toggle('button--active', Boolean(active));
+        this.node.classList.toggle("button--active", Boolean(active));
 
         if (disabled === true) {
-            this.node.setAttribute('disabled', true);
+            this.node.setAttribute("disabled", true);
         } else if (disabled === false) {
-            this.node.removeAttribute('disabled');
+            this.node.removeAttribute("disabled");
         }
 
         if (label) {

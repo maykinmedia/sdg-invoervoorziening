@@ -2,6 +2,27 @@
 
 .url_label_field {
 
+  &__container-item {
+    display: flex;
+
+    &--errorlist{ 
+      display: block;
+
+      // Fixes margins between errorlist item
+      ul:first-of-type {
+        margin-bottom: 8px;
+      }
+
+      ul:nth-of-type(n+2){
+        margin: 8px 0;
+      }
+
+      ul:last-of-type {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
   .url_label_field__container {
 
     .form__input {

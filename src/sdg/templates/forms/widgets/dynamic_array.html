@@ -3,7 +3,7 @@
 {% spaceless %}
     <div class="dynamic">
         <div class="dynamic__container">
-            <div>
+            <div class="dynamic__container-list">
                 {% for subwidget in widget.subwidgets %}
                     <div class="dynamic__container-item" {% if widget.is_none %}data-isNone="true"
                          style="display: none"{% endif %}>
@@ -11,8 +11,8 @@
                             {% include widget.template_name %}
                         {% endwith %}
                         {% if not widget.single %}
-                            <button type="button" class="dynamic__container__button--side dynamic__container-remove">
-                                <i class="fa fa-xs fa-times"></i>
+                            <button type="button" class="dynamic__container__button--side dynamic__container-remove" aria-hidden="false">
+                                <i class="fa fa-times" aria-hidden="false"></i>
                             </button>
                         {% endif %}
                     </div>
