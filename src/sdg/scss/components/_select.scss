@@ -13,11 +13,11 @@ select {
   cursor: pointer;
   font-family: 'Source Sans Pro', sans-serif;
   background-color: $color_grey_light;
-}
 
-/* Remove IE arrow */
-select::-ms-expand {
-  display: none;
+  /* Remove IE arrow */
+  &::-ms-expand {
+    display: none;
+  }
 }
 
 /* Custom Select wrapper */
@@ -28,23 +28,25 @@ select::-ms-expand {
   height: 40px;
   border-radius: .25em;
   overflow: hidden;
-}
 
-/* Arrow */
-.select::after {
-  content: '\25BC';
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 9px;
-  background-color: $color_primary_dark;
-  color: #fff;
-  transition: .25s all ease;
-  pointer-events: none;
-}
+  /* Arrow */
+  &::after {
+    content: '\25BC';
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+    right: 0;
+    padding: 9px;
+    height: 100%;
+    background-color: $color_primary_dark;
+    color: #fff;
+    transition: .25s all ease;
+    pointer-events: none;
+  }
 
-/* Transition */
-.select:hover::after {
-  color: $color_accent;
+  /* Transition */
+  &:hover::after {
+    color: $color_accent;
+  }
 }
-

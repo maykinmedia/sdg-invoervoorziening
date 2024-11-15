@@ -117,27 +117,6 @@ def table_grid_field(field, **kwargs):
     return {**kwargs, "field": field}
 
 
-@register.inclusion_tag("forms/table_row.html")
-def table_row(products, **kwargs):
-    return {**kwargs, "products": products}
-
-
-@register.inclusion_tag("forms/localized_url_label_field.html")
-def localized_url_label_field(label, link, taal, languages, **kwargs):
-    return {
-        **kwargs,
-        "label": label,
-        "link": link,
-        "taal": taal,
-        "languages": languages,
-    }
-
-
-@register.inclusion_tag("forms/select.html")
-def select(field, **kwargs):
-    return {**kwargs, "field": field}
-
-
 @register.inclusion_tag("forms/checkbox.html")
 def checkbox(field, **kwargs):
     return {**kwargs, "field": field}
