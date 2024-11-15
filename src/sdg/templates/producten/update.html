@@ -25,19 +25,11 @@
 {% endfor %}
 {% endblock %}
 
-{% block breadcrumbs_page_title %}
-    {% if product.is_referentie_product %}
-        <span>{{ object|capfirst|default:namespace|capfirst }} (referentie)</span>
-    {% else %}
-        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
-    {% endif %}
-{% endblock %}
-
 {% block page_title %}
     {% if product.is_referentie_product %}
-        <span>{{ object|capfirst|default:namespace|capfirst }} (referentie)</span>
+        <span>{{ product|capfirst|default:namespace|capfirst }} (referentie)</span>
     {% else %}
-        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
+        <span>{{ product|capfirst|default:namespace|capfirst }}</span>
     {% endif %}
 {% endblock %}
 
