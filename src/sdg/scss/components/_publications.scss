@@ -1,0 +1,24 @@
+@import "colors";
+
+.publications {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $grid-margin-1;
+  margin: $grid-margin-2 0;
+
+  &__publication {
+    display: flex;
+    gap: $grid-margin-0;
+    width: fit-content;
+
+    &:not(:first-of-type) {
+      border-left: 1px solid $color_grey_dark;
+      padding-left: $grid-margin-1;
+    }
+
+    &-link:not(:first-of-type) {
+      border-left: 1px solid $color_grey_dark;
+      padding-left: $grid-margin-0;
+    }
+  }
+}

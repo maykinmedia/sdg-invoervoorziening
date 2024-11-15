@@ -2,9 +2,9 @@
 {% load utils static i18n producten toggle localized_form nonlocalized_form %}
 
 {% block page_intro %}
-    <p class="subheading">
-        {% trans "Onderstaande velden kun je apart bewerken. Je kunt alles in één keer opslaan met de knoppen onderaan." %}
-    </p>
+    {# Create the url of the preview concept - stored in concept_url #}
+    {% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk as concept_url %}
+    {% publications concept_url=concept_url|add:'?status=concept' product=product publication_links=published_product_language_links %}
 {% endblock %}
 
 {% block templates %}
@@ -42,59 +42,6 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="toolbox">
-
-    <div class="toolbox__item toolbox__item--countries global-language-switch" title="{% trans 'Selecteer de te bewerken taal' %}">
-        {% toggle '' icon_before='flag-icon flag-icon-nl' icon_after='flag-icon flag-icon-gb' id='toggle-language' %}
-    </div>
-
-    {% with most_recent_is_concept=product.most_recent_version.publicatie_datum|notbool %}
-        <div class="toolbox__item toolbox__language_div">
-            {% trans "Toon" %}:
-            {% for taal, url in published_product_language_links.items %}
-                {% if product.active_version %}
-                    <a href="{{ url }}"
-                    id="preview-current"
-                    class="toolbox__language_item preview"
-                    target="_blank"
-                    lang="{{ taal }}"
-                    {% if not forloop.first %} aria-hidden="true" {% endif %}
-                    >{% trans "gepubliceerde tekst op Nationaal Portaal" %}
-                    </a>
-                {% endif %}
-            {% endfor %}
-                {% if product.active_version and most_recent_is_concept %}
-                    |
-                {% endif %}
-            {% for taal in languages %}
-                {% if most_recent_is_concept %}
-                    <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept&taal={{ taal }}"
-                    id="preview-concept"
-                    class="toolbox__language_item preview"
-                    target="_blank"
-                    lang="{{ taal }}"
-                    {% if not forloop.first %} aria-hidden="true" {% endif %}
-                    >{% trans "concepttekst" %}
-                    </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% endwith %}
-
-    {# Notifications. #}
-    <div class="toolbox__item">
-        <i class="fa fa-bell"></i>
-        <a href="{% url 'notificaties' %}" target="_blank">
-             {% trans "Notificaties" %}
-        </a>
-    </div>
-
-    {# (Global) edit togggle. #}
-    <div class="toolbox__item global-edit-toggle" title="{% trans 'Alles bewerken' %}">
-        {% toggle "" icon_before='fa fa-lock' icon_after='fa fa-lock-open' id='toggle-edit' %}
-    </div>
-</div>
-
 <div class="notifications">
     {% if not product.is_referentie_product %}{% include 'producten/_include/availability_warnings.html' %}{% endif %}
     {% include 'producten/_include/edit_warnings.html' %}
