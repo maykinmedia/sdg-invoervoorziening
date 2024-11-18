@@ -17,9 +17,11 @@
         {% csrf_token %}
         <p>{% blocktrans with user=object.user %}Weet je zeker dat je <span class="primary text-bold">{{ user }}</span> wilt verwijderen?{% endblocktrans %}</p>
         <hr class="divider">
-        <input type="submit" class="button" value="{% trans 'Verwijderen' %}">
-        <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}">
-            <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
-        </a>
+        <div class="form__actions">
+            <button type="submit" class="button">{% trans "Verwijderen" %}</button>
+            <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}" class="button button--light">
+                {% trans 'Annuleren' %}
+            </a>
+        </div>
     </form>
 {% endblock inner_content %}
