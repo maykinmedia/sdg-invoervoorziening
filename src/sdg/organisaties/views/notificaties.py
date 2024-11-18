@@ -47,13 +47,7 @@ class ProductVersieListView(
         # Call the parent class's get method to fetch the queryset
         response = super().get(request, *args, **kwargs)
 
-        # Get or create the NotificationViewed instance for the current user
-        notification_viewed, create = NotificationViewed.objects.get_or_create(
-            gebruiker=request.user
-        )
-
-        # Update the last_viewed_date to the current time
-        notification_viewed.last_viewed_date = timezone.now()
-        notification_viewed.save()
+        # Update or create the NotificationViewed instance for the current user
+        NotificationViewed.objects.update_or_create(gebruiker=request.user)
 
         return response

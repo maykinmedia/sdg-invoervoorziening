@@ -6,6 +6,6 @@
       {% if blank_target %}target="_blank" rel="noopener"{% endif %}
     >
         {{title}}
-        {% if icon %}{{icon}}{% endif %}
+        {% if icon and show_icon %}{{icon}}{% endif %}
     </a>
 </li>

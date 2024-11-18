@@ -178,6 +178,7 @@ def nav_item(context, href, title, **kwargs):
         - icon, can be an <i> element.
         - id, set an id on the <a> element
         - blank_target, set the target to `_blank`
+        - show_icon, boolean to render the icon
     """
 
     request = context.get("request")
@@ -194,6 +195,7 @@ def nav_item(context, href, title, **kwargs):
 
     # Get kwargs vars.
     icon = kwargs.get("icon", None)
+    show_icon = kwargs.get("show_icon", None)
     id = kwargs.get("id", None)
     blank_target = kwargs.get("blank_target", False)
 
@@ -203,6 +205,7 @@ def nav_item(context, href, title, **kwargs):
         "href": href,
         "title": title,
         "icon": icon,
+        "show_icon": show_icon,
         "blank_target": blank_target,
         "id": id,
         "active_link": active_link,

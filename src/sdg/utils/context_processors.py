@@ -32,23 +32,22 @@ def settings(request):
 
 
 def has_new_notifications(request):
-    if request.user and request.user.is_anonymous is not True:
-        # Get the user's NotificationViewed instance
+    user = request.user
+    has_new_notifications = False
+
+    if user and user.is_anonymous is not True:
         try:
-            notification_viewed = NotificationViewed.objects.get(gebruiker=request.user)
+            notification_viewed = NotificationViewed.objects.get(gebruiker=user)
+            last_viewed_date = notification_viewed.last_viewed_date
         except NotificationViewed.DoesNotExist:
             notification_viewed = None
-
-        # Get the last_viewed_date from data
-        try:
-            last_viewed_date = notification_viewed.last_viewed_date
-        except AttributeError:
-            # default last_viewed_date is 12 months ago
+            # By default, the last_viewed_date is set to 12 months ago.
             last_viewed_date = now() - relativedelta(months=12)
 
-        # Get the latest product version after the last_viewed_date else None.
+        # Get the latest product versie (notifications are based on ProductVersie) later than last_viewed_date.
         latest_notification = (
-            ProductVersie.objects.filter(
+            ProductVersie.objects.select_related("product")
+            .filter(
                 product__referentie_product=None,
                 gewijzigd_op__gt=last_viewed_date,
             )
@@ -56,17 +55,8 @@ def has_new_notifications(request):
             .first()
         )
 
-        # Check if there is a new notification
-        has_new = latest_notification is not None
-
-        return {
-            "has_new_notifications": has_new,
-            "latest_notification_date": (
-                latest_notification.gewijzigd_op if latest_notification else None
-            ),
-        }
+        has_new_notifications = bool(latest_notification)
 
     return {
-        "has_new_notifications": False,
-        "latest_notification_date": None,
+        "has_new_notifications": has_new_notifications,
     }
