@@ -23,7 +23,12 @@
         <hr class="divider">
         <div class="form__buttons">
             <input type="submit" class="button" value="{% trans 'Opslaan' %}">
-            <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}">
+            {% if request.user.email == role.user.email and role.is_beheerder is not True %}
+                {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk as cancel_url %}
+            {% else %}
+                {% url 'organisaties:roles:list' pk=lokaleoverheid.pk as cancel_url %}
+            {% endif %}
+            <a href="{{cancel_url}}">
                 <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
             </a>
         </div>
