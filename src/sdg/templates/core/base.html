@@ -4,7 +4,6 @@
 {% block inner %}
     {% with namespace=request.resolver_match.namespaces|last pk=lokaleoverheid.pk %}
         <div class="breadcrumbs">
-            {{product}}
             <div>
                 <a href="{% url 'core:home' %}">{% trans 'Homepage' %}</a>
                 {% with kwargs=request.resolver_match.kwargs %}
