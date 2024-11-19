@@ -9,19 +9,18 @@ class GenericForm {
     constructor(node) {
         /** @type {HTMLFormElement} */
         this.node = node;
-        this.display = {
-            valtOnder: false,
-            aanwezig: false,
-        };
 
-        if (!this.isGenericForm()) {
-            return; // Not a generic form.
-        }
+        if (!this.node) return;
+        if (this.isReferenceForm()) this.setUpDynamicProductAanwezig();
+        if (this.isGenericForm()) this.setUpDynamicProductValtOnder();
+    }
 
-        if (this.node) {
-            this.setUpDynamicProductAanwezig();
-            this.setUpDynamicProductValtOnder();
-        }
+    /**
+     * Returns whether `this.node` represents a reference form based on node tree.
+     * @return {boolean}
+     */
+    isReferenceForm() {
+        return Boolean(this.getAvailibilityClarificationField());
     }
 
     /**
@@ -29,54 +28,45 @@ class GenericForm {
      * @return {boolean}
      */
     isGenericForm() {
-        return Boolean(this.getClarificationField());
+        return (
+            Boolean(this.getAvailibilityClarificationField()) &&
+            Boolean(this.getFallsUnderClarificationField())
+        );
     }
 
     /**
-     * Returns clarification field (if found).
+     * Returns product availible clarification field (if found).
      * @return {(Element|null)}
      */
-    getClarificationField() {
+    getAvailibilityClarificationField() {
         return this.node.querySelector('[id$="product_aanwezig_toelichting"]');
     }
 
-    collapseExpand() {
+    /**
+     * Returns product falls under clarification field (if found).
+     * @return {(Element|null)}
+     */
+    getFallsUnderClarificationField() {
+        return this.node.querySelector(
+            '[id$="product_valt_onder_toelichting"]'
+        );
+    }
+
+    collapseExpand(collapse) {
         const formSpecific = document.querySelector(".form__specific");
         const formSpecificClassList = formSpecific.classList;
-
-        if (!this.display.valtOnder || !this.display.aanwezig) {
-            formSpecific.style.pointerEvents = "none";
-            formSpecificClassList.add("tabs__table--hidden");
-            formSpecificClassList.add("form__specific--hidden");
-        }
-
-        if (this.display.valtOnder && this.display.aanwezig) {
-            formSpecific.style.pointerEvents = "all";
-            formSpecificClassList.remove("tabs__table--hidden");
-            formSpecificClassList.remove("form__specific--hidden");
-        }
+        formSpecific.style.pointerEvents = collapse ? "none" : "all";
+        formSpecificClassList.toggle("tabs__table--hidden", collapse);
     }
 
-    displayHidden(dependency, field) {
+    displayHidden(dependency) {
         dependency.style.display = "none";
-        this.display[field] = true;
-        this.collapseExpand();
+        this.collapseExpand(false);
     }
 
-    displayGrid(dependency, field) {
+    displayGrid(dependency) {
         dependency.style.display = "grid";
-        this.display[field] = false;
-        this.collapseExpand();
-    }
-
-    async emptyFieldValues(fields) {
-        fields = Array.isArray(fields) ? fields : [fields];
-        if (fields) {
-            fields.forEach((item) => {
-                const textarea = item.querySelector("textarea");
-                textarea.value = "";
-            });
-        }
+        this.collapseExpand(true);
     }
 
     async getProductTranslationName(productId, language) {
@@ -139,15 +129,16 @@ class GenericForm {
 
     setUpDynamicProductAanwezig() {
         const input = this.node.querySelector("[name=product_aanwezig]");
-        const dependency = this.getClarificationField().closest(".form__field");
+        const dependency = this.getAvailibilityClarificationField().closest(
+            ".form__language-wrapper"
+        );
 
         if (input) {
             let previousIndex = input.selectedIndex;
 
-            const displayFunc = async (displayDependency) => {
-                const controls = await displayDependency.querySelectorAll(
-                    ".form__control"
-                );
+            const displayFunc = (displayDependency) => {
+                const controls =
+                    displayDependency.querySelectorAll(".form__control");
                 if (input.selectedIndex === 2) {
                     if (input.selectedIndex != previousIndex) {
                         if (
@@ -156,7 +147,7 @@ class GenericForm {
                             )
                         ) {
                             this.resetSpecefiekeGegevens();
-                            this.displayGrid(displayDependency, "aanwezig");
+                            this.displayGrid(displayDependency);
                         } else {
                             input.selectedIndex = previousIndex;
                             return;
@@ -173,10 +164,7 @@ class GenericForm {
                         }
                     });
                 } else {
-                    controls.forEach((fields) => {
-                        this.displayHidden(dependency, "aanwezig");
-                        this.emptyFieldValues(fields);
-                    });
+                    this.displayHidden(dependency);
                 }
 
                 previousIndex = input.selectedIndex;
@@ -191,9 +179,9 @@ class GenericForm {
 
     setUpDynamicProductValtOnder() {
         const select = document.querySelector("#id_product_valt_onder");
-        const dependency = document
-            .querySelector('[id$="product_valt_onder_toelichting"]')
-            .closest(".form__field");
+        const dependency = this.getFallsUnderClarificationField().closest(
+            ".form__language-wrapper"
+        );
 
         if (select) {
             let previousSelectedProduct = select.value;
@@ -210,7 +198,7 @@ class GenericForm {
                             )
                         ) {
                             this.resetSpecefiekeGegevens();
-                            this.displayGrid(displayDependency, "valtOnder");
+                            this.displayGrid(displayDependency);
                         } else {
                             previousSelectedProduct = null;
                             select.selectedIndex = 0;
@@ -234,16 +222,7 @@ class GenericForm {
                         textarea.value = explanation;
                     }
                 } else {
-                    const controls =
-                        displayDependency.querySelectorAll(".form__control");
-                    let index = 0;
-                    for (const element of controls) {
-                        const textarea = element.querySelector("textarea");
-                        this.displayHidden(dependency, "valtOnder");
-                        this.emptyFieldValues([controls[index], element]);
-                        previousSelectedProduct = null;
-                        index++;
-                    }
+                    this.displayHidden(dependency);
                 }
             };
 
