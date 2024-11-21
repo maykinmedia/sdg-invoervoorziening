@@ -1,0 +1,11 @@
+{% load i18n %}
+
+{% if show_warning %}
+    <div class="notifications__notification notification__warning">
+        <i class="fas fa-info-circle"></i>
+        <span>Er staat een tekstwijziging van VNG klaar die op automatisch wordt gepubliceerd. Wilt u dit niet? Maak dan zelf wijzigingen in de product tekst en sla deze op, of 
+            <a href="?doordrukken_action_taken=true" class="underline">klik hier.</a>
+        </span>
+        <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
+    </div>
+{% endif %}

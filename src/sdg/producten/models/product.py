@@ -225,6 +225,31 @@ class Product(ProductFieldMixin, models.Model):
         default=False,
     )
 
+    automatisch_doordrukken = models.BooleanField(
+        _("Product teksten automatisch doordrukken"),
+        help_text=_(
+            "Selecteer of het product (referentie) teksten automatisch moet worden doorgedrukt naar de specifieke producten."
+        ),  # TODO Change this text.
+        default=False,
+    )
+
+    automatisch_doordrukken_datum = models.DateField(
+        _("Datum waarop de tekst automatisch word doorgedrukt"),
+        help_text=_(
+            "Deze datum is 30 dagen na de publicatie datum, wanneer de optie 'Automatisch doordrukken' op 'Ja' geselecteerd."
+        ),  # TODO Change this text.
+        null=True,
+        blank=True,
+    )
+
+    doordrukken_action_taken = models.BooleanField(
+        _("Automatisch doordrukken uitvoeren"),
+        help_text=_(
+            "Waarde dat aangeeft of de teksten automatisch doorgedrukt moeten worden."
+        ),
+        default=False,
+    )
+
     objects = ProductQuerySet.as_manager()
 
     @cached_property
