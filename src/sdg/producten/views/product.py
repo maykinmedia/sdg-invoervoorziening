@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.db import transaction
 from django.db.models import Prefetch
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.template.defaultfilters import capfirst
 from django.urls import reverse
 from django.utils.translation import gettext as _
@@ -428,10 +429,18 @@ class ProductUpdateView(
     def get(self, request, *args, **kwargs):
         ctx = self.get_context_data()
 
-        if not self.product.is_referentie_product:
-            self._add_placeholder_warning()
+        # User can take action against pass through by clicking on a link with the `doordrukken_action_taken` query.
+        # Action is taken and the user is redirected to the same update page without the query.
+        if self.request.GET.get("doordrukken_action_taken", False):
+            Product.objects.filter(
+                id=self.product.pk, referentie_product__automatisch_doordrukken=True
+            ).update(doordrukken_action_taken=True)
+            return redirect(self.request.path)
+        else:
+            if not self.product.is_referentie_product:
+                self._add_placeholder_warning()
 
-        return self.render_to_response(ctx)
+            return self.render_to_response(ctx)
 
     @municipality_role_required([Role.choices.MANAGER, Role.choices.EDITOR])
     def post(self, request, *args, **kwargs):
@@ -471,6 +480,20 @@ class ProductUpdateView(
             messages.SUCCESS,
             _("Product {product} is opgeslagen.").format(product=self.product),
         )
+
+        if self.product.is_referentie_product:
+            Product.objects.filter(referentie_product_id=self.product.pk).update(
+                automatisch_doordrukken=self.product.automatisch_doordrukken,
+                automatisch_doordrukken_datum=(
+                    self.product.automatisch_doordrukken_datum
+                    if self.product.automatisch_doordrukken
+                    else None
+                ),
+            )
+        else:
+            Product.objects.filter(
+                id=self.product.pk, automatisch_doordrukken=True
+            ).update(doordrukken_action_taken=True)
 
         return HttpResponseRedirect(self.get_success_url())
 

@@ -80,6 +80,18 @@
     }
 },
 {
+    "model": "django_celery_beat.crontabschedule",
+    "pk": 8,
+    "fields": {
+        "minute": "0",
+        "hour": "9",
+        "day_of_week": "*",
+        "day_of_month": "*",
+        "month_of_year": "*",
+        "timezone": "UTC"
+    }
+},
+{
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
@@ -280,6 +292,62 @@
         "total_run_count": 0,
         "date_changed": "2023-04-06T12:22:36.304",
         "description": "Send notification emails about recent reference product updates."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 10,
+    "fields": {
+        "name": "Druk referentie teksten door naar de specifieke producten",
+        "task": "sdg.producten.tasks.automatisch_doordrukken_teksten",
+        "interval": null,
+        "crontab": 8,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2024-11-20T10:30:00.000",
+        "description": "Automatisch referentie teksten doordrukken naar de specifieke producten."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 11,
+    "fields": {
+        "name": "Stuur een email naar gebruikers dat over 30 dagen de referentie teksten van een product worden doorgedrukt.",
+        "task": "sdg.producten.tasks.send_email_to_users_about_doordrukken",
+        "interval": null,
+        "crontab": 8,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2024-11-20T14:30:00.000",
+        "description": "Send an e-mail to users to inform them about their related products and that they will be overwritten."
     }
 }
 ]
