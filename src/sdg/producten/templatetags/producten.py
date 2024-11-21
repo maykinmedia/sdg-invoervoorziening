@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django import template
 
 from sdg.producten.types import ProductFieldMetadata
@@ -37,4 +39,26 @@ def publications(product, publication_links, concept_url):
         "product": product,
         "publication_links": publication_links,
         "concept_url": concept_url,
+    }
+
+
+@register.inclusion_tag("producten/_include/doordruk_warning.html")
+def doordruk_warning(product):
+    if (
+        product.is_referentie_product
+        or not product.automatisch_doordrukken
+        or not product.automatisch_doordrukken_datum
+        or product.doordrukken_action_taken
+    ):
+        return {
+            "show_warning": False,
+        }
+
+    original_publication_date = product.automatisch_doordrukken_datum - timedelta(
+        days=30
+    )
+    waiting_passed = date.today() >= original_publication_date
+
+    return {
+        "show_warning": waiting_passed,
     }

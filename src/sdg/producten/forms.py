@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime, timedelta
 from typing import Optional
 
 from django import forms
@@ -135,8 +135,10 @@ class LocalizedProductFormSet(
 
 
 class ProductForm(FieldConfigurationMixin, forms.ModelForm):
-    # The options for the specific products form, the options for this field inside product form are created inside __init__.
-    product_aanwezig = BooleanChoiceField(
+    automatisch_doordrukken = BooleanChoiceField(required=False)
+    automatisch_doordrukken_datum = forms.DateField(required=False)
+
+    product_aanwezig = forms.NullBooleanField(
         required=False,
         choices=[(None, _("Onbekend")), (True, _("Ja")), (False, _("Nee"))],
     )
@@ -166,6 +168,8 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     class Meta:
         model = Product
         fields = (
+            "automatisch_doordrukken",
+            "automatisch_doordrukken_datum",
             "product_aanwezig",
             "product_valt_onder",
             "bevoegde_organisatie",
@@ -249,18 +253,20 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        available = cleaned_data.get("product_aanwezig")
+        submit_type = self.data.get("publish")
         is_reference = self.instance.is_referentie_product
 
+        available = cleaned_data.get("product_aanwezig")
+        
         if not is_reference:
-            if "date" in self.data.get("publish"):
-                if available is None:
-                    self.add_error(
-                        "product_aanwezig",
-                        "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
-                        Geef dit aan met Ja of Nee. Let op! \
-                        Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
-                    )
+
+            if "date" in submit_type and available is None:
+                self.add_error(
+                    "product_aanwezig",
+                    "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
+                    Geef dit aan met Ja of Nee. Let op! \
+                    Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
+                )
         else:
             # Show an error is the reference submit that the reference product is available (the flow does not allow this.)
             if available is True:
@@ -269,6 +275,29 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
                     "Je hebt aangegeven dat jou gemeente dit product aanbiedt. \
                     De optie Ja is niet mogelijk bij het referentie product.",
                 )
+
+            automatic_press_through = cleaned_data.get("automatisch_doordrukken")
+
+            if "concept" in submit_type and automatic_press_through:
+                self.add_error(
+                    "automatisch_doordrukken",
+                    "Je hebt aangegeven aangegeven dat je de teksten automatisch wilt doordrukken. \
+                    Het is niet mogelijk om deze optie te selecteren een een product op te slaan als concept. \
+                    Publiceer de tekst, als je de teksten automatisch wilt doordrukken",
+                )
+
+            publish_date = self.data.get("date")
+            automatic_press_through = (
+                False if "concept" in submit_type else automatic_press_through
+            )
+            automatic_press_through_date = (
+                datetime.strptime(publish_date, "%Y-%m-%d").date() + timedelta(days=30)
+                if automatic_press_through
+                else None
+            )
+
+            cleaned_data["automatisch_doordrukken_datum"] = automatic_press_through_date
+            cleaned_data["automatisch_doordrukken"] = automatic_press_through
 
 
 class VersionForm(forms.ModelForm):
