@@ -232,9 +232,6 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
 
-        if self.initial["product_aanwezig"] is None:
-            self.initial["product_aanwezig"] = True
-
         for field in self.fields:
             self.fields[field].help_text = self._help_text(field)
 
