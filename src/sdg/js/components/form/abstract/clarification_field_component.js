@@ -14,6 +14,8 @@ export class ClarificationFieldComponent extends FormComponent {
         super(node);
         this.node = node; // Same as in super(node), but this will overwrite the type HTMLElement with HTMLSelectElement.
         this.isReferenceForm = this.getForm().dataset.reference === "true";
+        this.availability = false;
+        this.fallsUnder = false;
     }
 
     /**
@@ -21,7 +23,7 @@ export class ClarificationFieldComponent extends FormComponent {
      */
     showClarificationField() {
         this.dependency.style.display = "grid";
-        this.collapseOrExpandSpecificForm(true);
+        this.collapseOrExpandSpecificForm();
     }
 
     /**
@@ -29,7 +31,7 @@ export class ClarificationFieldComponent extends FormComponent {
      */
     hideClarificationField() {
         this.dependency.style.display = "none";
-        this.collapseOrExpandSpecificForm(false);
+        this.collapseOrExpandSpecificForm();
     }
 
     /**
@@ -85,12 +87,15 @@ export class ClarificationFieldComponent extends FormComponent {
      * Collapse and remove pointer events or expand and add pointer events the specific form.
      * @param {boolean} collapse
      */
-    collapseOrExpandSpecificForm(collapse) {
-        const formSpecific = document.querySelector(".form__specific");
-        const formSpecificClassList = formSpecific.classList;
-        formSpecific.style.pointerEvents = collapse ? "none" : "all";
-        formSpecificClassList.toggle("tabs__table--hidden", collapse);
-        formSpecificClassList.toggle("form__specific--hidden", collapse);
+    collapseOrExpandSpecificForm() {
+        const collapse = this.availability || this.fallsUnder;
+        if (collapse) {
+            const formSpecific = document.querySelector(".form__specific");
+            const formSpecificClassList = formSpecific.classList;
+            formSpecific.style.pointerEvents = collapse ? "none" : "all";
+            formSpecificClassList.toggle("tabs__table--hidden", collapse);
+            formSpecificClassList.toggle("form__specific--hidden", collapse);
+        }
     }
 
     /**

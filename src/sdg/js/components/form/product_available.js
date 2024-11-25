@@ -57,18 +57,20 @@ class ProductAvailable extends ClarificationFieldComponent {
      */
     handle() {
         if (this.node.selectedIndex === 2) {
+            this.availability = true;
             if (this.node.selectedIndex != this.previousSelectedIndex) {
                 if (confirm(PRODUCT_AANWEZIG_QUESTION)) {
                     this.resetSpecifiekeGegevens();
-                    this.showClarificationField();
                 } else {
                     this.node.selectedIndex = this.previousSelectedIndex;
                     return;
                 }
             }
 
+            this.showClarificationField();
             this.updateValues();
         } else {
+            this.availability = false;
             this.hideClarificationField();
         }
 
