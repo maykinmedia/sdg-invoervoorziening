@@ -263,7 +263,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
                     )
         else:
             # Show an error is the reference submit that the reference product is available (the flow does not allow this.)
-            if available == True:
+            if available is True:
                 self.add_error(
                     "product_aanwezig",
                     "Je hebt aangegeven dat jou gemeente dit product aanbiedt. \
