@@ -7,7 +7,7 @@ from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import BevoegdeOrganisatie, LokaleOverheid
 from sdg.producten.models import Product, ProductVersie
 from sdg.producten.models.localized import LocalizedProduct
-from sdg.producten.utils import get_placeholder_maps 
+from sdg.producten.utils import get_placeholder_maps
 
 
 class Command(BaseCommand):
@@ -132,7 +132,9 @@ class Command(BaseCommand):
                     # Conditionally include "product_aanwezig" only if its value is None or False.
                     # The `not` operator checks for both None and False values.
                     if not reference_product.product_aanwezig:
-                        product_defaults["product_aanwezig"] = reference_product.product_aanwezig
+                        product_defaults["product_aanwezig"] = (
+                            reference_product.product_aanwezig
+                        )
 
                     # If it doesn't exist yet, create a (specific) product in
                     # this (specific) catalog.
@@ -183,12 +185,19 @@ class Command(BaseCommand):
 
                             # Conditionally include the explanation field if the product is not available
                             if reference_product.product_aanwezig is False:
-                                available_explanation_map, falls_under_explanation_map = get_placeholder_maps(product)
+                                (
+                                    available_explanation_map,
+                                    falls_under_explanation_map,
+                                ) = get_placeholder_maps(product)
                                 # Add the explanation text to the dictionary
-                                localized_product_version_create_kwargs["product_aanwezig_toelichting"] = falls_under_explanation_map[language]
+                                localized_product_version_create_kwargs[
+                                    "product_aanwezig_toelichting"
+                                ] = falls_under_explanation_map[language]
 
                             # Create the localized product version with the prepared arguments
-                            localized_product_version = LocalizedProduct.objects.create(**localized_product_version_create_kwargs)
+                            localized_product_version = LocalizedProduct.objects.create(
+                                **localized_product_version_create_kwargs
+                            )
 
                             # Copy the reference texts
                             if active_reference_product_version:
@@ -197,7 +206,7 @@ class Command(BaseCommand):
                                         taal=language
                                     ).first()
                                 )
-                                if localized_reference_product_version: 
+                                if localized_reference_product_version:
                                     localized_product_version.update_with_reference_texts(
                                         localized_reference_product_version,
                                     )
