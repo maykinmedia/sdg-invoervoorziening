@@ -76,11 +76,11 @@ def validate_product(localized):
         localized.product_versie.product.product_aanwezig is False
         and not localized.product_aanwezig_toelichting
     ):
-        raise ValidationError(
-            _(
-                "Het veld 'productAanwezigToelichting' is verplicht als product niet aanwezig is."
+        raise ValidationError({
+            "product_aanwezig_toelichting": _(
+                "Het veld 'Product aanwezig toelichting' is verplicht als product niet aanwezig is."
             )
-        )
+        })
 
     if bool(localized.decentrale_procedure_label) is not bool(
         localized.decentrale_procedure_link
