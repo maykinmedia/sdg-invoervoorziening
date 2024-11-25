@@ -135,8 +135,10 @@ class LocalizedProductFormSet(
 
 
 class ProductForm(FieldConfigurationMixin, forms.ModelForm):
-    product_aanwezig = forms.NullBooleanField(
+    # The options for the specific products form, the options for this field inside product form are created inside __init__.
+    product_aanwezig = forms.ChoiceField(
         required=False,
+        choices=[(None, _("Onbekend")), (True, _("Ja")), (False, _("Nee"))],
     )
     product_valt_onder = forms.ModelChoiceField(
         queryset=Product.objects.filter(
@@ -232,6 +234,10 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
             "bevoegde_organisatie"
         ].queryset.filter(lokale_overheid=self.instance.catalogus.lokale_overheid)
 
+        # Disable yes option inside the `product_aanwezig` select field inside the reference product, product form.
+        if self.instance.is_referentie_product:
+            self.fields["product_aanwezig"].choices = [(None, _("Onbekend")), (False, _("Nee"))]
+            
         for field in self.fields:
             self.fields[field].help_text = self._help_text(field)
 
@@ -246,13 +252,20 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         if not is_reference:
             if "date" in self.data.get("publish"):
                 if available is None:
-
                     self.add_error(
                         "product_aanwezig",
                         "Je hebt nog niet aangegeven of jouw gemeente dit product aanbiedt. \
                         Geef dit aan met Ja of Nee. Let op! \
                         Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
                     )
+        else: 
+            # Show an error is the reference submit that the reference product is available (the flow does not allow this.)
+            if available == True:
+                self.add_error(
+                    "product_aanwezig",
+                    "Je hebt aangegeven dat jou gemeente dit product aanbiedt. \
+                    De optie Ja is niet mogelijk bij het referentie product.",
+                )
 
 
 class VersionForm(forms.ModelForm):
