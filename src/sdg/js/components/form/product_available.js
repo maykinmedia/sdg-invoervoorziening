@@ -27,14 +27,17 @@ class ProductAvailable extends ClarificationFieldComponent {
      */
     onMount() {
         super.onMount();
-        this.handle();
+        this.handle({ onMount: true });
     }
 
     /**
      * Binds events to callbacks.
      */
     bindEvents() {
-        this.node.addEventListener("change", this.handle.bind(this));
+        this.node.addEventListener(
+            "change",
+            this.handle.bind(this, { onMount: false })
+        );
     }
 
     /**
@@ -54,11 +57,16 @@ class ProductAvailable extends ClarificationFieldComponent {
 
     /**
      * Gets called on change and on mount.
+     * @param {{ onMount: boolean }} options
      */
-    handle() {
-        if (this.node.selectedIndex === 2) {
+    handle(options) {
+        const FalseOption = this.isReferenceForm ? 1 : 2;
+        if (this.node.selectedIndex === FalseOption) {
             this.availability = true;
-            if (this.node.selectedIndex != this.previousSelectedIndex) {
+            if (
+                !this.isReferenceForm &&
+                this.node.selectedIndex != this.previousSelectedIndex
+            ) {
                 if (confirm(PRODUCT_AANWEZIG_QUESTION)) {
                     this.resetSpecifiekeGegevens();
                 } else {
@@ -68,8 +76,9 @@ class ProductAvailable extends ClarificationFieldComponent {
             }
 
             this.showClarificationField();
-            this.updateValues();
+            if (!options.onMount) this.updateValues();
         } else {
+            console.log("hiding now");
             this.availability = false;
             this.hideClarificationField();
         }
