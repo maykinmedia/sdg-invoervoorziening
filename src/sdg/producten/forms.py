@@ -236,8 +236,11 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
 
         # Disable yes option inside the `product_aanwezig` select field inside the reference product, product form.
         if self.instance.is_referentie_product:
-            self.fields["product_aanwezig"].choices = [(None, _("Onbekend")), (False, _("Nee"))]
-            
+            self.fields["product_aanwezig"].choices = [
+                (None, _("Onbekend")),
+                (False, _("Nee")),
+            ]
+
         for field in self.fields:
             self.fields[field].help_text = self._help_text(field)
 
@@ -258,7 +261,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
                         Geef dit aan met Ja of Nee. Let op! \
                         Je kan deze pagina alleen publiceren als je een keuze hebt gemaakt.",
                     )
-        else: 
+        else:
             # Show an error is the reference submit that the reference product is available (the flow does not allow this.)
             if available == True:
                 self.add_error(
