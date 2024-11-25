@@ -70,6 +70,8 @@ class ProductValtOnder extends ClarificationFieldComponent {
      */
     handle() {
         if (this.node.selectedIndex > 0) {
+            this.fallsUnder = true;
+
             if (this.previousSelectedIndex == 0) {
                 if (confirm(PRODUCT_VALT_ONDER_QUESTION)) {
                     this.resetSpecifiekeGegevens();
@@ -81,6 +83,7 @@ class ProductValtOnder extends ClarificationFieldComponent {
             }
             this.updateValues();
         } else {
+            this.fallsUnder = false;
             this.hideClarificationField();
         }
 
