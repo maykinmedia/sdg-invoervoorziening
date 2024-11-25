@@ -34,12 +34,12 @@
             </div>
         </div>
         <hr class="divider">
-        <div class="form-actions">
+        <div class="form__actions">
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
-            <div class="form__buttons">
+            <div>
                 <input type="submit" class="button" value="{% trans 'Opslaan' %}">
-                <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}">
-                    <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
+                <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}" class="button button--light">
+                    {% trans 'Annuleren' %}
                 </a>
             </div>
         </div>

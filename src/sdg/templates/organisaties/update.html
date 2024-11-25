@@ -20,13 +20,11 @@
             {% field form.contact_formulier_link %}
         </div>
         <hr class="divider">
-        <div class="form-actions">
-            <div class="form__buttons">
-                <input type="submit" value="Opslaan" class="primaryAction login_button button">
-                <a href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}">
-                    <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
-                </a>
-            </div>
+        <div class="form__actions">
+            <button type="submit" class="button">{% trans "Opslaan" %}</button>
+            <a href="{% url 'organisaties:edit' pk=lokaleoverheid.pk %}" class="button button--light">
+                {% trans 'Annuleren' %}
+            </a>
         </div>
     </form>
 {% endblock inner_content %}
