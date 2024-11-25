@@ -17,75 +17,10 @@
                 </h1>
                 <h2 class="logo__subtitle logo__subtitle-medium">voor {{ org_type_cfg.name_plural }}</h2>
             </div>
-            <div class="header__user header__dropdown">
-                <i class="fas fa-user"></i>
-
-                <span class="header__username">
-                    {{ request.user }}
-                </span>
-
-                <div class="header__dropdown-list">
-                    {% with pk=lokaleoverheid.pk %}
-
-                        {% if not pk %}
-                            <a class="header__dropdown-text">
-                                {% trans "Selecteer eerst een organisatie voor meer opties." %}
-                            </a>
-                        {% else %}
-                            {% if request.user|is_manager:lokaleoverheid %}
-                                <a class="header__dropdown-action" href="{% url 'organisaties:edit' pk=pk %}">
-                                    <i class="fas fa-building"></i> {% trans "Organisatie instellingen" %}
-                                </a>
-                                <a class="header__dropdown-action" href="{% url 'organisaties:locaties' pk=pk %}">
-                                    <i class="fas fa-compass"></i> {% trans "Locaties" %}
-                                </a>
-                                <a class="header__dropdown-action"
-                                   href="{% url 'organisaties:bevoegde_organisaties' pk=pk %}">
-                                    <i class="fas fa-handshake"></i> {% trans "Bevoegde organisaties" %}
-                                </a>
-                            {% endif %}
-                            <a class="header__dropdown-action" href="{% url 'organisaties:roles:list' pk=pk %}">
-                                <i class="fas fa-users"></i> {% trans "Gebruikersbeheer" %}
-                            </a>
-                        {% endif %}
-
-                        {% if siteconfig.documentatie_link %}
-                            <a class="header__dropdown-action" href="{{ siteconfig.documentatie_link }}" target="_blank"
-                               rel="noopener" id="documentation">
-                                <i class="fa fa-book"></i> {{ siteconfig.documentatie_titel|capfirst|default:_("Documentatie") }}
-                            </a>
-                        {% endif %}
-
-                        <hr>
-
-                        <a class="header__dropdown-action" href="{% url 'notificaties' %}">
-                            <i class="fa fa-bell"></i> {% trans "Notificaties" %}
-                        </a>
-
-                        <hr>
-
-                        <a class="header__dropdown-action" href="{% url 'account_logout' %}">
-                            <i class="fas fa-sign-out-alt"></i> {% trans "Uitloggen" %}
-                        </a>
-
-                    {% endwith %}
-                </div>
-            </div>
+            {% user_dropdown %}
         </div>
         <div class="container">
-            <p class="header__subtitle">{% block container_subtitle %}{% endblock container_subtitle %}</p>
-            <p class="header__title">
-                {% block container_title %}
-                    {% if lokaleoverheid %}
-                        <b>{{ lokaleoverheid }}</b>
-                        {% include "core/_municipality_switch.html" %}
-                    {% else %}
-                        <div class="header__title">
-                            <b>SDG</b> {% trans "Invoervoorziening" %}
-                        </div>
-                    {% endif %}
-                {% endblock container_title %}
-            </p>
+            {% navigation %}
         </div>
     </header>
 {% endblock %}

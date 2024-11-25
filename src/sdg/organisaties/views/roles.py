@@ -79,6 +79,15 @@ class RoleUpdateView(
 
         raise PermissionDenied()
 
+    def get_success_url(self):
+        # Stay on the same page if the user is editing own settings and is not an admin.
+        if (
+            self.request.user.email == self.object.user.email
+            and self.object.is_beheerder is not True
+        ):
+            return self.request.get_full_path()
+        return super().get_success_url()
+
     def form_valid(self, form, *args, **kwargs):
         response = super().form_valid(form)
 
