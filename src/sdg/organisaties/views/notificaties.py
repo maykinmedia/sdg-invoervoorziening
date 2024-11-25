@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.views.generic import ListView
@@ -6,7 +7,7 @@ from django.views.generic import ListView
 from dateutil.relativedelta import relativedelta
 
 from sdg.core.views.mixins import BreadcrumbsMixin
-from sdg.producten.models import ProductVersie
+from sdg.producten.models import NotificationViewed, ProductVersie
 
 
 class ProductVersieListView(
@@ -41,3 +42,12 @@ class ProductVersieListView(
             .published()
             .order_by("-gewijzigd_op")[: self.limit]
         )
+
+    def get(self, request, *args, **kwargs):
+        # Call the parent class's get method to fetch the queryset
+        response = super().get(request, *args, **kwargs)
+
+        # Update or create the NotificationViewed instance for the current user
+        NotificationViewed.objects.update_or_create(gebruiker=request.user)
+
+        return response

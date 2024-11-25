@@ -1,46 +1,22 @@
-@import 'colors';
+@import "colors";
 
 .header {
-  --shadow-color: rgba(0, 0, 0, 0.121722);
-
   width: 100%;
   background: rgb(57, 106, 136);
-  background: linear-gradient(353.15deg, var(--org-theme-bg-darkest) -68.3%, var(--org-theme-bg) 179.94%);
+  background: linear-gradient(
+    353.15deg,
+    var(--org-theme-bg-darkest) -68.3%,
+    var(--org-theme-bg) 179.94%
+  );
   padding: 24px 0 0;
   justify-content: space-between;
   display: flex;
   flex-direction: column;
 
-  &.header--inset {
-    padding-bottom: 88px;
-  }
-
-  .header__top {
+  &__top {
     justify-content: space-between;
     display: flex;
     flex-direction: row;
-  }
-
-  .header__user {
-    display: flex;
-    align-items: center;
-
-    & > .svg-inline--fa {
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-      background-color: $color_primary_lightest;
-      color: $color_primary;
-      padding-top: 4px;
-      overflow: hidden;
-      margin-right: 8px;
-      border: 3px solid $color_secondary_dark;
-      z-index: 1;
-
-      path {
-        color: $color_primary;
-      }
-    }
   }
 
   .header__username {
@@ -59,36 +35,10 @@
     color: #000;
   }
 
-  .header__title {
-    color: $color_secondary_dark;
-    font-size: 40px;
-
-    .switch-icon {
-      color: $color_accent;
-      margin-left: 8px;
-    }
-
-    a:hover svg {
-      color: $color_accent_dark;
-      transition: all 0.3s ease-in-out;
-    }
-
-  }
-
-  .header__subtitle {
-    color: $color_secondary_darker;
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-
   .header__dropdown {
     position: relative;
     padding: 12px;
     color: #fff;
-
-    .svg-inline--fa:hover {
-      transform: scale(1.05);
-    }
   }
 
   .header__dropdown *:hover ~ .header__dropdown-list,
@@ -125,21 +75,5 @@
     &:hover {
       text-decoration: underline;
     }
-  }
-
-  .header__dropdown-action .svg-inline--fa {
-    float: left;
-    margin-top: 2px;
-    margin-right: 8px;
-    width: 1em;
-  }
-
-  .header__dropdown-text {
-    padding: 12px;
-    color: #000;
-    display: block;
-    text-align: left;
-    text-decoration: none;
-    margin-right: 8px;
   }
 }
