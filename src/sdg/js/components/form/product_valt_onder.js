@@ -27,14 +27,17 @@ class ProductValtOnder extends ClarificationFieldComponent {
      */
     onMount() {
         super.onMount();
-        this.handle();
+        this.handle({ onMount: true });
     }
 
     /**
      * Binds events to callbacks.
      */
     bindEvents() {
-        this.node.addEventListener("change", this.handle.bind(this));
+        this.node.addEventListener(
+            "change",
+            this.handle.bind(this, { onMount: false })
+        );
     }
 
     /**
@@ -67,8 +70,9 @@ class ProductValtOnder extends ClarificationFieldComponent {
 
     /**
      * Gets called on change and on mount.
+     * @param {{ onMount: boolean }} options
      */
-    handle() {
+    handle(options) {
         if (this.node.selectedIndex > 0) {
             this.fallsUnder = true;
 
@@ -81,7 +85,7 @@ class ProductValtOnder extends ClarificationFieldComponent {
                     return;
                 }
             }
-            this.updateValues();
+            if (!options.onMount) this.updateValues();
         } else {
             this.fallsUnder = false;
             this.hideClarificationField();

@@ -88,14 +88,14 @@ export class ClarificationFieldComponent extends FormComponent {
      * @param {boolean} collapse
      */
     collapseOrExpandSpecificForm() {
+        if (this.isReferenceForm) return; // Don't collapse the specific form inside the reference product form.
         const collapse = this.availability || this.fallsUnder;
-        if (collapse) {
-            const formSpecific = document.querySelector(".form__specific");
-            const formSpecificClassList = formSpecific.classList;
-            formSpecific.style.pointerEvents = collapse ? "none" : "all";
-            formSpecificClassList.toggle("tabs__table--hidden", collapse);
-            formSpecificClassList.toggle("form__specific--hidden", collapse);
-        }
+
+        const formSpecific = document.querySelector(".form__specific");
+        const formSpecificClassList = formSpecific.classList;
+        formSpecific.style.pointerEvents = collapse ? "none" : "all";
+        formSpecificClassList.toggle("tabs__table--hidden", collapse);
+        formSpecificClassList.toggle("form__specific--hidden", collapse);
     }
 
     /**

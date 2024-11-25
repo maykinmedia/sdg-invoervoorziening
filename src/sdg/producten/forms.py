@@ -136,7 +136,7 @@ class LocalizedProductFormSet(
 
 class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     # The options for the specific products form, the options for this field inside product form are created inside __init__.
-    product_aanwezig = forms.ChoiceField(
+    product_aanwezig = BooleanChoiceField(
         required=False,
         choices=[(None, _("Onbekend")), (True, _("Ja")), (False, _("Nee"))],
     )
