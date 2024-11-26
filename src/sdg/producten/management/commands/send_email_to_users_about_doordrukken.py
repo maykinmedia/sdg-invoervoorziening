@@ -6,19 +6,18 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.management import BaseCommand
 from django.db.models import Q
+from django.db.models.manager import BaseManager
 from django.urls import reverse
 from django.utils.html import strip_tags
 
 from compat import render_to_string
 from furl import furl
 
-from sdg.conf.utils import org_type_cfg
-from sdg.producten.models import Product
-from sdg.organisaties.models import LokaleOverheid
-from sdg.core.models import ProductenCatalogus
 from sdg.accounts.models import Role
-
-from django.db.models.manager import BaseManager
+from sdg.conf.utils import org_type_cfg
+from sdg.core.models import ProductenCatalogus
+from sdg.organisaties.models import LokaleOverheid
+from sdg.producten.models import Product
 
 User = get_user_model()
 
@@ -43,7 +42,9 @@ class Command(BaseCommand):
             },
         ).lstrip("/")
 
-        url_path = [segment for segment in [settings.SUBPATH, url_partial_path] if segment]
+        url_path = [
+            segment for segment in [settings.SUBPATH, url_partial_path] if segment
+        ]
 
         return furl(
             scheme=url_scheme,
