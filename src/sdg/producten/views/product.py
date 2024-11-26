@@ -434,7 +434,7 @@ class ProductUpdateView(
         if self.request.GET.get("doordrukken_action_taken", False):
             Product.objects.filter(
                 id=self.product.pk, referentie_product__automatisch_doordrukken=True
-            ).update(doordrukken_action_taken=True)
+            ).update(automatisch_doordrukken=False)
             return redirect(self.request.path)
         else:
             if not self.product.is_referentie_product:
