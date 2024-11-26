@@ -6,9 +6,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('producten', '0060_alter_brokenlinks_url'),
-        ('producten', '0060_alter_notificationviewed_last_viewed_date'),
+        ("producten", "0060_alter_brokenlinks_url"),
+        ("producten", "0060_alter_notificationviewed_last_viewed_date"),
     ]
 
-    operations = [
-    ]
+    operations = []
