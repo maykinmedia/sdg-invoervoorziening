@@ -48,7 +48,6 @@ def doordruk_warning(product):
         product.is_referentie_product
         or not product.automatisch_doordrukken
         or not product.automatisch_doordrukken_datum
-        or product.doordrukken_action_taken
     ):
         return {
             "show_warning": False,
@@ -57,8 +56,7 @@ def doordruk_warning(product):
     original_publication_date = product.automatisch_doordrukken_datum - timedelta(
         days=30
     )
-    waiting_passed = date.today() >= original_publication_date
 
     return {
-        "show_warning": waiting_passed,
+        "show_warning": date.today() >= original_publication_date,
     }
