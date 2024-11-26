@@ -435,12 +435,13 @@ class ProductUpdateView(
             Product.objects.filter(
                 id=self.product.pk, referentie_product__automatisch_doordrukken=True
             ).update(automatisch_doordrukken=False)
-            return redirect(self.request.path)
-        else:
-            if not self.product.is_referentie_product:
-                self._add_placeholder_warning()
 
-            return self.render_to_response(ctx)
+            return redirect(self.request.path)
+
+        if not self.product.is_referentie_product:
+            self._add_placeholder_warning()
+
+        return self.render_to_response(ctx)
 
     @municipality_role_required([Role.choices.MANAGER, Role.choices.EDITOR])
     def post(self, request, *args, **kwargs):
