@@ -242,14 +242,6 @@ class Product(ProductFieldMixin, models.Model):
         blank=True,
     )
 
-    doordrukken_action_taken = models.BooleanField(
-        _("Automatisch doordrukken uitvoeren"),
-        help_text=_(
-            "Waarde dat aangeeft of de teksten automatisch doorgedrukt moeten worden."
-        ),
-        default=False,
-    )
-
     objects = ProductQuerySet.as_manager()
 
     @cached_property
