@@ -218,7 +218,7 @@ class ProductUpdateViewTests(WebTest):
         )
 
         response.form["product_valt_onder"] = str(product.pk)
-        response.form["product_aanwezig"] = "false"
+        response.form["product_aanwezig"] = "False"
 
         for idx, language in enumerate(TaalChoices.get_available_languages()):
             response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
@@ -1533,7 +1533,7 @@ class ProductUpdateViewTests(WebTest):
         )
         self.assertEqual(response.status_code, 200)
 
-        response.form["product_aanwezig"] = "true"
+        response.form["product_aanwezig"] = "True"
 
         for idx, _lang in enumerate(TaalChoices.get_available_languages()):
             response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
