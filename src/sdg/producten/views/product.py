@@ -434,7 +434,16 @@ class ProductUpdateView(
         if self.request.GET.get("doordrukken_action_taken", False):
             Product.objects.filter(
                 id=self.product.pk, referentie_product__automatisch_doordrukken=True
-            ).update(automatisch_doordrukken=False)
+            ).update(automatisch_doordrukken=False, automatisch_doordrukken_datum=None)
+
+            return redirect(self.request.path)
+        
+        # User can cancel the action taken against pass through by clicking on a link with the `doordrukken_cancel_action` query.
+        # Action cancelled and the user is redirected to the same update page without the query.
+        if self.request.GET.get("doordrukken_cancel_action", False):
+            Product.objects.filter(
+                id=self.product.pk, referentie_product__automatisch_doordrukken=True
+            ).update(automatisch_doordrukken=True, automatisch_doordrukken_datum=self.product.referentie_product.automatisch_doordrukken_datum)
 
             return redirect(self.request.path)
 
