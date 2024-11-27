@@ -4,6 +4,10 @@ from django import template
 
 from sdg.producten.types import ProductFieldMetadata
 
+from sdg.producten.models import Product
+
+from typing import Literal
+
 register = template.Library()
 
 
@@ -43,20 +47,33 @@ def publications(product, publication_links, concept_url):
 
 
 @register.inclusion_tag("producten/_include/doordruk_warning.html")
-def doordruk_warning(product):
-    if (
-        product.is_referentie_product
-        or not product.automatisch_doordrukken
-        or not product.automatisch_doordrukken_datum
-    ):
-        return {
-            "show_warning": False,
-        }
+def doordruk_warning(product: Product):
+    doordruk_activation_warning: bool | None
+    is_reference_product = product.is_referentie_product
+    auto_forward = product.automatisch_doordrukken
+    ref_auto_forward_date = product.automatisch_doordrukken_datum
 
-    original_publication_date = product.automatisch_doordrukken_datum - timedelta(
-        days=30
-    )
+    if is_reference_product:
+        doordruk_activation_warning = None
+
+    else:
+        reference_product: Product = product.referentie_product
+        ref_auto_forward = reference_product.automatisch_doordrukken
+        ref_auto_forward_date = reference_product.automatisch_doordrukken_datum
+        original_publication_date = reference_product.automatisch_doordrukken_datum - timedelta(days=30)
+        warning_in_timeframe = date.today() >= original_publication_date
+
+        # When it isn't the right time yet, don't show the warning.
+        if not warning_in_timeframe:
+            doordruk_activation_warning = None    
+        elif auto_forward and ref_auto_forward:
+            doordruk_activation_warning = True
+        elif not auto_forward and ref_auto_forward:
+            doordruk_activation_warning = False
+        else: 
+            doordruk_activation_warning = None
 
     return {
-        "show_warning": date.today() >= original_publication_date,
+        "doordruk_activation_warning": doordruk_activation_warning,
+        "datum__doordrukken": ref_auto_forward_date
     }
