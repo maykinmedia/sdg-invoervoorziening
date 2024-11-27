@@ -58,13 +58,10 @@ def doordruk_warning(product: Product):
         reference_product: Product = product.referentie_product
         ref_auto_forward = reference_product.automatisch_doordrukken
         ref_auto_forward_date = reference_product.automatisch_doordrukken_datum
-        original_publication_date = (
-            reference_product.automatisch_doordrukken_datum - timedelta(days=30)
-        )
-        warning_in_timeframe = date.today() >= original_publication_date
+        original_publication_date = ref_auto_forward_date - timedelta(days=30)
 
         # When it isn't the right time yet, don't show the warning.
-        if not warning_in_timeframe:
+        if not date.today() >= original_publication_date:
             doordruk_activation_warning = None
         elif auto_forward and ref_auto_forward:
             doordruk_activation_warning = True
