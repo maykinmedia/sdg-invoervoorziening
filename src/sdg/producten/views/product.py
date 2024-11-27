@@ -494,7 +494,7 @@ class ProductUpdateView(
         else:
             Product.objects.filter(
                 id=self.product.pk, automatisch_doordrukken=True
-            ).update(doordrukken_action_taken=True)
+            ).update(automatisch_doordrukken=False, automatisch_doordrukken_datum=None)
 
         return HttpResponseRedirect(self.get_success_url())
 
