@@ -8,40 +8,34 @@
         </strong>
     </td>
     <td class="tabs__table-cell">
-
-
-        <p>
-            {{version.product}}
-            {{version.reference_product}}
-        </p>
-            <li class="revision-list__item">
-                <span class="tabs__table-cell--value">
-                    <strong>{{ version.gewijzigd_op }} </strong>
-                    <span>—</span>
-                    <strong>{% trans "versie" %} {{version.versie}} {% if not version.publicatie_datum %}(concept){% endif %}</strong>
-                    <span>{% trans "gewijzigd" %}</span>
-                    {% if version.publicatie_datum %}
-                    <span>—</span>
-                    <span>Gepubliceerd op </span>
-                    {% blocktrans with publication_date=version.publicatie_datum %}
-                        <strong>{{ publication_date }}.</strong>
-                        {% endblocktrans %}
-                    {% endif %}
-                </span>
-                
-                <span>
-                </span>
-            </li>
-            {% if version.interne_opmerkingen %}
+        <li class="revision-list__item">
+            <span class="tabs__table-cell--value">
+                <strong>{{ version.gewijzigd_op }} </strong>
+                <span>—</span>
+                <strong>{% trans "versie" %} {{version.versie}} {% if not version.publicatie_datum %}(concept){% endif %}</strong>
+                <span>{% trans "gewijzigd" %}</span>
+                {% if version.publicatie_datum %}
+                <span>—</span>
+                <span>Gepubliceerd op </span>
+                {% blocktrans with publication_date=version.publicatie_datum %}
+                    <strong>{{ publication_date }}.</strong>
+                    {% endblocktrans %}
+                {% endif %}
+            </span>
+            
+            <span>
+            </span>
+        </li>
+        {% if version.interne_opmerkingen %}
             <li class="revision-list__remarks" title="{% trans 'Interne opmerkingen' %}">
                 <i class="fa fa-note-sticky fa-xs"></i>
                 <span>{{ version.interne_opmerkingen }}</span>
             </li>
-            {% endif %}
-            {% if version.bewerkte_velden %}
+        {% endif %}
+        {% if version.bewerkte_velden %}
             <li class="revision-list__edited-fields" title="{% trans 'Bewerkte velden' %}">
                 {% include 'producten/_include/productversie_bewerkte_velden.html' %}
             </li>
-            {% endif %}
+        {% endif %}
     </td>
 </tr>
