@@ -266,16 +266,11 @@ class ProductUpdateView(
         new_version.product = self.product
         new_version.gemaakt_door = self.request.user
         new_version.versie = self.object.versie + 1 if created else self.object.versie
-        changes_specific_fields = [
-            field
-            for field in product_form.changed_data
-            if field in settings.SDG_LOCALIZED_FORM_FIELDS
-        ]
         new_version.bewerkte_velden = list(
             chain.from_iterable(
                 [
                     localized_formset.changed_data_localized,
-                    parse_changed_data(changes_specific_fields, form=product_form),
+                    parse_changed_data(product_form.changed_data, form=product_form),
                 ]
             )
         )
