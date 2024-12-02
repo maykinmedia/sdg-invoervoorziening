@@ -46,31 +46,26 @@ def publications(product, publication_links, concept_url):
 
 @register.inclusion_tag("producten/_include/doordruk_warning.html")
 def doordruk_warning(product: Product):
-    doordruk_activation_warning: bool | None
-    is_reference_product = product.is_referentie_product
-    auto_forward = product.automatisch_doordrukken
-    ref_auto_forward_date = product.automatisch_doordrukken_datum
-
-    if is_reference_product:
-        doordruk_activation_warning = None
-
-    else:
-        reference_product: Product = product.referentie_product
-        ref_auto_forward = reference_product.automatisch_doordrukken
-        ref_auto_forward_date = reference_product.automatisch_doordrukken_datum
-        original_publication_date = ref_auto_forward_date - timedelta(days=30)
-
-        # When it isn't the right time yet, don't show the warning.
-        if not date.today() >= original_publication_date:
-            doordruk_activation_warning = None
-        elif auto_forward and ref_auto_forward:
-            doordruk_activation_warning = True
-        elif not auto_forward and ref_auto_forward:
-            doordruk_activation_warning = False
-        else:
-            doordruk_activation_warning = None
-
-    return {
-        "doordruk_activation_warning": doordruk_activation_warning,
-        "datum__doordrukken": ref_auto_forward_date,
+    return_value = lambda show_warning, warning_date: {
+        "doordruk_activation_warning": show_warning,
+        "datum__doordrukken": warning_date,
     }
+
+    reference_product = product.reference_product
+    reference_auto_press_through = reference_product.automatisch_doordrukken
+    reference_auto_press_through_date = reference_product.automatisch_doordrukken_datum
+    product_press_through = product.automatisch_doordrukken
+
+    if product.is_referentie_product:
+        return return_value(None, None)
+
+    if not reference_auto_press_through or not reference_auto_press_through_date:
+        return return_value(None, None)
+
+    if not date.today() >= reference_auto_press_through_date - timedelta(days=30):
+        return return_value(None, None)
+
+    if reference_auto_press_through and not product_press_through:
+        return return_value(False, reference_auto_press_through_date)
+
+    return return_value(True, reference_auto_press_through_date)
