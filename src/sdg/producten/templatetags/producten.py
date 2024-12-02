@@ -46,10 +46,11 @@ def publications(product, publication_links, concept_url):
 
 @register.inclusion_tag("producten/_include/doordruk_warning.html")
 def doordruk_warning(product: Product):
-    return_value = lambda show_warning, warning_date: {
-        "doordruk_activation_warning": show_warning,
-        "datum__doordrukken": warning_date,
-    }
+    def return_value(show_warning, warning_date):
+        return {
+            "doordruk_activation_warning": show_warning,
+            "datum__doordrukken": warning_date,
+        }
 
     reference_product = product.reference_product
     reference_auto_press_through = reference_product.automatisch_doordrukken
