@@ -10,11 +10,8 @@ import requests
 from bs4 import BeautifulSoup
 from zgw_consumers.concurrent import parallel
 
-from sdg.core.models import (
-    ProductFieldConfiguration,
-)
+from sdg.core.models import ProductFieldConfiguration
 from sdg.producten.models import BrokenLinks, LocalizedProduct, Product
-
 
 FIELD_NAMES_CONFIG = {
     "input_fields": [
