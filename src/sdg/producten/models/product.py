@@ -564,7 +564,8 @@ class BrokenLinks(models.Model):
     url = models.URLField(default="", max_length=2000)
     error_count = models.PositiveIntegerField(default=0)
     last_checked = models.DateTimeField(auto_now=True)
-    occuring_field = models.TextField(default="")
+    occurring_field = models.TextField(default="")
+    url_label = models.TextField(default="")
 
     def increment_error_count(self):
         self.error_count += 1
@@ -572,5 +573,4 @@ class BrokenLinks(models.Model):
 
     def reset_error_count(self):
         self.error_count = 0
-        self.occuring_field = ""
         self.save()
