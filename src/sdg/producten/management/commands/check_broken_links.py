@@ -51,6 +51,14 @@ class Command(BaseCommand):
     url_response_status_codes = defaultdict(int)
     founded_broken_link_ids = []
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--reset",
+            "-R",
+            action="store_true",
+            help="Reset all the broken links.",
+        )
+
     def request_head(self, url: str, allow_default_redirects=False, redirect_cycle=0):
         """
         Description
