@@ -584,110 +584,6 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         response_12 = self.command.request_head(self=self.command, url=sample_url_12)
         self.assertEqual(response_12.status_code, 403)
 
-    def test_check_broken_links_handle(self):
-        out = self.call_command("check_broken_links")
-        # This should be a test that validates if the broken links are created and the handle is executed correctly.
-        self.assertIn("Deleted 0 old BrokenLinks.", out)
-
-    def test_extract_urls(self):
-        # Multiple test to make sure the regex used to extract URLs is valid and works in every case.
-        # Test case 1: Simple URLs with HTTP
-        sample_text_1 = "Check out the site at [http://example.com](http://example.com) and also visit [http://anotherexample.com](http://anotherexample.com)."
-        result_1 = ["http://example.com", "http://anotherexample.com"]
-        extracted_urls_1 = self.command.extract_urls(
-            self=self.command, value=sample_text_1
-        )
-        self.assertListEqual(sorted(result_1), sorted(list(extracted_urls_1)))
-
-        # Test case 2: URLs with HTTPS
-        sample_text_2 = "Visit [https://google.com](https://google.com) for all the available info, otherwise visit some external sources [https://www.test.com](https://www.test.com)"
-        result_2 = ["https://google.com", "https://www.test.com"]
-        extracted_urls_2 = self.command.extract_urls(
-            self=self.command, value=sample_text_2
-        )
-        self.assertListEqual(sorted(result_2), sorted(list(extracted_urls_2)))
-
-        # Test case 3: URLs without a protocol (missing 'http://')
-        sample_text_3 = "You can find me at [www.example.com](www.example.com), or at [example.org](example.org)."
-        result_3 = ["www.example.com", "example.org"]
-        extracted_urls_3 = self.command.extract_urls(
-            self=self.command, value=sample_text_3
-        )
-        self.assertListEqual(sorted(result_3), sorted(list(extracted_urls_3)))
-
-        # Test case 4: URLs with query parameters
-        sample_text_4 = "For more information, check [https://example.com/search?q=test](https://example.com/search?q=test). Also, check [https://anotherexample.com/page?item=123](https://anotherexample.com/page?item=123)."
-        result_4 = [
-            "https://example.com/search?q=test",
-            "https://anotherexample.com/page?item=123",
-        ]
-        extracted_urls_4 = self.command.extract_urls(
-            self=self.command, value=sample_text_4
-        )
-        self.assertListEqual(sorted(result_4), sorted(list(extracted_urls_4)))
-
-        # Test case 5: URLs with fragments
-        sample_text_5 = "See the section on [http://example.com#section1](http://example.com#section1) and [https://anotherexample.com#top](https://anotherexample.com#top)."
-        result_5 = ["http://example.com#section1", "https://anotherexample.com#top"]
-        extracted_urls_5 = self.command.extract_urls(
-            self=self.command, value=sample_text_5
-        )
-        self.assertListEqual(sorted(result_5), sorted(list(extracted_urls_5)))
-
-        # Test case 6: URLs with ports
-        sample_text_6 = "My website is [http://localhost:8000](http://localhost:8000), and another server is running at [https://localhost:8080](https://localhost:8080)."
-        result_6 = ["http://localhost:8000", "https://localhost:8080"]
-        extracted_urls_6 = self.command.extract_urls(
-            self=self.command, value=sample_text_6
-        )
-        self.assertListEqual(sorted(result_6), sorted(list(extracted_urls_6)))
-
-        # Test case 7: URLs with subdomains
-        sample_text_7 = "The main site is [https://www.example.com](https://www.example.com), but the blog is at [https://blog.example.com](https://blog.example.com)."
-        result_7 = ["https://www.example.com", "https://blog.example.com"]
-        extracted_urls_7 = self.command.extract_urls(
-            self=self.command, value=sample_text_7
-        )
-        self.assertListEqual(sorted(result_7), sorted(list(extracted_urls_7)))
-
-        # Test case 8: URLs with paths
-        sample_text_8 = "Visit [http://example.com/path/to/page](http://example.com/path/to/page) and also try [https://anotherexample.com/blog/article](https://anotherexample.com/blog/article)."
-        result_8 = [
-            "http://example.com/path/to/page",
-            "https://anotherexample.com/blog/article",
-        ]
-        extracted_urls_8 = self.command.extract_urls(
-            self=self.command, value=sample_text_8
-        )
-        self.assertListEqual(sorted(result_8), sorted(list(extracted_urls_8)))
-
-        # Test case 9: Mixed URL formats (some with protocol, some without)
-        sample_text_9 = "The main site is [http://www.mainwebsite.com](http://www.mainwebsite.com), and the forum is [forum.example.com](forum.example.com)."
-        result_9 = ["http://www.mainwebsite.com", "forum.example.com"]
-        extracted_urls_9 = self.command.extract_urls(
-            self=self.command, value=sample_text_9
-        )
-        self.assertListEqual(sorted(result_9), sorted(list(extracted_urls_9)))
-
-        # Test case 10: URL with query parameters
-        sample_text_10 = "For more details, visit [https://example.com/search?q=python](https://example.com/search?q=python), or check out [https://anotherexample.com/articles?category=tech&sort=asc](https://anotherexample.com/articles?category=tech&sort=asc)."
-        result_10 = [
-            "https://example.com/search?q=python",
-            "https://anotherexample.com/articles?category=tech&sort=asc",
-        ]
-        extracted_urls_10 = self.command.extract_urls(
-            self=self.command, value=sample_text_10
-        )
-        self.assertListEqual(sorted(result_10), sorted(list(extracted_urls_10)))
-
-        # Test case 11: localhost server
-        sample_text_11 = "For more details visit [http://localhost:8000](http://localhost:8000), [localhost:8000](localhost:8000), [http://127.0.0.1:8000](http://127.0.0.1:8000) or check out [127.0.0.1:8000](127.0.0.1:8000)."
-        result_11 = ["http://localhost:8000", "http://127.0.0.1:8000"]
-        extracted_urls_11 = self.command.extract_urls(
-            self=self.command, value=sample_text_11
-        )
-        self.assertListEqual(sorted(result_11), sorted(list(extracted_urls_11)))
-
     @patch("sdg.producten.models.BrokenLinks.objects.exclude")
     def test_clean_up_removed_urls(self, mock_exclude):
         # Simuleer oude broken links die niet meer voorkomen
@@ -695,7 +591,7 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         mock_exclude.return_value = mock_queryset
         mock_queryset.__len__.return_value = 2  # Twee items om te verwijderen
 
-        out = self.call_command("check_broken_links", "--test")
+        out = self.call_command("check_broken_links")
         self.assertIn("Deleted 2 old BrokenLinks", out)
 
     @patch("sdg.producten.models.Product.objects.exclude_generic_status")

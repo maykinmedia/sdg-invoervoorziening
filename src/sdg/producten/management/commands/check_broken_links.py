@@ -1,48 +1,69 @@
-import re
-import threading
+import time
 from collections import defaultdict
+from itertools import chain
 from urllib import parse
 
 from django.core.management import BaseCommand
 
+import markdown
 import requests
+from bs4 import BeautifulSoup
 from zgw_consumers.concurrent import parallel
 
+from sdg.core.models import (
+    ProductFieldConfiguration,
+)
 from sdg.producten.models import BrokenLinks, LocalizedProduct, Product
+
+
+FIELD_NAMES_CONFIG = {
+    "input_fields": [
+        "product_titel_decentraal",
+        "product_valt_onder_toelichting",
+        "product_aanwezig_toelichting",
+    ],
+    "markdown_fields": [
+        "specifieke_tekst",
+        "vereisten",
+        "bewijs",
+        "procedure_beschrijving",
+        "kosten_en_betaalmethoden",
+        "uiterste_termijn",
+        "bezwaar_en_beroep",
+        "wtd_bij_geen_reactie",
+    ],
+    "urls_fields": [
+        "verwijzing_links",
+    ],
+    "decentrale_label": ["decentrale_procedure_label"],
+    "decentrale_link": ["decentrale_procedure_link"],
+}
+VALID_URL_ADAPTERS = ("tel:", "sms:", "mailto:")
+INVALID_URL_ADAPTERS = "geo:"
+SUCCES_STATUS_CODE = 200
+ANY_ERROR_STATUS_CODE = 420
+REDIRECT_STATUS_CODES = {301, 302, 303, 307, 308}
+SUCCESSFUL_STATUS_CODES = {200} | REDIRECT_STATUS_CODES
+REDIRECT_CYCLES_LIMIT = 10
 
 
 class Command(BaseCommand):
     help = "Check for broken links in product fields and update the BrokenLink model."
-    checked_url_dict = {}
+    product_dict = defaultdict(lambda: defaultdict(list))
+    url_set = set()
+    url_response_status_codes = defaultdict(int)
     founded_broken_link_ids = []
-    url_conditions = defaultdict(lambda: (threading.Lock(), threading.Condition()))
-    url_conditions_lock = threading.Lock()
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            "--reset",
-            "-R",
-            action="store_true",
-            help="Reset all the broken links.",
-        )
-
-        parser.add_argument(
-            "--test",
-            "-T",
-            action="store_true",
-            help="Indicate that this function is used in an unittest",
-        )
-
-    def request_head(self, url: str, allow_redirects=False, redirect_cycle=0):
+    def request_head(self, url: str, allow_default_redirects=False, redirect_cycle=0):
         """
         Description
         -----------
         Implementation of `requests.head(url)` that raises a TooManyRedirects error if the redirect_cycle exceeds
-        the redirct_cycle_limit and prevent errors in certain special cases:
+        the redirect_cycle_limit and prevent errors in certain special cases:
         - Case 1: Make sure that each URL starts with https if not defined - in some cases url = 'www.url.com'
-        - Case 2: Response header location is the same as the original url - use the default allow_redirect behaviour.
+        - Case 2: Response header location is the same as the original url - use the default allow_redirect behavior.
         - Case 3: Response header location is a relative path - add this path to the previous requested url. (case example: https://lang.com/, https://www.coevorden.nl/afspraak).
-        - Case 4: Status code 404 when the request is redirected with the default allow_redirect behaviour (case example: https://digid.nl/inloggen).
+        - Case 4: Status code 404 when the request is redirected with the default allow_redirect behavior (case example: https://digid.nl/inloggen).
 
         Parameters
         ----------
@@ -54,87 +75,130 @@ class Command(BaseCommand):
             The redirect_cycle is used to prevent infinite redirects.
             Some of the requested sites allow an infinite loop of redirects.
             To prevent this the redirect_cycle is used to track the cycles.
-            If the cycle exceeds a set limit an error can be raised.
+            If the cycle exceeds REDIRECT_CYCLES_LIMIT an error can be raised.
 
         Returns
         -------
         - response : Response
         """
-        redirct_cycle_limit = 10
-
         # Case 1
-        if not url.startswith("http"):
+        if url.startswith((INVALID_URL_ADAPTERS, *VALID_URL_ADAPTERS)):
+            url = url
+        elif not url.startswith("http"):
             url = f"https://{url}"
 
-        response = requests.head(url, timeout=5, allow_redirects=allow_redirects)
-        redirect_status_codes = {301, 302, 303, 307, 308}
+        response = requests.head(
+            url, timeout=5, allow_redirects=allow_default_redirects
+        )
 
-        if response.status_code in redirect_status_codes:
+        if response.status_code in REDIRECT_STATUS_CODES:
             redirect_url = url
-            force_redirect = False
 
-            if redirect_cycle == redirct_cycle_limit:
+            if redirect_cycle == REDIRECT_CYCLES_LIMIT:
                 raise requests.TooManyRedirects(f"Too many redirects for URL: {url}")
+
+            redirect_cycle += 1
+            joined_url = parse.urljoin(url, response.headers["location"])
 
             # Case 2
             if (
                 response.headers["location"] == redirect_url
-                or parse.urljoin(url, response.headers["location"]) == redirect_url
+                or joined_url == redirect_url
             ):
-                force_redirect = True
+                allow_default_redirects = True
             # Case 3
             elif not response.headers["location"].startswith("http"):
-                redirect_url = parse.urljoin(url, response.headers["location"])
+                redirect_url = joined_url
             else:
                 # Case 4
                 redirect_url = response.headers["location"]
 
             return self.request_head(
-                self=self,
                 url=redirect_url,
-                allow_redirects=force_redirect,
-                redirect_cycle=redirect_cycle + 1,
+                allow_default_redirects=allow_default_redirects,
+                redirect_cycle=redirect_cycle,
             )
 
         return response
 
-    def extract_urls(self, value: str | list):
-        """
-        Description
-        -----------
-        Extract a set of urls from a string or list with regex.
+    def get_products_to_check(self, product: Product):
+        localized_product: LocalizedProduct
+        for localized_product in product.most_recent_version.vertalingen.all():
+            decentrale_field = (None, None)
 
-        Parameters
-        ----------
-        - value : str | list
-            The value to extract urls from.
+            def localized_field_verbose_name(field_name: str):
+                configured_field_name = getattr(
+                    ProductFieldConfiguration.get_solo().localizedproductfieldconfiguration_set.get(
+                        taal="nl"
+                    ),
+                    f"localizedproduct_{field_name}",
+                )[0][0]
+                return f"{configured_field_name} ({localized_product.taal})"
 
-        Returns
-        -------
-        - set : set
-            Containing the urls present in th checked value.
-        """
-        # https://stackoverflow.com/questions/520031/whats-the-cleanest-way-to-extract-urls-from-a-string-using-python/28552670#28552670
-        URL_REGEX = r"""(?i)\b((?:https?:(?:/{1,3}|[a-z0-9%])|[a-z0-9.\-]+[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)/)(?:[^\s()<>{}\[\]]+|\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\))+(?:\([^\s()]*?\([^\s()]+\)[^\s()]*?\)|\([^\s]+?\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’])|(?:(?<!@)[a-z0-9]+(?:[.\-][a-z0-9]+)*[.](?:com|net|org|edu|gov|mil|aero|asia|biz|cat|coop|info|int|jobs|mobi|museum|name|post|pro|tel|travel|xxx|ac|ad|ae|af|ag|ai|al|am|an|ao|aq|ar|as|at|au|aw|ax|az|ba|bb|bd|be|bf|bg|bh|bi|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|cr|cs|cu|cv|cx|cy|cz|dd|de|dj|dk|dm|do|dz|ec|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gg|gh|gi|gl|gm|gn|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|im|in|io|iq|ir|is|it|je|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|me|mg|mh|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|mv|mw|mx|my|mz|na|nc|ne|nf|ng|ni|nl|no|np|nr|nu|nz|om|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|ps|pt|pw|py|qa|re|ro|rs|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|Ja|sk|sl|sm|sn|so|sr|ss|st|su|sv|sx|sy|sz|tc|td|tf|tg|th|tj|tk|tl|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)\b/?(?!@)))"""
-        url_pattern = re.compile(URL_REGEX)
-        extracted_urls = set()
+            for key, value in localized_product.__dict__.items():
+                if key in FIELD_NAMES_CONFIG["decentrale_label"]:
+                    _, url = decentrale_field
+                    if not url:
+                        decentrale_field = (value, url)
+                        continue
 
-        def extract(value: str | list):
-            if isinstance(value, list):
-                for list_value in value:
-                    extract(list_value)
-            elif isinstance(value, str):
-                founded_urls = url_pattern.findall(value)
-                for url in founded_urls:
-                    extracted_urls.add(url)
+                    self.product_dict[product.pk][
+                        f"online aanvragen ({localized_product.taal})"
+                    ].append((value, url))
+                    self.url_set.add(url)
 
-        extract(value)
+                elif key in FIELD_NAMES_CONFIG["decentrale_link"]:
+                    label, _ = decentrale_field
+                    if not label:
+                        decentrale_field = (label, value)
+                        continue
 
-        return extracted_urls
+                    self.product_dict[product.pk][
+                        f"online aanvragen ({localized_product.taal})"
+                    ].append((label, value))
+                    self.url_set.add(value)
 
-    def handle_response_code(
-        self, status_code: int, url: str, broken_link: BrokenLinks
-    ):
+                if not value:
+                    continue
+
+                if key in FIELD_NAMES_CONFIG["markdown_fields"]:
+                    occurring_field = localized_field_verbose_name(key)
+                    html = markdown.markdown(value)
+                    soup = BeautifulSoup(html, "html.parser")
+                    for link in soup.find_all("a"):
+                        text = link.get_text()  # Get the label, request VNG.
+                        href = link["href"]
+                        self.product_dict[product.pk][occurring_field].append(
+                            (text, href)
+                        )
+                        self.url_set.add(href)
+
+                elif key in FIELD_NAMES_CONFIG["urls_fields"]:
+                    occurring_field = localized_field_verbose_name(key)
+                    for label, url in value:
+                        self.product_dict[product.pk][occurring_field].append(
+                            (label, url)
+                        )
+                        self.url_set.add(url)
+
+    def check_url(self, url: str, status_code=None):
+        try:
+            response = self.request_head(url)
+            status_code = response.status_code
+            response.close()
+        except requests.exceptions.InvalidSchema:
+            # Exception for URLs starting with ['tel:', 'sms:', 'geo:', ...]
+            status_code = ANY_ERROR_STATUS_CODE
+
+            # These adapters will work most likely in the front-end, but the back-end will not know.
+            if url.startswith(VALID_URL_ADAPTERS):
+                status_code = SUCCES_STATUS_CODE
+        except requests.RequestException:
+            status_code = ANY_ERROR_STATUS_CODE
+        finally:
+            return (url, status_code)
+
+    def handle_response_code(self, url, occurring_field, product_pk, url_label):
         """
         Description
         -----------
@@ -148,146 +212,93 @@ class Command(BaseCommand):
             The url of the request response.
         - broken_links : BrokenLinks
             The broken link class model that interacts with the DB.
+        - url_label : str,
+            The 'label' of the url in the content.
         """
-        self.checked_url_dict[url] = status_code
-        successful_status_codes = {200, 301, 302, 303, 307, 308}
+        url_status_code = self.url_response_status_codes[url]
 
-        if status_code in successful_status_codes:
-            self.stdout.write(self.style.SUCCESS(f"{url} - [{status_code}]"))
+        broken_link, _ = BrokenLinks.objects.get_or_create(
+            product_id=product_pk,
+            url=url,
+            occurring_field=occurring_field,
+            url_label=url_label,
+        )
+
+        if url_status_code in SUCCESSFUL_STATUS_CODES:
             broken_link.delete()
+            self.stdout.write(self.style.SUCCESS(f"{url} - [{url_status_code}]"))
         else:
             broken_link.increment_error_count()
             self.founded_broken_link_ids.append(broken_link.id)
-            self.stdout.write(self.style.ERROR(f"{url} - [{status_code}]"))
+            self.stdout.write(self.style.ERROR(f"{url} - [{url_status_code}]"))
 
-    def check_url(self, url, product, occuring_field):
+    def reset_broken_links(self, reset_all=False):
         """
         Description
         -----------
-        Logic to check if an URL is valid. Multiple threads can check the same URL, each thread, that is the first to check if an url
-        is valid, will lock other threads that are trying to check the same URL. Once the first thread is done checking the other threads that were blocked are
-        released (and will take the value out of the `checked_url_dict`, since the URL has already been checked).
+        Reset and delete every BrokenLink that is indexed in the database, but not in the content.
+        Or reset each broken link in the DB.
 
         Parameters
         ----------
-        - url : str
-            The url that needs to be checked.
-        - product : Product
-            The product where the url is found in
-        - occuring_field : str
-            The field localized_verbose_name of the product where the url is found in. `verbose name (language)`
+        - reset_all , bool
+            Clean all the links or just the excluded ones.
         """
-        with self.url_conditions_lock:
-            url_lock, url_condition = self.url_conditions[url]
-
-        with url_condition:  # Automatically acquires the condition's internal lock
-            while url_lock.locked():
-                url_condition.wait()  # Wait until notified
-
-            # Lock acquired, proceed with URL check
-            url_lock.acquire()
-
-            try:
-                status_code_in_checked_url_dict = self.checked_url_dict.get(url)
-                broken_link, created = BrokenLinks.objects.get_or_create(
-                    product=product, url=url, occuring_field=occuring_field
-                )
-                if status_code_in_checked_url_dict is None:
-                    try:
-                        response = self.request_head(url)
-                        response.close()
-                        self.handle_response_code(
-                            response.status_code, url=url, broken_link=broken_link
-                        )
-                    except requests.RequestException:
-                        self.handle_response_code(420, url=url, broken_link=broken_link)
-                else:
-                    self.handle_response_code(
-                        status_code_in_checked_url_dict,
-                        url=url,
-                        broken_link=broken_link,
-                    )
-            finally:
-                url_lock.release()
-                url_condition.notify_all()
-
-        with self.url_conditions_lock:
-            if url in self.url_conditions:
-                del self.url_conditions[url]
-
-    def clean_up_removed_urls(self):
-        """
-        Description
-        -----------
-        Delete every BrokenLink that is indexed in the database, but not in the content.
-        """
-        cleanup_objects = BrokenLinks.objects.exclude(
-            id__in=self.founded_broken_link_ids
-        )
-        cleanup_objects.delete()
-        self.stdout.write(
-            self.style.SUCCESS(f"Deleted {cleanup_objects.__len__()} old BrokenLinks.")
-        )
-
-    def handle(self, *args, **options):
-        self.handle_reset = options.get("reset")
-
-        # Command executed with the argument `--reset` or `-R`.
-        if self.handle_reset:
+        if reset_all:
             links = BrokenLinks.objects.all()
             for link in links:
                 link.reset_error_count()
             return self.stdout.write(
                 self.style.SUCCESS(
-                    "Succesfully cleared the error_count of every BrokenLink."
+                    "Successfully cleared the error_count of every BrokenLink."
                 )
             )
-        # Default command executed
-        futures = []
-        max_workers = 32
-        with parallel(max_workers=max_workers) as executor:
-            for product in Product.objects.exclude_generic_status().annotate_name():
-                latest_product_versions = product.get_latest_versions(quantity=1)
+        else:
+            cleanup_objects = BrokenLinks.objects.exclude(
+                id__in=self.founded_broken_link_ids
+            )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"Deleted {cleanup_objects.count()} old BrokenLinks."
+                )
+            )
+            cleanup_objects.delete()
 
-                if len(latest_product_versions) == 0:
-                    break
+    def handle(self, *args, **options):
+        if options.get("reset"):
+            self.reset_broken_links(reset_all=True)
+            return
 
-                latest_product_version = product.get_latest_versions(quantity=1)[0]
-                localized_products = LocalizedProduct.objects.filter(
-                    product_versie=latest_product_version.id
+        with parallel(max_workers=32) as executor:
+            for product in Product.objects.prefetch_related(
+                "most_recent_version__vertalingen"
+            ).exclude_generic_status():
+                self.get_products_to_check(product)
+
+            # Map all futures to the executor
+            futures = executor.map(self.check_url, self.url_set)
+
+            # Wait for all the futures
+            for url, status_code in futures:
+                self.url_response_status_codes[url] = status_code
+
+            data_chain = chain.from_iterable(
+                [
+                    (
+                        (product_pk, field_name, url_label, url_href)
+                        for product_pk, product_fields in self.product_dict.items()
+                        for field_name, urls in product_fields.items()
+                        for url_label, url_href in urls
+                    )
+                ]
+            )
+
+            for product_pk, field_name, url_label, url_href in data_chain:
+                self.handle_response_code(
+                    url=url_href,
+                    occurring_field=field_name,
+                    product_pk=product_pk,
+                    url_label=url_label,
                 )
 
-                for prod in localized_products:
-                    localized_field_verbose_name = (
-                        lambda field_name: f"{prod.__class__._meta.get_field(field_name=field_name).verbose_name} ({prod.taal})"
-                    )
-
-                    urls = [
-                        (localized_field_verbose_name(key), url)
-                        for key, value in prod.__dict__.items()
-                        if value
-                        and key
-                        not in [
-                            "_state",
-                            "_configuration",
-                            "id",
-                            "taal",
-                            "product_versie_id",
-                        ]
-                        for url in self.extract_urls(value)
-                    ]
-
-                    for field_name, url in urls:
-                        future = executor.submit(
-                            self.check_url, url, product, field_name
-                        )
-                        futures.append(future)
-
-            # Wait for all futures to complete
-            for future in futures:
-                try:
-                    future.result()  # Ensures any exceptions are raised
-                except Exception as e:
-                    self.stdout.write(self.style.ERROR(f"Error processing URL: {e}"))
-
-        self.clean_up_removed_urls()
+            self.reset_broken_links()

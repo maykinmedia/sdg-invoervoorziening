@@ -10,6 +10,7 @@
                 <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Link</th>
                 <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Product</th>
                 <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Veld</th>
+                <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Tekstdeel</th>
                 {% if multiple_organizations %}<th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Product in organisatie</th>{% endif %}
                 <th style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;text-align: left;">Laatst gecontroleerd op</th>
             </tr>
@@ -18,8 +19,9 @@
             {% for broken_link in broken_links %}
             <tr style="display: table-row;vertical-align: inherit;border-color: inherit;">
                 <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ broken_link.url }}</td>
-                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ broken_link.product|capfirst }}</td>
-                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ broken_link.occuring_field|capfirst}}</td>
+                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;"><a href="{{base_url}}{% url 'organisaties:catalogi:producten:edit' pk=broken_link.product.catalogus.lokale_overheid.pk catalog_pk=broken_link.product.catalogus.pk product_pk=broken_link.product.pk %}" target="_blank">{{ broken_link.product|capfirst }}</a></td>
+                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ broken_link.occurring_field|capfirst}}</td>
+                <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ broken_link.url_label}}</td>
                 {% if multiple_organizations %}<td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ broken_link.product.catalogus.lokale_overheid }}</td>{% endif %}
                 <td style="border-bottom: 1px solid #bdbdbd;padding: 12px 0;vertical-align: top;">{{ broken_link.last_checked }}</td>
             </tr>
