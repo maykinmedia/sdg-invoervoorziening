@@ -30,7 +30,7 @@ def checkbox(context, field, **kwargs):
 
 
 @register.inclusion_tag("components/fields/core.html", takes_context=True)
-def core(context, label, tooltip, value, **kwargs):
+def core(context, label, tooltip, value=None, field=None, **kwargs):
     """
     Core (read-only) field, built for update view.
 
@@ -39,14 +39,17 @@ def core(context, label, tooltip, value, **kwargs):
         - label
         - tooltip
         - value
+        - field
 
     Kwargs:
         - as_row, define if the core field is placed inside a tr and td.
         - inline, define if the core field is rendered inline.
+        - fallback_value, define if there is a possibility that value can be falsy
     """
 
     inline = kwargs.get("inline", False)
     as_row = kwargs.get("as_row", True)
+    fallback_value = kwargs.get("fallback_value", None)
 
     return {
         **kwargs,
@@ -55,6 +58,8 @@ def core(context, label, tooltip, value, **kwargs):
         "as_row": as_row,
         "tooltip": tooltip,
         "value": value,
+        "field": field,
+        "fallback_value": fallback_value,
         "inline": inline,
     }
 

@@ -1,5 +1,5 @@
 {% extends 'components/fields/base.html' %}
-{% load fields %}
+{% load fields utils %}
 
 {% block header %}
     <label class="form__field-label">
@@ -11,7 +11,13 @@
 {% block body %}
     <div class="form__control">
         <div class="form__control-body">
-            <p>{{ value }}</p>
+            {% if field %}
+                {{ field|addclass:'form__input' }}
+            {% elif value %}
+                <p>{{ value }}</p>
+            {% elif fallback_value %}
+                <p>{{ fallback_value }}</p>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
