@@ -1181,11 +1181,15 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(response.status_code, 200)
 
         revisions = response.pyquery(".revision-list")
-        latest_active_version = self.product_version.gemaakt_door
+        latest_active_version = self.product_version
 
         self.assertEqual(len(revisions), 2)
-        self.assertIn(str(latest_active_version), revisions[1].text_content())
-        self.assertIn(str(self.reference_product), revisions[1].text_content())
+        self.assertIn(
+            str(latest_active_version.gemaakt_door), revisions[1].text_content()
+        )
+        self.assertIn(
+            str(latest_active_version.gewijzigd_op), revisions[1].text_content()
+        )
 
     @freeze_time(NOW_DATE)
     def test_consultant__cannot_update_product(self):
