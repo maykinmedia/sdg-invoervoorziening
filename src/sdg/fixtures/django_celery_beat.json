@@ -80,6 +80,18 @@
     }
 },
 {
+    "model": "django_celery_beat.crontabschedule",
+    "pk": 7,
+    "fields": {
+        "minute": "0",
+        "hour": "9",
+        "day_of_week": "*",
+        "day_of_month": "1",
+        "month_of_year": "*",
+        "timezone": "UTC"
+    }
+},
+{
     "model": "django_celery_beat.periodictasks",
     "pk": 1,
     "fields": {
@@ -280,6 +292,62 @@
         "total_run_count": 0,
         "date_changed": "2023-04-06T12:22:36.304",
         "description": "Send notification emails about recent reference product updates."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 8,
+    "fields": {
+        "name": "Check Broken Links",
+        "task": "sdg.producten.tasks.check_broken_links",
+        "interval": null,
+        "crontab": 1,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2024-11-04T12:00:00.000",
+        "description": "Send notification emails about broken links detected in product fields."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 9,
+    "fields": {
+        "name": "Send monthly broken links report",
+        "task": "sdg.producten.tasks.send_monthly_broken_links_report",
+        "interval": null,
+        "crontab": 7,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": false,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2024-11-04T14:00:00.000",
+        "description": "Send monthly broken links report to the all redactors of the content."
     }
 }
 ]
