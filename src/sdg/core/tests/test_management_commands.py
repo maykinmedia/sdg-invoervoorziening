@@ -513,7 +513,6 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
     def setUp(self):
         super().setUp()
         self.command = CheckBrokenLinksCommand
-        self.out_succes = lambda string: f"\x1b[32;1m{string}\x1b[0m\n"
 
     def test_handle_response_code_successful(self):
         out = self.call_command("check_broken_links")
@@ -554,15 +553,10 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
     def test_clean_up_removed_urls(self):
         removed_links_count = 0
         out = self.call_command("check_broken_links")
-        self.assertEqual(
-            self.out_succes(f"Deleted {removed_links_count} old BrokenLinks."), out
-        )
+        self.assertEqual(f"Deleted {removed_links_count} old BrokenLinks.", out)
 
     def test_reset_all_broken_links(self):
         out = self.call_command("check_broken_links", "--reset")
         self.assertEqual(
-            self.out_succes(
-                "Successfully cleared the error_count of every BrokenLink."
-            ),
-            str(out),
+            "Successfully cleared the error_count of every BrokenLink.", str(out)
         )
