@@ -119,6 +119,7 @@ class Command(BaseCommand):
                 redirect_url = response.headers["location"]
 
             return self.request_head(
+                self=self,
                 url=redirect_url,
                 allow_default_redirects=allow_default_redirects,
                 redirect_cycle=redirect_cycle,
