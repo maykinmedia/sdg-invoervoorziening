@@ -4,17 +4,25 @@
   background-color: #fff;
   height: 109px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
   margin: 0 -120px;
 
-  .footer__left {
+  &__side {
+    width: 512px;
     display: flex;
     align-items: center;
+    
+    &--left {
+      justify-content: flex-start;
+    }
+    
+    &--right{
+      justify-content: flex-end;
+    }
   }
 
-  .footer__link {
-    margin-right: 50px;
+  &__link {
     text-decoration: none;
     color: $color_primary;
 
@@ -22,12 +30,12 @@
       color: $color_primary_lighter;
     }
 
-    &:last-child {
-      margin-right: 0;
+    &:not(:last-child) {
+      margin-right: 50px;
     }
   }
 
-  .footer__logo {
+  &__logo {
     margin-left: 8px;
     height: 42px;
   }
