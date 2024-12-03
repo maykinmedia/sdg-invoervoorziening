@@ -1194,6 +1194,14 @@ class ProductUpdateViewTests(WebTest):
                 )
                 self.assertEqual(str(rev_date), str(edit_date))
 
+        for index, item in enumerate(revisions[1].getiterator("strong")):
+            if index == 1:
+                rev_date = datetime.fromisoformat(item.values()[0])
+                edit_date = datetime.fromisoformat(
+                    str(self.product_version.gewijzigd_op)
+                )
+                self.assertEqual(str(rev_date), str(edit_date))
+
     @freeze_time(NOW_DATE)
     def test_consultant__cannot_update_product(self):
         self.role.is_redacteur = False
