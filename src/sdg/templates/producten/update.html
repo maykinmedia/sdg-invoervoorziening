@@ -40,7 +40,12 @@
 </div>
 
 
-<form action="." method="POST" class="form">
+<form 
+    action="." 
+    method="POST" 
+    class="form"
+    data-reference="{{product.is_referentie_product|lower}}"
+>
     <!-- removes submitting on enter -->
     <button type="submit" disabled aria-hidden="true" class="hidden"></button>
 

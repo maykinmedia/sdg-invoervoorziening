@@ -10,16 +10,15 @@
 
 {% block form %}
     {% if not product.is_referentie_product %}
-
         {% core inline=True label=_("Doelgroep")|capfirst tooltip=doelgroep.help_text value=doelgroep.value %}
+    {% endif %}
 
-        {% select inline=True field=product_form.product_aanwezig %}
+    {% select inline=True field=product_form.product_aanwezig %}
+    {% localized inline=True object=localized_object_dict.product_aanwezig_toelichting render_hidden=product_form.product_aanwezig.value %}
 
-        {% localized inline=True object=localized_object_dict.product_aanwezig_toelichting %}
-
+    {% if not product.is_referentie_product %}
         {% select inline=True field=product_form.product_valt_onder %}
-
-        {% localized inline=True object=localized_object_dict.product_valt_onder_toelichting %}
+        {% localized inline=True object=localized_object_dict.product_valt_onder_toelichting render_hidden=product_form.product_valt_onder.value %}
 
         {% checkbox inline=True field=product_form.locaties %}
         

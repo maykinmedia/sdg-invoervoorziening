@@ -6,7 +6,6 @@ import "./formset";
 import "./calendar";
 import "./markdown";
 import "./dynamic_array";
-import "./generic";
 import "./tooltip";
 import "./choices";
 import "./bevoegde_organisaties";

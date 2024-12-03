@@ -75,12 +75,14 @@ def localized(context, object, **kwargs):
 
     inline = kwargs.get("inline", False)
     as_row = kwargs.get("as_row", True)
+    render_hidden = kwargs.get("render_hidden", False) in [True, None]
 
     return {
         **kwargs,
         "context": context,
         "as_row": as_row,
         "inline": inline,
+        "render_hidden": render_hidden,
         "object": object,
     }
 

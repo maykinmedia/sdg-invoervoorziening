@@ -3,7 +3,10 @@
     <td>
 {% endif %}
 
-<div class="form__field {% if inline %}form__field--inline{% endif %}">
+<div 
+    class="form__field {% if inline %}form__field--inline{% endif %}"
+    {% if render_hidden %} style="display:none" {% endif %}
+    >
     <header class="form__field-header">
         {% block header %}{% endblock %}    
     </header>

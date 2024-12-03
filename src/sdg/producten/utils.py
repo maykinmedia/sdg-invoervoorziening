@@ -55,6 +55,7 @@ def parse_changed_data(changed_data, *, form, language=None) -> List[dict]:
     ]
 
 
+# ! TODO - swap available_explanation_map and falls_under_explanation_map: dicts are created with the wrong strings.
 @lru_cache
 def get_placeholder_maps(product):
     """

@@ -21,6 +21,15 @@ export class FormComponent extends Component {
     onClick(event) {}
 
     /**
+     * Returns the form.
+     * @param {HTMLElement} child
+     * @returns {HTMLElement}
+     */
+    getForm(child = undefined) {
+        return this._getParent("form", child);
+    }
+
+    /**
      * Returns the form field containing multiple fields.
      * @param {HTMLElement} child
      * @returns {HTMLElement}
