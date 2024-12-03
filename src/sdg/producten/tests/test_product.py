@@ -1,4 +1,5 @@
 import html
+from datetime import datetime
 from typing import Optional
 
 from django.test import override_settings
@@ -43,6 +44,7 @@ class ProductUpdateViewTests(WebTest):
         self.app.set_user(self.user)
 
         self.product_version = SpecifiekProductVersieFactory.create(versie=1)
+
         self.product = self.product_version.product
         self.catalog = self.product.catalogus
         self.municipality = self.product.catalogus.lokale_overheid
@@ -1181,15 +1183,19 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(response.status_code, 200)
 
         revisions = response.pyquery(".revision-list")
-        latest_active_version = self.product_version
 
         self.assertEqual(len(revisions), 2)
         self.assertIn(
-            str(latest_active_version.gemaakt_door), revisions[1].text_content()
+            str(self.product_version.gemaakt_door), revisions[1].text_content()
         )
-        self.assertIn(
-            str(latest_active_version.gewijzigd_op), revisions[1].text_content()
-        )
+
+        for index, item in enumerate(revisions[1].getiterator("strong")):
+            if index == 1:
+                rev_date = datetime.fromisoformat(item.values()[0])
+                edit_date = datetime.fromisoformat(
+                    str(self.product_version.gewijzigd_op)
+                )
+                self.assertEqual(str(rev_date), str(edit_date))
 
     @freeze_time(NOW_DATE)
     def test_consultant__cannot_update_product(self):
