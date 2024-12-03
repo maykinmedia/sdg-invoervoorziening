@@ -141,6 +141,11 @@
       padding-top: 24px;
     }
 
+    &__content-spacing {
+      display: flex;
+      gap: 12px;
+    }
+
     &.required {
       color: #333333;
     }
