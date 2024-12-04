@@ -1,6 +1,6 @@
 import { FormsetFormComponent } from "./abstract/formset_form_component";
 
-const REMOVE_ELEMENTS = document.querySelectorAll(".formset__remove");
+const REMOVE_ELEMENTS = document.querySelectorAll(".formset__button--remove");
 
 export class RemoveFormsetForm extends FormsetFormComponent {
     /**

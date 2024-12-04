@@ -6,17 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('organisaties', '0032_alter_links'),
+        ("organisaties", "0032_alter_links"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='lokatie',
-            options={'ordering': ('order', 'naam'), 'verbose_name': 'locatie', 'verbose_name_plural': 'locaties'},
+            name="lokatie",
+            options={
+                "ordering": ("order", "naam"),
+                "verbose_name": "locatie",
+                "verbose_name_plural": "locaties",
+            },
         ),
         migrations.AddField(
-            model_name='lokatie',
-            name='order',
-            field=models.PositiveIntegerField(default=0, verbose_name='order'),
+            model_name="lokatie",
+            name="order",
+            field=models.PositiveIntegerField(default=0, verbose_name="order"),
         ),
     ]
