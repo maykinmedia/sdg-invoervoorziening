@@ -9,7 +9,7 @@ import { DynamicTitle } from "../dynamic_title";
 import { DynamicCheckbox } from "./dynamic_checkbox";
 
 /** @type {HTMLDivElement} */
-const ADD_FORM_ELEMENT = document.querySelector(".formset__add");
+const ADD_FORM_ELEMENT = document.querySelector(".formset__button--add");
 const PREFIX_PLACEHOLDER = "__prefix__";
 
 class AddFormsetForm extends FormsetFormComponent {

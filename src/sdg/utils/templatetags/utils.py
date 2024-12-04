@@ -116,14 +116,24 @@ def order_field(context, field=None, **kwargs):
 
 
 @register.inclusion_tag("forms/location_form.html", takes_context=True)
-def location_form(context,subform, initialOrder, **kwargs):
+def location_form(context, subform, initialOrder, **kwargs):
     print(subform)
-    return {"context":context, "subform": subform, "initialOrder": initialOrder, **kwargs}
+    return {
+        "context": context,
+        "subform": subform,
+        "initialOrder": initialOrder,
+        **kwargs,
+    }
 
 
 @register.inclusion_tag("forms/organization_form.html", takes_context=True)
-def organization_form(context,subform, initialOrder, **kwargs):
-    return {"context":context, "subform": subform, "initialOrder": initialOrder, **kwargs}
+def organization_form(context, subform, initialOrder, **kwargs):
+    return {
+        "context": context,
+        "subform": subform,
+        "initialOrder": initialOrder,
+        **kwargs,
+    }
 
 
 @register.inclusion_tag("forms/table_grid_field.html")

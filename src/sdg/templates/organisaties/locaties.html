@@ -2,6 +2,11 @@
 {% load static i18n utils %}
 
 {% block page_title %}{% trans "Locaties" %}{% endblock %}
+{% block page_intro %}
+    <p class="subheading">
+        {% trans "Je kant hier alle locaties opgeven waar producten worden aangeboden. Bij elk product kan je vervolgens een of meer locaties selecteren uit deze lijst." %}
+    </p>
+{% endblock %}
 
 {% block inner_content %}
     <form action="{% url "organisaties:locaties" pk=lokaleoverheid.pk %}" method="post" class="form">
@@ -16,7 +21,7 @@
                 {% endfor %}
             </div>
         </div>
-        <button class="formset__add" data-formset-prefix="{{ locatie_formset.prefix }}" type="button">
+        <button class="formset__button formset__button--add" data-formset-prefix="{{ locatie_formset.prefix }}" type="button">
             <i class="fas fa-plus"></i>
             {% trans "Nog een locatie toevoegen" %}
         </button>

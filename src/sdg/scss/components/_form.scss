@@ -67,6 +67,7 @@
     padding: .75rem;
     vertical-align: top;
     width: 100%;
+    padding: 12px;
 
     // Input states
     &[disabled],
@@ -78,6 +79,12 @@
     &[disabled]::placeholder,
     &[readonly]::placeholder {
       color: transparent;
+    }
+
+    &:focus-visible {
+      // Use CK-editor focus state as default focus state.
+      box-shadow: var(--ck-inner-shadow), 0 0;
+      --field-border-color: var(--ck-color-focus-border);
     }
 
     // Modifiers
@@ -241,26 +248,6 @@
 
     &--no-spacing {
       margin-bottom: 0;
-    }
-  }
-
-  &__input {
-    border: 1px solid #dfdfdf;
-    padding: 12px;
-    outline: none;
-    font-size: 16px;
-    width: 100%;
-    min-height: 57px;
-
-    &[disabled],
-    &[readonly]:not(.flatpickr-input),
-    &--disabled {
-      background-color: $color_grey_lightest;
-    }
-
-    &[disabled]::placeholder,
-    &[readonly]::placeholder {
-      color: transparent;
     }
   }
 
