@@ -1,27 +1,37 @@
 {% load utils %}
 {% load i18n %}
 
-<div class="form__subforms">
-    {% for hidden in form.empty_form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
-    {{ form.empty_form.DELETE|addclass:"hidden" }}
-    <h3 class="form__subtitle">
-        <span class="formset__title">{% trans "Organisatie" %} __prefix__</span>
-        <a class="formset__remove" href="#">
-            <i class="far fa-trash-alt"></i>
-            {% trans "Organisatie verwijderen" %}
-        </a>
-    </h3>
-    <div class="form__block-group">
-        <div>
-            <div class="form__table-header-left">{% trans "Organisatie" %}</div>
-            {% choices_field form.empty_form.organisatie %}
-            {% checkbox form.empty_form.staat_niet_in_de_lijst %}
+<section class="formset__form form-__prefix__-toggle" data-prefix="{{form.prefix}}">
+    <header class="formset__form-header bem-toggle" data-toggle-target=".form-__prefix__-toggle" data-toggle-modifier="hidden">
+        <i class="fa fa-chevron-up formset__toggle-indication"></i> 
+
+        <h3 class="formset__form-title">
+            <span>{% trans "Organisatie" %} </span>
+            <span class="formset__current-order">__prefix__ </span>
+            <span class="formset__form-name">(<span class="dynamic_title_target--form-__prefix__"></span>)</span>
+        </h3>
+
+        <p class="formset__indication formset__indication--new primary">
+            <span>{% trans 'Nieuw'%}</span>
+            <i class="fa fa-info-circle" title="Deze organisatie wordt na het opslaan toegevoegd."></i>
+        </p>
+    </header>
+
+    <div class="formset__form-body">
+        <div class="form__block-group">
+            <div>
+                {% choices_field form.empty_form.organisatie %}
+                {% checkbox form.empty_form.staat_niet_in_de_lijst %}
+            </div>
+            <div class="dynamic_title animated animated--hidden" data-dynamic-title-target=".dynamic_title_target--form-__prefix__">
+                {% field form.empty_form.naam %}
+            </div>
         </div>
-        <div>
-            <div class="form__table-header-left"></div>
-            {% field form.empty_form.naam hidden=True %}
-        </div>
+        <footer class="formset__footer">
+            <button class="formset__remove red" type="button">
+                <i class="far fa-trash-alt"></i>
+                {% trans "Organisatie verwijderen" %}
+            </button>
+        </footer>
     </div>
-</div>
+</section>

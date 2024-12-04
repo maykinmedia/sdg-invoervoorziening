@@ -169,6 +169,7 @@ class Lokatie(models.Model):
         related_name="locaties",
     )
 
+    order = models.PositiveIntegerField("order", default=0)
     naam = models.CharField(
         _("naam"),
         max_length=100,
@@ -284,7 +285,7 @@ class Lokatie(models.Model):
             "naam",
             "lokale_overheid",
         )
-        ordering = ("naam",)
+        ordering = ("order", "naam")
 
     def __str__(self):
         return self.naam
