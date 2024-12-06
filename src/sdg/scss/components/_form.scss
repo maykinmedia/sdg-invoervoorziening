@@ -1,4 +1,4 @@
-@import 'colors';
+@import "colors";
 
 .form {
   $form-gap: $grid-margin-2;
@@ -11,11 +11,11 @@
     padding: $form-gap 0;
     display: grid;
     grid-template-areas: "hdr"
-                         "bdy";
+                        "bdy";
     grid-template-rows: auto auto;
     gap: $form-label-row-gap;
     width: 100%;
-     
+    
     &--inline {
       padding: 12px 0;
       grid-template-areas: "hdr bdy";
@@ -67,6 +67,7 @@
     padding: .75rem;
     vertical-align: top;
     width: 100%;
+    padding: 12px;
 
     // Input states
     &[disabled],
@@ -78,6 +79,12 @@
     &[disabled]::placeholder,
     &[readonly]::placeholder {
       color: transparent;
+    }
+
+    &:focus-visible {
+      // Use CK-editor focus state as default focus state.
+      box-shadow: var(--ck-inner-shadow), 0 0;
+      --field-border-color: var(--ck-color-focus-border);
     }
 
     // Modifiers
@@ -93,8 +100,8 @@
     }
 
     &--wrapper {
-      padding: 0;
-      border: 0;
+      padding: 0 !important;
+      border: 0 !important;
     }
 
     // Nested elements
@@ -196,6 +203,19 @@
     visibility: hidden;
   }
 
+  & &__order {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+
+    .svg-inline--fa[aria-hidden="true"] {
+      visibility: visible;
+      display: block;
+    }
+  }
+
+
   &__group {
     display: flex;
     flex-direction: column;
@@ -225,6 +245,10 @@
   &__label {
     margin-bottom: 8px;
     font-size: 16px;
+
+    &--no-spacing {
+      margin-bottom: 0;
+    }
   }
 
   &__block {
@@ -236,16 +260,26 @@
     }
 
     &-group {
-      border: 1px solid $color_secondary;
-      background-color: $color_secondary_lightest;
-      border-radius: 15px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      margin-bottom: 24px;
-  
+
       & > div {
         padding: 24px;
+
+        &:only-child {
+          padding-top: 0;
+        }
       }
+    }
+  }
+
+  &__special-group {
+    &.form__table {
+      border: none;
+    }
+
+    .form__help-text {
+      display: none;
     }
   }
 
@@ -254,35 +288,17 @@
     grid-template-columns: 95px 1fr;
     grid-gap: 8px;
     align-items: center;
-
-    &:not(.form__special-group) {
-      border-left: 1px solid $color_secondary;
-    }
-
-    .form__special-group {
-      .form__help-text {
-        display: none;
-      }
-    }
+    border-left: 1px solid $color_secondary;
 
     &-header {
       text-transform: uppercase;
       font-weight: bold;
 
-      &-left {
-          text-transform: uppercase;
-          font-weight: bold;
-          margin-bottom: 16px;
-          min-height: 18px;
-        }
+      &--left {
+        min-height: 18px;
+        margin-bottom: 16px;
       }
-    } 
-
-  &__subtitle {
-    padding: 16px 16px;
-    font-size: 16px;
-    display: flex;
-    justify-content: space-between;
+    }
   }
 
   &__forms {
@@ -290,37 +306,10 @@
     padding: 8px 0;
   }
 
-  &__subforms {
-    margin-bottom: 32px;
-    color: $color_secondary_darkest;
-
-    .form__help-text {
-      color: $color_secondary_darker;
-    }
-
-    .formset__remove {
-      text-decoration: none;
-    }
-  }
-
   &__help-text {
     margin-top: 4px;
     font-size: 14px;
-    color: #666;
-  }
-
-  &__add-subform {
-    color: #0B71A1;
-    cursor: pointer;
-    margin-bottom: 42px;
-    margin-left: 16px;
-  }
-
-  &__buttons {
-
-    &-link {
-      margin-left: 16px;
-    }
+    color: $color_secondary_darker;
   }
 
   &__checkbox {
@@ -329,7 +318,6 @@
     &--invisible {
       opacity: 0;
     }
-
   }
 
   .errorlist {

@@ -1,0 +1,63 @@
+
+{% load utils i18n %}
+
+<section class="formset__form {{subform.prefix}}-toggle formset__form--hidden {{subform.prefix}}-toggle--hidden formset__form--hide-overflow" data-prefix="{{subform.prefix}}">
+    <header class="formset__form-header bem-toggle" data-toggle-target=".{{subform.prefix}}-toggle" data-toggle-modifier="hidden">
+        <i class="fa fa-chevron-up formset__toggle-indication"></i> 
+
+        <h3 class="formset__form-title">
+            <span>{% trans "Locatie" %} </span>
+            <span class="formset__current-order">{{initialOrder}} </span>
+            <span class="formset__form-name">(<span class="dynamic_title_target--{{subform.prefix}}">{{subform.naam.value}}</span>)</span>
+        </h3>
+
+        <p class="formset__indication formset__indication--error red">
+            <span>{% trans 'Locatie bevat fouten'%}</span>
+            <i class="fa fa-info-circle" title="Deze locatie bevat fouten."></i>
+        </p>
+        
+        {% order_field subform.order %}
+    </header>
+        
+    <div class="formset__form-body">
+        {% for hidden in subform.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {{ subform.DELETE|addclass:"hidden" }}
+
+        <div class="form__block-group">
+            <div>
+                <div class="form__table-header form__table-header--left">{% trans "Locatie" %}</div>
+                <div class="dynamic_title" data-dynamic-title-target=".dynamic_title_target--{{subform.prefix}}">
+                    {% field subform.naam %}
+                </div>
+                {% field subform.straat %}
+                {% field subform.nummer %}
+                <div class="form__table form__special-group">
+                    {% field subform.postcode %}
+                    {% field subform.plaats %}
+                </div>
+                {% field subform.land %}
+                {% field subform.openingstijden_opmerking %}
+            </div>
+            <div class="form__table">
+                <div class="form__table-header">Dag</div>
+                <div class="form__table-header">Openingstijden</div>
+                {% table_grid_field subform.maandag %}
+                {% table_grid_field subform.dinsdag %}
+                {% table_grid_field subform.woensdag %}
+                {% table_grid_field subform.donderdag %}
+                {% table_grid_field subform.vrijdag %}
+                {% table_grid_field subform.zaterdag %}
+                {% table_grid_field subform.zondag %}
+            </div>
+        </div>
+        <footer class="formset__ftr formset__footer">
+            <button class="formset__button formset__button--remove" type="button">
+                <i class="far fa-trash-alt"></i>
+                {% trans "Locatie verwijderen" %}
+            </button>
+        </footer>
+    </div>
+</section>
+

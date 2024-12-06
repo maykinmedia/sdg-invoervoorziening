@@ -2,12 +2,12 @@
 import "./form";
 import "./toggle";
 import "./notifications";
-import "./formset";
 import "./calendar";
 import "./markdown";
 import "./dynamic_array";
 import "./generic";
 import "./tooltip";
 import "./choices";
-import "./bevoegde_organisaties";
 import "./prevent_submit_twice";
+import "./formset/";
+import "./dynamic_title";

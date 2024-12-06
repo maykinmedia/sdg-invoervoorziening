@@ -13,6 +13,7 @@
   --spacing: 10px;
   --padding-h: 20px;
   --padding-v: 20px;
+  --default-font-size: 13.3333px;
 
   background-color: var(--main-color);
   color: var(--label-color);
@@ -24,6 +25,7 @@
   transition: transform 150ms, box-shadow 100ms;
   border: 0;
   cursor: pointer;
+  font-size: var(--default-font-size);
 
   &[disabled] {
     --label-color: #{$color_grey_dark};
@@ -64,6 +66,14 @@
     --shadow-size: 1px;
     --shadow-size-hover: 2px;
     --spacing: 0;
+  }
+
+  &--medium {
+    --shadow-size: 1px;
+    --shadow-size-hover: 2px;
+    --padding-h: .5rem;
+    --padding-v: .5rem;
+    height: min-content;
   }
 
   &.button--light {

@@ -1,0 +1,16 @@
+{% load utils i18n %}
+
+<div class="form__order">
+    <label class="form__label form__label--no-spacing" for="{{field.id_for_label}}">Wijzig volgorde:</label>
+
+    {{field|addclass:'order_field hidden'}}
+    
+    <div>
+        <button class="button button--medium button--light order_decrement" type="button" title="{% trans 'Verplaats omhoog.' %}">
+            <i class="fa fa-arrow-up"></i>
+        </button>
+        <button class="button button--medium button--light order_increment" type="button" title="{% trans 'Verplaats omlaag.' %}">
+            <i class="fa fa-arrow-down"></i>
+        </button>
+    </div>
+</div>

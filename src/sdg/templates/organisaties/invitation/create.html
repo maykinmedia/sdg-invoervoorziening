@@ -36,8 +36,8 @@
         <hr class="divider">
         <div class="form__actions">
             <input type="hidden" name="next" value="{{ redirect_field_value }}">
-            <div>
-                <input type="submit" class="button" value="{% trans 'Opslaan' %}">
+            <div class="form__buttons">
+                <button type="submit" class="button">{% trans "Opslaan" %}</button>
                 <a href="{% url 'organisaties:roles:list' pk=lokaleoverheid.pk %}" class="button button--light">
                     {% trans 'Annuleren' %}
                 </a>
