@@ -39,7 +39,7 @@
 
 {% block footer %}
     <div class="footer">
-        <div class="footer__left">
+        <div class="footer__side footer__side--left">
             Een initiatief van
             {% with logo=org_type_cfg.footer_logo %}
                 <a href="{{ org_type_cfg.url }}" target="_blank" rel="noopener" class="shine">
@@ -47,7 +47,7 @@
                 </a>
             {% endwith %}
         </div>
-        <div class="footer__right">
+        <div class="footer__side footer__side--right">
             <a class="footer__link" href="{{ org_type_cfg.accessibility_url }}" rel="noopener noreferrer">{% trans "Toegankelijkheid" %}</a>
             <a class="footer__link" href="{{ org_type_cfg.privacy_policy_url }}" rel="noopener noreferrer">{% trans "Privacybeleid" %}</a>
         </div>
