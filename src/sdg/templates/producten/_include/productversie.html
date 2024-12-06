@@ -10,7 +10,7 @@
     <td class="tabs__table-cell">
         <li class="revision-list__item">
             <span class="tabs__table-cell--value">
-                <strong>{{ version.gewijzigd_op }} </strong>
+                <strong data-date="{{version.gewijzigd_op|date:"c"}}">{{ version.gewijzigd_op }}</strong>
                 <span>—</span>
                 <strong>{% trans "versie" %} {{version.versie}} {% if not version.publicatie_datum %}(concept){% endif %}</strong>
                 <span>{% trans "gewijzigd" %}</span>
