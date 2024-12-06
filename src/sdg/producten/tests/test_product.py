@@ -1182,10 +1182,10 @@ class ProductUpdateViewTests(WebTest):
         self.assertEqual(response.status_code, 200)
 
         revisions = response.pyquery(".revision-list")
+        self.assertEqual(len(revisions), 2)
         self.assertIn(
             str(self.product_version.gemaakt_door), revisions[1].text_content()
         )
-
         for index, item in enumerate(revisions[1].getiterator("strong")):
             if index == 1:
                 rev_date = datetime.fromisoformat(item.values()[0])
