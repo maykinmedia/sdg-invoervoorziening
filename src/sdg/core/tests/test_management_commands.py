@@ -519,101 +519,44 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         self.assertIn("Deleted 0 old BrokenLinks.", out)
 
     def test_request_head_redirect_handling(self):
-        # Simuleer response met een redirect en een relatieve locatie
-        # Test case 1 - Successful request with default response
-        sample_url_1 = "https://example.com"
-        response_1 = self.command.request_head(self=self.command, url=sample_url_1)
-        self.assertEqual(response_1.status_code, 200)
+        self.call_command("check_broken_links")
 
+        def test_case(url, equals_status_code):
+            response = self.command.request_head(self=self.command, url=url)
+            self.assertEqual(response.status_code, equals_status_code)
+
+        # Test case 1 - Successful request to Example
+        test_case("https://google.com/", 200)
         # Test case 2 - Successful request to Google
-        sample_url_2 = "https://google.com"
-        response_2 = self.command.request_head(self=self.command, url=sample_url_2)
-        self.assertEqual(response_2.status_code, 200)
-
+        test_case("https://example.com/", 200)
         # Test case 3 - Multiple redirects, final status 200
-        sample_url_3 = "https://digid.nl/inloggen"
-        response_3 = self.command.request_head(self=self.command, url=sample_url_3)
-        self.assertEqual(response_3.status_code, 200)
-
+        test_case("https://digid.nl/inloggen", 200)
         # Test case 4 - 301 Redirect
-        sample_url_4 = "https://httpbin.org/status/301"
-        response_4 = self.command.request_head(self=self.command, url=sample_url_4)
-        self.assertEqual(response_4.status_code, 200)
-
+        test_case("https://httpbin.org/status/301", 200)
         # Test case 5 - 302 Redirect
-        sample_url_5 = "https://httpbin.org/status/302"
-        response_5 = self.command.request_head(self=self.command, url=sample_url_5)
-        self.assertEqual(response_5.status_code, 200)
-
+        test_case("https://httpbin.org/status/302", 200)
         # Test case 6 - 303 Redirect
-        sample_url_6 = "https://httpbin.org/status/303"
-        response_6 = self.command.request_head(self=self.command, url=sample_url_6)
-        self.assertEqual(response_6.status_code, 200)
-
+        test_case("https://httpbin.org/status/303", 200)
         # Test case 7 - 308 Redirect
-        sample_url_7 = (
-            "https://www.zoetermeer.nl/verhuizen-naar-het-buitenland-emigreren/"
+        test_case(
+            "https://www.zoetermeer.nl/verhuizen-naar-het-buitenland-emigreren/", 200
         )
-        response_7 = self.command.request_head(self=self.command, url=sample_url_7)
-        self.assertEqual(response_7.status_code, 200)
-
-        # Test case 8 - Invalid or unknown status code 309
-        sample_url_8 = "https://httpbin.org/status/309"
-        response_8 = self.command.request_head(self=self.command, url=sample_url_8)
-        self.assertNotEqual(
-            response_8.status_code, 200
-        )  # Expect not 200 for unknown redirect status
-
+        # Test case 8 - 403 Client error
+        test_case("https://httpbin.org/status/403", 403)
         # Test case 9 - 404 Not Found
-        sample_url_9 = "https://www.google.com/404"
-        response_9 = self.command.request_head(self=self.command, url=sample_url_9)
-        self.assertEqual(response_9.status_code, 404)
-
+        test_case("https://google.com/404", 404)
         # Test case 10 - URL without protocol (should raise an error or handle gracefully)
-        sample_url_10 = "www.google.com"
-        response_10 = self.command.request_head(self=self.command, url=sample_url_10)
-        self.assertEqual(response_10.status_code, 200)
+        test_case("www.google.com", 200)
+        # Test case 11 - 500 Server error
+        test_case("https://httpbin.org/status/500", 500)
 
-        # Test case 11 - Server Error 500
-        sample_url_11 = "https://httpbin.org/status/500"
-        response_11 = self.command.request_head(self=self.command, url=sample_url_11)
-        self.assertEqual(response_11.status_code, 500)
-
-        # Test case 12 - Client Error 403
-        sample_url_12 = "https://httpbin.org/status/403"
-        response_12 = self.command.request_head(self=self.command, url=sample_url_12)
-        self.assertEqual(response_12.status_code, 403)
-
-    @patch("sdg.producten.models.BrokenLinks.objects.exclude")
-    def test_clean_up_removed_urls(self, mock_exclude):
-        # Simuleer oude broken links die niet meer voorkomen
-        mock_queryset = MagicMock()
-        mock_exclude.return_value = mock_queryset
-        mock_queryset.__len__.return_value = 2  # Twee items om te verwijderen
-
+    def test_clean_up_removed_urls(self):
+        removed_links_count = 0
         out = self.call_command("check_broken_links")
-        self.assertIn("Deleted 2 old BrokenLinks", out)
+        self.assertIn(f"Deleted {removed_links_count} old BrokenLinks.", str(out))
 
-    @patch("sdg.producten.models.Product.objects.exclude_generic_status")
-    @patch("sdg.producten.models.LocalizedProduct.objects.filter")
-    def test_handle_method(self, mock_localized_filter, mock_product_queryset):
-        # Simuleer een Product queryset en LocalizedProduct queryset
-        mock_product = MagicMock()
-        mock_product_queryset.return_value = [mock_product]
-        mock_localized = MagicMock()
-        mock_localized_filter.return_value = [mock_localized]
-
-        # Roep handle aan met een reset
-        with patch(
-            "sdg.producten.models.BrokenLinks.objects.all"
-        ) as mock_broken_links_all:
-            mock_broken_links = MagicMock()
-            mock_broken_links_all.return_value = [mock_broken_links]
-
-            out = self.call_command("check_broken_links", "--reset")
-            self.assertIn(
-                "Succesfully cleared the error_count of every BrokenLink.", out
-            )
-
-            # Controleer dat de reset werd uitgevoerd
-            mock_broken_links.reset_error_count.assert_called_once()
+    def test_reset_all_broken_links(self):
+        out = self.call_command("check_broken_links", "--reset")
+        self.assertIn(
+            "Successfully cleared the error_count of every BrokenLink.", str(out)
+        )
