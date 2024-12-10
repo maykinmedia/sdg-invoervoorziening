@@ -519,10 +519,8 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         self.assertIn("Deleted 0 old BrokenLinks.", out)
 
     def test_request_head_redirect_handling(self):
-        self.call_command("check_broken_links")
-
         def test_case(url, equals_status_code):
-            response = self.command.request_head(self=self.command, url=url)
+            response = self.command().request_head(url=url)
             self.assertEqual(response.status_code, equals_status_code)
 
         # Test case 1 - Successful request to Example

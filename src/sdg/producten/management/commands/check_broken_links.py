@@ -274,7 +274,7 @@ class Command(BaseCommand):
         with parallel(max_workers=32) as executor:
             for product in Product.objects.prefetch_related(
                 "most_recent_version__vertalingen"
-            ).exclude_generic_status()[:500]:
+            ).exclude_generic_status()[:100]:
                 self.get_products_to_check(product)
 
             # Map all futures to the executor
