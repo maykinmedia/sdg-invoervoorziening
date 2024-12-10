@@ -5,7 +5,6 @@ import "./notifications";
 import "./calendar";
 import "./markdown";
 import "./dynamic_array";
-import "./generic";
 import "./tooltip";
 import "./choices";
 import "./prevent_submit_twice";
