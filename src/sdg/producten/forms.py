@@ -138,7 +138,7 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
     automatisch_doordrukken = BooleanChoiceField(required=False)
     automatisch_doordrukken_datum = forms.DateField(required=False)
 
-    product_aanwezig = forms.NullBooleanField(
+    product_aanwezig = BooleanChoiceField(
         required=False,
         choices=[(None, _("Onbekend")), (True, _("Ja")), (False, _("Nee"))],
     )
