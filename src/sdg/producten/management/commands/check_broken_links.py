@@ -199,7 +199,6 @@ class Command(BaseCommand):
             return (url, ANY_ERROR_STATUS_CODE)
         except requests.RequestException:
             return (url, ANY_ERROR_STATUS_CODE)
-            
 
     def handle_response_code(self, url, occurring_field, product_pk, url_label):
         """
