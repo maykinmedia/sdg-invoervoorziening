@@ -12,71 +12,52 @@
     <form action="{% url "organisaties:bevoegde_organisaties" pk=lokaleoverheid.pk %}" method="post" class="form"
           id="bevoegde_organisaties_form">
         {% csrf_token %}
-        <div class="form__subforms formset">
+        <div class="formset">
             <div>
                 {{ form.management_form }}
             </div>
             <div class="formset__body">
                 {% for subform in form %}
                     {% if subform.instance.organisatie == lokaleoverheid.organisatie %}
-                        <div class="form__subforms">{# No form__subforms class to prevent JS-bindings #}
+
+                        <div class="formset__form formset__form--preview" data-prefix="{{subform.prefix}}">
                             {{ subform.non_field_errors }}
+
                             {% for hidden in subform.hidden_fields %}
                                 {{ hidden }}
                             {% endfor %}
-                            <h3 class="form__subtitle">
-                                <span>{% trans "Organisatie" %} {{ forloop.counter }}</span>
-                            </h3>
+
+                            <div class="formset__form-header formset__form-header--small">
+                                <h3 class="formset__form-title">
+                                    <span>{% trans "Organisatie" %} </span>
+                                    <span class="formset__current-order">{{ forloop.counter }}</span>
+                                    <span class="formset__dynamic-title">({{ subform.instance.organisatie }})</span>
+                                </h3>
+                            </div>
+
                             <div class="form__block-group">
                                 <div>
                                     <input type="hidden" name="{{ subform.organisatie.html_name }}" value="{% localize off %}{{ lokaleoverheid.organisatie.pk }}{% endlocalize %}">
                                     <label for="id_form-{{ forloop.counter }}-naam" class="form__label">{% trans "Standaard bevoegde organisatie" %}</label>
-                                    <p id="form-{{ forloop.counter }}-naam">{{ subform.instance.organisatie }}</p>
                                 </div>
                             </div>
                         </div>
                     {% else %}
-                        <div class="form__subforms form__subforms--form">
-                            {{ subform.non_field_errors }}
-                            {% for hidden in subform.hidden_fields %}
-                                {{ hidden }}
-                            {% endfor %}
-                            {{ subform.DELETE|addclass:"hidden" }}
-                            <h3 class="form__subtitle">
-                                <span>{% trans "Organisatie" %} {{ forloop.counter }}</span>
-                                <a class="formset__remove" href="#">
-                                    <i class="far fa-trash-alt"></i>
-                                    {% trans "Organisatie verwijderen" %}
-                                </a>
-                            </h3>
-                            <div class="form__block-group">
-                                <div>
-                                    <div class="form__table-header-left">{% trans "Organisatie" %}</div>
-                                    {% choices_field subform.organisatie %}
-                                    {% checkbox subform.staat_niet_in_de_lijst %}
-                                </div>
-                                <div>
-                                    <div class="form__table-header-left"></div>
-                                    {% field subform.naam hidden=True %}
-                                </div>
-                            </div>
-                        </div>
+                        {% organization_form subform initialOrder=forloop.counter %}
                     {% endif %}
                 {% endfor %}
             </div>
         </div>
-        <div class="formset__add form__add-subform" data-formset-prefix="{{ locatie_formset.prefix }}">
+        <button class="formset__button formset__button--add" data-formset-prefix="{{ locatie_formset.prefix }}" type="button">
             <i class="fas fa-plus"></i>
             {% trans "Nog een organisatie toevoegen" %}
-        </div>
+        </button>
         <hr class="divider">
-        <div class="form-actions">
-            <div class="form__buttons">
-                <input type="submit" value="Opslaan" class="primaryAction login_button button">
-                <a href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}">
-                    <button type="button" class="button button--light">{% trans 'Annuleren' %}</button>
-                </a>
-            </div>
+        <div class="form__actions">
+            <button type="submit" class="button">{% trans "Opslaan" %}</button>
+            <a href="{% url 'organisaties:bevoegde_organisaties' pk=lokaleoverheid.pk %}" class="button button--light">
+                {% trans 'Annuleren' %}
+            </a>
         </div>
     </form>
 

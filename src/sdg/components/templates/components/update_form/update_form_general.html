@@ -1,0 +1,53 @@
+
+{% extends 'components/update_form/base.html' %}
+{% load utils static i18n producten fields %}
+
+{% block title %}
+    <span>
+        1. {% trans "Algemene gegevens" %}
+    </span>
+{% endblock %}
+
+{% block form %}
+    {% if not product.is_referentie_product %}
+        {% core inline=True label=_("Doelgroep")|capfirst tooltip=doelgroep.help_text value=doelgroep.value %}
+    {% endif %}
+
+    {% select inline=True field=product_form.product_aanwezig %}
+    {% localized inline=True object=localized_object_dict.product_aanwezig_toelichting render_hidden=product_form.product_aanwezig.value %}
+
+    {% if not product.is_referentie_product %}
+        {% select inline=True field=product_form.product_valt_onder %}
+        {% localized inline=True object=localized_object_dict.product_valt_onder_toelichting render_hidden=product_form.product_valt_onder.value %}
+
+        {% checkbox inline=True field=product_form.locaties %}
+        
+    {% endif %}
+
+    {% select hide_element=product.is_referentie_product|yesno:',True' inline=True field=product_form.automatisch_doordrukken %}
+
+    {% if product.is_referentie_product %}
+        {# Render as core with value #}
+        {% core hide_element=False inline=True label=product_form.automatisch_doordrukken_datum.label tooltip=product_form.automatisch_doordrukken_datum.help_text value=product_form.automatisch_doordrukken_datum.value fallback_value=_('Geen automatische doordruk datum') %}
+    {% else %}
+        {# Render hidden as core with field #}
+        {% core hide_element=True inline=True label=product_form.automatisch_doordrukken_datum.label tooltip=product_form.automatisch_doordrukken_datum.help_text field=product_form.automatisch_doordrukken_datum %}
+    {% endif %}
+
+    {# DISABLED PER REQUEST VNG #}
+    {% select hide_element=True inline=True field=product_form.api_verborgen %}
+
+    {% select inline=True field=product_form.bevoegde_organisatie %}
+
+    {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
+        {% with configuration=publication_date.configuration.label %}
+            {% core inline=True label=configuration.label|default:_("Publicatie datum")|capfirst tooltip=configuration.tooltip|default:_('Publicatiedatum van de productversie') value=publication_date.value|default:"Concept" %}
+        {% endwith %}
+    {% endwith %}
+
+    {% select inline=True field=product_form.heeft_kosten %}
+
+    {% core inline=True label=_("Informatiegebied") tooltip=_("Informatiegebied in verband met dit product.") value=areas|join:", " %}
+
+    {% nonlocalized inline=True object=nonlocalized_object_dict.interne_opmerkingen  %}
+{% endblock %}

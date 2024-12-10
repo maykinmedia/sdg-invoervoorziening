@@ -1,6 +1,5 @@
-import {Component} from '../../abstract/component';
-import {availableEditors} from '../../markdown';
-
+import { Component } from "../../abstract/component";
+import { availableEditors } from "../../markdown";
 
 /**
  * Base class for implementing components within the update form.
@@ -12,183 +11,209 @@ export class FormComponent extends Component {
      * Use this to define EventListeners, MutationObservers etc.
      */
     bindEvents() {
-        this.node.addEventListener('click', this.onClick.bind(this));
+        this.node.addEventListener("click", this.onClick.bind(this));
     }
 
     /**
      * Gets called when this.node gets clicked.
      * @param {MouseEvent} event
      */
-    onClick(event) {
+    onClick(event) {}
+
+    /**
+     * Returns the form.
+     * @param {HTMLElement} child
+     * @returns {HTMLElement}
+     */
+    getForm(child = undefined) {
+        return this._getParent("form", child);
     }
 
     /**
-     * Returns the form control (table cell) containing this button.
-     * @param {HTMLElement} [child]
-     * @param {string} [language]
+     * Returns the form field containing multiple fields.
+     * @param {HTMLElement} child
+     * @returns {HTMLElement}
+     */
+    getFormField(child = undefined) {
+        return this._getParent("form__field", child);
+    }
+
+    /**
+     * Return the current reference form.
+     * @param {String} language
+     * @return {HTMLTemplateElement}
+     */
+    getCurrentReferenceForm(language) {
+        return document.querySelector(`.form__reference-${language}`);
+    }
+
+    /**
+     * Returen the previous reference form.
+     * @return {HTMLTemplateElement}
+     */
+    getPreviousReferenceForm(language) {
+        return document.querySelector(`.form__previousreference-${language}`);
+    }
+
+    /**
+     * Returns the reference toolbar.
+     * @param {HTMLElement} child
      * @return {HTMLElement}
      */
-    getFormControl(child = undefined) {
-        return this._getParent('form__control', child);
+    getReferenceTextToolbar(child = undefined) {
+        return this.getFormField(child).querySelector(".form__field-toolbar");
     }
 
     /**
-     * Returns whether the form control is disabled.
-     * @return {boolean}
+     * Returns the language of the control - works only from a nested element inside `.form__control`
+     * @param {HTMLElement} child
+     * @returns {string} language string defined on the '.form__control' element - eg. 'nl'
      */
-    getFormControlDisabled() {
-        return this.getFormControl().classList.contains('form__control--disabled');
+    getControlLanguage(child = undefined) {
+        return this._getParent("form__control", child).lang;
     }
 
     /**
-     * Sets the disabled state of the form control.
-     * @param {boolean} disabled
-     * @param {HTMLElement} [formControl]
+     * Returns an object containing a property for each different `.reference` and it's language.
+     * @param {HTMLElement} child
+     * @returns {{ [language: string]: HTMLElement }}
      */
-    setFormControlDisabled(disabled, formControl = this.getFormControl()) {
-        formControl.classList.toggle('form__control--disabled', disabled);
-        const toggleInput = formControl.querySelector('.toolbar .toggle input ');
-
-        // Update toggle.
-        if (toggleInput) {
-            toggleInput.checked = !disabled;
-        }
-
-        // Update input/select/textarea.
-        [...formControl.querySelectorAll(`
-            .form__control input,
-            .form__control select,
-            .form__control textarea
-        `)].forEach((field) => {
-            field.readOnly = disabled;
-        });
-
-        // Update reference button.
-        formControl.querySelector('.form__control .form__reference-btn')?.toggleAttribute('disabled', disabled);
+    getReferenceElements(child = undefined) {
+        const nodes = this.getFormField(child).querySelectorAll(".reference");
+        return this._localizedGetter(nodes);
     }
 
     /**
-     * Returns the container for the field.
-     * @return {HTMLElement}
+     * Returns an object containing a property for each different `.reference__preview` and it's language.
+     * @param {HTMLElement} child
+     * @returns {{ [language: string]: HTMLElement }}
      */
-    getFieldContainer() {
-        return this.getFormControl().querySelector(`.form__control-body`);
+    getReferencePreviewElements(child = undefined) {
+        const nodes = this.getFormField(child).querySelectorAll(
+            ".reference__preview"
+        );
+        return this._localizedGetter(nodes);
     }
 
     /**
-     * Returns either the input or textarea for this diff button.
-     * @return {(HTMLInputElement|HTMLTextAreaElement)}
+     * Returns an object containing a property for each different `.reference__versions` and it's language.
+     * @param {HTMLElement} child
+     * @returns {{ [language: string]: HTMLElement }}
      */
-    getInputOrTextarea() {
-        return this.getFieldContainer().querySelector('input, textarea');
+    getReferenceVersionElements(child = undefined) {
+        const nodes = this.getFormField(child).querySelectorAll(
+            ".reference__versions"
+        );
+        return this._localizedGetter(nodes);
     }
 
     /**
-     * Returns a single HTMLElement containig all visible fields for the input or textarea.
+     * Returns an object containing a property for each different `.diff` and it's language.
+     * @param {HTMLElement} child
+     * @returns {{ [language: string]: HTMLElement }}
      */
-    getVisibleInputOrTextarea() {
-        const fieldContainer = this.getFieldContainer();
-        const markdownxField = fieldContainer.querySelector('input, .markdownx')
-
-        if (markdownxField) {
-            return markdownxField.parentElement
-        }
+    getDiffElements(child = undefined) {
+        const nodes = this.getFormField(child).querySelectorAll(".diff");
+        return this._localizedGetter(nodes);
     }
 
     /**
-     * Returns all the language wrappers.
-     * @return {HTMLElement}
+     * Returns an object containing a property for each different `.diff__preview` and it's language.
+     * @param {HTMLElement} child
+     * @returns {{ [language: string]: HTMLElement }}
      */
-    getLanguageWrappers() {
-        return this._getParent('form').querySelectorAll('.form__language-wrapper');
+    getDiffPreviewElements(child = undefined) {
+        const nodes =
+            this.getFormField(child).querySelectorAll(".diff__preview");
+        return this._localizedGetter(nodes);
     }
 
     /**
-     * Returns the language wrapper for child.
-     * @param [child]
-     * @return {HTMLElement}
+     * Returns an object containing a property for each different `.diff__versions` and it's language.
+     * @param {HTMLElement} child
+     * @returns {{ [language: string]: HTMLElement }}
      */
-    getLanguageWrapper(child) {
-        return this._getParent('form__language-wrapper', child);
+    getDiffVersionElements(child = undefined) {
+        const nodes =
+            this.getFormField(child).querySelectorAll(".diff__versions");
+        return this._localizedGetter(nodes);
     }
 
     /**
-     * Returns the language of the field container containing `this.node`.
-     * @return {string}
+     * Returns an object containing a property for each different `input, textarea` and it's language.
+     * @param {HTMLElement} child
+     * @returns {{ [language: string]: HTMLElement }}
      */
-    getLanguage() {
-        return this.getFieldContainer().lang;
+    getInputOrTextareas(child = undefined) {
+        const nodes =
+            this.getFormField(child).querySelectorAll("input, textarea");
+        return this._localizedGetter(nodes);
     }
 
     /**
-     * Returns the active language.
-     * @return {string}
+     * Returns an object containing all visible fields as value with the key as the language.
+     * @returns {{ [language: string]: HTMLElement} }
      */
-    getActiveLanguage() {
-        return this.getLanguageWrapper().lang;
+    getVisibleInputOrTextareas(child = undefined) {
+        const nodes =
+            this.getFormField(child).querySelectorAll("input, .markdownx");
+        return this._localizedGetter(nodes, "parentElement");
     }
 
     /**
-     * Set the languages.
-     * @param {string} language
-     * @param {boolean} [global=false] Whether to set all form controls to language.
+     * Returns the values of either the inputs or textareas.
+     * @returns {{ [language: string]: string} }
      */
-    setActiveLanguage(language, global = false) {
-        const languageWrappers = (global) ? this.getLanguageWrappers() : [this.getLanguageWrapper()];
-
-        [...languageWrappers].forEach((languageWrapper) => {
-            languageWrapper.lang = language;
-
-            [...languageWrapper.querySelectorAll('.form__control')].forEach((formControl) => {
-                if (formControl.lang === language) {
-                    formControl.removeAttribute('aria-hidden');
-                } else {
-                    formControl.setAttribute('aria-hidden', true);
-                }
-            });
-        })
-    }
-
-    /**
-     * Returns the table.
-     * @param {HTMLTableElement} [child]
-     * @return {HTMLTableElement}
-     */
-    getTable(child) {
-        return this._getParent('tabs__table', child);
-    }
-
-    /**
-     * Returns the HTMLElement containing the version labels.
-     * @return {HTMLElement}
-     */
-    getVersionsContainer() {
-        return this.getFormControl().querySelector('.tabs__table-cell--versions');
-    }
-
-    /**
-     * Returns the value of either the input or textarea.
-     * @return {string}
-     */
-    getValue() {
-        const inputOrTextarea = this.getInputOrTextarea();
-        return availableEditors[inputOrTextarea.id]?.getValue() || inputOrTextarea.value
+    getValues() {
+        return Object.entries(this.getInputOrTextareas()).reduce(
+            (acc, [language, node]) => {
+                const value = availableEditors[node.id]?.getValue();
+                if (value) acc[language] = value;
+                else if (value == "") acc[language] = value;
+                else acc[language] = node.value;
+                return acc;
+            },
+            {}
+        );
     }
 
     /**
      * Sets the value of either the input or textarea.
+     * @param {string} id
      * @param {string} value
      */
-    setValue(value) {
-        const inputOrTextarea = this.getInputOrTextarea();
-        const editor = availableEditors[inputOrTextarea.id];
+    setValue(id, value) {
+        const editor = availableEditors[id];
+        const inputOrTextareas = this.getInputOrTextareas();
 
         if (editor) {
             editor.setValue(value);
             return;
         }
 
-        inputOrTextarea.value = value;
+        Object.values(inputOrTextareas).forEach((node) => {
+            if (node.id == id) node.value = value;
+        });
+    }
+
+    /**
+     * Format the nodes in an object that has the key as language and the element als value.
+     * @param {NodeListOf<HTMLElement>} nodes
+     * @param {string} nodeProperty a property of node that can be returned
+     * @returns {{ [language: string]: HTMLElement} }
+     * @private
+     */
+    _localizedGetter(nodes, nodeProperty = undefined) {
+        return Array.from(nodes).reduce((acc, node) => {
+            const language = node.lang
+                ? node.lang
+                : this.getControlLanguage(node);
+
+            // return the property of a node under the key of the language.
+            if (nodeProperty) acc[language] = node[nodeProperty];
+            else acc[language] = node;
+            return acc;
+        }, {});
     }
 
     /**
@@ -207,7 +232,9 @@ export class FormComponent extends Component {
             i++;
 
             if (!iteratedNode || i > 100) {
-                throw new Error(`Maximum recursion depth exceeded while localizing parent with className ${className} for ${child}.`);
+                throw new Error(
+                    `Maximum recursion depth exceeded while localizing parent with className ${className} for ${child}.`
+                );
             }
         }
 

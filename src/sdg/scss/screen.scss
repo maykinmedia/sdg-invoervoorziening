@@ -11,11 +11,7 @@ body {
   overflow-x: hidden;
 }
 
-html, body {
-  scrollbar-gutter: stable;
-}
-
-input, textarea {
+input, textarea, button {
   color: #212121;
   font-family: 'Source Sans Pro', sans-serif;
 }
@@ -36,6 +32,17 @@ blockquote {
 
 .hidden {
   display: none !important;
+}
+
+.animated {
+  transition: 300ms all ease-in-out;
+  opacity: 1;
+  visibility: visible;
+
+  &--hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 .text-center {
@@ -84,3 +91,10 @@ blockquote {
   }
 }
 
+.italic {
+  font-style: italic;
+}
+
+.underline {
+  text-decoration: underline !important;
+}

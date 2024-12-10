@@ -4,88 +4,8 @@
 
 .tabs {
 
-  .tabs__subproduct {
-    margin-bottom: 94px;
-  }
-
-  .tabs__tabs {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(145px, 145px));
-    grid-gap: 4px;
-  }
-
-  .tabs__tab {
-    color: #fff;
-    background-color: #285a77;
-    padding: 16px;
-    border-radius: 10px 10px 0 0;
-    font-weight: bold;
-    transition: background-color 300ms;
-    text-decoration: none;
-
-    &:hover {
-      background-color: hsl(0deg 0% 100% / 20%);
-    }
-
-    &.tabs__tab--selected {
-      background-color: #f2f2f2;
-      color: #396a88;
-      text-decoration: none;
-    }
-
-    &-contents {
-      margin-top: 16px;
-    }
-
-  }
-
-  .tabs__tab-content {
-    display: none;
-
-    &.tabs__tab-content--active {
-      display: block;
-    }
-  }
-
-  .tabs__tab-content > .toolbar {
-    position: relative;
-  }
-
-  .tabs__tab-header {
-    padding: 0 12px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .tabs__status {
-    display: flex;
-  }
-
-  .tabs__status-label {
-    margin-right: 16px;
-    font-weight: bold;
-    color: $color_grey_darkest;
-  }
-
-  .tabs__status-label--result {
-    margin-left: 4px;
-  }
-
-  .tabs__status-published {
-    color: $color_primary;
-  }
-
-  .tabs__status-unpublished {
-    color: $color_accent_dark;
-  }
-
-  .tabs__status-concept {
-    color: $color_secondary_darkest;
-  }
-
-  .tabs__table {
+  &__table {
+    border-collapse: collapse;
     width: 100%;
     border-spacing: 0;
     margin-bottom: 48px;
@@ -101,6 +21,24 @@
         width: 14px;
       }
     }
+  }
+
+  .tabs__subproduct {
+    margin-bottom: 94px;
+  }
+
+  .tabs__tabs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(145px, 145px));
+    grid-gap: 4px;
+  }
+
+  .tabs__tab-header {
+    padding: 0 12px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .tabs__table-header {
@@ -201,6 +139,11 @@
 
     &--edit {
       padding-top: 24px;
+    }
+
+    &__content-spacing {
+      display: flex;
+      gap: 12px;
     }
 
     &.required {
@@ -348,37 +291,12 @@
       top: 1px;
     }
 
-    &-outer {
-      margin-top: 0;
-    }
-
-    .tabs__tab {
-      background-color: $color_grey_light;
-      border: 1px solid $color_grey_light;
-      border-bottom: none;
-      color: #525257;
-
-      &.tabs__tab--selected {
-        color: #525257;
-        text-decoration: none;
-      }
-
-      &:hover {
-        background-color: #f7f7f7;
-      }
-    }
-
     .tabs__tab-contents {
       border: 1px solid $color_grey_light;
       margin-top: 0;
       padding: 32px 64px;
       border-bottom-left-radius: 13px;
       border-bottom-right-radius: 13px;
-
-      .preview {
-        text-decoration: none;
-        font-weight: bold;
-      }
     }
   }
 }

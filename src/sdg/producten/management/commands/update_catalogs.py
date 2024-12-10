@@ -7,6 +7,7 @@ from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import BevoegdeOrganisatie, LokaleOverheid
 from sdg.producten.models import Product, ProductVersie
 from sdg.producten.models.localized import LocalizedProduct
+from sdg.producten.utils import get_placeholder_maps
 
 
 class Command(BaseCommand):
@@ -122,15 +123,25 @@ class Command(BaseCommand):
                             organisatie=catalog.lokale_overheid.organisatie,
                         )
 
+                    # Prepare the defaults dictionary with common fields that are always included
+                    product_defaults = {
+                        "generiek_product": reference_product.generiek_product,
+                        "bevoegde_organisatie": default_auth_org,
+                    }
+
+                    # Conditionally include "product_aanwezig" only if its value is None or False.
+                    # The `not` operator checks for both None and False values.
+                    if not reference_product.product_aanwezig:
+                        product_defaults["product_aanwezig"] = (
+                            reference_product.product_aanwezig
+                        )
+
                     # If it doesn't exist yet, create a (specific) product in
                     # this (specific) catalog.
                     product, is_created = Product.objects.get_or_create(
                         referentie_product=reference_product,
                         catalogus=catalog,
-                        defaults={
-                            "generiek_product": reference_product.generiek_product,
-                            "bevoegde_organisatie": default_auth_org,
-                        },
+                        defaults=product_defaults,
                     )
 
                     # Make sure the product has an authorized organisation.
@@ -166,10 +177,28 @@ class Command(BaseCommand):
                         # Create localized product version based on available
                         # languages.
                         for language in TaalChoices.labels.keys():
+                            # Initialize a dictionary with the common fields for creating the localized product version
+                            localized_product_version_create_kwargs = {
+                                "product_versie": product_version,
+                                "taal": language,
+                            }
+
+                            # Conditionally include the explanation field if the product is not available
+                            if reference_product.product_aanwezig is False:
+                                (
+                                    available_explanation_map,
+                                    falls_under_explanation_map,
+                                ) = get_placeholder_maps(product)
+                                # Add the explanation text to the dictionary
+                                localized_product_version_create_kwargs[
+                                    "product_aanwezig_toelichting"
+                                ] = falls_under_explanation_map[language]
+
+                            # Create the localized product version with the prepared arguments
                             localized_product_version = LocalizedProduct.objects.create(
-                                product_versie=product_version,
-                                taal=language,
+                                **localized_product_version_create_kwargs
                             )
+
                             # Copy the reference texts
                             if active_reference_product_version:
                                 localized_reference_product_version = (
@@ -179,7 +208,7 @@ class Command(BaseCommand):
                                 )
                                 if localized_reference_product_version:
                                     localized_product_version.update_with_reference_texts(
-                                        localized_reference_product_version
+                                        localized_reference_product_version,
                                     )
 
                     elif _fill_empty_english_text:

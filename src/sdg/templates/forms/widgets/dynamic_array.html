@@ -1,9 +1,9 @@
-{% load i18n static toggle %}
+{% load i18n static %}
 
 {% spaceless %}
     <div class="dynamic">
         <div class="dynamic__container">
-            <div>
+            <div class="dynamic__container-list">
                 {% for subwidget in widget.subwidgets %}
                     <div class="dynamic__container-item" {% if widget.is_none %}data-isNone="true"
                          style="display: none"{% endif %}>
@@ -11,8 +11,8 @@
                             {% include widget.template_name %}
                         {% endwith %}
                         {% if not widget.single %}
-                            <button type="button" class="dynamic__container__button--side dynamic__container-remove">
-                                <i class="fa fa-xs fa-times"></i>
+                            <button type="button" class="dynamic__container__button--side dynamic__container-remove" aria-hidden="false">
+                                <i class="fa fa-times" aria-hidden="false"></i>
                             </button>
                         {% endif %}
                     </div>
@@ -24,9 +24,6 @@
                         <i class="fa fa-plus fa-xs"></i>
                         {% trans "Toevoegen" %}
                     </button>
-                    {% if lockable %}
-                        {% toggle _('Aanpassen') hide_label=True icon_before='fa fa-lock fa-xs' icon_after='fa fa-lock-open fa-xs' %}
-                    {% endif %}
                 </div>
             {% endif %}
         </div>

@@ -1,7 +1,7 @@
-import './form_diff_button';
-import './reference_diff_button';
-import './language_switch';
-import './global_language_switch';
-import './show_reference_button';
-import './toggle';
-import './use_reference_button';
+import "./form_diff_button";
+import "./reference_diff_button";
+import "./show_reference_button";
+import "./use_reference_button";
+import "./utils";
+import "./product_available";
+import "./product_valt_onder";

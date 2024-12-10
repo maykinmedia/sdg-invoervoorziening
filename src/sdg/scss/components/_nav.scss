@@ -1,0 +1,31 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+
+  &__list {
+    display: flex;
+    list-style: none;
+    font-size: 1rem;
+    color: $color-white;
+    margin: 0;
+    gap: $grid-margin-3;
+  }
+
+  &__item {
+    color: $color-white;
+  }
+
+  &__item--active &__link {
+    color: $color_accent;
+    text-decoration: underline;
+  }
+
+  &__link {
+    color: $color-white;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

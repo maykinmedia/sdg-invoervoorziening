@@ -1,10 +1,10 @@
 {% extends 'producten/base.html' %}
-{% load utils static i18n producten toggle localized_form nonlocalized_form %}
+{% load utils static i18n producten update_form %}
 
 {% block page_intro %}
-    <p class="subheading">
-        {% trans "Onderstaande velden kun je apart bewerken. Je kunt alles in één keer opslaan met de knoppen onderaan." %}
-    </p>
+    {# Create the url of the preview concept - stored in concept_url #}
+    {% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk as concept_url %}
+    {% publications concept_url=concept_url|add:'?status=concept' product=product publication_links=published_product_language_links %}
 {% endblock %}
 
 {% block templates %}
@@ -25,361 +25,42 @@
 {% endfor %}
 {% endblock %}
 
-{% block breadcrumbs_page_title %}
-    {% if product.is_referentie_product %}
-        <span>{{ object|capfirst|default:namespace|capfirst }} (referentie)</span>
-    {% else %}
-        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
-    {% endif %}
-{% endblock %}
-
 {% block page_title %}
     {% if product.is_referentie_product %}
-        <span>{{ object|capfirst|default:namespace|capfirst }} (referentie)</span>
+        <span>{{ product|capfirst|default:namespace|capfirst }} (referentie)</span>
     {% else %}
-        <span>{{ object|capfirst|default:namespace|capfirst }}</span>
+        <span>{{ product|capfirst|default:namespace|capfirst }}</span>
     {% endif %}
 {% endblock %}
 
 {% block page_content %}
-<div class="toolbox">
-
-    <div class="toolbox__item toolbox__item--countries global-language-switch" title="{% trans 'Selecteer de te bewerken taal' %}">
-        {% toggle '' icon_before='flag-icon flag-icon-nl' icon_after='flag-icon flag-icon-gb' id='toggle-language' %}
-    </div>
-
-    {% with most_recent_is_concept=product.most_recent_version.publicatie_datum|notbool %}
-        <div class="toolbox__item toolbox__language_div">
-            {% trans "Toon" %}:
-            {% for taal, url in published_product_language_links.items %}
-                {% if product.active_version %}
-                    <a href="{{ url }}"
-                    id="preview-current"
-                    class="toolbox__language_item preview"
-                    target="_blank"
-                    lang="{{ taal }}"
-                    {% if not forloop.first %} aria-hidden="true" {% endif %}
-                    >{% trans "gepubliceerde tekst op Nationaal Portaal" %}
-                    </a>
-                {% endif %}
-            {% endfor %}
-                {% if product.active_version and most_recent_is_concept %}
-                    |
-                {% endif %}
-            {% for taal in languages %}
-                {% if most_recent_is_concept %}
-                    <a href="{% url 'organisaties:catalogi:producten:preview' pk=lokaleoverheid.pk catalog_pk=product.catalogus.pk product_pk=product.pk %}?status=concept&taal={{ taal }}"
-                    id="preview-concept"
-                    class="toolbox__language_item preview"
-                    target="_blank"
-                    lang="{{ taal }}"
-                    {% if not forloop.first %} aria-hidden="true" {% endif %}
-                    >{% trans "concepttekst" %}
-                    </a>
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% endwith %}
-
-    {# Notifications. #}
-    <div class="toolbox__item">
-        <i class="fa fa-bell"></i>
-        <a href="{% url 'notificaties' %}" target="_blank">
-             {% trans "Notificaties" %}
-        </a>
-    </div>
-
-    {# (Global) edit togggle. #}
-    <div class="toolbox__item global-edit-toggle" title="{% trans 'Alles bewerken' %}">
-        {% toggle "" icon_before='fa fa-lock' icon_after='fa fa-lock-open' id='toggle-edit' %}
-    </div>
-</div>
-
 <div class="notifications">
+    {% doordruk_warning product %}
     {% if not product.is_referentie_product %}{% include 'producten/_include/availability_warnings.html' %}{% endif %}
     {% include 'producten/_include/edit_warnings.html' %}
 </div>
 
 
-<form action="." method="POST" class="form">
+<form 
+    action="." 
+    method="POST" 
+    class="form"
+    data-reference="{{product.is_referentie_product|lower}}"
+>
     <!-- removes submitting on enter -->
     <button type="submit" disabled aria-hidden="true" class="hidden"></button>
 
     {% csrf_token %}
     {{ form.management_form }}
     {{ product_form.non_field_errors }}
-    <div class="tabs tabs--inline-outer">
-        <table class="tabs__table form__general">
-            <thead class="bem-toggle" data-toggle-target=".form__general" data-toggle-modifier="hidden">
-                <tr>
-                    <th class="tabs__table-header" width="25%">
-                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                        1. {% trans "Algemene Gegevens" %}
-                    </th>
-                </tr>
-                </thead>
-                <tbody class="tabs__table-body">
+    
+    {% update_form_general %}
+    
+    {% if generic_products %}
+        {% update_form_generic %}
+    {% endif %}
 
-                {% if not product.is_referentie_product %}
-                    <tr>
-                        <td>
-                            <div class="form__control">
-                                <header class="form__control-header">
-                                    <label class="form__label">
-                                        {{ _("Doelgroep")|capfirst }}
-                                        <i class="fa fa-info-circle fa-xs dark" title="{{ doelgroep.help_text }}"></i>
-                                    </label>
-                                </header>
-                                <div class="form__control-body">
-                                    <div class="tabs__table-cell--versions"></div>
-                                    {{ doelgroep.value }}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    {% with field=product_form.product_aanwezig %}
-                    <tr>
-                        <td>
-                            <div class="form__control">
-                                <header class="form__control-header">
-                                    <label class="form__label">
-                                        {{ field.label|capfirst }}
-                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-                                    </label>
-                                </header>
-                                <div class="form__control-body">
-                                    <div class="tabs__table-cell--versions"></div>
-                                    {% comment %} Didn't use template because error msg would render in the select element {% endcomment %}
-                                    <fieldset class="form__group--nopad">
-                                        <div class="select">
-                                            {{ field }}
-                                        </div>
-                                    </fieldset>
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endwith %}
-
-                    <tr>
-                        <td>
-                            {% localized_form formset include_form=False fields="product_aanwezig_toelichting" %}
-                        </td>
-                    </tr>
-
-                    {% with field=product_form.product_valt_onder %}
-                    <tr>
-                        <td>
-                            <div class="form__control">
-                                <header class="form__control-header">
-                                    <label class="form__label">
-                                        {{ field.label|capfirst }}
-                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-                                    </label>
-                                </header>
-                                <div class="form__control-body">
-                                    <div class="tabs__table-cell--versions"></div>
-                                    {% select field %}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endwith %}
-
-                    <tr>
-                        <td>
-                            {% localized_form formset include_form=False fields="product_valt_onder_toelichting" %}
-                        </td>
-                    </tr>
-
-                    {% with field=product_form.locaties %}
-                    <tr>
-                        <td>
-                            <div class="form__control">
-                                <header class="form__control-header">
-                                    <label class="form__label">
-                                        {{ field.label|capfirst }}
-                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-                                    </label>
-                                </header>
-                                <div class="form__control-body">
-                                    <div class="tabs__table-cell--versions"></div>
-                                    {{ field }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endwith %}
-                {% endif %}
-
-                {# DISABLED PER REQUEST VNG #}
-                {% with field=product_form.api_verborgen %}
-                    <tr style="display: none">
-                        <td>
-                            <div class="form__control">
-                                <header class="form__control-header">
-                                    <label class="form__label">
-                                        {{ field.label|capfirst }}
-                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-                                    </label>
-                                </header>
-                                <div class="form__control-body">
-                                    <div class="tabs__table-cell--versions"></div>
-                                    {% select field %}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                {% endwith %}
-
-                {% with field=product_form.bevoegde_organisatie %}
-                        <tr>
-                            <td>
-                                <div class="form__control">
-                                    <header class="form__control-header">
-                                        <label class="form__label">
-                                            {{ field.label }}
-                                            <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-                                        </label>
-                                    </header>
-                                    <div class="form__control-body">
-                                        <div class="tabs__table-cell--versions"></div>
-                                        {% select field %}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                {% endwith %}
-
-                {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
-                    {% with configuration=publication_date.configuration.label %}
-                        <tr>
-                            <td>
-                                <div class="form__control">
-                                    <header class="form__control-header">
-                                        <label class="form__label">
-                                            {{ configuration.label|default:_("Publicatie datum")|capfirst }}
-                                            <i class="fa fa-info-circle fa-xs dark" title="{{ configuration.tooltip|default:_('Publicatiedatum van de productversie') }}"></i>
-                                        </label>
-                                    </header>
-                                    <div class="form__control-body">
-                                        <div class="tabs__table-cell--versions"></div>
-                                        <span class="tabs__table-cell--value">{{ publication_date.value|default:"Concept" }}</span>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endwith %}
-                {% endwith %}
-                {% with field=product_form.heeft_kosten %}
-                    <tr>
-                        <td>
-                            <div class="form__control">
-                                <header class="form__control-header">
-                                    <label class="form__label">
-                                        {{ field.label|capfirst }}
-                                        <i class="fa fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
-                                    </label>
-                                </header>
-                                <div class="form__control-body">
-                                    <div class="tabs__table-cell--versions"></div>
-                                    {% select field %}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                {% endwith %}
-                <tr>
-                    <td>
-                        <div class="form__control">
-                            <header class="form__control-header">
-                                <label class="form__label">
-                                    {% trans "Informatiegebied" %}
-                                    <i class="fa fa-info-circle fa-xs dark" title="{% trans 'Informatiegebied in verband met dit product.' %}"></i>
-                                </label>
-                            </header>
-                            <div class="form__control-body">
-                                <div class="tabs__table-cell--versions"></div>
-                                <span class="tabs__table-cell--value">{{ areas|join:", " }}</span>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        {% nonlocalized_form version_form include_form=False fields="interne_opmerkingen" %}
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-    </div>
-
-    <div class="tabs tabs--inline">
-        {% for generic_information, form in informatie_forms %}
-        <div class="tabs__tab-content tabs__tab-content{% if forloop.first %}--active{% endif %}"
-            id="{{ form.taal.value }}">
-
-            {% if generic_products %}
-                <table class="tabs__table form__generic">
-                    <thead class="bem-toggle" data-toggle-target=".form__generic" data-toggle-modifier="hidden">
-                    <tr>
-                        <th class="tabs__table-header" width="25%">
-                            <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                            2. {% trans 'Generieke gegevens' %}
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody class="tabs__table-body">
-                        <td class="tabs__table-cell">
-                            {% table_row products=generic_products languages=languages generic_fields=generic_fields %}
-                        </td>
-                    </tbody>
-                </table>
-            {% endif %}
-
-        </div>
-        {% endfor %}
-
-        <table class="tabs__table form__specific">
-            <thead class="bem-toggle" data-toggle-target=".form__specific" data-toggle-modifier="hidden">
-                <tr>
-                    <th class="tabs__table-header" width="25%">
-                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
-                        3. {% trans 'Specifieke gegevens' %}
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="tabs__table-body">
-                <td>
-                    <div class="form__has-reference" data-reference=".form__reference-{{ form.taal.value }}"
-                        data-previousreference=".form__previousreference-{{ form.taal.value }}">
-                        {% for form in form.forms %}
-                        {{ form.non_field_errors }}
-                        {{ form.id.as_hidden }}
-                        {{ form.taal.as_hidden }}
-                        {% endfor %}
-
-                        {% localized_form formset include_form=False fields=localized_form_fields  %}
-
-                    {% comment %} loop though from to get decentrale_procedure_label and decentrale_procedure_link form instances to combine them in the localized_url_label_field template {% endcomment %}
-                        {% for form in form.forms %}
-                            {% if form.decentrale_procedure_label and form.decentrale_procedure_link %}
-                                {% localized_url_label_field label=form.decentrale_procedure_label link=form.decentrale_procedure_link taal=form.taal.value languages=languages %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </td>
-            </tbody>
-        </table>
-    </div>
+    {% update_form_specific %}
 
     {% if history %}
     <div class="tabs tabs--inline">

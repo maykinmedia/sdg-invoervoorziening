@@ -1,0 +1,23 @@
+{% extends 'components/fields/base.html' %}
+{% load fields utils %}
+
+{% block header %}
+    <label class="form__field-label">
+        {{label|capfirst}}
+        <i class="fas fa-info-circle fa-xs dark" title="{{ tooltip }}"></i>
+    </label>    
+{% endblock %}  
+
+{% block body %}
+    <div class="form__control">
+        <div class="form__control-body">
+            {% if field %}
+                {{ field|addclass:'form__input' }}
+            {% elif value %}
+                <p>{{ value }}</p>
+            {% elif fallback_value %}
+                <p>{{ fallback_value }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -225,6 +225,23 @@ class Product(ProductFieldMixin, models.Model):
         default=False,
     )
 
+    automatisch_doordrukken = models.BooleanField(
+        _("Product teksten automatisch doordrukken"),
+        help_text=_(
+            "Selecteer of het product (referentie) teksten automatisch moet worden doorgedrukt naar de specifieke producten."
+        ),  # TODO Change this text.
+        default=False,
+    )
+
+    automatisch_doordrukken_datum = models.DateField(
+        _("Datum waarop de tekst automatisch word doorgedrukt"),
+        help_text=_(
+            "Deze datum is 30 dagen na de publicatie datum, wanneer de optie 'Automatisch doordrukken' op 'Ja' geselecteerd."
+        ),  # TODO Change this text.
+        null=True,
+        blank=True,
+    )
+
     objects = ProductQuerySet.as_manager()
 
     @cached_property
@@ -323,7 +340,7 @@ class Product(ProductFieldMixin, models.Model):
     ):
         """:returns: The latest N versions for this product."""
         step_slice = 1 if reverse_order else 1
-        queryset = self.versies.all().order_by("-versie")
+        queryset = self.versies.all().order_by("-gewijzigd_op")
 
         if active:
             queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
@@ -334,7 +351,9 @@ class Product(ProductFieldMixin, models.Model):
 
     def get_all_versions(self, active=False, exclude_concept=False):
         """:returns: The versions for this product."""
-        queryset = self.versies.all().order_by("-versie").select_related("gemaakt_door")
+        queryset = (
+            self.versies.all().order_by("-gewijzigd_op").select_related("gemaakt_door")
+        )
 
         if active:
             queryset = queryset.filter(publicatie_datum__lte=datetime.date.today())
@@ -451,7 +470,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
     class Meta:
         verbose_name = _("product versie")
         verbose_name_plural = _("product versies")
-        ordering = ("-versie",)
+        ordering = ("-gewijzigd_op",)
         unique_together = (("versie", "product"),)
 
     def __str__(self):
@@ -548,3 +567,27 @@ class Productuitvoering(models.Model):
 
     def __str__(self):
         return f"{self.product} (uitvoering)"
+
+
+class BrokenLinks(models.Model):
+    """
+    Broken Links
+
+    Model that keeps track of each link with a One-To-One relationship to the product this link is present.
+    The model has different columns that keep track of data that is used to determine if a monthly must be email send.
+    """
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    url = models.URLField(default="", max_length=2000)
+    error_count = models.PositiveIntegerField(default=0)
+    last_checked = models.DateTimeField(auto_now=True)
+    occurring_field = models.TextField(default="")
+    url_label = models.TextField(default="")
+
+    def increment_error_count(self):
+        self.error_count += 1
+        self.save()
+
+    def reset_error_count(self):
+        self.error_count = 0
+        self.save()

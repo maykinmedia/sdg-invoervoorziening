@@ -1,0 +1,22 @@
+{% extends 'components/fields/base.html' %}
+{% load utils fields %}
+
+{% block header %}
+    <label class="form__field-label">
+        {{field.label|capfirst}}
+        <i class="fas fa-info-circle fa-xs dark" title="{{ field.help_text }}"></i>
+    </label>
+{% endblock %}
+
+{% block body %}
+<div class="form__control">
+    <div class="form__control-body">
+        <fieldset class="form__group--nopad">
+            <div class="select">
+                {{ field }}
+            </div>
+        </fieldset>
+        {{ field.errors }}
+    </div>
+</div>
+{% endblock %}

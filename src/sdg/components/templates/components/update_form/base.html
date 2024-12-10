@@ -1,0 +1,20 @@
+{% load update_form %}
+
+<div class="tabs tabs--inline">
+    <div class="tabs__tab-content">
+        <table class="tabs__table {{ form_name }}">
+            <thead class="bem-toggle" data-toggle-target=".{{ form_name }}" data-toggle-modifier="hidden">
+                <tr>
+                    <th class="tabs__table-header">
+                        <i class="fa fa-chevron-right bem-toggle__icon"></i>
+                        {% block title %}{% endblock %}
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="tabs__table-body">
+                {% block form %}{% endblock %}
+            </tbody>
+        </table>  
+    </div>
+</div>

@@ -69,18 +69,8 @@ def validate_https(value):
 
 def validate_product(localized):
     """Validate a product (specific / reference).
-    - If `product_aanwezig` is False, the product must declare `product_aanwezig_toelichting`.
+    - If `decentrale_procedure_label` is filled, but `decentrale_procedure_label` not - or reversed.
     """
-
-    if (
-        localized.product_versie.product.product_aanwezig is False
-        and not localized.product_aanwezig_toelichting
-    ):
-        raise ValidationError(
-            _(
-                "Het veld 'productAanwezigToelichting' is verplicht als product niet aanwezig is."
-            )
-        )
 
     if bool(localized.decentrale_procedure_label) is not bool(
         localized.decentrale_procedure_link

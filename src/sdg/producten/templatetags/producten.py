@@ -1,6 +1,10 @@
+from datetime import date, timedelta
+from typing import Literal
+
 from django import template
 
-from sdg.producten.types import Language, ProductFieldMetadata
+from sdg.producten.models import Product
+from sdg.producten.types import ProductFieldMetadata
 
 register = template.Library()
 
@@ -26,44 +30,43 @@ def value(field):
     return field.value
 
 
-@register.filter
-def exclude(field_list: list, excluded_fields: str) -> list:
-    excluded_fields = set(excluded_fields.split(","))
-
-    result = []
-    for field in field_list:
-        field_name = field.name.lower()
-        if field_name not in excluded_fields:
-            result.append(field)
-        else:
-            excluded_fields.discard(field_name)
-
-    if excluded_fields:
-        raise RuntimeError(
-            "Invalid field in excluded field list: {excluded}. Available fields: {available}".format(
-                excluded=", ".join(excluded_fields),
-                available=", ".join([f.name.lower() for f in field_list]),
-            )
-        )
-
-    return result
-
-
-@register.inclusion_tag("producten/_include/icon.html")
-def icon(name: str):
-    return {"name": name}
-
-
-@register.inclusion_tag("producten/_include/product_icon.html")
-def product_icon(product, **kwargs):
-    return {**kwargs, "product": product}
-
-
-@register.inclusion_tag("producten/_include/flag.html")
-def flag(language: Language, **kwargs):
-    return {**kwargs, "language": language}
-
-
 @register.inclusion_tag("producten/_include/field_info.html")
 def field_info(field: ProductFieldMetadata, **kwargs):
     return {**kwargs, "field": field}
+
+
+@register.inclusion_tag("producten/_include/publications.html")
+def publications(product, publication_links, concept_url):
+    return {
+        "product": product,
+        "publication_links": publication_links,
+        "concept_url": concept_url,
+    }
+
+
+@register.inclusion_tag("producten/_include/doordruk_warning.html")
+def doordruk_warning(product: Product):
+    def return_value(show_warning, warning_date):
+        return {
+            "doordruk_activation_warning": show_warning,
+            "datum__doordrukken": warning_date,
+        }
+
+    reference_product = product.reference_product
+    reference_auto_press_through = reference_product.automatisch_doordrukken
+    reference_auto_press_through_date = reference_product.automatisch_doordrukken_datum
+    product_press_through = product.automatisch_doordrukken
+
+    if product.is_referentie_product:
+        return return_value(None, None)
+
+    if not reference_auto_press_through or not reference_auto_press_through_date:
+        return return_value(None, None)
+
+    if not date.today() >= reference_auto_press_through_date - timedelta(days=30):
+        return return_value(None, None)
+
+    if reference_auto_press_through and not product_press_through:
+        return return_value(False, reference_auto_press_through_date)
+
+    return return_value(True, reference_auto_press_through_date)

@@ -1,10 +1,10 @@
 {% load i18n producten utils %}
 
 <tr>
-    <td class="tabs__table-cell">{{ user }}
+    <td class="tabs__table-cell">
+        {{ user }}
         {% if user.invitatie and not user.invitatie.accepted %}
-            <i class="fa fa-envelope fa-xs dark"
-               title="{% trans 'Uitnodiging verstuurd' %}"></i>
+            <i class="fa fa-envelope fa-xs dark" title="{% trans 'Uitnodiging verstuurd' %}"></i>
         {% endif %}
     </td>
     <td class="tabs__table-cell">{% status_icon role.is_beheerder %}</td>
@@ -12,18 +12,23 @@
     <td class="tabs__table-cell">{% status_icon role.is_raadpleger %}</td>
     <td class="tabs__table-cell">{% status_icon role.ontvangt_mail %}</td>
     <td class="tabs__table-cell">
-    {% if role %}
-        {% if request.user|is_manager:lokaleoverheid %}
-            <a class="button--small button--light" href="
-                {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
-            {% if user != request.user %}
-                <a class="button--small button--light" href="
-                    {% url 'organisaties:roles:delete' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Verwijderen" %}</a>
-            {% endif %}
-        {% elif user == request.user %}
-            <a class="button--small button--light"href="
-                {% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}">{% trans "Wijzigen" %}</a>
+        {% if role %}
+            <div class="tabs__table-cell__content-spacing">
+                {% if user == request.user or request.user|is_manager:lokaleoverheid %}
+                    <a class="button--small button--light" 
+                        href="{% url 'organisaties:roles:update' pk=lokaleoverheid.pk role_pk=role.pk %}"
+                    >
+                        {% trans "Wijzigen" %}
+                    </a>
+                {% endif %}
+                {% if user != request.user and request.user|is_manager:lokaleoverheid %}
+                    <a class="button--small button--light" 
+                        href="{% url 'organisaties:roles:delete' pk=lokaleoverheid.pk role_pk=role.pk %}"
+                    >
+                        {% trans "Verwijderen" %}
+                    </a>
+                {% endif %}
+            </div>
         {% endif %}
-    {% endif %}
     </td>
 </tr>

@@ -2,12 +2,6 @@
 {% load rijkshuisstijl_datagrid static i18n producten utils %}
 
 {% block page_title %}{% trans "Productenlijst" %}{% endblock %}
-{% block page_intro %}
-    <p class="subheading">
-        {% trans "Je ziet hieronder de lijst van alle SDG producten. Klik op een product om deze te bewerken." %}
-    </p>
-{% endblock %}
-
 
 {% block page_content %}
     {% datagrid config=datagrid_config %}

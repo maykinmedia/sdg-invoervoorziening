@@ -52,6 +52,7 @@ class LocatieForm(forms.ModelForm):
         model = Locatie
         fields = (
             "naam",
+            "order",
             "straat",
             "nummer",
             "postcode",

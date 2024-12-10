@@ -1,4 +1,5 @@
 import html
+from datetime import datetime
 from typing import Optional
 
 from django.test import override_settings
@@ -218,7 +219,7 @@ class ProductUpdateViewTests(WebTest):
         )
 
         response.form["product_valt_onder"] = str(product.pk)
-        response.form["product_aanwezig"] = "false"
+        response.form["product_aanwezig"] = "False"
 
         for idx, language in enumerate(TaalChoices.get_available_languages()):
             response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"
@@ -269,29 +270,14 @@ class ProductUpdateViewTests(WebTest):
         page_preview_current_url_nl = response.pyquery("#preview-current[lang=nl]")
         self.assertEqual(page_preview_current_url_nl.length, 0)
 
-        page_preview_concept_url_nl = response.pyquery(
-            "#preview-concept[lang=nl]"
-        ).attr("href")
-        self.assertEqual(
-            page_preview_concept_url_nl, f"{preview_url}?status=concept&taal=nl"
-        )
-
-        preview_response_nl = self.app.get(page_preview_concept_url_nl)
-        self.assertEqual(preview_response_nl.status_code, 200)
-
         page_preview_current_url_en = response.pyquery("#preview-current[lang=en]")
         self.assertEqual(page_preview_current_url_en.length, 0)
 
-        page_preview_concept_url_en = response.pyquery(
-            "#preview-concept[lang=en]"
-        ).attr("href")
+        page_preview_concept_url = response.pyquery("#preview-concept").attr("href")
+        self.assertEqual(page_preview_concept_url, f"{preview_url}?status=concept")
 
-        self.assertEqual(
-            page_preview_concept_url_en, f"{preview_url}?status=concept&taal=en"
-        )
-
-        preview_response_en = self.app.get(page_preview_concept_url_en)
-        self.assertEqual(preview_response_en.status_code, 200)
+        preview_response = self.app.get(page_preview_concept_url)
+        self.assertEqual(preview_response.status_code, 200)
 
     @freeze_time(NOW_DATE)
     def test_error_notification_is_displayed(self):
@@ -1197,8 +1183,16 @@ class ProductUpdateViewTests(WebTest):
 
         revisions = response.pyquery(".revision-list")
         self.assertEqual(len(revisions), 2)
-        self.assertIn(str(self.product), revisions[0].text_content())
-        self.assertIn(str(self.reference_product), revisions[1].text_content())
+        self.assertIn(
+            str(self.product_version.gemaakt_door), revisions[1].text_content()
+        )
+        for index, item in enumerate(revisions[1].getiterator("strong")):
+            if index == 1:
+                rev_date = datetime.fromisoformat(item.values()[0])
+                edit_date = datetime.fromisoformat(
+                    str(self.product_version.gewijzigd_op)
+                )
+                self.assertEqual(str(rev_date), str(edit_date))
 
     @freeze_time(NOW_DATE)
     def test_consultant__cannot_update_product(self):
@@ -1548,7 +1542,7 @@ class ProductUpdateViewTests(WebTest):
         )
         self.assertEqual(response.status_code, 200)
 
-        response.form["product_aanwezig"] = "true"
+        response.form["product_aanwezig"] = "True"
 
         for idx, _lang in enumerate(TaalChoices.get_available_languages()):
             response.form[f"vertalingen-{idx}-product_aanwezig_toelichting"] = "test"

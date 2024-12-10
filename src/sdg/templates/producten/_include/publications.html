@@ -1,0 +1,33 @@
+{% load utils static i18n %}
+
+{% if product.active_version and publication_links.items|length > 0 or product.most_recent_version.publicatie_datum|notbool %}
+    <section class="publications">
+        {% if product.active_version and publication_links.items|length > 0 %}
+            <div class="publications__publication">
+                <p>{% trans "Toon" %}:</p>
+                {% for taal, url in publication_links.items %}
+                    <a href="{{ url }}"
+                    id="preview-current"
+                    class="publications__publication-link"
+                    target="_blank"
+                    lang="{{ taal }}"
+                    >
+                        {% trans "gepubliceerde tekst op Nationaal Portaal" %} ({{taal}})
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if product.most_recent_version.publicatie_datum|notbool %}
+            <div class="publications__publication">
+                <p>{% trans "Toon" %}:</p>
+                <a href="{{concept_url}}"
+                id="preview-concept"
+                class="publications__publication-link"
+                target="_blank"
+                >
+                    {% trans "concepttekst" %}
+                </a>
+            </div>
+        {% endif %}
+    </section>
+{% endif %}

@@ -1,0 +1,39 @@
+{% load i18n utils %}
+
+{% with pk=lokaleoverheid.pk %}
+<nav class="nav">
+    <ul class="nav__list">
+        {% url 'core:home' as home_url %}
+        {% nav_item title='<i class="fa fa-house"></i>' href=home_url %}
+
+        {% if pk %}
+            {% url 'organisaties:catalogi:list' pk=pk as productlijst_url %}
+            {% nav_item title=_('Productenlijst') href=productlijst_url %}
+            
+            {# User is a manager #}
+            {% if request.user|is_manager:lokaleoverheid %}
+                {% url 'organisaties:edit' pk=pk as organisatie_url %}
+                {% nav_item title=_('Organisatie') href=organisatie_url %}
+                
+                {% url 'organisaties:locaties' pk=pk as location_url %}
+                {% nav_item title=_('Locaties') href=location_url %}
+                
+                {% url 'organisaties:bevoegde_organisaties' pk=pk as bevoegde_orgs_url %}
+                {% nav_item title=_('Bevoegde organisaties') href=bevoegde_orgs_url %}
+                
+                {% url 'organisaties:roles:list' pk=pk as roles_list_url %}
+                {% nav_item title=_('Gebruikersbeheer') href=roles_list_url %}
+                {% endif %}
+            {% endif %} 
+        
+                
+        {# Show new notification icon if has_new_notifications is True #}    
+        {% url 'notificaties' as notification_url %}
+        {% nav_item title=_('Notificaties') href=notification_url icon='<i class="fa fa-circle-exclamation accent"></i>' show_icon=has_new_notifications %}
+        
+        {% if siteconfig.documentatie_link %}
+        {% nav_item title=siteconfig.documentatie_titel|capfirst|default:_("Documentatie") href=siteconfig.documentatie_link blank_target=True id="documentation" %}
+        {% endif %}
+    </ul>
+</nav>
+{% endwith %}
