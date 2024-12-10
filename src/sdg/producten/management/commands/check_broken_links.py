@@ -191,7 +191,11 @@ class Command(BaseCommand):
                 return (url, SUCCES_STATUS_CODE)
             # Exception for URLs starting with ['tel:', 'sms:', 'geo:', ...]
             return (url, ANY_ERROR_STATUS_CODE)
+        except requests.exceptions.ReadTimeout:
+            return (url, ANY_ERROR_STATUS_CODE)
         except requests.RequestException:
+            return (url, ANY_ERROR_STATUS_CODE)
+        except Exception:
             return (url, ANY_ERROR_STATUS_CODE)
 
     def handle_response_code(
