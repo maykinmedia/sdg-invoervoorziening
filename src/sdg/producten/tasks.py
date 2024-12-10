@@ -39,3 +39,19 @@ def send_monthly_broken_links_report():
     Send monthly broken links report to the all redactors of the content.
     """
     call_command("send_monthly_broken_links_report")
+
+
+@app.task()
+def automatisch_doordrukken_teksten():
+    """
+    Generate and update the status of all generic products.
+    """
+    call_command("automatisch_doordrukken_teksten")
+
+
+@app.task()
+def send_email_to_users_about_doordrukken():
+    """
+    Send an e-mail to users to inform them about their product and that a reference product will overwrite it.
+    """
+    call_command("send_email_to_users_about_doordrukken")

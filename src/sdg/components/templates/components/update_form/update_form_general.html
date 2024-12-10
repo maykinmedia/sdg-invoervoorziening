@@ -24,6 +24,16 @@
         
     {% endif %}
 
+    {% select hide_element=product.is_referentie_product|yesno:',True' inline=True field=product_form.automatisch_doordrukken %}
+
+    {% if product.is_referentie_product %}
+        {# Render as core with value #}
+        {% core hide_element=False inline=True label=product_form.automatisch_doordrukken_datum.label tooltip=product_form.automatisch_doordrukken_datum.help_text value=product_form.automatisch_doordrukken_datum.value fallback_value=_('Geen automatische doordruk datum') %}
+    {% else %}
+        {# Render hidden as core with field #}
+        {% core hide_element=True inline=True label=product_form.automatisch_doordrukken_datum.label tooltip=product_form.automatisch_doordrukken_datum.help_text field=product_form.automatisch_doordrukken_datum %}
+    {% endif %}
+
     {# DISABLED PER REQUEST VNG #}
     {% select hide_element=True inline=True field=product_form.api_verborgen %}
 
