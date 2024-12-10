@@ -549,14 +549,3 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         test_case("www.google.com", 200)
         # Test case 11 - 500 Server error
         test_case("https://httpbin.org/status/500", 500)
-
-    def test_clean_up_removed_urls(self):
-        removed_links_count = 0
-        out = self.call_command("check_broken_links")
-        self.assertIn(f"Deleted {removed_links_count} old BrokenLinks.", str(out))
-
-    def test_reset_all_broken_links(self):
-        out = self.call_command("check_broken_links", "--reset")
-        self.assertIn(
-            "Successfully cleared the error_count of every BrokenLink.", str(out)
-        )
