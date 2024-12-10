@@ -110,6 +110,32 @@ def choices_field(field, **kwargs):
     return {**kwargs, "field": field}
 
 
+@register.inclusion_tag("forms/order_field.html", takes_context=True)
+def order_field(context, field=None, **kwargs):
+    return {**kwargs, "context": context, "field": field}
+
+
+@register.inclusion_tag("forms/location_form.html", takes_context=True)
+def location_form(context, subform, initialOrder, **kwargs):
+    print(subform)
+    return {
+        "context": context,
+        "subform": subform,
+        "initialOrder": initialOrder,
+        **kwargs,
+    }
+
+
+@register.inclusion_tag("forms/organization_form.html", takes_context=True)
+def organization_form(context, subform, initialOrder, **kwargs):
+    return {
+        "context": context,
+        "subform": subform,
+        "initialOrder": initialOrder,
+        **kwargs,
+    }
+
+
 @register.inclusion_tag("forms/table_grid_field.html")
 def table_grid_field(field, **kwargs):
     return {**kwargs, "field": field}

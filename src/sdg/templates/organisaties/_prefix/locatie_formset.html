@@ -1,37 +1,57 @@
 {% load utils %}
 {% load i18n %}
 
-<div class="form__subforms">
-    <h3 class="form__subtitle">
-                    <span class="formset__title">{% trans "Locatie" %} __prefix__</span>
-                    <a class="formset__remove" href="#">
-                        <i class="far fa-trash-alt"></i>
-                        {% trans "Locatie verwijderen" %}
-                    </a>
-                </h3>
-    <div class="form__block-group">
-        <div>
-            <div class="form__table-header-left">{% trans "Locatie" %}</div>
-            {% field form.empty_form.naam %}
-            {% field form.empty_form.straat %}
-            {% field form.empty_form.nummer %}
-            <div class="form__table form__special-group">
-                {% field form.empty_form.postcode %}
-                {% field form.empty_form.plaats %}
+<section class="formset__form form-__prefix__-toggle formset__form--hide-overflow" data-initial-order data-prefix>
+    <header class="formset__form-header bem-toggle" data-toggle-target=".form-__prefix__-toggle" data-toggle-modifier="hidden">
+        <i class="fa fa-chevron-up formset__toggle-indication"></i> 
+
+        <h3 class="formset__form-title">
+            <span>{% trans "Locatie" %} </span>
+            <span class="formset__current-order">__prefix__ </span>
+            <span class="formset__form-name">(<span class="dynamic_title_target--form-__prefix__"></span>)</span>
+        </h3>
+
+        <p class="formset__indication formset__indication--new primary">
+            <span>{% trans 'Nieuw'%}</span>
+            <i class="fa fa-info-circle" title="Deze locatie wordt na het opslaan toegevoegd."></i>
+        </p>
+
+        {% order_field form.empty_form.order %}
+    </header>
+
+    <div class="formset__form-body">
+        <div class="form__block-group">
+            <div>
+                <div class="form__table-header form__table-header--left">{% trans "Locatie" %}</div>
+                <div class="dynamic_title" data-dynamic-title-target=".dynamic_title_target--form-__prefix__">
+                    {% field form.empty_form.naam %}
+                </div>
+                {% field form.empty_form.straat %}
+                {% field form.empty_form.nummer %}
+                <div class="form__table form__special-group">
+                    {% field form.empty_form.postcode %}
+                    {% field form.empty_form.plaats %}
+                </div>
+                {% field form.empty_form.land %}
+                {% field form.empty_form.openingstijden_opmerking %}
             </div>
-            {% field form.empty_form.land %}
-            {% field form.empty_form.openingstijden_opmerking %}
+            <div class="form__table">
+                <div class="form__table-header">Dag</div>
+                <div class="form__table-header">Openingstijden</div>
+                {% table_grid_field form.empty_form.maandag %}
+                {% table_grid_field form.empty_form.dinsdag %}
+                {% table_grid_field form.empty_form.woensdag %}
+                {% table_grid_field form.empty_form.donderdag %}
+                {% table_grid_field form.empty_form.vrijdag %}
+                {% table_grid_field form.empty_form.zaterdag %}
+                {% table_grid_field form.empty_form.zondag %}
+            </div>
         </div>
-        <div class="form__table">
-            <div class="form__table-header">Dag</div>
-            <div class="form__table-header">Openingstijden</div>
-            {% table_grid_field form.empty_form.maandag %}
-            {% table_grid_field form.empty_form.dinsdag %}
-            {% table_grid_field form.empty_form.woensdag %}
-            {% table_grid_field form.empty_form.donderdag %}
-            {% table_grid_field form.empty_form.vrijdag %}
-            {% table_grid_field form.empty_form.zaterdag %}
-            {% table_grid_field form.empty_form.zondag %}
-        </div>
+        <footer class="formset__footer">
+            <button class="formset__button formset__button--remove" type="button">
+                <i class="far fa-trash-alt"></i>
+                {% trans "Locatie verwijderen" %}
+            </button>
+        </footer>
     </div>
-</div>
+</section>

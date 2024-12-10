@@ -1,9 +1,7 @@
-import {dom} from '@fortawesome/fontawesome-svg-core'
+import { dom } from "@fortawesome/fontawesome-svg-core";
 import tippy from "tippy.js";
 
-
 class InfoTooltip {
-
     constructor(node) {
         this.node = node;
         const text = this.node.firstChild.textContent;
@@ -21,7 +19,13 @@ class InfoTooltip {
 
 const iconsDoneRendering = () => {
     const infoIcons = document.querySelectorAll("svg.fa-circle-info");
-    [...infoIcons].forEach(icon => new InfoTooltip(icon));
+    [...infoIcons].forEach((icon) => new InfoTooltip(icon));
 };
 
-dom.i2svg({callback: iconsDoneRendering});
+// Exportable function that allows re-rendering new appended tooltips.
+export function createTooltips() {
+    dom.i2svg({ callback: iconsDoneRendering });
+}
+
+// Create tooltips the first render
+createTooltips();

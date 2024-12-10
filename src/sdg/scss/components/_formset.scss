@@ -1,0 +1,159 @@
+.formset {
+    --text-color: #{$color_secondary_darkest};
+    --border-color: #{$color_secondary};
+    --background-color: #{$color_secondary_lightest};
+    --x-spacing: 1.5rem;
+    --y-spacing: 1.5rem;
+    --border-radius: 15px;
+    --margin-bottom: 32px;
+    --text-gap: .75rem;
+    --font-size: 1rem;
+
+    margin-bottom: var(--margin-bottom);
+    color: var(--text-color);
+
+    &__button {
+        font-size: 13.3333px;
+    }
+
+    &__form{
+        margin-bottom: var(--margin-bottom);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        background-color: var(--background-color);
+        width: 100%;
+        
+        &--hide-overflow {
+            overflow: hidden;
+        }
+        
+        // Show error indication
+        &:has(.errorlist) {
+            --border-color: #{$color_red};
+            .formset__indication--error {
+                display: block;
+                visibility: visible;
+            } 
+        }
+
+        // Hide error indication
+        .formset__indication--error {
+            display: none;
+            visibility: hidden;
+        }
+
+        &-title {
+            font-size: 16px;
+            margin-right: auto;
+    
+        }
+
+        // Header component.
+        &-header {
+            display: flex;
+            gap: var(--text-gap);
+            align-items: center;
+            padding: var(--y-spacing) var(--x-spacing);
+
+            &--small {
+                padding-bottom: calc(var(--y-spacing) / 2);
+            }
+
+            &.bem-toggle {
+                cursor: pointer;
+            }
+        }
+
+        // Body collapsed
+        &--hidden &-body{
+            visibility: hidden;
+            max-height: 0; 
+            opacity: 0;
+        }
+
+        // Body default
+        &-body{
+            transition: all 300ms ease-in-out;
+            max-height: 1600px;
+            box-sizing: border-box;
+            display: block;
+            border-top: 1px solid var(--border-color);
+            opacity: 1;
+        }
+    }
+
+    &__header {
+        display: flex;
+        gap: var(--x-spacing);
+        align-items: center;
+        padding: var(--y-spacing) var(--x-spacing);
+        justify-content: space-between;
+    }
+
+
+    &__wrapper {
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        background-color: var(--background-color);
+        overflow: hidden;
+        width: 100%;
+
+    }
+
+    &__label {
+        font-size: 16px;
+    }
+    
+    &__footer{
+        padding: 24px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    &__remove:hover {
+        text-decoration: underline;
+    }
+
+    // Formset - toggle indication (works with bem-toggle.js)
+    &__toggle-indication.svg-inline--fa[aria-hidden=true] {
+        visibility: visible;
+        display: block;
+        transition: all 300ms ease-in-out;
+    }
+
+    &__form--hidden &__toggle-indication {
+        transform: rotate(0deg);
+    }
+
+    &__form:not(&__form--hidden) &__toggle-indication {
+        transform: rotate(180deg);
+    }
+    
+    &__button {
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        padding: 0;
+        background-color: transparent;
+        appearance: none;
+
+        &--add {
+            color: #0b71a1;
+            margin-bottom: 42px;
+            margin-left: 16px;
+            margin-bottom: 10px;
+        }
+
+        &--remove {
+            color: $color_red;
+        }
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    // Remove the dynamic title '(' & ')' if there is no dyanmic title target availible
+    &__form-name:has([class*="dynamic_title_target"]:empty){
+        display: none;
+    }
+}
