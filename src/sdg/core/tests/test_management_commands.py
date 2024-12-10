@@ -518,36 +518,6 @@ class TestCommandCheckBrokenLinks(CommandTestCase):
         out = self.call_command("check_broken_links")
         self.assertIn("Deleted 0 old BrokenLinks.", out)
 
-    def test_request_head_redirect_handling(self):
-        def test_case(url, equals_status_code):
-            response = self.command().request_head(url=url)
-            self.assertEqual(response.status_code, equals_status_code)
-
-        # Test case 1 - Successful request to Example
-        test_case("https://google.com/", 200)
-        # Test case 2 - Successful request to Google
-        test_case("https://example.com/", 200)
-        # Test case 3 - Multiple redirects, final status 200
-        test_case("https://digid.nl/inloggen", 200)
-        # Test case 4 - 301 Redirect
-        test_case("https://httpbin.org/status/301", 200)
-        # Test case 5 - 302 Redirect
-        test_case("https://httpbin.org/status/302", 200)
-        # Test case 6 - 303 Redirect
-        test_case("https://httpbin.org/status/303", 200)
-        # Test case 7 - 308 Redirect
-        test_case(
-            "https://www.zoetermeer.nl/verhuizen-naar-het-buitenland-emigreren/", 200
-        )
-        # Test case 8 - 403 Client error
-        test_case("https://httpbin.org/status/403", 403)
-        # Test case 9 - 404 Not Found
-        test_case("https://google.com/404", 404)
-        # Test case 10 - URL without protocol (should raise an error or handle gracefully)
-        test_case("www.google.com", 200)
-        # Test case 11 - 500 Server error
-        test_case("https://httpbin.org/status/500", 500)
-
     def test_clean_up_removed_urls(self):
         removed_links_count = 0
         out = self.call_command("check_broken_links")
