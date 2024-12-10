@@ -119,7 +119,6 @@ class Command(BaseCommand):
                 redirect_url = response.headers["location"]
 
             return self.request_head(
-                self=self,
                 url=redirect_url,
                 allow_default_redirects=allow_default_redirects,
                 redirect_cycle=redirect_cycle,
@@ -187,22 +186,20 @@ class Command(BaseCommand):
                         )
                         self.url_set.add(url)
 
-    def check_url(self, url: str, status_code=None):
+    def check_url(self, url: str):
         try:
-            response = self.request_head(url)
-            status_code = response.status_code
+            response = self.request_head(url=url)
             response.close()
+            return (url, response.status_code)
         except requests.exceptions.InvalidSchema:
-            # Exception for URLs starting with ['tel:', 'sms:', 'geo:', ...]
-            status_code = ANY_ERROR_STATUS_CODE
-
             # These adapters will work most likely in the front-end, but the back-end will not know.
             if url.startswith(VALID_URL_ADAPTERS):
-                status_code = SUCCES_STATUS_CODE
+                return (url, SUCCES_STATUS_CODE)
+            # Exception for URLs starting with ['tel:', 'sms:', 'geo:', ...]
+            return (url, ANY_ERROR_STATUS_CODE)
         except requests.RequestException:
-            status_code = ANY_ERROR_STATUS_CODE
-        finally:
-            return (url, status_code)
+            return (url, ANY_ERROR_STATUS_CODE)
+            
 
     def handle_response_code(self, url, occurring_field, product_pk, url_label):
         """
@@ -278,7 +275,7 @@ class Command(BaseCommand):
         with parallel(max_workers=32) as executor:
             for product in Product.objects.prefetch_related(
                 "most_recent_version__vertalingen"
-            ).exclude_generic_status():
+            ).exclude_generic_status()[:500]:
                 self.get_products_to_check(product)
 
             # Map all futures to the executor
@@ -286,6 +283,7 @@ class Command(BaseCommand):
 
             # Wait for all the futures
             for url, status_code in futures:
+                print(url, status_code)
                 self.url_response_status_codes[url] = status_code
 
             data_chain = chain.from_iterable(
