@@ -25,7 +25,7 @@ def update_form_generic(context) -> dict:
     generic_products = context.get("generic_products")
     formset = context.get("formset")
 
-    readonly = not context['user_can_edit']
+    readonly = not context["user_can_edit"]
 
     def get_object_list():
         obj_list = []
@@ -79,7 +79,7 @@ def update_form_specific(context) -> dict:
     languages = get_languages(formset)
     fields = get_fields(formset.forms[0], localized_form_fields)
 
-    readonly = not context['user_can_edit']
+    readonly = not context["user_can_edit"]
 
     def get_object_list(formset: BaseFormSet, fields: list) -> list:
         object_list = []
@@ -99,7 +99,7 @@ def update_form_specific(context) -> dict:
         "form_name": form_name,
         "object_list": get_object_list(formset, fields),
         "readonly": readonly,
-        "org_type_name": org_type_cfg().name
+        "org_type_name": org_type_cfg().name,
     }
 
 
@@ -137,8 +137,7 @@ def update_form_general(context) -> dict:
     # Nonlocalized fields in the general update form
     nonlocalized_field_names = ["interne_opmerkingen"]
     nonlocalized_fields = get_fields(version_form, nonlocalized_field_names)
-    readonly = not context['user_can_edit']
-
+    readonly = not context["user_can_edit"]
 
     def get_localized_object_dict(formset: BaseFormSet, fields: list) -> dict:
         object_list = {}
@@ -173,5 +172,5 @@ def update_form_general(context) -> dict:
         ),
         "product_form": product_form,
         "product": product,
-        "readonly": readonly
+        "readonly": readonly,
     }

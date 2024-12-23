@@ -77,12 +77,14 @@ def addclass(field, class_attr):
 
 @register.filter(name="add_readonly")
 def add_readonly(field):
-    return field.as_widget(attrs={"readonly": True, "disabled": True })
+    return field.as_widget(attrs={"readonly": True, "disabled": True})
 
 
 @register.filter(name="add_class_and_readonly")
 def add_class_and_readonly(field, class_attrs):
-    return field.as_widget(attrs={"readonly": True, "disabled": True, "class": class_attrs})
+    return field.as_widget(
+        attrs={"readonly": True, "disabled": True, "class": class_attrs}
+    )
 
 
 @register.filter(name="add_class_for_label")
@@ -92,17 +94,27 @@ def add_class_for_label(field, class_attr):
 
 @register.filter(name="add_class_and_readonly_for_label")
 def add_class_and_readonly_for_label(field, class_attr):
-    return field.as_widget(attrs={"readonly": True, "class": class_attr, "placeholder": "Label"})
+    return field.as_widget(
+        attrs={"readonly": True, "class": class_attr, "placeholder": "Label"}
+    )
 
 
 @register.filter(name="add_class_for_link")
 def add_class_for_link(field, class_attr):
-    return field.as_widget(attrs={"class": class_attr, "placeholder": "https://example.com/"})
+    return field.as_widget(
+        attrs={"class": class_attr, "placeholder": "https://example.com/"}
+    )
 
 
 @register.filter(name="add_class_and_readonly_for_link")
 def add_class_and_readonly_for_link(field, class_attr):
-    return field.as_widget(attrs={"readonly": True, "class": class_attr, "placeholder": "https://example.com/"})
+    return field.as_widget(
+        attrs={
+            "readonly": True,
+            "class": class_attr,
+            "placeholder": "https://example.com/",
+        }
+    )
 
 
 @register.simple_tag

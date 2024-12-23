@@ -22,7 +22,6 @@ def checkbox(context, field, **kwargs):
     inline = kwargs.get("inline", False)
     readonly = kwargs.get("readonly", False)
 
-
     return {
         **kwargs,
         "context": context,

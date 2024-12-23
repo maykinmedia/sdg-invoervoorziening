@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
@@ -6,11 +7,10 @@ from django.views.generic import ListView
 
 from dateutil.relativedelta import relativedelta
 
-from sdg.core.views.mixins import BreadcrumbsMixin
-from sdg.producten.models import NotificationViewed, ProductVersie
-from django.core.exceptions import PermissionDenied
-from sdg.organisaties.models import LokaleOverheid
 from sdg.accounts.mixins import OverheidMixin
+from sdg.core.views.mixins import BreadcrumbsMixin
+from sdg.organisaties.models import LokaleOverheid
+from sdg.producten.models import NotificationViewed, ProductVersie
 
 
 class ProductVersieListView(
@@ -40,7 +40,6 @@ class ProductVersieListView(
         self.lokale_overheid = LokaleOverheid.objects.get(pk=self.kwargs["pk"])
 
         return self.lokale_overheid
-    
 
     def get_queryset(self):
         """
@@ -60,16 +59,17 @@ class ProductVersieListView(
         # Call the parent class's get method to fetch the queryset
         response = super().get(request, *args, **kwargs)
 
-        # Raise permission denied error if the notification page 
+        # Raise permission denied error if the notification page
         # of a different lokale_overheid is requested.
-        valid_request = any([
-            kwargs['pk'] == str(role.lokale_overheid.pk)
-            for role in request.user.roles.all()
-        ])
+        valid_request = any(
+            [
+                kwargs["pk"] == str(role.lokale_overheid.pk)
+                for role in request.user.roles.all()
+            ]
+        )
 
         if not valid_request:
             raise PermissionDenied()
-
 
         # Update or create the NotificationViewed instance for the current user
         NotificationViewed.objects.update_or_create(gebruiker=request.user)
