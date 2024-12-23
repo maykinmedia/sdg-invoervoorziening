@@ -13,18 +13,17 @@
         {% core inline=True label=_("Doelgroep")|capfirst tooltip=doelgroep.help_text value=doelgroep.value %}
     {% endif %}
 
-    {% select inline=True field=product_form.product_aanwezig %}
-    {% localized inline=True object=localized_object_dict.product_aanwezig_toelichting render_hidden=product_form.product_aanwezig.value %}
+    {% select inline=True field=product_form.product_aanwezig readonly=readonly %}
+    {% localized inline=True object=localized_object_dict.product_aanwezig_toelichting render_hidden=product_form.product_aanwezig.value readonly=readonly %}
 
     {% if not product.is_referentie_product %}
-        {% select inline=True field=product_form.product_valt_onder %}
-        {% localized inline=True object=localized_object_dict.product_valt_onder_toelichting render_hidden=product_form.product_valt_onder.value %}
+        {% select inline=True field=product_form.product_valt_onder readonly=readonly %}
+        {% localized inline=True object=localized_object_dict.product_valt_onder_toelichting render_hidden=product_form.product_valt_onder.value readonly=readonly %}
 
-        {% checkbox inline=True field=product_form.locaties %}
-        
+        {% checkbox inline=True field=product_form.locaties readonly=readonly %}
     {% endif %}
 
-    {% select hide_element=product.is_referentie_product|yesno:',True' inline=True field=product_form.automatisch_doordrukken %}
+    {% select hide_element=product.is_referentie_product|yesno:',True' inline=True field=product_form.automatisch_doordrukken readonly=readonly %}
 
     {% if product.is_referentie_product %}
         {# Render as core with value #}
@@ -35,9 +34,9 @@
     {% endif %}
 
     {# DISABLED PER REQUEST VNG #}
-    {% select hide_element=True inline=True field=product_form.api_verborgen %}
+    {% select hide_element=True inline=True field=product_form.api_verborgen readonly=readonly %}
 
-    {% select inline=True field=product_form.bevoegde_organisatie %}
+    {% select inline=True field=product_form.bevoegde_organisatie readonly=readonly %}
 
     {% with publication_date=product.active_version|get_field:"publicatie_datum" %}
         {% with configuration=publication_date.configuration.label %}
@@ -45,9 +44,9 @@
         {% endwith %}
     {% endwith %}
 
-    {% select inline=True field=product_form.heeft_kosten %}
+    {% select inline=True field=product_form.heeft_kosten readonly=readonly %}
 
     {% core inline=True label=_("Informatiegebied") tooltip=_("Informatiegebied in verband met dit product.") value=areas|join:", " %}
 
-    {% nonlocalized inline=True object=nonlocalized_object_dict.interne_opmerkingen  %}
+    {% nonlocalized inline=True object=nonlocalized_object_dict.interne_opmerkingen readonly=readonly %}
 {% endblock %}

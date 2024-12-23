@@ -13,7 +13,11 @@
     <div class="form__control-body">
         <fieldset class="form__group--nopad">
             <div class="select">
-                {{ field }}
+                {% if readonly %}
+                    {{ field|add_readonly }}
+                {% else %}
+                    {{ field }}
+                {% endif %}
             </div>
         </fieldset>
         {{ field.errors }}

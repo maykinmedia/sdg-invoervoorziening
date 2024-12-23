@@ -81,7 +81,7 @@
       color: transparent;
     }
 
-    &:focus-visible {
+    &:focus-visible:not([readonly]) {
       // Use CK-editor focus state as default focus state.
       box-shadow: var(--ck-inner-shadow), 0 0;
       --field-border-color: var(--ck-color-focus-border);

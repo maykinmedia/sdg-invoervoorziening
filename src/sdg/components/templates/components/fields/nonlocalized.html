@@ -15,7 +15,11 @@
     {# Field. #}
     <div class="form__control">
         <div class="form__control-body">
-            {{ field|addclass:"form__input" }}
+            {% if readonly %}
+                {{ field|add_class_and_readonly:"form__input" }}
+            {% else %}
+                {{ field|addclass:"form__input" }}
+            {% endif %}
             {{ field.errors }}
         </div>
     </div>

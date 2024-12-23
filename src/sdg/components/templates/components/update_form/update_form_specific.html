@@ -16,8 +16,8 @@
     {% endfor %}
 
     {% for object in object_list %}
-        {% localized object=object %}
+        {% localized object=object readonly=readonly %}
     {% endfor %}
-        
-    {% localized_url form=form %}
+    
+    {% localized_url form=form readonly=readonly %}
 {% endblock %}
