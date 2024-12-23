@@ -78,7 +78,6 @@ class ProductAvailable extends ClarificationFieldComponent {
             this.showClarificationField();
             if (!options.onMount) this.updateValues();
         } else {
-            console.log("hiding now");
             this.availability = false;
             this.hideClarificationField();
         }

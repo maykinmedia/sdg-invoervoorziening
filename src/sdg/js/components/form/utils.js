@@ -9,7 +9,6 @@ import showdown from "showdown";
  * @returns {string} diffHTML - containing the del and ins elements.
  */
 export const returnDiffHTML = (oldValue, newValue) => {
-    console.log(oldValue, newValue);
     const diff = new Diff({ timeout: 0, editCost: 4 });
     const textDiff = diff.main(oldValue, newValue);
     diff.cleanupEfficiency(textDiff);

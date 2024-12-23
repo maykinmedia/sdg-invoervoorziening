@@ -22,7 +22,6 @@ class TabNav {
     }
 
     setActive(tabButton) {
-        console.log("tabNode=", tabButton);
         // make inactive all tabs and contents
         this.tabButtons.forEach((btn) => {
             btn.classList.remove("nav__item--active");

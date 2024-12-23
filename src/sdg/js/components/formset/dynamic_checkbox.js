@@ -13,7 +13,6 @@ export class DynamicCheckbox extends FormsetFormComponent {
     constructor(node) {
         super(node);
 
-        console.log(node.closest("#bevoegde_organisaties_form"));
         if (node.closest("#bevoegde_organisaties_form")) {
             this.shouldMount = true;
         } else this.shouldMount = false;
