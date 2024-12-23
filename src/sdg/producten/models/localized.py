@@ -163,6 +163,9 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
         ArrayField(
             models.CharField(max_length=512),
         ),
+        error_messages={
+            'nested_array_mismatch': "De link moet een label en een URL bevatten."
+        },
         subwidget_form=LabeledURLWidget,
         validators=[validate_labeled_url],
         help_text=_("Decentrale verwijzingen."),

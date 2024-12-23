@@ -2,8 +2,8 @@
 
 .dynamic {
   // Reset error border if the field is empty
-  &:has(+ .errorlist) .form__input:placeholder-shown {
-    --field-border-color: #{$color_grey_light};
+  &:has(+ .errorlist) .form__input:not(:focus-visible) {
+    --field-border-color: #{$color-red};
   }
 
   &__container {

@@ -74,7 +74,6 @@ def update_form_specific(context) -> dict:
     # Get some properties from the context
     localized_form_fields = context.get("localized_form_fields")
     formset: BaseFormSet = context.get("formset")
-    form = context.get("formset")
 
     # Get languages and fields form utils functions.
     languages = get_languages(formset)
@@ -96,7 +95,7 @@ def update_form_specific(context) -> dict:
 
     return {
         "context": context,
-        "form": form,
+        "form": formset,
         "form_name": form_name,
         "object_list": get_object_list(formset, fields),
         "readonly": readonly,
