@@ -24,13 +24,8 @@ def update_form_generic(context) -> dict:
     # Get some properties from the context
     generic_products = context.get("generic_products")
     formset = context.get("formset")
-    readonly = any(
-            [
-                role.is_raadpleger and not role.is_beheerder and not role.is_redacteur
-                for role in context['request'].user.roles.all()
-                if role.lokale_overheid.pk == context['pk']
-            ]
-        )
+
+    readonly = not context['user_can_edit']
 
     def get_object_list():
         obj_list = []
@@ -85,14 +80,7 @@ def update_form_specific(context) -> dict:
     languages = get_languages(formset)
     fields = get_fields(formset.forms[0], localized_form_fields)
 
-    readonly = any(
-            [
-                role.is_raadpleger and not role.is_beheerder and not role.is_redacteur
-                for role in context['request'].user.roles.all()
-                if role.lokale_overheid.pk == context['pk']
-            ]
-        )
-
+    readonly = not context['user_can_edit']
 
     def get_object_list(formset: BaseFormSet, fields: list) -> list:
         object_list = []
@@ -150,13 +138,7 @@ def update_form_general(context) -> dict:
     # Nonlocalized fields in the general update form
     nonlocalized_field_names = ["interne_opmerkingen"]
     nonlocalized_fields = get_fields(version_form, nonlocalized_field_names)
-    readonly = any(
-            [
-                role.is_raadpleger and not role.is_beheerder and not role.is_redacteur
-                for role in context['request'].user.roles.all()
-                if role.lokale_overheid.pk == context['pk']
-            ]
-        )
+    readonly = not context['user_can_edit']
 
 
     def get_localized_object_dict(formset: BaseFormSet, fields: list) -> dict:
