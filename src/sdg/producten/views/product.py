@@ -422,7 +422,7 @@ class ProductUpdateView(
                 messages.add_message(
                     self.request,
                     messages.WARNING,
-                    _("De huidige gegevens bevatten placeholder tekst."),
+                    _("De huidige gegevens bevatten placeholder tekst. Controleer en bewerk de tekst hieronder."),
                 )
                 return
 
