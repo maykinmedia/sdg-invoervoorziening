@@ -42,7 +42,7 @@ class NotificatiesTests(WebTest):
             5, product=specific_product, publicatie_datum=now()
         )
 
-        url = reverse("notificaties")
+        url = reverse("organisaties:notificaties:list", kwargs={"pk": self.lokale_overheid.pk})
         response = self.app.get(url)
 
         notifications = response.pyquery("#notifications tbody tr")
