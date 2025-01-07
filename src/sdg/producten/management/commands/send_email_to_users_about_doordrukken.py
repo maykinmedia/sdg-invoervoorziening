@@ -79,7 +79,7 @@ class Command(BaseCommand):
         )
 
         send_mail(
-            "30 dagen tot een product in SDG automatisch zal worden gepubliceerd.",
+            f"{settings.SDG_PRESS_THROUGH_DAYS} dagen tot een product in SDG automatisch zal worden gepubliceerd.",
             strip_tags(html_message),
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
@@ -91,7 +91,8 @@ class Command(BaseCommand):
         for product in Product.objects.filter(
             referentie_product__isnull=False,
             automatisch_doordrukken=True,
-            automatisch_doordrukken_datum=date.today() + timedelta(days=30),
+            automatisch_doordrukken_datum=date.today()
+            + timedelta(days=settings.SDG_PRESS_THROUGH_DAYS),
         ):
             catalogus: ProductenCatalogus = product.catalogus
             lokale_overheid: LokaleOverheid = catalogus.lokale_overheid
