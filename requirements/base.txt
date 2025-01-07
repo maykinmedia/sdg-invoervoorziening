@@ -204,6 +204,8 @@ face==20.1.1
     # via glom
 faker==22.6.0
     # via zgw-consumers
+furl==2.1.3
+    # via -r requirements/base.in
 gemma-zds-client==1.0.1
     # via
     #   notifications-api-common
@@ -239,6 +241,8 @@ notifications-api-common==0.2.2
     # via vng-api-common
 oauthlib==3.2.2
     # via requests-oauthlib
+orderedmultidict==1.0.1
+    # via furl
 oyaml==1.0
     # via vng-api-common
 phonenumbers==8.13.29
@@ -324,7 +328,9 @@ six==1.16.0
     # via
     #   bleach
     #   django-compat
+    #   furl
     #   isodate
+    #   orderedmultidict
     #   python-dateutil
     #   qrcode
     #   requests-mock

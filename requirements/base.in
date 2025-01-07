@@ -8,6 +8,7 @@ lxml
 glom
 pydantic
 email-validator
+furl
 
 # Framework libraries
 django ~= 3.2
