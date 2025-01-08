@@ -15,10 +15,12 @@ def checkbox(context, field, **kwargs):
     Kwargs:
         - as_row, define if the checkbox field is placed inside a tr and td.
         - inline, define if the checkbox field is rendered inline.
+        - readonly, define if the field is readonly.
     """
 
     as_row = kwargs.get("as_row", True)
     inline = kwargs.get("inline", False)
+    readonly = kwargs.get("readonly", False)
 
     return {
         **kwargs,
@@ -26,6 +28,7 @@ def checkbox(context, field, **kwargs):
         "field": field,
         "as_row": as_row,
         "inline": inline,
+        "readonly": readonly,
     }
 
 
@@ -76,11 +79,13 @@ def localized(context, object, **kwargs):
     Kwargs:
         - as_row, define if the localized field is placed inside a tr and td.
         - inline, define if the localized field is rendered inline.
+        - readonly, define if the field is readonly.
     """
 
     inline = kwargs.get("inline", False)
     as_row = kwargs.get("as_row", True)
     render_hidden = kwargs.get("render_hidden", False) in [True, None]
+    readonly = kwargs.get("readonly", False)
 
     return {
         **kwargs,
@@ -89,6 +94,7 @@ def localized(context, object, **kwargs):
         "inline": inline,
         "render_hidden": render_hidden,
         "object": object,
+        "readonly": readonly,
     }
 
 
@@ -103,9 +109,11 @@ def localized_url(context, form, **kwargs):
 
     Kwargs:
         - as_row, define if the localized url field is placed inside a tr and td.
+        - readonly, define if the field is readonly.
     """
 
     as_row = kwargs.get("as_row", True)
+    readonly = kwargs.get("readonly", False)
 
     def object_format(form):
         return {
@@ -123,6 +131,7 @@ def localized_url(context, form, **kwargs):
         "bound_fields": get_object_list(form.forms),
         "form": form,
         "as_row": as_row,
+        "readonly": readonly,
     }
 
 

@@ -4,7 +4,7 @@
 
 {% block title %}
     <span>
-        3. {% trans "Specifieke gegevens" %}
+        3. {{org_type_name}} {% trans "Tekst" %}
     </span>
 {% endblock %}
 
@@ -16,8 +16,8 @@
     {% endfor %}
 
     {% for object in object_list %}
-        {% localized object=object %}
+        {% localized object=object readonly=readonly %}
     {% endfor %}
-        
-    {% localized_url form=form %}
+    
+    {% localized_url form=form readonly=readonly %}
 {% endblock %}

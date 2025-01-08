@@ -24,12 +24,13 @@
                 {% url 'organisaties:roles:list' pk=pk as roles_list_url %}
                 {% nav_item title=_('Gebruikersbeheer') href=roles_list_url %}
                 {% endif %}
+                
+                {# Show new notification icon if has_new_notifications is True #}    
+                {% url 'organisaties:notificaties:list' pk=pk as notification_url %}
+                {% nav_item title=_('Notificaties') href=notification_url icon='<i class="fa fa-circle-exclamation accent"></i>' show_icon=has_new_notifications %}
             {% endif %} 
         
                 
-        {# Show new notification icon if has_new_notifications is True #}    
-        {% url 'notificaties' as notification_url %}
-        {% nav_item title=_('Notificaties') href=notification_url icon='<i class="fa fa-circle-exclamation accent"></i>' show_icon=has_new_notifications %}
         
         {% if siteconfig.documentatie_link %}
         {% nav_item title=siteconfig.documentatie_titel|capfirst|default:_("Documentatie") href=siteconfig.documentatie_link blank_target=True id="documentation" %}

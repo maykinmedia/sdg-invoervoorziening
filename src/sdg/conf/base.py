@@ -661,3 +661,6 @@ for template in [
 ]:
     assert "{product_url}" in template
     assert "{organisation}" in template
+
+
+SDG_PRESS_THROUGH_DAYS = config("SDG_PRESS_THROUGH_DAYS", 30)

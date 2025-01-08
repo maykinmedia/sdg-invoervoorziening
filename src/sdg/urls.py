@@ -49,11 +49,6 @@ urlpatterns = [
         decorator_include(enabled(), "sdg.organisaties.urls", namespace="organisaties"),
     ),
     path(
-        "notifications/",
-        ProductVersieListView.as_view(),
-        name="notificaties",
-    ),
-    path(
         "",
         decorator_include(enabled(redirect=True), "sdg.core.urls", namespace="core"),
     ),

@@ -34,8 +34,13 @@
                             data-initialized="true"
                         >
                             <div class="url_label_field__container-item">
-                                {{ field.label|addlabelclass:"form__input form__input--left" }} 
-                                {{ field.link|addlinkclass:"form__input form__input--right" }}
+                                {% if readonly %}
+                                    {{ field.label|add_class_and_readonly_for_label:"form__input form__input--left" }} 
+                                    {{ field.link|add_class_and_readonly_for_link:"form__input form__input--right" }}
+                                {% else %}
+                                    {{ field.label|add_class_for_label:"form__input form__input--left" }} 
+                                    {{ field.link|add_class_for_link:"form__input form__input--right" }}
+                                {% endif %}
                             </div>
                             {% if field.label.errors or field.link.errors %}
                             <div class="url_label_field__container-item url_label_field__container-item--errorlist">

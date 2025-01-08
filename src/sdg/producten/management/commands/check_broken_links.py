@@ -300,7 +300,7 @@ class Command(BaseCommand):
                     occurring_field=field_name,
                     product_pk=product_pk,
                     url_label=url_label,
-                    founded_status_code=url_response_status_codes[url],
+                    founded_status_code=url_response_status_codes[url_href],
                     founded_broken_link_ids=founded_broken_link_ids,
                 )
 

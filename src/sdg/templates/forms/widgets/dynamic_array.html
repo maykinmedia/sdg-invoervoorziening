@@ -10,7 +10,7 @@
                         {% with widget=subwidget %}
                             {% include widget.template_name %}
                         {% endwith %}
-                        {% if not widget.single %}
+                        {% if not widget.single and not widget.attrs.readonly %}
                             <button type="button" class="dynamic__container__button--side dynamic__container-remove" aria-hidden="false">
                                 <i class="fa fa-times" aria-hidden="false"></i>
                             </button>
@@ -18,7 +18,7 @@
                     </div>
                 {% endfor %}
             </div>
-            {% if not widget.single %}
+            {% if not widget.single and not widget.attrs.readonly %}
                 <div class="toolbar">
                     <button class="button button--light button--small dynamic__container-add" type="button">
                         <i class="fa fa-plus fa-xs"></i>

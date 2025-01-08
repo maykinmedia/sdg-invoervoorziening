@@ -30,7 +30,6 @@ class FormDiffButton extends ReferenceTextComponent {
         return Object.entries(currentVersionData).reduce(
             (acc, [language, { input }]) => {
                 const values = this.getValues();
-                console.log(values);
                 const currentVersionValue = input.value;
                 const currentValue = values[language];
                 acc[language] = returnDiffHTML(
@@ -76,7 +75,6 @@ class FormDiffButton extends ReferenceTextComponent {
      * @param {{ [language: string]: string } | undefined} diffHTML
      */
     renderDiffPreview(diffHTML) {
-        console.log(diffHTML);
         if (!diffHTML) return;
         Object.entries(this.getDiffPreviewElements()).forEach(
             ([language, node]) => (node.innerHTML = diffHTML[language])

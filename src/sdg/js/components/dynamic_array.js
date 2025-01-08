@@ -20,7 +20,7 @@ function initializeDynamicWidget(widgetElement) {
 
     addRemoveEventListener(widgetElement);
 
-    widgetElement.querySelector('.dynamic__container-add').addEventListener('click', () => {
+    widgetElement?.querySelector('.dynamic__container-add')?.addEventListener('click', () => {
         item_count++;
 
         const newElement = elementTemplate.cloneNode(true);

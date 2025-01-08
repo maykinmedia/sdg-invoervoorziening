@@ -47,7 +47,7 @@ class MarkdownEditor extends Component {
         return ClassicEditor.create(this.node)
             .then((editor) => {
                 // editor.isReadOnly = this.state.readOnly;
-                if (this.state.readOnly) {
+                if (this.state.readOnly || this.node.readOnly) {
                     editor.enableReadOnlyMode(GENERIC_EDITOR_LOCK);
                 }
                 else {
@@ -73,7 +73,7 @@ class MarkdownEditor extends Component {
             return;
         }
         //this.editor.isReadOnly = readOnly;
-        if (readOnly) {
+        if (readOnly || this.node.readOnly) {
             this.editor.enableReadOnlyMode(GENERIC_EDITOR_LOCK);
         }
         else {

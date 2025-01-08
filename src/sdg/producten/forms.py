@@ -291,7 +291,8 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
                 False if "concept" in submit_type else automatic_press_through
             )
             automatic_press_through_date = (
-                datetime.strptime(publish_date, "%Y-%m-%d").date() + timedelta(days=30)
+                datetime.strptime(publish_date, "%Y-%m-%d").date()
+                + timedelta(days=settings.SDG_PRESS_THROUGH_DAYS)
                 if automatic_press_through
                 else None
             )

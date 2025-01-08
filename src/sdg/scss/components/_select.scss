@@ -18,6 +18,10 @@ select {
   &::-ms-expand {
     display: none;
   }
+
+  &:disabled {
+    cursor: default;
+  }
 }
 
 /* Custom Select wrapper */
@@ -46,7 +50,13 @@ select {
   }
 
   /* Transition */
-  &:hover::after {
-    color: $color_accent;
+  &:hover {
+    &::after {
+      color: $color_accent;
+    }
+
+    &:has(select:disabled)::after {
+      color: #fff;
+    }
   }
 }

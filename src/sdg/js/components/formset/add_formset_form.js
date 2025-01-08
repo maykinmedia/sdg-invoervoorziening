@@ -114,7 +114,6 @@ class AddFormsetForm extends FormsetFormComponent {
         if (dynamicArrays)
             dynamicArrays.forEach((node) => initializeDynamicWidget(node));
 
-        console.log(form.closest("#bevoegde_organisaties_form"));
         if (form.closest("#bevoegde_organisaties_form")) {
             new DynamicCheckbox(form);
         }
