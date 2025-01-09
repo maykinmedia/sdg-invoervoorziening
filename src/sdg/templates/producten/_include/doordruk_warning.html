@@ -4,7 +4,7 @@
 {% if doordruk_activation_warning == True %}
     <div class="notifications__notification notification__warning">
         <i class="fas fa-info-circle"></i>
-        <span>Er staat een tekstwijziging van VNG klaar die op {{datum__doordrukken}} automatisch wordt gepubliceerd. Wilt u dit niet? Maak dan zelf wijzigingen in de product tekst en sla deze op, of 
+        <span>Er staat een tekstwijziging van de VNG klaar die op {{datum__doordrukken}} automatisch wordt gepubliceerd. Wilt je dit niet? Pas de tekst dan aan en publiceer deze, of 
             <a href="?doordrukken_action_taken=true" class="underline">klik hier.</a>
         </span>
         <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
@@ -15,8 +15,7 @@
 {% if doordruk_activation_warning == False %}
     <div class="notifications__notification notification__warning">
         <i class="fas fa-info-circle"></i>
-        <span>De tekstwijziging van VNG die op {{datum__doordrukken}} automatisch wordt gepubliceerd is geannuleerd. Wil je deze tekstwijziging toch wel de tekstwijziging van VNG automatisch publiceren? 
-            <a href="?doordrukken_cancel_action=true" class="underline">klik hier.</a>
+        <span>De tekstwijziging van de VNG die op {{datum__doordrukken}} automatisch wordt gepubliceerd, is geannuleerd. Wil je deze tekstwijziging toch gebruiken en automatisch laten publiceren? <a href="?doordrukken_cancel_action=true" class="underline">Klik dan hier.</a>
         </span>
         <a class="notifications__close" href="#">{% trans "Sluiten" %}</a>
     </div>

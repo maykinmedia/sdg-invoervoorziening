@@ -35,7 +35,9 @@ class Command(BaseCommand):
             path=url_path,
         )
 
-    def create_and_send_mail(self, user, broken_links, multiple_organizations: bool):
+    def create_and_send_mail(
+        self, user, broken_links, multiple_organizations: bool, user_organizations
+    ):
         def sort_compare_fn(broken_link):
             return (
                 broken_link.product.catalogus.lokale_overheid.__str__(),
@@ -43,12 +45,16 @@ class Command(BaseCommand):
                 broken_link.occurring_field,
             )
 
+        org_type_name = org_type_cfg().name
+
         mail_context = {
             "user_full_name": user.get_full_name(),
             "broken_links": sorted(broken_links, key=sort_compare_fn),
             "sender_organization": org_type_cfg().organisation_name,
+            "org_type_name": org_type_name,
             "multiple_organizations": multiple_organizations,
             "base_url": self.construct_base_url(),
+            "user_organizations": user_organizations,
         }
 
         html_message = render_to_string(
@@ -57,7 +63,7 @@ class Command(BaseCommand):
         )
 
         send_mail(
-            "Rapportage foutieve links in SDG-invoervoorziening",
+            f"Foute links in SDG-{org_type_name.lower()}teksten",
             strip_tags(html_message),
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
@@ -94,7 +100,7 @@ class Command(BaseCommand):
                 broken_links, user_organizations, user = grouped_users[
                     receiver_role.user.email
                 ]
-                user_organizations.add(organization_id)
+                user_organizations.add(lokale_overheid.organisatie)
                 broken_links.append(broken_link)
                 # Update user
                 grouped_users[receiver_role.user.email] = (
@@ -110,4 +116,5 @@ class Command(BaseCommand):
                 user=user,
                 broken_links=broken_links,
                 multiple_organizations=multiple_organizations,
+                user_organizations=user_organizations,
             )
