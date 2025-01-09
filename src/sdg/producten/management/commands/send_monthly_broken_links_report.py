@@ -85,7 +85,6 @@ class Command(BaseCommand):
             lokale_overheid: LokaleOverheid = (
                 broken_link.product.catalogus.lokale_overheid
             )
-            organization_id = lokale_overheid.organisatie_id
             roles: Role = lokale_overheid.roles
 
             receiver_roles: Role = (
