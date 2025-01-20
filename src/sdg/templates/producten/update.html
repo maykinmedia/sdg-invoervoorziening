@@ -127,6 +127,21 @@
                 </div>
             </div>
         </div>
+    {% else %}
+        {# Visible bar for users that can't edit - per request VNG #}
+        <div class="toolbar toolbar--sticky-b toolbar--column">
+            <div class="toolbar__section toolbar--row">
+                <div class="toolbar__section">
+                </div>
+                <div class="toolbar__section">
+                    <div class="button-group">
+                        <a class="button button--light" href="{% url 'organisaties:catalogi:list' pk=lokaleoverheid.pk %}" id="cancel-button">
+                            {% trans 'Annuleren' %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
 </form>
 {% endblock page_content %}

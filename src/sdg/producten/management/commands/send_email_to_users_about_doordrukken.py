@@ -71,6 +71,7 @@ class Command(BaseCommand):
             ).url,
             "org_type_name": cfg.name,
             "lokale_overheid": lokale_overheid,
+            "doordruk_date": settings.SDG_PRESS_THROUGH_DAYS,
         }
 
         html_message = render_to_string(
@@ -79,7 +80,7 @@ class Command(BaseCommand):
         )
 
         send_mail(
-            f"{settings.SDG_PRESS_THROUGH_DAYS} dagen tot een product in SDG automatisch zal worden gepubliceerd.",
+            f"{settings.SDG_PRESS_THROUGH_DAYS} dagen tot een SDG-producttekst automatisch wordt gepubliceerd",
             strip_tags(html_message),
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
