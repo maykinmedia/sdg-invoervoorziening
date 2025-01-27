@@ -2,6 +2,28 @@
 Change history
 ==============
 
+1.9.0
+=====
+
+*January 27, 2025*
+
+* [#996] Smaller header and reworked navigation menu
+* [#993] Sent periodic mail with broken links
+* [#990] Integrated notifications into the menu structure
+* [#989] Sort history by date
+* [#988] Add ability to change location order
+* [#994] Added option for management organization to force push texts
+* [#998] Added option for management organization to set products to not be 
+  offered by default
+* [#987] Remove editor locks
+* [#997] Rework the blue edit options in the editor
+* [#992] Allow editing Dutch and English in the same screen
+* [#991] Clarified some errors in the editor
+* [#995] Removed introduction texts and removed info-column from product list
+* [#999] Various small tweaks
+* Updated all libraries.
+
+
 1.8.7
 =====
 
