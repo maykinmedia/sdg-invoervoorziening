@@ -27,7 +27,7 @@ class Command(BaseCommand):
     ) -> furl:
         url_scheme = "https" if settings.IS_HTTPS else "http"
         url_netloc = Site.objects.get_current().domain.rstrip("/")
-        url_path = [segment for segment in [settings.SUBPATH] if segment]
+        url_path = [segment.lstrip("/") for segment in [settings.SUBPATH] if segment]
 
         return furl(
             scheme=url_scheme,
