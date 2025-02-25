@@ -57,18 +57,13 @@ class Command(BaseCommand):
             help="Reset all the broken links.",
         )
 
-    def request_head(self, url: str, allow_default_redirects=False, redirect_cycle=0):
+    def request_head(self, url: str):
         """
         Implementation of `requests.head(url)` that raises a TooManyRedirects error if the redirect_cycle exceeds
         the redirect_cycle_limit and prevent errors in certain special cases:
         - Case 1: Make sure that each URL starts with https if not defined - in some cases url = 'www.url.com'
-        - Case 2: Response header location is the same as the original url - use the default allow_redirect behavior.
-        - Case 3: Response header location is a relative path - add this path to the previous requested url. (case example: https://lang.com/, https://www.coevorden.nl/afspraak).
-        - Case 4: Status code 404 when the request is redirected with the default allow_redirect behavior (case example: https://digid.nl/inloggen).
 
         :param url: The requested url
-        :param allow_default_redirects: Boolean indicating if the default allow_redirects method is used.
-        :param redirect_cycle: The redirect_cycle is used to prevent infinite redirects. Some of the requested sites allow an infinite loop of redirects. To prevent this the redirect_cycle is used to track the cycles. If the cycle exceeds REDIRECT_CYCLES_LIMIT an error can be raised.
         :returns: Response
         """
         # Case 1
@@ -77,37 +72,7 @@ class Command(BaseCommand):
         elif not url.startswith("http"):
             url = f"https://{url}"
 
-        response = requests.head(
-            url, timeout=5, allow_redirects=allow_default_redirects
-        )
-
-        if response.status_code in REDIRECT_STATUS_CODES:
-            redirect_url = url
-
-            if redirect_cycle == REDIRECT_CYCLES_LIMIT:
-                raise requests.TooManyRedirects(f"Too many redirects for URL: {url}")
-
-            redirect_cycle += 1
-            joined_url = parse.urljoin(url, response.headers["location"])
-
-            # Case 2
-            if (
-                response.headers["location"] == redirect_url
-                or joined_url == redirect_url
-            ):
-                allow_default_redirects = True
-            # Case 3
-            elif not response.headers["location"].startswith("http"):
-                redirect_url = joined_url
-            else:
-                # Case 4
-                redirect_url = response.headers["location"]
-
-            return self.request_head(
-                url=redirect_url,
-                allow_default_redirects=allow_default_redirects,
-                redirect_cycle=redirect_cycle,
-            )
+        response = requests.head(url, timeout=5, allow_redirects=False)
 
         return response
 
@@ -224,7 +189,7 @@ class Command(BaseCommand):
             url_label=url_label,
         )
 
-        if founded_status_code in SUCCESSFUL_STATUS_CODES:
+        if founded_status_code not in [404, 420]:
             broken_link.delete()
             self.stdout.write(self.style.SUCCESS(f"{url} - [{founded_status_code}]"))
         else:
@@ -273,7 +238,7 @@ class Command(BaseCommand):
 
             for product in Product.objects.prefetch_related(
                 "most_recent_version__vertalingen"
-            ).exclude_generic_status():
+            ).exclude_generic_status()[:100]:
                 self.append_products_to_check(product, product_dict, url_set)
 
             # Map all futures to the executor
