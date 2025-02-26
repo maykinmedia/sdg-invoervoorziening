@@ -39,9 +39,6 @@ VALID_URL_ADAPTERS = ("tel:", "sms:", "mailto:")
 INVALID_URL_ADAPTERS = "geo:"
 SUCCES_STATUS_CODE = 200
 ANY_ERROR_STATUS_CODE = 420
-REDIRECT_STATUS_CODES = {301, 302, 303, 307, 308}
-SUCCESSFUL_STATUS_CODES = {200} | REDIRECT_STATUS_CODES
-REDIRECT_CYCLES_LIMIT = 10
 
 
 class Command(BaseCommand):
@@ -225,7 +222,7 @@ class Command(BaseCommand):
             )
             cleanup_objects.delete()
 
-    def handle(self, *args, **options):
+    def handle(self, **options):
         if options.get("reset"):
             self.reset_broken_links(reset_all=True)
             return
@@ -238,7 +235,7 @@ class Command(BaseCommand):
 
             for product in Product.objects.prefetch_related(
                 "most_recent_version__vertalingen"
-            ).exclude_generic_status()[:100]:
+            ).exclude_generic_status():
                 self.append_products_to_check(product, product_dict, url_set)
 
             # Map all futures to the executor
