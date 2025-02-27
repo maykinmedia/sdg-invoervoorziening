@@ -181,14 +181,14 @@ class Command(BaseCommand):
         """
         broken_link, _ = BrokenLinks.objects.get_or_create(
             product_id=product_pk,
-            url=url,
+            url=url[:2000],
             occurring_field=occurring_field,
             url_label=url_label,
         )
 
         if founded_status_code not in [404, 420]:
             broken_link.delete()
-            self.stdout.write(self.style.SUCCESS(f"{url} - [{founded_status_code}]"))
+            # self.stdout.write(self.style.SUCCESS(f"{url} - [{founded_status_code}]"))
         else:
             broken_link.increment_error_count()
             founded_broken_link_ids.append(broken_link.id)
