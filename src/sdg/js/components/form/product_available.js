@@ -61,12 +61,13 @@ class ProductAvailable extends ClarificationFieldComponent {
      */
     handle(options) {
         const FalseOption = this.isReferenceForm ? 1 : 2;
+        this.fallsUnder =
+            document.querySelector("#id_product_valt_onder")?.selectedIndex >
+                0 ?? false;
+
         if (this.node.selectedIndex === FalseOption) {
             this.availability = true;
-            if (
-                !this.isReferenceForm &&
-                this.node.selectedIndex != this.previousSelectedIndex
-            ) {
+            if (this.node.selectedIndex != this.previousSelectedIndex) {
                 if (confirm(PRODUCT_AANWEZIG_QUESTION)) {
                     this.resetSpecifiekeGegevens();
                 } else {

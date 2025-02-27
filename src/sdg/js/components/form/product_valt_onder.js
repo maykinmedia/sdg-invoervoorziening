@@ -73,6 +73,12 @@ class ProductValtOnder extends ClarificationFieldComponent {
      * @param {{ onMount: boolean }} options
      */
     handle(options) {
+        this.availability =
+            document.querySelector("#id_product_aanwezig").selectedIndex ===
+            this.isReferenceForm
+                ? 1
+                : 2;
+
         if (this.node.selectedIndex > 0) {
             this.fallsUnder = true;
 
