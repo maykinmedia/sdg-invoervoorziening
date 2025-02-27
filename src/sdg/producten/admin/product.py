@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from sdg.core.admin.mixins import BaseProductFilter
 
 from ..models import (
+    BrokenLinks,
     GeneriekProduct,
     GeneriekProductOverheidsorganisatieRol,
     LocalizedGeneriekProduct,
@@ -253,3 +254,16 @@ class ProductAdmin(admin.ModelAdmin):
             ).get_municipality_locations()
 
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+@admin.register(BrokenLinks)
+class BrokenLinksAdmin(admin.ModelAdmin):
+    list_display = (
+        "url_label",
+        "url_label",
+        "error_count",
+        "last_checked",
+        "occurring_field",
+    )
+    list_filter = ("product__catalogus",)
+    raw_id_fields = ("product",)
