@@ -2,6 +2,18 @@
 Change history
 ==============
 
+1.9.1
+=====
+
+*February 27, 2025*
+
+* Added broken links view in admin.
+* Changed the way broken links are checked. They are now only invalid if a 404 is returned.
+* Changed received email option to be enabled by default for new users.
+* Changed broken links email text to be more clear.
+* Fixed product link in broken links email.
+
+
 1.9.0
 =====
 
