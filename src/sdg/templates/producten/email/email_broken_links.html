@@ -1,16 +1,20 @@
 <div style="font-family: arial, sans-serif; font-size: 12px">
     <p>Beste {{ user_full_name }},</p>
-
     <p>
-        Je krijgt deze mail omdat je een account hebt van de
-        SDG-invoervoorziening en hebt aangegeven mails te willen ontvangen.
+        Jij en alle andere geregistreerde collega's krijgen deze mail omdat je een account hebt van de SDG-invoervoorziening.
     </p>
     <p>
-        Bij het controleren van de teksten van de {{ org_type_name }} {{ user_organizations|join:", " }} 
-        hebben we een paar foute links ontdekt.
-        Bij het aanklikken van deze link krijg je een foutmelding. De links
-        staan in een producttekst waar jij redacteur of beheerder van bent. Het
-        gaat om de volgende link(s):
+        Bij het controleren van de teksten van de {{ org_type_name }} {{ user_organizations|join:", " }} hebben we een paar foute links ontdekt. Bij het aanklikken van deze link krijg je een foutmelding. We hebben deze link(s) drie dagen achter elkaar gecontroleerd. Alle keren was de link niet bereikbaar.
+    </p>
+    <p>
+        We willen je daarom graag vragen om deze links te controleren en te corrigeren in de invoervoorziening. Hieronder vind je de lijst met de foute links. Klik op de link onder "Product" om direct aan de slag te gaan in de SDG-invoervoorziening.
+    </p>
+    <p>
+        <b>Hoe worden de links gecontroleerd?</b><br>
+        De test wordt elke dag 's nachts uitgevoerd. Als een link 3 maal achter elkaar niet werkt (pagina niet gevonden, ongeldige link, etc.) dan wordt deze gemarkeerd als foutief. Als de link de volgende dag weer werkt, wordt deze niet meer aangemerkt als foutief. Na drie keer niet bereikbaar te zijn, wordt de link opgenomen in deze mail. De links die hieronder staan waren alle keren niet bereikbaar. Het kan natuurlijk dat tijdens het controleren de desbetreffende server niet reageert of dat er bijvoorbeeld onderhoud wordt verricht. Werkt de link nu wel, dan is het nu niet noodzakelijk deze aan te passen. Fijn als je de link wel in de gaten wilt houden.
+    </p>
+    <p>
+        <b>Het gaat om de volgende link(s):</b>
     </p>
 
     <table
@@ -173,13 +177,6 @@
             {% endfor %}
         </tbody>
     </table>
-
-    <p>
-        We willen je graag vragen om deze links te controleren en te corrigeren
-        in de invoervoorziening, zodat bezoekers de juiste informatie kunnen
-        vinden. Klik hierboven op de geselecteerde links om direct aan de slag
-        te gaan.
-    </p>
 
     <p>Alvast veel dank voor de medewerking!</p>
 
