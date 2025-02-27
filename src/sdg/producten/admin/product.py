@@ -260,7 +260,7 @@ class ProductAdmin(admin.ModelAdmin):
 class BrokenLinksAdmin(admin.ModelAdmin):
     list_display = (
         "url_label",
-        "url_label",
+        "url",
         "error_count",
         "last_checked",
         "occurring_field",
