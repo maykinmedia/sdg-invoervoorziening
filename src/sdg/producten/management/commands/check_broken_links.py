@@ -73,7 +73,6 @@ class Command(BaseCommand):
         adapter = HTTPAdapter(max_retries=retry_strategy)
         session.mount("http://", adapter)
         session.mount("https://", adapter)
-
         # Set custom headers to mimic a browser
         session.headers.update(
             {
@@ -110,7 +109,11 @@ class Command(BaseCommand):
         try:
             # Use GET with stream=True to avoid downloading the entire content
             response = session.get(
-                parsed_url, timeout=20, stream=True, allow_redirects=True, verify=False
+                parsed_url,
+                timeout=20,
+                stream=True,
+                allow_redirects=True,
+                verify=False,
             )
             # Close connection to avoid downloading entire content
             response.close()
@@ -128,7 +131,6 @@ class Command(BaseCommand):
         :param timeout: Request timeout in seconds
         :returns: (url, status_code, message) The checked url, response status code, and error message if any
         """
-        print(url)
 
         # Check for special URL schemes
         if url.startswith(VALID_URL_ADAPTERS):
@@ -146,7 +148,6 @@ class Command(BaseCommand):
 
             if response:
                 status_code = response.status_code
-                print(status_code, url)
                 # Check for false 200 responses (some servers return 200 for missing pages)
                 if status_code == 200 and len(response.content) < 100:
                     # If the page is suspiciously small, it might be a custom error page
