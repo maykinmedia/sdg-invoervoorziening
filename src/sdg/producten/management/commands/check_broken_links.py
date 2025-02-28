@@ -6,6 +6,7 @@ from django.core.management import BaseCommand
 
 import markdown
 import requests
+import urllib3
 from bs4 import BeautifulSoup
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
@@ -13,6 +14,8 @@ from zgw_consumers.concurrent import parallel
 
 from sdg.core.models import ProductFieldConfiguration
 from sdg.producten.models import BrokenLinks, Product
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 FIELD_NAMES_CONFIG = {
     "input_fields": [
@@ -125,7 +128,7 @@ class Command(BaseCommand):
         :param timeout: Request timeout in seconds
         :returns: (url, status_code, message) The checked url, response status code, and error message if any
         """
-        # print(url)
+        print(url)
 
         # Check for special URL schemes
         if url.startswith(VALID_URL_ADAPTERS):
@@ -143,6 +146,7 @@ class Command(BaseCommand):
 
             if response:
                 status_code = response.status_code
+                print(status_code, url)
                 # Check for false 200 responses (some servers return 200 for missing pages)
                 if status_code == 200 and len(response.content) < 100:
                     # If the page is suspiciously small, it might be a custom error page
@@ -327,9 +331,6 @@ class Command(BaseCommand):
             self.reset_broken_links(reset_all=True)
             return
 
-        # Options
-        batch_size = options.get("batch_size", 50)
-
         # Storage
         founded_broken_link_ids = []
         url_response_dict = defaultdict(tuple)
@@ -341,19 +342,15 @@ class Command(BaseCommand):
 
         (url_set, product_dict) = self.get_url_set(products)
 
-        # Process URLs in batches to avoid overwhelming the system
         url_list = list(url_set)
 
         with parallel() as executor:
-            for i in range(0, len(url_list), batch_size):
-                batch = url_list[i : i + batch_size]
+            # Map all futures to the executor
+            futures = executor.map(self.check_url_with_retry, url_list)
 
-                # Map all futures to the executor
-                futures = executor.map(self.check_url_with_retry, batch)
-
-        # Process results
-        for url, status_code, error_msg in futures:
-            url_response_dict[url] = (status_code, error_msg)
+            # Process results
+            for url, status_code, error_msg in futures:
+                url_response_dict[url] = (status_code, error_msg)
 
         data_chain = chain.from_iterable(
             [
