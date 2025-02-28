@@ -215,13 +215,21 @@ class Command(BaseCommand):
             links = BrokenLinks.objects.all()
             for link in links:
                 link.reset_error_count()
-            return
+
+            self.stdout.write(
+                self.style.SUCCESS(
+                    "Successfully cleared the error_count of every BrokenLink."
+                )
+            )
         else:
             # Delete links that are no longer broken or don't exist anymore
             cleanup_objects = BrokenLinks.objects.exclude(
                 id__in=founded_broken_link_ids
             )
+            total = cleanup_objects.count()
             cleanup_objects.delete()
+
+            self.stdout.write(self.style.SUCCESS(f"Deleted {total} old BrokenLinks."))
 
     def is_valid_url(self, url: str):
         """
