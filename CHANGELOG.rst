@@ -2,6 +2,16 @@
 Change history
 ==============
 
+1.9.2
+=====
+
+*March 3, 2025*
+
+* Changed broken link detection again: Longer timeout period, no SSL-checking.
+* Changed admin to show the URL of a broken link.
+* Fixed collapsing of specific texts if an organisation makes a product unavailable.
+
+
 1.9.1
 =====
 
