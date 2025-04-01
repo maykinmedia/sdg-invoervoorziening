@@ -89,10 +89,17 @@ class Command(BaseCommand):
 
             receiver_roles: Role = (
                 # Receivers are every redactor with mailing on if there are redactors.
-                roles.filter(Q(is_redacteur=True, ontvangt_mail=True))
-                if roles.filter(Q(is_redacteur=True, ontvangt_mail=True)).count() >= 1
+                roles.filter(
+                    Q(is_redacteur=True, ontvangt_mail=True, user__is_active=True)
+                )
+                if roles.filter(
+                    Q(is_redacteur=True, ontvangt_mail=True, user__is_active=True)
+                ).count()
+                >= 1
                 # When there are no redactors as receivers, send the e-mail to every admin with mailing on.
-                else roles.filter(Q(is_beheerder=True, ontvangt_mail=True))
+                else roles.filter(
+                    Q(is_beheerder=True, ontvangt_mail=True, user__is_active=True)
+                )
             )
 
             for receiver_role in receiver_roles:
