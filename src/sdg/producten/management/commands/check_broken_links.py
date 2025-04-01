@@ -261,7 +261,6 @@ class Command(BaseCommand):
         return True
 
     def get_url_set(self, products: Product):
-        decentrale_field = (None, None)
         url_set = set()
         product_dict = defaultdict(lambda: defaultdict(list))
 
@@ -277,6 +276,7 @@ class Command(BaseCommand):
 
         for product in products:
             for localized_product in product.most_recent_version.vertalingen.all():
+                decentrale_field = (None, None)
                 for key, value in localized_product.__dict__.items():
                     if key in FIELD_NAMES_CONFIG["decentrale_label"]:
                         _, url = decentrale_field
