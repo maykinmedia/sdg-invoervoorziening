@@ -2,12 +2,12 @@
   "openapi": "3.0.1",
   "info": {
     "title": "SDG Producten API",
-    "description": "Deze API serveert SDG producten met generieke teksten die getoond worden op de Ondernemersplein.kvk.nl website.",
+    "description": "Deze API serveert SDG producten met generieke teksten die getoond worden op de ondernemersplein.overheid.nl website.",
     "version": "v1"
   },
   "servers": [
     {
-      "url": "https://sdgapi.ondernemersplein.kvk.nl"
+      "url": "https://sdgapi.ondernemersplein.overheid.nl"
     }
   ],
   "paths": {

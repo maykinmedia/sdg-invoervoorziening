@@ -1,10 +1,10 @@
 {
     "count": 73,
-    "next": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten?page=2",
+    "next": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten?page=2",
     "results": [
         {
             "titel": "Geluidsvoorschriften",
-            "tekst": "De [geluidsvoorschriften](http://www.infomil.nl/onderwerpen/geluid/regelgeving/) staan in verschillende wetten, zoals de Wet algemene bepalingen omgevingsrecht (Wabo) en de Wet geluidhinder (Wgh). De regels voor uw bedrijf hangen af van uw activiteiten en uw locatie.\r\n\r\n## Algemene milieuregels op het gebied van geluid\r\n\r\nIn het Activiteitenbesluit milieubeheer staan [algemene milieuregels](https://www.infomil.nl/onderwerpen/geluid/regelgeving/activiteitenbesluit/) op het gebied van geluid. Deze regels gelden voor een groot aantal bedrijven. Als u aan de algemene regels voldoet, heeft u geen [omgevingsvergunning](https://ondernemersplein.kvk.nl/omgevingsvergunning-aanvragen) nodig. Voldoet u niet aan de algemene regels? Dan komen er [geluidsvoorschriften](https://www.infomil.nl/onderwerpen/geluid/regelgeving/wet-algemene/toestemming-milieu/industrielawaai/geluidsvoorschriften/) in de omgevingsvergunning.\r\n\r\n## Akoestisch rapport\r\n\r\nAls u een bedrijf start, of uw bedrijfsactiviteiten verandert, kan de gemeente of provincie u vragen om een [akoestisch rapport](http://www.infomil.nl/onderwerpen/geluid/thema/akoestisch-rapport-0/). Dit rapport hoort bij de aanvraag van een [omgevingsvergunning voor milieu of een melding milieubeheer](https://ondernemersplein.kvk.nl/omgevingsvergunning-of-melding-milieubeheer/).\r\n\r\n## Geluidsniveau op een (gezoneerd) industrieterrein\r\n\r\nDe Wgh bepaalt het geluidsniveau van bedrijven op een [(gezoneerd) industrieterrein](https://ondernemersplein.kvk.nl/geluidsnormen-op-een-gezoneerd-industrieterrein).\r\n\r\n## Algemene Plaatselijke Verordening\r\n\r\nVoorschriften tegen geluidhinder staan ook in de [Algemene Plaatselijke Verordening](https://ondernemersplein.kvk.nl/algemene-plaatselijke-verordening-apv) (APV) van gemeenten.\r\n\r\n## Geluidsvoorschriften in de horeca\r\n\r\nEen aantal keren per jaar mag u in uw horecabedrijf een festiviteit houden. U hoeft zich dan niet te houden aan de geluidsvoorschriften. In sommige gemeenten moet u uw festiviteit een paar weken van tevoren melden. Wilt u geluidsapparatuur gebruiken? Dan heeft u daar in sommige gemeenten een vergunning voor nodig.",
+            "tekst": "De [geluidsvoorschriften](http://www.infomil.nl/onderwerpen/geluid/regelgeving/) staan in verschillende wetten, zoals de Wet algemene bepalingen omgevingsrecht (Wabo) en de Wet geluidhinder (Wgh). De regels voor uw bedrijf hangen af van uw activiteiten en uw locatie.\r\n\r\n## Algemene milieuregels op het gebied van geluid\r\n\r\nIn het Activiteitenbesluit milieubeheer staan [algemene milieuregels](https://www.infomil.nl/onderwerpen/geluid/regelgeving/activiteitenbesluit/) op het gebied van geluid. Deze regels gelden voor een groot aantal bedrijven. Als u aan de algemene regels voldoet, heeft u geen [omgevingsvergunning](https://ondernemersplein.overheid.nl/omgevingsvergunning-aanvragen) nodig. Voldoet u niet aan de algemene regels? Dan komen er [geluidsvoorschriften](https://www.infomil.nl/onderwerpen/geluid/regelgeving/wet-algemene/toestemming-milieu/industrielawaai/geluidsvoorschriften/) in de omgevingsvergunning.\r\n\r\n## Akoestisch rapport\r\n\r\nAls u een bedrijf start, of uw bedrijfsactiviteiten verandert, kan de gemeente of provincie u vragen om een [akoestisch rapport](http://www.infomil.nl/onderwerpen/geluid/thema/akoestisch-rapport-0/). Dit rapport hoort bij de aanvraag van een [omgevingsvergunning voor milieu of een melding milieubeheer](https://ondernemersplein.overheid.nl/omgevingsvergunning-of-melding-milieubeheer/).\r\n\r\n## Geluidsniveau op een (gezoneerd) industrieterrein\r\n\r\nDe Wgh bepaalt het geluidsniveau van bedrijven op een [(gezoneerd) industrieterrein](https://ondernemersplein.overheid.nl/geluidsnormen-op-een-gezoneerd-industrieterrein).\r\n\r\n## Algemene Plaatselijke Verordening\r\n\r\nVoorschriften tegen geluidhinder staan ook in de [Algemene Plaatselijke Verordening](https://ondernemersplein.overheid.nl/algemene-plaatselijke-verordening-apv) (APV) van gemeenten.\r\n\r\n## Geluidsvoorschriften in de horeca\r\n\r\nEen aantal keren per jaar mag u in uw horecabedrijf een festiviteit houden. U hoeft zich dan niet te houden aan de geluidsvoorschriften. In sommige gemeenten moet u uw festiviteit een paar weken van tevoren melden. Wilt u geluidsapparatuur gebruiken? Dan heeft u daar in sommige gemeenten een vergunning voor nodig.",
             "links": [
                 {
                     "label": "Regelgeving geluid (Kenniscentrum InfoMil)",
@@ -51,11 +51,11 @@
             ],
             "laatstGewijzigd": "2022-09-02T04:00:14",
             "laatstGecheckt": "2020-11-27T15:01:59",
-            "url": "https://ondernemersplein.kvk.nl/geluidsvoorschriften/",
+            "url": "https://ondernemersplein.overheid.nl/geluidsvoorschriften/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/geluidsontheffing",
             "upnLabel": "geluidsontheffing",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/fdf083f8-3fc2-4bb9-85c5-2c333d0a63a0",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/fdf083f8-3fc2-4bb9-85c5-2c333d0a63a0",
             "id": "fdf083f8-3fc2-4bb9-85c5-2c333d0a63a0"
         },
         {
@@ -75,12 +75,12 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/toeristenbelasting",
             "upnLabel": "toeristenbelasting",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/fd52a87b-78cd-422f-9144-ad72805744e9",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/fd52a87b-78cd-422f-9144-ad72805744e9",
             "id": "fd52a87b-78cd-422f-9144-ad72805744e9"
         },
         {
             "titel": "Integriteitsonderzoek (Wet Bibob)",
-            "tekst": "Overheden zoals gemeenten en provincies mogen uw achtergrond en uw bedrijf onderzoeken als u bijvoorbeeld:\r\n\r\n*   een vergunning of subsidie aanvraagt\r\n*   zich inschrijft voor een overheidsopdracht\r\n*   vastgoed van de overheid koopt\r\n*   vastgoed aan de overheid verkoopt\r\n\r\nDit is een integriteitsonderzoek op grond van de Wet Bevordering Integriteitsbeoordelingen door het openbaar bestuur (Wet Bibob). De overheid wil met dit onderzoek voorkomen dat ze criminele activiteiten financiert of dat u misbruik maakt van een vergunning.\r\n\r\n## Bibob-toets\r\n\r\nAls een overheidsinstantie de integriteit van uw bedrijf onderzoekt, heet dat een Bibob-toets. U moet daarvoor een Bibob-vragenformulier invullen.\r\n\r\nEen gemeente kan bijvoorbeeld informatie opvragen bij justitie, politie of de Belastingdienst over uw zakenrelaties. De overheidsinstantie mag ook mensen uit uw zakelijke netwerk controleren.\r\n\r\n## Bibob-advies\r\n\r\nTwijfelt de gemeente na de Bibob-toets nog over de integriteit van uw onderneming? Dan kan de gemeente een Bibob-advies aanvragen bij het [Landelijk Bureau Bibob (LBB)](https://justis.nl/producten/bibob/landelijk-bureau-bibob). Dat betekent dat er een uitgebreider onderzoek komt.\r\n\r\nVoordat het LBB-onderzoek begint, krijgt u hier altijd bericht over. Na het onderzoek geeft het LLB advies aan de gemeente. Dit onderzoek mag maximaal 12 weken duren.\r\n\r\nHet LBB kan ook overheidsinstanties zelf een tip geven als het informatie over strafbare feiten heeft.\r\n\r\nTegen het advies van Bureau Bibob kunt u geen bezwaar maken. U kunt [wel bezwaar maken](https://ondernemersplein.kvk.nl/bezwaar-en-beroep-tegen-beslissing-van-de-overheid) tegen de overheidsinstantie als die de vergunning of subsidie niet verleent of intrekt. Hiervoor heeft u na de beslissing 6 weken de tijd.\r\n\r\n## Digitaal versturen met de berichtenbox\r\n\r\nMoet u een Bibob-vragenformulier invullen voor een [procedure die onder de Dienstenwet valt](https://ondernemersplein.kvk.nl/berichtenbox-procedures-onder-de-dienstenwet)? Dan kunt u met de [berichtenbox](https://ondernemersplein.kvk.nl/berichtenbox-voor-bedrijven) het formulier digitaal versturen naar de gemeente. De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
+            "tekst": "Overheden zoals gemeenten en provincies mogen uw achtergrond en uw bedrijf onderzoeken als u bijvoorbeeld:\r\n\r\n*   een vergunning of subsidie aanvraagt\r\n*   zich inschrijft voor een overheidsopdracht\r\n*   vastgoed van de overheid koopt\r\n*   vastgoed aan de overheid verkoopt\r\n\r\nDit is een integriteitsonderzoek op grond van de Wet Bevordering Integriteitsbeoordelingen door het openbaar bestuur (Wet Bibob). De overheid wil met dit onderzoek voorkomen dat ze criminele activiteiten financiert of dat u misbruik maakt van een vergunning.\r\n\r\n## Bibob-toets\r\n\r\nAls een overheidsinstantie de integriteit van uw bedrijf onderzoekt, heet dat een Bibob-toets. U moet daarvoor een Bibob-vragenformulier invullen.\r\n\r\nEen gemeente kan bijvoorbeeld informatie opvragen bij justitie, politie of de Belastingdienst over uw zakenrelaties. De overheidsinstantie mag ook mensen uit uw zakelijke netwerk controleren.\r\n\r\n## Bibob-advies\r\n\r\nTwijfelt de gemeente na de Bibob-toets nog over de integriteit van uw onderneming? Dan kan de gemeente een Bibob-advies aanvragen bij het [Landelijk Bureau Bibob (LBB)](https://justis.nl/producten/bibob/landelijk-bureau-bibob). Dat betekent dat er een uitgebreider onderzoek komt.\r\n\r\nVoordat het LBB-onderzoek begint, krijgt u hier altijd bericht over. Na het onderzoek geeft het LLB advies aan de gemeente. Dit onderzoek mag maximaal 12 weken duren.\r\n\r\nHet LBB kan ook overheidsinstanties zelf een tip geven als het informatie over strafbare feiten heeft.\r\n\r\nTegen het advies van Bureau Bibob kunt u geen bezwaar maken. U kunt [wel bezwaar maken](https://ondernemersplein.overheid.nl/bezwaar-en-beroep-tegen-beslissing-van-de-overheid) tegen de overheidsinstantie als die de vergunning of subsidie niet verleent of intrekt. Hiervoor heeft u na de beslissing 6 weken de tijd.\r\n\r\n## Digitaal versturen met de berichtenbox\r\n\r\nMoet u een Bibob-vragenformulier invullen voor een [procedure die onder de Dienstenwet valt](https://ondernemersplein.overheid.nl/berichtenbox-procedures-onder-de-dienstenwet)? Dan kunt u met de [berichtenbox](https://ondernemersplein.overheid.nl/berichtenbox-voor-bedrijven) het formulier digitaal versturen naar de gemeente. De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
             "links": [
                 {
                     "label": "Landelijk Bureau Bibob (Justis)",
@@ -107,11 +107,11 @@
             ],
             "laatstGewijzigd": "2022-08-06T02:26:03",
             "laatstGecheckt": "2022-07-21T16:02:34",
-            "url": "https://ondernemersplein.kvk.nl/integriteitscreening-wet-bibob/",
+            "url": "https://ondernemersplein.overheid.nl/integriteitscreening-wet-bibob/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/integriteitsbeoordeling",
             "upnLabel": "integriteitsbeoordeling",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/fbe1228d-4d78-4914-a69d-03e6d3905c47",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/fbe1228d-4d78-4914-a69d-03e6d3905c47",
             "id": "fbe1228d-4d78-4914-a69d-03e6d3905c47"
         },
         {
@@ -131,7 +131,7 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/horecaExplVrg",
             "upnLabel": "horecabedrijf exploitatievergunning",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/f98b4f48-1cac-471f-9bcd-0d8bb2dc6964",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/f98b4f48-1cac-471f-9bcd-0d8bb2dc6964",
             "id": "f98b4f48-1cac-471f-9bcd-0d8bb2dc6964"
         },
         {
@@ -167,7 +167,7 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/opgravingscert",
             "upnLabel": "opgravingscertificaat",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/f3d23cae-da90-41f8-b3bb-65719f7dbf7e",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/f3d23cae-da90-41f8-b3bb-65719f7dbf7e",
             "id": "f3d23cae-da90-41f8-b3bb-65719f7dbf7e"
         },
         {
@@ -219,11 +219,11 @@
             ],
             "laatstGewijzigd": "2022-08-06T02:22:12",
             "laatstGecheckt": "2022-07-21T15:45:06",
-            "url": "https://ondernemersplein.kvk.nl/certificaat-voor-opgraving-aanvragen-en-vondst-melden/",
+            "url": "https://ondernemersplein.overheid.nl/certificaat-voor-opgraving-aanvragen-en-vondst-melden/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/opgravingscert",
             "upnLabel": "opgravingscertificaat",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/f03b9f6d-ff56-403a-a98a-37f06a7ad3d3",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/f03b9f6d-ff56-403a-a98a-37f06a7ad3d3",
             "id": "f03b9f6d-ff56-403a-a98a-37f06a7ad3d3"
         },
         {
@@ -254,12 +254,12 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/vaarvergunning",
             "upnLabel": "vaarvergunning",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/ed659305-08e0-4149-a3a1-f403dc418856",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/ed659305-08e0-4149-a3a1-f403dc418856",
             "id": "ed659305-08e0-4149-a3a1-f403dc418856"
         },
         {
             "titel": "Terrasvergunning aanvragen en regels voor uw terras",
-            "tekst": "Wilt u een terras plaatsen bij uw horecabedrijf? Of wilt u uw bestaande buitenterras uitbreiden? Dan heeft u in veel gemeenten een terrasvergunning nodig. Ook als u het terras op uw eigen terrein wilt plaatsen. Een terrasvergunning vraagt u aan bij de gemeente waar uw bedrijf is gevestigd.\r\n\r\n## Moet u een terrasvergunning aanvragen?\r\n\r\nHet verschilt per gemeente of u een terrasvergunning nodig heeft. In sommige gemeenten kunt u zonder vergunning een terras bij uw horecazaak plaatsen als u aan bepaalde voorwaarden voldoet. In andere gemeenten moet u nog wel uw [drank- en horecavergunning](https://ondernemersplein.kvk.nl/alcohol-schenken-met-een-drank-en-horecavergunning), [exploitatievergunning horecabedrijf](https://ondernemersplein.kvk.nl/exploitatievergunning-horecabedrijf-aanvragen) of [omgevingsvergunning](https://ondernemersplein.kvk.nl/omgevingsvergunning-aanvragen) wijzigen of een aanvulling indienen. U heeft dan geen aparte terrasvergunning nodig. \r\n\r\n### Terrasvergunning aanvragen met de berichtenbox\r\n\r\nHeeft u in uw gemeente w\u00e9l een aparte terrasvergunning nodig? Dan kunt u deze digitaal aanvragen bij uw gemeente met de [berichtenbox](https://ondernemersplein.kvk.nl/berichtenbox-voor-bedrijven). Dit is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.\r\n\r\n## Regels voor uw terras\r\n\r\nDe regels of voorwaarden voor een terras verschillen per gemeente. Het is dan ook verstandig om de website van uw gemeente vooraf te raadplegen. Wel is landelijk bepaald dat een terras alleen is toegestaan bij een gevestigde horecazaak. Uw terras mag geen:\r\n\r\n*   schade toebrengen aan de weg\r\n*   gevaar opleveren voor weggebruikers\r\n*   belemmering vormen voor beheer en onderhoud van de weg\r\n\r\n### Handhaving regels voor terrassen\r\n\r\nDe gemeente ziet er op toe dat u de regels naleeft. Bijvoorbeeld of u zich houdt aan de [geluidsvoorschriften voor terrassen](https://www.infomil.nl/onderwerpen/integrale/activiteitenbesluit/activiteiten/sport-recreatie/terrassen-0/geluidsvoorschriften/). Een gemeente kan sancties opleggen als u zich niet aan de regels houdt. Bijvoorbeeld door uw terras tijdelijk te sluiten of uw terrasvergunning in te trekken.\r\n\r\n## Vergunning voor terrasseizoen\r\n\r\nSommige gemeenten kennen een terrasseizoen. In de terrasvergunning staat voor welke periode de vergunning geldt. Als uw gemeente geen terrasseizoen kent, dan mag u het hele jaar een terras hebben.\r\n\r\n## Kosten voor een terrasvergunning\r\n\r\nVoor een terrasvergunning betaalt u in de meeste gemeenten [leges](https://ondernemersplein.kvk.nl/leges-van-gemeente-of-provincie) (belasting). De hoogte daarvan staat in de legesverordening van de gemeente. Als uw terras op grond van de gemeente staat, moet u [precariobelasting](https://ondernemersplein.kvk.nl/precariobelasting-betalen) betalen.",
+            "tekst": "Wilt u een terras plaatsen bij uw horecabedrijf? Of wilt u uw bestaande buitenterras uitbreiden? Dan heeft u in veel gemeenten een terrasvergunning nodig. Ook als u het terras op uw eigen terrein wilt plaatsen. Een terrasvergunning vraagt u aan bij de gemeente waar uw bedrijf is gevestigd.\r\n\r\n## Moet u een terrasvergunning aanvragen?\r\n\r\nHet verschilt per gemeente of u een terrasvergunning nodig heeft. In sommige gemeenten kunt u zonder vergunning een terras bij uw horecazaak plaatsen als u aan bepaalde voorwaarden voldoet. In andere gemeenten moet u nog wel uw [drank- en horecavergunning](https://ondernemersplein.overheid.nl/alcohol-schenken-met-een-drank-en-horecavergunning), [exploitatievergunning horecabedrijf](https://ondernemersplein.overheid.nl/exploitatievergunning-horecabedrijf-aanvragen) of [omgevingsvergunning](https://ondernemersplein.overheid.nl/omgevingsvergunning-aanvragen) wijzigen of een aanvulling indienen. U heeft dan geen aparte terrasvergunning nodig. \r\n\r\n### Terrasvergunning aanvragen met de berichtenbox\r\n\r\nHeeft u in uw gemeente w\u00e9l een aparte terrasvergunning nodig? Dan kunt u deze digitaal aanvragen bij uw gemeente met de [berichtenbox](https://ondernemersplein.overheid.nl/berichtenbox-voor-bedrijven). Dit is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.\r\n\r\n## Regels voor uw terras\r\n\r\nDe regels of voorwaarden voor een terras verschillen per gemeente. Het is dan ook verstandig om de website van uw gemeente vooraf te raadplegen. Wel is landelijk bepaald dat een terras alleen is toegestaan bij een gevestigde horecazaak. Uw terras mag geen:\r\n\r\n*   schade toebrengen aan de weg\r\n*   gevaar opleveren voor weggebruikers\r\n*   belemmering vormen voor beheer en onderhoud van de weg\r\n\r\n### Handhaving regels voor terrassen\r\n\r\nDe gemeente ziet er op toe dat u de regels naleeft. Bijvoorbeeld of u zich houdt aan de [geluidsvoorschriften voor terrassen](https://www.infomil.nl/onderwerpen/integrale/activiteitenbesluit/activiteiten/sport-recreatie/terrassen-0/geluidsvoorschriften/). Een gemeente kan sancties opleggen als u zich niet aan de regels houdt. Bijvoorbeeld door uw terras tijdelijk te sluiten of uw terrasvergunning in te trekken.\r\n\r\n## Vergunning voor terrasseizoen\r\n\r\nSommige gemeenten kennen een terrasseizoen. In de terrasvergunning staat voor welke periode de vergunning geldt. Als uw gemeente geen terrasseizoen kent, dan mag u het hele jaar een terras hebben.\r\n\r\n## Kosten voor een terrasvergunning\r\n\r\nVoor een terrasvergunning betaalt u in de meeste gemeenten [leges](https://ondernemersplein.overheid.nl/leges-van-gemeente-of-provincie) (belasting). De hoogte daarvan staat in de legesverordening van de gemeente. Als uw terras op grond van de gemeente staat, moet u [precariobelasting](https://ondernemersplein.overheid.nl/precariobelasting-betalen) betalen.",
             "links": [
                 {
                     "label": "Lokale wet- en regelgeving (Overheid.nl)",
@@ -276,11 +276,11 @@
             ],
             "laatstGewijzigd": "2022-08-06T02:23:41",
             "laatstGecheckt": "2021-06-17T15:52:55",
-            "url": "https://ondernemersplein.kvk.nl/terrasvergunning-aanvragen/",
+            "url": "https://ondernemersplein.overheid.nl/terrasvergunning-aanvragen/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/terrasvergunning",
             "upnLabel": "terrasvergunning",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/eabe7941-79c6-4561-ac23-52a8a122e306",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/eabe7941-79c6-4561-ac23-52a8a122e306",
             "id": "eabe7941-79c6-4561-ac23-52a8a122e306"
         },
         {
@@ -300,12 +300,12 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/marktvergunning",
             "upnLabel": "marktvergunning",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/e883f736-61df-45ca-9b7d-69a7f8fa998c",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/e883f736-61df-45ca-9b7d-69a7f8fa998c",
             "id": "e883f736-61df-45ca-9b7d-69a7f8fa998c"
         },
         {
             "titel": "Kabels en leidingen aanleggen en beheren",
-            "tekst": "Wilt u kabels en leidingen (met de apparatuur die erbij hoort) plaatsen in de openbare grond binnen de gemeente? Dan moet u:\r\n\r\n*   een vergunning van de gemeente hebben\r\n*   een [KLIC-melding doen](https://www.kadaster.nl/zakelijk/producten/graafwerk/klic-melding) bij het kadasterAls u de vergunning aanvraagt, moet u kadastrale gegevens en gegevens over de leidingen of kabels meesturen. \r\n\r\n## Werken bij een provinciale (vaar)weg\r\n\r\nWilt u kabels en leidingen aanleggen in, om of aan een provinciale (vaar)weg? Dan heeft u een [vergunning of ontheffing](https://ondernemersplein.kvk.nl/vergunning-of-ontheffing-aanvragen-voor-een-bouwwerk-bij-een-provinciale-weg) nodig van de provincie.\r\n\r\n## Meldplicht bij veranderingen\r\n\r\nVerandert er door uw werkzaamheden iets in of aan een buisleiding? Zoals lekkage, beschadiging of transportwijziging? Dan moet u deze [verandering melden](https://www.ilent.nl/onderwerpen/buisleidingen/meldingen) bij de Inspectie Leefomgeving en Transport (ILT). Als de situatie ongewoon of dringend is, moet u dat direct [telefonisch melden](https://www.ilent.nl/onderwerpen/buisleidingen/meldingen) bij de ILT.\r\n\r\n## Nadeelcompensatie voor verleggingen\r\n\r\nBent u kabel- en leidingbeheerder? En heeft u schade door verleggingen van kabels en leidingen door de overheid? Dan kunt u [nadeelcompensatie](https://ondernemersplein.kvk.nl/nadeelcompensatie-of-schadevergoeding-vragen) krijgen. Het gaat om verlegging door veranderingen in de infrastructuur in het beheersgebied van de minister van Infrastructuur en Waterstaat.\r\n\r\n## Digitaal aanvragen met de berichtenbox\r\n\r\nMet de [berichtenbox](https://ondernemersplein.kvk.nl/berichtenbox-voor-bedrijven) kunt u de vergunning of ontheffing digitaal aanvragen bij de gemeente of provincie. De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.\r\n\r\n**Let op**: Heeft de gemeente of provincie een aparte verordening voor het aanleggen van telecomkabels? Dan kunt u deze vergunning niet met de berichtenbox aanvragen.",
+            "tekst": "Wilt u kabels en leidingen (met de apparatuur die erbij hoort) plaatsen in de openbare grond binnen de gemeente? Dan moet u:\r\n\r\n*   een vergunning van de gemeente hebben\r\n*   een [KLIC-melding doen](https://www.kadaster.nl/zakelijk/producten/graafwerk/klic-melding) bij het kadasterAls u de vergunning aanvraagt, moet u kadastrale gegevens en gegevens over de leidingen of kabels meesturen. \r\n\r\n## Werken bij een provinciale (vaar)weg\r\n\r\nWilt u kabels en leidingen aanleggen in, om of aan een provinciale (vaar)weg? Dan heeft u een [vergunning of ontheffing](https://ondernemersplein.overheid.nl/vergunning-of-ontheffing-aanvragen-voor-een-bouwwerk-bij-een-provinciale-weg) nodig van de provincie.\r\n\r\n## Meldplicht bij veranderingen\r\n\r\nVerandert er door uw werkzaamheden iets in of aan een buisleiding? Zoals lekkage, beschadiging of transportwijziging? Dan moet u deze [verandering melden](https://www.ilent.nl/onderwerpen/buisleidingen/meldingen) bij de Inspectie Leefomgeving en Transport (ILT). Als de situatie ongewoon of dringend is, moet u dat direct [telefonisch melden](https://www.ilent.nl/onderwerpen/buisleidingen/meldingen) bij de ILT.\r\n\r\n## Nadeelcompensatie voor verleggingen\r\n\r\nBent u kabel- en leidingbeheerder? En heeft u schade door verleggingen van kabels en leidingen door de overheid? Dan kunt u [nadeelcompensatie](https://ondernemersplein.overheid.nl/nadeelcompensatie-of-schadevergoeding-vragen) krijgen. Het gaat om verlegging door veranderingen in de infrastructuur in het beheersgebied van de minister van Infrastructuur en Waterstaat.\r\n\r\n## Digitaal aanvragen met de berichtenbox\r\n\r\nMet de [berichtenbox](https://ondernemersplein.overheid.nl/berichtenbox-voor-bedrijven) kunt u de vergunning of ontheffing digitaal aanvragen bij de gemeente of provincie. De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.\r\n\r\n**Let op**: Heeft de gemeente of provincie een aparte verordening voor het aanleggen van telecomkabels? Dan kunt u deze vergunning niet met de berichtenbox aanvragen.",
             "links": [
                 {
                     "label": "Meldingen buisleidingexploitanten (ILT)",
@@ -337,16 +337,16 @@
             ],
             "laatstGewijzigd": "2022-08-06T02:24:10",
             "laatstGecheckt": "2021-09-05T19:44:53",
-            "url": "https://ondernemersplein.kvk.nl/kabels-en-leidingen-aanleggen-en-beheren/",
+            "url": "https://ondernemersplein.overheid.nl/kabels-en-leidingen-aanleggen-en-beheren/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/kabels-_en_leidingenvergunning",
             "upnLabel": "kabels- en leidingenvergunning",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/e718a289-130d-471d-bdc4-6231488002f5",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/e718a289-130d-471d-bdc4-6231488002f5",
             "id": "e718a289-130d-471d-bdc4-6231488002f5"
         },
         {
             "titel": "Toeristenbelasting betalen",
-            "tekst": "Heeft u een plek (accommodatie) waar toeristen blijven overnachten? Bijvoorbeeld een hotel, bed & breakfast (b&b), pension, bungalowpark, camping of jachthaven? Dan moet u toeristenbelasting betalen voor toeristen van buiten de gemeente. U kunt de toeristenbelasting doorberekenen aan uw gasten.\r\n\r\n## Aangifte toeristenbelasting\r\n\r\nU doet eenmaal per jaar aangifte toeristenbelasting bij uw gemeente over het vorige kalenderjaar. Bij uw aangifte kan de gemeente u vragen de [gegevens uit het nachtregister](https://ondernemersplein.kvk.nl/nachtregister-bijhouden) aan te leveren.\r\n\r\n## Coronacrisis: Controleer of uw gemeente toeristenbelasting aanpast\r\n\r\nKunt u door de coronacrisis de toeristenbelasting niet betalen? Mogelijk kunt u de toeristenbelasting in uw gemeente later afdragen of uw voorlopige aanslag verlagen. Dit is per gemeente verschillend. Neem contact op met de gemeente waar u toeristenbelasting betaalt om te kijken wat mogelijk is.\r\n\r\n## Soorten toeristenbelasting\r\n\r\nEr zijn 2 soorten toeristenbelasting:\r\n\r\n*   landtoeristenbelasting (voor overnachtingen in een hotel, b&b, pension, vakantiewoning, caravan en tent)\r\n*   watertoeristenbelasting (voor overnachtingen op boten)\r\n\r\n## Hoogte toeristenbelasting\r\n\r\nDe hoogte van de toeristenbelasting verschilt per gemeente. De gemeente berekent de landtoeristenbelasting meestal per overnachting en de watertoeristenbelasting per dag (24 uur). Voor boten die kleiner zijn dan 4 meter hoeft u vaak geen watertoeristenbelasting te betalen.\r\n\r\n## Vrijstelling toeristenbelasting\r\n\r\nIn sommige situaties hoeft u voor uw gasten geen toeristenbelasting te betalen. Zij krijgen dan een vrijstelling. Vrijstellingen verschillen per gemeente. Deze kunnen gelden voor mensen die:\r\n\r\n*   al [forensenbelasting](https://vng.nl/artikelen/forensenbelasting) betalen\r\n*   aanmeren met een woonboot en daarom al liggeld betalen\r\n*   verblijven in een ziekenhuis of verzorgingstehuis",
+            "tekst": "Heeft u een plek (accommodatie) waar toeristen blijven overnachten? Bijvoorbeeld een hotel, bed & breakfast (b&b), pension, bungalowpark, camping of jachthaven? Dan moet u toeristenbelasting betalen voor toeristen van buiten de gemeente. U kunt de toeristenbelasting doorberekenen aan uw gasten.\r\n\r\n## Aangifte toeristenbelasting\r\n\r\nU doet eenmaal per jaar aangifte toeristenbelasting bij uw gemeente over het vorige kalenderjaar. Bij uw aangifte kan de gemeente u vragen de [gegevens uit het nachtregister](https://ondernemersplein.overheid.nl/nachtregister-bijhouden) aan te leveren.\r\n\r\n## Coronacrisis: Controleer of uw gemeente toeristenbelasting aanpast\r\n\r\nKunt u door de coronacrisis de toeristenbelasting niet betalen? Mogelijk kunt u de toeristenbelasting in uw gemeente later afdragen of uw voorlopige aanslag verlagen. Dit is per gemeente verschillend. Neem contact op met de gemeente waar u toeristenbelasting betaalt om te kijken wat mogelijk is.\r\n\r\n## Soorten toeristenbelasting\r\n\r\nEr zijn 2 soorten toeristenbelasting:\r\n\r\n*   landtoeristenbelasting (voor overnachtingen in een hotel, b&b, pension, vakantiewoning, caravan en tent)\r\n*   watertoeristenbelasting (voor overnachtingen op boten)\r\n\r\n## Hoogte toeristenbelasting\r\n\r\nDe hoogte van de toeristenbelasting verschilt per gemeente. De gemeente berekent de landtoeristenbelasting meestal per overnachting en de watertoeristenbelasting per dag (24 uur). Voor boten die kleiner zijn dan 4 meter hoeft u vaak geen watertoeristenbelasting te betalen.\r\n\r\n## Vrijstelling toeristenbelasting\r\n\r\nIn sommige situaties hoeft u voor uw gasten geen toeristenbelasting te betalen. Zij krijgen dan een vrijstelling. Vrijstellingen verschillen per gemeente. Deze kunnen gelden voor mensen die:\r\n\r\n*   al [forensenbelasting](https://vng.nl/artikelen/forensenbelasting) betalen\r\n*   aanmeren met een woonboot en daarom al liggeld betalen\r\n*   verblijven in een ziekenhuis of verzorgingstehuis",
             "links": [
                 {
                     "label": "Toeristenbelasting (VNG)",
@@ -368,11 +368,11 @@
             ],
             "laatstGewijzigd": "2022-08-06T02:15:56",
             "laatstGecheckt": "2021-07-07T15:44:53",
-            "url": "https://ondernemersplein.kvk.nl/toeristenbelasting-betalen/",
+            "url": "https://ondernemersplein.overheid.nl/toeristenbelasting-betalen/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/toeristenbelasting",
             "upnLabel": "toeristenbelasting",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/e57a75b7-2246-4fb4-8a5d-d9a7c43abe93",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/e57a75b7-2246-4fb4-8a5d-d9a7c43abe93",
             "id": "e57a75b7-2246-4fb4-8a5d-d9a7c43abe93"
         },
         {
@@ -403,7 +403,7 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/speelautomaat_exploitatievergunning",
             "upnLabel": "speelautomaat exploitatievergunning",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/e43e987d-1cb9-44f8-a4ff-ebe9374321a6",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/e43e987d-1cb9-44f8-a4ff-ebe9374321a6",
             "id": "e43e987d-1cb9-44f8-a4ff-ebe9374321a6"
         },
         {
@@ -429,7 +429,7 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/objectvergunning",
             "upnLabel": "objectvergunning",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/de4deb17-6ab1-4aea-8509-045706ce0b8e",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/de4deb17-6ab1-4aea-8509-045706ce0b8e",
             "id": "de4deb17-6ab1-4aea-8509-045706ce0b8e"
         },
         {
@@ -449,7 +449,7 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/ventvergunning",
             "upnLabel": "ventvergunning",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/dbec112a-6a05-4bd5-ac92-69ef22bda294",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/dbec112a-6a05-4bd5-ac92-69ef22bda294",
             "id": "dbec112a-6a05-4bd5-ac92-69ef22bda294"
         },
         {
@@ -475,7 +475,7 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/strArtOptrOnth",
             "upnLabel": "straatartiestoptreden ontheffing",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/c1b089f0-e23e-4a33-b130-a95bb18b3185",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/c1b089f0-e23e-4a33-b130-a95bb18b3185",
             "id": "c1b089f0-e23e-4a33-b130-a95bb18b3185"
         },
         {
@@ -506,12 +506,12 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/afvalstortontheffing",
             "upnLabel": "afvalstortontheffing",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/bdf3e6c0-617f-4ff2-96d8-628e9c7684df",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/bdf3e6c0-617f-4ff2-96d8-628e9c7684df",
             "id": "bdf3e6c0-617f-4ff2-96d8-628e9c7684df"
         },
         {
             "titel": "Mobiele puinbreker gebruiken",
-            "tekst": "Een mobiele puinbreker is een machine waarmee u bouw- en sloopafval klein maakt.  Als u een mobiele puinbreker gebruikt, kan er overlast ontstaan. U moet uw werkzaamheden daarom melden. U doet een melding van het bewerken van bouw- en sloopafval met een mobiele puinbreker bij de gemeente waar u de puinbreker gaat gebruiken. Dat kan vaak online. Bij de meeste gemeenten moet u meestal een aantal dagen voordat u begint met de werkzaamheden melden.\r\n\r\n## Regels voor puinbreken\r\n\r\nU moet zich houden aan de [regels voor mobiele puinbrekers](https://iplo.nl/regelgeving/regels-voor-activiteiten/mobiel-breken-bouw-sloopafval/). Die regels gaan bijvoorbeeld over:\r\n\r\n*   veiligheid\r\n*   trillingsterkte\r\n*   stofhinder\r\n*   afvalscheiding\r\n*   geluidshinder\r\n*   bodembescherming\r\n*   milieubescherming\r\n*   onderhoud en schoonmaak\r\n\r\nU heeft een specifieke [zorgplicht mobiel breken](https://iplo.nl/regelgeving/regels-voor-activiteiten/mobiel-breken-bouw-sloopafval/specifieke-zorgplicht-mobiel-breken/), u moet de gemeente bepaalde informatie geven (een [akoestisch rapport](https://www.infomil.nl/onderwerpen/geluid/functies/mobiele-puinbreker-0/akoestisch-rapport/)) en tijdens het werk moet u bepaalde informatie bij u hebben ([informatieplicht mobiel breken](https://iplo.nl/regelgeving/regels-voor-activiteiten/mobiel-breken-bouw-sloopafval/informatieplicht-mobiel-breken/)).\r\n\r\n## Melding doen met de berichtenbox\r\n\r\nU kunt de melding mobiele puinbreker digitaal doen bij de gemeente via de [berichtenbox](https://ondernemersplein.kvk.nl/berichtenbox-voor-bedrijven) . De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
+            "tekst": "Een mobiele puinbreker is een machine waarmee u bouw- en sloopafval klein maakt.  Als u een mobiele puinbreker gebruikt, kan er overlast ontstaan. U moet uw werkzaamheden daarom melden. U doet een melding van het bewerken van bouw- en sloopafval met een mobiele puinbreker bij de gemeente waar u de puinbreker gaat gebruiken. Dat kan vaak online. Bij de meeste gemeenten moet u meestal een aantal dagen voordat u begint met de werkzaamheden melden.\r\n\r\n## Regels voor puinbreken\r\n\r\nU moet zich houden aan de [regels voor mobiele puinbrekers](https://iplo.nl/regelgeving/regels-voor-activiteiten/mobiel-breken-bouw-sloopafval/). Die regels gaan bijvoorbeeld over:\r\n\r\n*   veiligheid\r\n*   trillingsterkte\r\n*   stofhinder\r\n*   afvalscheiding\r\n*   geluidshinder\r\n*   bodembescherming\r\n*   milieubescherming\r\n*   onderhoud en schoonmaak\r\n\r\nU heeft een specifieke [zorgplicht mobiel breken](https://iplo.nl/regelgeving/regels-voor-activiteiten/mobiel-breken-bouw-sloopafval/specifieke-zorgplicht-mobiel-breken/), u moet de gemeente bepaalde informatie geven (een [akoestisch rapport](https://www.infomil.nl/onderwerpen/geluid/functies/mobiele-puinbreker-0/akoestisch-rapport/)) en tijdens het werk moet u bepaalde informatie bij u hebben ([informatieplicht mobiel breken](https://iplo.nl/regelgeving/regels-voor-activiteiten/mobiel-breken-bouw-sloopafval/informatieplicht-mobiel-breken/)).\r\n\r\n## Melding doen met de berichtenbox\r\n\r\nU kunt de melding mobiele puinbreker digitaal doen bij de gemeente via de [berichtenbox](https://ondernemersplein.overheid.nl/berichtenbox-voor-bedrijven) . De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
             "links": [
                 {
                     "label": "Mobiele puinbreker (Kenniscentrum InfoMil)",
@@ -558,16 +558,16 @@
             ],
             "laatstGewijzigd": "2022-08-06T02:09:46",
             "laatstGecheckt": "2022-08-01T10:22:20",
-            "url": "https://ondernemersplein.kvk.nl/mobiele-puinbreker-gebruiken/",
+            "url": "https://ondernemersplein.overheid.nl/mobiele-puinbreker-gebruiken/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/mobPuinbrGebr",
             "upnLabel": "mobiele puinbreker gebruiksmelding",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/bbebf32a-00dd-47d1-a243-94c3e4908b07",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/bbebf32a-00dd-47d1-a243-94c3e4908b07",
             "id": "bbebf32a-00dd-47d1-a243-94c3e4908b07"
         },
         {
             "titel": "Ventvergunning aanvragen",
-            "tekst": "Verkoopt u een product of biedt u een dienst aan voor meer dan \u20ac 50? Dan moet u zich houden aan de [regels voor colportage en straatverkoop](https://ondernemersplein.kvk.nl/huis-aan-huis-verkoop-en-straatverkoop).\r\n\r\n**Wilt u op straat eten of goederen verkopen vanuit een kraam of wagen?** Dan vraagt u geen ventevergunning aan. U moet meestal een [standplaatsvergunning aanvragen](https://ondernemersplein.kvk.nl/standplaatsvergunning-aanvragen).\r\n\r\n## Voorwaarden ventvergunning\r\n\r\nDe voorwaarden voor de ventvergunning of de melding kunnen per gemeente verschillen. Meestal zijn de voorwaarden:\r\n\r\n*   u staat ingeschreven bij KVK\r\n*   u neemt een geldig identiteitsbewijs mee als u aan de deur verkoopt\r\n*   u houdt zich aan bepaalde tijden\r\n*   u verkoopt in bepaalde gebieden\r\n*   u zorgt niet voor overlast\r\n\r\n## Digitaal ventvergunning aanvragen met de berichtenbox\r\n\r\nU kunt een ventvergunning digitaal aanvragen bij de gemeente via de [berichtenbox](https://ondernemersplein.kvk.nl/berichtenbox-voor-bedrijven). De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
+            "tekst": "Verkoopt u een product of biedt u een dienst aan voor meer dan \u20ac 50? Dan moet u zich houden aan de [regels voor colportage en straatverkoop](https://ondernemersplein.overheid.nl/huis-aan-huis-verkoop-en-straatverkoop).\r\n\r\n**Wilt u op straat eten of goederen verkopen vanuit een kraam of wagen?** Dan vraagt u geen ventevergunning aan. U moet meestal een [standplaatsvergunning aanvragen](https://ondernemersplein.overheid.nl/standplaatsvergunning-aanvragen).\r\n\r\n## Voorwaarden ventvergunning\r\n\r\nDe voorwaarden voor de ventvergunning of de melding kunnen per gemeente verschillen. Meestal zijn de voorwaarden:\r\n\r\n*   u staat ingeschreven bij KVK\r\n*   u neemt een geldig identiteitsbewijs mee als u aan de deur verkoopt\r\n*   u houdt zich aan bepaalde tijden\r\n*   u verkoopt in bepaalde gebieden\r\n*   u zorgt niet voor overlast\r\n\r\n## Digitaal ventvergunning aanvragen met de berichtenbox\r\n\r\nU kunt een ventvergunning digitaal aanvragen bij de gemeente via de [berichtenbox](https://ondernemersplein.overheid.nl/berichtenbox-voor-bedrijven). De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
             "links": [
                 {
                     "label": "Burgerlijk Wetboek Boek 6 (BW) (Overheid.nl)",
@@ -589,16 +589,16 @@
             ],
             "laatstGewijzigd": "2022-09-13T04:00:11",
             "laatstGecheckt": "2022-09-09T10:09:12",
-            "url": "https://ondernemersplein.kvk.nl/ventvergunning-aanvragen/",
+            "url": "https://ondernemersplein.overheid.nl/ventvergunning-aanvragen/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/ventvergunning",
             "upnLabel": "ventvergunning",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/bbca0313-8014-46a3-828f-6437b90c238f",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/bbca0313-8014-46a3-828f-6437b90c238f",
             "id": "bbca0313-8014-46a3-828f-6437b90c238f"
         },
         {
             "titel": "Regels voor straatartiesten",
-            "tekst": "Wilt u optreden als straatartiest in een openbare ruimte? Bijvoorbeeld als muzikant, goochelaar of portrettekenaar? Dan moet u vaak een vergunning of ontheffing aanvragen bij de gemeente waarin u wilt optreden. Of u een vergunning nodig heeft, hangt vaak af van:\r\n\r\n*   waar u precies optreedt\r\n*   met hoeveel personen u optreedt\r\n*   hoe laat en hoe lang u optreedt\r\n*   hoeveel geluid u maakt\r\n\r\nSommige gemeenten hebben plekken waar u helemaal niet mag optreden. U kunt voor deze plekken geen vergunning aanvragen.\r\n\r\n## Kosten vergunning of ontheffing straatartiesten\r\n\r\nVoor een vergunning of ontheffing om op te mogen treden als straatartiest betaalt u in sommige gemeenten een vergoeding ([leges](https://ondernemersplein.kvk.nl/leges-van-gemeente-of-provincie)). De hoogte van dit bedrag verschilt per gemeente. Bekijk de voorwaarden van de gemeente voor de kosten.\r\n\r\n## Digitaal ontheffing straatartiesten aanvragen met de berichtenbox\r\n\r\nMet de [berichtenbox](https://ondernemersplein.kvk.nl/berichtenbox-voor-bedrijven) kunt u de ontheffing straatartiesten digitaal aanvragen bij de gemeente. De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
+            "tekst": "Wilt u optreden als straatartiest in een openbare ruimte? Bijvoorbeeld als muzikant, goochelaar of portrettekenaar? Dan moet u vaak een vergunning of ontheffing aanvragen bij de gemeente waarin u wilt optreden. Of u een vergunning nodig heeft, hangt vaak af van:\r\n\r\n*   waar u precies optreedt\r\n*   met hoeveel personen u optreedt\r\n*   hoe laat en hoe lang u optreedt\r\n*   hoeveel geluid u maakt\r\n\r\nSommige gemeenten hebben plekken waar u helemaal niet mag optreden. U kunt voor deze plekken geen vergunning aanvragen.\r\n\r\n## Kosten vergunning of ontheffing straatartiesten\r\n\r\nVoor een vergunning of ontheffing om op te mogen treden als straatartiest betaalt u in sommige gemeenten een vergoeding ([leges](https://ondernemersplein.overheid.nl/leges-van-gemeente-of-provincie)). De hoogte van dit bedrag verschilt per gemeente. Bekijk de voorwaarden van de gemeente voor de kosten.\r\n\r\n## Digitaal ontheffing straatartiesten aanvragen met de berichtenbox\r\n\r\nMet de [berichtenbox](https://ondernemersplein.overheid.nl/berichtenbox-voor-bedrijven) kunt u de ontheffing straatartiesten digitaal aanvragen bij de gemeente. De berichtenbox is een beveiligd e-mailsysteem waarmee u als ondernemer digitaal berichten uitwisselt met Nederlandse overheidsorganisaties.",
             "links": [
                 {
                     "label": "Lokale wet- en regelgeving (Overheid.nl)",
@@ -615,11 +615,11 @@
             ],
             "laatstGewijzigd": "2022-08-06T02:39:03",
             "laatstGecheckt": "2021-08-18T11:23:08",
-            "url": "https://ondernemersplein.kvk.nl/regels-voor-straatartiesten/",
+            "url": "https://ondernemersplein.overheid.nl/regels-voor-straatartiesten/",
             "upnUri": "http://standaarden.overheid.nl/owms/terms/strArtOptrOnth",
             "upnLabel": "straatartiestoptreden ontheffing",
             "taal": "nl",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/b6792c5c-9691-4ed9-90d6-cf3d23c07a93",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/b6792c5c-9691-4ed9-90d6-cf3d23c07a93",
             "id": "b6792c5c-9691-4ed9-90d6-cf3d23c07a93"
         },
         {
@@ -660,7 +660,7 @@
             "upnUri": "http://standaarden.overheid.nl/owms/terms/omgevingsvergunning_bouw",
             "upnLabel": "omgevingsvergunning bouw",
             "taal": "en",
-            "self": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/producten/b46ea89d-eb2b-4661-a209-e55181cb4a91",
+            "self": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/producten/b46ea89d-eb2b-4661-a209-e55181cb4a91",
             "id": "b46ea89d-eb2b-4661-a209-e55181cb4a91"
         }
     ]

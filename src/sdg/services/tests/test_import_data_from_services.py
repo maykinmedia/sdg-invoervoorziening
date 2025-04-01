@@ -22,9 +22,9 @@ class TestImportDataFromServices(CommandTestCase):
         self.service = Service.objects.create(
             label="test",
             api_type="ztc",
-            api_root="https://sdgapi.ondernemersplein.kvk.nl/api/v1/",
+            api_root="https://sdgapi.ondernemersplein.overheid.nl/api/v1/",
             auth_type="no_auth",
-            oas="https://sdgapi.ondernemersplein.kvk.nl/swagger/v1/swagger.json",
+            oas="https://sdgapi.ondernemersplein.overheid.nl/swagger/v1/swagger.json",
         )
         self.service_config = ServiceConfiguration.objects.create(
             service=self.service,
@@ -109,7 +109,7 @@ class TestImportDataFromServices(CommandTestCase):
             self.localized_1.verwijzing_links,
         )
         self.assertEqual(
-            "https://ondernemersplein.kvk.nl/geluidsvoorschriften/",
+            "https://ondernemersplein.overheid.nl/geluidsvoorschriften/",
             self.localized_1.landelijke_link,
         )
         self.assertEqual(
