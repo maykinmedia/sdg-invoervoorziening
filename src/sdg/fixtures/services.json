@@ -5,13 +5,13 @@
     "fields": {
         "label": "Ondernemersplein",
         "api_type": "orc",
-        "api_root": "https://sdgapi.ondernemersplein.kvk.nl/api/v1/",
+        "api_root": "https://sdgapi.ondernemersplein.overheid.nl/api/v1/",
         "client_id": "",
         "secret": "",
         "auth_type": "no_auth",
         "header_key": "",
         "header_value": "",
-        "oas": "https://sdgapi.ondernemersplein.kvk.nl/swagger/v1/swagger.yaml",
+        "oas": "https://sdgapi.ondernemersplein.overheid.nl/swagger/v1/swagger.yaml",
         "nlx": "",
         "user_id": "",
         "user_representation": ""

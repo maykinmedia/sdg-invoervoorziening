@@ -2,6 +2,16 @@
 Change history
 ==============
 
+1.9.3
+=====
+
+*April 1, 2025*
+
+* Changed ondernemersplein.kvk.nl to ondernemersplein.overheid.nl
+* Fixed inadvertedly mailing inactive users
+* Fixed mailing broken links to the incorrect organisation
+
+
 1.9.2
 =====
 
