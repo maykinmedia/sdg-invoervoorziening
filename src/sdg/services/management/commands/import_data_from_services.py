@@ -65,9 +65,14 @@ class Command(BaseCommand):
                     for item in product.get("links", [])
                 ]
                 localized_generic_product.landelijke_link = product["url"]
-                localized_generic_product.datum_check = datetime.fromisoformat(
-                    product["laatstGecheckt"]
-                )
+
+                # An undocumented change in the API of Ondernemersplein removed the
+                # attribute "laatstGecheckt" entirely.
+                last_checked = product.get("laatstGecheckt", None)
+                if last_checked:
+                    localized_generic_product.datum_check = datetime.fromisoformat(
+                        product["laatstGecheckt"]
+                    )
                 localized_generic_product.laatst_gewijzigd = datetime.fromisoformat(
                     product["laatstGewijzigd"]
                 )
