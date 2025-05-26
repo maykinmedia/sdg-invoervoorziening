@@ -516,7 +516,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
         reference_product_version,
         languages: Optional[List[TaalChoices]] = None,
         skip_filled_fields=False,
-        availability_texts={},
+        availability_texts=None,
     ):
         language_version_map = {
             rpv.taal: rpv for rpv in reference_product_version.vertalingen.all()
