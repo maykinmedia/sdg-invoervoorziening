@@ -51,6 +51,12 @@ class ProductFieldConfiguration(
     product_api_verborgen = LabeledTooltipField(
         verbose_name=_("Verborgen"),
     )
+    product_automatisch_doordrukken = LabeledTooltipField(
+        verbose_name=("Automatisch doordrukken"),
+    )
+    product_automatisch_doordrukken_datum = LabeledTooltipField(
+        verbose_name=("Automatisch doordrukken datum"),
+    )
 
     class Meta:
         verbose_name = _("Product field configuratie")

@@ -516,6 +516,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
         reference_product_version,
         languages: Optional[List[TaalChoices]] = None,
         skip_filled_fields=False,
+        availability_texts={},
     ):
         language_version_map = {
             rpv.taal: rpv for rpv in reference_product_version.vertalingen.all()
@@ -532,6 +533,11 @@ class ProductVersie(ProductFieldMixin, models.Model):
                 localized_product_version.update_with_reference_texts(
                     localized_reference_product_version,
                     skip_filled_fields=skip_filled_fields,
+                    product_aanwezig_toelichting=(
+                        availability_texts[localized_product_version.taal]
+                        if availability_texts is not None
+                        else None
+                    ),
                 )
 
     def get_pretty_version(self):

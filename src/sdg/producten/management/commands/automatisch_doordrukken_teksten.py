@@ -3,6 +3,7 @@ from datetime import date
 from django.core.management import BaseCommand
 
 from sdg.producten.models import Product, ProductVersie
+from sdg.producten.utils import get_placeholder_maps
 
 
 class Command(BaseCommand):
@@ -16,6 +17,9 @@ class Command(BaseCommand):
             automatisch_doordrukken_datum=None,
         )
         self.stdout.write(f"Reset press through data for {count} products")
+
+    def update_products_availability(self, products, availility):
+        products.update(product_aanwezig=availility)
 
     def handle(self, *args, **options):
         self.stdout.write("Starting reference text press through process...")
@@ -54,12 +58,25 @@ class Command(BaseCommand):
             product_count = products.count()
             self.stdout.write(f"  Found {product_count} linked products to update")
 
+            # Updating the product before updating the most_recent_version,
+            # so that the LocalizedProduct.save function doesn't reset the available text.
+            self.update_products_availability(
+                products=products, availility=reference_product.product_aanwezig
+            )
+
             # Update each product linked to the reference product.
             for product in products:
                 self.stdout.write(f"    Updating product: {product.pk}")
                 product_version: ProductVersie = product.most_recent_version
+
+                available_text = None
+                # Take over default aanwezig_toelichting if product is not available.
+                if reference_product.product_aanwezig is False:
+                    (_, available_text) = get_placeholder_maps(product)
+
                 product_version.update_with_reference_texts(
-                    reference_product_version=reference_product_version
+                    reference_product_version=reference_product_version,
+                    availability_texts=available_text,
                 )
                 total_updated_products += 1
 
