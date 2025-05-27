@@ -80,6 +80,8 @@ class ProductFieldConfigurationAdmin(SingletonModelAdmin):
                     "product_product_valt_onder",
                     "product_heeft_kosten",
                     "product_api_verborgen",
+                    "product_automatisch_doordrukken",
+                    "product_automatisch_doordrukken_datum",
                 ],
             },
         )

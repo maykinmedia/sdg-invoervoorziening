@@ -330,7 +330,10 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
             self.localize_specific_products()
 
     def update_with_reference_texts(
-        self, localized_reference_product_version, skip_filled_fields=False
+        self,
+        localized_reference_product_version,
+        skip_filled_fields=False,
+        product_aanwezig_toelichting=None,
     ):
         field_names = [
             "bezwaar_en_beroep",
@@ -344,6 +347,8 @@ class LocalizedProduct(ProductFieldMixin, TaalMixin, models.Model):
             "verwijzing_links",
             "wtd_bij_geen_reactie",
         ]
+        if product_aanwezig_toelichting:
+            setattr(self, "product_aanwezig_toelichting", product_aanwezig_toelichting)
         for field_name in field_names:
             if skip_filled_fields and getattr(self, field_name):
                 continue
