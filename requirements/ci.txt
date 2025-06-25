@@ -340,7 +340,7 @@ django-two-factor-auth[phonenumberslite,webauthn]==1.17.0
     #   -r requirements/base.txt
     #   django-two-factor-auth
     #   maykin-2fa
-django-webtest==1.9.11
+django-webtest==1.9.13
     # via -r requirements/test-tools.in
 djangorestframework==3.16.0
     # via
