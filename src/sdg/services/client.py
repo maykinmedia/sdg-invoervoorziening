@@ -6,7 +6,6 @@ from urllib.parse import urljoin
 
 import requests
 import yaml
-from zds_client.oas import schema_fetcher
 from zgw_consumers.models import Service
 
 logger = logging.getLogger(__name__)
@@ -41,6 +40,19 @@ class SDGClient:
         spec = yaml.safe_load(file)
         return spec
 
+    def fetch(self, url: str, *args, **kwargs) -> dict:
+        response = requests.get(url, *args, **kwargs)
+        response.raise_for_status()
+
+        spec = yaml.safe_load(response.content)
+        spec_version = response.headers.get(
+            "X-OAS-Version", spec.get("openapi", spec.get("swagger", ""))
+        )
+        if not spec_version.startswith("3.0"):
+            raise ValueError("Unsupported spec version: {}".format(spec_version))
+
+        return spec
+
     def fetch_schema(self) -> None:
         """
         Override the default fetch_schema method to add missing operation ids.
@@ -54,7 +66,7 @@ class SDGClient:
                     self.SDG_service.api_root, "schema/openapi.yaml"
                 )
                 logger.info("Fetching schema at '%s'", url)
-                self._schema = schema_fetcher.fetch(url, {"v": "3"})
+                self._schema = self.fetch(url, {"v": "3"})
         except requests.HTTPError:
             schema = self.default_schema.replace("{{products_url}}", self.products_url)
             self._schema = self.load_schema_file(StringIO(schema))
