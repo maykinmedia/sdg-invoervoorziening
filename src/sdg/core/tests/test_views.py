@@ -1,10 +1,10 @@
 from django.test import override_settings
 from django.urls import reverse
 
-from django_webtest import WebTest
-
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
+
+from ..tests.utils import WebTest
 
 HOME_URL = "core:home"
 CARD_SELECTOR = ".cards__card"
@@ -23,7 +23,6 @@ class HomeViewTests(WebTest):
         RoleFactory.create_batch(3)
 
         response = self.app.get(reverse(HOME_URL))
-
         municipalities = response.pyquery(CARD_SELECTOR)
 
         self.assertEqual(municipalities.length, 2)

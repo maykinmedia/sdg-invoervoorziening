@@ -5,14 +5,13 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from django_webtest import WebTest
 from freezegun import freeze_time
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.constants import GenericProductStatus
-from sdg.core.models import ProductenCatalogus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
+from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import (
     BevoegdeOrganisatieFactory,
     LocatieFactory,

@@ -1,19 +1,15 @@
 import uuid
 
-import django
 from django.test import override_settings
 from django.urls import reverse
-
-from django_webtest import WebTest
 
 from sdg.accounts.tests.factories import RoleFactory, SuperUserFactory
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
+from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
-from sdg.tests.utils import disable_2fa
 
 
-@disable_2fa
 class CMSUrlsPathTest(WebTest):
     def setUp(self):
         super().setUp()

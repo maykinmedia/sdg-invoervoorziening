@@ -5,11 +5,10 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from django_webtest import WebTest
-
 from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
+from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 INVITATION_URL = "organisaties:roles:invitation_create"
@@ -223,7 +222,7 @@ class InvitationTests(WebTest):
         errors = response.pyquery(".errorlist li")
         self.assertEqual(
             errors[0].text,
-            _("Dit wachtwoord is te kort. De minimale lengte is 8 tekens."),
+            _("This password is too short. It must contain at least 8 characters."),
         )
         self.assertEqual(
             errors[1].text,

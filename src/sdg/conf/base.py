@@ -107,8 +107,10 @@ INSTALLED_APPS = [
     "django_otp",
     "django_otp.plugins.otp_static",
     "django_otp.plugins.otp_totp",
-    "rijkshuisstijl",
+    "maykin_2fa",
     "two_factor",
+    "two_factor.plugins.webauthn",
+    "rijkshuisstijl",
     # Optional applications.
     "ordered_model",
     "django_admin_index",
@@ -120,9 +122,8 @@ INSTALLED_APPS = [
     "django_better_admin_arrayfield",
     "axes",
     "sniplates",
-    "compat",  # Part of hijack
     "hijack",
-    "hijack_admin",
+    "hijack.contrib.admin",
     "markdownx",
     "markdownify",
     "allauth",
@@ -158,9 +159,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "hijack.middleware.HijackUserMiddleware",
     "axes.middleware.AxesMiddleware",
-    "django_otp.middleware.OTPMiddleware",
+    "maykin_2fa.middleware.OTPMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "vng_api_common.authorizations.middleware.AuthMiddleware",
+    "vng_api_common.middleware.APIVersionHeaderMiddleware",
 ]
 
 ROOT_URLCONF = "sdg.urls"
@@ -337,6 +341,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Allow logging in with both username+password and email+password
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesBackend",
+    "sdg.accounts.backends.UserModelEmailBackend",
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
@@ -414,15 +419,10 @@ AXES_FAILURE_LIMIT = 10
 # will be forgotten. Can be set to a python timedelta object or an integer. If
 # an integer, will be interpreted as a number of hours. Default: None
 AXES_COOLOFF_TIME = 1
-# If True only locks based on user id and never locks by IP if attempts limit
-# exceed, otherwise utilize the existing IP and user locking logic Default:
-# False
-AXES_ONLY_USER_FAILURES = True
 # If set, specifies a template to render when a user is locked out. Template
 # receives cooloff_time and failure_limit as context variables. Default: None
 AXES_LOCKOUT_TEMPLATE = "account_blocked.html"
-AXES_USE_USER_AGENT = True  # Default: False
-AXES_LOCK_OUT_BY_COMBINATION_USER_AND_IP = True  # Default: False
+AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 AXES_BEHIND_REVERSE_PROXY = IS_HTTPS
 
 # The default meta precedence order
@@ -439,15 +439,6 @@ IPWARE_META_PRECEDENCE_ORDER = (
     "REMOTE_ADDR",
 )
 
-#
-# DJANGO-HIJACK
-#
-HIJACK_LOGIN_REDIRECT_URL = "/"
-HIJACK_LOGOUT_REDIRECT_URL = reverse_lazy("admin:accounts_user_changelist")
-HIJACK_REGISTER_ADMIN = False
-# This is a CSRF-security risk.
-# See: http://django-hijack.readthedocs.io/en/latest/configuration/#allowing-get-method-for-hijack-views
-HIJACK_ALLOW_GET_REQUESTS = True
 
 #
 # SENTRY - error monitoring
@@ -455,12 +446,24 @@ HIJACK_ALLOW_GET_REQUESTS = True
 SENTRY_DSN = config("SENTRY_DSN", None)
 
 #
-# Maykin fork of DJANGO-TWO-FACTOR-AUTH
+# MAYKIN-2FA
 #
-TWO_FACTOR_FORCE_OTP_ADMIN = config("TWO_FACTOR_FORCE_OTP_ADMIN", default=not DEBUG)
-TWO_FACTOR_PATCH_ADMIN = config("TWO_FACTOR_PATCH_ADMIN", default=True)
-if "test" in sys.argv:  # Allow testing with 2FA
-    TWO_FACTOR_FORCE_OTP = False
+
+# Uses django-two-factor-auth under the hood, so relevant upstream package settings
+# apply too.
+#
+
+# we run the admin site monkeypatch instead.
+TWO_FACTOR_PATCH_ADMIN = False
+# Relying Party name for WebAuthn (hardware tokens)
+TWO_FACTOR_WEBAUTHN_RP_NAME = "SDG Invoervoorziening - admin"
+# use platform for fingerprint readers etc., or remove the setting to allow any.
+# cross-platform would limit the options to devices like phones/yubikeys
+TWO_FACTOR_WEBAUTHN_AUTHENTICATOR_ATTACHMENT = "cross-platform"
+# add entries from AUTHENTICATION_BACKENDS that already enforce their own two-factor
+# auth, avoiding having some set up MFA again in the project.
+MAYKIN_2FA_ALLOW_MFA_BYPASS_BACKENDS = []
+
 
 if SENTRY_DSN:
     SENTRY_CONFIG = {
@@ -486,10 +489,9 @@ if not ELASTIC_APM_SERVER_URL:
 
 # django-allauth
 ACCOUNT_ALLOW_REGISTRATION = os.getenv("DJANGO_ACCOUNT_ALLOW_REGISTRATION", False)
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_METHODS = ["email"]
 ACCOUNT_USER_MODEL_USERNAME_FIELD = "email"
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 56

@@ -123,7 +123,7 @@ class TestImportDataFromServices(CommandTestCase):
         )
         self.assertEqual(org.rol, "Ondersteuningsorganisatie")
 
-    @patch("zgw_consumers.client.ZGWClient.retrieve")
+    @patch("requests.get")
     def test_import_data_from_services_unreachable_api(self, retrieve_mock):
         retrieve_mock.side_effect = ConnectionError
         self.call_command("import_data_from_services")

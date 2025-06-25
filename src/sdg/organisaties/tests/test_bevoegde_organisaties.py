@@ -1,9 +1,8 @@
 from django.urls import reverse_lazy
 
-from django_webtest import WebTest
-
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
+from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 

@@ -77,7 +77,10 @@ class UserInvitation(models.Model):
     )
 
     key = models.CharField(
-        verbose_name=_("key"), max_length=64, unique=True, default=get_random_string
+        verbose_name=_("key"),
+        max_length=64,
+        unique=True,
+        default=get_random_string(length=32),
     )
     accepted = models.BooleanField(verbose_name=_("geaccepteerd"), default=False)
 

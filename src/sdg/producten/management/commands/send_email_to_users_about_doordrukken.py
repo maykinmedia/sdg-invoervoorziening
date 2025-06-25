@@ -7,10 +7,10 @@ from django.core.mail import send_mail
 from django.core.management import BaseCommand
 from django.db.models import Q
 from django.db.models.manager import BaseManager
+from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
 
-from compat import render_to_string
 from furl import furl
 
 from sdg.accounts.models import Role

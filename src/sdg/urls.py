@@ -8,12 +8,13 @@ from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 
 from decorator_include import decorator_include
+from maykin_2fa import monkeypatch_admin
+from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
 from two_factor.urls import urlpatterns as tf_urls
 
 from sdg import miscellaneous_urls
 from sdg.accounts.views.password_reset import PasswordResetView, ResendInventation
 from sdg.decorators import enabled
-from sdg.organisaties.views.notificaties import ProductVersieListView
 
 handler500 = "sdg.utils.views.server_error"
 admin.site.site_header = _("PDC voor de SDG")
@@ -21,6 +22,7 @@ admin.site.site_title = _("PDC voor de SDG")
 admin.site.index_title = _("PDC beheer voor de SDG")
 admin.site.enable_nav_sidebar = False
 
+monkeypatch_admin()
 
 urlpatterns = [
     path(
@@ -35,6 +37,8 @@ urlpatterns = [
     ),
     path("admin/hijack/", include("hijack.urls")),
     path("admin/resend_invite", ResendInventation.as_view(), name="resend_token"),
+    path("admin/", include((urlpatterns, "maykin_2fa"))),
+    path("admin/", include((webauthn_urlpatterns, "admin_two_factor"))),
     path("admin/", admin.site.urls),
     path("api/", include("sdg.api.urls", namespace="api")),
     # cms - these urls can be disabled if desired though the setting SDG_CMS_ENABLED

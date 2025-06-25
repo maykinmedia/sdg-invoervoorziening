@@ -1,5 +1,5 @@
 {% extends "admin/base.html" %}
-{% load i18n static hijack_tags utils %}
+{% load i18n static utils %}
 
 {% block title %}
 {{ title }} | {{ site_title|default:_('Administratie') }}
@@ -34,9 +34,9 @@
     <a href="{% url 'admin:password_change' %}">{% trans 'Wachtwoord wijzigen' %}</a> /
     {% endif %}
 
-    {% url 'admin:two_factor:profile' as 2fa_profile_url %}
-    {% if 2fa_profile_url %}
-        <a href="{{ 2fa_profile_url }}">{% trans "Beheer two-factor auth" %}</a> /
+    {% url 'maykin_2fa:account_security' as 2fa_account_security_url %}
+    {% if 2fa_account_security_url %}
+        <a href="{{ 2fa_account_security_url }}">{% trans "Beheer two-factor auth" %}</a> /
     {% endif %}
 
     <a href="{% url 'admin:logout' %}">{% trans 'Uitloggen' %}</a>
@@ -46,7 +46,6 @@
 {% endblock %}
 
 {% block messages %}
-    {% hijack_notification %}
     {{ block.super }}
 {% endblock %}
 

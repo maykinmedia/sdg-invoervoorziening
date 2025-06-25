@@ -1,4 +1,4 @@
-{% load static hijack_tags solo_tags %}
+{% load static solo_tags %}
 {% get_solo 'core.SiteConfiguration' as siteconfig %}
 
 <!DOCTYPE html>
@@ -26,8 +26,6 @@
 </head>
 
 <body class="view__body">
-{% hijack_notification %}
-
 {% block outer_content %}
 {% endblock %}
 

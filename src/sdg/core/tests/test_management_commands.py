@@ -1,7 +1,6 @@
 import os
 from datetime import date, datetime
 from io import StringIO
-from unittest.mock import MagicMock, patch
 
 from django.conf import settings
 from django.core import mail
@@ -68,7 +67,7 @@ class TestImportData(CommandTestCase):
             "http://standaarden.overheid.nl/owms/terms/'s-Graveland_(gemeente)",
             organisatie.owms_identifier,
         )
-        self.assertEqual(datetime(2001, 12, 31), organisatie.owms_end_date)
+        self.assertEqual(datetime(2001, 12, 31, 0, 42), organisatie.owms_end_date)
 
     def test_load_municipalities_before_gov_orgs(self):
         out = self.call_command(
