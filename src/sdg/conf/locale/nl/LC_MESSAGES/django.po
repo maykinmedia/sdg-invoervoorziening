@@ -1180,7 +1180,7 @@ msgstr ""
 
 #: sdg/organisaties/tests/test_invitation.py:226
 msgid "Dit wachtwoord is te kort. De minimale lengte is 8 tekens."
-msgstr ""
+msgstr "This password is too short. It must contain at least 8 characters."
 
 #: sdg/organisaties/tests/test_invitation.py:230
 msgid "Dit wachtwoord is te algemeen."

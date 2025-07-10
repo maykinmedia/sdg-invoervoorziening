@@ -4,12 +4,14 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
-from sdg.core.tests.utils import WebTest
+from django_webtest import WebTest
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from ..models import UserInvitation
 from .factories import SuperUserFactory
 
 
+@disable_mfa()
 class AdminTests(WebTest):
     @classmethod
     def setUpTestData(cls):

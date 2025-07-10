@@ -1,7 +1,7 @@
 import logging
 from io import StringIO
 from pathlib import Path
-from typing import IO, Dict, Optional
+from typing import IO, Optional
 from urllib.parse import urljoin
 
 import requests
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class SDGClient:
     def __init__(
         self,
-        auth_value: Optional[Dict[str, str]] = None,
+        auth_value: Optional[dict[str, str]] = None,
         schema_url: str = "",
         schema_file: IO = None,
         client_certificate_path=None,

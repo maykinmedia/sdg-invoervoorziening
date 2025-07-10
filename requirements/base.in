@@ -1,6 +1,6 @@
 # Core python libraries
 Pillow  # handle images
-psycopg2 == 2.9.10 # database driver
+psycopg2 >= 2.9.10 # database driver
 pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
@@ -11,7 +11,7 @@ email-validator
 furl
 
 # Framework libraries
-django == 5.2
+django ~= 5.2
 django-admin-index
 django-better-admin-arrayfield
 django-axes >= 8.0.0
@@ -45,4 +45,4 @@ elastic-apm  # Elastic APM integration
 
 git+https://github.com/maykinmedia/django-rijkshuisstijl.git
 beautifulsoup4  # missing from django-rijkshuisstijl
-zgw-consumers[zds-client]
+zgw-consumers

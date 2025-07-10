@@ -94,10 +94,9 @@ DEBUG_TOOLBAR_PANELS = [
     "debug_toolbar.panels.logging.LoggingPanel",
     "debug_toolbar.panels.redirects.RedirectsPanel",
     "debug_toolbar.panels.profiling.ProfilingPanel",
-    # "ddt_api_calls.panels.APICallsPanel",
 ]
 
-if config("DISABLE_2FA", default=False):  # pragma: no cover
+if config("DISABLE_2FA", default=True):  # pragma: no cover
     MAYKIN_2FA_ALLOW_MFA_BYPASS_BACKENDS = AUTHENTICATION_BACKENDS
 
 # THOU SHALT NOT USE NAIVE DATETIMES

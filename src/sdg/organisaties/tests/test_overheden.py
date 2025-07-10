@@ -5,13 +5,14 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from django_webtest import WebTest
 from freezegun import freeze_time
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.core.constants import GenericProductStatus
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
-from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import (
     BevoegdeOrganisatieFactory,
     LocatieFactory,
@@ -31,6 +32,7 @@ CATALOG_SELECTOR = ".datagrid__body"
 PRODUCT_SELECTOR = ".datagrid__row--cells"
 
 
+@disable_mfa()
 class CatalogListViewTests(WebTest):
     def setUp(self):
         super().setUp()
@@ -422,6 +424,7 @@ class CatalogListViewTests(WebTest):
             self.assertIn(str(product), response_text)
 
 
+@disable_mfa()
 class LokaleOverheidUpdateViewTests(WebTest):
     def setUp(self):
         super().setUp()
@@ -457,6 +460,7 @@ class LokaleOverheidUpdateViewTests(WebTest):
         )
 
 
+@disable_mfa()
 class LocatieUpdateViewTests(WebTest):
     def setUp(self):
         super().setUp()

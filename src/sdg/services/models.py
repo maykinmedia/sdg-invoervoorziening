@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import List
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -16,7 +16,7 @@ class ServiceConfiguration(models.Model):
         help_text=_("De doelgroep waarvoor deze service is geconfigureerd. "),
     )
 
-    def retrieve_products(self) -> List[Dict]:
+    def retrieve_products(self) -> List[dict]:
         """
         Fetch products according to the configured API.
         """

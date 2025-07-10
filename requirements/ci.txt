@@ -402,11 +402,6 @@ furl==2.1.3
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   ape-pie
-gemma-zds-client==2.0.0
-    # via
-    #   -c requirements/base.txt
-    #   -r requirements/base.txt
-    #   zgw-consumers
 glom==23.5.0
     # via
     #   -c requirements/base.txt
@@ -554,7 +549,6 @@ pyjwt==2.8.0
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
-    #   gemma-zds-client
     #   zgw-consumers
 pylint==3.0.3
     # via -r requirements/test-tools.in
@@ -597,7 +591,6 @@ pyyaml==6.0.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   drf-spectacular
-    #   gemma-zds-client
     #   oyaml
 qrcode==6.1
     # via
@@ -624,7 +617,6 @@ requests==2.31.0
     #   coreapi
     #   ddt-api-calls
     #   django-rosetta
-    #   gemma-zds-client
     #   requests-mock
     #   zgw-consumers
 requests-mock==1.11.0
@@ -735,10 +727,9 @@ wrapt==1.14.1
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   elastic-apm
-zgw-consumers[zds-client]==0.38.0
+zgw-consumers==0.38.0
     # via
     #   -c requirements/base.txt
     #   -r requirements/base.txt
     #   commonground-api-common
     #   notifications-api-common
-    #   zgw-consumers

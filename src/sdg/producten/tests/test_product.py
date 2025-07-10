@@ -6,14 +6,16 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from django_webtest import WebTest
 from freezegun import freeze_time
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
 from sdg.core.constants import GenericProductStatus, TaalChoices
 from sdg.core.constants.product import DoelgroepChoices
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
-from sdg.core.tests.utils import WebTest, hard_refresh_from_db
+from sdg.core.tests.utils import hard_refresh_from_db
 from sdg.organisaties.tests.factories.overheid import BevoegdeOrganisatieFactory
 from sdg.producten.models import Product
 from sdg.producten.tests.constants import (
@@ -35,6 +37,7 @@ from sdg.producten.tests.factories.product import (
 from sdg.producten.utils import build_url_kwargs, get_placeholder_maps
 
 
+@disable_mfa()
 class ProductUpdateViewTests(WebTest):
     def setUp(self):
         super().setUp()

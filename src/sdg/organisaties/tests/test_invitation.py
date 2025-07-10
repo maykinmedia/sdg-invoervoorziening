@@ -5,10 +5,12 @@ from django.test import override_settings
 from django.urls import reverse
 from django.utils.translation import gettext as _
 
+from django_webtest import WebTest
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
+
 from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
-from sdg.core.tests.utils import WebTest
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 INVITATION_URL = "organisaties:roles:invitation_create"
@@ -17,6 +19,7 @@ INVITATION_ACCEPT_URL = "invitation_accept"
 User = get_user_model()
 
 
+@disable_mfa()
 class InvitationTests(WebTest):
     def setUp(self):
         super().setUp()
@@ -222,7 +225,7 @@ class InvitationTests(WebTest):
         errors = response.pyquery(".errorlist li")
         self.assertEqual(
             errors[0].text,
-            _("This password is too short. It must contain at least 8 characters."),
+            _("Dit wachtwoord is te kort. De minimale lengte is 8 tekens."),
         )
         self.assertEqual(
             errors[1].text,
