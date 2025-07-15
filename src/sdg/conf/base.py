@@ -561,9 +561,6 @@ if SUBPATH := config("SUBPATH", None):
 # django-solo
 SOLO_CACHE = "default"
 
-# zgw_consumers
-ZGW_CONSUMERS_CLIENT_CLASS = "sdg.services.client.SDGClient"
-
 # organization type
 SDG_ORGANIZATION_TYPE = config(
     "SDG_ORGANIZATION_TYPE", default="municipality", transform=str.lower
