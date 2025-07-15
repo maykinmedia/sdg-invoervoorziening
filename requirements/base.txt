@@ -215,8 +215,6 @@ furl==2.1.3
     # via
     #   -r requirements/base.in
     #   ape-pie
-gemma-zds-client==2.0.0
-    # via zgw-consumers
 glom==23.5.0
     # via -r requirements/base.in
 idna==3.6
@@ -274,7 +272,6 @@ pydantic-core==2.16.1
 pyjwt==2.8.0
     # via
     #   commonground-api-common
-    #   gemma-zds-client
     #   zgw-consumers
 pyopenssl==24.0.0
     # via
@@ -296,7 +293,6 @@ pytz==2023.4
 pyyaml==6.0.1
     # via
     #   drf-spectacular
-    #   gemma-zds-client
     #   oyaml
 qrcode==6.1
     # via django-two-factor-auth
@@ -312,7 +308,6 @@ requests==2.31.0
     #   commonground-api-common
     #   coreapi
     #   django-rosetta
-    #   gemma-zds-client
     #   zgw-consumers
 rpds-py==0.17.1
     # via
@@ -368,7 +363,7 @@ webencodings==0.5.1
     #   tinycss2
 wrapt==1.14.1
     # via elastic-apm
-zgw-consumers[zds-client]==0.38.0
+zgw-consumers==0.38.0
     # via
     #   -r requirements/base.in
     #   commonground-api-common

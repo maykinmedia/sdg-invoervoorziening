@@ -453,11 +453,6 @@ furl==2.1.3
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   ape-pie
-gemma-zds-client==2.0.0
-    # via
-    #   -c requirements/ci.txt
-    #   -r requirements/ci.txt
-    #   zgw-consumers
 gitdb==4.0.11
     # via gitpython
 gitpython==3.1.41
@@ -647,7 +642,6 @@ pyjwt==2.8.0
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   commonground-api-common
-    #   gemma-zds-client
     #   zgw-consumers
 pylint==3.0.3
     # via
@@ -696,7 +690,6 @@ pyyaml==6.0.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   drf-spectacular
-    #   gemma-zds-client
     #   oyaml
     #   pre-commit
 qrcode==6.1
@@ -724,7 +717,6 @@ requests==2.31.0
     #   coreapi
     #   ddt-api-calls
     #   django-rosetta
-    #   gemma-zds-client
     #   requests-mock
     #   sphinx
     #   zgw-consumers
@@ -880,13 +872,12 @@ wrapt==1.14.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   elastic-apm
-zgw-consumers[zds-client]==0.38.0
+zgw-consumers==0.38.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   commonground-api-common
     #   notifications-api-common
-    #   zgw-consumers
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip
