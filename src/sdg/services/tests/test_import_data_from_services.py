@@ -1,7 +1,7 @@
 import json
 import os
 from datetime import datetime
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from zgw_consumers.models import Service
 
@@ -123,7 +123,6 @@ class TestImportDataFromServices(CommandTestCase):
         )
         self.assertEqual(org.rol, "Ondersteuningsorganisatie")
 
-    @patch("requests.get")
-    def test_import_data_from_services_unreachable_api(self, retrieve_mock):
-        retrieve_mock.side_effect = ConnectionError
+    @patch("requests.get", side_effect=ConnectionError)
+    def test_import_data_from_services_unreachable_api(self, retrieve_mock: MagicMock):
         self.call_command("import_data_from_services")

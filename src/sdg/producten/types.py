@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 from sdg.core.types import LabeledTooltip
 
@@ -17,7 +17,7 @@ class ProductFieldMetadata:
     value: Any
     help_text: str
     type: str
-    configuration: Optional[LabeledTooltip] = None
+    configuration: LabeledTooltip | None = None
 
     def __str__(self):
         return self.value
