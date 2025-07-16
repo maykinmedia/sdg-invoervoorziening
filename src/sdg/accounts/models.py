@@ -19,6 +19,10 @@ from sdg.conf.utils import org_type_cfg
 from .managers import UserInvitationManager, UserManager
 
 
+def get_random_32_char_string():
+    return get_random_string(length=32)
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     """
     Use the built-in user model.
@@ -80,7 +84,7 @@ class UserInvitation(models.Model):
         verbose_name=_("key"),
         max_length=64,
         unique=True,
-        default=get_random_string(length=32),
+        default=get_random_32_char_string,
     )
     accepted = models.BooleanField(verbose_name=_("geaccepteerd"), default=False)
 
