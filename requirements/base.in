@@ -1,6 +1,6 @@
 # Core python libraries
 Pillow  # handle images
-psycopg2 >= 2.9.10 # database driver
+psycopg2 <= 2.9.10 # database driver
 pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
@@ -14,29 +14,29 @@ furl
 django ~= 5.2
 django-admin-index
 django-better-admin-arrayfield
-django-axes >= 8.0.0
+django-axes
 django-choices
-django-decorator-include >= 3.3
-django-hijack >= 3.7.2
+django-decorator-include
+django-hijack ~= 3.7.0
 django-redis
-django-rosetta >= 0.10.2
-django-sniplates >= 0.7.2
-django-allauth >= 65.9.0
-django-markdownx >= 4.0.0
-django-markdownify >= 0.9.5
-django-filter ~= 25.1
-django-timeline-logger >= 5.0.0
+django-rosetta
+django-sniplates
+django-allauth
+django-markdownx
+django-markdownify
+django-filter
+django-timeline-logger
 celery
-django-celery-beat >= 2.8.1
-maykin-2fa >= 1.0.0
+django-celery-beat
+maykin-2fa
 # API libraries
-djangorestframework >= 3.16.0
+djangorestframework
 djangorestframework-camel-case
-drf-spectacular >= 0.28.0  # api documentation
+drf-spectacular # api documentation
 # django-extra-fields
 # django-filter
 # drf-yasg  # api documentation
-commonground-api-common >= 2.6.6
+commonground-api-common
 
 # WSGI servers & monitoring - production oriented
 uwsgi
