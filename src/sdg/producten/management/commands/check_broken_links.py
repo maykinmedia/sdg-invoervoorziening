@@ -297,7 +297,6 @@ class Command(BaseCommand):
                             continue
 
                         if self.is_valid_url(url):
-
                             product_dict[product.pk][
                                 f"online aanvragen ({localized_product.taal})"
                             ].append((label, value))
@@ -315,7 +314,7 @@ class Command(BaseCommand):
                         for link in soup.find_all("a"):
                             text = link.get_text()  # Get the label, request VNG.
                             href = link.get("href", "")
-                            if self.is_valid_url(url):
+                            if self.is_valid_url(href):
                                 product_dict[product.pk][occurring_field].append(
                                     (text, href)
                                 )
