@@ -26,10 +26,11 @@ class AdminTests(WebTest):
     def test_invitation_email_is_sent_after_creating_user(self):
         response = self.app.get(self.user_add_url)
 
-        response.form["email"] = "test@example.com"
-        response.form["first_name"] = "Arthur"
-        response.form["last_name"] = "Dent"
-        response.form.submit()
+        form = response.forms["user_form"]
+        form["email"] = "test@example.com"
+        form["first_name"] = "Arthur"
+        form["last_name"] = "Dent"
+        form.submit()
 
         self.assertEqual(len(mail.outbox), 1)
 

@@ -13,9 +13,6 @@ from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
-INVITATION_URL = "organisaties:roles:invitation_create"
-INVITATION_ACCEPT_URL = "invitation_accept"
-
 User = get_user_model()
 
 
@@ -52,7 +49,10 @@ class InvitationTests(WebTest):
 
     def test_manager_can_create_invitation(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
 
         self.assertEqual(User.objects.count(), 1)
@@ -68,7 +68,10 @@ class InvitationTests(WebTest):
 
     def test_manager_can_create_invitation_for_existing_user(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
         self.extra_user = UserFactory.create(email="test@example.com")
         self.assertEqual(User.objects.count(), 2)
@@ -91,12 +94,19 @@ class InvitationTests(WebTest):
         )
         self.app.set_user(editor_user)
         self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk}), status=403
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            ),
+            status=403,
         )
 
     def test_invitation_email_is_sent(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
 
         self._fill_invitation_form(response.form)
@@ -109,7 +119,10 @@ class InvitationTests(WebTest):
     @override_settings(SDG_ORGANIZATION_TYPE="municipality")
     def test_invitation_template_is_correct(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
 
         self._fill_invitation_form(response.form)
@@ -134,7 +147,10 @@ class InvitationTests(WebTest):
     )
     def test_invitation_template_is_correct_for_organization_type(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
 
         self._fill_invitation_form(response.form)
@@ -159,14 +175,17 @@ class InvitationTests(WebTest):
 
     def test_can_accept_invitation(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
         self._fill_invitation_form(response.form)
         response.form.submit()
 
         invite = UserInvitation.objects.get()
         response = self.app.get(
-            reverse(INVITATION_ACCEPT_URL, kwargs={"key": invite.key})
+            reverse("accounts:invitation_accept", kwargs={"key": invite.key})
         )
         response.form["password1"] = "Test@1234"
         response.form["password2"] = "Test@1234"
@@ -180,7 +199,10 @@ class InvitationTests(WebTest):
 
     def test_consultant_can_accept_invitation(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
         self._fill_invitation_form(
             response.form,
@@ -194,7 +216,7 @@ class InvitationTests(WebTest):
 
         invite = UserInvitation.objects.get()
         response = self.app.get(
-            reverse(INVITATION_ACCEPT_URL, kwargs={"key": invite.key})
+            reverse("accounts:invitation_accept", kwargs={"key": invite.key})
         )
         response.form["password1"] = "Test@1234"
         response.form["password2"] = "Test@1234"
@@ -209,14 +231,17 @@ class InvitationTests(WebTest):
 
     def test_accept_invitation_invalid_password_fails(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
         self._fill_invitation_form(response.form)
         response.form.submit()
 
         invite = UserInvitation.objects.get()
         response = self.app.get(
-            reverse(INVITATION_ACCEPT_URL, kwargs={"key": invite.key})
+            reverse("accounts:invitation_accept", kwargs={"key": invite.key})
         )
         response.form["password1"] = "bad"
         response.form["password2"] = "bad"
@@ -237,12 +262,15 @@ class InvitationTests(WebTest):
 
     def test_cannot_accept_invitation_with_invalid_key(self):
         response = self.app.get(
-            reverse(INVITATION_URL, kwargs={"pk": self.lokale_overheid.pk})
+            reverse(
+                "organisaties:roles:invitation_create",
+                kwargs={"pk": self.lokale_overheid.pk},
+            )
         )
         self._fill_invitation_form(response.form)
         response.form.submit()
 
         self.app.get(
-            reverse(INVITATION_ACCEPT_URL, kwargs={"key": "random1234"}),
+            reverse("accounts:invitation_accept", kwargs={"key": "random1234"}),
             status=404,
         )

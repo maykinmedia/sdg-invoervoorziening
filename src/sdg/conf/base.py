@@ -107,9 +107,9 @@ INSTALLED_APPS = [
     "django_otp",
     "django_otp.plugins.otp_static",
     "django_otp.plugins.otp_totp",
-    "maykin_2fa",
     "two_factor",
     "two_factor.plugins.webauthn",
+    "maykin_2fa",
     "rijkshuisstijl",
     # Optional applications.
     "ordered_model",

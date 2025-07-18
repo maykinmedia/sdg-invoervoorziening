@@ -39,7 +39,10 @@
         <a href="{{ 2fa_account_security_url }}">{% trans "Beheer two-factor auth" %}</a> /
     {% endif %}
 
-    <a href="{% url 'admin:logout' %}">{% trans 'Uitloggen' %}</a>
+    <form id="logout-form" method="post" action="{% url 'admin:logout' %}">
+        {% csrf_token %}
+        <button type="submit">{% trans 'Log out' %}</button>
+    </form>
 {% endblock %}
 
 {% block nav-global %}

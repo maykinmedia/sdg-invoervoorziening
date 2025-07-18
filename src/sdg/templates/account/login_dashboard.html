@@ -13,7 +13,7 @@
     <p class="login__container-info">{% blocktrans %}"Hier beheert u {{ org_type_cfg.name }} specifieke productbeschrijvingen" {% endblocktrans %}</p>
     <p class="login__container-info">{% blocktrans %}Deze informatie wordt gepresenteerd op <a href="#">Rijksoverheid.nl</a> en <a href="#">Digitaalondernemersplein.nl</a>.{% endblocktrans %}</p>
     <p class="login__container-info">{% trans "Log in om verder te gaan." %}</p>
-    <a class="login__button button" href="{% url 'account_login' %}?next={{ next }}">{% trans "Inloggen" %}<i class="fa fa-sign-in-alt login__button__icon"></i>
+    <a class="login__button button" href="{% url 'two_factor:login' %}?next={{ next }}">{% trans "Inloggen" %}<i class="fa fa-sign-in-alt login__button__icon"></i>
     </a>
 {% endblock %}
 

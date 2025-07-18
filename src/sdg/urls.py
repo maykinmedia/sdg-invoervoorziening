@@ -2,52 +2,26 @@ from django.apps import apps
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 
 from decorator_include import decorator_include
-from maykin_2fa import monkeypatch_admin
-from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
-from two_factor.urls import urlpatterns as tf_urls
 
-from sdg import miscellaneous_urls
-from sdg.accounts.views.password_reset import PasswordResetView, ResendInventation
+from sdg.accounts.tf_urls import urlpatterns as tf_urls
 from sdg.decorators import enabled
 
 handler500 = "sdg.utils.views.server_error"
+admin.site.enable_nav_sidebar = False
 admin.site.site_header = _("PDC voor de SDG")
 admin.site.site_title = _("PDC voor de SDG")
 admin.site.index_title = _("PDC beheer voor de SDG")
-admin.site.enable_nav_sidebar = False
-
-monkeypatch_admin()
 
 urlpatterns = [
-    path(
-        "admin/password_reset/",
-        PasswordResetView.as_view(),
-        name="admin_password_reset",
-    ),
-    path(
-        "admin/password_reset/done/",
-        auth_views.PasswordResetDoneView.as_view(),
-        name="password_reset_done",
-    ),
-    path("admin/hijack/", include("hijack.urls")),
-    path("admin/resend_invite", ResendInventation.as_view(), name="resend_token"),
-    path("admin/", include((urlpatterns, "maykin_2fa"))),
-    path("admin/", include((webauthn_urlpatterns, "admin_two_factor"))),
-    path("admin/", admin.site.urls),
+    path("admin/", include("sdg.admin.urls")),
     path("api/", include("sdg.api.urls", namespace="api")),
     # cms - these urls can be disabled if desired though the setting SDG_CMS_ENABLED
     path("markdownx/", decorator_include(enabled(), "markdownx.urls")),
-    path("accounts/", decorator_include(enabled(), "allauth.urls")),
-    path(
-        "accounts/",
-        decorator_include(enabled(), "sdg.accounts.urls", namespace="accounts"),
-    ),
     path(
         "organizations/",
         decorator_include(enabled(), "sdg.organisaties.urls", namespace="organisaties"),
@@ -61,7 +35,11 @@ urlpatterns = [
         decorator_include(enabled(), "sdg.cmsapi.urls", namespace="cmsapi"),
     ),
     path("ref/", include("vng_api_common.urls")),
-    path("", decorator_include(enabled(), miscellaneous_urls)),
+    # account urls:
+    path(
+        "account/",
+        decorator_include(enabled(), "sdg.accounts.urls", namespace="accounts"),
+    ),
     path("", decorator_include(enabled(), tf_urls)),
 ]
 
