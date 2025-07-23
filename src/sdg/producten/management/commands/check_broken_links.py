@@ -1,5 +1,6 @@
 from collections import defaultdict
-from itertools import chain
+from collections.abc import Sequence
+from typing import TypedDict
 from urllib import parse
 
 from django.core.management import BaseCommand
@@ -8,6 +9,7 @@ import markdown
 import requests
 import urllib3
 from bs4 import BeautifulSoup
+from glom import glom
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from zgw_consumers.concurrent import parallel
@@ -17,32 +19,27 @@ from sdg.producten.models import BrokenLinks, Product
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-FIELD_NAMES_CONFIG = {
-    "input_fields": [
-        "product_titel_decentraal",
-        "product_valt_onder_toelichting",
-        "product_aanwezig_toelichting",
-    ],
-    "markdown_fields": [
-        "specifieke_tekst",
-        "vereisten",
-        "bewijs",
-        "procedure_beschrijving",
-        "kosten_en_betaalmethoden",
-        "uiterste_termijn",
-        "bezwaar_en_beroep",
-        "wtd_bij_geen_reactie",
-    ],
-    "urls_fields": [
-        "verwijzing_links",
-    ],
-    "decentrale_label": ["decentrale_procedure_label"],
-    "decentrale_link": ["decentrale_procedure_link"],
-}
+MARKDOWN_LINKS = [
+    "specifieke_tekst",
+    "vereisten",
+    "bewijs",
+    "procedure_beschrijving",
+    "kosten_en_betaalmethoden",
+    "uiterste_termijn",
+    "bezwaar_en_beroep",
+    "wtd_bij_geen_reactie",
+]
+
 VALID_URL_ADAPTERS = ("tel:", "sms:", "mailto:")
 INVALID_URL_ADAPTERS = "geo:"
 SUCCES_STATUS_CODE = 200
 ANY_ERROR_STATUS_CODE = 420
+
+
+class FieldUrl(TypedDict):
+    field: str
+    label: str
+    url: str
 
 
 class Command(BaseCommand):
@@ -173,8 +170,7 @@ class Command(BaseCommand):
         product_pk,
         url_label,
         founded_status_code,
-        founded_broken_link_ids,
-    ):
+    ) -> int | None:
         """
         Increment or delete the broken_link based on the status_code
 
@@ -184,7 +180,6 @@ class Command(BaseCommand):
         :param url_label: The 'label' of the url in the content.
         :param founded_status_code: The response status code of the requested url
         :param error_message: Any error message from the request
-        :param founded_broken_link_ids: A list containing all the checked ids
         """
         broken_link, _ = BrokenLinks.objects.get_or_create(
             product_id=product_pk,
@@ -196,19 +191,19 @@ class Command(BaseCommand):
         # Good status - delete broken link entry
         if founded_status_code not in [404, 420]:
             broken_link.delete()
+            return
 
         # Definitely broken
-        else:
-            broken_link.increment_error_count()
-            broken_link.save()
-            founded_broken_link_ids.append(broken_link.id)
+        broken_link.increment_error_count()
+        broken_link.save()
+        return broken_link.id
 
-    def reset_broken_links(self, founded_broken_link_ids=[], reset_all=False):
+    def reset_broken_links(self, ignore_broken_ids=list, reset_all=False):
         """
         Reset and delete every BrokenLink that is indexed in the database, but not in the content.
         Or reset each broken link in the DB.
 
-        :param founded_broken_link_ids: A list containing all the checked ids (each broken link that is not in this list will be removed).
+        :param ignore_broken_ids: A list containing all the ids which we don't want to reset.
         :param reset_all: Clean all the links or just the excluded ones.
         """
         if reset_all:
@@ -223,9 +218,7 @@ class Command(BaseCommand):
             )
         else:
             # Delete links that are no longer broken or don't exist anymore
-            cleanup_objects = BrokenLinks.objects.exclude(
-                id__in=founded_broken_link_ids
-            )
+            cleanup_objects = BrokenLinks.objects.exclude(id__in=ignore_broken_ids)
             total = cleanup_objects.count()
             cleanup_objects.delete()
 
@@ -260,79 +253,60 @@ class Command(BaseCommand):
 
         return True
 
-    def get_url_set(self, products: Product):
-        url_set = set()
-        product_dict = defaultdict(lambda: defaultdict(list))
+    def localized_field_verbose_name(self, field_name: str, taal: str):
+        if configured_field_name := getattr(
+            ProductFieldConfiguration.get_solo().localizedproductfieldconfiguration_set.get(
+                taal=taal
+            ),
+            f"localizedproduct_{field_name}",
+        ):
+            field_name = configured_field_name[0][0]
 
-        # Def helper function.
-        def localized_field_verbose_name(field_name: str, taal: str):
-            configured_field_name = getattr(
-                ProductFieldConfiguration.get_solo().localizedproductfieldconfiguration_set.get(
-                    taal="nl"
-                ),
-                f"localizedproduct_{field_name}",
-            )[0][0]
-            return f"{configured_field_name} ({taal})"
+        return f"{field_name} ({taal})"
+
+    def get_product_urls(self, products: Sequence[Product]):
+        product_dict = defaultdict(list)
 
         for product in products:
             for localized_product in product.most_recent_version.vertalingen.all():
-                decentrale_field = (None, None)
-                for key, value in localized_product.__dict__.items():
-                    if key in FIELD_NAMES_CONFIG["decentrale_label"]:
-                        _, url = decentrale_field
-                        if not url:
-                            decentrale_field = (value, url)
-                            continue
+                for markdown_field in MARKDOWN_LINKS:
+                    occurring_field = self.localized_field_verbose_name(
+                        markdown_field, localized_product.taal
+                    )
+                    value = getattr(localized_product, markdown_field)
+                    html = markdown.markdown(value)
+                    soup = BeautifulSoup(html, "html.parser")
+                    for link in soup.find_all("a"):
+                        text = link.get_text()  # Get the label, request VNG.
+                        href = link.get("href", "")
+                        if self.is_valid_url(href):
+                            product_dict[product.id].append(
+                                FieldUrl(field=occurring_field, label=text, url=text)
+                            )
 
-                        if self.is_valid_url(url):
-                            product_dict[product.pk][
-                                f"online aanvragen ({localized_product.taal})"
-                            ].append((value, url))
-                            url_set.add(url)
-
-                    elif key in FIELD_NAMES_CONFIG["decentrale_link"]:
-                        label, _ = decentrale_field
-                        if not label:
-                            decentrale_field = (label, value)
-                            continue
-
-                        if self.is_valid_url(url):
-
-                            product_dict[product.pk][
-                                f"online aanvragen ({localized_product.taal})"
-                            ].append((label, value))
-                            url_set.add(value)
-
-                    if not value:
-                        continue
-
-                    if key in FIELD_NAMES_CONFIG["markdown_fields"]:
-                        occurring_field = localized_field_verbose_name(
-                            key, localized_product.taal
+                if self.is_valid_url(localized_product.decentrale_procedure_link):
+                    occurring_field = self.localized_field_verbose_name(
+                        "decentrale_procedure_link", localized_product.taal
+                    )
+                    product_dict[product.id].append(
+                        FieldUrl(
+                            field=occurring_field,
+                            label=localized_product.decentrale_procedure_label,
+                            url=localized_product.decentrale_procedure_link,
                         )
-                        html = markdown.markdown(value)
-                        soup = BeautifulSoup(html, "html.parser")
-                        for link in soup.find_all("a"):
-                            text = link.get_text()  # Get the label, request VNG.
-                            href = link.get("href", "")
-                            if self.is_valid_url(url):
-                                product_dict[product.pk][occurring_field].append(
-                                    (text, href)
-                                )
-                                url_set.add(href)
+                    )
 
-                    elif key in FIELD_NAMES_CONFIG["urls_fields"]:
-                        occurring_field = localized_field_verbose_name(
-                            key, localized_product.taal
-                        )
-                        for label, url in value:
-                            if self.is_valid_url(url):
-                                product_dict[product.pk][occurring_field].append(
-                                    (label, url)
-                                )
-                                url_set.add(url)
+                if verwijzing_links := localized_product.verwijzing_links:
+                    occurring_field = self.localized_field_verbose_name(
+                        "verwijzing_links", localized_product.taal
+                    )
+                    for label, url in verwijzing_links:
+                        if self.is_valid_url(url):
+                            product_dict[product.id].append(
+                                FieldUrl(field=occurring_field, label=label, url=url)
+                            )
 
-        return (url_set, product_dict)
+        return product_dict
 
     def handle(self, **options):
         # Handle Reset
@@ -349,40 +323,28 @@ class Command(BaseCommand):
             "most_recent_version__vertalingen"
         ).exclude_generic_status()
 
-        (url_set, product_dict) = self.get_url_set(products)
-
-        url_list = list(url_set)
+        product_urls: dict[int : list[FieldUrl]] = dict(self.get_product_urls(products))
 
         with parallel() as executor:
-            # Map all futures to the executor
-            futures = executor.map(self.check_url_with_retry, url_list)
+            # create a set of unique urls from the product_urls
+            unique_urls = set(glom(product_urls, "**.url"))
+            futures = executor.map(self.check_url_with_retry, unique_urls)
 
-            # Process results
             for url, status_code, error_msg in futures:
                 url_response_dict[url] = (status_code, error_msg)
 
-        data_chain = chain.from_iterable(
-            [
-                (
-                    (product_pk, field_name, url_label, url_href)
-                    for product_pk, product_fields in product_dict.items()
-                    for field_name, urls in product_fields.items()
-                    for url_label, url_href in urls
-                )
-            ]
-        )
+        for product_id, url_information_list in product_urls.items():
+            for url_information in url_information_list:
+                url = url_information["url"]
+                status_code, _ = url_response_dict[url]
 
-        for product_pk, field_name, url_label, url_href in data_chain:
-            status_code, error_msg = url_response_dict.get(
-                url_href, (ANY_ERROR_STATUS_CODE, "URL not checked")
-            )
-            self.handle_response_code(
-                url=url_href,
-                occurring_field=field_name,
-                product_pk=product_pk,
-                url_label=url_label,
-                founded_status_code=status_code,
-                founded_broken_link_ids=founded_broken_link_ids,
-            )
+                if broken_link_id := self.handle_response_code(
+                    url=url,
+                    occurring_field=url_information["field"],
+                    product_pk=product_id,
+                    url_label=url_information["label"],
+                    founded_status_code=status_code,
+                ):
+                    founded_broken_link_ids.append(broken_link_id)
 
-        self.reset_broken_links(founded_broken_link_ids=founded_broken_link_ids)
+        self.reset_broken_links(ignore_broken_ids=founded_broken_link_ids)
