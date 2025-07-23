@@ -23,9 +23,6 @@ from sdg.core.tests.factories.config import SiteConfigurationFactory
 from sdg.core.tests.factories.logius import ThemaFactory, UniformeProductnaamFactory
 from sdg.organisaties.models import LokaleOverheid
 from sdg.organisaties.tests.factories.overheid import BevoegdeOrganisatieFactory
-from sdg.producten.management.commands.check_broken_links import (
-    Command as CheckBrokenLinksCommand,
-)
 from sdg.producten.tests.factories.product import (
     GeneriekProductFactory,
     ReferentieProductFactory,
@@ -506,24 +503,3 @@ class TestSendNotificationMail(CommandTestCase):
 
         self.assertIn("No eligable users found.", out)
         self.assertEqual(len(mail.outbox), 0)
-
-
-class TestCommandCheckBrokenLinks(CommandTestCase):
-    def setUp(self):
-        super().setUp()
-        self.command = CheckBrokenLinksCommand
-
-    def test_handle_response_code_successful(self):
-        out = self.call_command("check_broken_links")
-        self.assertIn("Deleted 0 old BrokenLinks.", out)
-
-    def test_clean_up_removed_urls(self):
-        removed_links_count = 0
-        out = self.call_command("check_broken_links")
-        self.assertIn(f"Deleted {removed_links_count} old BrokenLinks.", str(out))
-
-    def test_reset_all_broken_links(self):
-        out = self.call_command("check_broken_links", "--reset")
-        self.assertIn(
-            "Successfully cleared the error_count of every BrokenLink.", str(out)
-        )
