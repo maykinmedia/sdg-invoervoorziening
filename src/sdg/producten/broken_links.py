@@ -1,7 +1,9 @@
 from collections import defaultdict
 from collections.abc import Sequence
 from typing import TypedDict
-from urllib import parse
+
+from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 
 import markdown
 import requests
@@ -38,7 +40,7 @@ ANY_ERROR_STATUS_CODE = 420
 __all__ = [
     "reset_broken_links",
     "get_product_urls",
-    "check_broken_link",
+    "check_broken_links",
 ]
 
 
@@ -183,9 +185,8 @@ def _handle_response_code(
         url_label=url_label,
     )
 
-    # Good status - delete broken link entry
+    # Good status return without ignore reference
     if founded_status_code not in [404, 420]:
-        broken_link.delete()
         return
 
     # Definitely broken
@@ -214,11 +215,9 @@ def _is_valid_url(url: str):
         return False
 
     # Check for valid scheme
-    parsed = parse.urlparse(url)
-    if not parsed.scheme and not url.startswith(("www.", *VALID_URL_ADAPTERS)):
-        if not parsed.netloc and parsed.path:
-            # This might be a relative URL - keep it for checking
-            return True
+    try:
+        URLValidator()(url)
+    except ValidationError:
         return False
 
     return True
@@ -236,7 +235,7 @@ def _localized_field_verbose_name(field_name: str, taal: str):
     return f"{field_name} ({taal})"
 
 
-def reset_broken_links(ignore_broken_ids: list = list, reset_all=False):
+def reset_broken_links(ignore_broken_ids: list | None = None, reset_all=False):
     """
     Reset and delete every BrokenLink that is indexed in the database, but not in the content.
     Or reset each broken link in the DB.
@@ -250,6 +249,11 @@ def reset_broken_links(ignore_broken_ids: list = list, reset_all=False):
             link.reset_error_count()
 
         return
+
+    if not ignore_broken_ids:
+        ignore_broken_ids = []
+
+    assert isinstance(ignore_broken_ids, list)
 
     # Delete links that are no longer broken or don't exist anymore
     cleanup_objects = BrokenLinks.objects.exclude(id__in=ignore_broken_ids)
@@ -304,7 +308,7 @@ def get_product_urls(products: Sequence[Product]) -> {int: [FieldUrl]}:
     return product_dict
 
 
-def check_broken_link():
+def check_broken_links():
     founded_broken_link_ids: list = []
     url_response_dict = defaultdict(tuple)
 

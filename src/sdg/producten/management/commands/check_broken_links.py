@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 
-from ...broken_links import check_broken_link, reset_broken_links
+from ...broken_links import check_broken_links, reset_broken_links
 
 
 class Command(BaseCommand):
@@ -25,5 +25,5 @@ class Command(BaseCommand):
             )
             return
 
-        total = check_broken_link()
+        total = check_broken_links()
         self.stdout.write(self.style.SUCCESS(f"Deleted {total} old BrokenLink(s)."))
