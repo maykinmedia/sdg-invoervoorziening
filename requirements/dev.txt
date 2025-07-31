@@ -312,7 +312,7 @@ django-rest-framework-condition==0.1.1
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
     #   vng-api-common
-django-rijkshuisstijl @ git+https://github.com/maykinmedia/django-rijkshuisstijl.git
+django-rijkshuisstijl==0.2.0
     # via
     #   -c requirements/ci.txt
     #   -r requirements/ci.txt
