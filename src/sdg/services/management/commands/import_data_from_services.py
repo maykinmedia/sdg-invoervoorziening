@@ -83,6 +83,10 @@ class Command(BaseCommand):
                 generiek_product = localized_generic_product.generiek_product
                 generiek_product.verantwoordelijke_organisaties.clear()
 
+                # Sometimes, the "organisaties" key is none instead of an empty list.
+                if not product["organisaties"]:
+                    continue
+
                 for org in product["organisaties"]:
                     org_obj = Overheidsorganisatie.objects.filter(
                         owms_identifier=org["owmsUri"]
