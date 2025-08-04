@@ -209,7 +209,7 @@ class LocatieSerializer(LocatieBaseSerializer):
         except IntegrityError:
             raise serializers.ValidationError(
                 {
-                    "": f"Er bestaat al een locatie met de naam '{ validated_data.get('naam') }' voor de ingevoerde organisatie."
+                    "": f"Er bestaat al een locatie met de naam '{validated_data.get('naam')}' voor de ingevoerde organisatie."
                 }
             )
 

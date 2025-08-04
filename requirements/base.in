@@ -1,6 +1,6 @@
 # Core python libraries
 Pillow  # handle images
-psycopg2 < 2.9 # database driver
+psycopg2 <= 2.9.10 # database driver
 pytz  # handle timezones
 python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
@@ -11,14 +11,13 @@ email-validator
 furl
 
 # Framework libraries
-django ~= 3.2
+django ~= 5.2
 django-admin-index
 django-better-admin-arrayfield
 django-axes
 django-choices
 django-decorator-include
-django-hijack ~= 2.3.0
-django-hijack-admin
+django-hijack ~= 3.7.0
 django-redis
 django-rosetta
 django-sniplates
@@ -29,16 +28,15 @@ django-filter
 django-timeline-logger
 celery
 django-celery-beat
-maykin-django-two-factor-auth[phonenumbers]
-
+maykin-2fa
 # API libraries
 djangorestframework
 djangorestframework-camel-case
-drf-spectacular  # api documentation
+drf-spectacular # api documentation
 # django-extra-fields
 # django-filter
 # drf-yasg  # api documentation
-vng-api-common
+commonground-api-common
 
 # WSGI servers & monitoring - production oriented
 uwsgi

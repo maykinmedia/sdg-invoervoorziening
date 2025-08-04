@@ -2,7 +2,7 @@ import csv
 import logging
 import os
 from tempfile import NamedTemporaryFile
-from typing import Any, Dict, List
+from typing import Any
 
 from django.core.management import BaseCommand, CommandError
 
@@ -43,7 +43,7 @@ class OwmsParser:
         else:
             raise ParserException("File format does not exist")
 
-    def xml(self, filename: str) -> List[Dict[str, Any]]:
+    def xml(self, filename: str) -> list[dict[str, Any]]:
         if not self.xml_column_names:
             raise ParserException("Invalid XML column names")
 
@@ -57,7 +57,7 @@ class OwmsParser:
             for value in values
         ]
 
-    def csv(self, filename: str) -> List[Dict[str, Any]]:
+    def csv(self, filename: str) -> list[dict[str, Any]]:
         with open(filename, encoding="utf-8-sig") as f:
             data = csv.DictReader(f)
             return list(data)
@@ -94,7 +94,7 @@ class ParserCommand(BaseCommand):
         else:
             self.stdout.write(self.style.SUCCESS(f"Done ({created_count} objects)."))
 
-    def parse(self, filename) -> List[Dict[str, Any]]:
+    def parse(self, filename) -> list[dict[str, Any]]:
         try:
             return self.parser.parse(filename)
         except ParserException:

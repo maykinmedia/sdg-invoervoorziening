@@ -2,6 +2,7 @@ from django.test import override_settings
 from django.urls import reverse
 
 from django_webtest import WebTest
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
@@ -10,6 +11,7 @@ HOME_URL = "core:home"
 CARD_SELECTOR = ".cards__card"
 
 
+@disable_mfa()
 class HomeViewTests(WebTest):
     def setUp(self):
         super().setUp()
@@ -23,7 +25,6 @@ class HomeViewTests(WebTest):
         RoleFactory.create_batch(3)
 
         response = self.app.get(reverse(HOME_URL))
-
         municipalities = response.pyquery(CARD_SELECTOR)
 
         self.assertEqual(municipalities.length, 2)

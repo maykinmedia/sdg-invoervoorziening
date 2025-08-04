@@ -1,4 +1,4 @@
-from django.utils.datetime_safe import datetime
+from datetime import datetime
 
 PRODUCT_EDIT_URL = "organisaties:catalogi:producten:edit"
 

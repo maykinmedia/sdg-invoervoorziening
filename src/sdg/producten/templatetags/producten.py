@@ -1,5 +1,4 @@
 from datetime import date, timedelta
-from typing import Literal
 
 from django import template
 

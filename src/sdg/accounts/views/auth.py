@@ -1,13 +1,12 @@
-from django.contrib.auth import user_login_failed
-from django.utils.decorators import method_decorator
+from django.conf import settings
+from django.contrib.auth import login
+from django.contrib.auth.views import LogoutView as AuthLogoutView
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 from allauth.account.utils import get_next_redirect_url
 from allauth.account.views import RedirectAuthenticatedUserMixin
-from axes.decorators import axes_dispatch, axes_form_invalid
 from two_factor.views import LoginView as _LoginView
-
-from sdg.accounts.forms import AuthenticationForm
 
 
 class LoginDashboardView(RedirectAuthenticatedUserMixin, TemplateView):
@@ -30,47 +29,29 @@ class LoginDashboardView(RedirectAuthenticatedUserMixin, TemplateView):
 
 
 class LoginView(_LoginView):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.form_list["auth"] = AuthenticationForm
-        self.__form = None
-
-    @method_decorator(axes_dispatch)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
-
-    @method_decorator(axes_form_invalid)
-    def _form_invalid(self, *args, **kwargs):
+    # template_name = "account/login.html"
+    # Overwrite the default two_factor LoginView to disable the 2fa step
+    # when the setting DISABLE_2FA is set to True.
+    # important to note that only accounts without devices will have the 2fa step
+    # disabled, when a device is set the step will still take place.
+    def done(self, form_list, **kwargs):
         """
-        Method called when a form is invalid (django-axes compat)
-        Ensure that the user_login_failed signal is sent when a token is invalid.
+        Login the user and redirect to the desired page.
         """
-        if self.request.POST.get("login_view-current_step") == "token":
-            user_login_failed.send(
-                sender=__name__,
-                credentials={
-                    "username": self.storage.authenticated_user.get_username(),
-                },
-                request=self.request,
-            )
+        user = self.get_user()
+        backends_to_skip_verification_for = getattr(
+            settings, "MAYKIN_2FA_ALLOW_MFA_BYPASS_BACKENDS", []
+        )
 
-    def _cache_wizard_form(self, form):
-        """
-        Cache the form instance to access the correct form.is_valid()
-        * Workaround for django-two-factor-auth + axes.
-        """
-        if self.__form and form.data == self.__form.data:
-            return self.__form
+        login(self.request, user)
+        device = getattr(self.get_user(), "otp_device", None)
 
-        self.__form = form
-        return form
+        if not device and user.backend in backends_to_skip_verification_for:
+            return redirect(self.get_success_url())
 
-    def get_form(self, *args, **kwargs):
-        form = super().get_form(*args, **kwargs)
-        return self._cache_wizard_form(form)
+        return super().done(form_list, **kwargs)
 
-    def post(self, *args, **kwargs):
-        form = self.get_form(data=self.request.POST, files=self.request.FILES)
-        if not form.is_valid():
-            self._form_invalid(self)
-        return super().post(*args, **kwargs)
+
+class LogoutView(AuthLogoutView):
+    http_method_names = ["get", "post"]
+    template_name = "account/logout.html"

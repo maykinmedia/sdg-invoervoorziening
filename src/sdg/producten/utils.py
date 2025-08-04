@@ -1,6 +1,5 @@
 from datetime import datetime
 from functools import lru_cache
-from typing import List
 
 from django.forms import BaseFormSet
 from django.utils import translation
@@ -41,7 +40,7 @@ def build_url_kwargs(product, catalog=None) -> dict:
     }
 
 
-def parse_changed_data(changed_data, *, form, language=None) -> List[dict]:
+def parse_changed_data(changed_data, *, form, language=None) -> list[dict]:
     """Parse changed data into correct JSON for `ProductVersie.bewerkte_velden`."""
 
     return [

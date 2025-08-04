@@ -1,19 +1,18 @@
 import uuid
 
-import django
 from django.test import override_settings
 from django.urls import reverse
 
 from django_webtest import WebTest
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from sdg.accounts.tests.factories import RoleFactory, SuperUserFactory
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import OverheidsorganisatieFactory
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
-from sdg.tests.utils import disable_2fa
 
 
-@disable_2fa
+@disable_mfa()
 class CMSUrlsPathTest(WebTest):
     def setUp(self):
         super().setUp()
@@ -41,8 +40,7 @@ class CMSUrlsPathTest(WebTest):
 
     def test_cms_enabled(self):
         cmsapi = self.app.get(reverse("cmsapi:api-root"), status="*")
-        reset = self.app.get(reverse("password_reset_complete"), status="*")
-        account = self.app.get(reverse("account_login"), status="*")
+        accounts = self.app.get(reverse("accounts:login_dashboard"), status="*")
         organizations = self.app.get(
             reverse("organisaties:roles:list", args=[str(self.lokale_overheid.id)]),
             status="*",
@@ -53,8 +51,7 @@ class CMSUrlsPathTest(WebTest):
         api = self.app.get(reverse("api:api-root"), status="*")
 
         self.assertEqual(cmsapi.status_code, 200)
-        self.assertEqual(reset.status_code, 200)
-        self.assertEqual(account.status_code, 302)
+        self.assertEqual(accounts.status_code, 302)
         self.assertEqual(organizations.status_code, 200)
         self.assertEqual(home.status_code, 302)
         self.assertEqual(two_factor.status_code, 200)
@@ -65,8 +62,7 @@ class CMSUrlsPathTest(WebTest):
     @override_settings(ROOT_URLCONF="sdg.urls")
     def test_cms_disabled(self):
         cmsapi = self.app.get(reverse("cmsapi:api-root"), status="*")
-        reset = self.app.get(reverse("password_reset_complete"), status="*")
-        account = self.app.get(reverse("account_login"), status="*")
+        accounts = self.app.get(reverse("accounts:login_dashboard"), status="*")
         organizations = self.app.get(
             reverse("organisaties:roles:list", args=[str(self.lokale_overheid.id)]),
             status="*",
@@ -78,8 +74,7 @@ class CMSUrlsPathTest(WebTest):
 
         # disabled
         self.assertEqual(cmsapi.status_code, 404)
-        self.assertEqual(reset.status_code, 404)
-        self.assertEqual(account.status_code, 404)
+        self.assertEqual(accounts.status_code, 404)
         self.assertEqual(organizations.status_code, 404)
         self.assertEqual(home.status_code, 302)
         self.assertEqual(two_factor.status_code, 404)

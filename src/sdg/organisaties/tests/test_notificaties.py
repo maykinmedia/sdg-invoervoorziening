@@ -1,12 +1,10 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.core import mail
 from django.urls import reverse
 from django.utils.timezone import now
 
 from django_webtest import WebTest
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
-from sdg.accounts.models import UserInvitation
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 from sdg.producten.tests.factories.product import (
@@ -18,6 +16,7 @@ from sdg.producten.tests.factories.product import (
 User = get_user_model()
 
 
+@disable_mfa()
 class NotificatiesTests(WebTest):
     def setUp(self):
         super().setUp()

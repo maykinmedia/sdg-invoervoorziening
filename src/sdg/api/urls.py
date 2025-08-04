@@ -26,7 +26,7 @@ router.register(
     "producten",
     ProductViewSet,
     [
-        routers.nested(
+        routers.Nested(
             "historie",
             ProductHistoryViewSet,
             basename="product-history",

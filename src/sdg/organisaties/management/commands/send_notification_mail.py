@@ -3,11 +3,10 @@ import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 from django.core.management import BaseCommand
-from django.db.models import Q
+from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.timezone import now
 
-from compat import render_to_string
 from dateutil.relativedelta import relativedelta
 
 from sdg.accounts.models import User

@@ -8,6 +8,7 @@ from django.utils.translation import gettext as _
 
 from django_webtest import WebTest
 from freezegun import freeze_time
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.conf.utils import org_type_cfg
@@ -36,6 +37,7 @@ from sdg.producten.tests.factories.product import (
 from sdg.producten.utils import build_url_kwargs, get_placeholder_maps
 
 
+@disable_mfa()
 class ProductUpdateViewTests(WebTest):
     def setUp(self):
         super().setUp()
@@ -364,9 +366,9 @@ class ProductUpdateViewTests(WebTest):
 
         response = self._submit_product_form_with_past_date(response.form)
 
+        form = response.context["version_form"]
         self.assertFormError(
-            response,
-            "version_form",
+            form,
             None,
             "De publicatiedatum kan niet in het verleden liggen.",
         )
@@ -600,9 +602,9 @@ class ProductUpdateViewTests(WebTest):
 
         response = self._submit_product_form_with_past_date(response.form)
 
+        form = response.context["version_form"]
         self.assertFormError(
-            response,
-            "version_form",
+            form,
             None,
             "De publicatiedatum kan niet in het verleden liggen.",
         )
@@ -708,9 +710,9 @@ class ProductUpdateViewTests(WebTest):
 
         response = self._submit_product_form_with_past_date(response.form)
 
+        form = response.context["version_form"]
         self.assertFormError(
-            response,
-            "version_form",
+            form,
             None,
             "De publicatiedatum kan niet in het verleden liggen.",
         )

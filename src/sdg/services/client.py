@@ -1,41 +1,40 @@
-from io import StringIO
-from pathlib import Path
-from urllib.parse import urljoin
+from __future__ import annotations
 
-from requests import HTTPError
-from zgw_consumers.client import ZGWClient, load_schema_file
+import logging
+
+import requests
+from zgw_consumers.client import build_client
+from zgw_consumers.models import Service
+from zgw_consumers.nlx import NLXClient
+
+logger = logging.getLogger(__name__)
+
+__all__ = ["get_client"]
 
 
-class SDGClient(ZGWClient):
-    default_schema = (
-        Path(__file__).parent / "data" / "default_schema.json"
-    ).read_text()
+def get_client(service: Service) -> SDGClient:
+    return build_client(service, client_factory=SDGClient)
 
-    def fetch_schema(self) -> None:
-        """
-        Override the default fetch_schema method to add missing operation ids.
-        """
+
+class SDGClient(NLXClient):
+    def _retrieve_recursive_from_url(self, url, results=None):
+        if not results:
+            results = []
+
+        if not url:
+            return results
+
+        response = self.get(url)
+        response.raise_for_status()
+
+        data = response.json()
+        results += data["results"]
+        return self._retrieve_recursive_from_url(data.get("next"), results)
+
+    def retrieve_products(self) -> list:
         try:
-            super().fetch_schema()
-        except HTTPError:
-            schema = self.default_schema.replace("{{products_url}}", self.products_url)
-            self._schema = load_schema_file(StringIO(schema))
+            return self._retrieve_recursive_from_url("producten")
+        except requests.RequestException as err:
+            logger.error("Something went wrong while retrieving products", err)
 
-        paths = self._schema["paths"]
-        paths[self.products_url]["get"]["operationId"] = "productenList"
-        paths[f"{self.products_url}/{{id}}"]["get"]["operationId"] = "productenRetrieve"
-
-    @property
-    def products_url(self):
-        return urljoin(self.base_path, "producten")
-
-    def retrieve_products(self):
-        response = {"next": self.products_url}
-        results = []
-        while response.get("next"):
-            try:
-                response = self.retrieve("productenList", response["next"])
-                results.extend(response["results"])
-            except ConnectionError:
-                break
-        return results
+        return []

@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from django_webtest import WebTest
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from sdg.accounts.tests.factories import UserFactory
 from sdg.conf.types.organization import (
@@ -10,6 +11,7 @@ from sdg.conf.types.organization import (
 from sdg.core.models import SiteConfiguration
 
 
+@disable_mfa()
 class SiteConfigurationTests(WebTest):
     def setUp(self):
         super().setUp()

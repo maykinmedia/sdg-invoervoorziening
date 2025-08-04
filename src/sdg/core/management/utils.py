@@ -1,7 +1,7 @@
 import datetime
 import logging
 import string
-from typing import Any, Dict, List
+from typing import Any
 
 from django.db.models import Q
 
@@ -23,7 +23,7 @@ from sdg.producten.models import (
 logger = logging.getLogger(__name__)
 
 
-def load_government_organisations(data: List[Dict[str, Any]]) -> int:
+def load_government_organisations(data: list[dict[str, Any]]) -> int:
     """
     Loads government organisations based on a list of dictionaries.
 
@@ -49,7 +49,7 @@ def load_government_organisations(data: List[Dict[str, Any]]) -> int:
     return count
 
 
-def load_organisation_subset(data: List[Dict[str, Any]]) -> int:
+def load_organisation_subset(data: list[dict[str, Any]]) -> int:
     """
     Identifies organisations in the list of all government organisations. It
     specifically does not add any organiation if it's not in the list of
@@ -78,7 +78,7 @@ def load_organisation_subset(data: List[Dict[str, Any]]) -> int:
     return count
 
 
-def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
+def load_informatiegebieden(data: list[dict[str, Any]]) -> int:
     """
     Loads information areas based on a list of dictionaries.
 
@@ -113,7 +113,7 @@ def load_informatiegebieden(data: List[Dict[str, Any]]) -> int:
     return count_themas
 
 
-def load_upn(data: List[Dict[str, Any]]) -> int:
+def load_upn(data: list[dict[str, Any]]) -> int:
     """
     Loads UPNs based on a list of dictionaries.
 

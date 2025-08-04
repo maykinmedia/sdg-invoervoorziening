@@ -5,7 +5,7 @@
 
 # Stage 1 - Backend build environment
 # includes compilers and build tooling to create the environment
-FROM python:3.10-slim-bullseye AS backend-build
+FROM python:3.12-slim-bookworm AS backend-build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         libpq-dev \
@@ -22,14 +22,13 @@ RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Ensure we use the latest version of pip
-RUN pip install "pip<24" -U
+RUN pip install pip setuptools -U
 COPY ./requirements /app/requirements
-RUN pip install -r requirements/setuptools.txt
 RUN pip install -r requirements/production.txt
 
 
 # Stage 2 - Install frontend deps and build assets
-FROM node:18-buster AS frontend-build
+FROM node:20-bookworm-slim AS frontend-build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         git \
@@ -61,7 +60,7 @@ RUN npm run build
 
 
 # Stage 3 - Build docker image suitable for production
-FROM python:3.10-slim-bullseye
+FROM python:3.12-slim-bookworm
 
 # Stage 3.1 - Set up the needed production dependencies
 # install all the dependencies for GeoDjango
@@ -85,7 +84,7 @@ RUN mkdir /app/log
 RUN mkdir /app/media
 
 # copy backend build deps
-COPY --from=backend-build /opt/venv/lib/python3.10 /usr/local/lib/python3.10
+COPY --from=backend-build /opt/venv/lib/python3.12 /usr/local/lib/python3.12
 COPY --from=backend-build /opt/venv/bin/uwsgi /usr/local/bin/uwsgi
 COPY --from=backend-build /app/src/ /app/src/
 

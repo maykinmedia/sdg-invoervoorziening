@@ -59,6 +59,17 @@ a:focus, a:hover {
   }
 }
 
+#user-tools button {
+  border-bottom: none;
+  text-decoration: underline;
+
+  &:focus,
+  &:hover {
+    color: var(--header-link-color);
+    margin-bottom: 0;
+  }
+}
+
 div.breadcrumbs {
   background: $color_primary;
   color: $color_primary_light;

@@ -1,5 +1,4 @@
 from datetime import date, datetime, timedelta
-from typing import Optional
 
 from django import forms
 from django.conf import settings
@@ -306,7 +305,7 @@ class VersionForm(forms.ModelForm):
     date = forms.DateTimeField(required=False)
 
     @staticmethod
-    def _get_version_instance(instance: ProductVersie) -> Optional[ProductVersie]:
+    def _get_version_instance(instance: ProductVersie) -> ProductVersie | None:
         """Decides between updating an existing product version or creating a new version instance.
 
         - Version is published: create a new version.

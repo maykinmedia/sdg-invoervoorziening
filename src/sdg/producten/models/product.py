@@ -3,7 +3,7 @@ from __future__ import annotations
 import datetime
 import uuid
 from functools import partialmethod
-from typing import Any, List, Optional
+from typing import Any
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -270,7 +270,7 @@ class Product(ProductFieldMixin, models.Model):
         )
 
     @cached_property
-    def beschikbare_talen(self) -> List[Language]:
+    def beschikbare_talen(self) -> list[Language]:
         """
         :returns: A list of available languages for this product.
         """
@@ -514,7 +514,7 @@ class ProductVersie(ProductFieldMixin, models.Model):
     def update_with_reference_texts(
         self,
         reference_product_version,
-        languages: Optional[List[TaalChoices]] = None,
+        languages: list[TaalChoices] | None = None,
         skip_filled_fields=False,
         availability_texts=None,
     ):

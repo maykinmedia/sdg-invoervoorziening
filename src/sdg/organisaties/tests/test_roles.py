@@ -1,12 +1,14 @@
 from django.urls import reverse_lazy
 
 from django_webtest import WebTest
+from maykin_2fa.test import disable_admin_mfa as disable_mfa
 
 from sdg.accounts.models import Role
 from sdg.accounts.tests.factories import RoleFactory, UserFactory
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 
+@disable_mfa()
 class RoleTests(WebTest):
     def setUp(self):
         super().setUp()

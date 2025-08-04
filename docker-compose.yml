@@ -23,8 +23,6 @@ services:
       - DB_HOST=db
       - CACHE_DEFAULT=redis:6379/0
       - CACHE_AXES=redis:6379/0
-      - TWO_FACTOR_PATCH_ADMIN=no
-      - TWO_FACTOR_FORCE_OTP_ADMIN=no
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - CELERY_LOGLEVEL=DEBUG

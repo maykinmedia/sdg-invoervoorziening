@@ -1,11 +1,11 @@
-from typing import Dict, List
-
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from zgw_consumers.models import Service
 
 from sdg.core.constants import DoelgroepChoices
+
+from .client import get_client
 
 
 class ServiceConfiguration(models.Model):
@@ -16,12 +16,12 @@ class ServiceConfiguration(models.Model):
         help_text=_("De doelgroep waarvoor deze service is geconfigureerd. "),
     )
 
-    def retrieve_products(self) -> List[Dict]:
+    def retrieve_products(self) -> list[dict]:
         """
         Fetch products according to the configured API.
         """
-        client = self.service.build_client()
-        return client.retrieve_products()
+        with get_client(self.service) as client:
+            return client.retrieve_products()
 
     class Meta:
         verbose_name = _("Serviceconfiguratie")

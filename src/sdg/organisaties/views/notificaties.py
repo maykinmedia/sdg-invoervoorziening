@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.utils import timezone
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.views.generic import ListView

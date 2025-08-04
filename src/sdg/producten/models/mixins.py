@@ -1,5 +1,3 @@
-from typing import List
-
 from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -38,7 +36,7 @@ class ProductFieldMixin(FieldConfigurationMixin):
                 configuration=field_config,
             )
 
-    def get_fields(self, fields=None) -> List[ProductFieldMetadata]:
+    def get_fields(self, fields=None) -> list[ProductFieldMetadata]:
         """Returns data for each field as a list of Field objects."""
         if not fields:
             fields = self.__class__._meta.fields

@@ -1,10 +1,9 @@
 from collections import defaultdict
-from typing import Dict
 
 events = defaultdict(list)
 
 
-def post_event(event_name: str, **kwargs) -> Dict[str, Exception]:
+def post_event(event_name: str, **kwargs) -> dict[str, Exception]:
     errors = {}
 
     for fn in events[event_name]:

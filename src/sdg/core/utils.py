@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime
-from typing import List
 
 from django.conf import settings
 from django.core.exceptions import FieldError
@@ -33,7 +32,7 @@ def unpack(item, default=empty):
     return item[0] if item else default
 
 
-def get_from_cache(instance, name, manager_methods: List = None):
+def get_from_cache(instance, name, manager_methods: list = None):
     """
     Check if prefetch/annotate cache is available from the manager.
     If there's nothing, it should be retrieved using manager methods.
