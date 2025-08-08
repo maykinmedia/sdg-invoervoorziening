@@ -101,21 +101,18 @@ def _request_head(session, url: str):
     else:
         parsed_url = url
 
-    try:
-        # Use GET with stream=True to avoid downloading the entire content
-        response = session.get(
-            parsed_url,
-            timeout=20,
-            stream=True,
-            allow_redirects=True,
-            verify=False,
-        )
-        # Close connection to avoid downloading entire content
-        response.close()
-        return response, None
+    # Use GET with stream=True to avoid downloading the entire content
+    response = session.get(
+        parsed_url,
+        timeout=20,
+        stream=True,
+        allow_redirects=True,
+        verify=False,
+    )
+    # Close connection to avoid downloading entire content
+    response.close()
 
-    except Exception as e:
-        return None, str(e)
+    return response
 
 
 def _check_url_with_retry(url: str):
@@ -138,7 +135,7 @@ def _check_url_with_retry(url: str):
 
     # for attempt in range(max_retries + 1):
     try:
-        response, error_msg = _request_head(session, url)
+        response = _request_head(session, url)
 
         if response:
             status_code = response.status_code
@@ -150,15 +147,13 @@ def _check_url_with_retry(url: str):
                     or b"404" in response.content
                 ):
                     status_code = 404
-            return (url, status_code, None)
-        else:
-            # If this is the last attempt, return error
-            return (url, ANY_ERROR_STATUS_CODE, error_msg)
 
-    except Exception as e:
-        # If this is the last attempt, return error
-        error_msg = str(e)
-        return (url, ANY_ERROR_STATUS_CODE, error_msg)
+            return url, status_code
+
+    except requests.RequestException:
+        pass
+
+    return url, ANY_ERROR_STATUS_CODE
 
 
 def _handle_response_code(
@@ -310,7 +305,7 @@ def get_product_urls(products: Sequence[Product]) -> {int: [FieldUrl]}:
 
 def check_broken_links():
     founded_broken_link_ids: list = []
-    url_response_dict = defaultdict(tuple)
+    url_response_dict = {}
 
     # Get all products
     products = Product.objects.prefetch_related(
@@ -324,15 +319,15 @@ def check_broken_links():
         unique_urls = set(glom(product_urls, "**.url"))
         futures = executor.map(_check_url_with_retry, unique_urls)
 
-        for url, status_code, error_msg in futures:
-            url_response_dict[url] = (status_code, error_msg)
+        for url, status_code in futures:
+            url_response_dict[url] = status_code
 
     for product_id, url_information_list in product_urls.items():
         for url_information in url_information_list:
             url_information: FieldUrl
 
             url = url_information["url"]
-            status_code, _ = url_response_dict[url]
+            status_code = url_response_dict[url]
 
             if broken_link_id := _handle_response_code(
                 url=url,
