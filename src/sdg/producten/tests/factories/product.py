@@ -10,7 +10,8 @@ from sdg.organisaties.tests.factories.overheid import (
     BevoegdeOrganisatieFactory,
     LocatieFactory,
 )
-from sdg.producten.models import GeneriekProduct, Product, ProductVersie
+
+from ...models import BrokenLinks, GeneriekProduct, Product, ProductVersie
 
 
 class GeneriekProductFactory(DjangoModelFactory):
@@ -84,3 +85,10 @@ class ReferentieProductVersieFactory(ProductVersieFactory):
 
 class SpecifiekProductVersieFactory(ProductVersieFactory):
     product = factory.SubFactory(SpecifiekProductFactory)
+
+
+class BrokenLinksFactory(DjangoModelFactory):
+    product = factory.SubFactory(ProductFactory)
+
+    class Meta:
+        model = BrokenLinks
