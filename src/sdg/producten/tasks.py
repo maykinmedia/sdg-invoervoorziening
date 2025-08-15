@@ -25,7 +25,10 @@ def update_generic_product_status():
     call_command("update_generic_product_status")
 
 
-@app.task()
+@app.task(
+    time_limit=60 * 60 * 12,  # 12 hours
+    soft_time_limit=60 * 60 * 11,  # 11 hours
+)
 def check_broken_links():
     """
     Create, update and remove broken links from the database.
