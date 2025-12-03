@@ -2,10 +2,10 @@
 PDC voor de SDG
 ===============
 
-:Version: 1.9.3
+:Version: 1.9.4
 :Source: https://github.com/maykinmedia/sdg-invoervoorziening
 :Keywords: sdg, pdc, gemeenten, provincies, waterschappen, vng, ipo, uvw
-:PythonVersion: 3.10
+:PythonVersion: 3.12
 
 |build-status| |coverage| |docker| |black| |python-versions|
 
@@ -46,8 +46,8 @@ API specificatie
 ================
 
 De API specificatie is beschikbaar in het Open API Specification (OAS) versie 3
-formaat. De versienummering volgt die van de SDG voorziening als geheel. Indien 
-een versie hieronder ontbreekt dan zijn er geen wijzigingen geweest in de API 
+formaat. De versienummering volgt die van de SDG voorziening als geheel. Indien
+een versie hieronder ontbreekt dan zijn er geen wijzigingen geweest in de API
 specificaties sinds de vorige versie.
 
 ==============  ==============  =============================
@@ -126,7 +126,7 @@ Licensed under the `EUPL`_.
     :alt: Docker image
     :target: https://hub.docker.com/r/maykinmedia/sdg-invoervoorziening
 
-.. |python-versions| image:: https://img.shields.io/badge/python-3.10%2B-blue.svg
+.. |python-versions| image:: https://img.shields.io/badge/python-3.12%2B-blue.svg
     :alt: Supported Python version
 
 

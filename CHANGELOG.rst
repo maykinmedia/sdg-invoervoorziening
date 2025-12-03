@@ -2,6 +2,15 @@
 Change history
 ==============
 
+1.9.4
+=====
+
+*Dec 3, 2025*
+
+* [#1033] Updated Django to 5.2
+* [#1035] Refactored broken links checker command to reduce errors
+* Implemented logging for doordrukken task
+
 1.9.3
 =====
 
@@ -45,7 +54,7 @@ Change history
 * [#989] Sort history by date
 * [#988] Add ability to change location order
 * [#994] Added option for management organization to force push texts
-* [#998] Added option for management organization to set products to not be 
+* [#998] Added option for management organization to set products to not be
   offered by default
 * [#987] Remove editor locks
 * [#997] Rework the blue edit options in the editor
@@ -268,7 +277,7 @@ Change history
 * [#758] Added localization for preview page
 * [#662] Added decentrale procedure label to CMS
 * [#819] Excluded products based on generic status
-* [#408] Organizations no longer have an enddate by default. 
+* [#408] Organizations no longer have an enddate by default.
 * [#408] Ensure the API does not return inactive organizations
 * [#807] Allow commas in dynamic array fields
 * [#576] Fixed edit view and added raadpleger on missing places.
@@ -476,7 +485,7 @@ project suitable for not only municipalities but also for provinces.
 * Fixed the way importing themes and information areas works
 * Fixed identifying municipalities in the list of government organisations
 * Refactored the way filling catalogs with products works
-* Various textual changes 
+* Various textual changes
 * [#520] Added succesfull messages on submit and delition of the user dropdown menu pages
 * [#448] Changed invite mail texts
 * [#510] changed max length of title fields from 80 to 100
