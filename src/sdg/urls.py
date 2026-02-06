@@ -38,7 +38,7 @@ urlpatterns = [
     # account urls:
     path(
         "account/",
-        decorator_include(enabled(), "sdg.accounts.urls", namespace="accounts"),
+        decorator_include(enabled(), "sdg.accounts.urls"),
     ),
     path("", decorator_include(enabled(), tf_urls)),
 ]

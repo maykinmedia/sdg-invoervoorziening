@@ -40,7 +40,7 @@ class CMSUrlsPathTest(WebTest):
 
     def test_cms_enabled(self):
         cmsapi = self.app.get(reverse("cmsapi:api-root"), status="*")
-        accounts = self.app.get(reverse("accounts:login_dashboard"), status="*")
+        accounts = self.app.get(reverse("login_dashboard"), status="*")
         organizations = self.app.get(
             reverse("organisaties:roles:list", args=[str(self.lokale_overheid.id)]),
             status="*",
@@ -62,7 +62,7 @@ class CMSUrlsPathTest(WebTest):
     @override_settings(ROOT_URLCONF="sdg.urls")
     def test_cms_disabled(self):
         cmsapi = self.app.get(reverse("cmsapi:api-root"), status="*")
-        accounts = self.app.get(reverse("accounts:login_dashboard"), status="*")
+        accounts = self.app.get(reverse("login_dashboard"), status="*")
         organizations = self.app.get(
             reverse("organisaties:roles:list", args=[str(self.lokale_overheid.id)]),
             status="*",
