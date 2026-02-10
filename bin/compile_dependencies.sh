@@ -24,7 +24,7 @@ export CUSTOM_COMPILE_COMMAND="./bin/compile_dependencies.sh"
 pip-compile \
     --no-emit-index-url \
     "$@" \
-    requirements/base.in
+    requirements/base.in --allow-unsafe
 
 # Dependencies for testing
 pip-compile \
@@ -32,7 +32,7 @@ pip-compile \
     --output-file requirements/ci.txt \
     "$@" \
     requirements/base.txt \
-    requirements/test-tools.in
+    requirements/test-tools.in --allow-unsafe
 
 # Dev depedencies - exact same set as CI + some extra tooling
 pip-compile \

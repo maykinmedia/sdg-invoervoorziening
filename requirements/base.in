@@ -46,3 +46,6 @@ elastic-apm  # Elastic APM integration
 django-rijkshuisstijl
 beautifulsoup4  # missing from django-rijkshuisstijl
 zgw-consumers
+
+
+setuptools <82 # Removes ppkg_resources

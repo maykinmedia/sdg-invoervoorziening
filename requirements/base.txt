@@ -368,3 +368,7 @@ zgw-consumers==0.38.0
     #   -r requirements/base.in
     #   commonground-api-common
     #   notifications-api-common
+
+# The following packages are considered to be unsafe in a requirements file:
+setuptools==81.0.0
+    # via -r requirements/base.in
