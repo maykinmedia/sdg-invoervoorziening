@@ -160,7 +160,7 @@ django-relativedelta==2.0.0
     # via zgw-consumers
 django-rest-framework-condition==0.1.1
     # via commonground-api-common
-django-rijkshuisstijl @ git+https://github.com/maykinmedia/django-rijkshuisstijl.git
+django-rijkshuisstijl==0.3.1
     # via -r requirements/base.in
 django-rosetta==0.10.2
     # via -r requirements/base.in
