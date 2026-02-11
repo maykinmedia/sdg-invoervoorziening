@@ -96,7 +96,7 @@ class UserInvitation(models.Model):
     objects = UserInvitationManager()
 
     def send_invitation(self, request, **kwargs):
-        invite_url = reverse("accounts:invitation_accept", args=[self.key])
+        invite_url = reverse("invitation_accept", args=[self.key])
         invite_url = request.build_absolute_uri(invite_url)
         ctx = kwargs
 

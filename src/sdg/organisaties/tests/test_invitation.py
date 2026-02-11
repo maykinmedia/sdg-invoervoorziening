@@ -185,7 +185,7 @@ class InvitationTests(WebTest):
 
         invite = UserInvitation.objects.get()
         response = self.app.get(
-            reverse("accounts:invitation_accept", kwargs={"key": invite.key})
+            reverse("invitation_accept", kwargs={"key": invite.key})
         )
         response.form["password1"] = "Test@1234"
         response.form["password2"] = "Test@1234"
@@ -216,7 +216,7 @@ class InvitationTests(WebTest):
 
         invite = UserInvitation.objects.get()
         response = self.app.get(
-            reverse("accounts:invitation_accept", kwargs={"key": invite.key})
+            reverse("invitation_accept", kwargs={"key": invite.key})
         )
         response.form["password1"] = "Test@1234"
         response.form["password2"] = "Test@1234"
@@ -241,7 +241,7 @@ class InvitationTests(WebTest):
 
         invite = UserInvitation.objects.get()
         response = self.app.get(
-            reverse("accounts:invitation_accept", kwargs={"key": invite.key})
+            reverse("invitation_accept", kwargs={"key": invite.key})
         )
         response.form["password1"] = "bad"
         response.form["password2"] = "bad"
@@ -271,6 +271,6 @@ class InvitationTests(WebTest):
         response.form.submit()
 
         self.app.get(
-            reverse("accounts:invitation_accept", kwargs={"key": "random1234"}),
+            reverse("invitation_accept", kwargs={"key": "random1234"}),
             status=404,
         )
