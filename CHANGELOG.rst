@@ -2,14 +2,23 @@
 Change history
 ==============
 
+1.9.5
+=====
+
+*February 11, 2026*
+
+* [#1041] Fixed password reset function for regular users.
+
+
 1.9.4
 =====
 
-*Dec 3, 2025*
+*December 3, 2025*
 
 * [#1033] Updated Django to 5.2
 * [#1035] Refactored broken links checker command to reduce errors
 * Implemented logging for doordrukken task
+
 
 1.9.3
 =====
