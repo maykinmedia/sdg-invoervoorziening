@@ -1,23 +1,44 @@
 import io
-import pandas as pd
 
 from django.test import TestCase, override_settings
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+import pandas as pd
 from freezegun import freeze_time
 
-from sdg.producten.tests.factories.product import GeneriekProductFactory, ProductVersieFactory, \
-    SpecifiekProductVersieFactory, SpecifiekProductFactory, ProductFactory
-from sdg.accounts.tests.factories import SuperUserFactory, RoleFactory, UserFactory, UserInvitationFactory
-from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory, BevoegdeOrganisatieFactory
+from sdg.accounts.tests.factories import (
+    RoleFactory,
+    SuperUserFactory,
+    UserFactory,
+    UserInvitationFactory,
+)
+from sdg.organisaties.tests.factories.overheid import (
+    BevoegdeOrganisatieFactory,
+    LokaleOverheidFactory,
+)
+from sdg.producten.tests.factories.localized import (
+    LocalizedGeneriekProductFactory,
+    LocalizedProductFactory,
+)
+from sdg.producten.tests.factories.product import (
+    GeneriekProductFactory,
+    ProductFactory,
+    ProductVersieFactory,
+    SpecifiekProductFactory,
+    SpecifiekProductVersieFactory,
+)
+
+from ..constants import (
+    AccountStatus,
+    DoelgroepChoices,
+    GenericProductStatus,
+    Rol,
+    Systeemrechten,
+)
+from ..export import ApplicationExporter
 from .factories.catalogus import ProductenCatalogusFactory
 from .factories.logius import OverheidsorganisatieFactory
-
-from ..constants import GenericProductStatus, DoelgroepChoices, AccountStatus, Rol, Systeemrechten
-
-from ..export import ApplicationExporter
-from ...producten.tests.factories.localized import LocalizedGeneriekProductFactory, LocalizedProductFactory
 
 
 class ApplicationExportTest(TestCase):
@@ -32,8 +53,12 @@ class ApplicationExportTest(TestCase):
                     self.assertTrue(dataframe.empty)
 
     def test_accounts_info(self):
-        lokale_overheid_1 = LokaleOverheidFactory.create(organisatie__owms_pref_label="UUUUtrecht")
-        lokale_overheid_2 = LokaleOverheidFactory.create(organisatie__owms_pref_label="Nimma")
+        lokale_overheid_1 = LokaleOverheidFactory.create(
+            organisatie__owms_pref_label="UUUUtrecht"
+        )
+        lokale_overheid_2 = LokaleOverheidFactory.create(
+            organisatie__owms_pref_label="Nimma"
+        )
 
         inviter = UserFactory.create(
             first_name="John",
@@ -58,7 +83,7 @@ class ApplicationExportTest(TestCase):
             lokale_overheid=lokale_overheid_1,
             is_beheerder=True,
             is_redacteur=False,
-            is_raadpleger=False
+            is_raadpleger=False,
         )
 
         RoleFactory.create(
@@ -66,9 +91,8 @@ class ApplicationExportTest(TestCase):
             lokale_overheid=lokale_overheid_2,
             is_beheerder=False,
             is_redacteur=True,
-            is_raadpleger=True
+            is_raadpleger=True,
         )
-
 
         with io.BytesIO() as export_file:
             ApplicationExporter(export_file)
@@ -77,62 +101,70 @@ class ApplicationExportTest(TestCase):
 
         with self.subTest("first row"):
             row = dataframe.iloc[0].to_dict()
-            self.assertEqual(row, {
-                "Unnamed: 0": 0,
-                "id": user.pk,
-                "gemeente_id": lokale_overheid_1.pk,
-                "organisatie": "UUUUtrecht",
-                "gemeente": "UUUUtrecht",
-                "voornaam": "Jane",
-                "achternaam": "Doe",
-                "naam": "Jane Doe",
-                "email": "jane.doe@email.net",
-                "uitgenodigd door": "John Doe",
-                "date_joined": "1 January, 2020, 00:00",
-                "last_login": "1 January, 2020, 00:00",
-                "account status": _("heeft ingelogd"),
-                "accepted": True,
-                "created": "1 January, 2020, 00:00",
-                "is_active": True,
-                "rol": _("beheerder"),
-                "is_beheerder": True,
-                "is_redacteur": False,
-                "is_raadpleger": False,
-                "systeemrechten": _("superuser"),
-                "is_superuser": True,
-                "is_staff": True,
-            })
+            self.assertEqual(
+                row,
+                {
+                    "Unnamed: 0": 0,
+                    "id": user.pk,
+                    "gemeente_id": lokale_overheid_1.pk,
+                    "organisatie": "UUUUtrecht",
+                    "gemeente": "UUUUtrecht",
+                    "voornaam": "Jane",
+                    "achternaam": "Doe",
+                    "naam": "Jane Doe",
+                    "email": "jane.doe@email.net",
+                    "uitgenodigd door": "John Doe",
+                    "date_joined": "1 January, 2020, 00:00",
+                    "last_login": "1 January, 2020, 00:00",
+                    "account status": _("heeft ingelogd"),
+                    "accepted": True,
+                    "created": "1 January, 2020, 00:00",
+                    "is_active": True,
+                    "rol": _("beheerder"),
+                    "is_beheerder": True,
+                    "is_redacteur": False,
+                    "is_raadpleger": False,
+                    "systeemrechten": _("superuser"),
+                    "is_superuser": True,
+                    "is_staff": True,
+                },
+            )
 
         with self.subTest("second row"):
             row = dataframe.iloc[1].to_dict()
-            self.assertEqual(row, {
-                "Unnamed: 0": 1,
-                "id": user.pk,
-                "gemeente_id": lokale_overheid_2.pk,
-                "organisatie": "Nimma",
-                "gemeente": "Nimma",
-                "voornaam": "Jane",
-                "achternaam": "Doe",
-                "naam": "Jane Doe",
-                "email": "jane.doe@email.net",
-                "uitgenodigd door": "John Doe",
-                "date_joined": "1 January, 2020, 00:00",
-                "last_login": "1 January, 2020, 00:00",
-                "account status": _("heeft ingelogd"),
-                "accepted": 1,
-                "created": "1 January, 2020, 00:00",
-                "is_active": 1,
-                "rol": _("redacteur"),
-                "is_beheerder": 0,
-                "is_redacteur": 1,
-                "is_raadpleger": 1,
-                "systeemrechten": _("superuser"),
-                "is_superuser": 1,
-                "is_staff": 1,
-            })
+            self.assertEqual(
+                row,
+                {
+                    "Unnamed: 0": 1,
+                    "id": user.pk,
+                    "gemeente_id": lokale_overheid_2.pk,
+                    "organisatie": "Nimma",
+                    "gemeente": "Nimma",
+                    "voornaam": "Jane",
+                    "achternaam": "Doe",
+                    "naam": "Jane Doe",
+                    "email": "jane.doe@email.net",
+                    "uitgenodigd door": "John Doe",
+                    "date_joined": "1 January, 2020, 00:00",
+                    "last_login": "1 January, 2020, 00:00",
+                    "account status": _("heeft ingelogd"),
+                    "accepted": 1,
+                    "created": "1 January, 2020, 00:00",
+                    "is_active": 1,
+                    "rol": _("redacteur"),
+                    "is_beheerder": 0,
+                    "is_redacteur": 1,
+                    "is_raadpleger": 1,
+                    "systeemrechten": _("superuser"),
+                    "is_superuser": 1,
+                    "is_staff": 1,
+                },
+            )
 
     def test_accounts_info_combined_fields(self):
-        lokale_overheid_1 = LokaleOverheidFactory.create(organisatie__owms_pref_label="UUUUtrecht")
+        lokale_overheid_1 = LokaleOverheidFactory.create(
+            organisatie__owms_pref_label="UUUUtrecht"
+        )
 
         with freeze_time("2020-01-01T00:00:00Z"):
             user_1 = SuperUserFactory.create(
@@ -150,7 +182,7 @@ class ApplicationExportTest(TestCase):
                 lokale_overheid=lokale_overheid_1,
                 is_beheerder=True,
                 is_redacteur=True,
-                is_raadpleger=True
+                is_raadpleger=True,
             )
 
             user_2 = UserFactory.create(
@@ -165,7 +197,7 @@ class ApplicationExportTest(TestCase):
                 lokale_overheid=lokale_overheid_1,
                 is_beheerder=False,
                 is_redacteur=True,
-                is_raadpleger=True
+                is_raadpleger=True,
             )
 
             user_3 = UserFactory.create(
@@ -178,7 +210,7 @@ class ApplicationExportTest(TestCase):
                 lokale_overheid=lokale_overheid_1,
                 is_beheerder=False,
                 is_redacteur=False,
-                is_raadpleger=True
+                is_raadpleger=True,
             )
 
         with io.BytesIO() as export_file:
@@ -187,7 +219,7 @@ class ApplicationExportTest(TestCase):
                 export_file,
                 keep_default_na=False,
                 na_values=[],
-                sheet_name="Accounts info"
+                sheet_name="Accounts info",
             )
 
         with self.subTest("first user"):
@@ -217,10 +249,13 @@ class ApplicationExportTest(TestCase):
             # user isn't staff or superuser
             self.assertEqual(row["systeemrechten"], Systeemrechten.empty.label)
 
-
     def test_municipality_data(self):
-        catalogus = ProductenCatalogusFactory.create(lokale_overheid__organisatie__owms_pref_label="UUUUtrecht")
-        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(lokale_overheid=catalogus.lokale_overheid)
+        catalogus = ProductenCatalogusFactory.create(
+            lokale_overheid__organisatie__owms_pref_label="UUUUtrecht"
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            lokale_overheid=catalogus.lokale_overheid
+        )
 
         for none_publication_status in [
             GenericProductStatus.NEW,
@@ -265,21 +300,26 @@ class ApplicationExportTest(TestCase):
             document_info = df.parse("Document info")
             row = document_info.iloc[0].to_dict()
 
-        self.assertEqual(row, {
-            "Unnamed: 0": 0,
-            "gemeente": "UUUUtrecht",
-            "aantal gepubliceerde teksten": 5,
-            "aantal conceptteksten": 1,
-            "aantal teksten": 6
-        })
+        self.assertEqual(
+            row,
+            {
+                "Unnamed: 0": 0,
+                "gemeente": "UUUUtrecht",
+                "aantal gepubliceerde teksten": 5,
+                "aantal conceptteksten": 1,
+                "aantal teksten": 6,
+            },
+        )
 
     @freeze_time("2026-01-01")
     def test_municipality_info_org_no_longer_exists(self):
         catalogus = ProductenCatalogusFactory.create(
             lokale_overheid__organisatie__owms_pref_label="UUUUtrecht",
-            lokale_overheid__organisatie__owms_end_date=timezone.now()
+            lokale_overheid__organisatie__owms_end_date=timezone.now(),
         )
-        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(lokale_overheid=catalogus.lokale_overheid)
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            lokale_overheid=catalogus.lokale_overheid
+        )
         product = ProductFactory.create(
             catalogus=catalogus,
             bevoegde_organisatie=bevoegde_organisatie,
@@ -297,7 +337,7 @@ class ApplicationExportTest(TestCase):
                 export_file,
                 keep_default_na=False,
                 na_values=[],
-                sheet_name="Document info"
+                sheet_name="Document info",
             )
 
         self.assertTrue(df.empty)
@@ -309,13 +349,16 @@ class ApplicationExportTest(TestCase):
             organisatie__owms_pref_label="UUUUtrecht"
         )
         catalogus = ProductenCatalogusFactory.create(lokale_overheid=lokale_overheid)
-        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(lokale_overheid=lokale_overheid, organisatie__owms_pref_label="UUUUtrecht (2)")
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            lokale_overheid=lokale_overheid,
+            organisatie__owms_pref_label="UUUUtrecht (2)",
+        )
         generiek_product = GeneriekProductFactory.create(
             product_status=GenericProductStatus.READY_FOR_PUBLICATION,
             verantwoordelijke_organisaties=[overheids_org.pk],
             upn__upn_label="product name",
             upn__thema__informatiegebied__informatiegebied="informatiegebied",
-            doelgroep=""
+            doelgroep="",
         )
 
         LocalizedGeneriekProductFactory.create(
@@ -326,9 +369,7 @@ class ApplicationExportTest(TestCase):
             korte_omschrijving="een korte beschrijving",
             laatst_gewijzigd=timezone.now(),
             datum_check=timezone.now(),
-            verwijzing_links=[
-                ["link", "https://www.link.com", "een publieke link"]
-            ],
+            verwijzing_links=[["link", "https://www.link.com", "een publieke link"]],
             landelijke_link="https://www.link.com/nl",
         )
         LocalizedGeneriekProductFactory.create(
@@ -339,9 +380,7 @@ class ApplicationExportTest(TestCase):
             korte_omschrijving="a short description",
             laatst_gewijzigd=timezone.now(),
             datum_check=timezone.now(),
-            verwijzing_links=[
-                ["link", "https://www.link.com", "a public link"]
-            ],
+            verwijzing_links=[["link", "https://www.link.com", "a public link"]],
             landelijke_link="https://www.link.com/en",
         )
 
@@ -400,73 +439,76 @@ class ApplicationExportTest(TestCase):
                 export_file,
                 keep_default_na=False,
                 na_values=[],
-                sheet_name="Product info"
+                sheet_name="Product info",
             )
             row = df.iloc[0].to_dict()
 
-        self.assertEqual(row, {
-            "Unnamed: 0": 0,
-            "id": product.pk,
-            "gemeente": "UUUUtrecht",
-            "doelgroep": "",
-            "UPN label": "product name",
-            "status": "published",
-            "aanwezig": False,
-            "heeft kosten": True,
-            "aanwezig toelichting": "het is aanwezig omdat het aanwezig is.",
-            "aanwezig toelichting (en)": "It is present because it is present.",
-            "valt onder doelgroep": "",
-            "valt onder": "",
-            "valt onder toelichting": "het valt hier onder omdat dit zo is.",
-            "valt onder toelichting (en)": "It falls under this because that is the case.",
-            "valt onder(ja / nee)": "Nee",
-            "informatiegebied": "informatiegebied",
-            "SDG product": "product name",
-            "generieke titel": "product naam",
-            "generieke titel (en)": "product name",
-            "generieke tekst": "tekst",
-            "generieke tekst (en)": "text",
-            "specifieke titel": "decentrale titel",
-            "specifieke titel (en)": "decentrale titel",
-            "specifieke tekst": "wat tekst",
-            "specifieke tekst (en)": "some text",
-            "Procedure beschrijving": "omschrijving over het product",
-            "Procedure beschrijving (en)": "description about the product",
-            "bewijs": "de documentatie",
-            "bewijs (en)": "the documentatie",
-            "bezwaar en beroep": "bezwaar en beroep",
-            "bezwaar en beroep (en)": "objection and appeal",
-            "kosten en betaalmethoden": "kosten",
-            "kosten en betaalmethoden (en)": "costs",
-            "uiterste termijn": "gisteren",
-            "uiterste termijn (en)": "yesterday",
-            "wat te doen bij geen reactie": "huilen",
-            "wat te doen bij geen reactie (en)": "cry",
-            "generieke verwijzing links": "[['link', 'https://www.link.com', 'een publieke link']]",
-            "generieke verwijzing links (en)": "[['link', 'https://www.link.com', 'a public link']]",
-            "specifieke verwijzing links": "[['bla', 'https://www.bla.nl']]",
-            "specifieke verwijzing links (en)": "[['bla', 'https://www.bla.com']]",
-            "URL portaal": "",
-            "URL portaal (en)": "",
-            "decentrale procedure label": "decentrale label",
-            "decentrale procedure label (en)": "decentralized label",
-            "decentrale procedure link": "https://www.procedure_link.nl",
-            "decentrale procedure link (en)": "https://www.procedure_link.com",
-            "landelijk verantwoordelijke organisatie": "org",
-            "generieke datum check": "1 January, 2020, 00:00",
-            "generieke datum check (en)": "1 January, 2020, 00:00",
-            "gemaakt op": "1 January, 2020, 00:00",
-            "publicatiedatum": "1 January, 2020",
-            "laatste wijziging": "1 January, 2020, 00:00",
-            "versie": 1,
-            "bevoegde organisatie": "UUUUtrecht (2)",
-        })
+        self.assertEqual(
+            row,
+            {
+                "Unnamed: 0": 0,
+                "id": product.pk,
+                "gemeente": "UUUUtrecht",
+                "doelgroep": "",
+                "UPN label": "product name",
+                "status": "published",
+                "aanwezig": False,
+                "heeft kosten": True,
+                "aanwezig toelichting": "het is aanwezig omdat het aanwezig is.",
+                "aanwezig toelichting (en)": "It is present because it is present.",
+                "valt onder doelgroep": "",
+                "valt onder": "",
+                "valt onder toelichting": "het valt hier onder omdat dit zo is.",
+                "valt onder toelichting (en)": "It falls under this because that is the case.",
+                "valt onder(ja / nee)": "Nee",
+                "informatiegebied": "informatiegebied",
+                "SDG product": "product name",
+                "generieke titel": "product naam",
+                "generieke titel (en)": "product name",
+                "generieke tekst": "tekst",
+                "generieke tekst (en)": "text",
+                "specifieke titel": "decentrale titel",
+                "specifieke titel (en)": "decentrale titel",
+                "specifieke tekst": "wat tekst",
+                "specifieke tekst (en)": "some text",
+                "Procedure beschrijving": "omschrijving over het product",
+                "Procedure beschrijving (en)": "description about the product",
+                "bewijs": "de documentatie",
+                "bewijs (en)": "the documentatie",
+                "bezwaar en beroep": "bezwaar en beroep",
+                "bezwaar en beroep (en)": "objection and appeal",
+                "kosten en betaalmethoden": "kosten",
+                "kosten en betaalmethoden (en)": "costs",
+                "uiterste termijn": "gisteren",
+                "uiterste termijn (en)": "yesterday",
+                "wat te doen bij geen reactie": "huilen",
+                "wat te doen bij geen reactie (en)": "cry",
+                "generieke verwijzing links": "[['link', 'https://www.link.com', 'een publieke link']]",
+                "generieke verwijzing links (en)": "[['link', 'https://www.link.com', 'a public link']]",
+                "specifieke verwijzing links": "[['bla', 'https://www.bla.nl']]",
+                "specifieke verwijzing links (en)": "[['bla', 'https://www.bla.com']]",
+                "URL portaal": "",
+                "URL portaal (en)": "",
+                "decentrale procedure label": "decentrale label",
+                "decentrale procedure label (en)": "decentralized label",
+                "decentrale procedure link": "https://www.procedure_link.nl",
+                "decentrale procedure link (en)": "https://www.procedure_link.com",
+                "landelijk verantwoordelijke organisatie": "org",
+                "generieke datum check": "1 January, 2020, 00:00",
+                "generieke datum check (en)": "1 January, 2020, 00:00",
+                "gemaakt op": "1 January, 2020, 00:00",
+                "publicatiedatum": "1 January, 2020",
+                "laatste wijziging": "1 January, 2020, 00:00",
+                "versie": 1,
+                "bevoegde organisatie": "UUUUtrecht (2)",
+            },
+        )
 
     @override_settings(
         SDG_DOP_URL_TEMPLATE_NL="{product_url}dop_nl/{organisation}/",
-        SDG_DOP_URL_TEMPLATE_EN = "{product_url}dop_en/{organisation}/",
-        SDG_DPC_URL_TEMPLATE_NL = "{product_url}dpc_nl/{organisation}/",
-        SDG_DPC_URL_TEMPLATE_EN = "{product_url}dpc_en/{organisation}/",
+        SDG_DOP_URL_TEMPLATE_EN="{product_url}dop_en/{organisation}/",
+        SDG_DPC_URL_TEMPLATE_NL="{product_url}dpc_nl/{organisation}/",
+        SDG_DPC_URL_TEMPLATE_EN="{product_url}dpc_en/{organisation}/",
     )
     def test_product_url_portaal(self):
         lokale_overheid = LokaleOverheidFactory.create(
@@ -479,7 +521,7 @@ class ApplicationExportTest(TestCase):
 
         generiek_product = GeneriekProductFactory.create(
             product_status=GenericProductStatus.READY_FOR_PUBLICATION,
-            doelgroep=DoelgroepChoices.burger
+            doelgroep=DoelgroepChoices.burger,
         )
         LocalizedGeneriekProductFactory.create(
             generiek_product=generiek_product,
@@ -504,7 +546,7 @@ class ApplicationExportTest(TestCase):
 
         generiek_product = GeneriekProductFactory.create(
             product_status=GenericProductStatus.READY_FOR_PUBLICATION,
-            doelgroep=DoelgroepChoices.bedrijf
+            doelgroep=DoelgroepChoices.bedrijf,
         )
         LocalizedGeneriekProductFactory.create(
             generiek_product=generiek_product,
@@ -533,18 +575,26 @@ class ApplicationExportTest(TestCase):
                 export_file,
                 keep_default_na=False,
                 na_values=[],
-                sheet_name="Product info"
+                sheet_name="Product info",
             )
 
         with self.subTest("burger"):
             row = df.iloc[0]
-            self.assertEqual(row["URL portaal"], "https://www.link.com/dpc_nl/uuuutrecht/")
-            self.assertEqual(row["URL portaal (en)"], "https://www.link.com/dpc_en/uuuutrecht/")
+            self.assertEqual(
+                row["URL portaal"], "https://www.link.com/dpc_nl/uuuutrecht/"
+            )
+            self.assertEqual(
+                row["URL portaal (en)"], "https://www.link.com/dpc_en/uuuutrecht/"
+            )
 
         with self.subTest("bedrijf"):
             row = df.iloc[1]
-            self.assertEqual(row["URL portaal"], "https://www.link.com/dop_nl/uuuutrecht/")
-            self.assertEqual(row["URL portaal (en)"], "https://www.link.com/dop_en/uuuutrecht/")
+            self.assertEqual(
+                row["URL portaal"], "https://www.link.com/dop_nl/uuuutrecht/"
+            )
+            self.assertEqual(
+                row["URL portaal (en)"], "https://www.link.com/dop_en/uuuutrecht/"
+            )
 
     def test_product_show_products(self):
         lokale_overheid = LokaleOverheidFactory.create(
@@ -554,7 +604,11 @@ class ApplicationExportTest(TestCase):
         bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
             lokale_overheid=lokale_overheid,
         )
-        product_scheduled, product_concept, latest_version, concept, scheduled = ProductFactory.create_batch(5, catalogus=catalogus, bevoegde_organisatie=bevoegde_organisatie)
+        product_scheduled, product_concept, latest_version, concept, scheduled = (
+            ProductFactory.create_batch(
+                5, catalogus=catalogus, bevoegde_organisatie=bevoegde_organisatie
+            )
+        )
 
         # published + scheduled
         ProductVersieFactory.create(
@@ -598,17 +652,13 @@ class ApplicationExportTest(TestCase):
         )
 
         # concept
-        ProductVersieFactory.create(
-            product=concept,
-            publicatie_datum=None,
-            versie=1
-        )
+        ProductVersieFactory.create(product=concept, publicatie_datum=None, versie=1)
 
         # scheduled
         ProductVersieFactory.create(
             product=scheduled,
             publicatie_datum=timezone.now() + timezone.timedelta(days=1),
-            versie=1
+            versie=1,
         )
 
         with io.BytesIO() as export_file:
@@ -617,34 +667,34 @@ class ApplicationExportTest(TestCase):
                 export_file,
                 keep_default_na=False,
                 na_values=[],
-                sheet_name="Product info"
+                sheet_name="Product info",
             )
 
         with self.subTest("don't show scheduled versions over published versions"):
             row = df.iloc[0]
             self.assertEqual(row["id"], product_scheduled.id)
-            self.assertEqual(row["versie"],1)
+            self.assertEqual(row["versie"], 1)
 
         with self.subTest("don't show concept versions over published versions"):
             row = df.iloc[1]
             self.assertEqual(row["id"], product_concept.id)
-            self.assertEqual(row["versie"],1)
+            self.assertEqual(row["versie"], 1)
 
         with self.subTest("published latest version"):
             # always show latest version
             row = df.iloc[2]
             self.assertEqual(row["id"], latest_version.id)
-            self.assertEqual(row["versie"],3)
+            self.assertEqual(row["versie"], 3)
 
         with self.subTest("show concept when no published versions"):
             row = df.iloc[3]
             self.assertEqual(row["id"], concept.id)
-            self.assertEqual(row["versie"],1)
+            self.assertEqual(row["versie"], 1)
 
         with self.subTest("show scheduled when no published versions"):
             row = df.iloc[4]
             self.assertEqual(row["id"], scheduled.id)
-            self.assertEqual(row["versie"],1)
+            self.assertEqual(row["versie"], 1)
 
     @freeze_time("2026-01-01")
     def test_product_org_no_longer_exists(self):
@@ -656,7 +706,9 @@ class ApplicationExportTest(TestCase):
         bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
             lokale_overheid=lokale_overheid,
         )
-        product = ProductFactory.create(catalogus=catalogus, bevoegde_organisatie=bevoegde_organisatie)
+        product = ProductFactory.create(
+            catalogus=catalogus, bevoegde_organisatie=bevoegde_organisatie
+        )
         ProductVersieFactory.create(
             product=product,
             publicatie_datum=timezone.now(),
@@ -669,7 +721,7 @@ class ApplicationExportTest(TestCase):
                 export_file,
                 keep_default_na=False,
                 na_values=[],
-                sheet_name="Product info"
+                sheet_name="Product info",
             )
 
         self.assertTrue(df.empty)

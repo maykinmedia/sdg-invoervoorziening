@@ -1,9 +1,9 @@
 from django.test import TestCase
 
 from freezegun import freeze_time
-from ..models import ApplicationRapport
 
-from ..tasks import create_application_export, clean_application_exports
+from ..models import ApplicationRapport
+from ..tasks import clean_application_exports, create_application_export
 from .factories.export import ApplicationExportFactory
 
 
@@ -16,7 +16,7 @@ class CreateApplicationExportTestCase(TestCase):
         export.refresh_from_db()
 
         self.assertTrue(export.file)
-        file_name = export.file.name.split('/')[-1]
+        file_name = export.file.name.split("/")[-1]
         self.assertIn("application_rapport_2026-01-01T02-02-02", file_name)
 
 

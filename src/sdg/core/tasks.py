@@ -1,15 +1,15 @@
 import io
-from django.core.files import File
 
 from django.conf import settings
+from django.core.files import File
 from django.db import transaction
 from django.utils import timezone
 
 from sdg.celery import app
 from sdg.core.constants.logius import PublicData
+from sdg.core.export import ApplicationExporter
 from sdg.core.models import ApplicationRapport
 from sdg.core.types import LoadCommand
-from sdg.core.export import ApplicationExporter
 
 if settings.SDG_ORGANIZATION_TYPE == "municipality":
     organization = PublicData.MUNICIPALITY
