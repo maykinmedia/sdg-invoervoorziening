@@ -13,9 +13,9 @@
     "fields": {
         "minute": "0",
         "hour": "3",
-        "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
+        "day_of_week": "*",
         "timezone": "UTC"
     }
 },
@@ -25,9 +25,9 @@
     "fields": {
         "minute": "0",
         "hour": "1",
-        "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
+        "day_of_week": "*",
         "timezone": "UTC"
     }
 },
@@ -37,9 +37,9 @@
     "fields": {
         "minute": "0",
         "hour": "2",
-        "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
+        "day_of_week": "*",
         "timezone": "UTC"
     }
 },
@@ -49,9 +49,9 @@
     "fields": {
         "minute": "0",
         "hour": "4",
-        "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
+        "day_of_week": "*",
         "timezone": "UTC"
     }
 },
@@ -61,9 +61,9 @@
     "fields": {
         "minute": "*/5",
         "hour": "*",
-        "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
+        "day_of_week": "*",
         "timezone": "UTC"
     }
 },
@@ -73,9 +73,9 @@
     "fields": {
         "minute": "0",
         "hour": "8",
-        "day_of_week": "1",
         "day_of_month": "*",
         "month_of_year": "*",
+        "day_of_week": "1",
         "timezone": "UTC"
     }
 },
@@ -85,9 +85,9 @@
     "fields": {
         "minute": "0",
         "hour": "9",
-        "day_of_week": "*",
         "day_of_month": "1",
         "month_of_year": "*",
+        "day_of_week": "*",
         "timezone": "UTC"
     }
 },
@@ -97,9 +97,9 @@
     "fields": {
         "minute": "0",
         "hour": "9",
-        "day_of_week": "*",
         "day_of_month": "*",
         "month_of_year": "*",
+        "day_of_week": "*",
         "timezone": "UTC"
     }
 },
@@ -330,7 +330,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2024-11-04T12:00:00.000",
+        "date_changed": "2024-11-04T12:00:00",
         "description": "Send notification emails about broken links detected in product fields."
     }
 },
@@ -358,7 +358,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2024-11-04T14:00:00.000",
+        "date_changed": "2024-11-04T14:00:00",
         "description": "Send monthly broken links report to the all redactors of the content."
     }
 },
@@ -386,7 +386,7 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2024-11-20T10:30:00.000",
+        "date_changed": "2024-11-20T10:30:00",
         "description": "Automatisch referentie teksten doordrukken naar de specifieke producten."
     }
 },
@@ -414,8 +414,36 @@
         "enabled": false,
         "last_run_at": null,
         "total_run_count": 0,
-        "date_changed": "2024-11-20T14:30:00.000",
+        "date_changed": "2024-11-20T14:30:00",
         "description": "Send an e-mail to users to inform them about their related products and that they will be overwritten."
+    }
+},
+{
+    "model": "django_celery_beat.periodictask",
+    "pk": 12,
+    "fields": {
+        "name": "Schonen van rapports",
+        "task": "sdg.core.tasks.clean_application_exports",
+        "interval": 1,
+        "crontab": null,
+        "solar": null,
+        "clocked": null,
+        "args": "[]",
+        "kwargs": "{\"days\": 30}",
+        "queue": null,
+        "exchange": null,
+        "routing_key": null,
+        "headers": "{}",
+        "priority": null,
+        "expires": null,
+        "expire_seconds": null,
+        "one_off": false,
+        "start_time": null,
+        "enabled": true,
+        "last_run_at": null,
+        "total_run_count": 0,
+        "date_changed": "2026-04-01T13:08:22.391",
+        "description": "Verwijder alle rapporten die meer dan 30 dagen geleden zijn aangemaakt.\r\n\r\n(U kunt het aantal dagen aanpassen met de variabele \"days\")"
     }
 }
 ]
