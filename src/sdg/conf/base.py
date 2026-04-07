@@ -138,6 +138,7 @@ INSTALLED_APPS = [
     "timeline_logger",
     "solo",
     "zgw_consumers",
+    "privates",
     # SDG applications
     "sdg.api",
     "sdg.cmsapi",
@@ -548,6 +549,13 @@ CELERY_TASK_TIME_LIMIT = 60 * 60  # 1 hour
 CELERY_TASK_SOFT_TIME_LIMIT = 50 * 60  # 50 minutes
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 SILENCED_SYSTEM_CHECKS = ["utils.E001"]
+
+# Django privates
+PRIVATE_MEDIA_ROOT = os.path.join(BASE_DIR, "private_media")
+PRIVATE_MEDIA_URL = "/private_media/"
+SENDFILE_BACKEND = config("SENDFILE_BACKEND", default="django_sendfile.backends.nginx")
+SENDFILE_ROOT = PRIVATE_MEDIA_ROOT
+SENDFILE_URL = PRIVATE_MEDIA_URL
 
 # Subpath (optional)
 # This environment variable can be configured during deployment.
