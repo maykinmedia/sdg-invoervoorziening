@@ -1,9 +1,14 @@
+import io
+from django.core.files import File
+
 from django.conf import settings
 from django.db import transaction
 
 from sdg.celery import app
 from sdg.core.constants.logius import PublicData
+from sdg.core.models import ApplicationRapport
 from sdg.core.types import LoadCommand
+from sdg.core.export import ApplicationExporter
 
 if settings.SDG_ORGANIZATION_TYPE == "municipality":
     organization = PublicData.MUNICIPALITY
@@ -30,3 +35,16 @@ def import_logius_data():
     with transaction.atomic():
         for command in management_commands:
             command.execute()
+
+
+@app.task()
+def create_application_export(application_export_pk: str):
+    export_model = ApplicationRapport.objects.get(pk=application_export_pk)
+
+    with io.BytesIO() as export_file:
+        datetime = export_model.gemaakt_op.strftime("%Y-%m-%dT%H-%M-%S")
+        name = f"application_rapport_{datetime}.xlsx"
+        ApplicationExporter(export_file)
+
+        export_model.file = File(file=export_file, name=name)
+        export_model.save()

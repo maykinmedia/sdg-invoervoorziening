@@ -5,12 +5,18 @@ from maykin_2fa import monkeypatch_admin
 from maykin_2fa.urls import urlpatterns, webauthn_urlpatterns
 
 from sdg.accounts.views.password_reset import ResendInventation
+from sdg.core.admin import application_export
 
 # Configure admin
 
 monkeypatch_admin()
 
 urlpatterns = [
+    path(
+        "export_application/",
+        application_export,
+        name="export_application",
+    ),
     path("hijack/", include("hijack.urls")),
     path("resend_invite", ResendInventation.as_view(), name="resend_token"),
     path("", include((urlpatterns, "maykin_2fa"))),
