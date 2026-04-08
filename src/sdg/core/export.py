@@ -1,5 +1,6 @@
 import datetime
 import json
+from dataclasses import dataclass, field
 from typing import assert_never
 
 from django.conf import settings
@@ -35,6 +36,34 @@ from sdg.producten.models import (
     LocalizedProduct,
     ProductVersie,
 )
+
+
+@dataclass
+class GeneriekProduct:
+    product_titel: str = ""
+    generieke_tekst: str = ""
+    datum_check: datetime.datetime = None
+    verwijzing_links: list | list[list[str]] = field(default_factory=list)
+    landelijke_link: str = str
+
+
+@dataclass
+class SpecifiekProduct:
+    product_titel_decentraal: str = ""
+    specifieke_tekst: str = ""
+    verwijzing_links: list | list[list[str]] = field(default_factory=list)
+    datum_wijziging: datetime.datetime = None
+    procedure_beschrijving: str = ""
+    vereisten: str = ""
+    bewijs: str = ""
+    bezwaar_en_beroep: str = ""
+    kosten_en_betaalmethoden: str = ""
+    uiterste_termijn: str = ""
+    wtd_bij_geen_reactie: str = ""
+    decentrale_procedure_label: str = ""
+    decentrale_procedure_link: str = ""
+    product_valt_onder_toelichting: str = ""
+    product_aanwezig_toelichting: str = ""
 
 
 class ApplicationExporter:
@@ -191,26 +220,42 @@ class ApplicationExporter:
             .order_by("product__catalogus__pk", "product__pk", "-versie")
             .distinct("product__catalogus__pk", "product__pk")
             .annotate(
-                specifiek_nl=Subquery(
-                    specifiek_product_subquery(langauge="nl")[:1],
+                specifiek_nl=Coalesce(
+                    Subquery(
+                        specifiek_product_subquery(langauge="nl")[:1],
+                        output_field=JSONField(),
+                    ),
+                    Value("{}"),
                     output_field=JSONField(),
                 )
             )
             .annotate(
-                specifiek_en=Subquery(
-                    specifiek_product_subquery(langauge="en")[:1],
+                specifiek_en=Coalesce(
+                    Subquery(
+                        specifiek_product_subquery(langauge="en")[:1],
+                        output_field=JSONField(),
+                    ),
+                    Value("{}"),
                     output_field=JSONField(),
                 )
             )
             .annotate(
-                generiek_nl=Subquery(
-                    generiek_product_subquery(langauge="nl")[:1],
+                generiek_nl=Coalesce(
+                    Subquery(
+                        generiek_product_subquery(langauge="nl")[:1],
+                        output_field=JSONField(),
+                    ),
+                    Value("{}"),
                     output_field=JSONField(),
                 )
             )
             .annotate(
-                generiek_en=Subquery(
-                    generiek_product_subquery(langauge="en")[:1],
+                generiek_en=Coalesce(
+                    Subquery(
+                        generiek_product_subquery(langauge="en")[:1],
+                        output_field=JSONField(),
+                    ),
+                    Value("{}"),
                     output_field=JSONField(),
                 )
             )
@@ -240,31 +285,31 @@ class ApplicationExporter:
             )
         ):
             doelgroep = version.product.generiek_product.doelgroep
-            generiek_nl = version.generiek_nl or {}
-            generiek_en = version.generiek_en or {}
-            specifiek_nl = version.specifiek_nl or {}
-            specifiek_en = version.specifiek_en or {}
+            generiek_nl = GeneriekProduct(**version.generiek_nl)
+            generiek_en = GeneriekProduct(**version.generiek_en)
+            specifiek_nl = SpecifiekProduct(**version.specifiek_nl)
+            specifiek_en = SpecifiekProduct(**version.specifiek_en)
 
             match doelgroep:
                 case DoelgroepChoices.bedrijf:
                     url_portaal = url_portaal_bedrijf(
-                        generiek_nl.get("landelijke_link", ""),
+                        generiek_nl.landelijke_link,
                         version.organisatie.get("dop", ""),
                         TaalChoices.nl,
                     )
                     url_portaal_en = url_portaal_bedrijf(
-                        generiek_en.get("landelijke_link", ""),
+                        generiek_en.landelijke_link,
                         version.organisatie.get("dop", ""),
                         TaalChoices.en,
                     )
                 case DoelgroepChoices.burger:
                     url_portaal = url_portaal_burger(
-                        generiek_nl.get("landelijke_link", ""),
+                        generiek_nl.landelijke_link,
                         version.organisatie.get("dpc", ""),
                         TaalChoices.nl,
                     )
                     url_portaal_en = url_portaal_burger(
-                        generiek_en.get("landelijke_link", ""),
+                        generiek_en.landelijke_link,
                         version.organisatie.get("dpc", ""),
                         TaalChoices.en,
                     )
@@ -281,93 +326,53 @@ class ApplicationExporter:
                     "status": version.current_status,
                     "aanwezig": version.product.product_aanwezig,
                     "heeft kosten": version.product.heeft_kosten,
-                    "aanwezig toelichting": specifiek_nl.get(
-                        "product_aanwezig_toelichting", ""
-                    ),
-                    "aanwezig toelichting (en)": specifiek_en.get(
-                        "product_aanwezig_toelichting", ""
-                    ),
+                    "aanwezig toelichting": specifiek_nl.product_aanwezig_toelichting,
+                    "aanwezig toelichting (en)": specifiek_en.product_aanwezig_toelichting,
                     "valt onder doelgroep": version.valt_onder_doelgroep,
                     "valt onder": version.valt_onder,
-                    "valt onder toelichting": specifiek_nl.get(
-                        "product_valt_onder_toelichting", ""
-                    ),
-                    "valt onder toelichting (en)": specifiek_en.get(
-                        "product_valt_onder_toelichting", ""
-                    ),
+                    "valt onder toelichting": specifiek_nl.product_valt_onder_toelichting,
+                    "valt onder toelichting (en)": specifiek_en.product_valt_onder_toelichting,
                     "valt onder(ja / nee)": "Ja" if version.valt_onder else "Nee",
                     "informatiegebied": version.informatiegebied,
                     "SDG product": version.product_name,
-                    "generieke titel": generiek_nl.get("product_titel", ""),
-                    "generieke titel (en)": generiek_en.get("product_titel", ""),
-                    "generieke tekst": generiek_nl.get("generieke_tekst", ""),
-                    "generieke tekst (en)": generiek_en.get("generieke_tekst", ""),
-                    "specifieke titel": specifiek_nl.get(
-                        "product_titel_decentraal", ""
-                    ),
-                    "specifieke titel (en)": specifiek_en.get(
-                        "product_titel_decentraal", ""
-                    ),
-                    "specifieke tekst": specifiek_nl.get("specifieke_tekst", ""),
-                    "specifieke tekst (en)": specifiek_en.get("specifieke_tekst", ""),
-                    "Procedure beschrijving": specifiek_nl.get(
-                        "procedure_beschrijving", ""
-                    ),
-                    "Procedure beschrijving (en)": specifiek_en.get(
-                        "procedure_beschrijving", ""
-                    ),
-                    "bewijs": specifiek_nl.get("bewijs", ""),
-                    "bewijs (en)": specifiek_en.get("bewijs", ""),
-                    "bezwaar en beroep": specifiek_nl.get("bezwaar_en_beroep", ""),
-                    "bezwaar en beroep (en)": specifiek_en.get("bezwaar_en_beroep", ""),
-                    "kosten en betaalmethoden": specifiek_nl.get(
-                        "kosten_en_betaalmethoden", ""
-                    ),
-                    "kosten en betaalmethoden (en)": specifiek_en.get(
-                        "kosten_en_betaalmethoden", ""
-                    ),
-                    "uiterste termijn": specifiek_nl.get("uiterste_termijn", ""),
-                    "uiterste termijn (en)": specifiek_en.get("uiterste_termijn", ""),
-                    "wat te doen bij geen reactie": specifiek_nl.get(
-                        "wtd_bij_geen_reactie", ""
-                    ),
-                    "wat te doen bij geen reactie (en)": specifiek_en.get(
-                        "wtd_bij_geen_reactie", ""
-                    ),
-                    "generieke verwijzing links": generiek_nl.get(
-                        "verwijzing_links", []
-                    ),
-                    "generieke verwijzing links (en)": generiek_en.get(
-                        "verwijzing_links", []
-                    ),
-                    "specifieke verwijzing links": specifiek_nl.get(
-                        "verwijzing_links", []
-                    ),
-                    "specifieke verwijzing links (en)": specifiek_en.get(
-                        "verwijzing_links", []
-                    ),
+                    "generieke titel": generiek_nl.product_titel,
+                    "generieke titel (en)": generiek_en.product_titel,
+                    "generieke tekst": generiek_nl.generieke_tekst,
+                    "generieke tekst (en)": generiek_en.generieke_tekst,
+                    "specifieke titel": specifiek_nl.product_titel_decentraal,
+                    "specifieke titel (en)": specifiek_en.product_titel_decentraal,
+                    "specifieke tekst": specifiek_nl.specifieke_tekst,
+                    "specifieke tekst (en)": specifiek_en.specifieke_tekst,
+                    "Procedure beschrijving": specifiek_nl.procedure_beschrijving,
+                    "Procedure beschrijving (en)": specifiek_en.procedure_beschrijving,
+                    "bewijs": specifiek_nl.bewijs,
+                    "bewijs (en)": specifiek_en.bewijs,
+                    "bezwaar en beroep": specifiek_nl.bezwaar_en_beroep,
+                    "bezwaar en beroep (en)": specifiek_en.bezwaar_en_beroep,
+                    "kosten en betaalmethoden": specifiek_nl.kosten_en_betaalmethoden,
+                    "kosten en betaalmethoden (en)": specifiek_en.kosten_en_betaalmethoden,
+                    "uiterste termijn": specifiek_nl.uiterste_termijn,
+                    "uiterste termijn (en)": specifiek_en.uiterste_termijn,
+                    "wat te doen bij geen reactie": specifiek_nl.wtd_bij_geen_reactie,
+                    "wat te doen bij geen reactie (en)": specifiek_en.wtd_bij_geen_reactie,
+                    "generieke verwijzing links": generiek_nl.verwijzing_links,
+                    "generieke verwijzing links (en)": generiek_en.verwijzing_links,
+                    "specifieke verwijzing links": specifiek_nl.verwijzing_links,
+                    "specifieke verwijzing links (en)": specifiek_en.verwijzing_links,
                     "URL portaal": url_portaal,
                     "URL portaal (en)": url_portaal_en,
-                    "decentrale procedure label": specifiek_nl.get(
-                        "decentrale_procedure_label", ""
-                    ),
-                    "decentrale procedure label (en)": specifiek_en.get(
-                        "decentrale_procedure_label", ""
-                    ),
-                    "decentrale procedure link": specifiek_nl.get(
-                        "decentrale_procedure_link", ""
-                    ),
-                    "decentrale procedure link (en)": specifiek_en.get(
-                        "decentrale_procedure_link", ""
-                    ),
+                    "decentrale procedure label": specifiek_nl.decentrale_procedure_label,
+                    "decentrale procedure label (en)": specifiek_en.decentrale_procedure_label,
+                    "decentrale procedure link": specifiek_nl.decentrale_procedure_link,
+                    "decentrale procedure link (en)": specifiek_en.decentrale_procedure_link,
                     "landelijk verantwoordelijke organisatie": ", ".join(
                         version.landelijke_verantwoordelijke_organisaties
                     ),
                     "generieke datum check": self._datetime_formater(
-                        generiek_nl.get("datum_check")
+                        generiek_nl.datum_check
                     ),
                     "generieke datum check (en)": self._datetime_formater(
-                        generiek_en.get("datum_check")
+                        generiek_en.datum_check
                     ),
                     "gemaakt op": self._datetime_formater(version.gemaakt_op),
                     "publicatiedatum": self._date_formater(version.publicatie_datum),

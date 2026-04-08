@@ -44,7 +44,7 @@ class TestApplicationExportAdmin(WebTest):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, _("in proces"), 1)
+        self.assertContains(response, _("bezig..."), 1)
         self.assertContains(response, _("Download rapport"), 0)
 
     @freeze_time("2026-01-01")
@@ -80,7 +80,7 @@ class TestApplicationExportAdmin(WebTest):
 
         with self.captureOnCommitCallbacks(execute=True):
             export_response = response.click(
-                description=_("Export application rapport")
+                description=_("Exporteer statistieken")
             ).follow()
 
         self.assertEqual(export_response.status_code, 200)
