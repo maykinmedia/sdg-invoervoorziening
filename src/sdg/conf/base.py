@@ -552,7 +552,7 @@ SILENCED_SYSTEM_CHECKS = ["utils.E001"]
 
 # Django privates
 PRIVATE_MEDIA_ROOT = os.path.join(BASE_DIR, "private_media")
-PRIVATE_MEDIA_URL = "/private_media/"
+PRIVATE_MEDIA_URL = "/private-media/"
 SENDFILE_BACKEND = config("SENDFILE_BACKEND", default="django_sendfile.backends.nginx")
 SENDFILE_ROOT = PRIVATE_MEDIA_ROOT
 SENDFILE_URL = PRIVATE_MEDIA_URL
