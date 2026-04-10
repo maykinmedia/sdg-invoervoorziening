@@ -9,6 +9,6 @@ class ApplicationRapport(models.Model):
     gemaakt_op = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = _("applicatie rapports")
-        verbose_name_plural = _("applicatie rapports")
+        verbose_name = _("statistiek")
+        verbose_name_plural = _("statistieken")
         ordering = ("-gemaakt_op",)

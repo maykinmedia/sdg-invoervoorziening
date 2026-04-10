@@ -120,6 +120,10 @@
             [
                 "timeline_logger",
                 "timelinelog"
+            ],
+            [
+                "core",
+                "applicationrapport"
             ]
         ]
     }

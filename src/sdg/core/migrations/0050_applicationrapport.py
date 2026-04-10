@@ -35,8 +35,8 @@ class Migration(migrations.Migration):
                 ("gemaakt_op", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                "verbose_name": "applicatie rapports",
-                "verbose_name_plural": "applicatie rapports",
+                "verbose_name": "statistiek",
+                "verbose_name_plural": "statistieken",
                 "ordering": ("-gemaakt_op",),
             },
         ),
