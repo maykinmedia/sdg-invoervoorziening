@@ -6,9 +6,11 @@ python-dotenv  # environment variables for secrets
 python-decouple  # processing of envvar configs
 lxml
 glom
+pandas
 pydantic
 email-validator
 furl
+xlsxwriter
 
 # Framework libraries
 django ~= 5.2
@@ -37,6 +39,7 @@ drf-spectacular # api documentation
 # django-filter
 # drf-yasg  # api documentation
 commonground-api-common
+django-privates
 
 # WSGI servers & monitoring - production oriented
 uwsgi

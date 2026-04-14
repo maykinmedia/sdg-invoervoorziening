@@ -4,7 +4,7 @@ from django.utils.timezone import now
 import factory
 from factory.django import DjangoModelFactory
 
-from sdg.accounts.models import Role
+from sdg.accounts.models import Role, UserInvitation
 from sdg.organisaties.tests.factories.overheid import LokaleOverheidFactory
 
 User = get_user_model()
@@ -37,3 +37,11 @@ class RoleFactory(DjangoModelFactory):
 
     class Meta:
         model = Role
+
+
+class UserInvitationFactory(DjangoModelFactory):
+    user = factory.SubFactory(UserFactory)
+    inviter = factory.SubFactory(UserFactory)
+
+    class Meta:
+        model = UserInvitation

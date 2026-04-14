@@ -12,6 +12,8 @@ os.environ.setdefault("DB_NAME", "sdg"),
 os.environ.setdefault("DB_USER", "sdg"),
 os.environ.setdefault("DB_PASSWORD", "sdg"),
 
+os.environ.setdefault("SENDFILE_BACKEND", "django_sendfile.backends.development")
+
 os.environ.setdefault("ENVIRONMENT", "development")
 
 from .base import *  # noqa isort:skip

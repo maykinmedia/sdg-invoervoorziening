@@ -29,6 +29,7 @@ local.py
 /env/
 /venv/
 /media/
+/private_media/
 /static/
 /mail/
 /log/*.log*

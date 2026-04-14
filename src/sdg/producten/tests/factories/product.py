@@ -1,9 +1,12 @@
+from typing import Sequence
+
 import factory
 from factory.django import DjangoModelFactory
 
 from sdg.accounts.tests.factories import UserFactory
 from sdg.core.constants import GenericProductStatus
 from sdg.core.constants.product import DoelgroepChoices
+from sdg.core.models import Overheidsorganisatie
 from sdg.core.tests.factories.catalogus import ProductenCatalogusFactory
 from sdg.core.tests.factories.logius import UniformeProductnaamFactory
 from sdg.organisaties.tests.factories.overheid import (
@@ -29,6 +32,19 @@ class GeneriekProductFactory(DjangoModelFactory):
                 "sdg.producten.tests.factories.localized.LocalizedGeneriekProductFactory",
             )
         )
+
+    @factory.post_generation
+    def verantwoordelijke_organisaties(
+        obj: GeneriekProduct,
+        create: bool,
+        extracted: Sequence[Overheidsorganisatie],
+        **kwargs,
+    ):
+        if not create:
+            return
+
+        if extracted:
+            obj.verantwoordelijke_organisaties.set(extracted)
 
 
 class ProductFactory(DjangoModelFactory):
