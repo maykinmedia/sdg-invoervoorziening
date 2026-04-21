@@ -80,8 +80,9 @@ WORKDIR /app
 COPY ./bin/docker_start.sh /start.sh
 COPY ./bin/celery_worker.sh /celery_worker.sh
 COPY ./bin/celery_beat.sh /celery_beat.sh
-RUN mkdir /app/log
-RUN mkdir /app/media
+RUN mkdir /app/log /app/media /app/private_media
+
+VOLUME ["/app/log", "/app/media", "/app/private_media"]
 
 # copy backend build deps
 COPY --from=backend-build /opt/venv/lib/python3.12 /usr/local/lib/python3.12

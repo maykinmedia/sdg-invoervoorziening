@@ -27,6 +27,8 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - CELERY_LOGLEVEL=DEBUG
       - SUBPATH=${SUBPATH:-/}
+    volumes:
+      - private_media:/app/private_media
     ports:
       - 8000:8000
     depends_on:
@@ -43,6 +45,8 @@ services:
     build: .
     environment: *web_env
     command: /celery_worker.sh
+    volumes:
+      - private_media:/app/private_media
     depends_on:
       - db
       - redis
@@ -59,7 +63,11 @@ services:
     image: nginx
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
+      - private_media:/private-media
     ports:
       - "9000:80"
     depends_on:
       - web
+
+volumes:
+  private_media:
