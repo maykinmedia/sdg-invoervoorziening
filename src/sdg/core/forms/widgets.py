@@ -7,7 +7,6 @@ from sdg.producten.constants import BooleanChoices
 
 
 class DynamicArrayWidget(forms.TextInput):
-
     template_name = "forms/widgets/dynamic_array.html"
 
     def __init__(self, *args, **kwargs):
@@ -64,7 +63,7 @@ class LabeledWidget(forms.TextInput):
             input_list = list(chain.from_iterable(input_list))
 
         input_list = [
-            input_list[i:i + chunk_size]
+            input_list[i : i + chunk_size]
             for i in range(0, len(input_list), chunk_size)  # fmt: skip
         ]
         return input_list

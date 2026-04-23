@@ -92,7 +92,6 @@ class RoleUpdateForm(forms.ModelForm):
 
 
 class BevoegdeOrganisatieForm(forms.ModelForm):
-
     staat_niet_in_de_lijst = forms.BooleanField(
         label=_("Mijn bevoegde organisatie staat niet in de lijst."),
         required=False,

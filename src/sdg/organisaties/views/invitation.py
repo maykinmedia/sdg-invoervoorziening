@@ -62,7 +62,6 @@ class InvitationCreateView(OverheidMixin, CreateView):
 
     def form_valid(self, form, formset=None):
         with transaction.atomic():
-
             if form.instance.pk:
                 self.object = form.instance  # do not update existing user
             else:

@@ -1,5 +1,3 @@
-from secrets import compare_digest
-
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm as _AuthenticationForm
 from django.forms import inlineformset_factory

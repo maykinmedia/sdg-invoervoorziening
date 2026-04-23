@@ -336,7 +336,6 @@ class TestAutofill(CommandTestCase):
         self.assertIn("Created new product", out)
 
         with self.subTest("test_autofill_matching_with_generic"):
-
             self.assertEqual(self.reference_catalog.producten.count(), 3)
             self.assertEqual(self.specific_catalog.producten.count(), 0)
 
@@ -346,15 +345,12 @@ class TestAutofill(CommandTestCase):
                 self.assertEqual(reference_version.vertalingen.count(), 2)
 
         with self.subTest("test_autofill_not_matching_with_generic"):
-
             self.assertEqual(self.reference_catalog_other_filter.producten.count(), 0)
 
         with self.subTest("test_autofill_with_no_autofill_catalogs"):
-
             self.assertEqual(self.reference_catalog_no_autofill.producten.count(), 0)
 
         with self.subTest("test_autofill_not_enabled"):
-
             self.assertEqual(self.specific_catalog.producten.count(), 0)
 
     def test_correct_missing_initial_version(self):

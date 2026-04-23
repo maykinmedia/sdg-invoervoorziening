@@ -3,7 +3,7 @@ import logging
 
 from django.conf import settings
 
-from rest_framework.permissions import SAFE_METHODS, BasePermission
+from rest_framework.permissions import BasePermission
 from vng_api_common.permissions import bypass_permissions
 
 from sdg.api.models import Token

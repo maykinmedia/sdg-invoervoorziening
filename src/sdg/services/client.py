@@ -1,11 +1,14 @@
 from __future__ import annotations
+from typing import TYPE_CHECKING
 
 import logging
 
 import requests
 from zgw_consumers.client import build_client
-from zgw_consumers.models import Service
 from zgw_consumers.nlx import NLXClient
+
+if TYPE_CHECKING:
+    from zgw_consumers.models import Service
 
 logger = logging.getLogger(__name__)
 

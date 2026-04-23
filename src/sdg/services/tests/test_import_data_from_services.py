@@ -118,9 +118,7 @@ class TestImportDataFromServices(CommandTestCase):
         self.assertEqual(
             self.localized_1.generiek_product.verantwoordelijke_organisaties.count(), 1
         )
-        org = (
-            self.localized_1.generiek_product.generiekproductoverheidsorganisatierol_set.all().first()
-        )
+        org = self.localized_1.generiek_product.generiekproductoverheidsorganisatierol_set.all().first()
         self.assertEqual(org.rol, "Ondersteuningsorganisatie")
 
     @patch("requests.get", side_effect=ConnectionError)
