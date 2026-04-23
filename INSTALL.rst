@@ -14,7 +14,7 @@ Prerequisites
 
 You need the following libraries and/or programs:
 
-* `Python`_ 3.10 or above
+* `Python`_ - check the ``Dockerfile`` for the required version.
 * Python `Virtualenv`_ and `Pip`_
 * `PostgreSQL`_ 10 or above
 * `Node.js`_
@@ -23,7 +23,7 @@ You need the following libraries and/or programs:
 .. _Python: https://www.python.org/
 .. _Django framework: https://www.djangoproject.com/
 .. _Virtualenv: https://virtualenv.pypa.io/en/stable/
-.. _Pip: https://packaging.python.org/tutorials/installing-packages/#ensure-pip-setuptools-and-wheel-are-up-to-date
+.. _Pip: https://packaging.python.org/en/latest/tutorials/installing-packages/#ensure-pip-is-up-to-date
 .. _PostgreSQL: https://www.postgresql.org
 .. _Node.js: http://nodejs.org/
 .. _npm: https://www.npmjs.com/
@@ -50,7 +50,7 @@ development machine.
 
        $ virtualenv env
        $ source env/bin/activate
-       $ pip install -r requirements/dev.txt
+       $ uv pip install -r requirements/dev.txt
 
 4. Install and build the frontend libraries:
 
