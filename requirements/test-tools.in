@@ -14,9 +14,7 @@ requests-mock
 tblib
 
 # Code formatting
-black
-isort
-flake8
+ruff
 
 # Debug
 django-debug-toolbar

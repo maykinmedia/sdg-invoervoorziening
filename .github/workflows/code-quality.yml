@@ -3,54 +3,52 @@ name: Code quality
 on: [push]
 
 jobs:
-  isort:
-    name: Import sorting (isort)
+  ruff:
+    name: Lint codebase with ruff (black, isort and flake8 alternative)
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - name: Set up backend environment
+        uses: maykinmedia/setup-django-backend@v1.3
         with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: |
-          pip install "pip<24" -U
-          pip install -r requirements/ci.txt
-      - uses: isort/isort-action@v0.1.0
-        with:
-          sortPaths: "src"
-          configuration: "--check-only --diff"
+          python-version: '3.12'
+          setup-node: 'no'
+      - run: |
+          ruff check --output-format=github .
+          ruff format --check
 
-  black:
-    name: Code formatting (black)
+  migrations:
+    name: Check for model changes not present in migrations
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.12"
-      - name: Install dependencies
-        run: |
-          pip install "pip<24" -U
-          pip install -r requirements/ci.txt
-      - name: Run black
-        run: |
-          black --check src
-
-  flake8:
-    name: Code style (flake8)
-    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        # Needed because the postgres container does not provide a healthcheck
+        options:
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - name: Set up backend environment
+        uses: maykinmedia/setup-django-backend@v1
         with:
-          python-version: "3.12"
-      - name: Install dependencies
+          python-version: '3.12'
+          setup-node: 'no'
+      - name: Run makemigrations to check for missing migrations
         run: |
-          pip install "pip<24" -U
-          pip install -r requirements/ci.txt
-      - name: Run flake8
-        run: |
-          flake8 src --ignore=E501,F405,W503,F401,E203
+          src/manage.py makemigrations \
+            --check \
+            --dry-run
+        env:
+          DJANGO_SETTINGS_MODULE: "sdg.conf.ci"
+          DEBUG: 'true'
+          SECRET_KEY: dummy
+          DB_USER: postgres
+          DB_NAME: postgres
+          DB_PASSWORD: ''

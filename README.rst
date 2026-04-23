@@ -7,7 +7,7 @@ PDC voor de SDG
 :Keywords: sdg, pdc, gemeenten, provincies, waterschappen, vng, ipo, uvw
 :PythonVersion: 3.12
 
-|build-status| |coverage| |docker| |black| |python-versions|
+|build-status| |coverage| |docker| |ruff| |python-versions|
 
 Beheer de teksten van producten en diensten t.b.v. de `Single Digital Gateway`_
 (SDG) via het CMS en/of de API.
@@ -118,9 +118,9 @@ Licensed under the `EUPL`_.
     :alt: Coverage
     :target: https://app.codecov.io/gh/maykinmedia/sdg-invoervoorziening
 
-.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
-    :alt: Code style
-    :target: https://github.com/psf/black
+.. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Ruff
 
 .. |docker| image:: https://img.shields.io/docker/v/maykinmedia/sdg-invoervoorziening
     :alt: Docker image
