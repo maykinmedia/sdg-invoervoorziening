@@ -48,6 +48,11 @@ class GenericProductStatus(DjangoChoices):
             return exclude + [cls.NEW, cls.READY_FOR_ADMIN]
 
     @classmethod
+    def get_cms_included(cls, reference=False) -> list:
+        exclude = cls.get_cms_excluded(reference)
+        return list(cls.values.keys() - exclude)
+
+    @classmethod
     def get_api_excluded(cls):
         """
         Get excluded statuses for the API.

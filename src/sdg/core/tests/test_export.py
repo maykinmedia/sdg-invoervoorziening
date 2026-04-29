@@ -249,43 +249,26 @@ class ApplicationExportTest(TestCase):
             # user isn't staff or superuser
             self.assertEqual(row["systeemrechten"], Systeemrechten.empty.label)
 
-    def test_municipality_data(self):
+    def test_referentie_municipality_data(self):
         catalogus = ProductenCatalogusFactory.create(
-            lokale_overheid__organisatie__owms_pref_label="UUUUtrecht"
+            lokale_overheid__organisatie__owms_pref_label="UUUUtrecht",
+            is_referentie_catalogus=True,
         )
         bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
             lokale_overheid=catalogus.lokale_overheid
         )
 
-        for none_publication_status in [
-            GenericProductStatus.NEW,
-            GenericProductStatus.READY_FOR_ADMIN,
-            GenericProductStatus.EXPIRED,
-            GenericProductStatus.EOL,
-            GenericProductStatus.DELETED,
-            GenericProductStatus.MISSING,
-        ]:
-            generiek_product = GeneriekProductFactory.create(
-                product_status=none_publication_status
-            )
+        for status in GenericProductStatus.values.keys():
+            generiek_product = GeneriekProductFactory.create(product_status=status)
             product = SpecifiekProductFactory.create(
                 generiek_product=generiek_product,
                 catalogus=catalogus,
                 bevoegde_organisatie=bevoegde_organisatie,
             )
             SpecifiekProductVersieFactory.create(
-                product=product,
-                publicatie_datum=timezone.now(),
+                product=product, publicatie_datum=timezone.now(), versie=1
             )
 
-        SpecifiekProductVersieFactory.create_batch(
-            5,
-            product__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION,
-            product__bevoegde_organisatie=bevoegde_organisatie,
-            product__catalogus=catalogus,
-            publicatie_datum=timezone.now(),
-            versie=1,
-        )
         SpecifiekProductVersieFactory.create(
             product__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION,
             product__catalogus=catalogus,
@@ -300,6 +283,19 @@ class ApplicationExportTest(TestCase):
             document_info = df.parse("Document info")
             row = document_info.iloc[0].to_dict()
 
+        # these are the statuses which should be included in the queryset.
+        # and in this case published
+        self.assertEqual(
+            GenericProductStatus.get_cms_included(reference=True).sort(),
+            [
+                GenericProductStatus.READY_FOR_PUBLICATION,
+                GenericProductStatus.READY_FOR_ADMIN,
+                GenericProductStatus.EXPIRED,
+                GenericProductStatus.NEW,
+                GenericProductStatus.EOL,
+            ].sort(),
+        )
+
         self.assertEqual(
             row,
             {
@@ -308,6 +304,61 @@ class ApplicationExportTest(TestCase):
                 "aantal gepubliceerde teksten": 5,
                 "aantal conceptteksten": 1,
                 "aantal teksten": 6,
+            },
+        )
+
+    def test_municipality_data(self):
+        catalogus = ProductenCatalogusFactory.create(
+            lokale_overheid__organisatie__owms_pref_label="UUUUtrecht"
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            lokale_overheid=catalogus.lokale_overheid
+        )
+
+        for status in GenericProductStatus.values.keys():
+            generiek_product = GeneriekProductFactory.create(product_status=status)
+            product = SpecifiekProductFactory.create(
+                generiek_product=generiek_product,
+                catalogus=catalogus,
+                bevoegde_organisatie=bevoegde_organisatie,
+            )
+            SpecifiekProductVersieFactory.create(
+                product=product, publicatie_datum=timezone.now(), versie=1
+            )
+
+        SpecifiekProductVersieFactory.create(
+            product__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION,
+            product__catalogus=catalogus,
+            publicatie_datum=None,
+            product__bevoegde_organisatie=bevoegde_organisatie,
+            versie=1,
+        )
+
+        with io.BytesIO() as export_file:
+            ApplicationExporter(export_file)
+            df = pd.ExcelFile(export_file)
+            document_info = df.parse("Document info")
+            row = document_info.iloc[0].to_dict()
+
+        # these are the statuses which should be included in the queryset.
+        # and in this case published
+        self.assertEqual(
+            GenericProductStatus.get_cms_included().sort(),
+            [
+                GenericProductStatus.READY_FOR_PUBLICATION,
+                GenericProductStatus.EXPIRED,
+                GenericProductStatus.EOL,
+            ].sort(),
+        )
+
+        self.assertEqual(
+            row,
+            {
+                "Unnamed: 0": 0,
+                "gemeente": "UUUUtrecht",
+                "aantal gepubliceerde teksten": 3,
+                "aantal conceptteksten": 1,
+                "aantal teksten": 4,
             },
         )
 
