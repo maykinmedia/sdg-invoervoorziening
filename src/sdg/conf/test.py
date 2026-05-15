@@ -3,6 +3,7 @@ Staging environment settings module.
 This *should* be nearly identical to production.
 """
 
+# ruff: noqa: F405
 import os
 
 os.environ.setdefault("ENVIRONMENT", "test")

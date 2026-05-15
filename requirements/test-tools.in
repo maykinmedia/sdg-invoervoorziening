@@ -8,15 +8,12 @@ factory-boy
 freezegun
 openpyxl
 pep8
-pylint
 pyquery  # integrates with webtest
 requests-mock
 tblib
 
 # Code formatting
-black
-isort
-flake8
+ruff
 
 # Debug
 django-debug-toolbar

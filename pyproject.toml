@@ -1,0 +1,50 @@
+[project]
+requires-python = "~=3.12.0"
+name = "sdg-invoervoorziening"
+version = "1.9.5"
+
+[tool.ruff]
+extend-exclude = [
+    "*/migrations/*",
+]
+include = ["src/**/*.py"]
+exclude = ["static", "media"]
+
+[tool.ruff.lint]
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = [
+    # PyFlakes
+    "F",
+    # Subset of pycodestyle
+    "E4",
+    "E7",
+    "E9",
+    "W",
+    # flake8-type-checking
+    "TC",
+    # flake8-bugbear
+    # "B",
+    # Prefer simple code
+    # "C",
+    # "SIM",
+]
+ignore = [
+    "E501", # line too long
+    "E731", # Assign lambda
+    # "W503",  # Line break before binary operator
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+section-order = [
+    "future",
+    "standard-library",
+    "django",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[tool.ruff.lint.isort.sections]
+"django" = ["django"]

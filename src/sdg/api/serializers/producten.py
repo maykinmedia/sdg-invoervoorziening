@@ -574,7 +574,6 @@ class ProductSerializer(ProductBaseSerializer):
                     lokale_overheid=verantwoordelijke_organisatie,
                 )
             except BevoegdeOrganisatie.DoesNotExist:
-
                 raise serializers.ValidationError(
                     {
                         "verantwoordelijkeOrganisatie.naam": "De waarde van het veld 'naam' is ongeldig. Het object met deze waarde bestaat niet."
@@ -755,7 +754,6 @@ class ProductSerializer(ProductBaseSerializer):
             translation["verwijzing_links"] = verwijzing_links
 
             if product_versie_created:
-
                 LocalizedProduct.objects.create(
                     **translation,
                     product_versie=product_versie,

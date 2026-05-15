@@ -1,5 +1,5 @@
+# ruff: noqa: F405
 import os
-import sys
 
 from django.urls import reverse_lazy
 

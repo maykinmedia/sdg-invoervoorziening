@@ -2,6 +2,7 @@
 Continuous integration settings module.
 """
 
+# ruff: noqa: F405
 import os
 
 os.environ.setdefault("IS_HTTPS", "no")
