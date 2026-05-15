@@ -172,7 +172,6 @@ class ApplicationExporter:
                 dpc="dpc_slug",
             )
         )
-
         for version in (
             ProductVersie.objects.select_related(
                 "product", "product__generiek_product", "product__bevoegde_organisatie"
@@ -180,7 +179,20 @@ class ApplicationExporter:
             .exclude(
                 product__catalogus__lokale_overheid__organisatie__owms_end_date__lte=timezone.now(),
             )
+            .exclude(
+                product__generiek_product__eind_datum__lte=datetime.date.today(),
+            )
             .filter(
+                Q(
+                    product__catalogus__is_referentie_catalogus=False,
+                    product__generiek_product__product_status__in=GenericProductStatus.get_cms_included(),
+                )
+                | Q(
+                    product__catalogus__is_referentie_catalogus=True,
+                    product__generiek_product__product_status__in=GenericProductStatus.get_cms_included(
+                        reference=True
+                    ),
+                ),
                 (
                     (
                         Q(publicatie_datum__isnull=False)
@@ -194,7 +206,6 @@ class ApplicationExporter:
                         )
                     )
                 ),
-                product__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION,
             )
             .order_by("product__catalogus__pk", "product__pk", "-versie")
             .distinct("product__catalogus__pk", "product__pk")
@@ -445,9 +456,21 @@ class ApplicationExporter:
 
         published_product_count_subquery: QuerySet[ProductVersie] = (
             ProductVersie.objects.select_related("product", "product__catalogus")
+            .exclude(
+                product__generiek_product__eind_datum__lte=datetime.date.today(),
+            )
             .filter(
+                Q(
+                    product__catalogus__is_referentie_catalogus=False,
+                    product__generiek_product__product_status__in=GenericProductStatus.get_cms_included(),
+                )
+                | Q(
+                    product__catalogus__is_referentie_catalogus=True,
+                    product__generiek_product__product_status__in=GenericProductStatus.get_cms_included(
+                        reference=True
+                    ),
+                ),
                 product__catalogus__pk=OuterRef("pk"),
-                product__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION,
                 publicatie_datum__lte=timezone.now(),
             )
             .order_by("product__pk", "pk", "-versie")
@@ -457,9 +480,21 @@ class ApplicationExporter:
 
         concept_product_count_subquery: QuerySet[ProductVersie] = (
             ProductVersie.objects.select_related("product")
+            .exclude(
+                product__generiek_product__eind_datum__lte=datetime.date.today(),
+            )
             .filter(
+                Q(
+                    product__catalogus__is_referentie_catalogus=False,
+                    product__generiek_product__product_status__in=GenericProductStatus.get_cms_included(),
+                )
+                | Q(
+                    product__catalogus__is_referentie_catalogus=True,
+                    product__generiek_product__product_status__in=GenericProductStatus.get_cms_included(
+                        reference=True
+                    ),
+                ),
                 product__catalogus__pk=OuterRef("pk"),
-                product__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION,
                 publicatie_datum=None,
                 versie=1,
             )
@@ -475,8 +510,16 @@ class ApplicationExporter:
                 total=Count(
                     "producten",
                     filter=Q(
-                        producten__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION
+                        is_referentie_catalogus=False,
+                        producten__generiek_product__product_status__in=GenericProductStatus.get_cms_included(),
+                    )
+                    | Q(
+                        is_referentie_catalogus=True,
+                        producten__generiek_product__product_status__in=GenericProductStatus.get_cms_included(
+                            reference=True
+                        ),
                     ),
+                    producten__generiek_product__eind_datum__gt=datetime.date.today(),
                 )
             )
             .annotate(
