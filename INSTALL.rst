@@ -2,8 +2,8 @@
 Installation
 ============
 
-This installation is meant for developers of the "SDG invoervoorziening". If 
-you are looking to install the application to try it out, or to run it in 
+This installation is meant for developers of the "SDG invoervoorziening". If
+you are looking to install the application to try it out, or to run it in
 production, please consult the documentation.
 
 The project is developed in `Python`_ using the `Django framework`_.
@@ -14,16 +14,15 @@ Prerequisites
 
 You need the following libraries and/or programs:
 
-* `Python`_ - check the ``Dockerfile`` for the required version.
-* Python `Virtualenv`_ and `Pip`_
+* `Python`_ - check the ``pyproject.toml`` for the required version.
+* `uv`_
 * `PostgreSQL`_ 10 or above
 * `Node.js`_
 * `npm`_
 
 .. _Python: https://www.python.org/
 .. _Django framework: https://www.djangoproject.com/
-.. _Virtualenv: https://virtualenv.pypa.io/en/stable/
-.. _Pip: https://packaging.python.org/en/latest/tutorials/installing-packages/#ensure-pip-is-up-to-date
+.. _uv: https://docs.astral.sh/uv/getting-started/installation/
 .. _PostgreSQL: https://www.postgresql.org
 .. _Node.js: http://nodejs.org/
 .. _npm: https://www.npmjs.com/
@@ -48,7 +47,7 @@ development machine.
 
    .. code-block:: bash
 
-       $ virtualenv env
+       $ uv venv env
        $ source env/bin/activate
        $ uv pip install -r requirements/dev.txt
 

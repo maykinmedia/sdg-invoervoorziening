@@ -1,3 +1,8 @@
+[project]
+requires-python = "~=3.12.0"
+name = "sdg-invoervoorziening"
+version = "1.9.5"
+
 [tool.ruff]
 extend-exclude = [
     "*/migrations/*",
