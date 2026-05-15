@@ -39,15 +39,6 @@ from sdg.producten.models import (
 
 
 @dataclass
-class GeneriekProduct:
-    product_titel: str = ""
-    generieke_tekst: str = ""
-    datum_check: datetime.datetime = None
-    verwijzing_links: list | list[list[str]] = field(default_factory=list)
-    landelijke_link: str = str
-
-
-@dataclass
 class SpecifiekProduct:
     product_titel_decentraal: str = ""
     specifieke_tekst: str = ""
@@ -124,25 +115,13 @@ class ApplicationExporter:
                 )
             )
 
-        def generiek_product_subquery(
+        def landelijke_link_subquery(
             langauge: str,
         ) -> QuerySet[LocalizedGeneriekProduct]:
-            return (
-                LocalizedGeneriekProduct.objects.filter(
-                    generiek_product__producten__pk=OuterRef("product__pk"),
-                    taal=langauge,
-                )
-                .order_by("-taal")
-                .values(
-                    json=JSONObject(
-                        product_titel="product_titel",
-                        generieke_tekst="generieke_tekst",
-                        datum_check="datum_check",
-                        verwijzing_links="verwijzing_links",
-                        landelijke_link="landelijke_link",
-                    )
-                )
-            )
+            return LocalizedGeneriekProduct.objects.filter(
+                generiek_product__producten__pk=OuterRef("product__pk"),
+                taal=langauge,
+            ).values("landelijke_link")
 
         def url_portaal_bedrijf(
             landelijke_link: str, dop: str, language: TaalChoices
@@ -240,24 +219,10 @@ class ApplicationExporter:
                 )
             )
             .annotate(
-                generiek_nl=Coalesce(
-                    Subquery(
-                        generiek_product_subquery(langauge="nl")[:1],
-                        output_field=JSONField(),
-                    ),
-                    Value("{}"),
-                    output_field=JSONField(),
-                )
+                landelijke_link_nl=Subquery(landelijke_link_subquery(langauge="nl")[:1])
             )
             .annotate(
-                generiek_en=Coalesce(
-                    Subquery(
-                        generiek_product_subquery(langauge="en")[:1],
-                        output_field=JSONField(),
-                    ),
-                    Value("{}"),
-                    output_field=JSONField(),
-                )
+                landelijke_link_en=Subquery(landelijke_link_subquery(langauge="en")[:1])
             )
             .annotate(
                 landelijke_verantwoordelijke_organisaties=ArraySubquery(
@@ -285,31 +250,29 @@ class ApplicationExporter:
             )
         ):
             doelgroep = version.product.generiek_product.doelgroep
-            generiek_nl = GeneriekProduct(**version.generiek_nl)
-            generiek_en = GeneriekProduct(**version.generiek_en)
             specifiek_nl = SpecifiekProduct(**version.specifiek_nl)
             specifiek_en = SpecifiekProduct(**version.specifiek_en)
 
             match doelgroep:
                 case DoelgroepChoices.bedrijf:
                     url_portaal = url_portaal_bedrijf(
-                        generiek_nl.landelijke_link,
+                        version.landelijke_link_nl,
                         version.organisatie.get("dop", ""),
                         TaalChoices.nl,
                     )
                     url_portaal_en = url_portaal_bedrijf(
-                        generiek_en.landelijke_link,
+                        version.landelijke_link_en,
                         version.organisatie.get("dop", ""),
                         TaalChoices.en,
                     )
                 case DoelgroepChoices.burger:
                     url_portaal = url_portaal_burger(
-                        generiek_nl.landelijke_link,
+                        version.landelijke_link_nl,
                         version.organisatie.get("dpc", ""),
                         TaalChoices.nl,
                     )
                     url_portaal_en = url_portaal_burger(
-                        generiek_en.landelijke_link,
+                        version.landelijke_link_en,
                         version.organisatie.get("dpc", ""),
                         TaalChoices.en,
                     )
@@ -335,10 +298,6 @@ class ApplicationExporter:
                     "valt onder(ja / nee)": "Ja" if version.valt_onder else "Nee",
                     "informatiegebied": version.informatiegebied,
                     "SDG product": version.product_name,
-                    "generieke titel": generiek_nl.product_titel,
-                    "generieke titel (en)": generiek_en.product_titel,
-                    "generieke tekst": generiek_nl.generieke_tekst,
-                    "generieke tekst (en)": generiek_en.generieke_tekst,
                     "specifieke titel": specifiek_nl.product_titel_decentraal,
                     "specifieke titel (en)": specifiek_en.product_titel_decentraal,
                     "specifieke tekst": specifiek_nl.specifieke_tekst,
@@ -357,8 +316,6 @@ class ApplicationExporter:
                     "uiterste termijn (en)": specifiek_en.uiterste_termijn,
                     "wat te doen bij geen reactie": specifiek_nl.wtd_bij_geen_reactie,
                     "wat te doen bij geen reactie (en)": specifiek_en.wtd_bij_geen_reactie,
-                    "generieke verwijzing links": generiek_nl.verwijzing_links,
-                    "generieke verwijzing links (en)": generiek_en.verwijzing_links,
                     "specifieke verwijzing links": specifiek_nl.verwijzing_links,
                     "specifieke verwijzing links (en)": specifiek_en.verwijzing_links,
                     "URL portaal": url_portaal,
@@ -369,12 +326,6 @@ class ApplicationExporter:
                     "decentrale procedure link (en)": specifiek_en.decentrale_procedure_link,
                     "landelijk verantwoordelijke organisatie": ", ".join(
                         version.landelijke_verantwoordelijke_organisaties
-                    ),
-                    "generieke datum check": self._datetime_formater(
-                        generiek_nl.datum_check
-                    ),
-                    "generieke datum check (en)": self._datetime_formater(
-                        generiek_en.datum_check
                     ),
                     "gemaakt op": self._datetime_formater(version.gemaakt_op),
                     "publicatiedatum": self._date_formater(version.publicatie_datum),
