@@ -393,6 +393,9 @@ else:
 
 RELEASE = config("RELEASE", GIT_SHA)
 
+PERIODIC_TASKS_FIXTURE = config("PERIODIC_TASKS_FIXTURE", default="periodic_tasks")
+assert PERIODIC_TASKS_FIXTURE == "periodic_tasks" or "periodic_tasks_production"
+
 ##############################
 #                            #
 # 3RD PARTY LIBRARY SETTINGS #

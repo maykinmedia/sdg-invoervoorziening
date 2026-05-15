@@ -1,6 +1,8 @@
 import os
 from datetime import date, datetime
 from io import StringIO
+from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 from django.conf import settings
 from django.core import mail
@@ -503,3 +505,32 @@ class TestSendNotificationMail(CommandTestCase):
 
         self.assertIn("No eligable users found.", out)
         self.assertEqual(len(mail.outbox), 0)
+
+
+@patch("sdg.core.management.commands.dump_tasks.dump_tasks")
+class TestDumpTasksCommand(TestCase):
+    def test_default_fixtures(self, mock_dump_tasks: MagicMock):
+        call_command("dump_tasks")
+
+        mock_dump_tasks.assert_called_once_with(
+            file_path_normal=Path(
+                Path(settings.DJANGO_PROJECT_DIR) / "fixtures" / "periodic_tasks.json",
+            ),
+            file_path_production=Path(
+                Path(settings.DJANGO_PROJECT_DIR)
+                / "fixtures"
+                / "periodic_tasks_production.json",
+            ),
+        )
+
+    def test_command_with_file_path_flags(self, mock_dump_tasks: MagicMock):
+        call_command(
+            "dump_tasks",
+            file_path_normal="/tmp/normal.json",
+            file_path_production="/tmp/production.json",
+        )
+
+        mock_dump_tasks.assert_called_once_with(
+            file_path_normal=Path("/tmp/normal.json"),
+            file_path_production=Path("/tmp/production.json"),
+        )
