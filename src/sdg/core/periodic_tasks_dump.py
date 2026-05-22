@@ -8,9 +8,31 @@ from django_celery_beat.models import PeriodicTask
 def dump_tasks(file_path_normal: Path, file_path_production: Path):
     fixture_data = serializers.serialize(
         "json",
-        PeriodicTask.objects.all(),
+        PeriodicTask.objects.all().order_by("pk"),
         indent=4,
         use_natural_primary_keys=True,
+        fields=[
+            "name",
+            "task",
+            "interval",
+            "crontab",
+            "solar",
+            "clocked",
+            "args",
+            "kwargs",
+            "queue",
+            "exchange",
+            "routing_key",
+            "headers",
+            "priority",
+            "expires",
+            "expire_seconds",
+            "one_off",
+            "start_time",
+            "enabled",
+            "description",
+            "date_changed",
+        ],
     )
 
     with open(file_path_normal, "w") as outfile:
