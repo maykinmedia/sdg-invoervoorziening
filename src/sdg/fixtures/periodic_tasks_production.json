@@ -21,8 +21,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2022-04-04T14:32:19.071",
         "description": ""
     }
@@ -49,8 +47,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": "2021-10-29T16:06:37.577",
-        "total_run_count": 1,
         "date_changed": "2022-04-04T14:31:43.283",
         "description": "Laad lijsten in van standaarden.overheid.nl, te weten:\r\n\r\n* Overheidsorganisaties (lijst)\r\n* Gemeenten (subset van bovenstaande lijst)\r\n* UPL (lijst)\r\n* Informatiegebieden (lijst)\r\n* UPL-Informatiegebieden (koppeling tussen bovenstaande lijsten)"
     }
@@ -77,8 +73,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": "2021-10-29T16:06:37.577",
-        "total_run_count": 1,
         "date_changed": "2022-04-04T14:33:38.570",
         "description": "Creeer automatisch generieke producten op basis van de UPL en maak referentie-producten aan indien nodig."
     }
@@ -105,8 +99,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2022-04-08T13:10:29.002",
         "description": "Haal generieke productteksten op bij geconfigureerde services en laad deze in de invoervoorziening. Het \"upnLabel\" wordt gebruikt om producten te identificeren. Niet beschikbare services worden genegeerd."
     }
@@ -133,8 +125,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2022-09-28T16:31:45.616",
         "description": ""
     }
@@ -161,8 +151,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2022-09-29T10:29:06.729",
         "description": "Update the status for all generic products based on defined logic.\r\n\r\nNote: crontab runs every 5 minutes."
     }
@@ -189,8 +177,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2023-04-06T12:22:36.304",
         "description": "Send notification emails about recent reference product updates."
     }
@@ -217,8 +203,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2024-11-04T12:00:00",
         "description": "Send notification emails about broken links detected in product fields."
     }
@@ -245,8 +229,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2024-11-04T14:00:00",
         "description": "Send monthly broken links report to the all redactors of the content."
     }
@@ -273,8 +255,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2024-11-20T10:30:00",
         "description": "Automatisch referentie teksten doordrukken naar de specifieke producten."
     }
@@ -301,8 +281,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2024-11-20T14:30:00",
         "description": "Send an e-mail to users to inform them about their related products and that they will be overwritten."
     }
@@ -329,8 +307,6 @@
         "one_off": false,
         "start_time": null,
         "enabled": true,
-        "last_run_at": null,
-        "total_run_count": 0,
         "date_changed": "2026-04-01T13:08:22.391",
         "description": "Verwijder alle rapporten die meer dan 30 dagen geleden zijn aangemaakt.\r\n\r\n(U kunt het aantal dagen aanpassen met de variabele \"days\")"
     }
