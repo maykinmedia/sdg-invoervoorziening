@@ -1,6 +1,7 @@
 import datetime
 import json
 from dataclasses import dataclass, field
+from datetime import timedelta
 from typing import assert_never
 
 from django.conf import settings
@@ -8,6 +9,8 @@ from django.contrib.postgres.expressions import ArraySubquery
 from django.db.models import (
     CharField,
     Count,
+    DurationField,
+    ExpressionWrapper,
     F,
     JSONField,
     OuterRef,
@@ -483,6 +486,14 @@ class ApplicationExporter:
             .exclude(
                 product__generiek_product__eind_datum__lte=datetime.date.today(),
             )
+            # annotate the time difference between the created and updated field
+            # this way we can check if these field are made within the same second
+            # since during creation of the object these fields will be milliseconds off each-other.
+            .annotate(
+                created_and_changed_difference=ExpressionWrapper(
+                    F("gewijzigd_op") - F("gemaakt_op"), output_field=DurationField()
+                )
+            )
             .filter(
                 Q(
                     product__catalogus__is_referentie_catalogus=False,
@@ -495,8 +506,14 @@ class ApplicationExporter:
                     ),
                 ),
                 product__catalogus__pk=OuterRef("pk"),
+                # Checking if the first version doesn't have a publication date
                 publicatie_datum=None,
                 versie=1,
+            )
+            .exclude(
+                # Ensuring that changes have been made, by checking if the updated and created
+                # dates fall within a second of each-other.
+                created_and_changed_difference__lte=timedelta(seconds=1)
             )
             .values("product__pk")
         )

@@ -1,4 +1,5 @@
 import io
+from datetime import datetime
 
 from django.test import TestCase, override_settings
 from django.utils import timezone
@@ -302,7 +303,7 @@ class ApplicationExportTest(TestCase):
                 "Unnamed: 0": 0,
                 "gemeente": "UUUUtrecht",
                 "aantal gepubliceerde teksten": 5,
-                "aantal conceptteksten": 1,
+                "aantal conceptteksten": 0,
                 "aantal teksten": 6,
             },
         )
@@ -357,8 +358,45 @@ class ApplicationExportTest(TestCase):
                 "Unnamed: 0": 0,
                 "gemeente": "UUUUtrecht",
                 "aantal gepubliceerde teksten": 3,
-                "aantal conceptteksten": 1,
+                "aantal conceptteksten": 0,
                 "aantal teksten": 4,
+            },
+        )
+
+    def test_municipality_concept_data(self):
+        catalogus = ProductenCatalogusFactory.create(
+            lokale_overheid__organisatie__owms_pref_label="UUUUtrecht"
+        )
+        bevoegde_organisatie = BevoegdeOrganisatieFactory.create(
+            lokale_overheid=catalogus.lokale_overheid
+        )
+        with freeze_time("2026-01-01T00:00:00Z"):
+            concept = SpecifiekProductVersieFactory.create(
+                product__generiek_product__product_status=GenericProductStatus.READY_FOR_PUBLICATION,
+                product__catalogus=catalogus,
+                publicatie_datum=None,
+                product__bevoegde_organisatie=bevoegde_organisatie,
+                versie=1,
+            )
+
+        # minute later
+        with freeze_time("2026-01-01T00:01:00Z"):
+            concept.save()
+
+        with io.BytesIO() as export_file:
+            ApplicationExporter(export_file)
+            df = pd.ExcelFile(export_file)
+            document_info = df.parse("Document info")
+            row = document_info.iloc[0].to_dict()
+
+        self.assertEqual(
+            row,
+            {
+                "Unnamed: 0": 0,
+                "gemeente": "UUUUtrecht",
+                "aantal gepubliceerde teksten": 0,
+                "aantal conceptteksten": 1,
+                "aantal teksten": 1,
             },
         )
 
