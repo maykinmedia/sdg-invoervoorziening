@@ -258,7 +258,6 @@ class ProductForm(FieldConfigurationMixin, forms.ModelForm):
         available = cleaned_data.get("product_aanwezig")
 
         if not is_reference:
-
             if "date" in submit_type and available is None:
                 self.add_error(
                     "product_aanwezig",

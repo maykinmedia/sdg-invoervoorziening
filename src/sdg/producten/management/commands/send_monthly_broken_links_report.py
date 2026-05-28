@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 from collections import defaultdict
 
 from django.conf import settings
@@ -11,10 +13,12 @@ from django.utils.html import strip_tags
 
 from furl import furl
 
-from sdg.accounts.models import Role
 from sdg.conf.utils import org_type_cfg
-from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import BrokenLinks
+
+if TYPE_CHECKING:
+    from sdg.accounts.models import Role
+    from sdg.organisaties.models import LokaleOverheid
 
 User = get_user_model()
 

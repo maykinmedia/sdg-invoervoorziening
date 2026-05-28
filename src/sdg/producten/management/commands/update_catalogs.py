@@ -90,7 +90,6 @@ class Command(BaseCommand):
         for reference_catalog in ProductenCatalogus.objects.filter(
             is_referentie_catalogus=True
         ):
-
             # Iterate over all reference products in the reference catalog.
             for reference_product in reference_catalog.producten.all():
                 active_reference_product_version = reference_product.active_version

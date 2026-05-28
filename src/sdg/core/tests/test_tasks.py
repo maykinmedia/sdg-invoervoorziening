@@ -8,7 +8,6 @@ from .factories.export import ApplicationExportFactory
 
 
 class CreateApplicationExportTestCase(TestCase):
-
     @freeze_time("2026-01-01T02:02:02Z")
     def test_create_rapport(self):
         export = ApplicationExportFactory.create()

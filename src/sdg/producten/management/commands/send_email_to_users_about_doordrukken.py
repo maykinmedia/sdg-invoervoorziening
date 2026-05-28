@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+from typing import TYPE_CHECKING
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -6,18 +7,20 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.core.management import BaseCommand
 from django.db.models import Q
-from django.db.models.manager import BaseManager
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils.html import strip_tags
 
 from furl import furl
 
-from sdg.accounts.models import Role
 from sdg.conf.utils import org_type_cfg
 from sdg.core.models import ProductenCatalogus
 from sdg.organisaties.models import LokaleOverheid
 from sdg.producten.models import Product
+
+if TYPE_CHECKING:
+    from django.db.models.manager import BaseManager
+    from sdg.accounts.models import Role
 
 User = get_user_model()
 

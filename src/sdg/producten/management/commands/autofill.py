@@ -25,12 +25,10 @@ class Command(BaseCommand):
         # NOTE: New languages are not created automatically. There's no need
         # for this feature at the moment.
         for upn in UniformeProductnaam.objects.filter(is_verwijderd=False):
-
             generic_products = list(upn.generieke_producten.all())
             active_fields = upn.get_active_fields()
 
             for catalog, autofill_fields in catalogs:
-
                 default_auth_org = BevoegdeOrganisatie.objects.filter(
                     lokale_overheid=catalog.lokale_overheid,
                     organisatie=catalog.lokale_overheid.organisatie,

@@ -30,7 +30,6 @@ class CoreConfig(AppConfig):
     name = "sdg.core"
 
     def ready(self):
-        from .checks import localized_form_field_check
 
         post_migrate.connect(update_admin_index, sender=self)
         post_migrate.connect(update_cron_jobs, sender=self)

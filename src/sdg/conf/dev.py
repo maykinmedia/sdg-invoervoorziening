@@ -1,3 +1,4 @@
+# ruff: noqa: F405
 import os
 import warnings
 
@@ -8,9 +9,9 @@ os.environ.setdefault(
 )
 os.environ.setdefault("IS_HTTPS", "no")
 
-os.environ.setdefault("DB_NAME", "sdg"),
-os.environ.setdefault("DB_USER", "sdg"),
-os.environ.setdefault("DB_PASSWORD", "sdg"),
+os.environ.setdefault("DB_NAME", "sdg")
+os.environ.setdefault("DB_USER", "sdg")
+os.environ.setdefault("DB_PASSWORD", "sdg")
 
 os.environ.setdefault("SENDFILE_BACKEND", "django_sendfile.backends.development")
 
