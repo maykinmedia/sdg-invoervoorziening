@@ -22,7 +22,7 @@ def update_admin_index(sender, **kwargs):
 def update_cron_jobs(sender, **kwargs):
     call_command("loaddata", "django_celery_beat", verbosity=0, stdout=StringIO())
     call_command(
-        "loaddata", settings.PERIODIC_TASKS_FIXTURE, verbosity=0, stdout=StringIO()
+        "load_tasks", settings.PERIODIC_TASKS_FIXTURE, verbosity=0, stdout=StringIO()
     )
 
 

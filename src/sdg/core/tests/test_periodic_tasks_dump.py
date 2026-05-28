@@ -77,14 +77,12 @@ class TestPeriodicTasksDumpTestcase(TestCase):
                     "expires": None,
                     "headers": "{}",
                     "kwargs": "{}",
-                    "last_run_at": None,
                     "one_off": False,
                     "priority": None,
                     "queue": None,
                     "routing_key": None,
                     "solar": None,
                     "start_time": None,
-                    "total_run_count": 0,
                 },
             )
 
@@ -110,13 +108,11 @@ class TestPeriodicTasksDumpTestcase(TestCase):
                     "expires": None,
                     "headers": "{}",
                     "kwargs": "{}",
-                    "last_run_at": None,
                     "one_off": False,
                     "priority": None,
                     "queue": None,
                     "routing_key": None,
                     "solar": None,
                     "start_time": None,
-                    "total_run_count": 0,
                 },
             )
